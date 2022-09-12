@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "webpack-merge": "^4.2.2",
+    "webpack-merge-and-include-globally": "^2.1.25"
+  }
+}

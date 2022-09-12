@@ -1,0 +1,47 @@
+<html>
+<head>
+    <title>harana</title></head>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-KRJD2HS');</script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
+    <link href="/public/css/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="/public/css/core.css" rel="stylesheet" type="text/css">
+    <link href="/public/css/components.css" rel="stylesheet" type="text/css">
+    <link href="/public/css/colors.css" rel="stylesheet" type="text/css">
+    <link href="/public/css/extras/animate.min.css" rel="stylesheet" type="text/css">
+    <link href="/public/css/fonts.css" rel="stylesheet" type="text/css">
+    <link href="/public/css/override.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.72/dist/themes/light.css">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.72/dist/shoelace.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script type="text/javascript" src="/public/js/plugins/loaders/pace.min.js"></script>
+    <script type="text/javascript" src="/public/js/plugins/visualization/d3/d3.min.js"></script>
+    <script type="text/javascript" src="/public/js/plugins/visualization/d3/d3_tooltip.js"></script>
+    <script type="text/javascript" src="/public/js/harana-designer-fastopt-library.js"></script>
+    <script src="https://unpkg.com/source-map@0.7.3/dist/source-map.js"></script>
+    <script>
+        let exports = window;
+        let authDomain = "{{ authDomain }}";
+        let debug = {{ debug }};
+        let domain = "{{ domain }}";
+        let initialJwt = "{{{ initialJwt }}}";
+        let i18n = "{{{ i18nProperties }}}";
+        let proxyDomain = "{{ proxyDomain }}";
+        exports.require = window["ScalaJSBundlerLibrary"].require;
+        sourceMap.SourceMapConsumer.initialize({"lib/mappings.wasm": "https://unpkg.com/source-map@0.7.3/lib/mappings.wasm"});
+        window.dataLayer = window.dataLayer || [];
+    </script>
+</head>
+<body class="navbar-bottom">
+  <div id="root"></div>
+</body>
+<script type="text/javascript" src="/public/js/harana-designer-fastopt.js"></script>
+<script type="module">
+  import { registerIconLibrary } from 'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.72/dist/shoelace.js';
+  registerIconLibrary('icomoon', { resolver: name => `/public/icons/icomoon/${name}.svg` });
+  registerIconLibrary('lindua', { resolver: name => `/public/icons/lindua/${name}.svg` });
+</script>
+</html>

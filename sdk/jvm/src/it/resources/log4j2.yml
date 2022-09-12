@@ -1,0 +1,96 @@
+Configutation:
+  name: Default
+  packages: "com.harana.spark.logs"
+  Properties:
+    Property:
+      name: log-path
+      value: "logs"
+  Appenders:
+    Console:
+      name: ConsoleAppender
+      target: SYSTEM_OUT
+      PatternLayout:
+        pattern: "%highlight{%d{HH:mm:ss} | %c:%line |} %style{%msg%n%throwable}{white}"
+    Syslog:
+      name: SyslogAppender
+      host: logs4.papertrailapp.com
+      port: 32532
+      protocol: TCP
+      facility: local6
+      connectTimeoutMillis: 10000
+      reconnectionDelayMillis: 5000
+      mdcId: mdc
+      appName: spark-executor
+      charset: UTF-8
+      ignoreExceptions: false
+      exceptionPattern: "%throwable{full}"
+      newLine: true
+      format: RFC5424
+      PatternLayout:
+        pattern: "%style{spark-executor}{magenta} %style{%c:%line}{cyan} %style{%msg%n%throwable}{white}"
+# FIXME
+#    Internal:
+#      name: InternalAppender
+#      PatternLayout:
+#        pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} %c - %msg%n - %X"
+  Loggers:
+      Root:
+        level: trace
+        AppenderRef:
+          - ref: ConsoleAppender
+          - ref: SyslogAppender
+# FIXME
+#          - ref: InternalAppender
+      Logger:
+        - name: io.micrometer
+          level: error
+        - name: com.harana.sdk.backend.modules.okhttp
+          level: error
+        - name: com.amazonaws
+          level: warn
+        - name: org.spark_project
+          level: warn
+        - name: org.apache.hadoop.security.UserGroupInformation
+          level: warn
+        - name: io.netty
+          level: warn
+        - name: org.apache.htrace
+          level: error
+        - name: org.apache.parquet
+          level: error
+        - name: org.apache.hadoop.metrics2
+          level: warn
+        - name: org.apache.spark.SecurityManager
+          level: error
+        - name: org.apache.spark.util.Utils
+          level: fatal
+        - name: org.apache.spark.ContextCleaner
+          level: fatal
+        - name: org.apache.hadoop.security.authentication.util.KerberosName
+          level: fatal
+        - name: org.apache.hadoop
+          level: fatal
+        - name: org.apache.spark
+          level: info
+        - name: org.apache.curator
+          level: error
+        - name: org.apache.zookeeper
+          level: error
+        - name: org.sparkproject.jetty
+          level: error
+        - name: org.apache.spark.sql.catalyst
+          level: error
+        - name: org.apache.spark.storage
+          level: error
+        - name: org.apache.spark.scheduler.DAGScheduler
+          level: error
+        - name: org.apache.spark.SparkEnv
+          level: error
+        - name: org.apache.spark.scheduler.TaskSetManager
+          level: error
+        - name: org.apache.spark.network.netty.NettyBlockTransferService
+          level: error
+        - name: org.apache.http
+          level: error
+        - name: org.eclipse.jetty
+          level: error

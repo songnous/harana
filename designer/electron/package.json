@@ -1,0 +1,8 @@
+{
+  "name": "harana",
+  "version": "1.0",
+  "main": "target/main.js",
+  "dependencies": {
+    "webpack-merge": "^4.2.2"
+  }
+}

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id="idJS [file:~/Developer/harana/harana/]" external.linked.project.path="$MODULE_DIR$/../../id/js" external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_11">
+    <output url="file://$MODULE_DIR$/../../id/js/target/scala-2.13/classes" />
+    <output-test url="file://$MODULE_DIR$/../../id/js/target/scala-2.13/it-classes" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../id/js">
+      <excludeFolder url="file://$MODULE_DIR$/../../id/js/target/streams" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="id-jwtJS" exported="" />
+    <orderEntry type="module" module-name="id-sources" exported="" />
+    <orderEntry type="library" name="sbt: com.beachape:enumeratum-circe_2.13:1.7.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.beachape:enumeratum-macros_2.13:1.6.1:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.beachape:enumeratum_2.13:1.7.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.chuusai:shapeless_2.13:2.3.9:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.chuusai:shapeless_sjs1_2.13:2.3.6:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.github.julien-truffaut:monocle-core_2.13:2.1.0:jar" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="sbt: com.github.sbt:sbt-jni-core_2.13:1.5.3:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.olvind:scalablytyped-runtime_sjs1_2.13:2.1.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-actor_2.13:2.6.19:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-http-core_2.13:10.2.9:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-http-spray-json_2.13:10.2.9:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-http_2.13:10.2.9:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-parsing_2.13:10.2.9:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-protobuf-v3_2.13:2.6.19:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-slf4j_2.13:2.6.19:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-stream_2.13:2.6.19:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-testkit_2.13:2.6.19:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.typesafe:config:1.4.2:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.typesafe:ssl-config-core_2.13:0.4.3:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.circe:circe-core_2.13:0.14.2:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.circe:circe-core_sjs1_2.13:0.14.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.circe:circe-derivation_2.13:0.13.0-M5:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.circe:circe-generic-extras_2.13:0.14.2:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.circe:circe-generic_2.13:0.14.2:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.circe:circe-generic_sjs1_2.13:0.14.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.circe:circe-jawn_2.13:0.14.2:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.circe:circe-numbers_2.13:0.14.2:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.circe:circe-numbers_sjs1_2.13:0.14.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.circe:circe-optics_2.13:0.14.1:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.circe:circe-parser_2.13:0.14.2:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.circe:circe-parser_sjs1_2.13:0.14.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.circe:circe-scalajs_sjs1_2.13:0.14.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.circe:circe-shapes_2.13:0.14.2:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.circe:circe-yaml_2.13:0.14.1:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.github.cquiroz:cldr-api_sjs1_2.13:1.0.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.github.cquiroz:scala-java-locales_sjs1_2.13:1.0.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.github.cquiroz:scala-java-time_sjs1_2.13:2.0.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.suzaku:diode-core_sjs1_2.13:1.2.0-RC4:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.suzaku:diode-data_sjs1_2.13:1.2.0-RC4:jar" level="project" />
+    <orderEntry type="library" name="sbt: io.suzaku:diode_sjs1_2.13:1.2.0-RC4:jar" level="project" />
+    <orderEntry type="library" name="sbt: me.shadaj:slinky-core_sjs1_2.13:0.7.2:jar" level="project" />
+    <orderEntry type="library" name="sbt: me.shadaj:slinky-history_sjs1_2.13:0.7.2:jar" level="project" />
+    <orderEntry type="library" name="sbt: me.shadaj:slinky-hot_sjs1_2.13:0.7.2:jar" level="project" />
+    <orderEntry type="library" name="sbt: me.shadaj:slinky-react-router_sjs1_2.13:0.7.2:jar" level="project" />
+    <orderEntry type="library" name="sbt: me.shadaj:slinky-readwrite_sjs1_2.13:0.7.2:jar" level="project" />
+    <orderEntry type="library" name="sbt: me.shadaj:slinky-web_sjs1_2.13:0.7.2:jar" level="project" />
+    <orderEntry type="library" name="sbt: net.java.dev.jna:jna:5.9.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.jline:jline:3.21.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.latestbit:circe-tagged-adt-codec-macros_2.13:0.10.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.latestbit:circe-tagged-adt-codec-models_2.13:0.10.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.latestbit:circe-tagged-adt-codec-models_sjs1_2.13:0.10.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.latestbit:circe-tagged-adt-codec_sjs1_2.13:0.10.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.portable-scala:portable-scala-reflect_sjs1_2.13:1.0.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.reactivestreams:reactive-streams:1.0.3:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.scala-js:scalajs-dom_sjs1_2.13:2.0.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.scala-js:scalajs-library_2.13:1.10.0:jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="sbt: org.scala-js:scalajs-test-bridge_2.13:1.10.0:jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="sbt: org.scala-js:scalajs-test-interface_2.13:1.10.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.scala-lang.modules:scala-collection-compat_2.13:2.6.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.scala-lang.modules:scala-java8-compat_2.13:1.0.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.scala-lang.modules:scala-parser-combinators_2.13:1.1.2:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.scala-lang:scala-compiler:2.13.8:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.scala-lang:scala-library:2.13.8:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.scala-lang:scala-reflect:2.13.8:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.slf4j:slf4j-api:1.7.36:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.typelevel:cats-core_2.13:2.7.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.typelevel:cats-core_sjs1_2.13:2.6.1:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.typelevel:cats-free_2.13:2.1.1:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.typelevel:cats-kernel_2.13:2.7.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.typelevel:cats-kernel_sjs1_2.13:2.6.1:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.typelevel:cats-macros_2.13:2.1.1:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.typelevel:jawn-parser_2.13:1.3.2:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.typelevel:simulacrum-scalafix-annotations_2.13:0.5.4:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.typelevel:squants_sjs1_2.13:1.8.3:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.yaml:snakeyaml:1.28:jar" level="project" />
+    <orderEntry type="module-library" scope="TEST">
+      <library name="sbt: unmanaged-jars-test">
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/../../id/js/conf" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="sbt: unmanaged-jars">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../id/js/lib/zio-macros_sjs1_2.12-1.0.3+90-8e76cd3e-SNAPSHOT.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="sbt: unmanaged-sources-and-docs">
+        <CLASSES />
+        <JAVADOC>
+          <root url="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/netty/netty-transport-native-kqueue/4.1.46.Final/netty-transport-native-kqueue-4.1.46.Final-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/netty/netty-transport-native-kqueue/4.1.52.Final/netty-transport-native-kqueue-4.1.52.Final-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/netty/netty-transport-native-epoll/4.1.74.Final/netty-transport-native-epoll-4.1.74.Final-sources.jar!/" />
+          <root url="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/netty/netty-transport-native-kqueue/4.1.46.Final/netty-transport-native-kqueue-4.1.46.Final-sources.jar!/" />
+          <root url="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/netty/netty-transport-native-kqueue/4.1.52.Final/netty-transport-native-kqueue-4.1.52.Final-sources.jar!/" />
+          <root url="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/netty/netty-transport-native-kqueue/4.1.74.Final/netty-transport-native-kqueue-4.1.74.Final-sources.jar!/" />
+          <root url="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/netty/incubator/netty-incubator-transport-native-io_uring/0.0.14.Final/netty-incubator-transport-native-io_uring-0.0.14.Final-sources.jar!/" />
+          <root url="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/apache/hive/hive-exec/2.3.9/hive-exec-2.3.9-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module" module-name="modulesJS" exported="" />
+    <orderEntry type="module" module-name="sdkJS" exported="" />
+  </component>
+</module>

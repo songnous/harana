@@ -1,0 +1,7 @@
+- name: General
+  items:
+    - name: Welcome
+      path: general/welcome
+      icon: stack4
+    - name: Contact Us
+      path: general/contact_us

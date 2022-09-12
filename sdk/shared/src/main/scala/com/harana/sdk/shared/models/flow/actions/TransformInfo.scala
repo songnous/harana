@@ -1,0 +1,41 @@
+package com.harana.sdk.shared.models.flow.actions
+
+import com.harana.sdk.shared.models.common.Version
+import com.harana.sdk.shared.models.flow.Action2To1Info
+import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Action
+import com.harana.sdk.shared.models.flow.actionobjects.TransformerInfo
+import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
+import com.harana.sdk.shared.models.flow.actions.layout.SmallBlockLayout2To1
+import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Action
+import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
+import com.harana.sdk.shared.models.flow.parameters.DynamicParameter
+import com.harana.sdk.shared.models.flow.utils.Id
+import io.circe.Json
+
+import scala.reflect.runtime.universe.TypeTag
+
+trait TransformInfo extends Action2To1Info[TransformerInfo, DataFrameInfo, DataFrameInfo] with SmallBlockLayout2To1 with ActionDocumentation {
+
+  val id: Id = "643d8706-24db-4674-b5b4-10b5129251fc"
+  val name = "Transform"
+  val description = "Transforms a DataFrame using a Transformer"
+  val since = Version(1, 0, 0)
+  val category = Action
+
+  val transformerParameters = new DynamicParameter("Parameters of input Transformer", Some("These parameters are rendered dynamically, depending on type of Transformer."),
+    inputPort = 0
+  )
+
+  setDefault(transformerParameters, Json.Null)
+  def getTransformerParameters = $(transformerParameters)
+  def setTransformerParameters(jsValue: Json): this.type = set(transformerParameters, jsValue)
+
+  override val parameters =  Array(transformerParameters)
+
+  lazy val portI_0: TypeTag[TransformerInfo] = typeTag
+  lazy val portI_1: TypeTag[DataFrameInfo] = typeTag
+  lazy val portO_0: TypeTag[DataFrameInfo] = typeTag
+
+}
+
+object TransformInfo extends TransformInfo

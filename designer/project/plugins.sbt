@@ -1,0 +1,3 @@
+resolvers += Resolver.githubPackages("harana", "sbt-plugin")
+addSbtPlugin("com.harana" % "sbt_js_jvm" % "1.0.0")
+addSbtPlugin("io.github.cquiroz" % "sbt-tzdb" % "0.3.1")

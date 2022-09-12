@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="designerJS" target="11" />
+      <module name="designerJVM" target="11" />
+      <module name="docs-generator" target="11" />
+      <module name="executor" target="11" />
+      <module name="growthJS" target="11" />
+      <module name="growthJVM" target="11" />
+      <module name="id-jwtJS" target="11" />
+      <module name="id-jwtJVM" target="11" />
+      <module name="idJS" target="11" />
+      <module name="idJVM" target="11" />
+      <module name="modules-core" target="11" />
+      <module name="modulesJS" target="11" />
+      <module name="modulesJVM" target="11" />
+      <module name="root" target="11" />
+      <module name="sdkJS" target="11" />
+      <module name="sdkJVM" target="11" />
+      <module name="spark-executor" target="11" />
+      <module name="sparkPatchesCsv2_2" target="11" />
+      <module name="sparkPatchesCsv2_4" target="11" />
+      <module name="sparkPatchesPatch2_2_x" target="11" />
+      <module name="sparkPatchesPatch2_x" target="11" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="designerJVM" options="-encoding UTF-8" />
+      <module name="docs-generator" options="-encoding UTF-8" />
+      <module name="executor" options="-encoding UTF-8" />
+      <module name="growthJVM" options="-encoding UTF-8" />
+      <module name="id-jwtJVM" options="-encoding UTF-8" />
+      <module name="idJVM" options="-encoding UTF-8" />
+      <module name="modules-core" options="-encoding UTF-8" />
+      <module name="modulesJVM" options="-encoding UTF-8" />
+      <module name="sdkJVM" options="-encoding UTF-8" />
+      <module name="spark-executor" options="-encoding UTF-8" />
+    </option>
+  </component>
+</project>

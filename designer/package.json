@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@visx/gradient": "^2.1.0",
+    "mini-css-extract-plugin": "^2.5.2"
+  }
+}

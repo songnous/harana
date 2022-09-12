@@ -1,0 +1,69 @@
+Configutation:
+  name: Default
+  Properties:
+    Property:
+      name: log-path
+      value: "logs"
+  Appenders:
+    Console:
+      name: ConsoleAppender
+      target: SYSTEM_OUT
+      PatternLayout:
+        pattern: "%highlight{%d{HH:mm:ss} | %c:%line |} %style{%msg%n%throwable}{white}"
+    File:
+      name: FileAppender
+      fileName: ${log-path}/logfile.log
+      PatternLayout:
+        pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} %c - %msg%n"
+    Syslog:
+      name: SyslogAppender
+      host: logs4.papertrailapp.com
+      port: 32532
+      protocol: TCP
+      facility: local6
+      connectTimeoutMillis: 10000
+      reconnectionDelayMillis: 5000
+      mdcId: mdc
+      appName: id
+      charset: UTF-8
+      ignoreExceptions: false
+      exceptionPattern: "%throwable{full}"
+      newLine: true
+      format: RFC5424
+      PatternLayout:
+        pattern: "%style{id}{blue} %style{%c:%line}{cyan} %style{%msg%n%throwable}{white}"
+  Loggers:
+    Root:
+      level: info
+      AppenderRef:
+        - ref: ConsoleAppender
+        - ref: SyslogAppender
+    Logger:
+      - name: com.github.jknack.handlebars
+        level: error
+      - name: com.harana.modules.stripe
+        level: debug
+      - name: com.harana.id.services.billing
+        level: debug
+      - name: io.netty
+        level: info
+      - name: io.vertx
+        level: warn
+      - name: org.apache.http
+        level: error
+      - name: com.harana.sdk.backend.modules.okhttp
+        level: error
+      - name: org.apache.curator
+        level: error
+      - name: org.apache.zookeeper
+        level: error
+      - name: org.mongodb
+        level: warn
+      - name: org.pac4j
+        level: warn
+      - name: org.pac4j.core.engine
+        level: warn
+      - name: org.redisson
+        level: warn
+      - name: skuber.api
+        level: warn
