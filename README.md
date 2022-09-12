@@ -70,7 +70,7 @@ Best way to get started is to select any issue with the [`good-first-issue` labe
 
 If you would like to contribute, please review our [Contributing Guide](CONTRIBUTING.md) for all relevant details.
 
-![Repobeats analytics image](https://repobeats.axiom.co/api/embed/635c57b743efe649cadceba6a2e6a956663f96dd.svg "Repobeats analytics image")
+![Repobeats analytics image](https://repobeats.axiom.co/api/embed/743088c59c6e9f900756695522f87fc90aba1b6f.svg "Repobeats analytics image")
 
 <br>
 
