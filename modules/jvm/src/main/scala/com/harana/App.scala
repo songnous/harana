@@ -13,7 +13,7 @@ object App extends zio.App {
 
   def startup =
     for {
-      connection      <- UIO(ShopifyConnection("dailey-dose-of-lashes", "7b23103943a71c8a3f9be28032f7af3a", "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"))
+      connection      <- UIO(ShopifyConnection("", "", ""))
     } yield ()
 
 
