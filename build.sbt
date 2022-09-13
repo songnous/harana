@@ -256,11 +256,6 @@ val sparkExecutor = jvmProject("spark-executor")
       Library.scopt.value
   )
 
-
-val growth = crossProject("growth")
-val growthJVM = growth.jvm.dependsOn(modulesJVM, modulesCore, sdkJVM)
-val growthJS = growth.js.dependsOn(modulesJS, sdkJS)
-
 val id = crossProject("id")
   .settings(
     libraryDependencies ++=
