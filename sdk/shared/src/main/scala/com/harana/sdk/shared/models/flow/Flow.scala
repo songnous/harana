@@ -15,7 +15,6 @@ case class Flow(title: String,
                 description: String,
                 connections: List[DataSource] = List(),
                 actions: List[Action] = List(),
-                links: List[Link] = List(),
                 zoomLevel: Option[Int],
                 createdBy: Option[UserId],
                 created: Instant,
@@ -33,17 +32,16 @@ case class Flow(title: String,
 }
 
 object Flow {
-  type FlowId = utils.Id
+  type FlowId = String
 
   def apply(title: String,
             description: String,
             connections: List[DataSource],
             actions: List[Action],
-            links: List[Link],
             createdBy: Option[UserId],
             visibility: Visibility,
             background: Background,
             tags: Set[String]): Flow = {
-    apply(title, description, connections, actions, links, None, createdBy, Instant.now, createdBy, Instant.now, Random.long, Status.Active, visibility, 1L, background, tags, Map())
+    apply(title, description, connections, actions, None, createdBy, Instant.now, createdBy, Instant.now, Random.long, Status.Active, visibility, 1L, background, tags, Map())
   }
 }

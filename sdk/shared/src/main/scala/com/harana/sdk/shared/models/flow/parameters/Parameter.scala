@@ -1,6 +1,5 @@
 package com.harana.sdk.shared.models.flow.parameters
 
-import ParameterType._
 import com.harana.sdk.shared.models.flow.exceptions.FlowError
 
 import java.util.Objects
@@ -24,8 +23,10 @@ abstract class Parameter[T] extends java.io.Serializable {
 
   override def toString = s"Parameter($parameterType -> $name)"
 
+  @unchecked
   override def equals(other: Any): Boolean = other match {
-    case that: Parameter[T] => this.isInstanceOf[Parameter[T]] && name == that.name && description == that.description && parameterType == that.parameterType
+    case that: Parameter[T] =>
+      this.isInstanceOf[Parameter[T]] && name == that.name && description == that.description && parameterType == that.parameterType
     case _ => false
   }
 

@@ -8,7 +8,7 @@ import io.circe.generic.JsonCodec
 
 @JsonCodec
 case class Action(id: ActionId,
-									actionType: ActionTypeInfo,
+									action: ActionInfo.Id,
 									position: (Int, Int),
 									title: Option[String],
 									description: Option[String],
@@ -18,11 +18,11 @@ case class Action(id: ActionId,
 object Action {
 	type ActionId = String
 
-	def apply(actionType: ActionTypeInfo,
+	def apply(action: ActionInfo.Id,
 						position: (Int, Int),
 						title: Option[String],
 						description: Option[String],
 						overrideColor: Option[String],
 						parameterValues: Map[ParameterName, ParameterValue]): Action =
-		apply(Random.long, actionType, position, title, description, overrideColor, parameterValues)
+		apply(Random.long, action, position, title, description, overrideColor, parameterValues)
 }
