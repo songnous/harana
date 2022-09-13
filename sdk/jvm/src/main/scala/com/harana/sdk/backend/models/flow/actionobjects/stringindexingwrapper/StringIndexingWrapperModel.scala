@@ -48,8 +48,6 @@ abstract class StringIndexingWrapperModel[M <: ml.Model[M], E <: ml.Estimator[M]
 
   override def report(extended: Boolean = true) = wrappedModel.report(extended)
 
-  val parameters = wrappedModel.parameters
-
   override def loadTransformer(ctx: ExecutionContext, path: String) = {
     val pipelineModelPath   = Transformer.stringIndexerPipelineFilePath(path)
     val wrappedModelPath    = Transformer.stringIndexerWrappedModelFilePath(path)
@@ -67,9 +65,5 @@ abstract class StringIndexingWrapperModel[M <: ml.Model[M], E <: ml.Estimator[M]
     pipelinedModel.save(pipelineModelPath)
     wrappedModel.save(ctx, wrappedModelPath)
   }
-
-  override def paramMap: ParameterMap = wrappedModel.paramMap
-
-  override def defaultParamMap: ParameterMap = wrappedModel.defaultParamMap
 
 }

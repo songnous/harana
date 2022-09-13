@@ -1,8 +1,10 @@
 package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimators
 
+import com.harana.sdk.shared.models.flow.ActionObjectInfo
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.MultiColumnParameters.SingleOrMultiColumnChoices.SingleColumnChoice
 import com.harana.sdk.shared.models.flow.actionobjects.{EstimatorInfo, SparkMultiColumnEstimatorWrapperInfo}
 import com.harana.sdk.shared.models.flow.parameters.{Parameter, Parameters}
+import com.harana.sdk.shared.models.flow.utils.Id.fromString
 
 import scala.language.reflectiveCalls
 
@@ -15,7 +17,7 @@ trait StringIndexerEstimatorInfo extends EstimatorInfo with SparkMultiColumnEsti
   override val specificParameters = Array.empty[Parameter[_]]
 }
 
-trait SingleStringIndexerInfo extends Parameters {
+trait SingleStringIndexerInfo extends ActionObjectInfo with Parameters {
 
   val id = "EA600609-AC9D-4FA3-A1AD-D1D2A0089750"
 

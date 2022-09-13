@@ -31,7 +31,8 @@ abstract class StringIndexingEstimatorWrapper[M <: ml.Model[M], E <: ml.Estimato
     val stringIndexingWrapperModelTag: TypeTag[SIWP]
 ) extends Estimator[SIWP] with ParametersWithSparkWrappers {
 
-  final val parameters = wrappedEstimator.parameters
+  // FIXME
+  //  final val parameters = wrappedEstimator.parameters
 
   final override def report(extended: Boolean = true) = wrappedEstimator.report(extended)
 

@@ -12,7 +12,7 @@ class RandomForestClassifier private (val vanillaRandomForestClassifier: Vanilla
       SparkRandomForestClassifier,
       VanillaRandomForestClassificationModel,
       RandomForestClassificationModel
-    ](vanillaRandomForestClassifier) {
+    ](vanillaRandomForestClassifier) with RandomForestClassifierInfo {
   def this() = this(new VanillaRandomForestClassifier())
 }
 

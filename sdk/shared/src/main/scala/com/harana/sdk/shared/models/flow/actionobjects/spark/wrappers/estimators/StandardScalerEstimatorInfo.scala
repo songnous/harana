@@ -13,7 +13,9 @@ trait StandardScalerEstimatorInfo extends EstimatorInfo with Parameters {
   val withStdParameter = BooleanParameter("with std", Some("Whether to scale the data to unit standard deviation."))
   setDefault(withStdParameter, true)
 
-  val parameters = Array[Parameter[_]](withMeanParameter, withStdParameter)
+  val specificParameters = Array[Parameter[_]](withMeanParameter, withStdParameter)
 }
 
-object StandardScalerEstimatorInfo extends StandardScalerEstimatorInfo
+object StandardScalerEstimatorInfo extends StandardScalerEstimatorInfo {
+  val parameters = specificParameters
+}

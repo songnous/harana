@@ -8,7 +8,8 @@ trait RandomForestClassificationModelInfo extends TransformerInfo {
  val id = "5E45320A-D21C-4AC0-925C-82AED31B83D3"
 
   val model = new VanillaRandomForestClassificationModelInfo {}
-  val parameters = model.parameters
+
+  override val parameters = model.parameters
 
   override def paramMap: ParameterMap = model.paramMap
 

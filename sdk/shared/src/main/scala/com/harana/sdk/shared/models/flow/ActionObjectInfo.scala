@@ -5,7 +5,7 @@ import com.harana.sdk.shared.models.flow.actionobjects.report.Report
 import io.circe.{Decoder, Encoder, HCursor, Json}
 
 trait ActionObjectInfo extends HasInferenceResult {
-  val id: ActionInfo.Id
+  val id: utils.Id
   def report(extended: Boolean = true) = Report()
 }
 
