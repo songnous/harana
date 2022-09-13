@@ -1,17 +1,17 @@
 package com.harana.workflowexecutor.partialexecution
 
-import com.harana.sdk.backend.models.designer.flow.graph.FlowGraph.FlowNode
-import com.harana.sdk.backend.models.designer.flow.graph.RandomNodeFactory._
-import com.harana.sdk.backend.models.designer.flow.graph._
+import com.harana.sdk.backend.models.flow.graph.FlowGraph.FlowNode
+import com.harana.sdk.backend.models.flow.graph.RandomNodeFactory._
+import com.harana.sdk.backend.models.flow.graph._
 import com.harana.sdk.shared.models.designer.flow.graph.node.NodeStatus.{Aborted, Draft, Queued}
-import com.harana.sdk.backend.models.designer.flow.json.{StandardSpec, UnitTestSupport}
-import com.harana.sdk.backend.models.designer.flow.report.factory.ReportContentTestFactory
-import com.harana.sdk.backend.models.designer.flow
-import com.harana.sdk.backend.models.designer.flow.inference.InferContext
+import com.harana.sdk.backend.models.flow.json.{StandardSpec, UnitTestSupport}
+import com.harana.sdk.backend.models.flow.report.factory.ReportContentTestFactory
+import com.harana.sdk.backend.models.flow
+import com.harana.sdk.backend.models.flow.inference.InferContext
 import com.harana.sdk.shared.models.designer.flow.graph.node.{Node, NodeStatus}
-import com.harana.sdk.backend.models.designer.flow.utils.Serialization
-import com.harana.sdk.backend.models.designer.flow.workflows
-import com.harana.sdk.backend.models.designer.flow.workflows.NodeStateWithResults
+import com.harana.sdk.backend.models.flow.utils.Serialization
+import com.harana.sdk.backend.models.flow.workflows
+import com.harana.sdk.backend.models.flow.workflows.NodeStateWithResults
 import com.harana.sdk.shared.models.designer
 import com.harana.sdk.shared.models.designer.flow.{ActionObjectInfo, EntitiesMap, NodeState}
 import com.harana.sdk.shared.models.designer.flow.exceptions.{FailureDescription, FlowError}
@@ -230,7 +230,7 @@ class StatefulGraphSpec
     }
 
     "be serializable" in {
-      import com.harana.sdk.backend.models.designer.flow.graph.ActionTestClasses._
+      import com.harana.sdk.backend.models.flow.graph.ActionTestClasses._
       val actionWithInitializedLogger = new ActionAToALogging
       val id = Node.Id.randomId
       val id2 = Node.Id.randomId

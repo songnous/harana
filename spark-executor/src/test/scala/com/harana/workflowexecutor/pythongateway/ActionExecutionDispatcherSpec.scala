@@ -1,7 +1,7 @@
 package com.harana.workflowexecutor.pythongateway
 
-import com.harana.sdk.backend.models.designer.flow.ActionExecutionDispatcher
-import com.harana.sdk.backend.models.designer.flow.json.StandardSpec
+import com.harana.sdk.backend.models.flow.ActionExecutionDispatcher
+import com.harana.sdk.backend.models.flow.json.StandardSpec
 import com.harana.sdk.shared.models.designer.flow.utils.Id
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.mockito.MockitoSugar

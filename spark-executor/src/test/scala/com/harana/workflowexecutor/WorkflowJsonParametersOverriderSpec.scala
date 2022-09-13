@@ -1,6 +1,6 @@
 package com.harana.workflowexecutor
 
-import com.harana.sdk.backend.models.designer.flow.json.StandardSpec
+import com.harana.sdk.backend.models.flow.json.StandardSpec
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.mockito.MockitoSugar
 

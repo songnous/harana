@@ -5,10 +5,10 @@ import com.harana.designer.frontend.flows.item.FlowItemStore.{FlowItemState, Sel
 import com.harana.designer.frontend.utils.DateUtils
 import com.harana.sdk.shared.models.common.Parameter.ParameterName
 import com.harana.sdk.shared.models.common.ParameterValue
-import com.harana.sdk.backend.models.designer.flow.Action.ActionId
-import com.harana.sdk.backend.models.designer.flow.{ActionType, Flow, FlowExecution}
-import com.harana.sdk.backend.models.designer.flow.execution.AggregateMetric.{ShuffleReadBytesRead, ShuffleReadRecordsRead, ShuffleWriteBytesWritten, ShuffleWriteRecordsWritten}
-import com.harana.sdk.backend.models.designer.flow.execution.{AggregateMetric, ExecutionStatus}
+import com.harana.sdk.backend.models.flow.Action.ActionId
+import com.harana.sdk.backend.models.flow.{ActionType, Flow, FlowExecution}
+import com.harana.sdk.backend.models.flow.execution.AggregateMetric.{ShuffleReadBytesRead, ShuffleReadRecordsRead, ShuffleWriteBytesWritten, ShuffleWriteRecordsWritten}
+import com.harana.sdk.backend.models.flow.execution.{AggregateMetric, ExecutionStatus}
 import com.harana.ui.components.elements.{Color, Label}
 import com.harana.ui.components.sidebar.ParametersSection
 import com.harana.ui.external.shoelace.ProgressBar

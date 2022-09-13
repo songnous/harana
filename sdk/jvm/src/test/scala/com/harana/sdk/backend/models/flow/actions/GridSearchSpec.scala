@@ -1,9 +1,9 @@
 package com.harana.sdk.backend.models.flow.actions
 
-import com.harana.sdk.backend.models.designer.flow.{Knowledge, TestSupport, UnitSpec}
-import com.harana.sdk.backend.models.designer.flow.actionobjects.dataframe.DataFrame
-import com.harana.sdk.backend.models.designer.flow.actions.MockActionObjectsFactory.{MockEstimator, MockEvaluator}
-import com.harana.sdk.backend.models.designer.flow.inference.{InferContext, InferenceWarnings}
+import com.harana.sdk.backend.models.flow.{Knowledge, TestSupport, UnitSpec}
+import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
+import com.harana.sdk.backend.models.flow.actions.MockActionObjectsFactory.{MockEstimator, MockEvaluator}
+import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
 import com.harana.sdk.shared.models.flow.actionobjects.report.Report
 import com.harana.sdk.shared.models.flow.actions.GridSearchInfo

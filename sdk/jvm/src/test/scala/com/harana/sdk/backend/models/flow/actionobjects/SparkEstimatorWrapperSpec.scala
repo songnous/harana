@@ -1,8 +1,8 @@
 package com.harana.sdk.backend.models.flow.actionobjects
 
-import com.harana.sdk.backend.models.designer.flow.TestSupport
-import com.harana.sdk.backend.models.designer.flow.ExecutionContext
-import com.harana.sdk.backend.models.designer.flow.UnitSpec
+import com.harana.sdk.backend.models.flow.TestSupport
+import com.harana.sdk.backend.models.flow.ExecutionContext
+import com.harana.sdk.backend.models.flow.UnitSpec
 import com.harana.sdk.backend.models.flow.ExecutionContext
 
 class SparkEstimatorWrapperSpec extends UnitSpec with TestSupport {

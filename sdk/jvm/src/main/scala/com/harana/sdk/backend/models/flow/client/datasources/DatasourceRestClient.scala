@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.client.datasources
 
-import com.harana.sdk.backend.models.designer.flow.utils.Logging
+import com.harana.sdk.backend.models.flow.utils.Logging
 
 import java.net.URL
 import java.util.UUID

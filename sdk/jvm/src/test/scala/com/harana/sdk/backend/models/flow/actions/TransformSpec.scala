@@ -1,10 +1,10 @@
 package com.harana.sdk.backend.models.flow.actions
 
-import com.harana.sdk.backend.models.designer.flow._
-import com.harana.sdk.backend.models.designer.flow.actionobjects.dataframe.DataFrame
-import com.harana.sdk.backend.models.designer.flow.actions.MockActionObjectsFactory._
-import com.harana.sdk.backend.models.designer.flow.actions.MockTransformers._
-import com.harana.sdk.backend.models.designer.flow.inference.{InferContext, InferenceWarnings}
+import com.harana.sdk.backend.models.flow._
+import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
+import com.harana.sdk.backend.models.flow.actions.MockActionObjectsFactory._
+import com.harana.sdk.backend.models.flow.actions.MockTransformers._
+import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
 import com.harana.sdk.backend.models.flow.Knowledge
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
 import com.harana.sdk.shared.models.flow.ActionObjectInfo

@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.parameters.choice
 
-import com.harana.sdk.backend.models.designer.flow.parameters.AbstractParameterSpec
+import com.harana.sdk.backend.models.flow.parameters.AbstractParameterSpec
 import com.harana.sdk.shared.models.flow.parameters.Parameter
 
 import scala.reflect.runtime.universe._

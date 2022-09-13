@@ -1,7 +1,7 @@
 package com.harana.sdk.backend.models.flow.graph
 
-import com.harana.sdk.backend.models.designer.flow._
-import com.harana.sdk.backend.models.designer.flow.actionobjects.ActionObjectInfoMock
+import com.harana.sdk.backend.models.flow._
+import com.harana.sdk.backend.models.flow.actionobjects.ActionObjectInfoMock
 import com.harana.sdk.backend.models.flow.actionobjects.ActionObjectInfoMock
 import com.harana.sdk.backend.models.flow.{Action0To1, Action1To0, Action1To1, Action1To2, Action2To1, ExecutionContext}
 import com.harana.sdk.shared.models.flow.ActionInfo
@@ -25,7 +25,7 @@ object DClassesForActions extends MockitoSugar {
 
 object ActionTestClasses {
 
-  import com.harana.sdk.backend.models.designer.flow.graph.DClassesForActions._
+  import com.harana.sdk.backend.models.flow.graph.DClassesForActions._
 
   trait ActionBaseFields extends GraphAction {
     val id: ActionInfo.Id = ActionInfo.Id.randomId

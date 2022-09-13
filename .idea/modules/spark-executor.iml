@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="spark-executor [file:~/Developer/harana/harana/]" external.linked.project.path="$MODULE_DIR$/../../spark-executor" external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" type="JAVA_MODULE" version="4">
+<module external.linked.project.id="spark-executor [file:/Users/naden/Developer/harana/harana/]" external.linked.project.path="$MODULE_DIR$/../../spark-executor" external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="jpa" name="JPA">
       <configuration>

@@ -24,8 +24,8 @@ import com.harana.modules.core.app.{App => CoreApp}
 import com.harana.modules.core.micrometer.{LiveMicrometer, Micrometer}
 import com.harana.modules.core.{Layers => CoreLayers}
 import com.harana.sdk.shared.models.common.{User => DesignerUser}
-import com.harana.sdk.backend.models.designer.flow.FlowExecution
-import com.harana.sdk.backend.models.designer.flow.execution.ExecutionStatus
+import com.harana.sdk.backend.models.flow.FlowExecution
+import com.harana.sdk.backend.models.flow.execution.ExecutionStatus
 import com.harana.id.jwt.shared.models.DesignerClaims
 import com.harana.modules.argo.LiveArgo
 import io.vertx.core.http.HttpMethod._

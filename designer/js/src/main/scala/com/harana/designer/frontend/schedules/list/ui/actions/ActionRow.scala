@@ -4,7 +4,7 @@ import com.harana.designer.frontend.Circuit
 import com.harana.designer.frontend.common.grid.GridStore.UpdateNewOrEditDialog
 import com.harana.designer.frontend.schedules.list.ScheduleListStore.{AddAction, DeleteAction, UpdateAction}
 import com.harana.designer.frontend.utils.i18nUtils.ops
-import com.harana.sdk.backend.models.designer.flow.Flow
+import com.harana.sdk.backend.models.flow.Flow
 import com.harana.sdk.shared.models.data.DataSource
 import com.harana.sdk.shared.models.schedules.Action._
 import com.harana.sdk.shared.models.schedules.{Action, Schedule}

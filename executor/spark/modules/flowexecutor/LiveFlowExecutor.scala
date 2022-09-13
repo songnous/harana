@@ -2,16 +2,16 @@ package com.harana.executor.spark.modules.flowexecutor
 
 import com.harana.modules.mongo.Mongo
 import com.harana.modules.vertx.Vertx
-import com.harana.sdk.backend.models.designer.flow.ActionType._
-import com.harana.sdk.backend.models.designer.flow._
+import com.harana.sdk.backend.models.flow.ActionType._
+import com.harana.sdk.backend.models.flow._
 import com.harana.modules.core.config.Config
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
 import com.harana.sdk.shared.models.common.Parameter.ParameterValues
-import com.harana.sdk.backend.models.designer.flow.Action.ActionId
-import com.harana.sdk.backend.models.designer.flow.FlowExecution.FlowExecutionId
-import com.harana.sdk.backend.models.designer.flow._
-import com.harana.sdk.backend.models.designer.flow.execution.ExecutionStatus
+import com.harana.sdk.backend.models.flow.Action.ActionId
+import com.harana.sdk.backend.models.flow.FlowExecution.FlowExecutionId
+import com.harana.sdk.backend.models.flow._
+import com.harana.sdk.backend.models.flow.execution.ExecutionStatus
 import com.harana.executor.spark.actiontypes.ActionTypes
 import com.harana.executor.spark.{everySecond, logDebug}
 import com.harana.executor.spark.metrics.MetricsManager

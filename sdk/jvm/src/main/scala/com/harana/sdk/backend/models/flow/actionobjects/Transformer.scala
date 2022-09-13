@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.actionobjects
 
-import com.harana.sdk.backend.models.designer.flow._
+import com.harana.sdk.backend.models.flow._
 import com.harana.sdk.backend.models.flow.{ExecutionContext, Knowledge, Method1To1}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.report.CommonTablesGenerators

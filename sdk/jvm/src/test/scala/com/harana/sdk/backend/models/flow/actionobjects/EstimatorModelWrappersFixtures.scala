@@ -1,7 +1,7 @@
 package com.harana.sdk.backend.models.flow.actionobjects
 
-import com.harana.sdk.backend.models.designer.flow.{ExecutionContext, TestSupport}
-import com.harana.sdk.backend.models.designer.flow.actionobjects.serialization.SerializableSparkModel
+import com.harana.sdk.backend.models.flow.{ExecutionContext, TestSupport}
+import com.harana.sdk.backend.models.flow.actionobjects.serialization.SerializableSparkModel
 import com.harana.sdk.backend.models.flow.ExecutionContext
 import com.harana.sdk.shared.models.flow.parameters.{DoubleParameter, Parameters}
 import com.harana.spark.ML

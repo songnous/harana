@@ -1,6 +1,6 @@
 package com.harana.workflowexecutor.pythongateway
 
-import com.harana.sdk.backend.models.designer.flow.utils.Logging
+import com.harana.sdk.backend.models.flow.utils.Logging
 import java.net.InetAddress
 import java.util.concurrent.atomic.AtomicReference
 
@@ -9,7 +9,7 @@ import scala.concurrent.duration._
 
 import org.apache.spark.SparkContext
 import py4j._
-import com.harana.sdk.backend.models.designer.flow._
+import com.harana.sdk.backend.models.flow._
 import com.harana.spark.SparkSQLSession
 import com.harana.workflowexecutor.customcode.CustomCodeEntryPoint
 import com.harana.workflowexecutor.pythongateway.PythonGateway.GatewayConfig

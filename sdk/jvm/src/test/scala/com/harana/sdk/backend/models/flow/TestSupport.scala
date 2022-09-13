@@ -1,8 +1,8 @@
 package com.harana.sdk.backend.models.flow
 
-import com.harana.sdk.backend.models.designer.flow.Catalog.ActionObjectCatalog
-import com.harana.sdk.backend.models.designer.flow.actionobjects.dataframe.DataFrame
-import com.harana.sdk.backend.models.designer.flow.inference.InferContext
+import com.harana.sdk.backend.models.flow.Catalog.ActionObjectCatalog
+import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
+import com.harana.sdk.backend.models.flow.inference.InferContext
 import com.harana.sdk.backend.models.flow.Catalog.ActionObjectCatalog
 import com.harana.sdk.backend.models.flow.inference.InferContext
 import org.apache.spark.sql.types.StructType

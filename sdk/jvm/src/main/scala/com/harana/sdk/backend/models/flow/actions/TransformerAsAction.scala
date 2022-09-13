@@ -7,11 +7,13 @@ import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarn
 import com.harana.sdk.shared.models.flow.actions.TransformerAsActionInfo
 import com.harana.sdk.shared.models.flow.utils.TypeUtils
 
-import scala.reflect.runtime.universe.TypeTag
+import scala.reflect.runtime.universe.{TypeTag, typeTag}
 
 abstract class TransformerAsAction[T <: Transformer]()(implicit tag: TypeTag[T]) extends Action1To2[DataFrame, DataFrame, T] {
 
   lazy val transformer: T = TypeUtils.instanceOfType(tag)
+
+  def extractParameterMap() = ???
 
   def execute(t0: DataFrame)(context: ExecutionContext): (DataFrame, T) = {
     transformer.set(extractParameterMap())

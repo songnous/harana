@@ -1,6 +1,6 @@
 package com.harana.workflowexecutor.pythongateway
 
-import com.harana.sdk.backend.models.designer.flow.utils.SparkUtils
+import com.harana.sdk.backend.models.flow.utils.SparkUtils
 
 import com.harana.spark.{PythonGateway => SparkPythonGateway}
 

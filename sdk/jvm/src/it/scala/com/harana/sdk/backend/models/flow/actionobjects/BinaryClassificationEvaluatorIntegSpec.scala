@@ -3,8 +3,8 @@ package com.harana.sdk.backend.models.flow.actionobjects
 import com.harana.spark.Linalg.Vectors
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.types._
-import com.harana.sdk.backend.models.designer.flow.actionobjects.spark.wrappers.evaluators.BinaryClassificationEvaluator._
-import com.harana.sdk.backend.models.designer.flow.actions.exceptions._
+import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.evaluators.BinaryClassificationEvaluator._
+import com.harana.sdk.backend.models.flow.actions.exceptions._
 import com.harana.sdk.backend.models.flow.{IntegratedTestSupport, Knowledge}
 import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.evaluators.BinaryClassificationEvaluator
 import com.harana.sdk.backend.models.flow.actions.exceptions.{ColumnDoesNotExistError, WrongColumnTypeError}

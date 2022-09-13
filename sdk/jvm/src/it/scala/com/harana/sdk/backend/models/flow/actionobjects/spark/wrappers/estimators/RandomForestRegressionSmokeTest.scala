@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.estimators
 
-import com.harana.sdk.backend.models.designer.flow.actionobjects.spark.wrappers.parameters.common.RegressionImpurity.Variance
+import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.parameters.common.RegressionImpurity.Variance
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.FeatureSubsetStrategy
 import com.harana.sdk.shared.models.flow.parameters.ParameterPair
 import com.harana.sdk.shared.models.flow.parameters.selections.NameSingleColumnSelection

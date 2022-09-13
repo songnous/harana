@@ -2,9 +2,9 @@ package com.harana.sdk.backend.models.flow.json.graph
 
 import com.harana.models.json.graph.GraphJsonTestSupport
 import com.harana.sdk.shared.models.designer.flow.graph.node._
-import com.harana.sdk.backend.models.designer.flow.json.DateTimeJsonProtocol.DateTimeJsonFormat
-import com.harana.sdk.backend.models.designer.flow.json.IdJsonProtocol.IdFormat
-import com.harana.sdk.backend.models.designer.flow.json.graph.NodeStatusJsonProtocol.NodeStatusFormat
+import com.harana.sdk.backend.models.flow.json.DateTimeJsonProtocol.DateTimeJsonFormat
+import com.harana.sdk.backend.models.flow.json.IdJsonProtocol.IdFormat
+import com.harana.sdk.backend.models.flow.json.graph.NodeStatusJsonProtocol.NodeStatusFormat
 import com.harana.sdk.shared.models.designer.flow.exceptions
 import com.harana.sdk.shared.models.designer.flow.exceptions.json.FailureDescriptionJsonProtocol
 import com.harana.sdk.shared.models.designer.flow.utils.{DateTimeConverter}

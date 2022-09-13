@@ -1,10 +1,10 @@
 package com.harana.sdk.backend.models.flow.json.workflow
 
-import com.harana.sdk.backend.models.designer.flow.Knowledge
-import com.harana.sdk.backend.models.designer.flow.actionobjects.dataframe.DataFrame
-import com.harana.sdk.backend.models.designer.flow.graph.{GraphKnowledge, NodeInferenceResult}
-import com.harana.sdk.backend.models.designer.flow.inference.{InferenceWarning, InferenceWarnings}
-import com.harana.sdk.backend.models.designer.flow.workflows.InferredState
+import com.harana.sdk.backend.models.flow.Knowledge
+import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
+import com.harana.sdk.backend.models.flow.graph.{GraphKnowledge, NodeInferenceResult}
+import com.harana.sdk.backend.models.flow.inference.{InferenceWarning, InferenceWarnings}
+import com.harana.sdk.backend.models.flow.workflows.InferredState
 import com.harana.sdk.shared.models.designer.flow.flows.Workflow
 import com.harana.sdk.shared.models.designer.flow.{graph}
 import com.harana.sdk.shared.models.designer.flow.json.workflow.InferredStateJsonProtocol

@@ -1,12 +1,10 @@
 package com.harana.sdk.backend.models.flow.actionobjects.dataframe.report
 
-import com.harana.sdk.shared.models.designer.flow.report._
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.report.distribution.{DistributionCalculator, NoDistributionReasons}
 import com.harana.sdk.backend.models.flow.actionobjects.report.ReportUtils
-import com.harana.sdk.backend.models.flow.utils.{SparkConversions, SparkTypeConverter}
+import com.harana.sdk.backend.models.flow.utils.SparkTypeConverter
 import com.harana.sdk.shared.models.flow.actionobjects.report.Report
-import com.harana.sdk.shared.models.flow.report
-import com.harana.sdk.shared.models.flow.report.{Distribution, NoDistribution, ReportContent, ReportType, Table}
+import com.harana.sdk.shared.models.flow.report._
 import com.harana.sdk.shared.models.flow.utils.ColumnType
 import org.apache.spark.mllib.stat.Statistics
 import org.apache.spark.sql.DataFrame

@@ -15,7 +15,7 @@ import com.harana.modules.mongo.Mongo
 import com.harana.modules.vertx.Vertx
 import com.harana.modules.vertx.models.Response
 import com.harana.sdk.shared.models.common.{PendingEvent, User}
-import com.harana.sdk.backend.models.designer.flow.{Flow, FlowExecution}
+import com.harana.sdk.backend.models.flow.{Flow, FlowExecution}
 import com.harana.sdk.shared.models.apps.{App => DesignerApp}
 import com.harana.sdk.shared.models.data.{DataSet, DataSource}
 import io.circe.parser._

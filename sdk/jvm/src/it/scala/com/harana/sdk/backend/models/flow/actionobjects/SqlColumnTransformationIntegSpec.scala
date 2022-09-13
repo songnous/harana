@@ -4,7 +4,7 @@ import org.apache.spark.sql.Row
 import org.apache.spark.sql.types._
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.MultiColumnParameters.SingleOrMultiColumnChoices.SingleColumnChoice
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.SingleColumnParameters.SingleTransformInPlaceChoices.NoInPlaceChoice
-import com.harana.sdk.backend.models.designer.flow.actions.exceptions._
+import com.harana.sdk.backend.models.flow.actions.exceptions._
 import com.harana.sdk.backend.models.flow.IntegratedTestSupport
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.transformers.TransformerSerialization

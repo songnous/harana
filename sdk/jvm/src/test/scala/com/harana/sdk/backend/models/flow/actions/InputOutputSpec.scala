@@ -2,14 +2,14 @@ package com.harana.sdk.backend.models.flow.actions
 
 import java.util.UUID
 import org.scalatest._
-import com.harana.sdk.backend.models.designer.flow.utils.Logging
-import com.harana.sdk.backend.models.designer.flow._
-import com.harana.sdk.backend.models.designer.flow.actionobjects.dataframe.DataFrame
+import com.harana.sdk.backend.models.flow.utils.Logging
+import com.harana.sdk.backend.models.flow._
+import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.shared.models.flow.actions.inout.CsvParameters.ColumnSeparatorChoice
-import com.harana.sdk.backend.models.designer.flow.actions.inout._
-import com.harana.sdk.backend.models.designer.flow.actions.read.ReadDataFrame
-import com.harana.sdk.backend.models.designer.flow.actions.readwritedataframe.FileScheme
-import com.harana.sdk.backend.models.designer.flow.actions.write.WriteDataFrame
+import com.harana.sdk.backend.models.flow.actions.inout._
+import com.harana.sdk.backend.models.flow.actions.read.ReadDataFrame
+import com.harana.sdk.backend.models.flow.actions.readwritedataframe.FileScheme
+import com.harana.sdk.backend.models.flow.actions.write.WriteDataFrame
 import com.harana.sdk.backend.models.flow.utils.Logging
 import org.scalatest.freespec.AnyFreeSpec
 

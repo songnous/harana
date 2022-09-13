@@ -1,7 +1,7 @@
 package com.harana.designer.frontend.schedules.list.ui.actions
 
 
-import com.harana.sdk.backend.models.designer.flow.Flow
+import com.harana.sdk.backend.models.flow.Flow
 import com.harana.sdk.shared.models.schedules.Action
 import com.harana.ui.external.shoelace.{MenuItem, Select}
 import slinky.core.FunctionalComponent

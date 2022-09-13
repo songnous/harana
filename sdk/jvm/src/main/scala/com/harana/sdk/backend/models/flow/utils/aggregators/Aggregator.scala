@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.utils.aggregators
 
-import com.harana.sdk.backend.models.designer.flow.utils.aggregators.Aggregator.TransformedInputAggregator
+import com.harana.sdk.backend.models.flow.utils.aggregators.Aggregator.TransformedInputAggregator
 import org.apache.spark.rdd.RDD
 
 import scala.reflect.ClassTag

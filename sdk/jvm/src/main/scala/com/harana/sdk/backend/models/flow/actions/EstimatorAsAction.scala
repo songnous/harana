@@ -6,9 +6,10 @@ import com.harana.sdk.backend.models.flow.actionobjects.{Estimator, Transformer}
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
 import com.harana.sdk.shared.models.flow.actionobjects.{EstimatorInfo, TransformerInfo}
 import com.harana.sdk.shared.models.flow.actions.EstimatorAsActionInfo
+import com.harana.sdk.shared.models.flow.actions.FitInfo.{extractParameterMap, validateDynamicParameters}
 import com.harana.sdk.shared.models.flow.utils.TypeUtils
 
-import scala.reflect.runtime.universe.TypeTag
+import scala.reflect.runtime.universe.{TypeTag, typeTag}
 
 abstract class EstimatorAsAction[E <: Estimator[T], T <: Transformer]()(implicit typeTagE: TypeTag[E], typeTagT: TypeTag[T])
   extends Action1To2[DataFrame, DataFrame, T] {

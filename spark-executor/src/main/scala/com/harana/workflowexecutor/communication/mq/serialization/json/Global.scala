@@ -1,6 +1,6 @@
 package com.harana.workflowexecutor.communication.mq.serialization.json
 
-import com.harana.sdk.backend.models.designer.flow.workflows.InferredState
+import com.harana.sdk.backend.models.flow.workflows.InferredState
 import com.harana.sdk.shared.models.designer.flow.ExecutionReport
 import java.nio.charset.Charset
 import com.harana.workflowexecutor.communication.mq.serialization.json.Constants.MessagesTypes._

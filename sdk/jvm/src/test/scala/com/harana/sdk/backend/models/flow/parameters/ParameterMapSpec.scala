@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.parameters
 
-import com.harana.sdk.backend.models.designer.flow.UnitSpec
+import com.harana.sdk.backend.models.flow.UnitSpec
 import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterMap, ParameterPair, ParameterType}
 import io.circe.Json
 

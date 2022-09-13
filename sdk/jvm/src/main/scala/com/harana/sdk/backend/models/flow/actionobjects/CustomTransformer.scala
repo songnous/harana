@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.actionobjects
 
-import com.harana.sdk.backend.models.designer.flow._
+import com.harana.sdk.backend.models.flow._
 import com.harana.sdk.backend.models.flow.{CommonExecutionContext, ExecutionContext, Knowledge}
 import com.harana.sdk.shared.models.designer.flow
 import io.circe.syntax.EncoderOps

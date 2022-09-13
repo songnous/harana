@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.json.graph
 
-import com.harana.sdk.backend.models.designer.flow.Action
+import com.harana.sdk.backend.models.flow.Action
 import com.harana.sdk.backend.models.flow.Action
 import com.harana.sdk.shared.models.designer.flow.graph.Endpoint
 import com.harana.sdk.shared.models.flow.ActionInfo

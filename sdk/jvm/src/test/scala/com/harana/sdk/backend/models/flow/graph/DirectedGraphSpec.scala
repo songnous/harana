@@ -1,7 +1,7 @@
 package com.harana.sdk.backend.models.flow.graph
 
-import com.harana.sdk.backend.models.designer.flow.graph.RandomNodeFactory._
-import com.harana.sdk.backend.models.designer.flow.utils.{Logging, Serialization}
+import com.harana.sdk.backend.models.flow.graph.RandomNodeFactory._
+import com.harana.sdk.backend.models.flow.utils.{Logging, Serialization}
 import com.harana.sdk.backend.models.flow.utils.{Logging, Serialization}
 import com.harana.sdk.shared.models.{designer, flow}
 import com.harana.sdk.shared.models.flow.graph.FlowGraph.FlowNode
@@ -26,7 +26,7 @@ class DirectedGraphSpec extends AnyFunSuite with Matchers with Serialization wit
   }
 
   test("Graph with two nodes should have size 2") {
-    import com.harana.sdk.backend.models.designer.flow.graph.ActionTestClasses._
+    import com.harana.sdk.backend.models.flow.graph.ActionTestClasses._
 
     val node1 = randomNode(ActionA1ToA())
     val node2 = randomNode(ActionA1ToA())
@@ -37,7 +37,7 @@ class DirectedGraphSpec extends AnyFunSuite with Matchers with Serialization wit
   }
 
   test("Programmer can validate if graph doesn't contain a cycle") {
-    import com.harana.sdk.backend.models.designer.flow.graph.ActionTestClasses._
+    import com.harana.sdk.backend.models.flow.graph.ActionTestClasses._
 
     val node1 = randomNode(ActionA1ToA())
     val node2 = randomNode(ActionA1A2ToA())
@@ -56,7 +56,7 @@ class DirectedGraphSpec extends AnyFunSuite with Matchers with Serialization wit
   }
 
   test("Simple Graph can be sorted topologically") {
-    import com.harana.sdk.backend.models.designer.flow.graph.ActionTestClasses._
+    import com.harana.sdk.backend.models.flow.graph.ActionTestClasses._
 
     val node1 = randomNode(ActionA1ToA())
     val node2 = randomNode(ActionA1ToA())
@@ -69,7 +69,7 @@ class DirectedGraphSpec extends AnyFunSuite with Matchers with Serialization wit
   }
 
   test("Simple Graph can calculate its direct and non-direct precedessors") {
-    import com.harana.sdk.backend.models.designer.flow.graph.ActionTestClasses._
+    import com.harana.sdk.backend.models.flow.graph.ActionTestClasses._
 
     val node1 = randomNode(ActionA1ToA())
     val node2 = randomNode(ActionA1ToA())
@@ -84,7 +84,7 @@ class DirectedGraphSpec extends AnyFunSuite with Matchers with Serialization wit
   }
 
   test("Complicated Graph can be sorted topologically") {
-    import com.harana.sdk.backend.models.designer.flow.graph.ActionTestClasses._
+    import com.harana.sdk.backend.models.flow.graph.ActionTestClasses._
 
     def checkIfInOrder(node1: FlowNode, node2: FlowNode, order: List[FlowNode]) =
       assert(order.indexOf(node1) < order.indexOf(node2))
@@ -117,7 +117,7 @@ class DirectedGraphSpec extends AnyFunSuite with Matchers with Serialization wit
   }
 
   test("Graph's nodes have correct predecessors and successors") {
-    import com.harana.sdk.backend.models.designer.flow.graph.ActionTestClasses._
+    import com.harana.sdk.backend.models.flow.graph.ActionTestClasses._
 
     val node1 = randomNode(ActionCreateA1())
     val node2 = randomNode(ActionA1ToA())

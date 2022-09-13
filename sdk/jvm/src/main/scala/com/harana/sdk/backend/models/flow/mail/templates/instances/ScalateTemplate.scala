@@ -1,7 +1,7 @@
 package com.harana.sdk.backend.models.flow.mail.templates.instances
 
-import com.harana.sdk.backend.models.designer.flow.mail.templates.TemplateLoadedFromFile
-import com.harana.sdk.backend.models.designer.flow.utils.DirectoryListFileFinder
+import com.harana.sdk.backend.models.flow.mail.templates.TemplateLoadedFromFile
+import com.harana.sdk.backend.models.flow.utils.DirectoryListFileFinder
 import com.harana.sdk.backend.models.flow.mail.templates.TemplateLoadedFromFile
 import org.apache.commons.io.FilenameUtils
 import org.fusesource.scalate.{Template, TemplateEngine}

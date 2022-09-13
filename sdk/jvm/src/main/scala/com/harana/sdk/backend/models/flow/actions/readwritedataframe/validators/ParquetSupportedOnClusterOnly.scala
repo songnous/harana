@@ -1,9 +1,9 @@
 package com.harana.sdk.backend.models.flow.actions.readwritedataframe.validators
 
-import com.harana.sdk.backend.models.designer.flow.actions.read.ReadDataFrame
-import com.harana.sdk.backend.models.designer.flow.actions.readwritedataframe.{FilePath, FileScheme}
-import com.harana.sdk.backend.models.designer.flow.actions.readwritedataframe.filestorage.ParquetNotSupported
-import com.harana.sdk.backend.models.designer.flow.actions.write.WriteDataFrame
+import com.harana.sdk.backend.models.flow.actions.read.ReadDataFrame
+import com.harana.sdk.backend.models.flow.actions.readwritedataframe.{FilePath, FileScheme}
+import com.harana.sdk.backend.models.flow.actions.readwritedataframe.filestorage.ParquetNotSupported
+import com.harana.sdk.backend.models.flow.actions.write.WriteDataFrame
 import com.harana.sdk.shared.models.flow.actions.inout.{InputFileFormatChoice, InputStorageTypeChoice, OutputFileFormatChoice, OutputStorageTypeChoice}
 
 object ParquetSupportedOnClusterOnly {

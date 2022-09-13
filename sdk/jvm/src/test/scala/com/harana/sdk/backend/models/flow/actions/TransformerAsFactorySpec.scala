@@ -1,7 +1,7 @@
 package com.harana.sdk.backend.models.flow.actions
 
-import com.harana.sdk.backend.models.designer.flow._
-import com.harana.sdk.backend.models.designer.flow.inference.{InferContext, InferenceWarnings}
+import com.harana.sdk.backend.models.flow._
+import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
 import com.harana.sdk.backend.models.flow.ExecutionContext
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
 import com.harana.sdk.shared.models.flow.parameters.ParameterMap

@@ -1,10 +1,10 @@
 package com.harana.sdk.backend.models.flow.catalogs.actions
 
-import com.harana.sdk.backend.models.designer.flow.Catalog.ActionCatalog
-import com.harana.sdk.backend.models.designer.flow._
-import com.harana.sdk.backend.models.designer.flow.actionobjects.ActionObjectInfoMock
-import com.harana.sdk.backend.models.designer.flow.actions.UnknownAction
-import com.harana.sdk.backend.models.designer.flow.inference.{InferContext, InferenceWarnings}
+import com.harana.sdk.backend.models.flow.Catalog.ActionCatalog
+import com.harana.sdk.backend.models.flow._
+import com.harana.sdk.backend.models.flow.actionobjects.ActionObjectInfoMock
+import com.harana.sdk.backend.models.flow.actions.UnknownAction
+import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
 import com.harana.sdk.backend.models.flow.actionobjects.ActionObjectInfoMock
 import com.harana.sdk.backend.models.flow.{ExecutionContext, Knowledge}
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
@@ -212,7 +212,7 @@ class ActionCatalogSuite extends AnyFunSuite with Matchers with MockitoSugar {
   }
 
   test("SortPriority inSequence assigns values with step 100") {
-    import com.harana.sdk.backend.models.designer.flow.catalogs.actions.ActionCatalogTestResources.CategoryTree
+    import com.harana.sdk.backend.models.flow.catalogs.actions.ActionCatalogTestResources.CategoryTree
     CategoryTree.ML.Classification.priority shouldBe SortPriority(300)
     CategoryTree.ML.Regression.priority shouldBe SortPriority(400)
   }

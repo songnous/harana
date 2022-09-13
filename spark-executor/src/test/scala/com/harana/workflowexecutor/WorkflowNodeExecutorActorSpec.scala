@@ -14,9 +14,9 @@ import org.scalatest.BeforeAndAfter
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
-import com.harana.sdk.backend.models.designer.flow._
-import com.harana.sdk.backend.models.designer.flow.graph.FlowGraph.FlowNode
-import com.harana.sdk.backend.models.designer.flow.inference.InferenceWarnings
+import com.harana.sdk.backend.models.flow._
+import com.harana.sdk.backend.models.flow.graph.FlowGraph.FlowNode
+import com.harana.sdk.backend.models.flow.inference.InferenceWarnings
 import com.harana.sdk.shared.models.designer.flow.actionobjects.report.Report
 import com.harana.sdk.shared.models.designer.flow.graph.node.Node
 import com.harana.sdk.shared.models.designer.flow.report.ReportContent

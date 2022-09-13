@@ -1,8 +1,8 @@
 package com.harana.workflowexecutor.session.storage
 
-import com.harana.sdk.backend.models.designer.flow.DataFrameStorage
-import com.harana.sdk.backend.models.designer.flow.actionobjects.dataframe.DataFrame
-import com.harana.sdk.backend.models.designer.flow.json.StandardSpec
+import com.harana.sdk.backend.models.flow.DataFrameStorage
+import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
+import com.harana.sdk.backend.models.flow.json.StandardSpec
 import com.harana.sdk.shared.models.designer.flow.utils.Id
 import org.apache.spark.sql.{DataFrame => SparkDataFrame}
 import org.scalatest.BeforeAndAfter

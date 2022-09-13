@@ -3,10 +3,10 @@ package com.harana.executor.spark
 import com.harana.sdk.shared.models.common.Parameter
 import com.harana.sdk.shared.models.common.Parameter.ParameterValues
 import com.harana.sdk.shared.models.designer.data.{DataSourceType, JdbcDataSourceType}
-import com.harana.sdk.backend.models.designer.flow.FlowContext
-import com.harana.sdk.backend.models.designer.flow.actiontypes.{profileParameter, sampleParameter, schemaParameter}
-import com.harana.sdk.backend.models.designer.flow.execution.ExecutionError
-import com.harana.sdk.backend.models.designer.flow.execution.ExecutionError.InvalidParameter
+import com.harana.sdk.backend.models.flow.FlowContext
+import com.harana.sdk.backend.models.flow.actiontypes.{profileParameter, sampleParameter, schemaParameter}
+import com.harana.sdk.backend.models.flow.execution.ExecutionError
+import com.harana.sdk.backend.models.flow.execution.ExecutionError.InvalidParameter
 import org.apache.commons.io.FilenameUtils
 import org.apache.log4j.LogManager
 import org.apache.spark.sql.{DataFrame, DataFrameReader, SparkSession}

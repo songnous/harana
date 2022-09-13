@@ -1,15 +1,12 @@
 package com.harana.sdk.backend.models.flow.graph
 
-import com.harana.sdk.backend.models.designer.flow.Knowledge
-import com.harana.sdk.backend.models.designer.flow.inference.InferenceWarnings
-import com.harana.sdk.backend.models.designer.flow.inference.exceptions.{AllTypesNotCompilableError, NoInputEdgesError}
-import com.harana.sdk.backend.models.designer.flow.inference.warnings.SomeTypesNotCompilableWarning
+import com.harana.sdk.backend.models.flow.Knowledge
 import com.harana.sdk.backend.models.flow.inference.InferenceWarnings
-import com.harana.sdk.shared.models.flow.ActionObjectInfo._
+import com.harana.sdk.backend.models.flow.inference.exceptions.{AllTypesNotCompilableError, NoInputEdgesError}
+import com.harana.sdk.backend.models.flow.inference.warnings.SomeTypesNotCompilableWarning
 import com.harana.sdk.shared.models.flow.ActionObjectInfo
 import com.harana.sdk.shared.models.flow.exceptions.FlowError
 import com.harana.sdk.shared.models.flow.utils.Id
-import io.circe.generic.JsonCodec
 
 case class GraphKnowledge(private[graph] val resultsMap: Map[Id, NodeInferenceResult]) {
 

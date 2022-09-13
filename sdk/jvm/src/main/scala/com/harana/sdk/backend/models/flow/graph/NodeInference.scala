@@ -1,16 +1,14 @@
 package com.harana.sdk.backend.models.flow.graph
 
-import com.harana.sdk.backend.models.designer.flow.Catalog.ActionObjectCatalog
-import com.harana.sdk.backend.models.designer.flow.graph.TypesAccordance.TypesAccordance
-import com.harana.sdk.backend.models.designer.flow.inference.{InferContext, InferenceWarnings}
-import com.harana.sdk.backend.models.designer.flow.{Action, Catalog, Knowledge}
-import com.harana.sdk.backend.models.flow.Catalog
 import com.harana.sdk.backend.models.flow.Catalog.ActionObjectCatalog
-import com.harana.sdk.backend.models.flow.inference.InferenceWarnings
-import com.harana.sdk.shared.models.flow.graph.FlowGraph.FlowNode
-import com.harana.sdk.shared.models.designer.flow.graph._
+import com.harana.sdk.backend.models.flow.graph.TypesAccordance.TypesAccordance
+import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
+import com.harana.sdk.backend.models.flow.{Action, Catalog, Knowledge}
 import com.harana.sdk.shared.models.flow.ActionObjectInfo
 import com.harana.sdk.shared.models.flow.exceptions.FlowError
+import com.harana.sdk.shared.models.flow.graph.Edge.PortIndex
+import com.harana.sdk.shared.models.flow.graph.FlowGraph.FlowNode
+import com.harana.sdk.shared.models.flow.utils.Id
 
 import scala.reflect.runtime.universe.TypeTag
 
@@ -64,7 +62,7 @@ object NodeInference {
     }
   }
 
-  private def inputKnowledgeAndAccordanceForInputPort(node: FlowNode, catalog: ActionObjectCatalog, graphKnowledge: GraphKnowledge, portIndex: Int, predecessorEndpointOption: Option[(Id, PortIndex])): (Knowledge[ActionObjectInfo], TypesAccordance) = {
+  private def inputKnowledgeAndAccordanceForInputPort(node: FlowNode, catalog: ActionObjectCatalog, graphKnowledge: GraphKnowledge, portIndex: Int, predecessorEndpointOption: Option[(Id, PortIndex)]): (Knowledge[ActionObjectInfo], TypesAccordance) = {
     val inPortType = node.value.inPortTypes(portIndex).asInstanceOf[TypeTag[ActionObjectInfo]]
     predecessorEndpointOption match {
       case None => (KnowledgeService.defaultKnowledge(catalog, inPortType), TypesAccordance.NotProvided(portIndex))

@@ -1,7 +1,7 @@
 package com.harana.sdk.backend.models.flow.actions.examples
 
-import com.harana.sdk.backend.models.designer.flow.actionobjects.Projector.ColumnProjection
-import com.harana.sdk.backend.models.designer.flow.actionobjects.Projector.RenameColumnChoice.Yes
+import com.harana.sdk.backend.models.flow.actionobjects.Projector.ColumnProjection
+import com.harana.sdk.backend.models.flow.actionobjects.Projector.RenameColumnChoice.Yes
 import com.harana.sdk.backend.models.flow.actions.Projection
 import com.harana.sdk.shared.models.flow.parameters.selections.NameSingleColumnSelection
 

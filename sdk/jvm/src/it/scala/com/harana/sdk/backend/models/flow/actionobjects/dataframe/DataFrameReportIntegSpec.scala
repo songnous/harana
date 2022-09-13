@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.actionobjects.dataframe
 
-import com.harana.sdk.backend.models.designer.flow.report._
+import com.harana.sdk.backend.models.flow.report._
 import com.harana.sdk.backend.models.flow.IntegratedTestSupport
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.report.DataFrameReportGenerator
 import com.harana.sdk.shared.models.flow.actionobjects.report.Report

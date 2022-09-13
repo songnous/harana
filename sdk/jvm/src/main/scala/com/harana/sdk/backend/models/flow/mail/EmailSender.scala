@@ -1,8 +1,8 @@
 package com.harana.sdk.backend.models.flow.mail
 
-import com.harana.sdk.backend.models.designer.flow.mail.templates.Template
-import com.harana.sdk.backend.models.designer.flow.mail.templates.TemplateInstanceToLoad
-import com.harana.sdk.backend.models.designer.flow.utils.Logging
+import com.harana.sdk.backend.models.flow.mail.templates.Template
+import com.harana.sdk.backend.models.flow.mail.templates.TemplateInstanceToLoad
+import com.harana.sdk.backend.models.flow.utils.Logging
 import com.harana.sdk.backend.models.flow.mail.templates.{Template, TemplateInstanceToLoad}
 import com.harana.sdk.backend.models.flow.utils.Logging
 import com.sun.mail.smtp.SMTPTransport

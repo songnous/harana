@@ -1,9 +1,9 @@
 package com.harana.sdk.backend.models.flow.actions
 
 import org.scalatest._
-import com.harana.sdk.backend.models.designer.flow._
-import com.harana.sdk.backend.models.designer.flow.actions.inout._
-import com.harana.sdk.backend.models.designer.flow.actions.readwritedataframe.googlestorage._
+import com.harana.sdk.backend.models.flow._
+import com.harana.sdk.backend.models.flow.actions.inout._
+import com.harana.sdk.backend.models.flow.actions.readwritedataframe.googlestorage._
 import com.harana.sdk.backend.models.flow.{Jenkins, LocalExecutionContext, TestFiles}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actions.read.ReadDataFrame

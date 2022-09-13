@@ -1,8 +1,8 @@
 package com.harana.executor.spark.actiontypes
 
 import com.harana.sdk.shared.models.common.Parameter.ParameterValues
-import com.harana.sdk.backend.models.designer.flow.actiontypes.output.JdbcOutputActionTypeInfo
-import com.harana.sdk.backend.models.designer.flow.execution.ExecutionError
+import com.harana.sdk.backend.models.flow.actiontypes.output.JdbcOutputActionTypeInfo
+import com.harana.sdk.backend.models.flow.execution.ExecutionError
 import org.apache.commons.lang3.StringUtils
 import org.apache.spark.sql.{DataFrame, DataFrameReader, SparkSession}
 import com.harana.executor.spark.utils.PathUtils

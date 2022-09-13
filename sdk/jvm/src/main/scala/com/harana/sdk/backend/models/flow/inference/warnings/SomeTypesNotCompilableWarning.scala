@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.inference.warnings
 
-import com.harana.sdk.backend.models.designer.flow.inference.InferenceWarning
+import com.harana.sdk.backend.models.flow.inference.InferenceWarning
 import com.harana.sdk.backend.models.flow.inference.InferenceWarning
 
 case class SomeTypesNotCompilableWarning(portIndex: Int) extends InferenceWarning {

@@ -3,8 +3,8 @@ package com.harana.sdk.backend.models.flow
 import org.mockito.Mockito._
 import org.mockito.ArgumentMatchers.any
 import org.scalatest.BeforeAndAfter
-import com.harana.sdk.backend.models.designer.flow.actionobjects.dataframe.DataFrame
-import com.harana.sdk.backend.models.designer.flow.actions.exceptions.CustomActionExecutionError
+import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
+import com.harana.sdk.backend.models.flow.actions.exceptions.CustomActionExecutionError
 import com.harana.sdk.backend.models.flow.actions.exceptions.CustomActionExecutionError
 import com.harana.sdk.shared.models.flow.utils.Id
 

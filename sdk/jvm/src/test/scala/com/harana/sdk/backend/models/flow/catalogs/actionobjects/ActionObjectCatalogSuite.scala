@@ -1,8 +1,8 @@
 package com.harana.sdk.backend.models.flow.catalogs.actionobjects
 
-import com.harana.sdk.backend.models.designer.flow.actionobjects.ActionObjectInfoMock
-import com.harana.sdk.backend.models.designer.flow.catalogs.actionobjects.Constructors.{AuxiliaryParameterless, NotParameterLess, WithDefault}
-import com.harana.sdk.backend.models.designer.flow.catalogs.actionobjects.MixinInheritance.{OpA, OpB, P}
+import com.harana.sdk.backend.models.flow.actionobjects.ActionObjectInfoMock
+import com.harana.sdk.backend.models.flow.catalogs.actionobjects.Constructors.{AuxiliaryParameterless, NotParameterLess, WithDefault}
+import com.harana.sdk.backend.models.flow.catalogs.actionobjects.MixinInheritance.{OpA, OpB, P}
 import com.harana.sdk.backend.models.flow.actionobjects.ActionObjectInfoMock
 import com.harana.sdk.backend.models.flow.utils.catalog.exceptions.NoParameterlessConstructorInClassError
 import com.harana.sdk.shared.models.designer.flow.utils.catalog.exceptions.NoParameterlessConstructorInClassError

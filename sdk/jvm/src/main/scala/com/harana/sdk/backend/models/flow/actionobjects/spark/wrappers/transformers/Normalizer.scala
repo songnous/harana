@@ -2,8 +2,6 @@ package com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.transfor
 
 import com.harana.sdk.backend.models.flow.actionobjects.SparkTransformerAsMultiColumnTransformer
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.transformers.NormalizerInfo
-import com.harana.sdk.shared.models.flow.DoubleParameter
-import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
 import org.apache.spark.ml.feature.{Normalizer => SparkNormalizer}
 
 class Normalizer extends SparkTransformerAsMultiColumnTransformer[SparkNormalizer] with NormalizerInfo {

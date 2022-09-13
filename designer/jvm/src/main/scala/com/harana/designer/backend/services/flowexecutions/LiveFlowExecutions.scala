@@ -6,8 +6,8 @@ import com.harana.modules.vertx.models.Response
 import com.harana.modules.core.config.Config
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
-import com.harana.sdk.backend.models.designer.flow.execution.spark.{ExecutionLog, ExecutionStatus}
-import com.harana.sdk.backend.models.designer.flow.{Flow, FlowExecution}
+import com.harana.sdk.backend.models.flow.execution.spark.{ExecutionLog, ExecutionStatus}
+import com.harana.sdk.backend.models.flow.{Flow, FlowExecution}
 import com.harana.sdk.shared.models.data.DataSource
 import io.circe.parser._
 import io.circe.syntax._

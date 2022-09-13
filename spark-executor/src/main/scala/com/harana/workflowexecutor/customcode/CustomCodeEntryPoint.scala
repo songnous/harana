@@ -1,6 +1,6 @@
 package com.harana.workflowexecutor.customcode
 
-import com.harana.sdk.backend.models.designer.flow.utils.Logging
+import com.harana.sdk.backend.models.flow.utils.Logging
 import java.util.concurrent.TimeoutException
 import java.util.concurrent.atomic.AtomicReference
 
@@ -13,7 +13,7 @@ import org.apache.spark.api.java.JavaSparkContext
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
-import com.harana.sdk.backend.models.designer.flow._
+import com.harana.sdk.backend.models.flow._
 import com.harana.spark.SparkSQLSession
 
 /** An entry point to our application designed to be accessible by custom code processes. */

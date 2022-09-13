@@ -1,11 +1,11 @@
 package com.harana.executor.spark.actiontypes
 
 import com.harana.sdk.shared.models.common.Parameter.ParameterValues
-import com.harana.sdk.backend.models.designer.flow.actiontypes.input.JdbcInputActionTypeInfo
-import com.harana.sdk.backend.models.designer.flow.execution.ExecutionError
+import com.harana.sdk.backend.models.flow.actiontypes.input.JdbcInputActionTypeInfo
+import com.harana.sdk.backend.models.flow.execution.ExecutionError
 import org.apache.spark.sql.{DataFrame, DataFrameReader, SparkSession}
 import com.harana.executor.spark.utils.PathUtils
-import com.harana.sdk.backend.models.designer.flow.execution.ExecutionError
+import com.harana.sdk.backend.models.flow.execution.ExecutionError
 import zio.{IO, Task, UIO}
 
 package object input {

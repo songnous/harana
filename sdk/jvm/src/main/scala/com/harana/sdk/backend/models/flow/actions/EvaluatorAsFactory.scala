@@ -1,11 +1,9 @@
 package com.harana.sdk.backend.models.flow.actions
 
-import com.harana.sdk.backend.models.designer.flow._
-import com.harana.sdk.backend.models.flow.{Action0To1, ExecutionContext, Knowledge}
 import com.harana.sdk.backend.models.flow.actionobjects.Evaluator
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
-import com.harana.sdk.shared.models.flow.actions.EvaluatorAsFactoryInfo
-import com.harana.sdk.shared.models.flow.parameters.Parameter
+import com.harana.sdk.backend.models.flow.{Action0To1, ExecutionContext, Knowledge}
+import com.harana.sdk.shared.models.flow.actions.FitInfo.extractParameterMap
 import com.harana.sdk.shared.models.flow.utils.TypeUtils
 
 import scala.reflect.runtime.universe.TypeTag

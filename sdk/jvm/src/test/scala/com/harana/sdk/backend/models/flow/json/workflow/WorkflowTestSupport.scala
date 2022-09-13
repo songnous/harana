@@ -1,9 +1,9 @@
 package com.harana.sdk.backend.models.flow.json.workflow
 
-import com.harana.sdk.backend.models.designer.flow.{Action, Knowledge}
-import com.harana.sdk.backend.models.designer.flow.actions.custom.{Sink, Source}
-import com.harana.sdk.backend.models.designer.flow.inference.InferenceWarnings
-import com.harana.sdk.backend.models.designer.flow.json.{StandardSpec, UnitTestSupport}
+import com.harana.sdk.backend.models.flow.{Action, Knowledge}
+import com.harana.sdk.backend.models.flow.actions.custom.{Sink, Source}
+import com.harana.sdk.backend.models.flow.inference.InferenceWarnings
+import com.harana.sdk.backend.models.flow.json.{StandardSpec, UnitTestSupport}
 import com.harana.sdk.backend.models.flow.inference.InferenceWarnings
 import com.harana.sdk.backend.models.flow.{Action, Knowledge}
 import com.harana.sdk.shared.models.designer.flow.graph.Endpoint

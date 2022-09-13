@@ -1,7 +1,7 @@
 package com.harana.sdk.backend.models.flow.actions.readwritedataframe.filestorage
 
 import com.harana.sdk.shared.models.flow.actions.inout.InputFileFormatChoice.Csv
-import com.harana.sdk.backend.models.designer.flow.actions.readwritedataframe._
+import com.harana.sdk.backend.models.flow.actions.readwritedataframe._
 import com.harana.sdk.backend.models.flow.ExecutionContext
 import com.harana.sdk.backend.models.flow.actions.readwritedataframe.{FilePath, FilePathFromLibraryPath}
 import com.harana.sdk.backend.models.flow.actions.readwritedataframe.FileScheme.{FTP, File, HDFS, HTTP, HTTPS, Library}

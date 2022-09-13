@@ -1,7 +1,7 @@
 package com.harana.sdk.backend.models.flow.actionobjects
 
 import org.mockito.Mockito._
-import com.harana.sdk.backend.models.designer.flow.{Knowledge, TestSupport}
+import com.harana.sdk.backend.models.flow.{Knowledge, TestSupport}
 import com.harana.sdk.backend.models.flow.{ExecutionContext, Knowledge, TestSupport, UnitSpec}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}

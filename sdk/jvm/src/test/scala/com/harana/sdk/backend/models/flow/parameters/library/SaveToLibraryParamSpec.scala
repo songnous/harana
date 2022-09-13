@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.parameters.library
 
-import com.harana.sdk.backend.models.designer.flow.parameters.AbstractParameterSpec
+import com.harana.sdk.backend.models.flow.parameters.AbstractParameterSpec
 import com.harana.sdk.shared.models.flow.parameters.library.SaveToLibraryParameter
 import io.circe.Json
 import io.circe.syntax.EncoderOps

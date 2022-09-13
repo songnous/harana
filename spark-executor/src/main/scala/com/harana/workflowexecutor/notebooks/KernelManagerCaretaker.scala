@@ -1,7 +1,7 @@
 package com.harana.workflowexecutor.notebooks
 
 import akka.actor.{Actor, ActorSystem, Props}
-import com.harana.sdk.backend.models.designer.flow.utils.Logging
+import com.harana.sdk.backend.models.flow.utils.Logging
 import com.harana.sdk.shared.models.designer.flow.flows.Workflow
 import com.harana.sdk.shared.models.designer.flow.utils.Id
 import com.harana.workflowexecutor.communication.message.notebook.KernelManagerReady

@@ -1,7 +1,7 @@
 package com.harana.sdk.backend.models.flow.graph
 
-import com.harana.sdk.backend.models.designer.flow.Catalog.ActionObjectCatalog
-import com.harana.sdk.backend.models.designer.flow.Knowledge
+import com.harana.sdk.backend.models.flow.Catalog.ActionObjectCatalog
+import com.harana.sdk.backend.models.flow.Knowledge
 import com.harana.sdk.backend.models.flow.Catalog.ActionObjectCatalog
 import com.harana.sdk.shared.models.flow.{ActionInfo, ActionObjectInfo}
 

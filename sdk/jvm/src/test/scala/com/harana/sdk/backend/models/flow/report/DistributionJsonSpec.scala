@@ -3,7 +3,7 @@ package com.harana.sdk.backend.models.flow.report
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import com.harana.sdk.backend.models.designer.flow.report.factory.DistributionTestFactory
+import com.harana.sdk.backend.models.flow.report.factory.DistributionTestFactory
 import com.harana.sdk.backend.models.flow.report.factory.DistributionTestFactory
 import com.harana.sdk.shared.models.designer.flow.report.ReportJsonProtocol
 import com.harana.sdk.shared.models.flow.report.{ContinuousDistribution, Distribution, NoDistribution, Statistics}

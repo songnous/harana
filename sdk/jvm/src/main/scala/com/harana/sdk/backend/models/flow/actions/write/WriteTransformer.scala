@@ -1,9 +1,9 @@
 package com.harana.sdk.backend.models.flow.actions.write
 
-import com.harana.sdk.backend.models.designer.flow.actionobjects.Transformer
-import com.harana.sdk.backend.models.designer.flow.actions.exceptions.HaranaIOError
-import com.harana.sdk.backend.models.designer.flow.utils.FileOperations.deleteRecursivelyIfExists
-import com.harana.sdk.backend.models.designer.flow.{Action1To0, ExecutionContext}
+import com.harana.sdk.backend.models.flow.actionobjects.Transformer
+import com.harana.sdk.backend.models.flow.actions.exceptions.HaranaIOError
+import com.harana.sdk.backend.models.flow.utils.FileOperations.deleteRecursivelyIfExists
+import com.harana.sdk.backend.models.flow.{Action1To0, ExecutionContext}
 import com.harana.sdk.backend.models.flow.actionobjects.Transformer
 import com.harana.sdk.shared.models.flow.actions.write.WriteTransformerInfo
 import org.apache.hadoop.fs.{FileSystem, Path}

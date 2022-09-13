@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.graph
 
-import com.harana.sdk.backend.models.designer.flow._
+import com.harana.sdk.backend.models.flow._
 import com.harana.sdk.backend.models.flow.{Action0To1, Action1To1, Action2To2}
 import com.harana.sdk.shared.models.flow.graph.FlowGraph.FlowNode
 import com.harana.sdk.shared.models.designer.flow.graph.Endpoint

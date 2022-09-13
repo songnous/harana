@@ -1,8 +1,8 @@
 package com.harana.sdk.backend.models.flow
 
-import com.harana.sdk.backend.models.designer.flow.Catalog.ActionObjectCatalog
-import com.harana.sdk.backend.models.designer.flow.actionobjects.ActionObjectInfoMock
-import com.harana.sdk.backend.models.designer.flow.inference.{InferContext, InferenceWarnings}
+import com.harana.sdk.backend.models.flow.Catalog.ActionObjectCatalog
+import com.harana.sdk.backend.models.flow.actionobjects.ActionObjectInfoMock
+import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
 import com.harana.sdk.backend.models.flow.actionobjects.ActionObjectInfoMock
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
 import com.harana.sdk.shared.models.flow.{ActionInfo, ActionObjectInfo}

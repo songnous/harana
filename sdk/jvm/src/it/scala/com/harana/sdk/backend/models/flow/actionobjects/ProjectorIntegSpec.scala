@@ -5,9 +5,9 @@ import org.apache.spark.sql.Row
 import org.apache.spark.sql.types._
 import org.joda.time.DateTime
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import com.harana.sdk.backend.models.designer.flow._
-import com.harana.sdk.backend.models.designer.flow.actionobjects.Projector.ColumnProjection
-import com.harana.sdk.backend.models.designer.flow.actionobjects.Projector.RenameColumnChoice.Yes
+import com.harana.sdk.backend.models.flow._
+import com.harana.sdk.backend.models.flow.actionobjects.Projector.ColumnProjection
+import com.harana.sdk.backend.models.flow.actionobjects.Projector.RenameColumnChoice.Yes
 import com.harana.sdk.backend.models.flow.IntegratedTestSupport
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.transformers.TransformerSerialization

@@ -9,9 +9,9 @@ import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
-import com.harana.sdk.backend.models.designer.flow.CustomCodeExecutor
-import com.harana.sdk.backend.models.designer.flow.DataFrameStorage
-import com.harana.sdk.backend.models.designer.flow.ActionExecutionDispatcher
+import com.harana.sdk.backend.models.flow.CustomCodeExecutor
+import com.harana.sdk.backend.models.flow.DataFrameStorage
+import com.harana.sdk.backend.models.flow.ActionExecutionDispatcher
 import com.harana.spark.SparkSQLSession
 import com.harana.workflowexecutor.customcode.CustomCodeEntryPoint
 

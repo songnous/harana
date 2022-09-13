@@ -3,7 +3,7 @@ package com.harana.workflowexecutor
 import java.io._
 import java.util.zip.ZipInputStream
 import scala.reflect.io.Path
-import com.harana.sdk.backend.models.designer.flow.utils.Logging
+import com.harana.sdk.backend.models.flow.utils.Logging
 
 import java.nio.file.Files
 import scala.annotation.tailrec

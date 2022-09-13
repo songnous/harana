@@ -4,7 +4,7 @@ import java.sql.Timestamp
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.types._
 import org.scalatest.BeforeAndAfter
-import com.harana.sdk.backend.models.designer.flow.actions.inout._
+import com.harana.sdk.backend.models.flow.actions.inout._
 import com.harana.sdk.backend.models.flow.{IntegratedTestSupport, TestFiles}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actions.read.ReadDataFrame

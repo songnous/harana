@@ -1,8 +1,8 @@
 package com.harana.sdk.backend.models.flow
 
-import com.harana.sdk.backend.models.designer.flow.Catalog.{ActionCatalog, ActionObjectCatalog}
-import com.harana.sdk.backend.models.designer.flow.actionobjects.dataframe.DataFrameBuilder
-import com.harana.sdk.backend.models.designer.flow.client.datasources.{DatasourceClient, DatasourceInMemoryClientFactory}
+import com.harana.sdk.backend.models.flow.Catalog.{ActionCatalog, ActionObjectCatalog}
+import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrameBuilder
+import com.harana.sdk.backend.models.flow.client.datasources.{DatasourceClient, DatasourceInMemoryClientFactory}
 import com.harana.sdk.backend.models.flow.Catalog.{ActionCatalog, ActionObjectCatalog}
 import com.harana.sdk.backend.models.flow.client.datasources.DatasourceClient
 import org.scalatestplus.mockito.MockitoSugar.mock

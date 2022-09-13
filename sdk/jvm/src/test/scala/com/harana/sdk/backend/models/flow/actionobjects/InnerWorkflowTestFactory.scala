@@ -1,7 +1,7 @@
 package com.harana.sdk.backend.models.flow.actionobjects
 
-import com.harana.sdk.backend.models.designer.flow.actions.ConvertType
-import com.harana.sdk.backend.models.designer.flow.actions.custom.{Sink, Source}
+import com.harana.sdk.backend.models.flow.actions.ConvertType
+import com.harana.sdk.backend.models.flow.actions.custom.{Sink, Source}
 import com.harana.sdk.shared.models.designer.flow.graph
 import com.harana.sdk.shared.models.flow.actionobjects.{TargetTypeChoice, TargetTypeChoices, TypeConverterInfo}
 import com.harana.sdk.shared.models.flow.graph.FlowGraph

@@ -31,7 +31,7 @@ object TypeUtilsSpec {
   trait B
   class C[T]
 
-  val describedA = "com.harana.sdk.backend.models.designer.flow.TypeUtilsSpec.A"
-  val describedB = "com.harana.sdk.backend.models.designer.flow.TypeUtilsSpec.B"
-  val describedC = "com.harana.sdk.backend.models.designer.flow.TypeUtilsSpec.C"
+  val describedA = "com.harana.sdk.backend.models.flow.TypeUtilsSpec.A"
+  val describedB = "com.harana.sdk.backend.models.flow.TypeUtilsSpec.B"
+  val describedC = "com.harana.sdk.backend.models.flow.TypeUtilsSpec.C"
 }

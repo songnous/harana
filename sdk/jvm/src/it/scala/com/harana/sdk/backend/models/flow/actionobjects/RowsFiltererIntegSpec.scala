@@ -3,7 +3,7 @@ package com.harana.sdk.backend.models.flow.actionobjects
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.types._
 import org.scalatest.matchers.should.Matchers
-import com.harana.sdk.backend.models.designer.flow._
+import com.harana.sdk.backend.models.flow._
 import com.harana.sdk.backend.models.flow.IntegratedTestSupport
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.transformers.TransformerSerialization

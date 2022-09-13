@@ -1,9 +1,8 @@
 package com.harana.sdk.backend.models.flow.actionobjects.dataframe
 
 import com.harana.sdk.backend.models.flow.actions.exceptions.{ColumnDoesNotExistError, ColumnsDoNotExistError}
-import com.harana.sdk.backend.models.flow.utils.{SparkConversions, SparkTypeConverter}
-import com.harana.sdk.shared.models.designer.flow.parameters.selections._
-import com.harana.sdk.shared.models.flow.parameters.selections.{ColumnSelection, IndexColumnSelection, IndexRangeColumnSelection, IndexSingleColumnSelection, MultipleColumnSelection, NameColumnSelection, NameSingleColumnSelection, SingleColumnSelection, TypeColumnSelection}
+import com.harana.sdk.backend.models.flow.utils.SparkTypeConverter
+import com.harana.sdk.shared.models.flow.parameters.selections._
 import com.harana.sdk.shared.models.flow.utils.ColumnType
 import org.apache.spark.sql.types.StructType
 

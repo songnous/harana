@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.json.graph
 
-import com.harana.sdk.backend.models.designer.flow.json.graph.EdgeJsonProtocol._
+import com.harana.sdk.backend.models.flow.json.graph.EdgeJsonProtocol._
 import com.harana.models.json.graph.GraphJsonTestSupport
 import com.harana.sdk.shared.models.designer.flow.graph.{Endpoint}
 import com.harana.sdk.shared.models.flow.graph.Edge

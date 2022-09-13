@@ -2,7 +2,6 @@ package com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.estimato
 
 import com.harana.sdk.backend.models.flow.actionobjects.SparkEstimatorWrapper
 import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.models.LogisticRegressionModel
-import com.harana.sdk.shared.models.designer.flow.actionobjects.spark.wrappers.parameters.common._
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimators.LogisticRegressionInfo
 import org.apache.spark.ml.classification.{LogisticRegression => SparkLogisticRegression, LogisticRegressionModel => SparkLogisticRegressionModel}
 

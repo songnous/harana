@@ -1,9 +1,8 @@
 package com.harana.sdk.backend.models.flow.actions.custom
 
-import com.harana.sdk.backend.models.designer.flow._
-import com.harana.sdk.backend.models.flow.{Action1To1, ExecutionContext, Knowledge}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
+import com.harana.sdk.backend.models.flow.{Action1To1, ExecutionContext, Knowledge}
 import com.harana.sdk.shared.models.flow.actions.custom.SinkInfo
 
 import scala.reflect.runtime.universe.TypeTag

@@ -5,7 +5,7 @@ import scala.io.Source
 import org.apache.spark.sql._
 import org.apache.spark.sql.types._
 import org.scalatest.BeforeAndAfter
-import com.harana.sdk.backend.models.designer.flow.actions.inout._
+import com.harana.sdk.backend.models.flow.actions.inout._
 import com.harana.sdk.backend.models.flow.{IntegratedTestSupport, Knowledge, TestFiles}
 import com.harana.sdk.backend.models.flow.actions.exceptions.{HaranaIOError, UnsupportedColumnTypeError}
 import com.harana.sdk.backend.models.flow.actions.readwritedataframe.FileScheme.File

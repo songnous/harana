@@ -1,6 +1,6 @@
 package com.harana.executor.spark.actiontypes
 
-import com.harana.sdk.backend.models.designer.flow.ActionTypeInfo
+import com.harana.sdk.backend.models.flow.ActionTypeInfo
 import com.harana.executor.spark.actiontypes.input._
 import com.harana.executor.spark.actiontypes.input.next.GetElasticsearch
 import com.harana.executor.spark.actiontypes.output._

@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.parameters
 
-import com.harana.sdk.backend.models.designer.flow.UnitSpec
+import com.harana.sdk.backend.models.flow.UnitSpec
 import com.harana.sdk.shared.models.flow.actions.inout.InputStorageTypeChoice.File
 import com.harana.sdk.shared.models.designer.flow.parameters._
 import com.harana.sdk.shared.models.flow.exceptions.FlowError

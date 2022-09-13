@@ -10,7 +10,7 @@ import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.MultiColumnPa
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.MultiColumnParameters.SingleOrMultiColumnChoices.SingleColumnChoice
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.SingleColumnParameters.SingleTransformInPlaceChoices.NoInPlaceChoice
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.SingleColumnParameters.SingleTransformInPlaceChoices.YesInPlaceChoice
-import com.harana.sdk.backend.models.designer.flow.parameters
+import com.harana.sdk.backend.models.flow.parameters
 import com.harana.sdk.backend.models.flow.{ExecutionContext, IntegratedTestSupport, Knowledge}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.inference.InferContext

@@ -1,8 +1,8 @@
 package com.harana.workflowexecutor.partialexecution
 
-import com.harana.sdk.backend.models.designer.flow.graph._
-import com.harana.sdk.backend.models.designer.flow.inference.InferContext
-import com.harana.sdk.backend.models.designer.flow.workflows.NodeStateWithResults
+import com.harana.sdk.backend.models.flow.graph._
+import com.harana.sdk.backend.models.flow.inference.InferContext
+import com.harana.sdk.backend.models.flow.workflows.NodeStateWithResults
 import com.harana.sdk.shared.models.designer.flow.graph.node.Node
 import com.harana.sdk.shared.models.designer.flow.{ActionObjectInfo, ExecutionReport}
 import com.harana.sdk.shared.models.designer.flow.graph.FlowGraph

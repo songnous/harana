@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.catalogs.actions
 
-import com.harana.sdk.backend.models.designer.flow.{CatalogRecorder, UnitSpec}
+import com.harana.sdk.backend.models.flow.{CatalogRecorder, UnitSpec}
 
 class ActionRegistrationSpec extends UnitSpec {
 

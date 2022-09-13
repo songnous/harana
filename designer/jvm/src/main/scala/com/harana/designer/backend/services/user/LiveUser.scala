@@ -6,7 +6,7 @@ import com.harana.modules.aws.AWS
 import com.harana.id.jwt.modules.jwt.JWT
 import com.harana.modules.mongo.{Mongo, convertToBson}
 import com.harana.modules.vertx.models.Response
-import com.harana.sdk.backend.models.designer.flow.{Flow, FlowExecution}
+import com.harana.sdk.backend.models.flow.{Flow, FlowExecution}
 import com.harana.modules.core.config.Config
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer

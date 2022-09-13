@@ -3,9 +3,9 @@ package com.harana.sdk.backend.models.flow.json.workflow
 import scala.util.Success
 import org.mockito.Mockito._
 import org.mockito.ArgumentMatchers.any
-import com.harana.sdk.backend.models.designer.flow.utils.Logging
+import com.harana.sdk.backend.models.flow.utils.Logging
 import com.harana.sdk.shared.models.common.Version
-import com.harana.sdk.backend.models.designer.flow.json.{StandardSpec, UnitTestSupport}
+import com.harana.sdk.backend.models.flow.json.{StandardSpec, UnitTestSupport}
 import com.harana.sdk.backend.models.flow.utils.Logging
 import com.harana.sdk.shared.models.designer.flow.flows._
 import com.harana.sdk.shared.models.flow.{EntitiesMap, ExecutionReport, FlowType}

@@ -1,8 +1,8 @@
 package com.harana.workflowexecutor
 
 import akka.actor._
-import com.harana.sdk.backend.models.designer.flow.CommonExecutionContext
-import com.harana.sdk.backend.models.designer.flow.utils.Logging
+import com.harana.sdk.backend.models.flow.CommonExecutionContext
+import com.harana.sdk.backend.models.flow.utils.Logging
 import com.harana.sdk.shared.models.designer.flow.flows.WorkflowWithResults
 import com.harana.workflowexecutor.partialexecution.Execution
 

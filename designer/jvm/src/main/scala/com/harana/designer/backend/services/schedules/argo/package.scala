@@ -8,7 +8,7 @@ import com.harana.modules.argo.events.Sensor.{EventDependency, Http, K8SResource
 import com.harana.modules.argo.events.Trigger.{K8SSource, K8STrigger}
 import com.harana.modules.argo.{Container => ArgoContainer, Template => ArgoTemplate}
 import com.harana.modules.argo.workflows.{DAG, DAGTask, Template, Workflow}
-import com.harana.sdk.backend.models.designer.flow.Flow
+import com.harana.sdk.backend.models.flow.Flow
 import zio.UIO
 import io.scalaland.chimney.dsl._
 

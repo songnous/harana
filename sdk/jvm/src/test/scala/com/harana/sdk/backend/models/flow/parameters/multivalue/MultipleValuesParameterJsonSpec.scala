@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.parameters.multivalue
 
-import com.harana.sdk.backend.models.designer.flow.UnitSpec
+import com.harana.sdk.backend.models.flow.UnitSpec
 import com.harana.sdk.shared.models.flow.parameters.multivalue.MultipleValuesParameter
 import io.circe.Json
 import io.circe.syntax.EncoderOps

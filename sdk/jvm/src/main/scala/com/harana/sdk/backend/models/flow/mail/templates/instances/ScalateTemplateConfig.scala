@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.mail.templates.instances
 
-import com.harana.sdk.backend.models.designer.flow.utils.ConfigWithDirListsImplicits.ConfigWithDirLists
+import com.harana.sdk.backend.models.flow.utils.ConfigWithDirListsImplicits.ConfigWithDirLists
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
 

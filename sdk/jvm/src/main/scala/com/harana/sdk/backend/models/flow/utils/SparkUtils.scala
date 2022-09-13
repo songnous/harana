@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.utils
 
-import com.harana.sdk.backend.models.designer.flow.utils.aggregators.CountOccurrencesWithKeyLimitAggregator
+import com.harana.sdk.backend.models.flow.utils.aggregators.CountOccurrencesWithKeyLimitAggregator
 import org.apache.spark.rdd.RDD
 
 import scala.collection._

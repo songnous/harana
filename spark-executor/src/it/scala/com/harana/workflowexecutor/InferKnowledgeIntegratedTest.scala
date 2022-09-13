@@ -1,7 +1,7 @@
 package com.harana.workflowexecutor
 
-import com.harana.sdk.backend.models.designer.flow.{CatalogRecorder, TestSupport, IntegratedTestSupport, graph}
-import com.harana.sdk.backend.models.designer.flow.graph.{KnowledgeService, NodeInference, NodeInferenceResult}
+import com.harana.sdk.backend.models.flow.{CatalogRecorder, TestSupport, IntegratedTestSupport, graph}
+import com.harana.sdk.backend.models.flow.graph.{KnowledgeService, NodeInference, NodeInferenceResult}
 import com.harana.sdk.shared.models.designer.flow.graph.node.Node
 import com.harana.sdk.shared.models.designer.flow.ActionInfo
 import com.harana.sdk.shared.models.designer.flow.catalogs.FlowCatalog

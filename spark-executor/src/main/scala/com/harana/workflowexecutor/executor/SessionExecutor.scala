@@ -2,9 +2,9 @@ package com.harana.workflowexecutor.executor
 
 import akka.actor.{ActorRef, ActorSystem, Props}
 import akka.routing._
-import com.harana.sdk.backend.models.designer.flow._
-import com.harana.sdk.backend.models.designer.flow.client.datasources.DatasourceRestClientFactory
-import com.harana.sdk.backend.models.designer.flow.mail.{EmailSender, EmailSenderAuthorizationConfig, EmailSenderConfig}
+import com.harana.sdk.backend.models.flow._
+import com.harana.sdk.backend.models.flow.client.datasources.DatasourceRestClientFactory
+import com.harana.sdk.backend.models.flow.mail.{EmailSender, EmailSenderAuthorizationConfig, EmailSenderConfig}
 import com.harana.sdk.shared.models.designer.flow.catalogs.{ActionObjectCatalog, FlowCatalog}
 import com.harana.sdk.shared.models.designer.flow.flows.Workflow
 import com.harana.spark.{AkkaUtils, SparkSQLSession}

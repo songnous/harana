@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.actions
 
-import com.harana.sdk.backend.models.designer.flow.actionobjects._
+import com.harana.sdk.backend.models.flow.actionobjects._
 import com.harana.sdk.backend.models.flow.{Action3To1, ExecutionContext}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.wrappers.{EstimatorWrapper, EvaluatorWrapper}

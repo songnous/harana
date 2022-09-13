@@ -1,10 +1,10 @@
 package com.harana.sdk.backend.models.flow.graph
 
-import com.harana.sdk.backend.models.designer.flow.{Knowledge, graph}
-import com.harana.sdk.backend.models.designer.flow.graph.DClassesForActions.A1
-import com.harana.sdk.backend.models.designer.flow.inference.InferenceWarnings
-import com.harana.sdk.backend.models.designer.flow.inference.exceptions.{AllTypesNotCompilableError, NoInputEdgesError}
-import com.harana.sdk.backend.models.designer.flow.inference.warnings.SomeTypesNotCompilableWarning
+import com.harana.sdk.backend.models.flow.{Knowledge, graph}
+import com.harana.sdk.backend.models.flow.graph.DClassesForActions.A1
+import com.harana.sdk.backend.models.flow.inference.InferenceWarnings
+import com.harana.sdk.backend.models.flow.inference.exceptions.{AllTypesNotCompilableError, NoInputEdgesError}
+import com.harana.sdk.backend.models.flow.inference.warnings.SomeTypesNotCompilableWarning
 import com.harana.sdk.backend.models.flow.Knowledge
 import com.harana.sdk.shared.models.designer.flow.graph.Endpoint
 import com.harana.sdk.shared.models.flow.ActionObjectInfo

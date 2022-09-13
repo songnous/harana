@@ -1,13 +1,11 @@
 package com.harana.sdk.backend.models.flow.actions
 
-import com.harana.sdk.backend.models.designer.flow._
-import com.harana.sdk.backend.models.flow.{Action0To1, ExecutionContext, Knowledge}
 import com.harana.sdk.backend.models.flow.actionobjects.{Estimator, Transformer}
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
-import com.harana.sdk.shared.models.flow.actions.EstimatorAsFactoryInfo
+import com.harana.sdk.backend.models.flow.{Action0To1, ExecutionContext, Knowledge}
 import com.harana.sdk.shared.models.flow.utils.TypeUtils
 
-import scala.reflect.runtime.universe.TypeTag
+import scala.reflect.runtime.universe.{TypeTag, typeTag}
 
 abstract class EstimatorAsFactory[E <: Estimator[Transformer]](implicit typeTagE: TypeTag[E]) extends Action0To1[E] {
 

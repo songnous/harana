@@ -2,7 +2,7 @@ package com.harana.workflowexecutor.session.storage
 
 import scala.collection.concurrent.TrieMap
 import org.apache.spark.sql.{DataFrame => SparkDataFrame}
-import com.harana.sdk.backend.models.designer.flow.DataFrameStorage
+import com.harana.sdk.backend.models.flow.DataFrameStorage
 import com.harana.sdk.shared.models.designer.flow.utils.Id
 
 class DataFrameStorageImpl extends DataFrameStorage {

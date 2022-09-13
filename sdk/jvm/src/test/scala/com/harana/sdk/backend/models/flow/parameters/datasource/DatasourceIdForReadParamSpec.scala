@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.parameters.datasource
 
-import com.harana.sdk.backend.models.designer.flow.parameters.AbstractParameterSpec
+import com.harana.sdk.backend.models.flow.parameters.AbstractParameterSpec
 import com.harana.sdk.shared.models.flow.parameters.datasource.DatasourceIdForReadParameter
 import io.circe.Json
 import io.circe.syntax.EncoderOps

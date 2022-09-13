@@ -6,7 +6,7 @@ import org.apache.spark.sql.types._
 import com.harana.sdk.shared.models.designer.flow.utils.DateTimeConverter.dateTime
 import com.harana.sdk.shared.models.designer.flow.utils.DateTimeConverter.dateTimeFromUTC
 import com.harana.sdk.shared.models.designer.flow.utils.DateTimeConverter.{toString => dateToString}
-import com.harana.sdk.backend.models.designer.flow.report._
+import com.harana.sdk.backend.models.flow.report._
 import com.harana.sdk.backend.models.flow.IntegratedTestSupport
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.{DataFrame, DataFrameTestFactory}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.report.DataFrameReportGenerator

@@ -2,7 +2,7 @@ package com.harana.executor.spark.logs
 
 import java.time.Instant
 
-import com.harana.sdk.backend.models.designer.flow.execution.ExecutionLog
+import com.harana.sdk.backend.models.flow.execution.ExecutionLog
 import org.apache.logging.log4j.core.LogEvent
 
 import scala.collection.mutable

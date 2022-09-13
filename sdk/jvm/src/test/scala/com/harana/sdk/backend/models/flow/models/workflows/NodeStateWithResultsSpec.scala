@@ -1,9 +1,9 @@
 package com.harana.sdk.backend.models.flow.models.workflows
 
-import com.harana.sdk.backend.models.designer.flow.{Knowledge, graph}
-import com.harana.sdk.backend.models.designer.flow.graph.NodeInferenceResult
-import com.harana.sdk.backend.models.designer.flow.inference.InferenceWarnings
-import com.harana.sdk.backend.models.designer.flow.workflows.NodeStateWithResults
+import com.harana.sdk.backend.models.flow.{Knowledge, graph}
+import com.harana.sdk.backend.models.flow.graph.NodeInferenceResult
+import com.harana.sdk.backend.models.flow.inference.InferenceWarnings
+import com.harana.sdk.backend.models.flow.workflows.NodeStateWithResults
 import com.harana.sdk.backend.models.flow.inference.InferenceWarnings
 import com.harana.sdk.backend.models.flow.workflows.NodeStateWithResults
 import com.harana.sdk.shared.models.designer.flow

@@ -3,11 +3,11 @@ package com.harana.sdk.backend.models.flow.graph
 import scala.reflect.runtime.{universe => ru}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import com.harana.sdk.backend.models.designer.flow._
-import com.harana.sdk.backend.models.designer.flow.graph.DClassesForActions._
-import com.harana.sdk.backend.models.designer.flow.graph.ActionTestClasses._
-import com.harana.sdk.backend.models.designer.flow.graph.FlowGraph.FlowNode
-import com.harana.sdk.backend.models.designer.flow.inference.{InferContext, InferenceWarning, InferenceWarnings}
+import com.harana.sdk.backend.models.flow._
+import com.harana.sdk.backend.models.flow.graph.DClassesForActions._
+import com.harana.sdk.backend.models.flow.graph.ActionTestClasses._
+import com.harana.sdk.backend.models.flow.graph.FlowGraph.FlowNode
+import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarning, InferenceWarnings}
 import com.harana.sdk.backend.models.flow.{Action2To1, ExecutionContext, Knowledge}
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarning, InferenceWarnings}
 import com.harana.sdk.shared.models.designer.flow

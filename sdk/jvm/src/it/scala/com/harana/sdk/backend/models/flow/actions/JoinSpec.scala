@@ -2,7 +2,7 @@ package com.harana.sdk.backend.models.flow.actions
 
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.types._
-import com.harana.sdk.backend.models.designer.flow._
+import com.harana.sdk.backend.models.flow._
 import com.harana.sdk.backend.models.flow.{IntegratedTestSupport, Knowledge}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actions.exceptions.{ColumnDoesNotExistError, ColumnsDoNotExistError, DuplicatedColumnsError, WrongColumnTypeError}

@@ -3,7 +3,7 @@ package com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.estimato
 import org.apache.spark.sql.types.DoubleType
 import org.apache.spark.sql.types.Metadata
 import org.apache.spark.sql.types.StructType
-import com.harana.sdk.backend.models.designer.flow.actionobjects.spark.wrappers.parameters.common._
+import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.parameters.common._
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.utils.DataFrameUtils
 import com.harana.sdk.shared.models.flow.parameters.selections.NameSingleColumnSelection

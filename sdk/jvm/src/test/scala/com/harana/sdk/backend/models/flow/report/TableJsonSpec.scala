@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.report
 
-import com.harana.sdk.backend.models.designer.flow.report.factory.TableTestFactory
+import com.harana.sdk.backend.models.flow.report.factory.TableTestFactory
 import com.harana.sdk.backend.models.flow.report.factory.TableTestFactory
 import com.harana.sdk.shared.models.flow.report.Table
 import com.harana.sdk.shared.models.flow.utils.ColumnType

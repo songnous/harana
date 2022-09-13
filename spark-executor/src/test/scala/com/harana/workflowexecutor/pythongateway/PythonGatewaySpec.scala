@@ -1,6 +1,6 @@
 package com.harana.workflowexecutor.pythongateway
 
-import com.harana.sdk.backend.models.designer.flow.DataFrameStorage
+import com.harana.sdk.backend.models.flow.DataFrameStorage
 import com.harana.spark.SparkSQLSession
 import com.harana.workflowexecutor.customcode.CustomCodeEntryPoint
 import com.harana.workflowexecutor.pythongateway.PythonGateway.GatewayConfig

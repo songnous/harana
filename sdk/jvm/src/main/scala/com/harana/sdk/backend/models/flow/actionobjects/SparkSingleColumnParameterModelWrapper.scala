@@ -1,13 +1,10 @@
 package com.harana.sdk.backend.models.flow.actionobjects
 
-import com.harana.sdk.backend.models.designer.flow.actionobjects.multicolumn._
 import com.harana.sdk.backend.models.flow.ExecutionContext
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.{DataFrame, DataFrameColumnsGetter}
 import com.harana.sdk.backend.models.flow.actionobjects.multicolumn.SingleColumnTransformerUtils
-import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.SingleColumnParameters.SingleTransformInPlaceChoices.{NoInPlaceChoice, YesInPlaceChoice}
 import com.harana.sdk.shared.models.flow.actionobjects.SparkSingleColumnParameterModelWrapperInfo
-import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.{HasSingleInPlaceParameter, HasSpecificParameters}
-import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.HasInputColumnParameter
+import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.SingleColumnParameters.SingleTransformInPlaceChoices.{NoInPlaceChoice, YesInPlaceChoice}
 import com.harana.sdk.shared.models.flow.parameters.ParameterMap
 import org.apache.spark.ml
 import org.apache.spark.ml.param.{Params, ParamMap => SparkParamMap}

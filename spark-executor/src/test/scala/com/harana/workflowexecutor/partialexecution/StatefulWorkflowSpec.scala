@@ -1,8 +1,8 @@
 package com.harana.workflowexecutor.partialexecution
 
-import com.harana.sdk.backend.models.designer.flow.json.workflow.WorkflowTestSupport
-import com.harana.sdk.backend.models.designer.flow.workflows.InferredState
-import com.harana.sdk.backend.models.designer.flow.{CommonExecutionContext, workflows}
+import com.harana.sdk.backend.models.flow.json.workflow.WorkflowTestSupport
+import com.harana.sdk.backend.models.flow.workflows.InferredState
+import com.harana.sdk.backend.models.flow.{CommonExecutionContext, workflows}
 import com.harana.sdk.shared.models.designer.flow.{ActionInfo, EntitiesMap, ExecutionReport, FlowType, NodeState}
 import com.harana.sdk.shared.models.designer.flow.flows._
 import com.harana.sdk.shared.models.designer.flow.graph.node.Node

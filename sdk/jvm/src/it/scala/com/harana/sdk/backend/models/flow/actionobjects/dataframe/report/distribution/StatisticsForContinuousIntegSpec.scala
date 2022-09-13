@@ -5,7 +5,7 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.types._
-import com.harana.sdk.backend.models.designer.flow.report._
+import com.harana.sdk.backend.models.flow.report._
 import com.harana.sdk.backend.models.flow.IntegratedTestSupport
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.{DataFrame, DataFrameTestFactory}
 import com.harana.sdk.shared.models.designer.flow.utils.DateTimeConverter

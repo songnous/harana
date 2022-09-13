@@ -2,8 +2,8 @@ package com.harana.designer.backend.services
 
 import com.harana.sdk.shared.models.common.{Background, ParameterValue, Visibility}
 import com.harana.sdk.shared.models.common.User.UserId
-import com.harana.sdk.backend.models.designer.flow.execution.ExecutionStatus
-import com.harana.sdk.backend.models.designer.flow._
+import com.harana.sdk.backend.models.flow.execution.ExecutionStatus
+import com.harana.sdk.backend.models.flow._
 
 package object user {
 

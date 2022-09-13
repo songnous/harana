@@ -9,7 +9,7 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.client.{MappingBuilder, WireMock}
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration._
-import com.harana.sdk.backend.models.designer.flow.json.StandardSpec
+import com.harana.sdk.backend.models.flow.json.StandardSpec
 import com.harana.sdk.shared.models.designer.flow.{ExecutionReport, FlowType}
 import com.harana.sdk.shared.models.designer.flow.flows._
 import com.harana.sdk.shared.models.designer.flow.graph.FlowGraph

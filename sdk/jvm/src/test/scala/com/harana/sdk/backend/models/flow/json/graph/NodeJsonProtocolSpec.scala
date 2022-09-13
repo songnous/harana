@@ -1,7 +1,7 @@
 package com.harana.sdk.backend.models.flow.json.graph
 
 import com.harana.models.json.graph.GraphJsonTestSupport
-import com.harana.sdk.backend.models.designer.flow.Action
+import com.harana.sdk.backend.models.flow.Action
 import com.harana.sdk.shared.models.flow.ActionInfo
 import com.harana.sdk.shared.models.flow.graph.FlowGraph.{FlowNode, flowNodeEncoder}
 import com.harana.sdk.shared.models.flow.graph.node.Node

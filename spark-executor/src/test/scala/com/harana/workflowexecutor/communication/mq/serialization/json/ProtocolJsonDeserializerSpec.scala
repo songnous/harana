@@ -1,6 +1,6 @@
 package com.harana.workflowexecutor.communication.mq.serialization.json
 
-import com.harana.sdk.backend.models.designer.flow.json.StandardSpec
+import com.harana.sdk.backend.models.flow.json.StandardSpec
 import com.harana.sdk.shared.models.designer.flow.FlowType
 import com.harana.sdk.shared.models.designer.flow.flows.Workflow
 import com.harana.sdk.shared.models.designer.flow.graph.FlowGraph

@@ -1,7 +1,7 @@
 package com.harana.sdk.backend.models.flow.catalogs
 
-import com.harana.sdk.backend.models.designer.flow.catalogs.spi.CatalogRegistrant
-import com.harana.sdk.backend.models.designer.flow.catalogs.spi.CatalogRegistrar.DefaultCatalogRegistrar
+import com.harana.sdk.backend.models.flow.catalogs.spi.CatalogRegistrant
+import com.harana.sdk.backend.models.flow.catalogs.spi.CatalogRegistrar.DefaultCatalogRegistrar
 import com.harana.sdk.backend.models.flow.UnitSpec
 import com.harana.sdk.shared.models.flow.ActionInfo
 import org.scalatest.BeforeAndAfter

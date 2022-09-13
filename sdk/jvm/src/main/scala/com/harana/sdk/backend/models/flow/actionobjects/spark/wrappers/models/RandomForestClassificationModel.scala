@@ -4,7 +4,6 @@ import com.harana.sdk.backend.models.flow.actionobjects.{LoadableWithFallback, S
 import com.harana.sdk.backend.models.flow.actionobjects.report.CommonTablesGenerators
 import com.harana.sdk.backend.models.flow.actionobjects.report.CommonTablesGenerators.SparkSummaryEntry
 import com.harana.sdk.backend.models.flow.actionobjects.stringindexingwrapper.StringIndexingWrapperModel
-import com.harana.sdk.shared.models.designer.flow.actionobjects.spark.wrappers.models
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.models.{RandomForestClassificationModelInfo, VanillaRandomForestClassificationModelInfo}
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.ProbabilisticClassifierParameters
 import com.harana.spark.Linalg

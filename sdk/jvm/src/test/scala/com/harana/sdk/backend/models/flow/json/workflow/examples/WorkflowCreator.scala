@@ -1,7 +1,7 @@
 package com.harana.sdk.backend.models.flow.json.workflow.examples
 
 import com.harana.sdk.shared.models.designer.flow.flows.{Workflow, WorkflowWithVariables}
-import com.harana.sdk.backend.models.designer.flow.Action
+import com.harana.sdk.backend.models.flow.Action
 import com.harana.sdk.backend.models.flow.Action
 import com.harana.sdk.shared.models.designer.flow.Variables
 import com.harana.sdk.shared.models.flow.FlowType

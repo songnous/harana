@@ -1,8 +1,8 @@
 package com.harana.workflowexecutor.executor
 
-import com.harana.sdk.backend.models.designer.flow.utils.Logging
+import com.harana.sdk.backend.models.flow.utils.Logging
 import org.apache.spark.api.r.SparkRBackend
-import com.harana.sdk.backend.models.designer.flow.CustomCodeExecutor
+import com.harana.sdk.backend.models.flow.CustomCodeExecutor
 import com.harana.workflowexecutor.Unzip
 import com.harana.workflowexecutor.customcode.CustomCodeEntryPoint
 

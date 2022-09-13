@@ -1,7 +1,7 @@
 package com.harana.workflowexecutor.rabbitmq
 
 import akka.actor.ActorRef
-import com.harana.sdk.backend.models.designer.flow.utils.Logging
+import com.harana.sdk.backend.models.flow.utils.Logging
 import com.harana.workflowexecutor.communication.mq.serialization.json.MQSerializer
 import com.newmotion.akka.rabbitmq.{Channel, ChannelMessage}
 

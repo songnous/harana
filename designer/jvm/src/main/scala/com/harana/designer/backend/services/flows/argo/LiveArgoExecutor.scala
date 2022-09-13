@@ -11,8 +11,8 @@ import com.harana.modules.core.micrometer.Micrometer
 import com.harana.modules.kubernetes.Kubernetes
 import com.harana.sdk.shared.models.common.User.UserId
 import com.harana.sdk.shared.models.common.Workflow
-import com.harana.sdk.backend.models.designer.flow.container.Container
-import com.harana.sdk.backend.models.designer.flow.{ActionType, Flow}
+import com.harana.sdk.backend.models.flow.container.Container
+import com.harana.sdk.backend.models.flow.{ActionType, Flow}
 import com.harana.sdk.shared.models.flow.ActionInfo
 import zio.{Task, UIO, ZLayer}
 import io.scalaland.chimney.dsl._

@@ -3,10 +3,10 @@ package com.harana.executor.spark.actiontypes.input
 import com.harana.sdk.shared.models.common.Parameter
 import com.harana.sdk.shared.models.common.Parameter.ParameterValues
 import com.harana.sdk.shared.models.designer.data.DataSourceTypes.Snowflake._
-import com.harana.sdk.backend.models.designer.flow.ActionType.{Inputs, Outputs}
-import com.harana.sdk.backend.models.designer.flow.actiontypes.input.GetSnowflakeInfo
-import com.harana.sdk.backend.models.designer.flow.execution.ExecutionError
-import com.harana.sdk.backend.models.designer.flow.{ActionType, FlowContext}
+import com.harana.sdk.backend.models.flow.ActionType.{Inputs, Outputs}
+import com.harana.sdk.backend.models.flow.actiontypes.input.GetSnowflakeInfo
+import com.harana.sdk.backend.models.flow.execution.ExecutionError
+import com.harana.sdk.backend.models.flow.{ActionType, FlowContext}
 import com.harana.executor.spark.actiontypes.dataSourceParameterValues
 import zio.{IO, Task, UIO}
 

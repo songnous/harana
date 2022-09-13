@@ -1,11 +1,11 @@
 package com.harana.executor.spark.actiontypes.output.next
 
-import com.harana.sdk.backend.models.designer.flow.ActionType.{Inputs, Outputs}
-import com.harana.sdk.backend.models.designer.flow.{ActionType, FlowContext}
+import com.harana.sdk.backend.models.flow.ActionType.{Inputs, Outputs}
+import com.harana.sdk.backend.models.flow.{ActionType, FlowContext}
 import com.harana.sdk.shared.models.common.Parameter.ParameterValues
-import com.harana.sdk.backend.models.designer.flow.actiontypes.output.next.PutElasticsearchInfo
-import com.harana.sdk.backend.models.designer.flow.actiontypes.pathParameter
-import com.harana.sdk.backend.models.designer.flow.execution.ExecutionError
+import com.harana.sdk.backend.models.flow.actiontypes.output.next.PutElasticsearchInfo
+import com.harana.sdk.backend.models.flow.actiontypes.pathParameter
+import com.harana.sdk.backend.models.flow.execution.ExecutionError
 import com.harana.executor.spark.actiontypes.dataSourceParameterValues
 import zio.{IO, UIO}
 

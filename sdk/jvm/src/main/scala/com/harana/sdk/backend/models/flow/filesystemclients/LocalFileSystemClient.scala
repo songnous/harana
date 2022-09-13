@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.filesystemclients
 
-import com.harana.sdk.backend.models.designer.flow.utils.{ManagedResource, Serialization}
+import com.harana.sdk.backend.models.flow.utils.{ManagedResource, Serialization}
 import com.harana.sdk.backend.models.flow.utils.Serialization
 import org.apache.hadoop.fs.FileUtil
 

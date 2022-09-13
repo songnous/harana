@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.report
 
-import com.harana.sdk.backend.models.designer.flow.report.factory.ReportContentTestFactory
+import com.harana.sdk.backend.models.flow.report.factory.ReportContentTestFactory
 import com.harana.sdk.backend.models.flow.report.factory.ReportContentTestFactory
 import com.harana.sdk.shared.models.designer.flow.report.ReportJsonProtocol
 import com.harana.sdk.shared.models.flow.report.ReportContent

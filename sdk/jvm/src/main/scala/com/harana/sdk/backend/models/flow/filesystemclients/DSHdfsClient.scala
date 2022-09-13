@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.filesystemclients
 
-import com.harana.sdk.backend.models.designer.flow.utils.Serialization
+import com.harana.sdk.backend.models.flow.utils.Serialization
 import com.harana.sdk.backend.models.flow.utils.Serialization
 import org.apache.hadoop.hdfs.{DFSClient, DFSInputStream}
 

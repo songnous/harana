@@ -1,21 +1,14 @@
 package com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.models
 
-import com.harana.sdk.backend.models.flow.actionobjects.report.CommonTablesGenerators.SparkSummaryEntry
-import com.harana.sdk.backend.models.flow.actionobjects.{LoadableWithFallback, SparkModelWrapper}
 import com.harana.sdk.backend.models.flow.actionobjects.report.CommonTablesGenerators
+import com.harana.sdk.backend.models.flow.actionobjects.report.CommonTablesGenerators.SparkSummaryEntry
 import com.harana.sdk.backend.models.flow.actionobjects.stringindexingwrapper.StringIndexingWrapperModel
+import com.harana.sdk.backend.models.flow.actionobjects.{LoadableWithFallback, SparkModelWrapper}
 import com.harana.sdk.backend.models.flow.utils.Logging
-import com.harana.sdk.shared.models.designer.flow.actionobjects.spark.wrappers.models
-import com.harana.sdk.shared.models.flow.actionobjects.report.Report
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.models.VanillaGBTClassificationModelInfo
-import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.PredictorParameters
-import com.harana.sdk.shared.models.flow.parameters.Parameter
 import com.harana.spark.ML
-import org.apache.spark.ml.classification.{GBTClassificationModel => SparkGBTClassificationModel}
-import org.apache.spark.ml.classification.{GBTClassifier => SparkGBTClassifier}
-import org.apache.spark.sql.types.DoubleType
-import org.apache.spark.sql.types.StructField
-import org.apache.spark.sql.types.StructType
+import org.apache.spark.ml.classification.{GBTClassificationModel => SparkGBTClassificationModel, GBTClassifier => SparkGBTClassifier}
+import org.apache.spark.sql.types.{DoubleType, StructField, StructType}
 
 class GBTClassificationModel(model: VanillaGBTClassificationModel)
     extends StringIndexingWrapperModel[SparkGBTClassificationModel, SparkGBTClassifier](model) {

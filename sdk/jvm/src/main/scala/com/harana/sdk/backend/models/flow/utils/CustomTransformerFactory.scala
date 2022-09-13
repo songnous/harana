@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.utils
 
-import com.harana.sdk.backend.models.designer.flow.actionobjects.CustomTransformer
+import com.harana.sdk.backend.models.flow.actionobjects.CustomTransformer
 import com.harana.sdk.shared.models.flow.actionobjects.ParameterWithValues
 import com.harana.sdk.shared.models.flow.parameters.custom.{InnerWorkflow, PublicParameter}
 

@@ -1,8 +1,8 @@
 package com.harana.designer.shared.flows.actiontypes.spark
 
 import com.harana.sdk.shared.models.common.{Parameter, ParameterGroup, ParameterValue}
-import com.harana.sdk.backend.models.designer.flow.actiontypes.{inputPort, outputPort}
-import com.harana.sdk.backend.models.designer.flow.{ActionType, Port}
+import com.harana.sdk.backend.models.flow.actiontypes.{inputPort, outputPort}
+import com.harana.sdk.backend.models.flow.{ActionType, Port}
 
 object Query {
 

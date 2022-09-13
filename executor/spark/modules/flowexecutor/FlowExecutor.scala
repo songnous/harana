@@ -1,6 +1,6 @@
 package com.harana.executor.spark.modules.flowexecutor
 
-import com.harana.sdk.backend.models.designer.flow.{Flow, FlowExecution}
+import com.harana.sdk.backend.models.flow.{Flow, FlowExecution}
 import zio.macros.accessible
 import zio.{Has, Task}
 

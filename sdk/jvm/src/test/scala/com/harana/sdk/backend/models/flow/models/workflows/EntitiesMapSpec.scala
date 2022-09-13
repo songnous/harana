@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.models.workflows
 
-import com.harana.sdk.backend.models.designer.flow.actionobjects.dataframe.DataFrame
+import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.shared.models.flow
 import com.harana.sdk.shared.models.flow.EntitiesMap
 import com.harana.sdk.shared.models.flow.report.ReportContent
@@ -26,8 +26,8 @@ class EntitiesMapSpec extends AnyWordSpec with Matchers with MockitoSugar {
 
       flow.EntitiesMap(results, reports) shouldBe EntitiesMap(
         Map(
-          entity1Id -> EntitiesMap.Entry("com.harana.sdk.backend.models.designer.flow.actionobjects.dataframe.DataFrame", Some(report1)),
-          entity2Id -> EntitiesMap.Entry("com.harana.sdk.backend.models.designer.flow.actionobjects.dataframe.DataFrame", None)
+          entity1Id -> EntitiesMap.Entry("com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame", Some(report1)),
+          entity2Id -> EntitiesMap.Entry("com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame", None)
         )
       )
     }

@@ -3,7 +3,7 @@ package com.harana.sdk.backend.models.flow
 import scala.reflect.runtime.{universe => ru}
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
-import com.harana.sdk.backend.models.designer.flow.actionobjects.ActionObjectInfoMock
+import com.harana.sdk.backend.models.flow.actionobjects.ActionObjectInfoMock
 import com.harana.sdk.backend.models.flow.actionobjects.ActionObjectInfoMock
 import com.harana.sdk.shared.models.flow.ActionObjectInfo
 
