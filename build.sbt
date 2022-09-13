@@ -3,11 +3,6 @@
 import ProjectsPlugin.autoImport.crossProject
 import scalajsbundler.sbtplugin.ScalaJSBundlerPlugin.autoImport.{npmDependencies, npmResolutions}
 
-val settingsForPublished = CommonSettingsPlugin.assemblySettings ++ PublishSettings.enablePublishing
-
-val settingsForNotPublished = CommonSettingsPlugin.assemblySettings ++ PublishSettings.disablePublishing
-
-
 /****************************************************************************************************************
  * Spark Patching                                                                                               *
  ****************************************************************************************************************/
@@ -19,8 +14,8 @@ val sparkSettings = (
     Library.univocity.value
   )
 
-val sparkPatchesCsv2_2 = project settings(sparkSettings) in file(s"spark-patches/csv-2_2") settings settingsForPublished
-val sparkPatchesCsv2_4 = project settings(sparkSettings) in file(s"spark-patches/csv-2_4") settings settingsForPublished
+val sparkPatchesCsv2_2 = project settings(sparkSettings) in file(s"spark-patches/csv-2_2")
+val sparkPatchesCsv2_4 = project settings(sparkSettings) in file(s"spark-patches/csv-2_4")
 
 val sparkPatchesCsv = Version.spark match {
   case "2.2.3" => sparkPatchesCsv2_2
@@ -28,7 +23,7 @@ val sparkPatchesCsv = Version.spark match {
   case "3.3.0" => sparkPatchesCsv2_4
 }
 
-val sparkPatchesPatch2_2_x = project settings(sparkSettings) in file("spark-patches/patch-2.2.x") settings settingsForPublished
+val sparkPatchesPatch2_2_x = project settings(sparkSettings) in file("spark-patches/patch-2.2.x")
 
 val sparkPatchesCurrentVersion = Version.spark match {
   case "2.2.3" => sparkPatchesPatch2_2_x
@@ -36,7 +31,7 @@ val sparkPatchesCurrentVersion = Version.spark match {
   case "3.3.0" => sparkPatchesPatch2_2_x
 }
 
-val sparkPatchesPatch2_x = project settings(sparkSettings) in file(s"spark-patches/patch-2.x") dependsOn (sparkPatchesCsv, sparkPatchesCurrentVersion) settings settingsForPublished
+val sparkPatchesPatch2_x = project settings(sparkSettings) in file(s"spark-patches/patch-2.x") dependsOn (sparkPatchesCsv, sparkPatchesCurrentVersion)
 
 /****************************************************************************************************************
  * Id JWT / Modules / SDK                                                                                                *
@@ -84,7 +79,6 @@ val sdkJS = sdk.js
 
 val modulesCore = jvmProject("modules-core")
   .dependsOn(sdkJVM)
-  .settings(settingsForPublished)
   .settings(
     Library.compilerPlugins,
     libraryDependencies ++=
@@ -115,7 +109,7 @@ val idJwt = crossProject("id-jwt")
       Library.jose4j.value :+
       Library.scaffeine.value
   )
-val idJwtVM = idJwt.jvm dependsOn (modulesCore) settings settingsForPublished
+val idJwtVM = idJwt.jvm dependsOn (modulesCore)
 
 val modules = crossProject("modules")
   .settings(
@@ -192,8 +186,8 @@ val modules = crossProject("modules")
       Library.zip4j.value :+
       Library.ztZip.value
   )
-val modulesJVM = modules.jvm dependsOn (modulesCore, sdkJVM) settings settingsForPublished
-val modulesJS = modules.js dependsOn (sdkJS) settings settingsForPublished
+val modulesJVM = modules.jvm dependsOn (modulesCore, sdkJVM)
+val modulesJS = modules.js dependsOn (sdkJS)
 
 
 /****************************************************************************************************************
@@ -213,13 +207,12 @@ val designer = crossProject("designer")
       Library.opencsv.value
   )
 
-val designerJVM = designer.jvm dependsOn (idJwtVM, modulesJVM, modulesCore, sdkJVM) settings settingsForPublished
-val designerJS = designer.js dependsOn (modulesJS, sdkJS) settings settingsForPublished
+val designerJVM = designer.jvm dependsOn (idJwtVM, modulesJVM, modulesCore, sdkJVM)
+val designerJS = designer.js dependsOn (modulesJS, sdkJS)
 
 val docsGenerator = jvmProject("docs-generator")
   .dependsOn(sdkJVM)
   .settings(
-    settingsForPublished,
     libraryDependencies ++=
       Library.providedSpark.value ++
       Library.zio2.value
@@ -258,7 +251,6 @@ val sparkExecutor = jvmProject("spark-executor")
     sdkJVM % "it->it",
     sparkPatchesCurrentVersion)
   .settings(
-    settingsForPublished,
     libraryDependencies ++=
       Library.akka.value ++
       Library.logging.value ++
@@ -273,17 +265,16 @@ val sparkExecutor = jvmProject("spark-executor")
 
 
 val growth = crossProject("growth")
-val growthJVM = growth.jvm.dependsOn(modulesJVM, modulesCore, sdkJVM) settings settingsForPublished
-val growthJS = growth.js.dependsOn(modulesJS, sdkJS) settings settingsForPublished
+val growthJVM = growth.jvm.dependsOn(modulesJVM, modulesCore, sdkJVM)
+val growthJS = growth.js.dependsOn(modulesJS, sdkJS)
 
 val id = crossProject("id")
   .settings(
-    settingsForPublished,
     libraryDependencies ++=
       Library.akka.value
   )
 val idJVM = id.jvm dependsOn(idJwtVM, modulesJVM, modulesCore, sdkJVM)
-val idJS = id.js dependsOn (idJwt.js, modulesJS, sdkJS) settings settingsForPublished
+val idJS = id.js dependsOn (idJwt.js, modulesJS, sdkJS)
 
 /****************************************************************************************************************
  * Root                                                                                                         *
@@ -292,7 +283,6 @@ val idJS = id.js dependsOn (idJwt.js, modulesJS, sdkJS) settings settingsForPubl
 val root = project
   .in(file("."))
   .settings(name := "harana")
-  .settings(PublishSettings.disablePublishing)
   .aggregate(
     designerJS,
     designerJVM,
