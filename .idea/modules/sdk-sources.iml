@@ -79,7 +79,7 @@
     <orderEntry type="library" scope="PROVIDED" name="sbt: commons-collections:commons-collections:3.2.2:jar" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="sbt: commons-dbcp:commons-dbcp:1.4:jar" level="project" />
     <orderEntry type="library" scope="TEST" name="sbt: commons-fileupload:commons-fileupload:1.4:jar" level="project" />
-    <orderEntry type="library" name="sbt: commons-io:commons-io:20030203.000550:jar" level="project" />
+    <orderEntry type="library" name="sbt: commons-io:commons-io:2.11.0:jar" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="sbt: commons-lang:commons-lang:2.6:jar" level="project" />
     <orderEntry type="library" name="sbt: commons-logging:commons-logging:1.2:jar" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="sbt: commons-pool:commons-pool:1.5.4:jar" level="project" />

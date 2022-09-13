@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/designer-sources.iml" filepath="$PROJECT_DIR$/.idea/modules/designer-sources.iml" group="designer" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/designerJS.iml" filepath="$PROJECT_DIR$/.idea/modules/designerJS.iml" group="designer" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/designerJVM.iml" filepath="$PROJECT_DIR$/.idea/modules/designerJVM.iml" group="designer" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/docs-generator.iml" filepath="$PROJECT_DIR$/.idea/modules/docs-generator.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/executor.iml" filepath="$PROJECT_DIR$/.idea/modules/executor.iml" group="executor" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/growth-sources.iml" filepath="$PROJECT_DIR$/.idea/modules/growth-sources.iml" group="growth" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/growthJS.iml" filepath="$PROJECT_DIR$/.idea/modules/growthJS.iml" group="growth" />

@@ -211,14 +211,6 @@ val designer = crossProject("designer")
 val designerJVM = designer.jvm dependsOn (idJwtVM, modulesJVM, modulesCore, sdkJVM)
 val designerJS = designer.js dependsOn (modulesJS, sdkJS)
 
-val docsGenerator = jvmProject("docs-generator")
-  .dependsOn(sdkJVM)
-  .settings(
-    libraryDependencies ++=
-      Library.providedSpark.value ++
-      Library.zio2.value
-  )
-
 val executor = jvmProject("executor")
   .dependsOn(
     modulesJVM,
@@ -293,8 +285,7 @@ val root = project
     idJVM,
     sdkJS,
     sdkJVM,
-    sparkExecutor,
-    docsGenerator)
+    sparkExecutor)
 
 
 /****************************************************************************************************************

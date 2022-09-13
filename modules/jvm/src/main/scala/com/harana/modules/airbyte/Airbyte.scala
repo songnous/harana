@@ -20,10 +20,5 @@ object Airbyte {
 
     def read(integrationName: String, catalog: ConfiguredAirbyteCatalog)
 
-
-
-
-
-
   }
 }
