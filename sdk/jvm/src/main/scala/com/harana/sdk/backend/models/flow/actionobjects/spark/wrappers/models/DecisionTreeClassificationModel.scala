@@ -9,11 +9,7 @@ import org.apache.spark.ml.classification.{DecisionTreeClassificationModel => Sp
 
 class DecisionTreeClassificationModel(vanillaModel: VanillaDecisionTreeClassificationModel)
     extends StringIndexingWrapperModel[SparkDecisionTreeClassificationModel, SparkDecisionTreeClassifier](vanillaModel)
-      with DecisionTreeClassificationModelInfo {
-
-  def this () = this(new VanillaDecisionTreeClassificationModel())
-
-}
+      with DecisionTreeClassificationModelInfo
 
 class VanillaDecisionTreeClassificationModel
     extends SparkModelWrapper[SparkDecisionTreeClassificationModel, SparkDecisionTreeClassifier]

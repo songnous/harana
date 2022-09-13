@@ -15,11 +15,7 @@ import org.apache.spark.sql.types.StructField
 import org.apache.spark.sql.types.StructType
 
 class RandomForestClassificationModel(model: VanillaRandomForestClassificationModel = new VanillaRandomForestClassificationModel())
-    extends StringIndexingWrapperModel[SparkRandomForestClassificationModel, SparkRandomForestClassifier](model) with RandomForestClassificationModelInfo {
-
-  def this() = this(new VanillaRandomForestClassificationModel())
-
-}
+    extends StringIndexingWrapperModel[SparkRandomForestClassificationModel, SparkRandomForestClassifier](model) with RandomForestClassificationModelInfo
 
 class VanillaRandomForestClassificationModel
     extends SparkModelWrapper[SparkRandomForestClassificationModel, SparkRandomForestClassifier]
