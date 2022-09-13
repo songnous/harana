@@ -1,7 +1,7 @@
 package com.harana.sdk.backend.models.flow.filesystemclients
 
 import com.harana.sdk.backend.models.flow.utils.{ManagedResource, Serialization}
-import com.harana.sdk.backend.models.flow.utils.Serialization
+import org.apache.commons.compress.utils.IOUtils
 import org.apache.hadoop.fs.FileUtil
 
 import java.io._
@@ -30,12 +30,12 @@ case class LocalFileSystemClient() extends FileSystemClient with Serialization {
 
   def saveInputStreamToFile(inputStream: InputStream, destinationPath: String) =
     ManagedResource(new BufferedOutputStream(new FileOutputStream(destinationPath))) { fos =>
-      org.apache.commons.io.IOUtils.copy(inputStream, fos)
+      IOUtils.copy(inputStream, fos)
     }
 
   def readFileAsObject[T <: Serializable](path: String): T =
     ManagedResource(new FileInputStream(path)) { inputStream =>
-      deserialize(org.apache.commons.io.IOUtils.toByteArray(inputStream))
+      deserialize(IOUtils.toByteArray(inputStream))
     }
 
   def getFileInfo(path: String): Option[FileInfo] = {

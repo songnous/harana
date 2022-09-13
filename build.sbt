@@ -89,6 +89,7 @@ val modulesCore = jvmProject("modules-core")
       Library.testing.value ++
       Library.vertx.value ++
       Library.zio1.value :+
+      Library.commonsIo.value :+
       Library.ficus.value :+
       Library.scaffeine.value :+
       Library.sourcecode.value

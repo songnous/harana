@@ -1,22 +1,9 @@
-import java.nio.charset.Charset
-import java.nio.file._
-import com.typesafe.config.ConfigFactory
+import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 import sbt.Keys._
 import sbt._
-import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport.scalaJSUseMainModuleInitializer
-import sbtcrossproject.CrossPlugin.autoImport._
-import sbtcrossproject.CrossProject
-import org.scalajs.sbtplugin._
-import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
-import scalajsbundler.sbtplugin.ScalaJSBundlerPlugin
-import scalajsbundler.sbtplugin.ScalaJSBundlerPlugin.autoImport._
-import scalajscrossproject.ScalaJSCrossPlugin.autoImport._
-import com.typesafe.sbt.packager.archetypes.JavaAppPackaging
-import com.typesafe.sbt.packager.universal.UniversalPlugin
-import com.typesafe.sbt.packager.universal.UniversalPlugin.autoImport._
-import scala.sys.process._
-import sbtghpackages.GitHubPackagesPlugin.autoImport._
 import sbtassembly.AssemblyPlugin.autoImport._
+import sbtghpackages.GitHubPackagesPlugin.autoImport._
+import scalajsbundler.sbtplugin.ScalaJSBundlerPlugin.autoImport._
 
 object Settings {
 
@@ -144,8 +131,6 @@ object Settings {
 
   val jvm = Seq(
     javacOptions                              ++= Seq("-encoding", "UTF-8"),
-    javaOptions                               ++= javaLaunchOptions,
-    Universal / javaOptions                   ++= javaLaunchOptions.map(lo => s"-J$lo"),
     excludeDependencies                       ++= Library.globalExclusions.value,
     libraryDependencySchemes                  ++= Library.libraryDependencySchemes.value,
     javaOptions                               ++= {
@@ -162,8 +147,8 @@ object Settings {
     Resolver.mavenLocal,
     Resolver.githubPackages("harana"),
     Resolver.jcenterRepo,
-    Resolver.sonatypeRepo("releases"),
-    Resolver.sonatypeRepo("snapshots"),
+    Resolver.sonatypeOssRepos("releases").head,
+    Resolver.sonatypeOssRepos("snapshots").head,
     Resolver.url("heroku-sbt-plugin-releases", url("https://dl.bintray.com/heroku/sbt-plugins/"))(Resolver.ivyStylePatterns),
     "typesafe.com" at "https://repo.typesafe.com/typesafe/repo/",
     "sonatype.org" at "https://oss.sonatype.org/content/repositories/releases",

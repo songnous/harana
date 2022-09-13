@@ -17,17 +17,17 @@
     <orderEntry type="library" name="sbt: com.chuusai:shapeless_2.13:2.3.9:jar" level="project" />
     <orderEntry type="library" name="sbt: com.chuusai:shapeless_sjs1_2.13:2.3.6:jar" level="project" />
     <orderEntry type="library" name="sbt: com.github.julien-truffaut:monocle-core_2.13:2.1.0:jar" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="sbt: com.github.sbt:sbt-jni-core_2.13:1.5.3:jar" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="sbt: com.github.sbt:sbt-jni-core_2.13:1.5.4:jar" level="project" />
     <orderEntry type="library" name="sbt: com.olvind:scalablytyped-runtime_sjs1_2.13:2.1.0:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-actor_2.13:2.6.19:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-http-core_2.13:10.2.9:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-http-spray-json_2.13:10.2.9:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-http_2.13:10.2.9:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-parsing_2.13:10.2.9:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-protobuf-v3_2.13:2.6.19:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-slf4j_2.13:2.6.19:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-stream_2.13:2.6.19:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-testkit_2.13:2.6.19:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-actor_2.13:2.6.20:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-http-core_2.13:10.2.10:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-http-spray-json_2.13:10.2.10:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-http_2.13:10.2.10:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-parsing_2.13:10.2.10:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-protobuf-v3_2.13:2.6.20:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-slf4j_2.13:2.6.20:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-stream_2.13:2.6.20:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-testkit_2.13:2.6.20:jar" level="project" />
     <orderEntry type="library" name="sbt: com.typesafe:config:1.4.2:jar" level="project" />
     <orderEntry type="library" name="sbt: com.typesafe:ssl-config-core_2.13:0.4.3:jar" level="project" />
     <orderEntry type="library" name="sbt: io.circe:circe-core_2.13:0.14.2:jar" level="project" />
@@ -66,9 +66,9 @@
     <orderEntry type="library" name="sbt: org.portable-scala:portable-scala-reflect_sjs1_2.13:1.0.0:jar" level="project" />
     <orderEntry type="library" name="sbt: org.reactivestreams:reactive-streams:1.0.3:jar" level="project" />
     <orderEntry type="library" name="sbt: org.scala-js:scalajs-dom_sjs1_2.13:2.0.0:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.scala-js:scalajs-library_2.13:1.10.0:jar" level="project" />
-    <orderEntry type="library" scope="TEST" name="sbt: org.scala-js:scalajs-test-bridge_2.13:1.10.0:jar" level="project" />
-    <orderEntry type="library" scope="TEST" name="sbt: org.scala-js:scalajs-test-interface_2.13:1.10.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.scala-js:scalajs-library_2.13:1.10.1:jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="sbt: org.scala-js:scalajs-test-bridge_2.13:1.10.1:jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="sbt: org.scala-js:scalajs-test-interface_2.13:1.10.1:jar" level="project" />
     <orderEntry type="library" name="sbt: org.scala-lang.modules:scala-collection-compat_2.13:2.6.0:jar" level="project" />
     <orderEntry type="library" name="sbt: org.scala-lang.modules:scala-java8-compat_2.13:1.0.0:jar" level="project" />
     <orderEntry type="library" name="sbt: org.scala-lang.modules:scala-parser-combinators_2.13:1.1.2:jar" level="project" />
@@ -107,15 +107,11 @@
     <orderEntry type="module-library">
       <library name="sbt: unmanaged-sources-and-docs">
         <CLASSES />
-        <JAVADOC>
-          <root url="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/netty/netty-transport-native-kqueue/4.1.46.Final/netty-transport-native-kqueue-4.1.46.Final-javadoc.jar!/" />
-          <root url="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/netty/netty-transport-native-kqueue/4.1.52.Final/netty-transport-native-kqueue-4.1.52.Final-javadoc.jar!/" />
-        </JAVADOC>
+        <JAVADOC />
         <SOURCES>
           <root url="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/netty/netty-transport-native-epoll/4.1.74.Final/netty-transport-native-epoll-4.1.74.Final-sources.jar!/" />
-          <root url="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/netty/netty-transport-native-kqueue/4.1.46.Final/netty-transport-native-kqueue-4.1.46.Final-sources.jar!/" />
-          <root url="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/netty/netty-transport-native-kqueue/4.1.52.Final/netty-transport-native-kqueue-4.1.52.Final-sources.jar!/" />
           <root url="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/netty/netty-transport-native-kqueue/4.1.74.Final/netty-transport-native-kqueue-4.1.74.Final-sources.jar!/" />
+          <root url="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/netty/netty-transport-native-kqueue/4.1.75.Final/netty-transport-native-kqueue-4.1.75.Final-sources.jar!/" />
           <root url="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/io/netty/incubator/netty-incubator-transport-native-io_uring/0.0.14.Final/netty-incubator-transport-native-io_uring-0.0.14.Final-sources.jar!/" />
           <root url="jar://$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/apache/hive/hive-exec/2.3.9/hive-exec-2.3.9-sources.jar!/" />
         </SOURCES>

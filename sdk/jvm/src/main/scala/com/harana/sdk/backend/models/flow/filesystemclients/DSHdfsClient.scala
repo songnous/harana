@@ -1,7 +1,7 @@
 package com.harana.sdk.backend.models.flow.filesystemclients
 
 import com.harana.sdk.backend.models.flow.utils.Serialization
-import com.harana.sdk.backend.models.flow.utils.Serialization
+import org.apache.commons.compress.utils.IOUtils
 import org.apache.hadoop.hdfs.{DFSClient, DFSInputStream}
 
 import java.io._
@@ -41,7 +41,7 @@ case class DSHdfsClient(hdfsClient: DFSClient) extends Serialization with FileSy
   def saveInputStreamToFile(inputStream: InputStream, destinationPath: String) = {
     val fos = new BufferedOutputStream(hdfsClient.create(destinationPath, false))
     try
-      org.apache.commons.io.IOUtils.copy(inputStream, fos)
+      IOUtils.copy(inputStream, fos)
     finally
       fos.close()
   }
@@ -51,7 +51,7 @@ case class DSHdfsClient(hdfsClient: DFSClient) extends Serialization with FileSy
     */
   def readFileAsObject[T <: Serializable](path: String): T = {
     val inputStream: DFSInputStream = hdfsClient.open(path)
-    deserialize(org.apache.commons.io.IOUtils.toByteArray(inputStream))
+    deserialize(IOUtils.toByteArray(inputStream))
   }
 
   /** Returns basic info about a file. */

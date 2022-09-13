@@ -1,18 +1,16 @@
-import java.nio.charset.Charset
-import java.nio.file._
+import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
+import org.scalajs.sbtplugin._
 import sbt.Keys._
 import sbt._
-import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport.scalaJSUseMainModuleInitializer
 import sbtcrossproject.CrossPlugin.autoImport._
 import sbtcrossproject.CrossProject
-import org.scalajs.sbtplugin._
-import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
+import sbtghpackages.GitHubPackagesKeys.githubRepository
 import scalajsbundler.sbtplugin.ScalaJSBundlerPlugin
 import scalajsbundler.sbtplugin.ScalaJSBundlerPlugin.autoImport._
 import scalajscrossproject.ScalaJSCrossPlugin.autoImport._
-import sbtghpackages.GitHubPackagesKeys.githubRepository
-import com.typesafe.sbt.packager.archetypes.JavaAppPackaging
-import com.typesafe.sbt.packager.universal.UniversalPlugin
+
+import java.nio.charset.Charset
+import java.nio.file._
 import scala.sys.process._
 
 object ProjectsPlugin extends AutoPlugin {
@@ -39,7 +37,6 @@ object ProjectsPlugin extends AutoPlugin {
       CrossProject(id = id, file(id))(JSPlatform, JVMPlatform)
         .crossType(CrossType.Full)
         .jsConfigure(_.enablePlugins(ScalaJSBundlerPlugin))
-        .jvmConfigure(_.enablePlugins(JavaAppPackaging, UniversalPlugin))
         .settings(
           organization := "com.harana",
           name := id,
@@ -68,7 +65,6 @@ object ProjectsPlugin extends AutoPlugin {
 
     def jvmProject(id: String): Project =
       Project(id = id, file(id))
-        .enablePlugins(JavaAppPackaging, UniversalPlugin)
         .settings(
           organization := "com.harana",
           name := id,

@@ -3,31 +3,6 @@
   <component name="ScalaCompilerConfiguration">
     <option name="incrementalityType" value="SBT" />
     <profile name="sbt 1" modules="harana_1859" />
-    <profile name="sbt 2" modules="designerJS,growthJS,id-jwtJS,idJS,modulesJS,sdkJS">
-      <option name="postfixOps" value="true" />
-      <option name="implicitConversions" value="true" />
-      <option name="higherKinds" value="true" />
-      <option name="deprecationWarnings" value="true" />
-      <option name="uncheckedWarnings" value="true" />
-      <option name="featureWarnings" value="true" />
-      <parameters>
-        <parameter value="-Xmaxerrs" />
-        <parameter value="10000" />
-        <parameter value="-Ymacro-annotations" />
-        <parameter value="-Yrangepos" />
-        <parameter value="-Ybackend-parallelism" />
-        <parameter value="8" />
-        <parameter value="-Ybackend-worker-queue" />
-        <parameter value="8" />
-        <parameter value="-Xlog-implicits" />
-        <parameter value="-Ymacro-annotations" />
-      </parameters>
-      <plugins>
-        <plugin path="$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-js/scalajs-compiler_2.13.8/1.10.0/scalajs-compiler_2.13.8-1.10.0.jar" />
-        <plugin path="$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/olegpy/better-monadic-for_2.13/0.3.1/better-monadic-for_2.13-0.3.1.jar" />
-        <plugin path="$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/kind-projector_2.13.8/0.13.2/kind-projector_2.13.8-0.13.2.jar" />
-      </plugins>
-    </profile>
     <profile name="sbt 3" modules="designerJVM,docs-generator,executor,growthJVM,id-jwtJVM,idJVM,modules-core,modulesJVM,sdkJVM,spark-executor">
       <option name="postfixOps" value="true" />
       <option name="implicitConversions" value="true" />
@@ -48,6 +23,31 @@
         <parameter value="-Ymacro-annotations" />
       </parameters>
       <plugins>
+        <plugin path="$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/olegpy/better-monadic-for_2.13/0.3.1/better-monadic-for_2.13-0.3.1.jar" />
+        <plugin path="$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/kind-projector_2.13.8/0.13.2/kind-projector_2.13.8-0.13.2.jar" />
+      </plugins>
+    </profile>
+    <profile name="sbt 4" modules="designerJS,growthJS,id-jwtJS,idJS,modulesJS,sdkJS">
+      <option name="postfixOps" value="true" />
+      <option name="implicitConversions" value="true" />
+      <option name="higherKinds" value="true" />
+      <option name="deprecationWarnings" value="true" />
+      <option name="uncheckedWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-Xmaxerrs" />
+        <parameter value="10000" />
+        <parameter value="-Ymacro-annotations" />
+        <parameter value="-Yrangepos" />
+        <parameter value="-Ybackend-parallelism" />
+        <parameter value="8" />
+        <parameter value="-Ybackend-worker-queue" />
+        <parameter value="8" />
+        <parameter value="-Xlog-implicits" />
+        <parameter value="-Ymacro-annotations" />
+      </parameters>
+      <plugins>
+        <plugin path="$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-js/scalajs-compiler_2.13.8/1.10.1/scalajs-compiler_2.13.8-1.10.1.jar" />
         <plugin path="$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/olegpy/better-monadic-for_2.13/0.3.1/better-monadic-for_2.13-0.3.1.jar" />
         <plugin path="$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/typelevel/kind-projector_2.13.8/0.13.2/kind-projector_2.13.8-0.13.2.jar" />
       </plugins>

@@ -1,8 +1,8 @@
 package com.harana.modules.core.logger
 
 import com.harana.modules.core.logger.Logger.Service
-import org.apache.commons.io.FilenameUtils
 import org.apache.logging.log4j.{LogManager, Logger => Log4JLogger}
+import org.apache.commons.io.FilenameUtils
 import sourcecode._
 import zio._
 
