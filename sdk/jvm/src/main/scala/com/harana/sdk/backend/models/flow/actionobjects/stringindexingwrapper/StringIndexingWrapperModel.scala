@@ -4,6 +4,7 @@ import com.harana.sdk.backend.models.flow.ExecutionContext
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.{SparkModelWrapper, Transformer}
 import com.harana.sdk.backend.models.flow.inference.InferContext
+import com.harana.sdk.shared.models.flow.actionobjects.stringindexingwrapper.StringIndexingWrapperModelInfo
 import com.harana.sdk.shared.models.flow.parameters.ParameterMap
 import org.apache.spark.ml
 import org.apache.spark.ml.PipelineModel
@@ -13,11 +14,9 @@ import org.apache.spark.sql.types.StructType
   *
   * Concrete models (like GBTClassificationModel) must be concrete classes (leaves in hierarchy). That's why this class must be abstract.
   */
-abstract class StringIndexingWrapperModel[M <: ml.Model[M], E <: ml.Estimator[M]](
-    private var wrappedModel: SparkModelWrapper[M, E]
-) extends Transformer {
+abstract class StringIndexingWrapperModel[M <: ml.Model[M], E <: ml.Estimator[M]](private var wrappedModel: SparkModelWrapper[M, E]) extends Transformer {
 
-  private var pipelinedModel: PipelineModel = null
+  private var pipelinedModel: PipelineModel = _
 
   def setPipelinedModel(pipelinedModel: PipelineModel): this.type = {
     this.pipelinedModel = pipelinedModel

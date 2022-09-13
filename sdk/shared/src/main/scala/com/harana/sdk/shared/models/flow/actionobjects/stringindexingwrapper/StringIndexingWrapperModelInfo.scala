@@ -7,8 +7,7 @@ import com.harana.sdk.shared.models.flow.parameters.ParameterMap
   *
   * Concrete models (like GBTClassificationModel) must be concrete classes (leaves in hierarchy). That's why this class must be abstract.
   */
-abstract class StringIndexingWrapperModelInfo(private var wrappedModel: SparkModelWrapperInfo)
-  extends TransformerInfo {
+abstract class StringIndexingWrapperModelInfo(private var wrappedModel: SparkModelWrapperInfo) extends TransformerInfo {
 
   val parameters = wrappedModel.parameters
 

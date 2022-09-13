@@ -40,7 +40,7 @@ object DataFrameReportGenerator {
     val multivarStats = calculateMultiColStats(df)
     val distributions = DistributionCalculator.distributionByColumn(df, multivarStats)
     val tables = Seq(sampleTable(df), sizeTable(df.schema, multivarStats.count))
-    Report(report.ReportContent(ReportContentName, ReportType.DataFrameFull, tables, distributions))
+    Report(ReportContent(ReportContentName, ReportType.DataFrameFull, tables, distributions))
   }
 
   private def calculateMultiColStats(df: DataFrame) =

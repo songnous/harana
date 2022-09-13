@@ -1,13 +1,11 @@
 package com.harana.sdk.backend.models.flow
 
-import scala.language.implicitConversions
-import ToVectorConversions._
+import com.harana.sdk.backend.models.flow.ToVectorConversions._
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
-import com.harana.sdk.shared.models.flow.ToVectorConversions._
-import com.harana.sdk.shared.models.designer.flow._
-import com.harana.sdk.shared.models.flow
 import com.harana.sdk.shared.models.flow.ActionObjectInfo
+import com.harana.sdk.shared.models.flow.ToVectorConversions._
 
+import scala.language.implicitConversions
 import scala.reflect.runtime.{universe => ru}
 
 object ToVectorConversions {
@@ -23,7 +21,7 @@ object ToVectorConversions {
   }
 }
 
-trait Action0To1[TO_0 <: ActionObjectInfo] extends flow.Action {
+trait Action0To1[TO_0 <: ActionObjectInfo] extends Action {
   final def executeUntyped(arguments: Vector[ActionObjectInfo])(context: ExecutionContext) =
     execute()(context)
 
@@ -38,7 +36,7 @@ trait Action0To1[TO_0 <: ActionObjectInfo] extends flow.Action {
   val tTagTO_0: ru.TypeTag[TO_0]
 }
 
-trait Action0To2[TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo] extends flow.Action {
+trait Action0To2[TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo] extends Action {
   final def executeUntyped(arguments: Vector[ActionObjectInfo])(context: ExecutionContext): Vector[ActionObjectInfo] =
     execute()(context)
 
@@ -61,7 +59,7 @@ trait Action0To2[TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo] extends flo
   val tTagTO_1: ru.TypeTag[TO_1]
 }
 
-trait Action0To3[TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo, TO_2 <: ActionObjectInfo] extends flow.Action {
+trait Action0To3[TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo, TO_2 <: ActionObjectInfo] extends Action {
   final def executeUntyped(arguments: Vector[ActionObjectInfo])(context: ExecutionContext): Vector[ActionObjectInfo] =
     execute()(context)
 
@@ -88,7 +86,7 @@ trait Action0To3[TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo, TO_2 <: Act
   val tTagTO_2: ru.TypeTag[TO_2]
 }
 
-trait Action1To0[TI_0 <: ActionObjectInfo] extends flow.Action {
+trait Action1To0[TI_0 <: ActionObjectInfo] extends Action {
 
   final def executeUntyped(arguments: Vector[ActionObjectInfo])(context: ExecutionContext): Vector[ActionObjectInfo] = {
     execute(arguments(0).asInstanceOf[TI_0])(context)
@@ -105,7 +103,7 @@ trait Action1To0[TI_0 <: ActionObjectInfo] extends flow.Action {
   def inferKnowledge(k0: Knowledge[TI_0])(context: InferContext): (Unit, InferenceWarnings) = ((), InferenceWarnings.empty)
 }
 
-trait Action1To1[TI_0 <: ActionObjectInfo, TO_0 <: ActionObjectInfo] extends flow.Action {
+trait Action1To1[TI_0 <: ActionObjectInfo, TO_0 <: ActionObjectInfo] extends Action {
 
   final def executeUntyped(arguments: Vector[ActionObjectInfo])(context: ExecutionContext): Vector[ActionObjectInfo] =
     execute(arguments(0).asInstanceOf[TI_0])(context)
@@ -124,7 +122,7 @@ trait Action1To1[TI_0 <: ActionObjectInfo, TO_0 <: ActionObjectInfo] extends flo
 trait Action1To2[
   TI_0 <: ActionObjectInfo,
   TO_0 <: ActionObjectInfo,
-  TO_1 <: ActionObjectInfo] extends flow.Action {
+  TO_1 <: ActionObjectInfo] extends Action {
 
   final def executeUntyped(arguments: Vector[ActionObjectInfo])(context: ExecutionContext): Vector[ActionObjectInfo] =
     execute(arguments(0).asInstanceOf[TI_0])(context)
@@ -152,7 +150,7 @@ trait Action1To3[
   TI_0 <: ActionObjectInfo,
   TO_0 <: ActionObjectInfo,
   TO_1 <: ActionObjectInfo,
-  TO_2 <: ActionObjectInfo] extends flow.Action {
+  TO_2 <: ActionObjectInfo] extends Action {
 
   final def executeUntyped(arguments: Vector[ActionObjectInfo])(context: ExecutionContext): Vector[ActionObjectInfo] =
     execute(arguments(0).asInstanceOf[TI_0])(context)
@@ -178,7 +176,7 @@ trait Action1To3[
   val tTagTO_2: ru.TypeTag[TO_2]
 }
 
-trait Action2To0[TI_0 <: ActionObjectInfo, TI_1 <: ActionObjectInfo] extends flow.Action {
+trait Action2To0[TI_0 <: ActionObjectInfo, TI_1 <: ActionObjectInfo] extends Action {
 
   final def executeUntyped(arguments: Vector[ActionObjectInfo])(context: ExecutionContext): Vector[ActionObjectInfo] = {
     execute(arguments(0).asInstanceOf[TI_0], arguments(1).asInstanceOf[TI_1])(context)
@@ -199,7 +197,7 @@ trait Action2To0[TI_0 <: ActionObjectInfo, TI_1 <: ActionObjectInfo] extends flo
 trait Action2To1[
   TI_0 <: ActionObjectInfo,
   TI_1 <: ActionObjectInfo,
-  TO_0 <: ActionObjectInfo] extends flow.Action {
+  TO_0 <: ActionObjectInfo] extends Action {
 
   final def executeUntyped(arguments: Vector[ActionObjectInfo])(context: ExecutionContext): Vector[ActionObjectInfo] =
     execute(arguments(0).asInstanceOf[TI_0], arguments(1).asInstanceOf[TI_1])(context)
@@ -219,7 +217,7 @@ trait Action2To2[
   TI_0 <: ActionObjectInfo,
   TI_1 <: ActionObjectInfo,
   TO_0 <: ActionObjectInfo,
-  TO_1 <: ActionObjectInfo] extends flow.Action {
+  TO_1 <: ActionObjectInfo] extends Action {
 
   final def executeUntyped(arguments: Vector[ActionObjectInfo])(context: ExecutionContext): Vector[ActionObjectInfo] =
     execute(arguments(0).asInstanceOf[TI_0], arguments(1).asInstanceOf[TI_1])(context)
@@ -250,7 +248,7 @@ trait Action2To3[
     TO_0 <: ActionObjectInfo,
     TO_1 <: ActionObjectInfo,
     TO_2 <: ActionObjectInfo
-] extends flow.Action {
+] extends Action {
 
   final def executeUntyped(arguments: Vector[ActionObjectInfo])(context: ExecutionContext): Vector[ActionObjectInfo] =
     execute(arguments(0).asInstanceOf[TI_0], arguments(1).asInstanceOf[TI_1])(context)
@@ -279,7 +277,7 @@ trait Action2To3[
 trait Action3To0[
   TI_0 <: ActionObjectInfo,
   TI_1 <: ActionObjectInfo,
-  TI_2 <: ActionObjectInfo] extends flow.Action {
+  TI_2 <: ActionObjectInfo] extends Action {
 
   final def executeUntyped(arguments: Vector[ActionObjectInfo])(context: ExecutionContext): Vector[ActionObjectInfo] = {
     execute(arguments(0).asInstanceOf[TI_0], arguments(1).asInstanceOf[TI_1], arguments(2).asInstanceOf[TI_2])(context)
@@ -304,7 +302,7 @@ trait Action3To1[
   TI_0 <: ActionObjectInfo,
   TI_1 <: ActionObjectInfo,
   TI_2 <: ActionObjectInfo,
-  TO_0 <: ActionObjectInfo] extends flow.Action {
+  TO_0 <: ActionObjectInfo] extends Action {
 
   final def executeUntyped(arguments: Vector[ActionObjectInfo])(context: ExecutionContext): Vector[ActionObjectInfo] =
     execute(arguments(0).asInstanceOf[TI_0], arguments(1).asInstanceOf[TI_1], arguments(2).asInstanceOf[TI_2])(context)
@@ -331,7 +329,7 @@ trait Action3To2[
     TI_2 <: ActionObjectInfo,
     TO_0 <: ActionObjectInfo,
     TO_1 <: ActionObjectInfo
-] extends flow.Action {
+] extends Action {
 
   final def executeUntyped(arguments: Vector[ActionObjectInfo])(context: ExecutionContext): Vector[ActionObjectInfo] =
     execute(arguments(0).asInstanceOf[TI_0], arguments(1).asInstanceOf[TI_1], arguments(2).asInstanceOf[TI_2])(context)
@@ -366,7 +364,7 @@ trait Action3To3[
     TO_0 <: ActionObjectInfo,
     TO_1 <: ActionObjectInfo,
     TO_2 <: ActionObjectInfo
-] extends flow.Action {
+] extends Action {
 
   final def executeUntyped(arguments: Vector[ActionObjectInfo])(context: ExecutionContext): Vector[ActionObjectInfo] =
     execute(arguments(0).asInstanceOf[TI_0], arguments(1).asInstanceOf[TI_1], arguments(2).asInstanceOf[TI_2])(context)

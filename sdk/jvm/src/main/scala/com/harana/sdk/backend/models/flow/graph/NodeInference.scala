@@ -6,9 +6,8 @@ import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarn
 import com.harana.sdk.backend.models.flow.{Action, Catalog, Knowledge}
 import com.harana.sdk.shared.models.flow.ActionObjectInfo
 import com.harana.sdk.shared.models.flow.exceptions.FlowError
-import com.harana.sdk.shared.models.flow.graph.Edge.PortIndex
+import com.harana.sdk.shared.models.flow.graph.Endpoint
 import com.harana.sdk.shared.models.flow.graph.FlowGraph.FlowNode
-import com.harana.sdk.shared.models.flow.utils.Id
 
 import scala.reflect.runtime.universe.TypeTag
 
@@ -62,13 +61,13 @@ object NodeInference {
     }
   }
 
-  private def inputKnowledgeAndAccordanceForInputPort(node: FlowNode, catalog: ActionObjectCatalog, graphKnowledge: GraphKnowledge, portIndex: Int, predecessorEndpointOption: Option[(Id, PortIndex)]): (Knowledge[ActionObjectInfo], TypesAccordance) = {
+  private def inputKnowledgeAndAccordanceForInputPort(node: FlowNode, catalog: ActionObjectCatalog, graphKnowledge: GraphKnowledge, portIndex: Int, predecessorEndpointOption: Option[Endpoint]): (Knowledge[ActionObjectInfo], TypesAccordance) = {
     val inPortType = node.value.inPortTypes(portIndex).asInstanceOf[TypeTag[ActionObjectInfo]]
     predecessorEndpointOption match {
       case None => (KnowledgeService.defaultKnowledge(catalog, inPortType), TypesAccordance.NotProvided(portIndex))
       case Some(predecessorEndpoint) =>
-        val outPortIndex = predecessorEndpoint._2
-        val predecessorKnowledge = graphKnowledge.getKnowledge(predecessorEndpoint._1)(outPortIndex)
+        val outPortIndex = predecessorEndpoint.portIndex
+        val predecessorKnowledge = graphKnowledge.getKnowledge(predecessorEndpoint.nodeId)(outPortIndex)
         inputKnowledgeAndAccordanceForInputPort(catalog, predecessorKnowledge, portIndex, inPortType)
     }
   }

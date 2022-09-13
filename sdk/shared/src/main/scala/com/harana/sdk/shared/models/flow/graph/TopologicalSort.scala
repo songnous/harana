@@ -24,7 +24,7 @@ private[graph] class TopologicalSort[T](sortable: TopologicallySortable[T]) {
       case None =>      // node not yet visited
         markInProgress(node)
         var l = sortedSoFar
-        sortable.successors(node.id).foreach(_.map(_._1).foreach(s => l = topologicalSort(sortable.node(s), l)))
+        sortable.successors(node.id).foreach(_.map(_.nodeId).foreach(s => l = topologicalSort(sortable.node(s), l)))
         markVisited(node)
         l.map(node :: _)
     }

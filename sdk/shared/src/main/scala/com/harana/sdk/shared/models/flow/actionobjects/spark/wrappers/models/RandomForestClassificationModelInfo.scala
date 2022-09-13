@@ -1,14 +1,18 @@
 package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.models
 
-import com.harana.sdk.shared.models.flow.actionobjects.SparkModelWrapperInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.ProbabilisticClassifierParameters
-import com.harana.sdk.shared.models.flow.actionobjects.stringindexingwrapper.StringIndexingWrapperModelInfo
-import com.harana.sdk.shared.models.flow.parameters.Parameter
+import com.harana.sdk.shared.models.flow.actionobjects.{SparkModelWrapperInfo, TransformerInfo}
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterMap}
 
-class RandomForestClassificationModelInfo(model: VanillaRandomForestClassificationModelInfo = new VanillaRandomForestClassificationModelInfo() {})
-    extends StringIndexingWrapperModelInfo(model) {
+trait RandomForestClassificationModelInfo extends TransformerInfo {
+ val id = "5E45320A-D21C-4AC0-925C-82AED31B83D3"
 
-  val id = "5E45320A-D21C-4AC0-925C-82AED31B83D3"
+  val model = new VanillaRandomForestClassificationModelInfo {}
+  val parameters = model.parameters
+
+  override def paramMap: ParameterMap = model.paramMap
+
+  override def defaultParamMap: ParameterMap = model.defaultParamMap
 }
 
 trait VanillaRandomForestClassificationModelInfo extends SparkModelWrapperInfo with ProbabilisticClassifierParameters {

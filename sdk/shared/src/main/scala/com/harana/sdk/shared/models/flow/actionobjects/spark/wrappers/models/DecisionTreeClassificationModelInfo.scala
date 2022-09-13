@@ -1,15 +1,18 @@
 package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.models
 
-import com.harana.sdk.shared.models.flow.actionobjects.SparkModelWrapperInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.ProbabilisticClassifierParameters
-import com.harana.sdk.shared.models.flow.actionobjects.stringindexingwrapper.StringIndexingWrapperModelInfo
+import com.harana.sdk.shared.models.flow.actionobjects.{SparkModelWrapperInfo, TransformerInfo}
+import com.harana.sdk.shared.models.flow.parameters.ParameterMap
 
-class DecisionTreeClassificationModelInfo(vanillaModel: VanillaDecisionTreeClassificationModelInfo)
-  extends StringIndexingWrapperModelInfo(vanillaModel) {
+trait DecisionTreeClassificationModelInfo extends TransformerInfo {
 
   val id = "60290377-6A93-495B-BC3E-14F7159B7791"
 
-  def this() = this(new VanillaDecisionTreeClassificationModelInfo{})
+  val model = new VanillaDecisionTreeClassificationModelInfo{}
+  val parameters = model.parameters
+
+  override def paramMap: ParameterMap = model.paramMap
+  override def defaultParamMap: ParameterMap = model.defaultParamMap
 }
 
 trait VanillaDecisionTreeClassificationModelInfo extends SparkModelWrapperInfo with ProbabilisticClassifierParameters {

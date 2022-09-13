@@ -27,10 +27,10 @@ abstract class DirectedGraph[T <: GraphAction, G <: DirectedGraph[T, G]](
   def containsCycle = _containsCycle
 
   def allPredecessorsOf(id: Id) =
-    predecessors(id).foldLeft(Set[Node[T]]())((acc: Set[Node[T]], predecessor: Option[(Id, PortIndex)]) =>
+    predecessors(id).foldLeft(Set[Node[T]]())((acc: Set[Node[T]], predecessor: Option[Endpoint]) =>
       predecessor match {
         case None => acc
-        case Some(endpoint) => (acc + node(endpoint._1)) ++ allPredecessorsOf(endpoint._1)
+        case Some(endpoint) => (acc + node(endpoint.nodeId)) ++ allPredecessorsOf(endpoint.nodeId)
       }
     )
 
@@ -40,10 +40,10 @@ abstract class DirectedGraph[T <: GraphAction, G <: DirectedGraph[T, G]](
     topologicallySorted.get.filter(n => predecessors(n.id).flatten.isEmpty)
 
   def predecessorsOf(nodes: Set[Id]): Set[Id] =
-    nodes.flatMap(node => predecessors(node).flatten.map(_._1))
+    nodes.flatMap(node => predecessors(node).flatten.map(_.nodeId))
 
   def successorsOf(node: Id): Set[Id] =
-    successors(node).flatMap(endpoints => endpoints.map(_._1)).toSet
+    successors(node).flatMap(endpoints => endpoints.map(_.nodeId)).toSet
 
   def subgraph(nodes: Set[Id]): G = {
     @tailrec
@@ -67,24 +67,24 @@ abstract class DirectedGraph[T <: GraphAction, G <: DirectedGraph[T, G]](
 
   def getValidEdges: Set[Edge] = validEdges
   private def edgesOf(nodes: Set[Id]): Set[Edge] = nodes.flatMap(edgesTo)
-  private def edgesTo(node: Id): Set[Edge] = validEdges.filter(edge => edge.to._1 == node)
+  private def edgesTo(node: Id): Set[Edge] = validEdges.filter(edge => edge.to.nodeId == node)
 
   private def preparePredecessors = {
     import scala.collection.mutable
-    val mutablePredecessors = mutable.Map.empty[Id, mutable.IndexedSeq[Option[(Id, PortIndex)]]]
+    val mutablePredecessors = mutable.Map.empty[Id, mutable.IndexedSeq[Option[Endpoint]]]
 
     nodes.foreach(n => mutablePredecessors += n.id -> mutable.IndexedSeq.fill(n.value.inArity)(None))
 
-    validEdges.foreach(edge => mutablePredecessors(edge.to._1)(edge.to._2) = Some(edge.from))
+    validEdges.foreach(edge => mutablePredecessors(edge.to.nodeId)(edge.to.portIndex) = Some(edge.from))
     mutablePredecessors.view.mapValues(_.toIndexedSeq).toMap
   }
 
   private def prepareSuccessors = {
     import scala.collection.mutable
-    val mutableSuccessors = mutable.Map.empty[Id, IndexedSeq[mutable.Set[(Id, PortIndex)]]]
+    val mutableSuccessors = mutable.Map.empty[Id, IndexedSeq[mutable.Set[Endpoint]]]
 
     nodes.foreach(node => mutableSuccessors += node.id -> Vector.fill(node.value.outArity)(mutable.Set()))
-    validEdges.foreach(edge => mutableSuccessors(edge.from._1)(edge.from._2) += edge.to)
+    validEdges.foreach(edge => mutableSuccessors(edge.from.nodeId)(edge.from.portIndex) += edge.to)
     mutableSuccessors.view.mapValues(_.map(_.toSet)).toMap
   }
 
@@ -92,12 +92,12 @@ abstract class DirectedGraph[T <: GraphAction, G <: DirectedGraph[T, G]](
     val nodesIds = nodes.map(_.id)
     edges.filter(edge =>
       {
-        val inNodeOpt  = nodes.find(n => n.id == edge.from._1)
-        val outNodeOpt = nodes.find(n => n.id == edge.to._1)
+        val inNodeOpt  = nodes.find(n => n.id == edge.from.nodeId)
+        val outNodeOpt = nodes.find(n => n.id == edge.to.nodeId)
         for {
           inNode  <- inNodeOpt
           outNode <- outNodeOpt
-        } yield edge.from._2 < inNode.value.outArity && edge.to._2 < outNode.value.inArity
+        } yield edge.from.portIndex < inNode.value.outArity && edge.to.portIndex < outNode.value.inArity
       }.getOrElse(false)
     )
   }

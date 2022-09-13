@@ -1,13 +1,12 @@
 package com.harana.sdk.backend.models.flow.graph
 
-import com.harana.sdk.backend.models.flow.{Knowledge, graph}
 import com.harana.sdk.backend.models.flow.graph.DClassesForActions.A1
 import com.harana.sdk.backend.models.flow.inference.InferenceWarnings
 import com.harana.sdk.backend.models.flow.inference.exceptions.{AllTypesNotCompilableError, NoInputEdgesError}
 import com.harana.sdk.backend.models.flow.inference.warnings.SomeTypesNotCompilableWarning
-import com.harana.sdk.backend.models.flow.Knowledge
-import com.harana.sdk.shared.models.designer.flow.graph.Endpoint
+import com.harana.sdk.backend.models.flow.{Knowledge, graph}
 import com.harana.sdk.shared.models.flow.ActionObjectInfo
+import com.harana.sdk.shared.models.flow.graph.FlowGraph.FlowNode
 import com.harana.sdk.shared.models.flow.graph.node.Node
 
 class NodeInferenceImplSpec extends AbstractInferenceSpec {
@@ -55,7 +54,7 @@ class NodeInferenceImplSpec extends AbstractInferenceSpec {
 
     "return default knowledge with errors when missing inference for one input and invalid type for other" in {
         val predecessorId = Node.Id.randomId
-        val nodePredecessorsEndpoints = IndexedSeq(None, Some(Endpoint(predecessorId, 0)))
+        val nodePredecessorsEndpoints = IndexedSeq(None, Some(predecessorId, 0))
         val graphKnowledge = GraphKnowledge(Map(predecessorId -> graph.NodeInferenceResult(Vector(knowledgeA1))))
         val inferenceResult = nodeInference.inputInferenceForNode(nodeA1A2ToFirst, inferenceCtx, graphKnowledge, nodePredecessorsEndpoints)
         inferenceResult shouldBe NodeInferenceResult(Vector(knowledgeA1, knowledgeA2), errors = Vector(NoInputEdgesError(0), AllTypesNotCompilableError(1)))

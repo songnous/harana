@@ -16,8 +16,8 @@ trait TopologicallySortable[T] {
 
   def node(id: Id): Node[T]
 
-  def predecessors(id: Id): IndexedSeq[Option[(Id, PortIndex)]]
+  def predecessors(id: Id): IndexedSeq[Option[Endpoint]]
 
-  def successors(id: Id): IndexedSeq[Set[(Id, PortIndex)]]
+  def successors(id: Id): IndexedSeq[Set[Endpoint]]
 
 }
