@@ -274,8 +274,6 @@ val root = project
   .aggregate(
     designerJS,
     designerJVM,
-    growthJS,
-    growthJVM,
     idJS,
     idJVM,
     sdkJS,

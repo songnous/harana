@@ -1,1 +1,1 @@
-name = "id-jwt"
+name := "id-jwt"
