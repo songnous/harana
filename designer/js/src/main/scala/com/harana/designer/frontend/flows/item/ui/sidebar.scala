@@ -3,18 +3,18 @@ package com.harana.designer.frontend.flows.item.ui
 import com.harana.designer.frontend.Circuit
 import com.harana.designer.frontend.flows.item.FlowItemStore.{FlowItemState, SelectActionType, UpdateIsEditingParameters, UpdateParameterValues}
 import com.harana.designer.frontend.utils.DateUtils
+import com.harana.designer.frontend.utils.i18nUtils._
 import com.harana.sdk.shared.models.common.Parameter.ParameterName
 import com.harana.sdk.shared.models.common.ParameterValue
-import com.harana.sdk.backend.models.flow.Action.ActionId
-import com.harana.sdk.backend.models.flow.{ActionType, Flow, FlowExecution}
-import com.harana.sdk.backend.models.flow.execution.AggregateMetric.{ShuffleReadBytesRead, ShuffleReadRecordsRead, ShuffleWriteBytesWritten, ShuffleWriteRecordsWritten}
-import com.harana.sdk.backend.models.flow.execution.{AggregateMetric, ExecutionStatus}
+import com.harana.sdk.shared.models.designer.flow.execution.AggregateMetric._
+import com.harana.sdk.shared.models.designer.flow.execution.{AggregateMetric, ExecutionStatus}
+import com.harana.sdk.shared.models.flow.Action.ActionId
+import com.harana.sdk.shared.models.flow.{Flow, FlowExecution}
 import com.harana.ui.components.elements.{Color, Label}
 import com.harana.ui.components.sidebar.ParametersSection
 import com.harana.ui.external.shoelace.ProgressBar
 import slinky.core.facade.{Fragment, ReactElement}
 import slinky.web.html._
-import com.harana.designer.frontend.utils.i18nUtils._
 
 import scala.util.Try
 
@@ -101,8 +101,8 @@ package object sidebar {
     Fragment(
       div(h6(i"flows.sidebar.statistics.timing")),
       ul(className := "media-list media-list-linked pb-15")(
-        row(i"flows.sidebar.statistics.timing.start", Try(DateUtils.format(info.get.startTime, true)).toOption),
-        row(i"flows.sidebar.statistics.timing.finish", Try(DateUtils.format(info.get.endTime, true)).toOption),
+        row(i"flows.sidebar.statistics.timing.start", Try(DateUtils.format(info.get.startTime, includeTime = true)).toOption),
+        row(i"flows.sidebar.statistics.timing.finish", Try(DateUtils.format(info.get.endTime, includeTime = true)).toOption),
         row(i"flows.sidebar.statistics.timing.duration", Try(s"${DateUtils.pretty(info.get.startTime, info.get.endTime)}").toOption)
       )
     )

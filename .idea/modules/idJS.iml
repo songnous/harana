@@ -96,15 +96,6 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="sbt: unmanaged-jars">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../id/js/lib/zio-macros_sjs1_2.12-1.0.3+90-8e76cd3e-SNAPSHOT.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
       <library name="sbt: unmanaged-sources-and-docs">
         <CLASSES />
         <JAVADOC />

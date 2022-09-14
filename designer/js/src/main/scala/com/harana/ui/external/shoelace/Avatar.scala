@@ -23,6 +23,6 @@ import scala.collection.mutable.ListBuffer
     add(attrs, props.shape, "shape")
     add(attrs, props.slot, "slot")
 
-    CustomTag("sl-avatar")(attrs: _*)
+    CustomTag("sl-avatar")(attrs.toSeq: _*)
   }
 }

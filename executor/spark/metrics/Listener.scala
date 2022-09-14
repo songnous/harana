@@ -3,7 +3,7 @@ package com.harana.executor.spark.metrics
 import java.time.Instant
 
 import com.harana.sdk.backend.models.flow.execution.{ApplicationInfo, ExecutionStatus, AggregateMetric => HaranaAggregateMetric, AggregateMetrics => HaranaAggregateMetrics, AggregateValue => HaranaAggregateValue, ExecutorTimespan => HaranaExecutorTimespan, HostTimespan => HaranaHostTimespan, JobTimespan => HaranaJobTimespan, StageTimespan => HaranaStageTimespan}
-import com.harana.sdk.backend.models.flow.FlowExecution
+import com.harana.sdk.shared.models.flow.FlowExecution
 import com.harana.executor.spark.logs.LogsManager
 import com.harana.executor.spark.metrics.common.{AggregateMetrics, AggregateValue, AppContext}
 import com.harana.executor.spark.metrics.timespan._

@@ -1,7 +1,7 @@
 package com.harana.modules
 
 import com.harana.modules.airbyte.Airbyte.Airbyte
-import io.airbyte.api.model._
+import io.airbyte.api.client.model.generated._
 import io.airbyte.commons.enums.Enums
 import io.airbyte.commons.text.Names
 import io.airbyte.protocol.models.{ConfiguredAirbyteCatalog, ConfiguredAirbyteStream, AirbyteCatalog => ProtocolAirbyteCatalog, AirbyteStream => ProtocolAirbyteStream, DestinationSyncMode => ProtocolDestinationSyncMode, SyncMode => ProtocolSyncMode}
@@ -11,7 +11,7 @@ import org.apache.commons.io.IOUtils
 import java.io.File
 import java.nio.charset.StandardCharsets
 import java.util.jar.JarFile
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 package object airbyte {
 
@@ -19,11 +19,10 @@ package object airbyte {
     val connectionSpec = json.hcursor.downField("connectionSpecification")
     val required = connectionSpec.downField("required").as[List[String]].getOrElse(List())
 
-    val properties = try {
+    val properties =
       connectionSpec.downField("properties").keys.getOrElse(List()).map { p =>
-      toAirbyteProperty(p, connectionSpec.downField("properties").downField(p), required)
+        toAirbyteProperty(p, connectionSpec.downField("properties").downField(p), required)
       }
-    }
 
     val name = fileName.substring(fileName.indexOf("-") + 1, fileName.length)
     val syncDirection = if (fileName.contains("source")) AirbyteSyncDirection.Source else AirbyteSyncDirection.Destination
@@ -144,11 +143,11 @@ package object airbyte {
     val result = new AirbyteStreamConfiguration()
       .aliasName(Names.toAlphanumericAndUnderscore(stream.getName))
       .cursorField(stream.getDefaultCursorField)
-      .destinationSyncMode(io.airbyte.api.model.DestinationSyncMode.APPEND)
+      .destinationSyncMode(DestinationSyncMode.APPEND)
       .primaryKey(stream.getSourceDefinedPrimaryKey).selected(true)
 
     if (stream.getSupportedSyncModes.size > 0) result.setSyncMode(stream.getSupportedSyncModes.get(0))
-    else result.setSyncMode(io.airbyte.api.model.SyncMode.INCREMENTAL)
+    else result.setSyncMode(SyncMode.INCREMENTAL)
 
     result
   }

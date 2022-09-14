@@ -11,7 +11,7 @@ import org.apache.spark.sql.types.{IntegerType, StructField, StructType}
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 class DataFrameSplitterIntegSpec extends IntegratedTestSupport with ScalaCheckDrivenPropertyChecks with Matchers {
 

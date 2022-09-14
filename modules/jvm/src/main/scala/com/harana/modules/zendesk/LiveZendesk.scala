@@ -19,7 +19,7 @@ import org.zendesk.client.v2.model.targets.Target
 import org.zendesk.client.v2.{ZendeskResponseException, ZendeskResponseRateLimitException}
 import zio.{Has, IO, Task, UIO, ZIO, ZLayer}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 object LiveZendesk {
 	private val clientRef = new AtomicReference[Option[Zendesk]](None)

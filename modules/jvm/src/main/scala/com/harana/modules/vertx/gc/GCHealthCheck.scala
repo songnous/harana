@@ -1,7 +1,7 @@
 package com.harana.modules.vertx.gc
 
 import java.lang.management.ManagementFactory
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 object GCHealthCheck {
 

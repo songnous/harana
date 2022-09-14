@@ -56,7 +56,7 @@ object LiveIgnite {
         quietArg        <- booleanArg("quiet", quiet)
         sshArg          =  ssh.map(s => List(s"ssh=$s")).getOrElse(List())
         args            =  cpusArg ++ diskArg ++ labelsArg ++ memoryArg ++ nameArg ++ quietArg ++ sshArg
-        cmd             <- Command("ignite", List("create", ociImage) ++ args: _*).lines.provide(Has(blocking))
+        cmd             <- Command("ignite", List("create", ociImage) ++ args.toSeq: _*).lines.provide(Has(blocking))
       } yield cmd.toList
 
 
@@ -172,7 +172,7 @@ object LiveIgnite {
         quietArg          <- booleanArg("quiet", quiet)
         sshesArg          =  ssh.map(s => List(s"ssh=$s")).getOrElse(List())
         args              =  copyFilesArg ++ cpusArg ++ diskArg ++ interactiveArg ++ labelsArg ++ memoryArg ++ nameArg ++ quietArg ++ sshesArg
-        cmd               <- Command("ignite", List("run", ociImage) ++ args: _*).lines.provide(Has(blocking))
+        cmd               <- Command("ignite", List("run", ociImage) ++ args.toSeq: _*).lines.provide(Has(blocking))
       } yield cmd.toList
 
 

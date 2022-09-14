@@ -45,6 +45,6 @@ import scala.scalajs.js
     attrs += (ref := elementRef)
     add(attrs, Some(s"menu ${props.className.getOrElse("")}"), "class")
 
-    CustomTag("sl-menu")(attrs: _*)(props.items)
+    CustomTag("sl-menu")(attrs.toSeq: _*)(props.items)
   }
 }

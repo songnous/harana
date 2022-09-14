@@ -12,11 +12,7 @@
             <option value="$PROJECT_DIR$/designer/js" />
             <option value="$PROJECT_DIR$/designer/jvm" />
             <option value="$PROJECT_DIR$/designer/shared" />
-            <option value="$PROJECT_DIR$/docs-generator" />
             <option value="$PROJECT_DIR$/executor" />
-            <option value="$PROJECT_DIR$/growth/js" />
-            <option value="$PROJECT_DIR$/growth/jvm" />
-            <option value="$PROJECT_DIR$/growth/shared" />
             <option value="$PROJECT_DIR$/id-jwt/js" />
             <option value="$PROJECT_DIR$/id-jwt/jvm" />
             <option value="$PROJECT_DIR$/id-jwt/shared" />

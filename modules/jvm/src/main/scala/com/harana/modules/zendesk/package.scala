@@ -5,7 +5,7 @@ import org.asynchttpclient.ListenableFuture
 import org.zendesk.client.v2.{ZendeskResponseException, ZendeskResponseRateLimitException}
 import org.zendesk.client.v2.model.JobStatus
 import zio.{IO, Task, ZIO}
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.compat.java8.FutureConverters._
 
 package object zendesk {

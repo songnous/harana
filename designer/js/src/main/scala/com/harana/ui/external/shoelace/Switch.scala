@@ -68,6 +68,6 @@ import scala.scalajs.js
     add(attrs, Some(style), "style")
 
 
-    CustomTag("sl-switch")(attrs: _*)(children: _*)
+    CustomTag("sl-switch")(attrs.toSeq: _*)(children.toSeq: _*)
   }
 }

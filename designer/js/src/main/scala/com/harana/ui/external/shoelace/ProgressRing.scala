@@ -35,6 +35,6 @@ import scala.scalajs.js
     if (props.size.isDefined) style.updateDynamic("--size")(props.size.get)
     add(attrs, Some(style), "style")
 
-    CustomTag("sl-progress-ring")(attrs: _*)(children: _*)
+    CustomTag("sl-progress-ring")(attrs.toSeq: _*)(children.toSeq: _*)
   }
 }

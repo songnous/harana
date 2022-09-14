@@ -10,7 +10,7 @@ import com.mixpanel.mixpanelapi.{ClientDelivery, MessageBuilder, MixpanelAPI}
 import org.json.{JSONArray, JSONObject}
 import zio.{IO, Task, ZLayer}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 object LiveMixpanel {
 
@@ -95,7 +95,7 @@ object LiveMixpanel {
     def increment(id: UUID, properties: Map[String, Long], modifiers: Map[String, String] = Map()) =
       for {
         mb <- messageBuilder
-        r <- Task(mb.increment(id.toString, properties.mapValues(Long.box).asJava, toJson(modifiers)))
+        r <- Task(mb.increment(id.toString, properties.view.mapValues(Long.box).toMap.asJava, toJson(modifiers)))
       } yield r
 
 

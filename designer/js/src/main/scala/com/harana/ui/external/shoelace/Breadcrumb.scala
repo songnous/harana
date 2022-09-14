@@ -13,6 +13,6 @@ import scala.collection.mutable.ListBuffer
   def render() = {
     val attrs = new ListBuffer[TagMod[_]]()
 
-    CustomTag("sl-breadcrumb")(attrs: _*)(props.items)
+    CustomTag("sl-breadcrumb")(attrs.toSeq: _*)(props.items)
   }
 }

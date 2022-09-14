@@ -30,7 +30,7 @@ import zio.clock.Clock
 import zio.duration._
 import zio.{Task, _}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 object LiveApps {
   val layer = ZLayer.fromServices { (clock: Clock.Service,

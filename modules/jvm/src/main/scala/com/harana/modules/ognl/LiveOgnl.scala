@@ -5,7 +5,7 @@ import com.harana.modules.ognl.models.{OgnlMemberAccess, OgnlObjectPropertyAcces
 import ognl.{DefaultClassResolver, OgnlRuntime, Ognl => jOgnl}
 import zio.{Task, ZLayer}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 object LiveOgnl {
   val layer = ZLayer.succeed(new Service {

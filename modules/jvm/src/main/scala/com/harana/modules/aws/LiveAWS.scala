@@ -18,7 +18,7 @@ import com.harana.modules.core.micrometer.Micrometer
 import io.circe.syntax._
 import zio.blocking.Blocking
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import zio.{Has, Task, UIO, ZIO, ZLayer}
 
 object LiveAWS {

@@ -52,6 +52,6 @@ import scala.scalajs.js
     if (props.trackColor.isDefined) style.updateDynamic("--track-color")(props.trackColor.get)
     add(attrs, Some(style), "style")
 
-    CustomTag("sl-tab-group")(attrs: _*)(props.children: _*)
+    CustomTag("sl-tab-group")(attrs.toSeq: _*)(props.children: _*)
   }
 }

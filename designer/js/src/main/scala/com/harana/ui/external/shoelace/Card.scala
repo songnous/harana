@@ -17,6 +17,6 @@ import scala.collection.mutable.ListBuffer
     add(attrs, props.className, "class")
     add(attrs, props.slot, "slot")
 
-    CustomTag("sl-card")(attrs: _*)(props.children)
+    CustomTag("sl-card")(attrs.toSeq: _*)(props.children)
   }
 }

@@ -111,6 +111,6 @@ import scala.scalajs.js
     val children = new ListBuffer[ReactElement]()
     if (props.helpText.isDefined) children += div(slotAttr := "help-text")(props.helpText.get)
 
-    CustomTag("sl-textarea")(attrs: _*)(children: _*)
+    CustomTag("sl-textarea")(attrs.toSeq: _*)(children.toSeq: _*)
   }
 }

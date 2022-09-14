@@ -59,6 +59,11 @@ object Library {
   lazy val providedSpark = new Spark(Version.spark).provided
   lazy val testSpark = new Spark(Version.spark).test
 
+  val airbyte = Def.setting(Seq(
+    "io.airbyte" % "airbyte-api" % "0.40.6",
+    "io.airbyte.airbyte-protocol" % "protocol-models" % "0.40.6"
+  ))
+
   val akka = Def.setting(Seq(
     "com.typesafe.akka" %% "akka-actor" % "2.6.20",
     "com.typesafe.akka" %% "akka-http-core" % "10.2.10",
@@ -238,7 +243,8 @@ object Library {
     "org.pac4j" % "pac4j-ldap" % "5.5.0",
     "org.pac4j" % "pac4j-oauth" % "5.5.0",
     "org.pac4j" % "pac4j-oidc" % "5.5.0",
-    "org.pac4j" % "pac4j-saml" % "5.5.0"
+    "org.pac4j" % "pac4j-saml" % "5.5.0",
+    "org.pac4j" % "vertx-pac4j" % "6.0.1"
   ))
 
   val parquet = Def.setting(Seq(
@@ -416,6 +422,7 @@ object Library {
   val reflections = Def.setting("org.reflections" % "reflections" % "0.10.2")
   val scaffeine = Def.setting("com.github.blemale" %% "scaffeine" % "5.2.1")
   val scalaHashing = Def.setting("com.desmondyeung.hashing"%% "scala-hashing" % "0.1.0")
+  val scalaStripe = Def.setting("com.outr" %% "scala-stripe" % "1.1.11")
   val scalajsDom = Def.setting("org.scala-js" %%% "scalajs-dom" % "2.0.0")
   val scalajsStubs = Def.setting("org.scala-js" %% "scalajs-stubs" % "1.1.0")
   val scalate = Def.setting("org.scalatra.scalate" %% "scalate-core" % "1.9.8")
@@ -442,7 +449,6 @@ object Library {
   val upickle = Def.setting("com.lihaoyi" %%% "upickle" % "1.4.3")
   val webjarsLocator = Def.setting("org.webjars" % "webjars-locator-core" % "0.52")
   val xmlApis = Def.setting("xml-apis" % "xml-apis" % "2.0.2")
-  val youi = Def.setting("io.youi" %% "youi-client" % "0.14.4")
   val zendeskClient = Def.setting("com.cloudbees.thirdparty" % "zendesk-java-client" % "0.18.0")
   val zip4j = Def.setting("net.lingala.zip4j" % "zip4j" % "2.11.1")
   val ztZip = Def.setting("org.zeroturnaround" % "zt-zip" % "1.15")

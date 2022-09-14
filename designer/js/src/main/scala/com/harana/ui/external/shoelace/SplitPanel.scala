@@ -36,6 +36,6 @@ import scala.scalajs.js
     if (props.maxSize.isDefined) style.updateDynamic("--max")(props.maxSize.get)
     add(attrs, Some(style), "style")
 
-    CustomTag("sl-split-panel")(attrs: _*)
+    CustomTag("sl-split-panel")(attrs.toSeq: _*)
   }
 }

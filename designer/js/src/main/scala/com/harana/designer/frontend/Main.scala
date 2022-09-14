@@ -3,7 +3,7 @@ package com.harana.designer.frontend
 import com.harana.designer.frontend.analytics.Analytics
 import com.harana.designer.frontend.utils.AuthUtils
 import com.harana.designer.frontend.utils.error.Error
-import com.harana.id.jwt.shared.models.DesignerClaims
+import com.harana.sdk.shared.models.jwt.DesignerClaims
 import diode._
 import org.scalajs.dom
 import org.scalajs.dom.HashChangeEvent

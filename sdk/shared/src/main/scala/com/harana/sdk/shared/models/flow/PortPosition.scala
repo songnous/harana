@@ -10,16 +10,14 @@ case object PortPosition extends Enum[PortPosition] with CirceEnum[PortPosition]
   val values = findValues
 
   implicit def ordering = new Ordering[PortPosition] {
-    def compare(x: PortPosition, y: PortPosition): Int =
-      if (x == y)
-        0
-      else
-        (x, y) match {
-          case (Left, _) => -1
-          case (Center, Left) => 0
-          case (Center, Right) => -1
-          case (Right, _) => 1
-        }
+    def compare(x: PortPosition, y: PortPosition) =
+      (x, y) match {
+        case (Left, _) => -1
+        case (Center, Left) => 0
+        case (Center, Right) => -1
+        case (Right, _) => 1
+        case _ => 0
+      }
   }
 }
 

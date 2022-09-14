@@ -20,7 +20,7 @@ import org.pac4j.vertx.handler.impl.{SecurityHandler, SecurityHandlerOptions}
 import zio.internal.Platform
 import zio.{Exit, Runtime, Task, ZIO}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 package object vertx {
 

@@ -85,7 +85,7 @@ import scala.scalajs.js
     if (props.label.isDefined) children += props.label.get
     if (props.badge.isDefined) children += Badge(props.badge.get)
 
-    val button = CustomTag("sl-button")(attrs: _*)(children: _*)
+    val button = CustomTag("sl-button")(attrs.toSeq: _*)(children.toSeq: _*)
     if (props.tooltip.isDefined) Tooltip(props.tooltip.get)(List(button)) else button
   }
 }

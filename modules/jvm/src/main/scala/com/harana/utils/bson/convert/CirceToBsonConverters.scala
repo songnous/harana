@@ -7,7 +7,7 @@ import io.circe.{ Json, JsonNumber, JsonNumberHelper, JsonObject }
 import org.bson.BsonType
 import org.mongodb.scala.bson._
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 object CirceToBsonConverters {
   def bsonToJson(bson: BsonValue): Either[List[BsonError], Json] = {
@@ -18,7 +18,7 @@ object CirceToBsonConverters {
       bson
         .asDocument()
         .asScala
-        .mapValues(bsonToJson)
+        .view.mapValues(bsonToJson)
         .map { case (key, value) => value.map(json => (key, json)).toValidated }
         .toList
         .sequence
@@ -71,7 +71,7 @@ object CirceToBsonConverters {
         values.map(jsonToBson).map(_.toValidated).sequence.toEither.map(BsonArray.fromIterable(_))
       override def onObject(obj: JsonObject): Either[List[JsonError], BsonValue] =
         obj.toMap
-          .mapValues(jsonToBson)
+          .view.mapValues(jsonToBson)
           .map { case (key, value) => value.map(bson => (key, bson)).toValidated }
           .toList
           .sequence

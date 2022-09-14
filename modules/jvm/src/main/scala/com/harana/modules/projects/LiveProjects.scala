@@ -32,7 +32,7 @@ import zio.clock.Clock
 import zio.duration._
 import zio._
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 object LiveProjects {
 
@@ -154,7 +154,7 @@ object LiveProjects {
       for {
         json        <- UIO(parser.parse(yml._2))
         _           <- UIO.when(json.isLeft)(logger.error(s"Failed to parse YAML: ${yml._1} due to error: ${json.left.get.getMessage}"))
-        _           <- UIO.when(json.isRight && json.right.get.as[Project].isLeft)(logger.error(s"Failed to parse project: ${yml._1} due to error: ${json.right.get.as[Project].left.get.getMessage}"))
+        _           <- UIO.when(json.isRight && json.toOption.get.as[Project].isLeft)(logger.error(s"Failed to parse project: ${yml._1} due to error: ${json.toOption.get.as[Project].left.get.getMessage}"))
         project     =  json.toOption.flatMap(_.as[Project].toOption)
       } yield project
 

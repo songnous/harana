@@ -72,6 +72,6 @@ import scala.scalajs.js
     if (props.showDelay.isDefined) style.updateDynamic("--show-delay")(props.showDelay.get)
     add(attrs, Some(style), "style")
 
-    CustomTag("sl-tooltip")(attrs: _*)(props.children: _*)
+    CustomTag("sl-tooltip")(attrs.toSeq: _*)(props.children: _*)
   }
 }

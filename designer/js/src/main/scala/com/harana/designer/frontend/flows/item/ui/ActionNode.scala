@@ -3,9 +3,8 @@ package com.harana.designer.frontend.flows.item.ui
 import com.harana.designer.frontend.utils.i18nUtils.ops
 import com.harana.sdk.shared.models.common.Parameter.ParameterName
 import com.harana.sdk.shared.models.common.ParameterValue
-import com.harana.sdk.backend.models.flow.Action.ActionId
-import com.harana.sdk.backend.models.flow.ActionType
-import com.harana.sdk.backend.models.flow.execution.ExecutionStatus
+import com.harana.sdk.shared.models.designer.flow.execution.ExecutionStatus
+import com.harana.sdk.shared.models.flow.Action.ActionId
 import com.harana.ui.external.flow.types.Position
 import com.harana.ui.external.shoelace.ProgressBar
 import slinky.core.FunctionalComponent

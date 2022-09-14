@@ -79,6 +79,6 @@ import scala.scalajs.js
 
     val headerChild: Option[ReactElement] = props.headerElement.map(he => header(he))
     val children = if (headerChild.isDefined) List(headerChild.get) ++ props.children else props.children
-    CustomTag("sl-drawer")(attrs: _*)(children: _*)
+    CustomTag("sl-drawer")(attrs.toSeq: _*)(children.toSeq: _*)
   }
 }

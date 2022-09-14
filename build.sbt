@@ -131,6 +131,7 @@ val modules = crossProject("modules")
   .jvmSettings(
     unmanagedBase := baseDirectory.value / "lib",
     libraryDependencies ++=
+      Library.airbyte.value ++
       Library.alluxio.value ++
       Library.dockerJava.value ++
       Library.jackson.value ++
@@ -182,7 +183,6 @@ val modules = crossProject("modules")
       Library.sundial.value :+
       Library.ulid.value :+
       Library.unboundid.value :+
-      Library.youi.value :+
       Library.zendeskClient.value :+
       Library.zip4j.value :+
       Library.ztZip.value

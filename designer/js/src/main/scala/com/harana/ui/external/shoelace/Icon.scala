@@ -48,8 +48,8 @@ import scala.scalajs.js
     attrs += (ref := elementRef)
 
     if (props.className.isDefined)
-      div(className := props.className)(CustomTag("sl-icon")(attrs: _*))
+      div(className := props.className)(CustomTag("sl-icon")(attrs.toSeq: _*))
     else
-      CustomTag("sl-icon")(attrs: _*)
+      CustomTag("sl-icon")(attrs.toSeq: _*)
   }
 }

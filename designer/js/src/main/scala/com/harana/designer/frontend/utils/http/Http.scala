@@ -85,13 +85,13 @@ object Http {
       }
     }
     request.map(r => {
-      parse(r.right.get).toOption
+      parse(r.toOption.get).toOption
     })
   }
 
   private def decodeResponse[T](url: String, response: Response[Either[String, String]])(implicit decoder: Decoder[T]): Option[T] = {
     if (response.isSuccess) {
-      val json = response.body.right.get
+      val json = response.body.toOption.get
       decode[T](json) match {
         case Left(e) => {
           println(s"Failed decoding JSON: $url - ${e.getMessage}")

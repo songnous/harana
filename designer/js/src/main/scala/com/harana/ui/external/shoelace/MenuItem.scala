@@ -58,6 +58,6 @@ import scala.scalajs.js
     if (props.iconPrefix.isDefined) children += icon("prefix", props.className, props.iconPrefix.get)
     if (props.iconSuffix.isDefined) children += icon("suffix", props.className, props.iconSuffix.get)
 
-    CustomTag("sl-menu-item")(attrs: _*)(children: _*)
+    CustomTag("sl-menu-item")(attrs.toSeq: _*)(children.toSeq: _*)
   }
 }

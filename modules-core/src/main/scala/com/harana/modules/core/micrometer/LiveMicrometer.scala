@@ -12,7 +12,7 @@ import io.micrometer.prometheus.{PrometheusConfig, PrometheusMeterRegistry}
 import io.github.mweirauch.micrometer.jvm.extras._
 import zio.{Task, UIO, ZLayer}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 
 object LiveMicrometer {

@@ -66,6 +66,6 @@ import scala.scalajs.js
     if (props.icon.isDefined) children += icon("icon", props.className, props.icon.get)
     children += props.children
 
-    CustomTag("sl-alert")(attrs: _*)(children: _*)
+    CustomTag("sl-alert")(attrs.toSeq: _*)(children.toSeq: _*)
   }
 }

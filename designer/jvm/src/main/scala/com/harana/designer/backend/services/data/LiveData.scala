@@ -15,7 +15,7 @@ import com.harana.sdk.shared.utils.CirceCodecs._
 import io.vertx.ext.web.RoutingContext
 import zio.{Task, ZIO, ZLayer}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 object LiveData {
   val layer = ZLayer.fromServices { (alluxio: AlluxioFs.Service,

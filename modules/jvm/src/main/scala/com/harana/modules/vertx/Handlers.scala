@@ -31,7 +31,7 @@ object Handlers {
     rc: RoutingContext => {
       rc.response()
         .putHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
-        .end(jwks.asJson(JsonWebKey.OutputControlLevel.PUBLIC_ONLY))
+        .end(jwks.toJson(JsonWebKey.OutputControlLevel.PUBLIC_ONLY))
     }
   }
 

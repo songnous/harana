@@ -19,7 +19,7 @@ import io.circe.syntax._
 import io.vertx.ext.web.RoutingContext
 import zio.{Task, ZIO, ZLayer}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 object LiveFiles {
   val layer = ZLayer.fromServices { (config: Config.Service,

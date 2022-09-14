@@ -37,6 +37,6 @@ import scala.scalajs.js
     if (props.handleSize.isDefined) style.updateDynamic("--handle-size")(props.handleSize.get)
     add(attrs, Some(style), "style")
 
-    CustomTag("sl-image-comparer")(attrs: _*)
+    CustomTag("sl-image-comparer")(attrs.toSeq: _*)
   }
 }

@@ -1,6 +1,6 @@
 package com.harana.designer.frontend.schedules.list
 
-import com.harana.sdk.backend.models.flow.Flow
+import com.harana.sdk.shared.models.flow.Flow
 import com.harana.sdk.shared.models.data.DataSource
 import com.harana.sdk.shared.models.schedules.{Action, Event, Schedule}
 import diode.{Action => DiodeAction}

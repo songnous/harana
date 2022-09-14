@@ -1,25 +1,25 @@
 package com.harana.modules
 
 import java.io.{InputStream, OutputStream}
-
 import alluxio.AlluxioURI
 import alluxio.client.file.FileSystem
-import alluxio.conf.{AlluxioConfiguration, InstancedConfiguration, PropertyKey}
+import alluxio.conf.{AlluxioConfiguration, AlluxioProperties, Configuration, InstancedConfiguration, PropertyKey}
 import alluxio.exception.AlluxioException
 import zio.{IO, UIO}
 
 package object alluxiofs {
 
-  def alluxioFs(defaultConfig: AlluxioConfiguration, username: Option[String] = None) =
+  def alluxioFs(properties: AlluxioProperties, username: Option[String] = None) =
     UIO {
       FileSystem.Factory.create(
         username match {
           case Some(u) =>
-            val config = defaultConfig.copyProperties()
-            config.set(PropertyKey.SECURITY_LOGIN_USERNAME, u)
-            new InstancedConfiguration(config)
+            val p = properties.copy()
+            p.set(PropertyKey.SECURITY_LOGIN_USERNAME, u)
+            new InstancedConfiguration(p)
 
-          case None => defaultConfig
+          case None =>
+            new InstancedConfiguration(properties)
         }
       )
     }

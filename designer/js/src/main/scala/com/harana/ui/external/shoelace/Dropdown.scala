@@ -85,6 +85,6 @@ import scala.scalajs.js
     if (props.element.isDefined) children += props.element.get
     if (props.menu.isDefined) children += Menu(props.menu.get)
 
-    CustomTag("sl-dropdown")(attrs: _*)(children: _*)
+    CustomTag("sl-dropdown")(attrs.toSeq: _*)(children.toSeq: _*)
   }
 }

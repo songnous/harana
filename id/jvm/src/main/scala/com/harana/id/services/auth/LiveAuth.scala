@@ -21,7 +21,7 @@ import io.vertx.core.http.CookieSameSite
 import io.vertx.ext.web.RoutingContext
 import org.pac4j.core.profile.CommonProfile
 import org.pac4j.oauth.profile.google2.Google2ProfileDefinition
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import zio._
 
 import java.time.Instant

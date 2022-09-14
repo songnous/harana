@@ -20,7 +20,7 @@ import zio.{Has, IO, Queue, UIO, ZLayer}
 import io.circe.parser._
 import org.json4s.DefaultFormats
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 object LiveDocker {
   val layer = ZLayer.fromServices { (blocking: Blocking.Service,

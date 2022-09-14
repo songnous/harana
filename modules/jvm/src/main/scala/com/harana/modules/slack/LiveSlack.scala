@@ -33,7 +33,7 @@ import com.hubspot.slack.client.models.{Attachment, LiteMessage, SlackChannel}
 import com.hubspot.slack.client.{SlackClient, SlackClientFactory, SlackClientRuntimeConfig}
 import zio.{IO, ZLayer}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 object LiveSlack {
   val layer = ZLayer.fromServices { (logger: Logger.Service,
@@ -71,7 +71,7 @@ object LiveSlack {
           .setShouldHighlight(shouldHighlight)
           .setSort(sort)
           .setSortOrder(sortOrder)
-          build()
+          .build()
       ).map(_.getMessages)
 
 
@@ -181,7 +181,7 @@ object LiveSlack {
           .setChannelId(channelId)
           .setUserId(userId)
           .build()
-      ).as(Unit)
+      ).unit
 
 
     def listGroups(client: SlackClient,
@@ -202,7 +202,7 @@ object LiveSlack {
           .setChannelId(channelId)
           .setUserId(userId)
           .build()
-      ).as(Unit)
+      ).unit
 
 
     def openIm(client: SlackClient,
@@ -215,7 +215,7 @@ object LiveSlack {
           .setReturnIm(returnIm)
           .setUserId(userId)
           .build()
-      ).as(Unit)
+      ).unit
 
 
     def postMessage(client: SlackClient,
@@ -284,7 +284,7 @@ object LiveSlack {
           .setText(text)
           .setTs(ts)
           .build()
-      ).as(Unit)
+      ).unit
 
 
     def getPermalink(client: SlackClient,
@@ -308,7 +308,7 @@ object LiveSlack {
           .setChannelId(channelId)
           .setMessageToDeleteTs(messageToDeleteTs)
           .build()
-      ).as(Unit)
+      ).unit
 
 
     def listConversations(client: SlackClient,
@@ -348,7 +348,7 @@ object LiveSlack {
           .setIsPrivate(isPrivate)
           .setName(name)
           .build()
-      ).as(Unit)
+      ).unit
 
 
     def inviteToConversation(client: SlackClient,
@@ -359,7 +359,7 @@ object LiveSlack {
           .setChannelId(channelId)
           .setUsers(users.asJava)
           .build()
-      ).as(Unit)
+      ).unit
 
 
     def unarchiveConversation(client: SlackClient, channelId: String): IO[Either[SlackError, Throwable], Unit] =
@@ -367,7 +367,7 @@ object LiveSlack {
         ConversationUnarchiveParams.builder()
           .setChannelId(channelId)
           .build()
-      ).as(Unit)
+      ).unit
 
 
     def getConversationHistory(client: SlackClient,
@@ -393,7 +393,7 @@ object LiveSlack {
         ConversationArchiveParams.builder()
           .setChannelId(channelId)
           .build()
-      ).as(Unit)
+      ).unit
 
 
     def getConversationInfo(client: SlackClient,
@@ -502,7 +502,7 @@ object LiveSlack {
           .setIncludeCount(includeCount)
           .setUsergroupId(userGroupId)
           .build()
-      ).as(Unit)
+      ).unit
     }
 
 
@@ -514,7 +514,7 @@ object LiveSlack {
           .setIncludeCount(includeCount)
           .setUsergroupId(userGroupId)
           .build()
-      ).as(Unit)
+      ).unit
 
 
     def updateUsergroupUsers(client: SlackClient,
@@ -538,7 +538,7 @@ object LiveSlack {
           .setDialog(slackDialog)
           .setTriggerId(triggerId)
           .build()
-      ).as(Unit)
+      ).unit
 
 
     def addReaction(client: SlackClient,
@@ -555,7 +555,7 @@ object LiveSlack {
           .setName(name)
           .setTimestamp(timestamp)
           .build()
-      ).as(Unit)
+      ).unit
 
 
     def getTeamInfo(client: SlackClient): IO[Either[SlackError, Throwable], SlackTeam] =

@@ -32,7 +32,7 @@ import com.harana.designer.frontend.user.UserStore.UserState
 import com.harana.designer.frontend.utils.DiodeUtils
 import com.harana.designer.frontend.welcome.WelcomeStore.WelcomeState
 import com.harana.designer.frontend.welcome.{WelcomeHandler, WelcomeStore}
-import com.harana.sdk.backend.models.flow.Flow
+import com.harana.sdk.shared.models.flow.Flow
 import com.harana.sdk.shared.models.apps.{App => HaranaApp}
 import com.harana.sdk.shared.models.data.DataSource
 import com.harana.sdk.shared.models.schedules.Schedule

@@ -37,6 +37,6 @@ import scala.scalajs.js
     val children = new ListBuffer[ReactElement]()
     children += props.label
 
-    CustomTag("sl-tab")(attrs: _*)(children: _*)
+    CustomTag("sl-tab")(attrs.toSeq: _*)(children.toSeq: _*)
   }
 }

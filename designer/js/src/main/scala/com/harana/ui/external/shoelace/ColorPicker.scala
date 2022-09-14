@@ -79,6 +79,6 @@ import scala.scalajs.js
 
     attrs += (ref := elementRef)
 
-    CustomTag("sl-color-picker")(attrs: _*)
+    CustomTag("sl-color-picker")(attrs.toSeq: _*)
   }
 }

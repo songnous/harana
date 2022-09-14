@@ -25,6 +25,6 @@ import scala.scalajs.js
     if (props.padding.isDefined) style.updateDynamic("--padding")(props.padding.get)
     add(attrs, Some(style), "style")
 
-    CustomTag("sl-tab-panel")(attrs: _*)(props.children: _*)
+    CustomTag("sl-tab-panel")(attrs.toSeq: _*)(props.children: _*)
   }
 }

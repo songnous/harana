@@ -32,6 +32,6 @@ import scala.scalajs.js
     val children = new ListBuffer[ReactElement]()
     if (props.label.isDefined) children += props.label.get
 
-    CustomTag("sl-qr-code")(attrs: _*)(children: _*)
+    CustomTag("sl-qr-code")(attrs.toSeq: _*)(children.toSeq: _*)
   }
 }

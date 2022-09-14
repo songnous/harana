@@ -1,7 +1,7 @@
 package com.harana.executor.spark.metrics
 
 import com.harana.sdk.backend.models.flow.Action.ActionId
-import com.harana.sdk.backend.models.flow.FlowExecution.FlowExecutionId
+import com.harana.sdk.shared.models.flow.FlowExecution.FlowExecutionId
 import com.harana.sdk.backend.models.flow.execution.ExecutionStatus
 import com.harana.sdk.backend.models.flow.{ActionExecution, Flow, FlowExecution, FlowExecutionLogs}
 import com.harana.sdk.shared.models.designer.flow.ActionInfo

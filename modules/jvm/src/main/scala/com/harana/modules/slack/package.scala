@@ -7,7 +7,7 @@ import com.hubspot.algebra.Result
 import com.hubspot.slack.client.models.response.SlackError
 import zio.{IO, ZIO}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.compat.java8.FutureConverters._
 import scala.compat.java8.OptionConverters._
 import scala.concurrent.ExecutionContext.Implicits.global

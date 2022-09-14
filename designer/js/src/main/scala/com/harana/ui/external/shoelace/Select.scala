@@ -91,6 +91,6 @@ import scala.scalajs.js
     if (props.helpText.isDefined) children += div(slotAttr := "help-text")(props.helpText.get)
     props.options.foreach(children += _)
 
-    CustomTag("sl-select")(attrs: _*)(children: _*)
+    CustomTag("sl-select")(attrs.toSeq: _*)(children.toSeq: _*)
   }
 }

@@ -19,6 +19,6 @@ import scala.collection.mutable.ListBuffer
     add(attrs, props.label, "label")
     add(attrs, props.slot, "slot")
 
-    CustomTag("sl-button-group")(attrs: _*)(props.children)
+    CustomTag("sl-button-group")(attrs.toSeq: _*)(props.children)
   }
 }

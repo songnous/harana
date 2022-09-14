@@ -16,7 +16,7 @@ import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
 import zio.{Has, IO, Task, UIO, ZLayer}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 object LiveAuth0 {
   val layer = ZLayer.fromServices { (config: Config.Service,

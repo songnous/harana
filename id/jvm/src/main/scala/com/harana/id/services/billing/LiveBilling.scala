@@ -17,7 +17,7 @@ import io.vertx.core.http.HttpHeaders
 import io.vertx.ext.web.RoutingContext
 import zio.{Task, ZLayer}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import com.harana.id.utils.Cookie
 import com.harana.modules.vertx.Vertx
 import com.mongodb.BasicDBObject

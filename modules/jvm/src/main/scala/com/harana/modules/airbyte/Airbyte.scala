@@ -16,9 +16,7 @@ object Airbyte {
 
     def check(integrationName: String, connectionValues: Map[String, Object]): Task[AirbyteConnectionStatus]
 
-//    def schema(integrationName: String): Task[AirbyteSchema]
-
-    def read(integrationName: String, catalog: ConfiguredAirbyteCatalog)
+    def read(integrationName: String, catalog: ConfiguredAirbyteCatalog): Task[Unit]
 
   }
 }

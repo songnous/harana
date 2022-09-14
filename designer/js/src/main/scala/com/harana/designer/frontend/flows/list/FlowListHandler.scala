@@ -11,6 +11,7 @@ import com.harana.ui.components.LinkType
 import com.harana.designer.frontend.utils.ColorUtils
 import com.harana.designer.frontend.flows.list.FlowListStore._
 import com.harana.sdk.shared.models.common.Parameter.ParameterName
+import com.harana.sdk.shared.models.flow.Flow
 import diode.Effect
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -28,7 +29,7 @@ class FlowListHandler extends GridHandler[Flow, FlowEditState]("flows", zoomTo(_
       chartType = None,
       link = LinkType.Page(s"/flows/${flow.id}"),
       entitySubType = None,
-      background = flow.background,
+      background = Some(flow.background),
       parameterValues = Map(
         "title" -> ParameterValue.String(flow.title),
         "description" -> ParameterValue.String(flow.description),
@@ -44,10 +45,9 @@ class FlowListHandler extends GridHandler[Flow, FlowEditState]("flows", zoomTo(_
           description = "",
           connections = List(),
           actions = List(),
-          links = List(),
           createdBy = Some(Main.claims.userId),
           visibility = Visibility.Owner,
-          background = Some(Background.Image(ColorUtils.randomBackground)),
+          background = Background.Image(ColorUtils.randomBackground),
           tags = Set()
         )
       )

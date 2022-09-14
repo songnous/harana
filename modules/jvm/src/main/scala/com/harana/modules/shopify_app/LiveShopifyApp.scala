@@ -9,7 +9,7 @@ import com.shopify.model.{Metafield, ShopifyCustomCollection, ShopifyCustomColle
 import org.joda.time.DateTime
 import zio.{Task, ZLayer}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 object LiveShopifyApp {
     val layer = ZLayer.fromServices { (config: Config.Service,

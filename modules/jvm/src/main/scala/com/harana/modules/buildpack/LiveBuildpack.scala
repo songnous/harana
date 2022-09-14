@@ -47,7 +47,7 @@ object LiveBuildpack {
           if (runImage.isDefined) args += s"--run-image ${runImage.get}s"
           args
         }
-        cmd <- Command(cmd, args: _*).lines.provide(Has(blocking))
+        cmd <- Command(cmd, args.toSeq: _*).lines.provide(Has(blocking))
       } yield cmd.toList
 
 
@@ -66,7 +66,7 @@ object LiveBuildpack {
           if (runImage.isDefined) args += s"--run-image ${runImage.get}s"
           args
         }
-        cmd <- Command(cmd, args: _*).lines.provide(Has(blocking))
+        cmd <- Command(cmd, args.toSeq: _*).lines.provide(Has(blocking))
       } yield cmd.toList
   }}
 }

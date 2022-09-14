@@ -2,10 +2,10 @@ package com.harana.modules.ognl.models
 
 import java.beans.IntrospectionException
 import java.util
-
 import ognl.{ObjectPropertyAccessor, OgnlContext, OgnlException, OgnlRuntime}
 
-import scala.collection.JavaConverters._
+import scala.collection.JavaConverters.{mapAsJavaMap, seqAsJavaList, setAsJavaSet}
+import scala.jdk.CollectionConverters._
 
 class OgnlObjectPropertyAccessor extends ObjectPropertyAccessor {
 
@@ -38,7 +38,7 @@ class OgnlObjectPropertyAccessor extends ObjectPropertyAccessor {
   def getCaseClassFieldValueByName(targetClass: Any, fieldName: String): Option[Any] = {
     val productInstance = targetClass.asInstanceOf[Product]
     val fieldsNameToValueMap = productInstance.getClass.getDeclaredFields.map(_.getName)
-      .zip(productInstance.productIterator.to).toMap
+      .zip(productInstance.productIterator).toMap
     fieldsNameToValueMap.get(fieldName)
   }
 
@@ -63,9 +63,9 @@ class OgnlObjectPropertyAccessor extends ObjectPropertyAccessor {
   override def getProperty(context: util.Map[_, _], target: scala.Any, oname: scala.Any): AnyRef = {
     val result = super.getProperty(context, target, oname)
     result match {
-      case c: List[_] => seqAsJavaList(c)
-      case c: Map[_, _] => mapAsJavaMap(c)
-      case c: Set[_] => setAsJavaSet(c)
+      case c: List[_] => c.asJava
+      case c: Map[_, _] => c.asJava
+      case c: Set[_] => c.asJava
       case _ => result
     }
   }

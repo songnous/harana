@@ -25,6 +25,6 @@ import scala.collection.mutable.ListBuffer
     add(attrs, props.`type`, "type")
     add(attrs, props.variant, "variant")
 
-    CustomTag("sl-badge")(attrs: _*)(props.value)
+    CustomTag("sl-badge")(attrs.toSeq: _*)(props.value)
   }
 }

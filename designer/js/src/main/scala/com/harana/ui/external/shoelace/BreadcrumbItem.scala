@@ -21,6 +21,6 @@ import scala.collection.mutable.ListBuffer
     add(attrs, props.slot, "slot")
     add(attrs, props.target, "target")
 
-    CustomTag("sl-breadcrumb-item")(attrs: _*)(props.children)
+    CustomTag("sl-breadcrumb-item")(attrs.toSeq: _*)(props.children)
   }
 }

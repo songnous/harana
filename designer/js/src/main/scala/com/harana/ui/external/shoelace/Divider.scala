@@ -28,6 +28,6 @@ import scala.scalajs.js
 
     attrs += (ref := elementRef)
 
-    CustomTag("sl-divider")(attrs: _*)()
+    CustomTag("sl-divider")(attrs.toSeq: _*)()
   }
 }

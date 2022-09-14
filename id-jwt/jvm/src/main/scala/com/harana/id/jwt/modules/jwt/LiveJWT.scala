@@ -32,7 +32,7 @@ import org.jose4j.keys.resolvers.HttpsJwksVerificationKeyResolver
 import org.nustaq.serialization.FSTConfiguration
 import zio.{Task, UIO, ZLayer}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 object LiveJWT {
 

@@ -30,7 +30,7 @@ object LiveArgo {
       delete[EventSource](namespace, name, client)
 
 
-    def existsEventSource(namespace: String, name: String, client: Option[KubernetesClient]): Task[Unit] =
+    def existsEventSource(namespace: String, name: String, client: Option[KubernetesClient]): Task[Boolean] =
       exists[EventSource](namespace, name, client)
 
 
@@ -42,7 +42,7 @@ object LiveArgo {
       delete[Rollout](namespace, name, client)
 
 
-    def existsRollout(namespace: String, name: String, client: Option[KubernetesClient]): Task[Unit] =
+    def existsRollout(namespace: String, name: String, client: Option[KubernetesClient]): Task[Boolean] =
       exists[Rollout](namespace, name, client)
 
 
@@ -54,7 +54,7 @@ object LiveArgo {
       delete[Sensor](namespace, name, client)
 
 
-    def existsSensor(namespace: String, name: String, client: Option[KubernetesClient]): Task[Unit] =
+    def existsSensor(namespace: String, name: String, client: Option[KubernetesClient]): Task[Boolean] =
       exists[Sensor](namespace, name, client)
 
 
@@ -66,7 +66,7 @@ object LiveArgo {
       delete[Workflow](namespace, name, client)
 
 
-    def existsWorkflow(namespace: String, name: String, client: Option[KubernetesClient]): Task[Unit] =
+    def existsWorkflow(namespace: String, name: String, client: Option[KubernetesClient]): Task[Boolean] =
       exists[Workflow](namespace, name, client)
 
 
@@ -78,7 +78,7 @@ object LiveArgo {
       delete[WorkflowTemplate](namespace, name, client)
 
 
-    def existsWorkflowTemplate(namespace: String, name: String, client: Option[KubernetesClient]): Task[Unit] =
+    def existsWorkflowTemplate(namespace: String, name: String, client: Option[KubernetesClient]): Task[Boolean] =
       exists[WorkflowTemplate](namespace, name, client)
 
 
@@ -110,7 +110,7 @@ object LiveArgo {
       } yield ()
 
 
-    private def exists[A <: skuber.ObjectResource](namespace: String, name: String, client: Option[KubernetesClient])(implicit fmt: Format[A], rd: ResourceDefinition[A], lc: LoggingContext, ct: ClassTag[A]): Task[Unit] =
+    private def exists[A <: skuber.ObjectResource](namespace: String, name: String, client: Option[KubernetesClient])(implicit fmt: Format[A], rd: ResourceDefinition[A], lc: LoggingContext, ct: ClassTag[A]): Task[Boolean] =
       for {
         client        <- ZIO.fromOption(client).orElse(kubernetes.newClient)
         exists        <- kubernetes.get[A](client, namespace, name).map(_.isDefined)

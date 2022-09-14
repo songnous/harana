@@ -9,7 +9,7 @@ import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
 import com.harana.sdk.shared.models.common.Parameter.ParameterValues
 import com.harana.sdk.backend.models.flow.Action.ActionId
-import com.harana.sdk.backend.models.flow.FlowExecution.FlowExecutionId
+import com.harana.sdk.shared.models.flow.FlowExecution.FlowExecutionId
 import com.harana.sdk.backend.models.flow._
 import com.harana.sdk.backend.models.flow.execution.ExecutionStatus
 import com.harana.executor.spark.actiontypes.ActionTypes

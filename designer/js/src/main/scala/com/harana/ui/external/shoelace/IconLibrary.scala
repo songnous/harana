@@ -26,6 +26,6 @@ import scala.scalajs.js
     add(attrs, Some(props.name), "name")
     attrs += (ref := elementRef)
 
-    CustomTag("sl-icon-library")(attrs: _*)
+    CustomTag("sl-icon-library")(attrs.toSeq: _*)
   }
 }

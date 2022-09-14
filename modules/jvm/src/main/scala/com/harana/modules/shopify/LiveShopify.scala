@@ -40,9 +40,9 @@ object LiveShopify {
         _                           <- logger.info(s"Number of orders: ${orders.size}")
 
         ordersByDate                = orders.groupBy(o => o.createdAt.atZone(ZoneId.systemDefault()).`with`(TemporalAdjusters.firstDayOfMonth()).truncatedTo(ChronoUnit.DAYS))
-        lineItemsByDate             = ordersByDate.mapValues(orders => orders.flatMap(_.lineItems.map(li => (lineItemTitle(li), li.quantity))))
+        lineItemsByDate             = ordersByDate.view.mapValues(orders => orders.flatMap(_.lineItems.map(li => (lineItemTitle(li), li.quantity))))
         lineItemsByVariantIdMap     = orders.flatMap(_.lineItems.map(li => li.variantId -> li)).toMap
-        groupedLineItemsByDate      = lineItemsByDate.mapValues(lineItems => lineItems.groupBy(_._1).mapValues(_.map(_._2).sum).toList.sortBy(_._1))
+        groupedLineItemsByDate      = lineItemsByDate.mapValues(lineItems => lineItems.groupBy(_._1).view.mapValues(_.map(_._2).sum).toList.sortBy(_._1))
 
         groupedLineItemsByDateMap   = groupedLineItemsByDate.mapValues(sumByKeys).mapValues(_.toMap)
         sortedDates                 = groupedLineItemsByDate.keys.toList.sortBy(_.toString).take(3)
@@ -75,7 +75,7 @@ object LiveShopify {
 
 
     private def sumByKeys[A](tuples: List[(A, Long)]) : List[(A, Long)] = {
-      tuples.groupBy(_._1).mapValues(_.map(_._2).sum).toList
+      tuples.groupBy(_._1).view.mapValues(_.map(_._2).sum).toList
     }
 
 
@@ -212,7 +212,7 @@ object LiveShopify {
         relUrl        =  rel.map(r => r.substring(1, r.indexOf(">")))
         relType       =  rel.map(r => r.substring(r.indexOf("rel=")+5, r.length-1))
 
-        cursor        <- Task(parse(response.body().string).right.get.hcursor)
+        cursor        <- Task(parse(response.body().string).toOption.get.hcursor)
         root          <- Task(cursor.keys.get.head)
         json          <- Task(cursor.downField(root).focus.get)
         items         <- Task.fromEither(json.as[List[T]]).onError(e => logger.error(e.prettyPrint))

@@ -16,7 +16,7 @@ object LiveLdap {
         result            <- Task.effectAsync[Unit] { cb =>
                                 connection.asyncAdd(new AddRequest(entry), new AsyncResultListener {
                                   override def ldapResultReceived(requestID: AsyncRequestID, ldapResult: LDAPResult): Unit = {
-                                    if (ldapResult.getResultCode.equals(ResultCode.SUCCESS)) cb(Task(Unit))
+                                    if (ldapResult.getResultCode.equals(ResultCode.SUCCESS)) cb(Task.unit)
                                     else cb(Task.fail(new Exception(ldapResult.getDiagnosticMessage)))
                                   }
                                 })
@@ -30,7 +30,7 @@ object LiveLdap {
         result            <- Task.effectAsync[Unit] { cb =>
                                 connection.asyncDelete(new DeleteRequest(dn(emailAddress)), new AsyncResultListener {
                                   override def ldapResultReceived(requestID: AsyncRequestID, ldapResult: LDAPResult): Unit = {
-                                    if (ldapResult.getResultCode.equals(ResultCode.SUCCESS)) cb(Task(Unit))
+                                    if (ldapResult.getResultCode.equals(ResultCode.SUCCESS)) cb(Task.unit)
                                     else cb(Task.fail(new Exception(ldapResult.getDiagnosticMessage)))
                                   }
                                 })
@@ -46,7 +46,7 @@ object LiveLdap {
         result            <- Task.effectAsync[Unit] { cb =>
                               connection.asyncModify(modifyRequest, new AsyncResultListener {
                                 override def ldapResultReceived(requestID: AsyncRequestID, ldapResult: LDAPResult): Unit = {
-                                  if (ldapResult.getResultCode.equals(ResultCode.SUCCESS)) cb(Task(Unit))
+                                  if (ldapResult.getResultCode.equals(ResultCode.SUCCESS)) cb(Task.unit)
                                   else cb(Task.fail(new Exception(ldapResult.getDiagnosticMessage)))
                                 }
                               })

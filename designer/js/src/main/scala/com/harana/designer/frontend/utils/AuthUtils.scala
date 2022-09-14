@@ -1,6 +1,6 @@
 package com.harana.designer.frontend.utils
 
-import com.harana.id.jwt.shared.models.DesignerClaims
+import com.harana.sdk.shared.models.jwt.DesignerClaims
 
 import scala.scalajs.js
 

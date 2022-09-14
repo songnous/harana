@@ -9,7 +9,7 @@ import org.apache.commons.mail._
 import models.{EmailAddress => hrmcEmailAddress}
 import zio.{IO, ZLayer}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 object LiveEmail {
   val layer = ZLayer.fromServices { (config: Config.Service, logger: Logger.Service, micrometer: Micrometer.Service) => new Service {

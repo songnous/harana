@@ -47,7 +47,7 @@ import scala.scalajs.js
 
     attrs += (ref := elementRef)
 
-    val iconButton = CustomTag("sl-icon-button")(attrs: _*)
+    val iconButton = CustomTag("sl-icon-button")(attrs.toSeq: _*)
     if (props.tooltip.isDefined) Tooltip(props.tooltip.get)(List(iconButton)) else iconButton
   }
 }

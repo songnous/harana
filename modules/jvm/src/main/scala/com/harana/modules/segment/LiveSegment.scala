@@ -9,7 +9,7 @@ import com.segment.analytics.Analytics
 import com.segment.analytics.messages._
 import zio.{Has, IO, ZLayer}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 object LiveSegment {
     val layer = ZLayer.fromServices { (config: Config.Service,

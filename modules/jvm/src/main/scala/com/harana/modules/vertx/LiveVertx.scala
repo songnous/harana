@@ -44,7 +44,7 @@ import zio.blocking._
 import zio.{IO, Task, UIO, ZLayer}
 import io.vertx.ext.web.sstore.cookie.CookieSessionStore
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.collection.concurrent.{TrieMap, Map => ConcurrentMap}
 import scala.compat.java8.FunctionConverters.asJavaFunction
 import scala.compat.java8.OptionConverters._

@@ -17,6 +17,6 @@ import scala.collection.mutable.ListBuffer
   def render() = {
     val attrs = new ListBuffer[TagMod[_]]()
     attrs += (ref := elementRef)
-    CustomTag("sl-divider")(attrs: _*)()
+    CustomTag("sl-divider")(attrs.toSeq: _*)()
   }
 }

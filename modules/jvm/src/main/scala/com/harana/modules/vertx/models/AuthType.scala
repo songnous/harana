@@ -26,7 +26,7 @@ import org.pac4j.saml.config.SAML2Configuration
 import org.pac4j.vertx.core.store.VertxLocalMapStore
 import org.pac4j.vertx.handler.impl.LogoutHandler
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 sealed trait AuthType
 object AuthType {

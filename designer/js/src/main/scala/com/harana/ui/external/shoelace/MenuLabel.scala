@@ -16,6 +16,6 @@ import scala.collection.mutable.ListBuffer
     val children = new ListBuffer[ReactElement]()
     children += props.label
 
-    CustomTag("sl-menu-label")()(children: _*)
+    CustomTag("sl-menu-label")()(children.toSeq: _*)
   }
 }

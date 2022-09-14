@@ -113,12 +113,6 @@ object LiveFacebook {
         pages <- Task(new AdAccount(adAccountId, ac).get.requestAllFields.execute())
       } yield pages
 
-    def adAccountActivity(adActivityId: String): Task[AdAccountActivity] =
-      for {
-        ac <- apiContext
-        pages <- Task(new AdAccountActivity(adActivityId, ac).get.requestAllFields.execute())
-      } yield pages
-
     def adActivities(adAccountId: String): Task[List[AdActivity]] =
       adAccount(adAccountId, _.getActivities.requestAllFields.execute())
 

@@ -12,7 +12,7 @@ import dev.fuxing.airtable.AirtableTable.{PaginationList, QuerySpec}
 import org.mongodb.scala.MongoClient
 import zio.{Task, UIO, ZLayer}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 object LiveAirtable {
 

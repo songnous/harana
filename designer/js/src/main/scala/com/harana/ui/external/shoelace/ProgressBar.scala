@@ -37,6 +37,6 @@ import scala.scalajs.js
     if (props.trackColor.isDefined) style.updateDynamic("--track-color")(props.trackColor.get)
     add(attrs, Some(style), "style")
 
-    CustomTag("sl-progress-bar")(attrs: _*)(children: _*)
+    CustomTag("sl-progress-bar")(attrs.toSeq: _*)(children.toSeq: _*)
   }
 }

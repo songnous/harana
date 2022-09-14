@@ -64,6 +64,6 @@ import scala.scalajs.js
 
     attrs += (ref := elementRef)
 
-    CustomTag("sl-checkbox")(attrs: _*)
+    CustomTag("sl-checkbox")(attrs.toSeq: _*)
   }
 }

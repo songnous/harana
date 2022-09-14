@@ -78,6 +78,6 @@ import scala.scalajs.js.Dynamic.literal
 
     val headerChild: Option[ReactElement] = props.headerElement.map(he => header(he))
     val children = if (headerChild.isDefined) List(headerChild.get) ++ props.children else props.children
-    CustomTag("sl-dialog")(attrs: _*)(children: _*)
+    CustomTag("sl-dialog")(attrs.toSeq: _*)(children.toSeq: _*)
   }
 }

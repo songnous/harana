@@ -25,6 +25,6 @@ import scala.scalajs.js
     if (props.trackWidth.isDefined) style.updateDynamic("--track-width")(props.trackWidth.get)
     add(attrs, Some(style), "style")
 
-    CustomTag("sl-spinner")(attrs: _*)
+    CustomTag("sl-spinner")(attrs.toSeq: _*)
   }
 }

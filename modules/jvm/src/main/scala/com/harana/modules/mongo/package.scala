@@ -26,7 +26,7 @@ package object mongo {
     Document("id" -> id)
 
 
-  def collection(db: MongoDatabase, collectionName: String): Task[MongoCollection[BsonDocument]] =
+  def getCollection(db: MongoDatabase, collectionName: String): Task[MongoCollection[BsonDocument]] =
     Task(db.getCollection[BsonDocument](collectionName))
 
 
@@ -87,7 +87,7 @@ package object mongo {
           if (errors.nonEmpty) {
             cb(IO.fail(new Exception(errors.mkString("\n"))))
           } else {
-            cb(Task(buffer.map(_.fromBson[E]).filter(_.isRight).map(_.right.get).toList))
+            cb(Task(buffer.map(_.fromBson[E]).filter(_.isRight).map(_.toOption.get).toList))
           }
         }
       })
@@ -101,12 +101,12 @@ package object mongo {
           if (!result.wasAcknowledged()) Task.fail(new Exception("Result was not acknowledged"))
           else if (result.getMatchedCount == 0) Task.fail(new Exception("Entity not found"))
           else if (result.getModifiedCount == 0) Task.fail(new Exception("Entity not modified"))
-          else Task.succeed(Unit)
+          else Task.unit
         )
 
         def onError(t: Throwable): Unit = cb(Task.fail(t))
 
-        def onComplete(): Unit = cb(Task.succeed(Unit))
+        def onComplete(): Unit = cb(Task.unit)
       })
     }
 
@@ -118,12 +118,12 @@ package object mongo {
           if (!result.wasAcknowledged()) Task.fail(new Exception("Result was not acknowledged"))
           else if (result.getMatchedCount == 0) Task.fail(new Exception("Entity not found"))
           else if (result.getModifiedCount == 0) Task.fail(new Exception("Entity not modified"))
-          else Task.succeed(Unit)
+          else Task.unit
         )
 
         def onError(t: Throwable): Unit = cb(Task.fail(t))
 
-        def onComplete(): Unit = cb(Task.succeed(Unit))
+        def onComplete(): Unit = cb(Task.unit)
       })
     }
 

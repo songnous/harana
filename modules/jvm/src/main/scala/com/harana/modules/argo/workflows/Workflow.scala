@@ -1,7 +1,7 @@
 package com.harana.modules.argo.workflows
 
-import ai.x.play.json.{CamelToSnakeNameEncoder, Jsonx}
-import com.harana.modules.argo._
+import ai.x.play.json.Jsonx
+import com.harana.modules.argo.{Affinity, NodeStatus, PersistentVolumeClaim, SecretKeySelector, Time}
 import play.api.libs.json.{Format, Json}
 import skuber.apiextensions.CustomResourceDefinition
 import skuber.{CustomResource, ListResource, ResourceDefinition}

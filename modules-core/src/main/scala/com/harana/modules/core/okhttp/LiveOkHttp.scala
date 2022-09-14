@@ -17,7 +17,7 @@ import zio.{IO, UIO, ZLayer}
 
 import java.io.{IOException, InputStream}
 import java.util.concurrent.TimeUnit
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 object LiveOkHttp {
   val layer = ZLayer.fromServices { (config: Config.Service,
@@ -237,7 +237,7 @@ object LiveOkHttp {
 
 
     private def parseJson(fn: => IO[OkHttpError, String]) =
-      fn.map(parse(_).right.get)
+      fn.map(parse(_).toOption.get)
 
 
     private def newClient: UIO[OkHttpClient] =

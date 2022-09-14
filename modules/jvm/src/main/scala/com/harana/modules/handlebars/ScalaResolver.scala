@@ -4,7 +4,7 @@ import com.github.jknack.handlebars.context.MapValueResolver
 import com.github.jknack.handlebars.helper.EachHelper
 import com.github.jknack.handlebars.{Helper, Options, ValueResolver}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.reflect.runtime.{universe => ru}
 import scala.util.Try
 

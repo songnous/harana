@@ -3,7 +3,7 @@ package com.harana.modules.jsoup.models
 import org.jsoup.nodes._
 import org.jsoup.select.Elements
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 trait JsoupImplicits {
   implicit def enrichElements(xs: Elements) = new RichElements(xs)

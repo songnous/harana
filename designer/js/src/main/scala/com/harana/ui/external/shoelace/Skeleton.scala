@@ -25,6 +25,6 @@ import scala.scalajs.js
     if (props.sheenColor.isDefined) style.updateDynamic("--sheen-color")(props.sheenColor.get)
     add(attrs, Some(style), "style")
 
-    CustomTag("sl-skeleton")(attrs: _*)
+    CustomTag("sl-skeleton")(attrs.toSeq: _*)
   }
 }

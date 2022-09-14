@@ -78,6 +78,6 @@ import scala.scalajs.js
     if (props.trackHeight.isDefined) style.updateDynamic("--track-height")(props.trackHeight.get)
     add(attrs, Some(style), "style")
 
-    CustomTag("sl-range")(attrs: _*)
+    CustomTag("sl-range")(attrs.toSeq: _*)
   }
 }

@@ -54,6 +54,6 @@ import scala.scalajs.js
 
     attrs += (ref := elementRef)
 
-    CustomTag("sl-details")(attrs: _*)(props.children: _*)
+    CustomTag("sl-details")(attrs.toSeq: _*)(props.children: _*)
   }
 }

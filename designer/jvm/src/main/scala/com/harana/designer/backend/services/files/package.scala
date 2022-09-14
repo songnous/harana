@@ -21,7 +21,7 @@ import java.time.temporal.JulianFields
 
 import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.collection.mutable.ListBuffer
 import scala.util.Try
 

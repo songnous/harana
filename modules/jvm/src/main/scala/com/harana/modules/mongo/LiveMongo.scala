@@ -11,7 +11,7 @@ import com.harana.modules.mongo.Mongo.Service
 import com.harana.sdk.shared.models.common.Entity.EntityId
 import com.harana.sdk.shared.models.common.Id
 import com.harana.sdk.shared.utils.Random
-import com.harana.utils.bson.codec.{OptionCodec, SomeCodec}
+import com.harana.utils.bson.codec.OptionCodec
 import com.mongodb.BasicDBObject
 import com.mongodb.MongoCredential._
 import com.mongodb.connection.ClusterConnectionMode
@@ -24,7 +24,7 @@ import org.mongodb.scala.result.{DeleteResult, UpdateResult}
 import org.mongodb.scala.{ConnectionString, MongoClient, MongoClientSettings, MongoDatabase, Observer, ServerAddress}
 import zio.{Task, UIO, ZLayer}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.reflect.runtime.universe._
 import com.harana.utils.bson.convert.ConvertImplicits._
 import io.circe.{Decoder, Encoder}
@@ -113,7 +113,7 @@ object LiveMongo {
     def aggregate(collectionName: String, stages: List[Bson]): Task[List[BsonDocument]] =
       for {
         db                  <- mongoDatabase
-        collection          <- collection(db, collectionName)
+        collection          <- getCollection(db, collectionName)
         results             <- execute(collection.aggregate(stages).collect()).map(_.toList)
       } yield results
 
@@ -121,7 +121,7 @@ object LiveMongo {
     def get[E <: Id](collectionName: String, id: EntityId)(implicit tt: TypeTag[E], d: Decoder[E]): Task[Option[E]] =
       for {
         db                  <- mongoDatabase
-        collection          <- collection(db, collectionName)
+        collection          <- getCollection(db, collectionName)
         results             <- executeGet(collection.find(byIdSelector(id)))
       } yield results
 
@@ -129,7 +129,7 @@ object LiveMongo {
     def insert[E <: Id](collectionName: String, entity: E)(implicit tt: TypeTag[E], e: Encoder[E]): Task[Unit] =
       for {
         db                  <- mongoDatabase
-        collection          <- collection(db, collectionName)
+        collection          <- getCollection(db, collectionName)
         bson                <- convertToBson(entity)
         results             <- execute(collection.insertOne(bson)).unit
       } yield results
@@ -138,7 +138,7 @@ object LiveMongo {
     def insertMany[E <: Id](collectionName: String, entities: List[E])(implicit tt: TypeTag[E], e: Encoder[E]): Task[Unit] =
       for {
         db                  <- mongoDatabase
-        collection          <- collection(db, collectionName)
+        collection          <- getCollection(db, collectionName)
         bsons               <- Task.foreach(entities)(convertToBson(_))
         results             <- execute(collection.insertMany(bsons)).unit
       } yield results
@@ -151,7 +151,7 @@ object LiveMongo {
     def update[E <: Id](collectionName: String, entity: E)(implicit tt: TypeTag[E], e: Encoder[E]): Task[Unit] =
       for {
         db                  <- mongoDatabase
-        collection          <- collection(db, collectionName)
+        collection          <- getCollection(db, collectionName)
         bson                <- convertToBson(entity)
         results             <- executeReplace(collection, entity.id, bson)
       } yield results
@@ -160,7 +160,7 @@ object LiveMongo {
     def updateFields(collectionName: String, id: EntityId, keyValues: Map[String, Object]): Task[Unit] =
       for {
         db                  <- mongoDatabase
-        collection          <- collection(db, collectionName)
+        collection          <- getCollection(db, collectionName)
         results             <- executeUpdate(collection, id, new BasicDBObject("$set", new BasicDBObject(keyValues.asJava)))
       } yield results
 
@@ -168,7 +168,7 @@ object LiveMongo {
     def replace[E <: Id](collectionName: String, id: EntityId, entity: E, upsert: Boolean)(implicit tt: TypeTag[E], e: Encoder[E]): Task[Unit] =
       for {
         db                  <- mongoDatabase
-        collection          <- collection(db, collectionName)
+        collection          <- getCollection(db, collectionName)
         bson                <- convertToBson(entity)
         results             <- Task.effectAsync[Unit] { cb =>
                                 collection.replaceOne(byIdSelector(entity.id), bson, ReplaceOptions().upsert(upsert)).subscribe(new Observer[UpdateResult] {
@@ -176,10 +176,10 @@ object LiveMongo {
                                     if (!result.wasAcknowledged()) Task.fail(new Exception("Result was not acknowledged"))
                                     else if (result.getMatchedCount == 0 && !upsert) Task.fail(new Exception("Entity not found"))
                                     else if (result.getModifiedCount == 0 && !upsert) Task.fail(new Exception("Modification failure"))
-                                    else Task.succeed(Unit)
+                                    else Task.unit
                                   )
                                   def onError(t: Throwable): Unit = cb(Task.fail(t))
-                                  def onComplete(): Unit = cb(Task.succeed(Unit))
+                                  def onComplete(): Unit = cb(Task.unit)
                                 })
         }
       } yield results
@@ -188,16 +188,16 @@ object LiveMongo {
     def delete[E <: Id](collectionName: String, bson: Bson)(implicit tt: TypeTag[E]): Task[Unit] =
       for {
         db                  <- mongoDatabase
-        collection          <- collection(db, collectionName)
+        collection          <- getCollection(db, collectionName)
         results             <- Task.effectAsync[Unit] { cb =>
           collection.deleteOne(bson).subscribe(new Observer[DeleteResult] {
             def onNext(result: DeleteResult): Unit = cb(
               if (!result.wasAcknowledged()) Task.fail(new Exception("Result was not acknowledged"))
               else if (result.getDeletedCount == 0) Task.fail(new Exception("Entity not found"))
-              else Task.succeed(Unit)
+              else Task.unit
             )
             def onError(t: Throwable): Unit = cb(Task.fail(t))
-            def onComplete(): Unit = Unit
+            def onComplete(): Unit = {}
           })
         }
       } yield results
@@ -214,7 +214,7 @@ object LiveMongo {
     def findEquals[E <: Id](collectionName: String, keyValues: Map[String, Object], sort: Option[(String, Boolean)] = None)(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]] =
       for {
         db                  <- mongoDatabase
-        collection          <- collection(db, collectionName)
+        collection          <- getCollection(db, collectionName)
         sortDoc             =  sort.map(s => if (s._2) ascending(s._1) else descending(s._1))
         findDoc             =  collection.find(new BasicDBObject(keyValues.asJava))
         results             <- executeFind[E](if (sort.isDefined) findDoc.sort(sortDoc.get) else findDoc)
@@ -224,7 +224,7 @@ object LiveMongo {
     def find[E <: Id](collectionName: String, bson: Bson, sort: Option[(String, Boolean)] = None)(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]] =
       for {
         db                  <- mongoDatabase
-        collection          <- collection(db, collectionName)
+        collection          <- getCollection(db, collectionName)
         sortDoc             =  sort.map(s => if (s._2) ascending(s._1) else descending(s._1))
         findDoc             =  collection.find(bson)
         results             <- executeFind[E](if (sort.isDefined) findDoc.sort(sortDoc.get) else findDoc)
@@ -234,7 +234,7 @@ object LiveMongo {
     def findOne[E <: Id](collectionName: String, keyValues: Map[String, Object], sort: Option[(String, Boolean)] = None)(implicit tt: TypeTag[E], d: Decoder[E]): Task[Option[E]] =
       for {
         db                  <- mongoDatabase
-        collection          <- collection(db, collectionName)
+        collection          <- getCollection(db, collectionName)
         sortDoc             =  sort.map(s => if (s._2) ascending(s._1) else descending(s._1))
         query               =  new BasicDBObject(keyValues.asJava)
         result              <- executeGet[E](if (sort.isDefined) collection.find(query).sort(sortDoc.get).first() else collection.find(query).first())
@@ -244,7 +244,7 @@ object LiveMongo {
     def findOneAndDelete[E <: Id](collectionName: String, keyValues: Map[String, Object], sort: Option[(String, Boolean)] = None)(implicit tt: TypeTag[E], d: Decoder[E]): Task[Option[E]] =
       for {
         db                  <- mongoDatabase
-        collection          <- collection(db, collectionName)
+        collection          <- getCollection(db, collectionName)
         sortDoc             =  sort.map(s => if (s._2) ascending(s._1) else descending(s._1))
         query               =  new BasicDBObject(keyValues.asJava)
         options             =  FindOneAndDeleteOptions().sort(sortDoc.get)
@@ -255,7 +255,7 @@ object LiveMongo {
     def distinctEquals(collectionName: String, field: String, keyValues: Map[String, Object]): Task[List[String]] =
       for {
         db                  <- mongoDatabase
-        collection          <- collection(db, collectionName)
+        collection          <- getCollection(db, collectionName)
         results             <- execute(collection.distinct[String](field, new BasicDBObject(keyValues.asJava)).collect()).map(_.toList)
       } yield results
 
@@ -263,7 +263,7 @@ object LiveMongo {
     def countEquals(collectionName: String, keyValues: Map[String, Object]): Task[Long] =
       for {
         db                  <- mongoDatabase
-        collection          <- collection(db, collectionName)
+        collection          <- getCollection(db, collectionName)
         results             <- execute(collection.countDocuments(new BasicDBObject(keyValues.asJava)))
       } yield results
 
@@ -271,7 +271,7 @@ object LiveMongo {
     def count(collectionName: String, bson: Bson): Task[Long] =
       for {
         db                  <- mongoDatabase
-        collection          <- collection(db, collectionName)
+        collection          <- getCollection(db, collectionName)
         results             <- execute(collection.countDocuments(bson))
       } yield results
 
@@ -279,7 +279,7 @@ object LiveMongo {
     def textSearch[E <: Id](collectionName: String, text: String)(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]] =
       for {
         db                  <- mongoDatabase
-        collection          <- collection(db, collectionName)
+        collection          <- getCollection(db, collectionName)
         results             <- executeFind[E](collection.find(Filters.text(text))
                                 .projection(Projections.metaTextScore("score")).sort(Sorts.metaTextScore("score")))
       } yield results
@@ -288,7 +288,7 @@ object LiveMongo {
     def textSearchFindEquals[E <: Id](collectionName: String, text: String, keyValues: Map[String, Object])(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]] =
       for {
         db                  <- mongoDatabase
-        collection          <- collection(db, collectionName)
+        collection          <- getCollection(db, collectionName)
         results             <- executeFind[E](collection.find(Filters.and(Filters.text(text), new BasicDBObject(keyValues.asJava)))
                                 .projection(Projections.metaTextScore("score")).sort(Sorts.metaTextScore("score")))
       } yield results
@@ -297,7 +297,7 @@ object LiveMongo {
     def all[E <: Id](collectionName: String, sort: Option[(String, Boolean)] = None)(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]] =
       for {
         db                  <- mongoDatabase
-        collection          <- collection(db, collectionName)
+        collection          <- getCollection(db, collectionName)
         sortDoc             =  sort.map(s => if (s._2) ascending(s._1) else descending(s._1))
         results             <- executeFind[E](if (sort.isDefined) collection.find().sort(sortDoc.get) else collection.find())
       } yield results
@@ -306,7 +306,7 @@ object LiveMongo {
     def createIndex[E <: Id](collectionName: String, indexes: Map[String, Int], unique: Boolean = false, opts: Option[IndexOptions] = None)(implicit tt: TypeTag[E]): Task[Unit] =
       for {
         db                  <- mongoDatabase
-        collection          <- collection(db, collectionName)
+        collection          <- getCollection(db, collectionName)
         keys                =  new BsonDocument()
         _                   =  indexes.foreach { case (k, v) => keys.append(k, new BsonInt32(v)) }
         results             <- Task.effectAsync[Unit] { cb =>
@@ -325,7 +325,7 @@ object LiveMongo {
     def createTextIndex[E <: Id](collectionName: String, fields: List[String])(implicit tt: TypeTag[E]): Task[Unit] =
       for {
         db                  <- mongoDatabase
-        collection          <- collection(db, collectionName)
+        collection          <- getCollection(db, collectionName)
         index               =  Document(fields.map(f => (f, "text")))
         _                   <- execute(collection.createIndex(index))
       } yield ()
@@ -343,7 +343,7 @@ object LiveMongo {
     def ackQueue[E <: Id](queueName: String, id: EntityId, visibility: Option[Int] = None)(implicit tt: TypeTag[E], d: Decoder[E]): Task[Option[EntityId]] =
       for {
         db                  <- mongoDatabase
-        queue               <- collection(db, queueName)
+        queue               <- getCollection(db, queueName)
         query               =  Document(
                                 "ack"     -> id,
                                 "deleted" -> -1,
@@ -357,7 +357,7 @@ object LiveMongo {
     def pingQueue[E <: Id](queueName: String, id: EntityId, visibility: Option[Int] = None)(implicit tt: TypeTag[E], d: Decoder[E]): Task[Option[EntityId]] =
       for {
         db                  <- mongoDatabase
-        queue               <- collection(db, queueName)
+        queue               <- getCollection(db, queueName)
         defaultVisibility   <- config.int("mongo.queueDefaultVisibility", 60)
         query               =  Document(
                                 "ack" -> id,
@@ -372,7 +372,7 @@ object LiveMongo {
     def addToQueue[E <: Id](queueName: String, entities: List[E], delay: Option[Int] = None)(implicit tt: TypeTag[E], e: Encoder[E]): Task[List[EntityId]] = {
       for {
         db                  <- mongoDatabase
-        queue               <- collection(db, queueName)
+        queue               <- getCollection(db, queueName)
         documents           =  entities.map { entity =>
                                   Message(
                                     id = Random.long,
@@ -389,7 +389,7 @@ object LiveMongo {
     def getFromQueue[E <: Id](queueName: String, visibility: Option[Int] = None)(implicit tt: TypeTag[Message[E]], d: Decoder[Message[E]]): Task[Option[Message[E]]] =
       for {
         db                  <- mongoDatabase
-        queue               <- collection(db, queueName)
+        queue               <- getCollection(db, queueName)
         defaultVisibility   <- config.int("mongo.queueDefaultVisibility", 60)
         query               = Document(
                                 "visible" -> Document("$lte" -> new Date().getTime),
@@ -410,7 +410,7 @@ object LiveMongo {
     def countQueue[E <: Id](queueName: String, bson: Bson)(implicit tt: TypeTag[E]): Task[Long] =
       for {
         db                  <- mongoDatabase
-        collection          <- collection(db, queueName)
+        collection          <- getCollection(db, queueName)
         count               <- execute(collection.countDocuments(bson))
       } yield count
 
@@ -448,7 +448,7 @@ object LiveMongo {
       )
       for {
         db          <- mongoDatabase
-        collection  <- collection(db, queueName)
+        collection  <- getCollection(db, queueName)
         results     <- execute(collection.deleteMany(query)).unit
       } yield results
     }
@@ -457,7 +457,7 @@ object LiveMongo {
     def totalCountForQueue[E <: Id](queueName: String)(implicit tt: TypeTag[E]): Task[Long] =
       for {
         db          <- mongoDatabase
-        collection  <- collection(db, queueName)
+        collection  <- getCollection(db, queueName)
         count       <- execute(collection.countDocuments())
       } yield count
 

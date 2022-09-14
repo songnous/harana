@@ -12,7 +12,7 @@ import org.apache.calcite.sql.dialect.CalciteSqlDialect
 import org.apache.calcite.sql.parser.SqlParser
 import zio.{Task, ZLayer}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.collection.mutable.ListBuffer
 
 object LiveCalcite2 {

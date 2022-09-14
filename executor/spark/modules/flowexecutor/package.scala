@@ -6,7 +6,7 @@ import com.harana.modules.vertx.Vertx
 import com.harana.modules.core.config.Config
 import com.harana.modules.core.logger.Logger
 import com.harana.sdk.shared.models.designer.data.DataSource
-import com.harana.sdk.backend.models.flow.FlowExecution.FlowExecutionId
+import com.harana.sdk.shared.models.flow.FlowExecution.FlowExecutionId
 import com.harana.sdk.backend.models.flow.{Flow, FlowExecution}
 import com.harana.executor.spark.metrics.MetricsManager
 import com.harana.sdk.shared.models.designer.flow.ActionInfo

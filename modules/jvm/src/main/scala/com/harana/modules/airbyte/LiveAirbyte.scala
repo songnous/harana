@@ -9,7 +9,7 @@ import io.airbyte.protocol.models.{AirbyteCatalog, AirbyteConnectionStatus, Conf
 import io.circe.parser._
 
 import java.nio.file.{Files, Paths}
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import zio.{Task, UIO, ZLayer}
 
 object LiveAirbyte {
@@ -21,22 +21,20 @@ object LiveAirbyte {
     def integrations: Task[List[AirbyteIntegration]] =
       for {
         files         <- Task(airbyteFiles)
-        jsons         = files.mapValues(parse).filter(_._2.isRight).mapValues(_.right.get)
+        jsons         = files.view.mapValues(parse).filter(_._2.isRight).mapValues(_.toOption.get)
         integrations  = jsons.map { j => toAirbyteIntegration(j._1, j._2)}.toList
       } yield integrations
 
 
     def discover(integrationName: String, connectionValues: Map[String, Object]): Task[AirbyteCatalog] =
-      Task(null)
+      null
 
 
     def check(integrationName: String, connectionValues: Map[String, Object]): Task[AirbyteConnectionStatus] =
-      Task(null)
+      null
 
-//    def schema(integrationName: String): Task[Any] =
-//      Task(null)
 
-    def read(integrationName: String, catalog: ConfiguredAirbyteCatalog): Unit =
-      Task(null)
+    def read(integrationName: String, catalog: ConfiguredAirbyteCatalog): Task[Unit] =
+      null
   }}
 }

@@ -13,7 +13,7 @@ import io.vertx.ext.web.RoutingContext
 import io.vertx.ext.web.client.{HttpRequest, HttpResponse, WebClient}
 import org.apache.commons.lang3.mutable.MutableBoolean
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 
 class WebProxyClient(client: WebClient, clientOptions: WebProxyClientOptions) {

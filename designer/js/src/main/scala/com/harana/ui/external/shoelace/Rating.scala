@@ -59,6 +59,6 @@ import scala.scalajs.js
     if (props.symbolSpacing.isDefined) style.updateDynamic("--symbol-spacing")(props.symbolSpacing.get)
     add(attrs, Some(style), "style")
 
-    CustomTag("sl-rating")(attrs: _*)
+    CustomTag("sl-rating")(attrs.toSeq: _*)
   }
 }

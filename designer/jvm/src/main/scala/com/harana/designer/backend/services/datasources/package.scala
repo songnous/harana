@@ -19,7 +19,7 @@ package object datasources {
       case AirbytePropertyType.Integer =>
         Parameter.Integer(
           name = ap.name,
-          default = ap.default.map(p => ParameterValue.Integer(p.right.get)),
+          default = ap.default.map(p => ParameterValue.Integer(p.toOption.get)),
           required = ap.required,
           placeholder = ap.placeholder.map(_.toInt),
           allowNegative = ap.minimum.map(_ > 0),

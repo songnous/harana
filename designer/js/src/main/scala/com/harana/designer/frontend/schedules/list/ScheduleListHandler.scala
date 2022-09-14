@@ -11,8 +11,7 @@ import com.harana.designer.frontend.utils.http.Http
 import com.harana.designer.frontend.{Main, State}
 import com.harana.sdk.shared.models.common.Parameter.ParameterName
 import com.harana.sdk.shared.models.common._
-import com.harana.sdk.shared.models.designer.schedules.{EventMode}
-import com.harana.sdk.shared.models.schedules.{Action, Event, Schedule}
+import com.harana.sdk.shared.models.schedules.{Action, Event, EventMode, Schedule}
 import com.harana.ui.components.LinkType
 import diode._
 

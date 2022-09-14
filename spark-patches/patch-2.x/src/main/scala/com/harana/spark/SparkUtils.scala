@@ -78,13 +78,13 @@ object Linalg {
 object ML {
 
   abstract class Transformer extends ml.Transformer {
-    final override def transform(dataset: Dataset[_]): DataFrame = transformDF(dataset.toDF)
+    final override def transform(dataset: Dataset[_]): DataFrame = transformDF(dataset.toDF())
 
     def transformDF(dataFrame: DataFrame): DataFrame
   }
 
   abstract class Model[T <: ml.Model[T]] extends ml.Model[T] {
-    final override def transform(dataset: Dataset[_]): DataFrame = transformDF(dataset.toDF)
+    final override def transform(dataset: Dataset[_]): DataFrame = transformDF(dataset.toDF())
 
     def transformDF(dataFrame: DataFrame): DataFrame
   }

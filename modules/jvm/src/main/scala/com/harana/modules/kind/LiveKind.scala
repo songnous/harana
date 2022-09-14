@@ -32,7 +32,7 @@ object LiveKind {
           if (waitForControlPlane > 0) args += s"--wait ${waitForControlPlane}s"
           args
         }
-        cmd <- Command("kind", args: _*).lines.provide(Has(blocking))
+        cmd <- Command("kind", args.toSeq: _*).lines.provide(Has(blocking))
       } yield cmd.toList
 
 
@@ -45,7 +45,7 @@ object LiveKind {
           if (kubeConfig.isDefined) args += s"--kubeconfig ${kubeConfig.get.getAbsolutePath}"
           args
         }
-        _ <- Command("kind", args: _*).lines.provide(Has(blocking))
+        _ <- Command("kind", args.toSeq: _*).lines.provide(Has(blocking))
       } yield ()
 
 
