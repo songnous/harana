@@ -3,20 +3,18 @@ package com.harana.designer.backend.services.flows
 import com.harana.designer.backend.services.Crud
 import com.harana.designer.backend.services.flows.Flows.Service
 import com.harana.id.jwt.modules.jwt.JWT
-import com.harana.modules.mongo.Mongo
-import com.harana.modules.vertx.models.Response
+import com.harana.id.jwt.shared.models.DesignerClaims
 import com.harana.modules.core.config.Config
-import com.harana.modules.kubernetes.Kubernetes
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
-import com.harana.sdk.backend.models.flow.execution.ExecutionStatus
-import com.harana.sdk.backend.models.flow.{Flow, FlowExecution}
-import com.harana.id.jwt.shared.models.DesignerClaims
-import com.harana.sdk.backend.models.flow.execution.spark.ExecutionStatus
+import com.harana.modules.kubernetes.Kubernetes
+import com.harana.modules.mongo.Mongo
+import com.harana.modules.vertx.models.Response
+import com.harana.sdk.shared.models.designer.flow.execution.ExecutionStatus
+import com.harana.sdk.shared.models.flow.{Flow, FlowExecution}
 import com.harana.sdk.shared.models.jwt.DesignerClaims
 import io.circe.syntax._
 import io.vertx.ext.web.RoutingContext
-import org.mongodb.scala.bson.BsonString
 import zio.{Task, ZLayer}
 
 import java.time.Instant
@@ -45,9 +43,8 @@ object LiveFlows {
         userId              <- Crud.userId(rc, config, jwt)
         jwt                 <- jwt.claims[DesignerClaims](rc)
         flowId              <- Task(rc.pathParam("flowId"))
-        response            =  Response.
-
-      } yield Res
+        response            =  Response.Empty
+      } yield response
 
 
     def stop(rc: RoutingContext): Task[Response] =

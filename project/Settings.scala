@@ -72,6 +72,7 @@ object Settings {
     Compile / packageDoc / publishArtifact    := false,
     packageSrc / publishArtifact              := false,
     Compile / packageSrc / publishArtifact    := false,
+    maxErrors                                 := 1000,
     githubOwner                               := "harana",
     organization                              := "com.harana",
     githubTokenSource                         := TokenSource.Environment("GITHUB_TOKEN"),

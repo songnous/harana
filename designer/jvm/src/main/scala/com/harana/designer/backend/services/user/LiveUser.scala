@@ -6,12 +6,12 @@ import com.harana.modules.aws.AWS
 import com.harana.id.jwt.modules.jwt.JWT
 import com.harana.modules.mongo.{Mongo, convertToBson}
 import com.harana.modules.vertx.models.Response
-import com.harana.sdk.backend.models.flow.{Flow, FlowExecution}
 import com.harana.modules.core.config.Config
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
 import com.harana.modules.kubernetes.Kubernetes
 import com.harana.sdk.shared.models.common.{User, UserSettings}
+import com.harana.sdk.shared.models.flow.{Flow, FlowExecution}
 import io.circe.syntax._
 import com.harana.sdk.shared.utils.CirceCodecs._
 import io.vertx.ext.web.RoutingContext

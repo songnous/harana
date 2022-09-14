@@ -1,7 +1,7 @@
 package com.harana.designer.backend.services
 
-import com.harana.designer.backend.services.colors._
-import com.harana.sdk.backend.models.flow.execution.spark.ExecutionLog
+import com.harana.designer.backend.flowexecutions.colors._
+import com.harana.sdk.shared.models.designer.flow.execution.ExecutionLog
 
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter

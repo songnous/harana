@@ -15,9 +15,9 @@ import com.harana.modules.mongo.Mongo
 import com.harana.modules.vertx.Vertx
 import com.harana.modules.vertx.models.Response
 import com.harana.sdk.shared.models.common.{PendingEvent, User}
-import com.harana.sdk.backend.models.flow.{Flow, FlowExecution}
 import com.harana.sdk.shared.models.apps.{App => DesignerApp}
 import com.harana.sdk.shared.models.data.{DataSet, DataSource}
+import com.harana.sdk.shared.models.flow.{Flow, FlowExecution}
 import io.circe.parser._
 import io.vertx.ext.web.RoutingContext
 import org.apache.commons.io.IOUtils
@@ -28,7 +28,7 @@ import upickle.default._
 
 import scala.io.Source
 import org.jsoup.Jsoup
-import org.jsoup.safety.Whitelist
+import org.jsoup.safety.Safelist
 
 object LiveSystem {
   val layer = ZLayer.fromServices { (clock: Clock.Service,
@@ -39,13 +39,11 @@ object LiveSystem {
                                      mongo: Mongo.Service,
                                      vertx: Vertx.Service) => new Service {
 
-    private val whitelist = Whitelist.simpleText
-
     private val properties = Task {
       val airbyte = Source.fromURL(getClass.getResource("/messages_airbyte_en")).bufferedReader()
       val harana = Source.fromURL(getClass.getResource("/messages_harana_en")).bufferedReader()
-      val airByteLines = Stream.continually(airbyte.readLine()).takeWhile(_ != null).map(Jsoup.clean(_, whitelist))
-      val haranaLines = Stream.continually(harana.readLine()).takeWhile(_ != null).map(Jsoup.clean(_, whitelist))
+      val airByteLines = Stream.continually(airbyte.readLine()).takeWhile(_ != null).map(Jsoup.clean(_, Safelist.simpleText))
+      val haranaLines = Stream.continually(harana.readLine()).takeWhile(_ != null).map(Jsoup.clean(_, Safelist.simpleText))
       new String(java.util.Base64.getEncoder.encode(write(airByteLines.toList ++ haranaLines.toList).getBytes(Charsets.UTF_8)))
     }
 

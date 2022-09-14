@@ -3,7 +3,11 @@ package com.harana.designer.backend.services.schedules.argo
 import com.harana.designer.backend.App.env
 import com.harana.designer.backend.services.flows.argo.ArgoExecutor.Service
 import com.harana.id.jwt.modules.jwt.JWT
-import com.harana.modules.argo.Argo
+import com.harana.modules.argo.{Argo, SecretKeySelector, SecureHeader, ValueFromSource}
+import com.harana.modules.argo.events.{EventSource, Sensor}
+import com.harana.modules.argo.events.EventSource.{EventSource, WatchPathConfig}
+import com.harana.modules.argo.events.Sensor.{EventDependency, Sensor, Trigger, TriggerTemplate}
+import com.harana.modules.argo.events.Trigger._
 import com.harana.modules.core.config.Config
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
