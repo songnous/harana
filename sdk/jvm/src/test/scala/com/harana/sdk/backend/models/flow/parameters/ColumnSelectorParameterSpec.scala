@@ -11,7 +11,7 @@ class ColumnSelectorParameterSpec extends AbstractParameterSpec[MultipleColumnSe
 
   def paramFixture: (ColumnSelectorParameter, Json) = {
     val description  = "Column selector description"
-    val param        = ColumnSelectorParameter(name = "Column selector name", description = Some(description), portIndex = 0)
+    val param        = ColumnSelectorParameter(name = "Column selector name", portIndex = 0)
     val expectedJson = Map(
                           "type"        -> Json.fromString("selector"),
                           "name"        -> Json.fromString(param.name),

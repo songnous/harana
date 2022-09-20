@@ -18,11 +18,10 @@ trait ReadTransformerInfo
 
   val id: Id = "424dc996-a471-482d-b08c-bc12849f0b68"
   val name = "Read Transformer"
-  val description = "Reads a Transformer from a directory"
   val since = Version(1, 1, 0)
   val category = IO
 
-  val sourcePathParameter = StringParameter("source", Some("A path to the Transformer directory."))
+  val sourcePathParameter = StringParameter("source")
   def getSourcePath = $(sourcePathParameter)
   def setSourcePath(value: String): this.type = set(sourcePathParameter, value)
 

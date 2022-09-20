@@ -2,7 +2,7 @@ package com.harana.sdk.shared.models.flow.parameters
 
 import com.harana.sdk.shared.models.flow.parameters.validators.{RangeValidator, Validator}
 
-case class FloatParameter(name: String, description: Option[String], validator: Validator[Float] = RangeValidator.allFloat)
+case class FloatParameter(name: String, validator: Validator[Float] = RangeValidator.allFloat)
   extends Parameter[Float] with HasValidator[Float] {
 
   val parameterType = ParameterType.Numeric

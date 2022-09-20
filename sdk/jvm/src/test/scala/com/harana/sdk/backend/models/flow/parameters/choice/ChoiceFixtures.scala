@@ -12,7 +12,7 @@ sealed trait ChoiceABC extends Choice {
 
 case class OptionA() extends ChoiceABC {
   val name = "A"
-  val bool = BooleanParameter("bool", Some("description"))
+  val bool = BooleanParameter("bool")
   val parameters = Array(bool)
   def setBool(b: Boolean) = set(bool, b)
 }

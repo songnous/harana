@@ -14,7 +14,6 @@ trait CreateLinearRegressionInfo extends EstimatorAsFactoryInfo[LinearRegression
 
   val id: Id = "461a7b68-5fc8-4cd7-a912-0e0cc70eb3aa"
   val name = "Linear Regression"
-  val description = "Creates a linear regression model"
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-classification-regression.html#linear-regression")
   val category = Regression

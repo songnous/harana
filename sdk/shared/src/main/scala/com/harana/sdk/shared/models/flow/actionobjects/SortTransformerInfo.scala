@@ -8,7 +8,7 @@ trait SortTransformerInfo extends TransformerInfo {
 
   val id = "C40584ED-56CB-4A8C-92E8-56105C76FF92"
 
-  val columnsParameter = ParametersSequence[SortColumnParameter]("sort columns", Some("Columns that will be used to sort the DataFrame."))
+  val columnsParameter = ParametersSequence[SortColumnParameter]("sort columns")
   def getColumns = $(columnsParameter)
   def setColumns(sortColumnParameters: Seq[SortColumnParameter]): this.type = set(columnsParameter, sortColumnParameters)
   val parameters = Array(columnsParameter)
@@ -19,11 +19,11 @@ object SortTransformerInfo extends SortTransformerInfo
 
 class SortColumnParameter extends Parameters {
 
-  val columnNameParameter = SingleColumnSelectorParameter(columnNameParameterName, None, portIndex = 0)
+  val columnNameParameter = SingleColumnSelectorParameter(columnNameParameterName, portIndex = 0)
   def getColumnName = $(columnNameParameter)
   def setColumnName(col: SingleColumnSelection): this.type = set(columnNameParameter, col)
 
-  val descendingParameter = BooleanParameter(descendingFlagParameterName, Some("Should sort in descending order?"))
+  val descendingParameter = BooleanParameter(descendingFlagParameterName)
   setDefault(descendingParameter, false)
   def getDescending = $(descendingParameter)
   def isDescending: Boolean = getDescending

@@ -13,7 +13,6 @@ class PrefixBasedColumnCreatorParameterSpec extends AbstractParameterSpec[String
     val description  = "Prefix based column creator description"
     val param        = PrefixBasedColumnCreatorParameter(
       name = "Prefix based column creator name",
-      description = Some(description)
     )
     val expectedJson = Map(
       "type"        -> Json.fromString("prefixBasedCreator"),

@@ -14,7 +14,6 @@ trait DCTInfo extends TransformerAsActionInfo[DiscreteCosineTransformerInfo] wit
 
   val id: Id = "68cd1492-501d-4c4f-9fde-f742d652111a"
   val name = "DCT"
-  val description = "Applies discrete cosine transform (DCT) to vector columns"
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-features.html#discrete-cosine-transform-dct")
   val category = FeatureConversion

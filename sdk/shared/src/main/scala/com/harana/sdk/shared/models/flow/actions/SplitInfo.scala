@@ -21,20 +21,12 @@ trait SplitInfo extends Action1To2Info[DataFrameInfo, DataFrameInfo, DataFrameIn
 
   val id: Id = "d273c42f-b840-4402-ba6b-18282cc68de3"
   val name = "Split"
-  val description = "Splits a DataFrame into two DataFrames"
   val since = Version(0, 4, 0)
   val category = SetAction
 
   override def outPortsLayout = Vector(PortPosition.Left, PortPosition.Right)
 
-  val splitModeParameter = ChoiceParameter[SplitModeChoice]("split mode",
-    description = Some("""There are two split modes:
-                         |`RANDOM` where rows are split randomly with specified `ratio` and `seed`;
-                         |`CONDITIONAL` where rows are split into two `DataFrames` -
-                         |satisfying an SQL `condition` and not satisfying it.
-                         |""".stripMargin)
-  )
-
+  val splitModeParameter = ChoiceParameter[SplitModeChoice]("split mode")
   setDefault(splitModeParameter, SplitModeChoice.Random())
   def getSplitMode = $(splitModeParameter)
   def setSplitMode(value: SplitModeChoice): this.type = set(splitModeParameter, value)
@@ -64,7 +56,7 @@ object SplitModeChoice {
   case class Random() extends SplitModeChoice with HasSeedParameter {
     val name = "RANDOM"
 
-    val splitRatioParameter = DoubleParameter("split ratio", Some("Percentage of rows that should end up in the first output DataFrame."), validator = RangeValidator(0.0, 1.0))
+    val splitRatioParameter = DoubleParameter("split ratio", validator = RangeValidator(0.0, 1.0))
     setDefault(splitRatioParameter, 0.5)
     def getSplitRatio = $(splitRatioParameter)
     def setSplitRatio(value: Double): this.type = set(splitRatioParameter, value)
@@ -79,14 +71,7 @@ object SplitModeChoice {
   case class Conditional() extends SplitModeChoice {
     val name = "CONDITIONAL"
 
-    val conditionParameter = CodeSnippetParameter("condition",
-      description = Some("""Condition used to split rows.
-                           |Rows that satisfy condition will be placed in the first DataFrame
-                           |and rows that do not satisfy it - in the second.
-                           |Use SQL syntax.""".stripMargin),
-      language = CodeSnippetLanguage(CodeSnippetLanguage.sql)
-    )
-
+    val conditionParameter = CodeSnippetParameter("condition", language = CodeSnippetLanguage(CodeSnippetLanguage.sql))
     def getCondition = $(conditionParameter)
     def setCondition(value: String): this.type = set(conditionParameter, value)
 

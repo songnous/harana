@@ -13,7 +13,6 @@ trait CreateMulticlassClassificationEvaluatorInfo extends EvaluatorAsFactoryInfo
 
   val id: Id = "3129848c-8a1c-449e-b006-340fec5b42ae"
   val name = "Multiclass Classification Evaluator"
-  val description = "Creates a multiclass classification evaluator. Multiclass classification evaluator does not assume any label class is special, thus it cannot be used for calculation of metrics specific for binary classification (where this assumption is taken into account)."
   val since = Version(1,0,0)
   val docsGuideLocation = Some("mllib-evaluation-metrics.html#multiclass-classification")
   val category = ModelEvaluation

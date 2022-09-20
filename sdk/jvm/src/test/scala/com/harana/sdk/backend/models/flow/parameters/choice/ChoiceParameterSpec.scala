@@ -34,7 +34,7 @@ class ChoiceParameterSpec extends AbstractChoiceParamSpec[ChoiceABC, ChoiceParam
   }
 
   def paramFixture = {
-    val singleChoiceParam = ChoiceParameter[ChoiceABC]("name", Some("description"))
+    val singleChoiceParam = ChoiceParameter[ChoiceABC]("name")
     val singleChoiceExpectedJson = Map(
                                       "type"        -> Json.fromString("choice"),
                                       "name"        -> Json.fromString(singleChoiceParam.name),

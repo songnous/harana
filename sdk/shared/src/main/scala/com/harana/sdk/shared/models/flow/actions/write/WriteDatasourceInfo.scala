@@ -20,7 +20,6 @@ trait WriteDatasourceInfo extends Action1To0Info[DataFrameInfo]
 
   val id: Id = "bf082da2-a0d9-4335-a62f-9804217a1436"
   val name = "Write DataFrame"
-  val description = "Writes data to the data source"
   val since = Version(1, 4, 0)
   val category = IO
 

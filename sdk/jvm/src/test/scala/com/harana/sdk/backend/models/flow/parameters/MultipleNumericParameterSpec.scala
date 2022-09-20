@@ -33,10 +33,8 @@ class MultipleNumericParameterSpec extends AbstractParameterSpec[Array[Double], 
   }
 
   def paramFixture: (MultipleNumericParameter, Json) = {
-    val description = "Multiple numeric parameter description"
-    val param       = MultipleNumericParameter(
+      val param       = MultipleNumericParameter(
       name = "Multiple numeric parameter",
-      description = Some(description),
       validator = ComplexArrayValidator(
         rangeValidator = RangeValidator(1.0, 3.0, beginIncluded = true, endIncluded = false),
         lengthValidator = ArrayLengthValidator(min = 2, max = 4)
@@ -45,7 +43,7 @@ class MultipleNumericParameterSpec extends AbstractParameterSpec[Array[Double], 
     val json = Map(
       "type"        -> Json.fromString("multipleNumeric"),
       "name"        -> Json.fromString(param.name),
-      "description" -> Json.fromString(description + param.constraints),
+      "description" -> Json.fromString(param.constraints),
       "default"     -> Json.Null,
       "isGriddable" -> Json.False,
       "validator"   -> Map(

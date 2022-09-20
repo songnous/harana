@@ -12,11 +12,7 @@ trait AFTSurvivalRegressionParameters
     with PredictorParameters
     with HasOptionalQuantilesColumnParameter {
 
-  val quantileProbabilitiesParameter = DoubleArrayParameter(
-    name = "quantile probabilities",
-    description = Some("""Param for quantile probabilities array.
-                         |Values of the quantile probabilities array should be in the range (0, 1)
-                         |and the array should be non-empty.""".stripMargin),
+  val quantileProbabilitiesParameter = DoubleArrayParameter("quantile probabilities",
     validator = ComplexArrayValidator(
       rangeValidator = RangeValidator(0.0, 1.0, beginIncluded = false, endIncluded = false),
       lengthValidator = ArrayLengthValidator.withAtLeast(1)

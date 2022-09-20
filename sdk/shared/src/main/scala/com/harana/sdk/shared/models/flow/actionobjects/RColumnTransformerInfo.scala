@@ -6,7 +6,7 @@ trait RColumnTransformerInfo extends CustomCodeColumnTransformerInfo {
 
   override val id = "AB01554B-4BBF-40E6-8729-7CBED40F2303"
 
-  val codeParameter = CodeSnippetParameter("column action code", None, language = CodeSnippetLanguage(CodeSnippetLanguage.r))
+  val codeParameter = CodeSnippetParameter("column action code", language = CodeSnippetLanguage(CodeSnippetLanguage.r))
 
   setDefault(codeParameter ->
       """transform.column <- function(column, column.name) {

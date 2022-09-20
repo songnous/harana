@@ -14,7 +14,6 @@ trait TokenizeWithRegexInfo extends TransformerAsActionInfo[RegexTokenizerInfo] 
 
   val id: Id = "3fb50e0a-d4fb-474f-b6f3-679788068b1b"
   val name = "Tokenize With Regex"
-  val description = "Splits text using a regular expression"
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-features.html#tokenizer")
   val category = TextProcessing

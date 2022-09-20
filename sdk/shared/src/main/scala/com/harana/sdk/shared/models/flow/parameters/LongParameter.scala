@@ -2,7 +2,7 @@ package com.harana.sdk.shared.models.flow.parameters
 
 import com.harana.sdk.shared.models.flow.parameters.validators.{RangeValidator, Validator}
 
-case class LongParameter(name: String, description: Option[String], validator: Validator[Long] = RangeValidator.allLong)
+case class LongParameter(name: String, validator: Validator[Long] = RangeValidator.allLong)
   extends Parameter[Long] with HasValidator[Long] {
 
   val parameterType = ParameterType.Numeric

@@ -15,7 +15,6 @@ trait FilterRowsInfo
 
   val id: Id = "7d7eddfa-c9be-48c3-bb8c-5f7cc59b403a"
   val name = "Filter Rows"
-  val description = "Creates a DataFrame containing only rows satisfying given condition"
   val since = Version(1, 0, 0)
   val category = Filtering
 

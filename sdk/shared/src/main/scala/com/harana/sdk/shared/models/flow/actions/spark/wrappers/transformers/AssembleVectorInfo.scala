@@ -14,7 +14,6 @@ trait AssembleVectorInfo extends TransformerAsActionInfo[VectorAssemblerInfo] wi
 
   val id: Id = "c57a5b99-9184-4095-9037-9359f905628d"
   val name = "Assemble Vector"
-  val description = "Merges multiple columns into a single vector column"
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-features.html#vectorassembler")
   val category = FeatureConversion

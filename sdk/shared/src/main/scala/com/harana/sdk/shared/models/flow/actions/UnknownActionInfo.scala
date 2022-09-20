@@ -12,7 +12,6 @@ trait UnknownActionInfo extends ActionInfo {
 
   val id: Id = "08752b37-3f90-4b8d-8555-e911e2de5662"
   val name = "Unknown Action"
-  val description = "Action that could not be recognized by Harana"
   val category = Other
 
   val inArity = 0

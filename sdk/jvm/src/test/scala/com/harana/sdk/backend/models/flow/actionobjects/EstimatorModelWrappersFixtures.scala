@@ -16,7 +16,7 @@ import scala.language.reflectiveCalls
 object EstimatorModelWrappersFixtures extends MockitoSugar with TestSupport {
 
   trait HasNumericParameter extends Parameters {
-    val numericParameter = DoubleParameter("name", Some("description"))
+    val numericParameter = DoubleParameter("name")
     setDefault(numericParameter, 1.0)
   }
 

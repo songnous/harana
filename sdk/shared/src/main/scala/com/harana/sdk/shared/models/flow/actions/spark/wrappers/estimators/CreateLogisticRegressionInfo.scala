@@ -14,7 +14,6 @@ trait CreateLogisticRegressionInfo extends EstimatorAsFactoryInfo[LogisticRegres
 
   val id: Id = "7f9e459e-3e11-4c5f-9137-94447d53ff60"
   val name = "Logistic Regression"
-  val description = "Creates a logistic regression model"
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-classification-regression.html#logistic-regression")
   val category = Classification

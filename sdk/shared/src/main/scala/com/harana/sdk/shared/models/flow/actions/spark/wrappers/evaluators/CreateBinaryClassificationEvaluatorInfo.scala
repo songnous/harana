@@ -12,7 +12,6 @@ trait CreateBinaryClassificationEvaluatorInfo extends EvaluatorAsFactoryInfo[Bin
 
   val id: Id = "464ce3fa-e915-4a5d-a9d1-442c1e4b7aa7"
   val name = "Binary Classification Evaluator"
-  val description = "Creates a binary classification evaluator"
   val since = Version(1,0,0)
   val category = ModelEvaluation
 

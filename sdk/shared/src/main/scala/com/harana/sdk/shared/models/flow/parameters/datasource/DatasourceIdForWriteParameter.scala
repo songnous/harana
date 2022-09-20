@@ -5,7 +5,7 @@ import com.harana.sdk.shared.models.flow.parameters.ParameterType.DatasourceIdFo
 
 import java.util.UUID
 
-case class DatasourceIdForWriteParameter(name: String, description: Option[String]) extends Parameter[UUID] {
+case class DatasourceIdForWriteParameter(name: String) extends Parameter[UUID] {
 
   override def replicate(name: String) = copy(name = name)
 

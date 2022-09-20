@@ -8,13 +8,9 @@ import scala.language.reflectiveCalls
 
 trait HasOptionalQuantilesColumnParameter extends Parameters {
 
-  val optionalQuantilesColumnParameter = new ChoiceParameter[OptionalQuantilesColumnChoice.QuantilesColumnOption](
-    name = "use custom quantiles",
-    description = Some("""Param for quantiles column name.
-                         |This column will output quantiles of corresponding
-                         |quantileProbabilities if it is set.""".stripMargin)
-  )
+  val optionalQuantilesColumnParameter = new ChoiceParameter[OptionalQuantilesColumnChoice.QuantilesColumnOption]("use custom quantiles")
   setDefault(optionalQuantilesColumnParameter, OptionalQuantilesColumnChoice.QuantilesColumnNoOption())
+
 }
 
 object OptionalQuantilesColumnChoice {
@@ -29,10 +25,7 @@ object OptionalQuantilesColumnChoice {
   case class QuantilesColumnYesOption() extends QuantilesColumnOption {
     val name = "yes"
 
-    val quantilesColumnParameter = SingleColumnCreatorParameter(
-      name = "quantiles column",
-      description = Some("The quantiles column for a model."))
-
+    val quantilesColumnParameter = SingleColumnCreatorParameter("quantiles column")
     setDefault(quantilesColumnParameter, "quantiles")
     val parameters = Array(quantilesColumnParameter)
   }

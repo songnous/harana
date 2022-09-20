@@ -7,9 +7,7 @@ import scala.language.reflectiveCalls
 
 trait HasInputColumnParameter extends Parameters {
 
-  val inputColumnParameter = SingleColumnSelectorParameter("input column", Some("The input column name."),
-    portIndex = 0
-  )
-
+  val inputColumnParameter = SingleColumnSelectorParameter("input column", portIndex = 0)
   def setInputColumn(value: String): this.type = set(inputColumnParameter, NameSingleColumnSelection(value))
+
 }

@@ -18,23 +18,22 @@ trait SqlCombineInfo extends Action2To1Info[DataFrameInfo, DataFrameInfo, DataFr
 
   val id: Id = "8f254d75-276f-48b7-872d-e4a18b6a86c6"
   val name = "SQL Combine"
-  val description = "Combines two DataFrames into one using custom SQL"
   val since = Version(1, 4, 0)
   val category = SetAction
 
   override val inPortsLayout = Vector(PortPosition.Left, PortPosition.Right)
 
-  val leftTableNameParameter = StringParameter("Left dataframe id", description = Some("The identifier that can be used in the Spark SQL expression to refer the left-hand side DataFrame."))
+  val leftTableNameParameter = StringParameter("Left dataframe id")
   setDefault(leftTableNameParameter, "")
   def getLeftTableName = $(leftTableNameParameter)
   def setLeftTableName(name: String): this.type = set(leftTableNameParameter, name)
 
-  val rightTableNameParameter = StringParameter("Right dataframe id", Some("The identifier that can be used in the Spark SQL expression to refer the right-hand side DataFrame."))
+  val rightTableNameParameter = StringParameter("Right dataframe id")
   setDefault(rightTableNameParameter, "")
   def getRightTableName = $(rightTableNameParameter)
   def setRightTableName(name: String): this.type = set(rightTableNameParameter, name)
 
-  val sqlCombineExpressionParameter = CodeSnippetParameter("expression", Some("SQL expression to be executed on two DataFrames, yielding a DataFrame."),
+  val sqlCombineExpressionParameter = CodeSnippetParameter("expression",
     language = CodeSnippetLanguage(CodeSnippetLanguage.sql)
   )
   setDefault(sqlCombineExpressionParameter, "")

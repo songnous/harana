@@ -11,10 +11,7 @@ trait PolynomialExpanderInfo extends ActionObjectInfo
 
   val id = "AA63DE9C-B825-4E5A-AB54-1244BD3E3AEA"
 
-  val degreeParameter = IntParameter("degree", Some("The polynomial degree to expand."),
-    validator = RangeValidator(2, Int.MaxValue, step = Some(1))
-  )
-
+  val degreeParameter = IntParameter("degree", validator = RangeValidator(2, Int.MaxValue, step = Some(1)))
   def getDegree = $(degreeParameter)
   setDefault(degreeParameter, 2)
 

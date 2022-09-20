@@ -13,7 +13,6 @@ trait SortTransformationInfo extends TransformerAsActionInfo[SortTransformerInfo
 
   val id: Id = "1fa337cc-26f5-4cff-bd91-517777924d66"
   val name = "Sort"
-  val description = "Sorts DataFrame by selected columns"
   val since = Version(1, 4, 0)
   val category = SetAction
 

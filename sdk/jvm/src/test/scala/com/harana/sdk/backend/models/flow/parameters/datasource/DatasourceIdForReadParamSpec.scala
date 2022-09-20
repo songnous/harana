@@ -12,7 +12,7 @@ class DatasourceIdForReadParamSpec extends AbstractParameterSpec[UUID, Datasourc
   def className = "DatasourceIdForReadParameter"
 
   def paramFixture: (DatasourceIdForReadParameter, Json) = {
-    val param        = DatasourceIdForReadParameter(name = "Ds for read parameter name", description = None)
+    val param        = DatasourceIdForReadParameter(name = "Ds for read parameter name")
     val expectedJson = Map(
                           "type"        -> Json.fromString("datasourceIdForRead"),
                           "name"        -> Json.fromString(param.name),

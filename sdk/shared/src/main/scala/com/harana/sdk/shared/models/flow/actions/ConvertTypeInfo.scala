@@ -14,7 +14,6 @@ trait ConvertTypeInfo extends TransformerAsActionInfo[TypeConverterInfo] with Ac
 
   val id = "04084863-fdda-46fd-b1fe-796c6b5a0967"
   val name = "Convert Type"
-  val description = "Converts selected columns of a DataFrame to a different type"
   val since = Version(0, 4, 0)
   val category = FeatureConversion
 

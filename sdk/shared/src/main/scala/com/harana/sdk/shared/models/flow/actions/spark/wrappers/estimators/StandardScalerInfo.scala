@@ -15,7 +15,6 @@ trait StandardScalerInfo extends EstimatorAsActionInfo[StandardScalerEstimatorIn
 
   val id: Id = "85007b46-210c-4e88-b7dc-cf46d3803b06"
   val name = "Standard Scaler"
-  val description = "Standardizes features by removing the mean and scaling to unit variance using column summary statistics on the samples in the training set"
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-features.html#standardscaler")
   val category = FeatureScaling

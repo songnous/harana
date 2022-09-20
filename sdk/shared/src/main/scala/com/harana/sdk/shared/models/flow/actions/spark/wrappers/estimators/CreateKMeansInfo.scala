@@ -14,7 +14,6 @@ trait CreateKMeansInfo extends EstimatorAsFactoryInfo[KMeansInfo] with SparkActi
 
   val id: Id = "2ecdd789-695d-4efa-98ad-63c80ae70f71"
   val name = "K-Means"
-  val description = "Creates a k-means model. Note: Trained k-means model does not have any parameters."
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-clustering.html#k-means")
   val category = Clustering

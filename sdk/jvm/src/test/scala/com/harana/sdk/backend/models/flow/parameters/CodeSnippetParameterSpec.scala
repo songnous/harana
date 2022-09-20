@@ -9,8 +9,7 @@ class CodeSnippetParameterSpec extends AbstractParameterSpec[String, CodeSnippet
   def className = "CodeSnippetParameter"
 
   def paramFixture: (CodeSnippetParameter, Json) = {
-    val description = "myDescription"
-    val param       = CodeSnippetParameter(
+      val param       = CodeSnippetParameter(
       "myName",
       Some(description),
       CodeSnippetLanguage(CodeSnippetLanguage.python)

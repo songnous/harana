@@ -19,13 +19,12 @@ trait CreateCustomTransformerInfo extends TransformerAsFactoryInfo[CustomTransfo
 
   val id: Id = "65240399-2987-41bd-ba7e-2944d60a3404"
   val name = "Create Custom Transformer"
-  val description = "Creates custom transformer"
   val since = Version(1, 0, 0)
   val category = Custom
 
   lazy val portO_0: TypeTag[CustomTransformerInfo] = typeTag
 
-  val innerWorkflowParameter = WorkflowParameter(name = "inner workflow", description = None)
+  val innerWorkflowParameter = WorkflowParameter(name = "inner workflow")
   setDefault(innerWorkflowParameter, CreateCustomTransformerInfo.default)
   def getInnerWorkflow = $(innerWorkflowParameter)
   def setInnerWorkflow(workflow: Json): this.type = set(innerWorkflowParameter, workflow.as[InnerWorkflow].toOption.get)

@@ -15,7 +15,6 @@ trait IDFInfo extends EstimatorAsActionInfo[IDFEstimatorInfo, IDFModelInfo] with
 
   val id: Id = "36d31a98-9238-4159-8298-64eb8e3ca55a"
   val name = "IDF"
-  val description = "Computes the Inverse Document Frequency (IDF) of a collection of documents"
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-features.html#tf-idf")
   val category = TextProcessing

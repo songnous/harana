@@ -1,48 +1,63 @@
 package com.harana.sdk.shared.models.flow.parameters.validators
 
+import com.harana.sdk.shared.models.common.ParameterValue
 import com.harana.sdk.shared.models.flow.exceptions.FlowError
 import com.harana.sdk.shared.models.flow.parameters.exceptions.{OutOfRangeError, OutOfRangeWithStepError}
+import io.circe.{Decoder, Encoder, HCursor, Json}
+import io.circe.generic.JsonCodec
 
+import java.net.URI
 import scala.language.reflectiveCalls
 
-case class RangeValidator[T](begin: T, end: T, beginIncluded: Boolean = true, endIncluded: Boolean = true, step: Option[T] = None)(implicit n: Numeric[T]) extends Validator[T] {
+@JsonCodec
+case class RangeValidator[T](begin: Double,
+                             end: Double,
+                             beginIncluded: Boolean = true,
+                             endIncluded: Boolean = true,
+                             step: Option[Double] = None) extends Validator[T] {
 
   import RangeValidator.Epsilon
-  import n._
 
   require(begin <= end)
-  step.foreach(s => require(s.toDouble > 0))
-  step.foreach(s => require(math.abs(takeSteps(countStepsTo(end, s), s.toDouble) - end.toDouble) < Epsilon, "Length of range should be divisible by step."))
+  step.foreach(s => require(s > 0))
+  step.foreach(s => require(math.abs(takeSteps(countStepsTo(end, s), s) - end) < Epsilon, "Length of range should be divisible by step."))
 
-  val validatorType = ValidatorType.Range
+  def validate(name: String, parameter: T): Vector[FlowError] =
+    parameter match {
+      case d: Double => validateDouble(name, d)
+      case f: Float => validateDouble(name, f)
+      case i: Int => validateDouble(name, i)
+      case s: String => validateDouble(name, s.toDouble)
+      case _ => Vector()
+    }
 
-  def validate(name: String, parameter: T): Vector[FlowError] = {
-    val beginComparison: (T, T) => Boolean = if (beginIncluded) (_ >= _) else (_ > _)
-    val endComparison: (T, T) => Boolean   = if (endIncluded) (_ <= _) else (_ < _)
+  private def validateDouble(name: String, parameter: Double) = {
+    val beginComparison: (Double, Double) => Boolean = if (beginIncluded) (_ >= _) else (_ > _)
+    val endComparison: (Double, Double) => Boolean = if (endIncluded) (_ <= _) else (_ < _)
     if (!(beginComparison(parameter, begin) && endComparison(parameter, end)))
       Vector(OutOfRangeError(name, parameter, begin, end))
     else
       validateStep(name, parameter)
   }
 
-  private def validateStep(name: String, value: T): Vector[FlowError] = {
+  private def validateStep(name: String, value: Double): Vector[FlowError] = {
     step.foreach { s =>
-      if (math.abs(takeSteps(countStepsTo(value, s), s.toDouble) - value.toDouble) >= Epsilon)
+      if (math.abs(takeSteps(countStepsTo(value, s), s) - value) >= Epsilon)
         return Vector(OutOfRangeWithStepError(name, value, begin, end, s))
     }
     Vector.empty
   }
 
-  private def countStepsTo(value: T, step: T) = ((value.toDouble - begin.toDouble) / step.toDouble).floor.toLong
-  private def takeSteps(count: Long, step: Double) = begin.toDouble + step * count
+  private def countStepsTo(value: Double, step: Double) = ((value - begin) / step).floor.toLong
+  private def takeSteps(count: Long, step: Double) = begin + step * count
 
   override def toHumanReadable(parameterName: String) = {
     val beginConstraint = Begin()
     val endConstraint = End()
     val (isIntStep, mappedStep) = step match {
       case Some(s) =>
-        val isInt = s.toDouble == s.toDouble.round
-        (isInt, Some(if (isInt) s.toDouble.round.toString else s.toString))
+        val isInt = s == s.round
+        (isInt, Some(if (isInt) s.round.toString else s.toString))
       case None => (false, None)
     }
     val isIntRange = beginConstraint.mapsToInt && endConstraint.mapsToInt && isIntStep
@@ -72,13 +87,13 @@ case class RangeValidator[T](begin: T, end: T, beginIncluded: Boolean = true, en
     def create = buildConstraint(isOneOfLimits, mappedLimit).getOrElse("")
   }
 
-  case class Begin() extends Constraint(begin.toDouble) {
+  case class Begin() extends Constraint(begin) {
     val included = beginIncluded
 
     val limits = List(
-      Int.MinValue.toDouble,
-      Long.MinValue.toDouble,
-      Float.MinValue.toDouble,
+      Int.MinValue,
+      Long.MinValue,
+      Float.MinValue,
       Double.MinValue,
       Double.NegativeInfinity
     )
@@ -87,13 +102,13 @@ case class RangeValidator[T](begin: T, end: T, beginIncluded: Boolean = true, en
       if (oneOfLimits) None else Some(limitRepresentation.concat(if (included) " <= " else " < "))
   }
 
-  case class End() extends Constraint(end.toDouble) {
+  case class End() extends Constraint(end) {
     val included = endIncluded
 
     val limits = List(
-      Int.MaxValue.toDouble,
-      Long.MaxValue.toDouble,
-      Float.MaxValue.toDouble,
+      Int.MaxValue,
+      Long.MaxValue,
+      Float.MaxValue,
       Double.MaxValue,
       Double.PositiveInfinity
     )
@@ -106,10 +121,9 @@ case class RangeValidator[T](begin: T, end: T, beginIncluded: Boolean = true, en
 object RangeValidator {
   val Epsilon = 1e-10
 
-  def allDouble = RangeValidator(begin = Double.MinValue, end = Double.MaxValue)
-  def allFloat = RangeValidator(begin = Float.MinValue, end = Float.MaxValue)
-  def allInt = RangeValidator(begin = Int.MinValue, end = Int.MaxValue)
-  def allLong = RangeValidator(begin = Long.MinValue, end = Long.MaxValue)
-
-  def positiveIntegers = RangeValidator(begin = 0, end = Int.MaxValue, step = Some(1))
+  def allDouble = RangeValidator[Double](begin = Double.MinValue, end = Double.MaxValue)
+  def allFloat = RangeValidator[Float](begin = Float.MinValue, end = Float.MaxValue)
+  def allInt = RangeValidator[Int](begin = Int.MinValue, end = Int.MaxValue)
+  def allLong = RangeValidator[Long](begin = Long.MinValue, end = Long.MaxValue)
+  def positiveIntegers = RangeValidator[Int](begin = 0, end = Int.MaxValue, step = Some(1))
 }

@@ -18,16 +18,7 @@ trait MultilayerPerceptronClassifierInfo
   override val maxIterationsDefault = 100
   override val toleranceDefault = 1e-4
 
-  val layersParameter = IntArrayParameter(
-    name = "layers",
-    description = Some("""The list of layer sizes that includes the input layer size as the first number and the
-                         |output layer size as the last number. The input layer and hidden layers have sigmoid
-                         |activation functions, while the output layer has a softmax. The input layer size has to be
-                         |equal to the length of the feature vector. The output layer size has to be equal to the
-                         |total number of labels.""".stripMargin),
-    validator = ComplexArrayValidator(RangeValidator.positiveIntegers, ArrayLengthValidator.withAtLeast(2))
-  )
-
+  val layersParameter = IntArrayParameter("layers", validator = ComplexArrayValidator(RangeValidator.positiveIntegers, ArrayLengthValidator.withAtLeast(2)))
   setDefault(layersParameter, Array(1, 1))
 
   val parameters = Array(

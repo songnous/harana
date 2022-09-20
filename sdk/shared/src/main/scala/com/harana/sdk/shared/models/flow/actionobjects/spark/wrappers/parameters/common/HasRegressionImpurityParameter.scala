@@ -8,7 +8,7 @@ import scala.language.reflectiveCalls
 
 trait HasRegressionImpurityParameter extends Parameters {
 
-  val impurityParameter = ChoiceParameter[RegressionImpurity]("regression impurity", Some("The criterion used for information gain calculation."))
-
+  val impurityParameter = ChoiceParameter[RegressionImpurity]("regression impurity")
   setDefault(impurityParameter, Variance())
+
 }

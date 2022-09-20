@@ -14,7 +14,6 @@ trait CreateGBTClassifierInfo extends EstimatorAsFactoryInfo[GBTClassifierInfo] 
 
   val id: Id = "98275271-9817-4add-85d7-e6eade3e5b81"
   val name = "GBT Classifier"
-  val description = "Gradient-Boosted Trees (GBTs) is a learning algorithm for classification. It supports binary labels, as well as both continuous and categorical features. Note: Multiclass labels are not currently supported."
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-classification-regression.html#gradient-boosted-tree-classifier")
   val category = Classification

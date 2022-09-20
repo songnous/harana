@@ -7,10 +7,10 @@ trait StandardScalerEstimatorInfo extends EstimatorInfo with Parameters {
 
   val id = "0772BF36-7EA7-4814-8B49-8BF1E9A67052"
 
-  val withMeanParameter = BooleanParameter("with mean", Some("Whether to center data with mean."))
+  val withMeanParameter = BooleanParameter("with mean")
   setDefault(withMeanParameter, false)
 
-  val withStdParameter = BooleanParameter("with std", Some("Whether to scale the data to unit standard deviation."))
+  val withStdParameter = BooleanParameter("with std")
   setDefault(withStdParameter, true)
 
   val specificParameters = Array[Parameter[_]](withMeanParameter, withStdParameter)

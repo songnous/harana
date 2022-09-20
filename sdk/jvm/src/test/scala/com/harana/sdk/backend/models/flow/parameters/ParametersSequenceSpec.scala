@@ -7,8 +7,8 @@ import io.circe.syntax.EncoderOps
 
 
 case class ClassWithParameters() extends Parameters {
-  val string = StringParameter("string", None)
-  val bool = BooleanParameter("bool", None)
+  val string = StringParameter("string")
+  val bool = BooleanParameter("bool")
 
   val parameters = Array(string, bool)
 
@@ -26,13 +26,12 @@ class ParametersSequenceSpec extends AbstractParameterSpec[Seq[ClassWithParamete
   className should {
     "throw an exception when parameters don't have no-arg constructor" in {
       an[NoArgumentConstructorRequiredError] should be thrownBy
-        ParametersSequence[ParametersWithoutNoArgConstructor](name = "parametersSequence", description = None)
+        ParametersSequence[ParametersWithoutNoArgConstructor](name = "parametersSequence")
     }
   }
 
   def paramFixture: (ParametersSequence[ClassWithParameters], Json) = {
-    val description = "Parameters sequence description"
-    val parametersSequence = ParametersSequence[ClassWithParameters]("Parameters sequence name", Some(description))
+      val parametersSequence = ParametersSequence[ClassWithParameters]("Parameters sequence name", Some(description))
     val expectedJson = Map(
       "type"        -> Json.fromString("multiplier"),
       "name"        -> Json.fromString(parametersSequence.name),

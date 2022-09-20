@@ -14,7 +14,6 @@ trait CreateRandomForestClassifierInfo extends EstimatorAsFactoryInfo[RandomFore
 
   val id: Id = "7cd334e2-bd40-42db-bea1-7592f12302f2"
   val name = "Random Forest Classifier"
-  val description = "Creates a random forest classification model"
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-classification-regression.html#random-forest-classifier")
 

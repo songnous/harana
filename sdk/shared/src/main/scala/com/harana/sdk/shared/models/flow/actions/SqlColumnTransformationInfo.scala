@@ -13,7 +13,6 @@ trait SqlColumnTransformationInfo extends TransformerAsActionInfo[SqlColumnTrans
 
   val id: Id = "012876d9-7a72-47f9-98e4-8ed26db14d6d"
   val name = "SQL Column Transformation"
-  val description = "Executes a SQL transformation on a column of a DataFrame"
   val since = Version(1, 1, 0)
   val category = Custom
 

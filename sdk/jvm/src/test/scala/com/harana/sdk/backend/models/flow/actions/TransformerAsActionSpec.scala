@@ -61,8 +61,7 @@ class TransformerAsActionSpec extends UnitSpec {
   class MockTransformerAsAction extends TransformerAsAction[MockTransformer] {
     val name = ""
     val id: Id = "6d924962-9456-11e5-8994-feff819cdc9f"
-    val description = ""
-    override lazy val tTagTO_1: TypeTag[MockTransformer] = typeTag[MockTransformer]
+      override lazy val tTagTO_1: TypeTag[MockTransformer] = typeTag[MockTransformer]
   }
 
   "TransformerAsAction" should {

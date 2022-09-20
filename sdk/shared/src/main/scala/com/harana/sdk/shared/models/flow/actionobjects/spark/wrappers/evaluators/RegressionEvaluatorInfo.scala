@@ -14,7 +14,7 @@ trait RegressionEvaluatorInfo
 
   val id = "721588DE-97CF-4B5D-9A4C-905E6580F235"
 
-  val metricNameParameter = ChoiceParameter[Metric]("regression metric", Some("The metric used in evaluation."))
+  val metricNameParameter = ChoiceParameter[Metric]("regression metric")
   setDefault(metricNameParameter, Rmse())
   def getMetricName = $(metricNameParameter).name
 

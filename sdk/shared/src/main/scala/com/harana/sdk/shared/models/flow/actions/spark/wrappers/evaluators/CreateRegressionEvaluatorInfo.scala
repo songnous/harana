@@ -16,7 +16,6 @@ trait CreateRegressionEvaluatorInfo extends EvaluatorAsFactoryInfo[RegressionEva
 
   val id: Id = "d9c3026c-a3d0-4365-8d1a-464a656b72de"
   val name = "Regression Evaluator"
-  val description = "Creates a regression evaluator"
   val since = Version(1,0,0)
   val docsGuideLocation = Some("mllib-evaluation-metrics.html#regression-model-evaluation")
   val category = ModelEvaluation

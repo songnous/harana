@@ -13,7 +13,6 @@ trait GetFromVectorInfo extends TransformerAsActionInfo[GetFromVectorTransformer
 
   val id: Id = "241a23d1-97a0-41d0-bcf7-5c2ccb24e3d5"
   val name = "Get From Vector"
-  val description = "Extracts single number from vector column"
   val since = Version(1, 2, 0)
   val category = FeatureConversion
 

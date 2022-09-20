@@ -12,8 +12,7 @@ class WorkflowParamSpec extends AbstractParameterSpec[InnerWorkflow, WorkflowPar
   def className = "WorkflowParameter"
 
   def paramFixture: (WorkflowParameter, Json) = {
-    val description = "Workflow parameter description"
-    val param = WorkflowParameter("Workflow parameter name", Some(description))
+      val param = WorkflowParameter("Workflow parameter name", Some(description))
     val expectedJson = Map(
                           "type" -> Json.fromString("workflow"),
                           "name" -> Json.fromString(param.name),

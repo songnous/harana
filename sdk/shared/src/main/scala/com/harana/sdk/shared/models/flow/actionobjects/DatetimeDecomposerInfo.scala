@@ -11,15 +11,15 @@ trait DatetimeDecomposerInfo extends TransformerInfo {
 
   val id = "D9FE1921-2960-4CCF-BDAF-B73B56BD46B4"
 
-  val timestampColumnParameter = SingleColumnSelectorParameter("timestamp column", Some("Timestamp column to decompose."), portIndex = 0)
+  val timestampColumnParameter = SingleColumnSelectorParameter("timestamp column", portIndex = 0)
   def timestampColumn = $(timestampColumnParameter)
   def setTimestampColumn(timestampColumn: SingleColumnSelection): this.type = set(timestampColumnParameter, timestampColumn)
 
-  val timestampPartsParameter = MultipleChoiceParameter[TimestampPart]("parts", Some("Parts of the date/time to retain."))
+  val timestampPartsParameter = MultipleChoiceParameter[TimestampPart]("parts")
   def getTimestampParts = $(timestampPartsParameter)
   def setTimestampParts(timestampParts: Set[TimestampPart]): this.type = set(timestampPartsParameter, timestampParts)
 
-  val timestampPrefixParameter = PrefixBasedColumnCreatorParameter("prefix", Some("Common prefix for names of created columns."))
+  val timestampPrefixParameter = PrefixBasedColumnCreatorParameter("prefix")
   setDefault(timestampPrefixParameter, "")
   def getTimestampPrefix = $(timestampPrefixParameter)
   def setTimestampPrefix(timestampPrefix: String): this.type = set(timestampPrefixParameter, timestampPrefix)

@@ -15,16 +15,15 @@ trait WriteTransformerInfo extends Action1To0Info[TransformerInfo] with Paramete
 
   val id: Id = "58368deb-68d0-4657-ae3f-145160cb1e2b"
   val name = "Write Transformer"
-  val description = "Writes a Transformer to a directory"
   val since = Version(1, 1, 0)
   val category = IO
 
-  val shouldOverwriteParameter = BooleanParameter("overwrite", Some("Should an existing transformer with the same name be overwritten?"))
+  val shouldOverwriteParameter = BooleanParameter("overwrite")
   setDefault(shouldOverwriteParameter, true)
   def getShouldOverwrite = $(shouldOverwriteParameter)
   def setShouldOverwrite(value: Boolean): this.type = set(shouldOverwriteParameter, value)
 
-  val outputPathParameter = StringParameter("output path", Some("The output path for writing the Transformer."))
+  val outputPathParameter = StringParameter("output path")
   def getOutputPath = $(outputPathParameter)
   def setOutputPath(value: String): this.type = set(outputPathParameter, value)
 

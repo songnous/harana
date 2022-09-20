@@ -21,7 +21,6 @@ trait FitPlusTransformInfo
 
   val id: Id = "1cb153f1-3731-4046-a29b-5ad64fde093f"
   val name = "Fit + Transform"
-  val description = "Fits an Estimator on a DataFrame and transforms it"
   val since = Version(1, 2, 0)
   val category = Action
 
@@ -30,9 +29,7 @@ trait FitPlusTransformInfo
   lazy val portO_0: TypeTag[DataFrameInfo] = typeTag[DataFrameInfo]
   lazy val portO_1: TypeTag[TransformerInfo] = typeTag[TransformerInfo]
 
-  val estimatorParameters = new DynamicParameter("Parameters of input Estimator", Some("These parameters are rendered dynamically, depending on type of Estimator."),
-    inputPort = 0
-  )
+  val estimatorParameters = new DynamicParameter("Parameters of input Estimator", inputPort = 0)
   setDefault(estimatorParameters -> Json.Null)
   def setEstimatorParameters(jsValue: Json): this.type = set(estimatorParameters -> jsValue)
 

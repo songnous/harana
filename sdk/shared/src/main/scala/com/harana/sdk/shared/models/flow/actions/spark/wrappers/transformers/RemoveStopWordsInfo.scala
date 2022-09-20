@@ -14,7 +14,6 @@ trait RemoveStopWordsInfo extends TransformerAsActionInfo[StopWordsRemoverInfo] 
 
   val id: Id = "39acf60c-3f57-4346-ada7-6959a76568a5"
   val name = "Remove Stop Words"
-  val description = "Filters out default English stop words from the input. Null values from the input array are preserved."
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-features.html#stopwordsremover")
   val category = TextProcessing

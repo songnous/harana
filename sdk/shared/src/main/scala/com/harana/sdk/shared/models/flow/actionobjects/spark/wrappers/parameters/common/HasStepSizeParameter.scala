@@ -9,10 +9,7 @@ import scala.language.reflectiveCalls
 trait HasStepSizeParameter extends Parameters {
 
   val stepSizeDefault = 0.1
-
-  val stepSizeParameter = DoubleParameter("step size", Some("The step size to be used for each iteration of optimization."),
-    validator = RangeValidator(begin = 0.0, end = Double.MaxValue)
-  )
-
+  val stepSizeParameter = DoubleParameter("step size", validator = RangeValidator(begin = 0.0, end = Double.MaxValue))
   setDefault(stepSizeParameter, stepSizeDefault)
+
 }

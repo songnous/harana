@@ -14,7 +14,6 @@ trait CreateALSInfo extends EstimatorAsFactoryInfo[ALSInfo] with SparkActionDocu
 
   val id: Id = "5a9e4883-b653-418e-bc51-a42fde476a63"
   val name = "ALS"
-  val description = "Creates an ALS recommendation model"
   val since = Version(1,0,0)
   val docsGuideLocation = Some("mllib-collaborative-filtering.html#collaborative-filtering")
   val category = Recommendation

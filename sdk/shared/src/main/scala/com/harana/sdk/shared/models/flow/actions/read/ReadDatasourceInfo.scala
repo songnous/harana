@@ -16,14 +16,13 @@ trait ReadDatasourceInfo extends Action0To1Info[DataFrameInfo] with ActionDocume
 
   val id: Id = "1a3b32f0-f56d-4c44-a396-29d2dfd43423"
   val name = "Read DataFrame"
-  val description = "Reads data from its source to memory"
   val since = Version(1, 4, 0)
   val category = IO
 
   @transient
   lazy val portO_0: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]
 
-  val datasourceIdParameter = DatasourceIdForReadParameter(name = "data source", description = None)
+  val datasourceIdParameter = DatasourceIdForReadParameter(name = "data source")
   def getDataSourceId = $(datasourceIdParameter)
 
   val parameters = Array(datasourceIdParameter)

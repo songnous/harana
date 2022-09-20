@@ -1,13 +1,13 @@
 package com.harana.sdk.shared.models.flow.parameters.validators
 
 import com.harana.sdk.shared.models.flow.parameters.exceptions.{ArrayTooLong, ArrayTooShort}
+import io.circe.generic.JsonCodec
 
+@JsonCodec
 case class ArrayLengthValidator(min: Int = 1, max: Int = Int.MaxValue) extends Validator[Array[_]] {
 
   require(min >= 0)
   require(max >= min)
-
-  val validatorType = ValidatorType.ArrayLength
 
   def validate(name: String, parameter: Array[_]) = {
     val length = parameter.length

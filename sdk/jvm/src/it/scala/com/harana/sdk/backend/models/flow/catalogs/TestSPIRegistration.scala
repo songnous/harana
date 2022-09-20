@@ -22,7 +22,6 @@ class SpiLoadedAction extends Action0To1[A1] {
 
   val id: Id = SpiLoadedAction.spiLoadedActionUuid
   val name = "SpiLoadedAction"
-  val description = "SpiLoadedAction"
   val parameters = Array.empty
 }
 

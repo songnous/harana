@@ -6,7 +6,7 @@ import scala.language.reflectiveCalls
 
 trait HasFitInterceptParameter extends Parameters {
 
-  val fitInterceptParameter = BooleanParameter("fit intercept", Some("Whether to fit an intercept term."))
+  val fitInterceptParameter = BooleanParameter("fit intercept")
 
   setDefault(fitInterceptParameter, true)
 }

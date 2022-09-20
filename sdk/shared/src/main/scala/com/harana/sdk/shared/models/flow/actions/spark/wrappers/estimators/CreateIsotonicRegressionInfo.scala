@@ -14,7 +14,6 @@ trait CreateIsotonicRegressionInfo extends EstimatorAsFactoryInfo[IsotonicRegres
 
   val id: Id = "0aebeb36-058c-49ef-a1be-7974ef56b564"
   val name = "Isotonic Regression"
-  val description = "Creates an isotonic regression model"
   val since = Version(1,0,0)
   val docsGuideLocation = Some("mllib-isotonic-regression.html")
   val category = Regression

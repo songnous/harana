@@ -13,12 +13,7 @@ trait QuantileDiscretizerEstimatorInfo
 
   val id = "BE138D50-B5A8-428B-8600-1F22718A5BCC"
 
-  val numBucketsParameter = IntParameter(
-    name = "num buckets",
-    description = Some("Maximum number of buckets (quantiles or categories) into which the data points are grouped. Must be >= 2."),
-    RangeValidator(2, Int.MaxValue, step = Some(1))
-  )
-
+  val numBucketsParameter = IntParameter("num buckets", RangeValidator(2, Int.MaxValue, step = Some(1)))
   setDefault(numBucketsParameter, 2)
   val specificParameters = Array[Parameter[_]](numBucketsParameter)
   def setNumBuckets(value: Int): this.type = set(numBucketsParameter -> value)

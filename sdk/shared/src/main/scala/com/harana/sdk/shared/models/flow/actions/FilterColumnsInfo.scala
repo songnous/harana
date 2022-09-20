@@ -13,7 +13,6 @@ trait FilterColumnsInfo extends TransformerAsActionInfo[ColumnsFiltererInfo] wit
 
   val id: Id = "6534f3f4-fa3a-49d9-b911-c213d3da8b5d"
   val name = "Filter Columns"
-  val description = "Creates a DataFrame containing only selected columns"
   val since = Version(1, 0, 0)
   val category = Filtering
 

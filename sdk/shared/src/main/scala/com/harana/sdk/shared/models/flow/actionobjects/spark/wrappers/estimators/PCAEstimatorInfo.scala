@@ -9,10 +9,7 @@ trait PCAEstimatorInfo extends EstimatorInfo with Parameters {
 
   val id = "D0CF1ACF-247F-4CEE-9E8F-6D22B0487646"
 
-  val kParameter = IntParameter("k", Some("The number of principal components."),
-    validator = RangeValidator(begin = 1, end = Int.MaxValue, step = Some(1))
-  )
-
+  val kParameter = IntParameter("k", validator = RangeValidator(begin = 1, end = Int.MaxValue, step = Some(1)))
   setDefault(kParameter, 1)
   def setK(value: Int): this.type = set(kParameter -> value)
 

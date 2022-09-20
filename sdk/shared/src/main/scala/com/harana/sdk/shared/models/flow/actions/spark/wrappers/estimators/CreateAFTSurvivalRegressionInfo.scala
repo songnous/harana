@@ -14,7 +14,6 @@ trait CreateAFTSurvivalRegressionInfo extends EstimatorAsFactoryInfo[AFTSurvival
 
   val id: Id = "e315aa7f-16f2-4fa5-8376-69a96171a57a"
   val name = "AFT Survival Regression"
-  val description = "Creates an AFT survival regression model"
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-classification-regression.html#survival-regression")
   val category = Regression

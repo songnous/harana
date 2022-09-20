@@ -30,8 +30,7 @@ object ActionTestClasses {
   trait ActionBaseFields extends GraphAction {
     val id: ActionInfo.Id = ActionInfo.Id.randomId
     val name = ""
-    val description = ""
-    val parameters = Array.empty[Parameter[_]]
+      val parameters = Array.empty[Parameter[_]]
   }
 
   case class ActionCreateA1() extends Action0To1[A1] with ActionBaseFields {

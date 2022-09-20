@@ -15,7 +15,6 @@ trait QuantileDiscretizerInfo extends EstimatorAsActionInfo[QuantileDiscretizerE
 
   val id: Id = "986e0b10-09de-44e9-a5b1-1dcc5fb53bd1"
   val name = "Quantile Discretizer"
-  val description = "Takes a column with continuous features and outputs a column with binned categorical features."
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-features.html#quantilediscretizer")
   val category = FeatureConversion

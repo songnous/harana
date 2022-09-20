@@ -21,28 +21,27 @@ trait JoinInfo extends Action2To1Info[DataFrameInfo, DataFrameInfo, DataFrameInf
 
   val id: Id = "06374446-3138-4cf7-9682-f884990f3a60"
   val name = "Join"
-  val description = "Joins two DataFrames to a DataFrame"
   val since = Version(0, 4, 0)
   val category = SetAction
 
   override val inPortsLayout = Vector(PortPosition.Left, PortPosition.Right)
 
-  val joinTypeParameter = ChoiceParameter[JoinTypeChoice.Option]("join type", Some("Type of join action."))
+  val joinTypeParameter = ChoiceParameter[JoinTypeChoice.Option]("join type")
   setDefault(joinTypeParameter, JoinTypeChoice.Inner())
   def getJoinType = $(joinTypeParameter)
   def setJoinType(value: JoinTypeChoice.Option): this.type = set(joinTypeParameter, value)
 
-  val leftPrefixParameter = new PrefixBasedColumnCreatorParameter("left prefix", Some("Prefix for columns of left DataFrame.")) with EmptyPrefixValidator
+  val leftPrefixParameter = PrefixBasedColumnCreatorParameter("left prefix", emptyPrefixValidation = true)
   setDefault(leftPrefixParameter, "")
   def getLeftPrefix = $(leftPrefixParameter)
   def setLeftPrefix(value: String): this.type = set(leftPrefixParameter, value)
 
-  val rightPrefixParameter = new PrefixBasedColumnCreatorParameter("right prefix", Some("Prefix for columns of right DataFrame.")) with EmptyPrefixValidator
+  val rightPrefixParameter = PrefixBasedColumnCreatorParameter("right prefix", emptyPrefixValidation = true)
   setDefault(rightPrefixParameter, "")
   def getRightPrefix = $(rightPrefixParameter)
   def setRightPrefix(value: String): this.type = set(rightPrefixParameter, value)
 
-  val joinColumnsParameter = ParametersSequence[ColumnPair]("join columns", Some("Pairs of columns to join upon."))
+  val joinColumnsParameter = ParametersSequence[ColumnPair]("join columns")
   def getJoinColumns = $(joinColumnsParameter)
   def setJoinColumns(value: Seq[ColumnPair]): this.type = set(joinColumnsParameter, value)
 
@@ -83,11 +82,11 @@ object JoinInfo extends JoinInfo {
 
   case class ColumnPair() extends Parameters {
 
-    val leftColumnParameter = SingleColumnSelectorParameter("left column", Some("Column from the left DataFrame."), portIndex = 0)
+    val leftColumnParameter = SingleColumnSelectorParameter("left column", portIndex = 0)
     def getLeftColumn = $(leftColumnParameter)
     def setLeftColumn(value: SingleColumnSelection): this.type = set(leftColumnParameter, value)
 
-    val rightColumnParameter = SingleColumnSelectorParameter("right column", Some("Column from the right DataFrame."), portIndex = 1)
+    val rightColumnParameter = SingleColumnSelectorParameter("right column", portIndex = 1)
     def getRightColumn = $(rightColumnParameter)
     def setRightColumn(value: SingleColumnSelection): this.type = set(rightColumnParameter, value)
 

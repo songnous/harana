@@ -10,7 +10,6 @@ class ParameterMapSpec extends UnitSpec {
 
     // cannot use mockito, because asInstanceOf[Any] won't work
     val name = "name"
-    val description: Option[String] = Some("description")
 
     val parameterType: ParameterType = mock[ParameterType]
 

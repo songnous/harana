@@ -18,35 +18,25 @@ trait ALSInfo
 
   val id = "13B66409-18FA-4AF0-B7CA-8EA657A36054"
 
-  val alphaParameter = DoubleParameter("alpha", Some("The alpha parameter in the implicit preference formulation."),
-    validator = RangeValidator(0.0, Double.PositiveInfinity)
-  )
+  val alphaParameter = DoubleParameter("alpha", validator = RangeValidator(0.0, Double.PositiveInfinity))
   setDefault(alphaParameter, 1.0)
 
-  val implicitPrefsParameter = BooleanParameter("implicit prefs", Some("Whether to use implicit preference."))
+  val implicitPrefsParameter = BooleanParameter("implicit prefs")
   setDefault(implicitPrefsParameter, false)
 
-  val nonNegativeParameter = BooleanParameter("nonnegative", Some("Whether to apply nonnegativity constraints for least squares."))
+  val nonNegativeParameter = BooleanParameter("nonnegative")
   setDefault(nonNegativeParameter, true)
 
-  val numItemBlocksParameter = IntParameter("num item blocks", Some("The number of item blocks."),
-    validator = RangeValidator(begin = 1, end = Int.MaxValue, step = Some(1))
-  )
+  val numItemBlocksParameter = IntParameter("num item blocks", validator = RangeValidator(begin = 1, end = Int.MaxValue, step = Some(1)))
   setDefault(numItemBlocksParameter, 10)
 
-  val numUserBlocksParameter = IntParameter("num user blocks", Some("The number of user blocks."),
-    validator = RangeValidator(begin = 1, end = Int.MaxValue, step = Some(1))
-  )
+  val numUserBlocksParameter = IntParameter("num user blocks", validator = RangeValidator(begin = 1, end = Int.MaxValue, step = Some(1)))
   setDefault(numUserBlocksParameter, 10)
 
-  val rankParameter = IntParameter("rank", Some("The rank of the matrix factorization."),
-    validator = RangeValidator(begin = 1, end = Int.MaxValue, step = Some(1))
-  )
+  val rankParameter = IntParameter("rank", validator = RangeValidator(begin = 1, end = Int.MaxValue, step = Some(1)))
   setDefault(rankParameter, 10)
 
-  val ratingColumnParameter = SingleColumnSelectorParameter("rating column", Some("The column for ratings."),
-    portIndex = 0
-  )
+  val ratingColumnParameter = SingleColumnSelectorParameter("rating column", portIndex = 0)
   def getRatingColumn = $(ratingColumnParameter)
   setDefault(ratingColumnParameter, NameSingleColumnSelection("rating"))
 

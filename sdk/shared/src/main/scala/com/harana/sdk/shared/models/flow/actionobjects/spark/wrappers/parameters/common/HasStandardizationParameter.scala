@@ -6,7 +6,7 @@ import scala.language.reflectiveCalls
 
 trait HasStandardizationParameter extends Parameters {
 
-  val standardizationParameter = BooleanParameter("standardization", Some("Whether to standardize the training features before fitting the model."))
-
+  val standardizationParameter = BooleanParameter("standardization")
   setDefault(standardizationParameter, true)
+
 }

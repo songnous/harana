@@ -20,7 +20,7 @@ class WrappersDefaultValidationSpec extends AnyWordSpec with Matchers with Mocki
   }
 
   "IntParamWrapper" should {
-    val intParamWrapper = IntParameter("name", Some("description"))
+    val intParamWrapper = IntParameter("name")
 
     "validate whole Int range" in {
       intParamWrapper.validate(Int.MinValue + 1) shouldBe empty
@@ -33,7 +33,7 @@ class WrappersDefaultValidationSpec extends AnyWordSpec with Matchers with Mocki
   }
 
   "FloatParamWrapper" should {
-    val floatParamWrapper = FloatParameter("name", Some("description"))
+    val floatParamWrapper = FloatParameter("name")
 
     "validate whole Float range" in {
       floatParamWrapper.validate(Float.MinValue + 1) shouldBe empty
@@ -49,7 +49,7 @@ class WrappersDefaultValidationSpec extends AnyWordSpec with Matchers with Mocki
   "DoubleParamWrapper" should {
 
     "validate whole Double range" in {
-      val doubleParamWrapper = new DoubleParameter("name", Some("description"))
+      val doubleParamWrapper = new DoubleParameter("name")
       doubleParamWrapper.validate(Double.MinValue + 1) shouldBe empty
       doubleParamWrapper.validate(Double.MinValue - 1) shouldBe empty
     }

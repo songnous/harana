@@ -14,8 +14,7 @@ class TransformerAsFactorySpec extends UnitSpec {
   class MockTransformerAsFactory extends TransformerAsFactory[MockTransformer] {
     val name = ""
     val id: Id = "6d924962-9456-11e5-8994-feff819cdc9f"
-    val description = ""
-  }
+    }
 
   "TransformerAsFactory" should {
     def action: MockTransformerAsFactory = new MockTransformerAsFactory

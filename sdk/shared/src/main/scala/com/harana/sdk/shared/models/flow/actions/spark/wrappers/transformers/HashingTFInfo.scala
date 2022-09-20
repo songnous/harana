@@ -14,7 +14,6 @@ trait HashingTFInfo extends TransformerAsActionInfo[HashingTFTransformerInfo] wi
 
   val id: Id = "4266c9c0-6863-44ca-967b-62927ca34434"
   val name = "HashingTF"
-  val description = "Maps a sequence of terms to term frequencies using the hashing trick"
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-features.html#tf-idf")
   val category = TextProcessing

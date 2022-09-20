@@ -13,7 +13,6 @@ trait ProjectionInfo extends TransformerAsActionInfo[ProjectorInfo] with ActionD
 
   val id: Id = "9c3225d8-d430-48c0-a46e-fa83909ad054"
   val name = "Projection"
-  val description = "Projects subset of columns in specified order and with (optional) new column names"
   val since = Version(1, 2, 0)
   val category = Filtering
 

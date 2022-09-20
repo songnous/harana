@@ -13,7 +13,6 @@ trait DecomposeDatetimeInfo extends TransformerAsActionInfo[DatetimeDecomposerIn
 
   val id: Id = "6c18b05e-7db7-4315-bce1-3291ed530675"
   val name = "Decompose Datetime"
-  val description = "Extracts Numeric fields (year, month, etc.) from a Timestamp column"
   val since = Version(0, 4, 0)
   val category = FeatureConversion
 

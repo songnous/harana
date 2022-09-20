@@ -7,7 +7,6 @@ import java.util.Objects
 abstract class Parameter[T] extends java.io.Serializable {
 
   val name: String
-  val description: Option[String]
 
   def constraints = ""
 
@@ -26,9 +25,9 @@ abstract class Parameter[T] extends java.io.Serializable {
   @unchecked
   override def equals(other: Any): Boolean = other match {
     case that: Parameter[T] =>
-      this.isInstanceOf[Parameter[T]] && name == that.name && description == that.description && parameterType == that.parameterType
+      this.isInstanceOf[Parameter[T]] && name == that.name && parameterType == that.parameterType
     case _ => false
   }
 
-  override def hashCode() = Objects.hash(name, description, parameterType)
+  override def hashCode() = Objects.hash(name, parameterType)
 }

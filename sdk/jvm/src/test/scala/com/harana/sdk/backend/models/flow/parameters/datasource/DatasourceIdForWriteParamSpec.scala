@@ -8,7 +8,7 @@ class DatasourceIdForWriteParamSpec extends AbstractParameterSpec[UUID, Datasour
   def className = "DatasourceIdForWriteParameter"
 
   def paramFixture: (DatasourceIdForWriteParameter, Json) = {
-    val param        = DatasourceIdForWriteParameter(name = "Ds for write parameter name", description = None)
+    val param        = DatasourceIdForWriteParameter(name = "Ds for write parameter name")
     val expectedJson = Json(
       "type"        -> "datasourceIdForWrite",
       "name"        -> param.name,

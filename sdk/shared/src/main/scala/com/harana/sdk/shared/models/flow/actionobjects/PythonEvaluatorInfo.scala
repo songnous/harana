@@ -6,7 +6,7 @@ trait PythonEvaluatorInfo extends CustomCodeEvaluatorInfo {
 
   val id = "1DE6C6F3-C6CC-4DDA-A09A-99CBDD00CFF6"
 
-  val codeParameter = CodeSnippetParameter("python evaluator code", None, language = CodeSnippetLanguage(CodeSnippetLanguage.python))
+  val codeParameter = CodeSnippetParameter("python evaluator code", language = CodeSnippetLanguage(CodeSnippetLanguage.python))
 
   setDefault(codeParameter ->
       """from math import sqrt

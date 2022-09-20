@@ -242,7 +242,6 @@ object ParametersSpec extends UnitSpec {
   case class MockError(override val message: String) extends FlowError(message)
 
   case class MockParameter(name: String) extends Parameter[Int] {
-    val description: Option[String] = Some("description")
     val parameterType = mock[ParameterType]
 
     def valueToJson(value: Int) = value.asJson

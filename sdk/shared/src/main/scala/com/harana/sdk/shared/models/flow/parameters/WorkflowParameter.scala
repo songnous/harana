@@ -3,8 +3,7 @@ package com.harana.sdk.shared.models.flow.parameters
 import com.harana.sdk.shared.models.flow.parameters.custom.InnerWorkflow
 
 
-case class WorkflowParameter(name: String,
-                             description: Option[String]) extends Parameter[InnerWorkflow] {
+case class WorkflowParameter(name: String) extends Parameter[InnerWorkflow] {
 
   val parameterType = ParameterType.Workflow
 

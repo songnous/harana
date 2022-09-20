@@ -14,7 +14,6 @@ trait CreateRandomForestRegressionInfo extends EstimatorAsFactoryInfo[RandomFore
 
   val id: Id = "2ec65504-bbe2-4ba2-a9b4-192e2f45ff16"
   val name = "Random Forest Regression"
-  val description = "Random forest regression (RFR) is a learning algorithm for regression. It supports both continuous and categorical features."
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-classification-regression.html#random-forest-regression")
   val category = Regression

@@ -12,7 +12,7 @@ class SingleColumnSelectorParameterSpec extends AbstractParameterSpec[SingleColu
   def paramFixture: (SingleColumnSelectorParameter, Json) = {
     val description  = "Single column selector description"
     val param        =
-      SingleColumnSelectorParameter(name = "Single column selector name", description = Some(description), portIndex = 0)
+      SingleColumnSelectorParameter(name = "Single column selector name", portIndex = 0)
     val expectedJson = Map(
                           "type"        -> Json.fromString("selector"),
                           "name"        -> Json.fromString(param.name),

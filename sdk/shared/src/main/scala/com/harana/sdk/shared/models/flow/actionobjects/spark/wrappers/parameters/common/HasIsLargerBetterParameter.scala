@@ -6,10 +6,7 @@ import scala.language.reflectiveCalls
 
 trait HasIsLargerBetterParameter extends Parameters {
 
-  val isLargerBetterParameter = BooleanParameter(
-    name = "is larger better",
-    description = Some("Indicates whether the returned metric is better to be maximized or minimized.")
-  )
-
+  val isLargerBetterParameter = BooleanParameter("is larger better")
   setDefault(isLargerBetterParameter -> false)
+
 }

@@ -14,7 +14,6 @@ trait PolynomialExpandInfo extends TransformerAsActionInfo[PolynomialExpanderInf
 
   val id: Id = "4a741088-3180-4373-940d-741b2f1620de"
   val name = "Polynomial Expansion"
-  val description = "Applies polynomial expansion to vector columns"
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-features.html#polynomialexpansion")
   val category = FeatureConversion

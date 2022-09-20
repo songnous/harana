@@ -12,7 +12,6 @@ class MultipleColumnCreatorParameterSpec extends AbstractParameterSpec[Array[Str
     val description  = "Multiple column creator description"
     val param        = MultipleColumnCreatorParameter(
       name = "Multiple column creator name",
-      description = Some(description)
     )
     val expectedJson = Map(
                           "type"        -> Json.fromString("multipleCreator"),

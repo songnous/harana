@@ -17,7 +17,6 @@ trait StringIndexerInfo
 
   val id: Id = "c9df7000-9ea0-41c0-b66c-3062fd57851b"
   val name = "String Indexer"
-  val description = "Maps a string column of labels to an integer column of label indices"
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-features.html#stringindexer")
   val category = FeatureConversion

@@ -10,12 +10,12 @@ trait DatetimeComposerInfo extends TransformerInfo {
 
   val id = "DB26B2A0-658F-41D2-A8D1-10A17654B284"
 
-  val timestampColumnsParameter = MultipleChoiceParameter[TimestampPartColumnChoice]("parts", Some("Columns containing timestamp parts."))
+  val timestampColumnsParameter = MultipleChoiceParameter[TimestampPartColumnChoice]("parts")
   setDefault(timestampColumnsParameter, Set.empty[TimestampPartColumnChoice])
   def timestampColumns = $(timestampColumnsParameter)
   def setTimestampColumns(timestampParts: Set[TimestampPartColumnChoice]): this.type = set(timestampColumnsParameter, timestampParts)
 
-  val outputColumnParameter = SingleColumnCreatorParameter("output column", Some("Column to save results to."))
+  val outputColumnParameter = SingleColumnCreatorParameter("output column")
   setDefault(outputColumnParameter, "Timestamp")
   def outputColumn = $(outputColumnParameter)
   def setOutputColumn(outputColumn: String): this.type = set(outputColumnParameter, outputColumn)
@@ -35,7 +35,7 @@ object DatetimeComposerInfo extends DatetimeComposerInfo {
     val defaultValue: Int
     val formatString: String
 
-    val timestampColumnSelectorParameter = SingleColumnSelectorParameter(name + " column", Some("Column containing " + name), portIndex = 0)
+    val timestampColumnSelectorParameter = SingleColumnSelectorParameter(name + " column", portIndex = 0)
     def timestampColumn = $(timestampColumnSelectorParameter)
     def setTimestampColumn(timestampColumn: SingleColumnSelection): this.type = set(timestampColumnSelectorParameter, timestampColumn)
 

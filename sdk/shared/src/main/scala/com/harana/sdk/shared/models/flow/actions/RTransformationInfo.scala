@@ -13,7 +13,6 @@ trait RTransformationInfo extends TransformerAsActionInfo[RTransformerInfo] with
 
   val id: Id = "b578ad31-3a5b-4b94-a8d1-4c319fac6add"
   val name = "R Transformation"
-  val description = "Creates a custom R transformation"
   val since = Version(1, 3, 0)
   val category = Custom
 

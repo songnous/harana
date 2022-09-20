@@ -14,7 +14,6 @@ trait TokenizeInfo extends TransformerAsActionInfo[StringTokenizerInfo] with Spa
 
   val id: Id = "38751243-5e0e-435a-b366-8d225c9fd5ca"
   val name = "Tokenize"
-  val description = "Converts text to lowercase and splits it by spaces"
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-features.html#tokenizer")
   val category = TextProcessing

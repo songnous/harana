@@ -17,7 +17,6 @@ trait UnionInfo extends Action2To1Info[DataFrameInfo, DataFrameInfo, DataFrameIn
 
   val id: Id = "90fed07b-d0a9-49fd-ae23-dd7000a1d8ad"
   val name = "Union"
-  val description = "Creates a DataFrame containing all rows from both input DataFrames"
   val since = Version(0, 4, 0)
   val category = SetAction
 

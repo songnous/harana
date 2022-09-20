@@ -13,7 +13,6 @@ trait CreateREvaluatorInfo extends EvaluatorAsFactoryInfo[REvaluatorInfo] with A
 
   val id: Id = "1c626513-f266-4458-8499-29cbad95bb8c"
   val name = "R Evaluator"
-  val description = "Creates an R Evaluator"
   val since = Version(1, 3, 0)
   val category = ModelEvaluation
 

@@ -21,13 +21,10 @@ trait FitInfo
 
   val id: Id = "0c2ff818-977b-11e5-8994-feff819cdc9f"
   val name = "Fit"
-  val description = "Fits an Estimator on a DataFrame"
   val since = Version(1,0,0)
   val category = Action
 
-  val estimatorParameters = new DynamicParameter("Parameters of input Estimator", Some("These parameters are rendered dynamically, depending on type of Estimator."),
-    inputPort = 0
-  )
+  val estimatorParameters = new DynamicParameter("Parameters of input Estimator", inputPort = 0)
   setDefault(estimatorParameters -> Json.Null)
   def setEstimatorParameters(jsValue: Json): this.type = set(estimatorParameters -> jsValue)
   override val parameters =  Array(estimatorParameters)

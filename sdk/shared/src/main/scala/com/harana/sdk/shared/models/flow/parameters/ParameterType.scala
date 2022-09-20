@@ -8,13 +8,21 @@ case object ParameterType extends Enum[ParameterType] {
   case object Boolean extends ParameterType
   case object Numeric extends ParameterType
   case object MultipleNumeric extends ParameterType
+  case object Password extends ParameterType
   case object String extends ParameterType
   case object Choice extends ParameterType
+  case object LongArray extends ParameterType
+  case object IPAddress extends ParameterType
+  case object DataSource extends ParameterType
+  case object URI extends ParameterType
   case object MultipleChoice extends ParameterType
+  case object TimestampParts extends ParameterType
   case object Multiplier extends ParameterType
   case object ColumnSelector extends ParameterType
+  case object JSON extends ParameterType
   case object SingleColumnCreator extends ParameterType
   case object MultipleColumnCreator extends ParameterType
+  case object TimestampColumns extends ParameterType
   case object PrefixBasedColumnCreator extends ParameterType
   case object CodeSnippet extends ParameterType
   case object Dynamic extends ParameterType

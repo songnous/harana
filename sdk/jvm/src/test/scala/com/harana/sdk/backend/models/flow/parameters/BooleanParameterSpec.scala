@@ -10,8 +10,7 @@ class BooleanParameterSpec extends AbstractParameterSpec[Boolean, BooleanParamet
   def className = "BooleanParameter"
 
   def paramFixture: (BooleanParameter, Json) = {
-    val description = "Boolean param description"
-    val param       = BooleanParameter("Boolean param name", Some(description))
+      val param       = BooleanParameter("Boolean param name")
     val json        = Map(
                         "type"        -> Json.fromString("boolean"),
                         "name"        -> Json.fromString(param.name),

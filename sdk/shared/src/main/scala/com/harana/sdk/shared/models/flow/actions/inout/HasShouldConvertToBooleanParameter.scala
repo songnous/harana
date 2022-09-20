@@ -5,7 +5,7 @@ import com.harana.sdk.shared.models.flow.parameters.{BooleanParameter, Parameter
 trait HasShouldConvertToBooleanParameter {
   this: Parameters =>
 
-  val shouldConvertToBooleanParameter = BooleanParameter("convert to boolean", Some("Should columns containing only 0 and 1 be converted to Boolean?"))
+  val shouldConvertToBooleanParameter = BooleanParameter("convert to boolean")
   setDefault(shouldConvertToBooleanParameter, false)
 
   def getShouldConvertToBoolean = $(shouldConvertToBooleanParameter)

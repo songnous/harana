@@ -20,7 +20,7 @@ object SingleColumnParameters {
     case class NoInPlaceChoice() extends SingleColumnInPlaceChoice {
       val name = "append new column"
 
-      val outputColumnParameter = SingleColumnCreatorParameter("output column", Some("Column to save results to."))
+      val outputColumnParameter = SingleColumnCreatorParameter("output column")
       def getOutputColumn = $(outputColumnParameter)
       def setOutputColumn(columnName: String): this.type = set(outputColumnParameter, columnName)
 

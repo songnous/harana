@@ -20,8 +20,7 @@ class MultipleChoiceParameterSpec extends AbstractChoiceParamSpec[Set[ChoiceABC]
   }
 
   def paramFixture: (MultipleChoiceParameter[ChoiceABC], Json) = {
-    val description = "description"
-    val multipleChoiceParam = MultipleChoiceParameter[ChoiceABC]("name", Some(description))
+      val multipleChoiceParam = MultipleChoiceParameter[ChoiceABC]("name", Some(description))
     val multipleChoiceExpectedJson = Map(
                                         "type"        -> Json.fromString("multipleChoice"),
                                         "name"        -> Json.fromString(multipleChoiceParam.name),

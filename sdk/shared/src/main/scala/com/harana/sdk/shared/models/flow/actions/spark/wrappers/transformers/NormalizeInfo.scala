@@ -14,7 +14,6 @@ trait NormalizeInfo extends TransformerAsActionInfo[NormalizerInfo] with SparkAc
 
   val id: Id = "20f3d9ef-9b04-49c6-8acd-7ddafdedcb39"
   val name = "Normalize"
-  val description = "Normalizes vector columns using given p-norm"
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-features.html#normalizer")
   val category = FeatureConversion

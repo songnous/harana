@@ -14,7 +14,7 @@ trait GBTClassifierInfo extends EstimatorInfo with GBTParameters with HasClassif
 
   override val maxIterationsDefault = 10
 
-  val lossTypeParameter = ChoiceParameter[LossType]("loss function", Some("The loss function which GBT tries to minimize."))
+  val lossTypeParameter = ChoiceParameter[LossType]("loss function")
   setDefault(lossTypeParameter, Logistic())
 
   val parameters = Array(

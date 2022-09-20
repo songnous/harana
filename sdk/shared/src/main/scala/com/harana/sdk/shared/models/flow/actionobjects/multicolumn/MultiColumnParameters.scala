@@ -24,7 +24,7 @@ object MultiColumnParameters {
     case class MultiColumnNoInPlace() extends MultiColumnInPlaceChoice {
       val name = "append new columns"
 
-      val outputColumnsPrefixParameter = PrefixBasedColumnCreatorParameter("column name prefix", Some("Prefix for output columns."))
+      val outputColumnsPrefixParameter = PrefixBasedColumnCreatorParameter("column name prefix")
       def getColumnsPrefix = $(outputColumnsPrefixParameter)
       def setColumnsPrefix(prefix: String): this.type = set(outputColumnsPrefixParameter, prefix)
 
@@ -42,7 +42,7 @@ object MultiColumnParameters {
     case class SingleColumnChoice() extends SingleOrMultiColumnChoice with HasSingleInPlaceParameter {
       val name = "one column"
 
-      val inputColumnParameter = SingleColumnSelectorParameter("input column", Some("Column to transform."), portIndex = 0)
+      val inputColumnParameter = SingleColumnSelectorParameter("input column", portIndex = 0)
       def getInputColumn = $(inputColumnParameter)
       def setInputColumn(value: SingleColumnSelection): this.type = set(inputColumnParameter, value)
 
@@ -55,12 +55,12 @@ object MultiColumnParameters {
     case class MultiColumnChoice() extends SingleOrMultiColumnChoice {
       val name = "multiple columns"
 
-      val inputColumnsParameter = ColumnSelectorParameter("input columns", Some("Columns to transform."), portIndex = 0)
+      val inputColumnsParameter = ColumnSelectorParameter("input columns", portIndex = 0)
       def getInputColumns = $(inputColumnsParameter)
       def setInputColumns(value: MultipleColumnSelection): this.type = set(inputColumnsParameter, value)
       def setInputColumns(inputColumnNames: Set[String]): this.type = setInputColumns(MultipleColumnSelection(Vector(NameColumnSelection(inputColumnNames))))
 
-      val inPlaceChoiceParameter = ChoiceParameter[MultiColumnInPlaceChoice]("output", Some("Output generation mode."))
+      val inPlaceChoiceParameter = ChoiceParameter[MultiColumnInPlaceChoice]("output")
       setDefault(inPlaceChoiceParameter, MultiColumnYesInPlace())
       def getInPlaceChoice = $(inPlaceChoiceParameter)
       def setInPlaceChoice(value: MultiColumnInPlaceChoice): this.type = set(inPlaceChoiceParameter, value)

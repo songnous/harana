@@ -21,11 +21,10 @@ trait ReadDataFrameInfo
 
   val id: Id = "c48dd54c-6aef-42df-ad7a-42fc59a09f0e"
   val name = "Read DataFrame"
-  val description = "Reads a DataFrame from a file or database"
   val since = Version(0, 4, 0)
   val category = IO
 
-  val storageTypeParameter = ChoiceParameter[InputStorageTypeChoice]("data storage type", Some("Storage type."))
+  val storageTypeParameter = ChoiceParameter[InputStorageTypeChoice]("data storage type")
   def getStorageType = $(storageTypeParameter)
   def setStorageType(value: InputStorageTypeChoice): this.type = set(storageTypeParameter, value)
 

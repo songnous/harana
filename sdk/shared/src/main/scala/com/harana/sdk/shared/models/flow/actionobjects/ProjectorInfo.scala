@@ -10,7 +10,7 @@ trait ProjectorInfo extends TransformerInfo {
 
   val id = "5867276F-3897-4E11-B141-F58CE0F5EBFE"
 
-  val projectionColumnsParameter = ParametersSequence[ColumnProjection]("projection columns", Some("Column to project in the output DataFrame."))
+  val projectionColumnsParameter = ParametersSequence[ColumnProjection]("projection columns")
   def getProjectionColumns = $(projectionColumnsParameter)
   def setProjectionColumns(value: Seq[ColumnProjection]): this.type = set(projectionColumnsParameter, value)
 
@@ -24,11 +24,11 @@ object ProjectorInfo extends ProjectorInfo{
 
   case class ColumnProjection() extends Parameters {
 
-    val originalColumnParameter = SingleColumnSelectorParameter("original column", Some("Column from the input DataFrame."), portIndex = 0)
+    val originalColumnParameter = SingleColumnSelectorParameter("original column", portIndex = 0)
     def getOriginalColumn = $(originalColumnParameter)
     def setOriginalColumn(value: SingleColumnSelection): this.type = set(originalColumnParameter, value)
 
-    val renameColumnParameter = ChoiceParameter[RenameColumnChoice]("rename column", Some("Determine if the column should be renamed."))
+    val renameColumnParameter = ChoiceParameter[RenameColumnChoice]("rename column")
     setDefault(renameColumnParameter, RenameColumnChoice.No())
     def getRenameColumn = $(renameColumnParameter)
     def setRenameColumn(value: RenameColumnChoice): this.type = set(renameColumnParameter, value)
@@ -48,7 +48,7 @@ object ProjectorInfo extends ProjectorInfo{
     case class Yes() extends RenameColumnChoice {
       val name = "Yes"
 
-      val columnNameParameter = SingleColumnCreatorParameter("column name", Some("New name for a column in the output DataFrame."))
+      val columnNameParameter = SingleColumnCreatorParameter("column name")
       setDefault(columnNameParameter, "")
       def getColumnName: Option[String] = Some($(columnNameParameter))
       def setColumnName(value: String): this.type = set(columnNameParameter, value)

@@ -19,7 +19,7 @@ trait GBTRegressionInfo
 
   override val maxIterationsDefault = 20
 
-  val lossTypeParameter = ChoiceParameter[LossType]("loss function", Some("The loss function which GBT tries to minimize."))
+  val lossTypeParameter = ChoiceParameter[LossType]("loss function")
   setDefault(lossTypeParameter, Squared())
 
   val parameters = Array(

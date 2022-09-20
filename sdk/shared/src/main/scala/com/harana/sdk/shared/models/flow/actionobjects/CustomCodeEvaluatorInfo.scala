@@ -8,7 +8,7 @@ trait CustomCodeEvaluatorInfo extends EvaluatorInfo with HasIsLargerBetterParame
   val InputPortNumber: Int = 0
   val OutputPortNumber: Int = 0
 
-  val metricNameParameter = StringParameter(name = "metric name", description = None)
+  val metricNameParameter = StringParameter(name = "metric name")
   setDefault(metricNameParameter -> "custom metric")
   def getMetricName = $(metricNameParameter)
 

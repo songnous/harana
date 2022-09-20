@@ -8,9 +8,7 @@ import scala.language.reflectiveCalls
 
 trait HasCheckpointIntervalParameter extends Parameters {
 
-  val checkpointIntervalParameter = IntParameter("checkpoint interval", Some("The checkpoint interval. E.g. 10 means that the cache will get checkpointed every 10 iterations."),
-    validator = RangeValidator(begin = 1, end = Int.MaxValue, step = Some(1))
-  )
-
+  val checkpointIntervalParameter = IntParameter("checkpoint interval", validator = RangeValidator(begin = 1, end = Int.MaxValue, step = Some(1)))
   setDefault(checkpointIntervalParameter, 10)
+
 }

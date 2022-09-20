@@ -139,12 +139,6 @@ trait Parameters extends Serializable with HasInferenceResult {
 
   def parameterPairsFromJson(json: Json): Seq[ParameterPair[_]] = null
 
-  def noValueParametersFromJson(json: Json): Seq[Parameter[_]] = null
-
-  private def isMultiValueParameter(parameter: Parameter[_], value: Json): Boolean = {
-    parameter.isGriddable && MultipleValuesParameter.isMultiValueParameter(value)
-  }
-
   private def createMultiValueParameter[T](json: Json, parameter: Parameter[_]): Option[ParameterPair[T]] = {
     None
   }

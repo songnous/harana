@@ -70,6 +70,5 @@ object EstimatorAsActionSpec extends UnitSpec {
   class MockEstimatorAction extends EstimatorAsAction[MockEstimator, Transformer] {
     val id: Id = Id.randomId
     val name = "Mock Estimator as an action"
-    val description = "Description"
-  }
+    }
 }

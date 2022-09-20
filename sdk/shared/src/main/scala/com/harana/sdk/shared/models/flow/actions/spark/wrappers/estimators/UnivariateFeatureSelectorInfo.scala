@@ -16,7 +16,6 @@ trait UnivariateFeatureSelectorInfo extends EstimatorAsActionInfo[UnivariateFeat
 
   val id: Id = "7355518a-4581-4048-b8b2-880cdb212205"
   val name = "Chi-Squared Selector"
-  val description = "Selects categorical features to use for predicting a categorical label."
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-features.html#chisqselector")
   val category = FeatureSelection

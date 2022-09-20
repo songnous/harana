@@ -8,9 +8,7 @@ import scala.language.reflectiveCalls
 
 trait HasElasticNetParameter extends Parameters {
 
-  val elasticNetParameter = DoubleParameter("elastic net param", Some("The ElasticNet mixing parameter. For alpha = 0, the penalty is an L2 penalty. For alpha = 1, it is an L1 penalty."),
-    validator = RangeValidator(0.0, 1.0)
-  )
-
+  val elasticNetParameter = DoubleParameter("elastic net param", validator = RangeValidator(0.0, 1.0))
   setDefault(elasticNetParameter, 0.0)
+
 }

@@ -19,15 +19,7 @@ trait AFTSurvivalRegressionInfo
 
   val id = "6AB9BCA9-B914-49C0-A1BC-770287F57EFB"
 
-  val censorColumnParameter = SingleColumnSelectorParameter(
-      name = "censor column",
-      description = Some("""Param for censor column name.
-                           |The value of this column could be 0 or 1.
-                           |If the value is 1, it means the event has occurred i.e. uncensored;
-                           |otherwise censored.""".stripMargin),
-      portIndex = 0
-    )
-
+  val censorColumnParameter = SingleColumnSelectorParameter("censor column", portIndex = 0)
   setDefault(censorColumnParameter, NameSingleColumnSelection("censor"))
 
   val parameters = Array(

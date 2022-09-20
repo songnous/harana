@@ -87,6 +87,5 @@ object EstimatorAsFactorySpec {
   class MockEstimatorFactory extends EstimatorAsFactory[MockEstimator] {
     val id: Id = Id.randomId
     val name = "Mock Estimator factory used for tests purposes"
-    val description = "Description"
-  }
+    }
 }

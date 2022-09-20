@@ -9,17 +9,7 @@ import scala.language.reflectiveCalls
 
 trait HasSolverParameter extends Parameters {
 
-  val solverParameter = ChoiceParameter[SolverOption](
-    name = "solver",
-    description = Some("""Sets the solver algorithm used for optimization.
-                         |Can be set to "l-bfgs", "normal" or "auto".
-                         |"l-bfgs" denotes Limited-memory BFGS which is a limited-memory quasi-Newton
-                         |optimization method. "normal" denotes Normal Equation. It is an analytical
-                         |solution to the linear regression problem.
-                         |The default value is "auto" which means that the solver algorithm is
-                         |selected automatically.""".stripMargin)
-  )
-
+  val solverParameter = ChoiceParameter[SolverOption]("solver")
   setDefault(solverParameter, SolverChoice.Auto())
 }
 

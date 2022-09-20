@@ -13,7 +13,6 @@ trait CreatePythonEvaluatorInfo extends EvaluatorAsFactoryInfo[PythonEvaluatorIn
 
   val id: Id = "582748ff-b1e4-4821-94da-d6c411e76e7e"
   val name = "Python Evaluator"
-  val description = "Creates a Python Evaluator"
   val since = Version(1, 2, 0)
   val category = ModelEvaluation
 

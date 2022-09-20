@@ -15,14 +15,7 @@ trait UnivariateFeatureEstimatorInfo
 
   val id = "509D82C5-76E1-4AB0-B119-154883DB0AB4"
 
-  val numTopFeaturesParameter = IntParameter("num top features",
-    description = Some(
-      "Number of features that selector will select, ordered by statistics value " +
-        "descending. If the real number of features is lower, then this will select all " +
-        "features."
-    ),
-    validator = RangeValidator(begin = 1, end = Int.MaxValue, step = Some(1))
-  )
+  val numTopFeaturesParameter = IntParameter("num top features", validator = RangeValidator(begin = 1, end = Int.MaxValue, step = Some(1)))
   setDefault(numTopFeaturesParameter -> 50)
   def setNumTopFeatures(value: Int): this.type = set(numTopFeaturesParameter -> value)
 

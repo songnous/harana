@@ -13,7 +13,6 @@ trait ComposeDatetimeInfo extends TransformerAsActionInfo[DatetimeComposerInfo] 
 
   val id: Id = "291cdd16-b57a-4613-abbe-3fd73011e579"
   val name = "Compose Datetime"
-  val description = "Combines Numeric fields (year, month, etc.) into a Timestamp column"
   val since = Version(1, 3, 0)
   val category = FeatureConversion
 

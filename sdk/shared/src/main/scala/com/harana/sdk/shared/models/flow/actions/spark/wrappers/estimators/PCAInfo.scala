@@ -15,7 +15,6 @@ trait PCAInfo extends EstimatorAsActionInfo[PCAEstimatorInfo, PCAModelInfo] with
 
   val id: Id = "fe1ac5fa-329a-4e3e-9cfc-67ee165053db"
   val name = "PCA"
-  val description = "Trains a model to project vectors to a low-dimensional space using PCA"
   val since = Version(1,0,0)
   val docsGuideLocation = Some("mllib-dimensionality-reduction.html#principal-component-analysis-pca")
   val category = DimensionalityReduction

@@ -13,7 +13,6 @@ trait RColumnTransformationInfo extends TransformerAsActionInfo[RColumnTransform
 
   val id: Id = "52e2652a-0c90-445e-87e9-a04f92ff75f0"
   val name = "R Column Transformation"
-  val description = "Executes a custom R transformation on a column of a DataFrame"
   val since = Version(1, 3, 0)
   val category = Custom
 

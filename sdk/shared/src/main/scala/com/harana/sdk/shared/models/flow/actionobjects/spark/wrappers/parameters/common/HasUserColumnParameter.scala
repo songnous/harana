@@ -7,10 +7,8 @@ import scala.language.reflectiveCalls
 
 trait HasUserColumnParameter extends Parameters {
 
-  val userColumnParameter = SingleColumnSelectorParameter("user column", Some("The column for user ids."),
-    portIndex = 0
-  )
-
+  val userColumnParameter = SingleColumnSelectorParameter("user column", portIndex = 0)
   def getUserColumn = $(userColumnParameter)
   setDefault(userColumnParameter, NameSingleColumnSelection("user"))
+
 }

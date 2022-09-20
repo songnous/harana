@@ -18,14 +18,14 @@ object CommonTablesGenerators {
       .flatMap(pair =>
         pair.value match {
           case choice: Choice =>
-            Seq(List(Some(namePrefix + pair.param.name), Some(choice), Some(pair.param.description.getOrElse("None")))) ++
+            Seq(List(Some(namePrefix + pair.param.name), Some(choice), Some("None"))) ++
               paramMapToDescriptionLists(choice.extractParameterMap(), namePrefix)
           case seq: Seq[_]    =>
             seq.zipWithIndex.flatMap { case (p: Parameters, i) =>
               paramMapToDescriptionLists(p.extractParameterMap(), s"${pair.param.name} #${i + 1} ")
             }.toList
           case value          =>
-            Seq(List(Some(namePrefix + pair.param.name), Some(value), Some(pair.param.description.getOrElse("None"))))
+            Seq(List(Some(namePrefix + pair.param.name), Some(value), Some("None")))
         }
       )
       .toList

@@ -23,7 +23,6 @@ trait ActionInfo extends GraphAction with Serializable with Parameters {
 
   val id: ActionInfo.Id
   val name: String
-  val description: String
   val category: ActionCategory
 
   val parameters: Array[Parameter[_]]
@@ -63,7 +62,7 @@ trait ActionInfo extends GraphAction with Serializable with Parameters {
 
   def typeTag[T: ru.TypeTag]: ru.TypeTag[T] = ru.typeTag[T]
 
-  val reportTypeParameter: ChoiceParameter[ReportType] = ChoiceParameter[ReportType]("report type", Some("Output entities report type. Computing extended report can be time consuming."))
+  val reportTypeParameter: ChoiceParameter[ReportType] = ChoiceParameter[ReportType]("report type")
   setDefault(reportTypeParameter, ReportParameter.Extended())
   def getReportType = $(reportTypeParameter)
   def setReportType(value: ReportType): this.type = set(reportTypeParameter, value)

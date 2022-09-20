@@ -14,7 +14,6 @@ trait BinarizeInfo extends TransformerAsActionInfo[BinarizerInfo] with SparkActi
 
   val id: Id = "c29f2401-0891-4223-8a33-41ecbe316de6"
   val name = "Binarize"
-  val description = "Binarizes continuous features"
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-features.html#binarizer")
   val category = FeatureConversion

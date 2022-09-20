@@ -2,11 +2,11 @@ package com.harana.sdk.shared.models.flow.actions.inout
 
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
+import com.harana.sdk.shared.models.flow.parameters.validators.RegexValidator
 import com.harana.sdk.shared.models.flow.parameters.{BooleanParameter, Parameter, Parameters, StringParameter}
-import com.harana.sdk.shared.models.flow.parameters.validators.SingleCharRegexValidator
 
 trait NamesIncludedParameter { this: Parameters =>
-  val namesIncludedParameter = BooleanParameter("names included", Some("Does the first row include column names?"))
+  val namesIncludedParameter = BooleanParameter("names included")
   setDefault(namesIncludedParameter, true)
   def getNamesIncluded = $(namesIncludedParameter)
   def setNamesIncluded(value: Boolean): this.type = set(namesIncludedParameter, value)
@@ -15,7 +15,7 @@ trait NamesIncludedParameter { this: Parameters =>
 trait CsvParameters extends NamesIncludedParameter { this: Parameters =>
   import CsvParameters._
 
-  val csvColumnSeparatorParameter = ChoiceParameter[ColumnSeparatorChoice]("separator", Some("Column separator."))
+  val csvColumnSeparatorParameter = ChoiceParameter[ColumnSeparatorChoice]("separator")
   setDefault(csvColumnSeparatorParameter, ColumnSeparatorChoice.Comma())
   def getCsvColumnSeparator = $(csvColumnSeparatorParameter)
   def setCsvColumnSeparator(value: ColumnSeparatorChoice): this.type = set(csvColumnSeparatorParameter, value)
@@ -71,7 +71,7 @@ object CsvParameters {
     case class Custom() extends ColumnSeparatorChoice {
       val name = "Custom"
 
-      val customColumnSeparator = StringParameter(name = "custom separator", description = None, validator = new SingleCharRegexValidator)
+      val customColumnSeparator = StringParameter(name = "custom separator", validator = RegexValidator.SingleChar)
       setDefault(customColumnSeparator, ",")
       def getCustomColumnSeparator = $(customColumnSeparator)
       def setCustomColumnSeparator(value: String): this.type = set(customColumnSeparator, value)

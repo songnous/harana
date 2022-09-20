@@ -13,7 +13,6 @@ trait PythonColumnTransformationInfo extends TransformerAsActionInfo[PythonColum
 
   val id: Id = "9951d301-7eb7-473b-81ad-0f8659619784"
   val name = "Python Column Transformation"
-  val description = "Executes a custom Python transformation on a column of a DataFrame"
   val since = Version(1, 3, 0)
   val category = Custom
 

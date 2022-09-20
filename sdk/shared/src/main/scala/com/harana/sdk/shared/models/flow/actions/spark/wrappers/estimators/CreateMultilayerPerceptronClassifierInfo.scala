@@ -14,7 +14,6 @@ trait CreateMultilayerPerceptronClassifierInfo extends EstimatorAsFactoryInfo[Mu
 
   val id: Id = "860f51aa-627e-4636-a4df-696b79a54efc"
   val name = "Multilayer Perceptron Classifier"
-  val description = "Creates a Multilayer Perceptron classification model."
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-classification-regression.html#multilayer-perceptron-classifier")
   val category = Classification

@@ -99,8 +99,7 @@ class WorkflowWithResultsJsonProtocolSpec extends WorkflowJsonTestSupport {
 
     val workflowId = Workflow.Id.randomId
     val workflowName = " workflow name "
-    val description = " some description "
-    val ownerId = UUID.randomUUID.toString
+      val ownerId = UUID.randomUUID.toString
     val ownerName = "some@email.com"
     val workflowInfo = WorkflowInfo(workflowId, workflowName, description, createdDateTime, updatedDateTime, ownerId, ownerName)
 

@@ -6,6 +6,7 @@ import com.harana.sdk.backend.models.flow.inference.exceptions.TransformSchemaEr
 import com.harana.sdk.backend.models.flow.ExecutionContext
 import com.harana.sdk.backend.models.flow.inference.exceptions.TransformSchemaError
 import com.harana.sdk.shared.models.flow.DoubleParameter
+import com.harana.sdk.shared.models.flow.parameters.DoubleParameter
 import com.harana.spark.ML
 import org.apache.spark.ml
 import org.apache.spark.ml.param.{BooleanParam, DoubleParam, ParamMap}
@@ -51,7 +52,7 @@ object SparkTransformerWrapperSpec extends MockitoSugar {
 
     val id = "test"
 
-    val paramWrapper = DoubleParameter("name", Some("description"))
+    val paramWrapper = DoubleParameter("name")
     setDefault(paramWrapper, 0.0)
     def setParamWrapper(value: Double): this.type = set(paramWrapper, value)
 

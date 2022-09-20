@@ -8,9 +8,7 @@ import scala.language.reflectiveCalls
 
 trait HasRegularizationParameter extends Parameters {
 
-  val regularizationParameter = DoubleParameter("regularization param", Some("The regularization parameter."),
-    validator = RangeValidator(0.0, Double.MaxValue)
-  )
-
+  val regularizationParameter = DoubleParameter("regularization param", validator = RangeValidator(0.0, Double.MaxValue))
   setDefault(regularizationParameter, 0.0)
+
 }

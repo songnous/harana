@@ -6,7 +6,7 @@ trait PythonTransformerInfo extends CustomCodeTransformerInfo {
 
   val id = "EEAEBAE4-52C5-4FF7-899D-ABFF0EB2CFC6"
 
-  override lazy val codeParameter = CodeSnippetParameter("code", None, language = CodeSnippetLanguage(CodeSnippetLanguage.python))
+  override lazy val codeParameter = CodeSnippetParameter("code", language = CodeSnippetLanguage(CodeSnippetLanguage.python))
   setDefault(codeParameter -> "def transform(dataframe):\n    return dataframe")
 
 }

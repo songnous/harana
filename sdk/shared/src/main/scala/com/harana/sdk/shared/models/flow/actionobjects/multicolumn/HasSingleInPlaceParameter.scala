@@ -8,7 +8,7 @@ import com.harana.sdk.shared.models.flow.parameters.choice.ChoiceParameter
 
 trait HasSingleInPlaceParameter extends Parameters {
 
-  val singleInPlaceChoiceParameter = ChoiceParameter[SingleColumnInPlaceChoice]("output", Some("Output generation mode."))
+  val singleInPlaceChoiceParameter = ChoiceParameter[SingleColumnInPlaceChoice]("output")
   def getSingleInPlaceChoice = $(singleInPlaceChoiceParameter)
   def setSingleInPlaceChoice(value: SingleColumnInPlaceChoice): this.type = set(singleInPlaceChoiceParameter -> value)
 

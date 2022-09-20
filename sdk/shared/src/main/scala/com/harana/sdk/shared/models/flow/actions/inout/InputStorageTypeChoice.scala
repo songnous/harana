@@ -16,11 +16,11 @@ object InputStorageTypeChoice {
   class File extends InputStorageTypeChoice {
     val name = StorageType.File.toString
 
-    val sourceFileParameter = LoadFromLibraryParameter("source", Some("Path to the DataFrame file."))
+    val sourceFileParameter = LoadFromLibraryParameter("source")
     def getSourceFile = $(sourceFileParameter)
     def setSourceFile(value: String): this.type = set(sourceFileParameter, value)
 
-    val fileFormatParameter = ChoiceParameter[InputFileFormatChoice]("format", Some("Format of the input file."))
+    val fileFormatParameter = ChoiceParameter[InputFileFormatChoice]("format")
     setDefault(fileFormatParameter, new InputFileFormatChoice.Csv())
     def getFileFormat = $(fileFormatParameter)
     def setFileFormat(value: InputFileFormatChoice): this.type = set(fileFormatParameter, value)

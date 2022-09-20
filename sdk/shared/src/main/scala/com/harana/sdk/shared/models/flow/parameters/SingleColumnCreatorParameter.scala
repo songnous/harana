@@ -1,11 +1,10 @@
 package com.harana.sdk.shared.models.flow.parameters
 
-import com.harana.sdk.shared.models.flow.parameters.validators.{ColumnNameValidator, Validator}
+import com.harana.sdk.shared.models.flow.parameters.validators.{ColumnValidator, Validator}
 
-case class SingleColumnCreatorParameter(name: String,
-                                        description: Option[String]) extends Parameter[String] with HasValidator[String] {
+case class SingleColumnCreatorParameter(name: String) extends Parameter[String] with HasValidator[String] {
 
-  val validator: Validator[String] = ColumnNameValidator
+  val validator: Validator[String] = ColumnValidator.Name
 
   val parameterType = ParameterType.SingleColumnCreator
 
