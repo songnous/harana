@@ -185,7 +185,7 @@ object MultiColumnTransformerIntegSpec {
       }
 
       val columnSelection = NameColumnSelection(columns.toSet)
-      val multiple = MultiColumnChoice().setInputColumns(MultipleColumnSelection(Vector(columnSelection))).setInPlaceChoice(inPlaceChoice)
+      val multiple = MultiColumnChoice().setInputColumns(MultipleColumnSelection(List(columnSelection))).setInPlaceChoice(inPlaceChoice)
       setSingleOrMultiChoice(multiple)
     }
 

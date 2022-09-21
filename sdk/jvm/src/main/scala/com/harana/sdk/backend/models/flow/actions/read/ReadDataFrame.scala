@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.actions.read
 
-import com.harana.sdk.backend.models.flow.{Action0To1, ExecutionContext}
+import com.harana.sdk.backend.models.flow.{ActionType0To1, ExecutionContext}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actions.exceptions.{HaranaIOError, HaranaUnknownHostError}
 import com.harana.sdk.backend.models.flow.actions.readwritedataframe.filestorage.DataFrameFromFileReader
@@ -13,7 +13,7 @@ import scala.reflect.runtime.universe.TypeTag
 import java.io._
 import java.net.UnknownHostException
 
-class ReadDataFrame extends Action0To1[DataFrame] with ReadDataFrameInfo {
+class ReadDataFrame extends ActionType0To1[DataFrame] with ReadDataFrameInfo {
 
   def execute()(context: ExecutionContext) = {
     implicit val ec = context

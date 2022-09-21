@@ -2,12 +2,12 @@ package com.harana.sdk.backend.models.flow.actions
 
 import com.harana.sdk.backend.models.flow.actionobjects.{Estimator, Transformer}
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
-import com.harana.sdk.backend.models.flow.{Action0To1, ExecutionContext, Knowledge}
+import com.harana.sdk.backend.models.flow.{ActionType0To1, ExecutionContext, Knowledge}
 import com.harana.sdk.shared.models.flow.utils.TypeUtils
 
 import scala.reflect.runtime.universe.TypeTag
 
-abstract class EstimatorAsFactory[E <: Estimator[Transformer]](implicit typeTagE: TypeTag[E]) extends Action0To1[E] {
+abstract class EstimatorAsFactory[E <: Estimator[Transformer]](implicit typeTagE: TypeTag[E]) extends ActionType0To1[E] {
 
   lazy val tTagTO_0: TypeTag[E] = typeTag[E]
 

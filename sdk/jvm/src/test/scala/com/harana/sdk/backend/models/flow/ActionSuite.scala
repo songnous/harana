@@ -5,7 +5,7 @@ import com.harana.sdk.backend.models.flow.actionobjects.ActionObjectInfoMock
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
 import com.harana.sdk.backend.models.flow.actionobjects.ActionObjectInfoMock
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
-import com.harana.sdk.shared.models.flow.{ActionInfo, ActionObjectInfo}
+import com.harana.sdk.shared.models.flow.{ActionTypeInfo, ActionObjectInfo}
 import com.harana.sdk.shared.models.flow.parameters.Parameter
 import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
 import com.harana.sdk.shared.models.flow.utils.Id
@@ -26,11 +26,11 @@ object DClassesForActions {
 object ActionForPortTypes {
   import DClassesForActions._
 
-  class SimpleAction extends Action1To1[A1, A2] {
+  class SimpleAction extends ActionType1To1[A1, A2] {
 
     def execute(t0: A1)(context: ExecutionContext): A2 = ???
 
-    val id: Id = ActionInfo.Id.randomId
+    val id: Id = ActionTypeInfo.Id.randomId
     val name = ""
       val parameters = Array.empty[Parameter[_]]
 
@@ -44,8 +44,8 @@ class ActionSuite extends AnyFunSuite with TestSupport {
   test("It is possible to implement simple actions") {
     import DClassesForActions._
 
-    class PickOne extends Action2To1[A1, A2, A] {
-      val id: Id = ActionInfo.Id.randomId
+    class PickOne extends ActionType2To1[A1, A2, A] {
+      val id: Id = ActionTypeInfo.Id.randomId
 
       val param = NumericParameter("param", None, RangeValidator.allInt)
       def setParam(int: Int): this.type = set(param -> int)
@@ -64,18 +64,18 @@ class ActionSuite extends AnyFunSuite with TestSupport {
     val secondPicker = new PickOne
     secondPicker.setParam(2)
 
-    val input = Vector(A1(), A2())
-    assert(firstPicker.executeUntyped(input)(mock[ExecutionContext]) == Vector(A1()))
-    assert(secondPicker.executeUntyped(input)(mock[ExecutionContext]) == Vector(A2()))
+    val input = List(A1(), A2())
+    assert(firstPicker.executeUntyped(input)(mock[ExecutionContext]) == List(A1()))
+    assert(secondPicker.executeUntyped(input)(mock[ExecutionContext]) == List(A2()))
 
     val h = new ActionObjectCatalog
     h.register[A1]
     h.register[A2]
     val context = createInferContext(h)
 
-    val knowledge = Vector[Knowledge[ActionObjectInfo]](Knowledge(A1()), Knowledge(A2()))
+    val knowledge = List[Knowledge[ActionObjectInfo]](Knowledge(A1()), Knowledge(A2()))
     val (result, warnings) = firstPicker.inferKnowledgeUntyped(knowledge)(context)
-    assert(result == Vector(Knowledge(A1(), A2())))
+    assert(result == List(Knowledge(A1(), A2())))
     assert(warnings == InferenceWarnings.empty)
   }
 
@@ -84,8 +84,8 @@ class ActionSuite extends AnyFunSuite with TestSupport {
 
     val mockedWarnings = mock[InferenceWarnings]
 
-    class GeneratorOfA extends Action0To1[A] {
-      val id = ActionInfo.Id.randomId
+    class GeneratorOfA extends ActionType0To1[A] {
+      val id = ActionTypeInfo.Id.randomId
 
       def execute()(context: ExecutionContext): A                                             = ???
       override def inferKnowledge()(context: InferContext): (Knowledge[A], InferenceWarnings) = (Knowledge(A1(), A2()), mockedWarnings)
@@ -95,27 +95,27 @@ class ActionSuite extends AnyFunSuite with TestSupport {
       lazy val tTagTO_0: ru.TypeTag[A] = ru.typeTag[A]
     }
 
-    val generator: Action = new GeneratorOfA
+    val generator: ActionType = new GeneratorOfA
 
     val h = new ActionObjectCatalog
     h.register[A1]()
     h.register[A2]()
     val context = createInferContext(h)
 
-    val (results, warnings) = generator.inferKnowledgeUntyped(Vector())(context)
-    assert(results == Vector(Knowledge(A1(), A2())))
+    val (results, warnings) = generator.inferKnowledgeUntyped(List.empty)(context)
+    assert(results == List(Knowledge(A1(), A2())))
     assert(warnings == mockedWarnings)
   }
 
   test("Getting types required in input port") {
     import ActionForPortTypes._
     val op = new SimpleAction
-    assert(op.inPortTypes == Vector(ru.typeTag[DClassesForActions.A1]))
+    assert(op.inputPorts == List(ru.typeTag[DClassesForActions.A1]))
   }
 
   test("Getting types required in output port") {
     import ActionForPortTypes._
     val op = new SimpleAction
-    assert(op.outPortTypes == Vector(ru.typeTag[DClassesForActions.A2]))
+    assert(op.outputPorts == List(ru.typeTag[DClassesForActions.A2]))
   }
 }

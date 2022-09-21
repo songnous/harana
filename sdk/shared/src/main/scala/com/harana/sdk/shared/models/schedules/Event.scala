@@ -1,16 +1,17 @@
 package com.harana.sdk.shared.models.schedules
 
 import com.harana.sdk.shared.models.data.DataSource.DataSourceId
+import com.harana.sdk.shared.models.flow.Flow.FlowId
 import com.harana.sdk.shared.models.schedules.Schedule.ScheduleId
 import io.circe.derivation.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 
-//import scala.scalajs.reflect.annotation.EnableReflectiveInstantiation
+import scala.scalajs.reflect.annotation.EnableReflectiveInstantiation
 
 sealed trait Event
 
-//@EnableReflectiveInstantiation
+@EnableReflectiveInstantiation
 object Event {
 
   case class CalendarInterval(interval: Option[String] = None,
@@ -37,12 +38,12 @@ object Event {
   case class FileDeleted(path: Option[String] = None,
                          pathRegex: Option[String] = None) extends Event
 
-//  case class FlowStarted(flowId: Option[FlowId] = None) extends Event
-//
-//  case class FlowCompleted(flowId: Option[FlowId] = None) extends Event
-//
-//  case class FlowFailed(flowId: Option[FlowId] = None,
-//                        errorMessage: Option[String] = None) extends Event
+  case class FlowStarted(flowId: Option[FlowId] = None) extends Event
+
+  case class FlowCompleted(flowId: Option[FlowId] = None) extends Event
+
+  case class FlowFailed(flowId: Option[FlowId] = None,
+                        errorMessage: Option[String] = None) extends Event
 
   case class Github(owner: Option[String] = None,
                     repository: Option[String] = None,
@@ -80,9 +81,9 @@ object Event {
     case "FileCreated" => FileCreated()
     case "FileModified" => FileModified()
     case "FileDeleted" => FileDeleted()
-//    case "FlowStarted" => FlowStarted()
-//    case "FlowCompleted" => FlowCompleted()
-//    case "FlowFailed" => FlowFailed()
+    case "FlowStarted" => FlowStarted()
+    case "FlowCompleted" => FlowCompleted()
+    case "FlowFailed" => FlowFailed()
     case "Github" => Github()
     case "Gitlab" => Gitlab()
     case "ScheduleStarted" => ScheduleStarted()
@@ -100,9 +101,9 @@ object Event {
     FileCreated,
     FileModified,
     FileDeleted,
-//    FlowStarted,
-//    FlowCompleted,
-//    FlowFailed,
+    FlowStarted,
+    FlowCompleted,
+    FlowFailed,
     Github,
     Gitlab,
     ScheduleStarted,
@@ -121,9 +122,9 @@ object Event {
       case "FileCreated" => deriveDecoder[FileCreated].apply(content)
       case "FileModified" => deriveDecoder[FileModified].apply(content)
       case "FileDeleted" => deriveDecoder[FileDeleted].apply(content)
-//      case "FlowStarted" => deriveDecoder[FlowStarted].apply(content)
-//      case "FlowCompleted" => deriveDecoder[FlowCompleted].apply(content)
-//      case "FlowFailed" => deriveDecoder[FlowFailed].apply(content)
+      case "FlowStarted" => deriveDecoder[FlowStarted].apply(content)
+      case "FlowCompleted" => deriveDecoder[FlowCompleted].apply(content)
+      case "FlowFailed" => deriveDecoder[FlowFailed].apply(content)
       case "Github" => deriveDecoder[Github].apply(content)
       case "Gitlab" => deriveDecoder[Gitlab].apply(content)
       case "ScheduleStarted" => deriveDecoder[ScheduleStarted].apply(content)
@@ -144,9 +145,9 @@ object Event {
       case "FileCreated" => deriveEncoder[FileCreated].apply(event.asInstanceOf[FileCreated])
       case "FileModified" => deriveEncoder[FileModified].apply(event.asInstanceOf[FileModified])
       case "FileDeleted" => deriveEncoder[FileDeleted].apply(event.asInstanceOf[FileDeleted])
-//      case "FlowStarted" => deriveEncoder[FlowStarted].apply(event.asInstanceOf[FlowStarted])
-//      case "FlowCompleted" => deriveEncoder[FlowCompleted].apply(event.asInstanceOf[FlowCompleted])
-//      case "FlowFailed" => deriveEncoder[FlowFailed].apply(event.asInstanceOf[FlowFailed])
+      case "FlowStarted" => deriveEncoder[FlowStarted].apply(event.asInstanceOf[FlowStarted])
+      case "FlowCompleted" => deriveEncoder[FlowCompleted].apply(event.asInstanceOf[FlowCompleted])
+      case "FlowFailed" => deriveEncoder[FlowFailed].apply(event.asInstanceOf[FlowFailed])
       case "Github" => deriveEncoder[Github].apply(event.asInstanceOf[Github])
       case "ScheduleStarted" => deriveEncoder[ScheduleStarted].apply(event.asInstanceOf[ScheduleStarted])
       case "ScheduleCompleted" => deriveEncoder[ScheduleCompleted].apply(event.asInstanceOf[ScheduleCompleted])

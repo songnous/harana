@@ -9,14 +9,14 @@ abstract class WriteReadTransformerIntegTest extends IntegratedTestSupport {
 
   def writeReadTransformer(transformer: Transformer, outputFile: String) = {
     val writeTransformer = WriteTransformer(outputFile).setShouldOverwrite(true)
-    writeTransformer.executeUntyped(Vector(transformer))(executionContext)
+    writeTransformer.executeUntyped(List(transformer))(executionContext)
 
-    val deserializedTransformer = ReadTransformer(outputFile).executeUntyped(Vector())(executionContext).head
+    val deserializedTransformer = ReadTransformer(outputFile).executeUntyped(List.empty)(executionContext).head
     deserializedTransformer shouldBe transformer
   }
 
   def writeTransformer(transformer: Transformer, outputFile: String, overwrite: Boolean) = {
     val writeTransformer = WriteTransformer(outputFile).setShouldOverwrite(overwrite)
-    writeTransformer.executeUntyped(Vector(transformer))(executionContext)
+    writeTransformer.executeUntyped(List(transformer))(executionContext)
   }
 }

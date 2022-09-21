@@ -36,7 +36,7 @@ class DataFrameIntegSpec extends IntegratedTestSupport {
 
       "many selectors are used" in {
         val selection = MultipleColumnSelection(
-          Vector(
+          List(
             NameColumnSelection(Set("a")),
             IndexColumnSelection(Set(1, 3)),
             TypeColumnSelection(Set(ColumnType.String, ColumnType.timestamp))
@@ -48,7 +48,7 @@ class DataFrameIntegSpec extends IntegratedTestSupport {
 
       "columns are selected in different order" in {
         val selection = MultipleColumnSelection(
-          Vector(
+          List(
             NameColumnSelection(Set("c")),
             NameColumnSelection(Set("a")),
             NameColumnSelection(Set("b"))
@@ -59,7 +59,7 @@ class DataFrameIntegSpec extends IntegratedTestSupport {
       }
 
       def selectSingleType(columnType: ColumnType): Seq[String] = {
-        val selection = MultipleColumnSelection(Vector(TypeColumnSelection(Set(columnType))), false)
+        val selection = MultipleColumnSelection(List(TypeColumnSelection(Set(columnType))), false)
         dataFrame.getColumnNames(selection)
       }
 
@@ -81,7 +81,7 @@ class DataFrameIntegSpec extends IntegratedTestSupport {
 
       "excluding selector is used" in {
         val selection = MultipleColumnSelection(
-          Vector(NameColumnSelection(Set("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m"))),
+          List(NameColumnSelection(Set("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m"))),
           true
         )
         dataFrame.getColumnNames(selection) shouldBe Seq("n", "o", "p")
@@ -91,14 +91,14 @@ class DataFrameIntegSpec extends IntegratedTestSupport {
     "throw an exception" when {
       "non-existing column name was selected" in {
         intercept[ColumnsDoNotExistError] {
-          val selection = MultipleColumnSelection(Vector(NameColumnSelection(Set("no such column"))), false)
+          val selection = MultipleColumnSelection(List(NameColumnSelection(Set("no such column"))), false)
           dataFrame.getColumnNames(selection)
         }
         ()
       }
       "index out of bounds was selected" in {
         intercept[ColumnsDoNotExistError] {
-          val selection = MultipleColumnSelection(Vector(IndexColumnSelection(Set(20))), false)
+          val selection = MultipleColumnSelection(List(IndexColumnSelection(Set(20))), false)
           dataFrame.getColumnNames(selection)
         }
         ()

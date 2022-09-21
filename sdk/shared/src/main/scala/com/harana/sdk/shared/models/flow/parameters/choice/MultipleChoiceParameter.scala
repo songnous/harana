@@ -9,7 +9,7 @@ case class MultipleChoiceParameter[T <: Choice](name: String)(implicit tag: Type
 
   val parameterType = MultipleChoice
 
-  override def validate(value: Set[T]) = value.toVector.flatMap(_.validateParameters)
+  override def validate(value: Set[T]) = value.toList.flatMap(_.validateParameters)
 
   override def replicate(name: String) = copy(name = name)
 }

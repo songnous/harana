@@ -70,7 +70,7 @@ class TableJsonSpec extends AnyWordSpec with Matchers with TableTestFactory {
 
   def toJson(values: Option[List[String]]): Json =
     values
-      .map(values => Seq(values.map(_)).toVector)
+      .map(values => Seq(values.map(_)).toList)
       .getOrElse(Json.Null)
 
 }

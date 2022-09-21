@@ -7,7 +7,7 @@ trait HasValidator[T] extends Parameter[T] {
 
   val validator: Validator[T]
 
-  override def validate(value: T): Vector[FlowError] = validator.validate(name, value)
+  override def validate(value: T): List[FlowError] = validator.validate(name, value)
 
   override def constraints = if (validator.toHumanReadable(name).isEmpty) "" else " " + validator.toHumanReadable(name)
 

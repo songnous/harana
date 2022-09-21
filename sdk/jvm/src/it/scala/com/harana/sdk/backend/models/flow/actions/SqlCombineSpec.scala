@@ -143,7 +143,7 @@ class SqlCombineSpec extends IntegratedTestSupport {
       rightName: String,
       rightSchema: StructType) = {
     val (knowledge, warnings) = combine.inferKnowledgeUntyped(
-      Vector(
+      List(
         Knowledge(DataFrame.forInference(leftSchema)),
         Knowledge(DataFrame.forInference(rightSchema))
       )

@@ -4,7 +4,7 @@ import com.harana.sdk.backend.models.flow.actionobjects.Projector
 import scala.collection.mutable
 import org.apache.spark.sql.Row
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
-import com.harana.sdk.shared.models.flow.ActionInfo
+import com.harana.sdk.shared.models.flow.ActionTypeInfo
 import com.harana.sdk.shared.models.flow.actionobjects.SortColumnParameter
 import com.harana.sdk.shared.models.flow.parameters.ParameterType
 import io.circe.Json

@@ -20,7 +20,7 @@ object InnerWorkflowTestFactory {
   private def createInnerNodeAction(targetType: TargetTypeChoice) = {
     val parameters = TypeConverterInfo
       .setTargetType(targetType)
-      .setSelectedColumns(MultipleColumnSelection(Vector(NameColumnSelection(Set("column1")))))
+      .setSelectedColumns(MultipleColumnSelection(List(NameColumnSelection(Set("column1")))))
       .parameterValuesToJson
     new ConvertType().setParametersFromJson(parameters)
   }

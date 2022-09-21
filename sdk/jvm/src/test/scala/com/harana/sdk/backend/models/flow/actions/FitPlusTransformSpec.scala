@@ -25,7 +25,7 @@ class FitPlusTransformSpec extends UnitSpec with TestSupport {
         val fpt = new FitPlusTransform
 
         def testExecute(op: FitPlusTransform, expectedDataFrame: DataFrame, expectedTransformer: Transformer) = {
-          val results = op.executeUntyped(Vector(estimator, mock[DataFrame]))(createExecutionContext)
+          val results = op.executeUntyped(List(estimator, mock[DataFrame]))(createExecutionContext)
           val outputDataFrame = results(0).asInstanceOf[DataFrame]
           val outputTransformer = results(1).asInstanceOf[Transformer]
 
@@ -48,8 +48,8 @@ class FitPlusTransformSpec extends UnitSpec with TestSupport {
         val fpt = new FitPlusTransform
 
         def testInference(op: FitPlusTransform, expectedDataFrameKnowledge: Knowledge[DataFrame], expectedTransformerKnowledge: Knowledge[Transformer]) = {
-          val (Vector(outputDataFrameKnowledge, outputTransformerKnowledge), _) =
-            op.inferKnowledgeUntyped(Vector(Knowledge(estimator), mock[Knowledge[DataFrame]]))(mock[InferContext])
+          val (List(outputDataFrameKnowledge, outputTransformerKnowledge), _) =
+            op.inferKnowledgeUntyped(List(Knowledge(estimator), mock[Knowledge[DataFrame]]))(mock[InferContext])
 
           outputDataFrameKnowledge shouldBe expectedDataFrameKnowledge
           outputTransformerKnowledge shouldBe expectedTransformerKnowledge
@@ -64,7 +64,7 @@ class FitPlusTransformSpec extends UnitSpec with TestSupport {
 
         "input Estimator Knowledge consist more than one type" in {
           val estimators = Set[ActionObjectInfo](new MockEstimator, new MockEstimator)
-          val inputKnowledge: Vector[Knowledge[ActionObjectInfo]] = Vector(Knowledge(estimators), mock[Knowledge[DataFrame]])
+          val inputKnowledge: List[Knowledge[ActionObjectInfo]] = List(Knowledge(estimators), mock[Knowledge[DataFrame]])
           val fpt = new FitPlusTransform
           a[TooManyPossibleTypesError] shouldBe thrownBy {
             fpt.inferKnowledgeUntyped(inputKnowledge)(mock[InferContext])
@@ -73,7 +73,7 @@ class FitPlusTransformSpec extends UnitSpec with TestSupport {
 
         "Estimator's dynamic parameters are invalid" in {
           val estimator = new MockEstimator
-          val inputKnowledge = Vector(Knowledge(estimator), mock[Knowledge[DataFrame]])
+          val inputKnowledge = List(Knowledge(estimator), mock[Knowledge[DataFrame]])
           val fpt = new FitPlusTransform
           fpt.setEstimatorParameters(Map(estimator.paramA.name -> -2).asJson)
           a[FlowMultiError] shouldBe thrownBy {

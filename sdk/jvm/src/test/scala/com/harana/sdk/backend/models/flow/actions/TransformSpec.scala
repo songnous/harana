@@ -18,7 +18,7 @@ class TransformSpec extends UnitSpec with TestSupport {
       val transformer = new MockTransformer
 
       def testTransform(op: Transform, expectedDataFrame: DataFrame) = {
-        val Vector(outputDataFrame) = op.executeUntyped(Vector(transformer, createDataFrame()))(createExecutionContext)
+        val List(outputDataFrame) = op.executeUntyped(List(transformer, createDataFrame()))(createExecutionContext)
         outputDataFrame shouldBe expectedDataFrame
       }
 
@@ -36,7 +36,7 @@ class TransformSpec extends UnitSpec with TestSupport {
 
       val parametersForTransformer = Json(transformer.paramA.name -> 2)
       val op = Transform().setTransformerParameters(parametersForTransformer)
-      op.executeUntyped(Vector(transformer, mock[DataFrame]))(createExecutionContext)
+      op.executeUntyped(List(transformer, mock[DataFrame]))(createExecutionContext)
 
       transformer should have(theSameParametersAs(originalTransformer))
     }
@@ -46,9 +46,9 @@ class TransformSpec extends UnitSpec with TestSupport {
 
       def testInference(op: Transform, expecteDataFrameKnowledge: Knowledge[DataFrame]) = {
         val inputDF = createDataFrame()
-        val (knowledge, warnings)  = op.inferKnowledgeUntyped(Vector(Knowledge(transformer), Knowledge(inputDF)))(mock[InferContext])
+        val (knowledge, warnings)  = op.inferKnowledgeUntyped(List(Knowledge(transformer), Knowledge(inputDF)))(mock[InferContext])
         warnings shouldBe InferenceWarnings.empty
-        val Vector(dataFrameKnowledge) = knowledge
+        val List(dataFrameKnowledge) = knowledge
         dataFrameKnowledge shouldBe expecteDataFrameKnowledge
       }
 
@@ -67,7 +67,7 @@ class TransformSpec extends UnitSpec with TestSupport {
       val parametersForTransformer = Json(transformer.paramA.name -> 2)
       val op = Transform().setTransformerParameters(parametersForTransformer)
       val inputDF = DataFrame.forInference(createSchema())
-      op.inferKnowledgeUntyped(Vector(Knowledge(transformer), Knowledge(inputDF)))(mock[InferContext])
+      op.inferKnowledgeUntyped(List(Knowledge(transformer), Knowledge(inputDF)))(mock[InferContext])
 
       transformer should have(theSameParametersAs(originalTransformer))
     }
@@ -77,8 +77,8 @@ class TransformSpec extends UnitSpec with TestSupport {
       val transformers = Set[ActionObjectInfo](new MockTransformer, new MockTransformer)
 
       val op = Transform()
-      val (knowledge, warnings) = op.inferKnowledgeUntyped(Vector(Knowledge(transformers), Knowledge(inputDF)))(mock[InferContext])
-      knowledge shouldBe Vector(Knowledge(DataFrame.forInference()))
+      val (knowledge, warnings) = op.inferKnowledgeUntyped(List(Knowledge(transformers), Knowledge(inputDF)))(mock[InferContext])
+      knowledge shouldBe List(Knowledge(DataFrame.forInference()))
       warnings shouldBe InferenceWarnings.empty
     }
 
@@ -89,7 +89,7 @@ class TransformSpec extends UnitSpec with TestSupport {
         val transform = Transform().setTransformerParameters(Json(transformer.paramA.name -> -2))
 
         a[FlowMultiError] shouldBe thrownBy {
-          transform.inferKnowledgeUntyped(Vector(Knowledge(transformer), Knowledge(inputDF)))(mock[InferContext])
+          transform.inferKnowledgeUntyped(List(Knowledge(transformer), Knowledge(inputDF)))(mock[InferContext])
         }
       }
     }

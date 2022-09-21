@@ -32,7 +32,7 @@ class EstimatorAsActionSpec extends UnitSpec with TestSupport {
 
     "execute fit using properly set parameters" in {
       def testFit(op: MockEstimatorAction, expectedDataFrame: DataFrame, expectedTransformer: Transformer) = {
-        val Vector(outputDataFrame: DataFrame, outputTransformer: Transformer) = op.executeUntyped(Vector(mock[DataFrame]))(mock[ExecutionContext])
+        val List(outputDataFrame: DataFrame, outputTransformer: Transformer) = op.executeUntyped(List(mock[DataFrame]))(mock[ExecutionContext])
         outputDataFrame shouldBe expectedDataFrame
         outputTransformer shouldBe expectedTransformer
       }
@@ -46,13 +46,13 @@ class EstimatorAsActionSpec extends UnitSpec with TestSupport {
     "infer types using properly set parameters" in {
       def testInference(op: MockEstimatorAction, expectedSchema: StructType, expectedTransformerKnowledge: Knowledge[Transformer]) = {
         val inputDF = DataFrame.forInference(createSchema())
-        val (knowledge, warnings) = op.inferKnowledgeUntyped(Vector(Knowledge(inputDF)))(mock[InferContext])
+        val (knowledge, warnings) = op.inferKnowledgeUntyped(List(Knowledge(inputDF)))(mock[InferContext])
 
         // Warnings should be a sum of transformer inference warnings
         // and estimator inference warnings. Currently, either both of them
         // are empty or the inferences throw exception, so the sum is always 'empty'.
         warnings shouldBe InferenceWarnings.empty
-        val Vector(dataFrameKnowledge, transformerKnowledge) = knowledge
+        val List(dataFrameKnowledge, transformerKnowledge) = knowledge
         dataFrameKnowledge shouldBe Knowledge(DataFrame.forInference(expectedSchema))
         transformerKnowledge shouldBe expectedTransformerKnowledge
       }

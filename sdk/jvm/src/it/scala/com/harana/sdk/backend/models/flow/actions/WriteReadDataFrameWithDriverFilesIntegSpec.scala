@@ -48,7 +48,7 @@ class WriteReadDataFrameWithDriverFilesIntegSpec extends IntegratedTestSupport w
                 new OutputFileFormatChoice.Csv().setCsvColumnSeparator(CsvParameters.ColumnSeparatorChoice.Comma()).setNamesIncluded(true)
               )
           )
-      wdf.executeUntyped(Vector(dataFrame))(executionContext)
+      wdf.executeUntyped(List(dataFrame))(executionContext)
 
       val rdf =
         new ReadDataFrame()
@@ -62,7 +62,7 @@ class WriteReadDataFrameWithDriverFilesIntegSpec extends IntegratedTestSupport w
                   .setShouldConvertToBoolean(true)
               )
           )
-      val loadedDataFrame = rdf.executeUntyped(Vector())(executionContext).head
+      val loadedDataFrame = rdf.executeUntyped(List.empty)(executionContext).head
       assertDataFramesEqual(loadedDataFrame, dataFrame, checkRowOrder = false)
     }
 
@@ -73,7 +73,7 @@ class WriteReadDataFrameWithDriverFilesIntegSpec extends IntegratedTestSupport w
             new OutputStorageTypeChoice.File().setOutputFile(absoluteTestsDirPath.fullPath + "json").setFileFormat(new OutputFileFormatChoice.Json())
           )
 
-      wdf.executeUntyped(Vector(dataFrame))(executionContext)
+      wdf.executeUntyped(List(dataFrame))(executionContext)
 
       val rdf =
         new ReadDataFrame()
@@ -81,7 +81,7 @@ class WriteReadDataFrameWithDriverFilesIntegSpec extends IntegratedTestSupport w
             new InputStorageTypeChoice.File().setSourceFile(absoluteTestsDirPath.fullPath + "json").setFileFormat(new InputFileFormatChoice.Json())
           )
 
-      val loadedDataFrame = rdf.executeUntyped(Vector())(executionContext).head
+      val loadedDataFrame = rdf.executeUntyped(List.empty)(executionContext).head
       assertDataFramesEqual(loadedDataFrame, dataFrame, checkRowOrder = false)
     }
   }

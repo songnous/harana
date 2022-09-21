@@ -13,7 +13,7 @@ import com.harana.sdk.backend.models.flow.parameters
 import com.harana.sdk.backend.models.flow.ExecutionContext
 import com.harana.sdk.backend.models.flow.actionobjects.Transformer
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
-import com.harana.sdk.shared.models.flow.ActionInfo
+import com.harana.sdk.shared.models.flow.ActionTypeInfo
 import com.harana.sdk.shared.models.flow.actionobjects.report.Report
 import com.harana.sdk.shared.models.flow.parameters.{NumericParameter, Parameter, ParameterMap}
 import com.harana.sdk.shared.models.flow.utils.Id
@@ -37,7 +37,7 @@ class EstimatorAsFactorySpec extends UnitSpec {
     "produce an Estimator with parameters set" in {
       val mockFactory = new MockEstimatorFactory
       mockFactory.set(mockFactory.estimator.param -> paramValue1)
-      val Vector(estimator: MockEstimator) = mockFactory.executeUntyped(Vector.empty)(mock[ExecutionContext])
+      val List(estimator: MockEstimator) = mockFactory.executeUntyped(List.empty)(mock[ExecutionContext])
       estimator.get(mockFactory.estimator.param) shouldBe Some(paramValue1)
     }
 
@@ -56,7 +56,7 @@ class EstimatorAsFactorySpec extends UnitSpec {
       val mockFactory = new MockEstimatorFactory
       mockFactory.set(mockFactory.estimator.param -> paramValue1)
 
-      val (Vector(knowledge), warnings) = mockFactory.inferKnowledgeUntyped(Vector.empty)(mock[InferContext])
+      val (List(knowledge), warnings) = mockFactory.inferKnowledgeUntyped(List.empty)(mock[InferContext])
 
       knowledge should have size 1
       knowledge.single shouldBe a[MockEstimator]
@@ -68,7 +68,7 @@ class EstimatorAsFactorySpec extends UnitSpec {
   }
 
   private def execute(factory: MockEstimatorFactory): MockEstimator =
-    factory.executeUntyped(Vector.empty)(mock[ExecutionContext]).head.asInstanceOf[MockEstimator]
+    factory.executeUntyped(List.empty)(mock[ExecutionContext]).head.asInstanceOf[MockEstimator]
 
 }
 

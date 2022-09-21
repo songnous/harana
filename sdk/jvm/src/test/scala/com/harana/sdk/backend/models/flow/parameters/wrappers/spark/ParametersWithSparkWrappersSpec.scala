@@ -2,7 +2,7 @@ package com.harana.sdk.backend.models.flow.parameters.wrappers.spark
 
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
-import com.harana.sdk.shared.models.flow.parameters.{BooleanParameter, Parameter, StringParameter}
+import com.harana.sdk.shared.models.flow.parameters.{BooleanParameter, IntParameter, Parameter, StringParameter}
 import org.apache.spark.ml
 import org.apache.spark.ml.param._
 import org.apache.spark.sql.types.StructType
@@ -59,10 +59,10 @@ object ParametersWithSparkWrappersSpec {
 
     val exampleSparkParameters = new ExampleSparkParameters
 
-    val paramA = StringParameter("paramA")
-    val paramB = new IntParameter[ExampleSparkParameters]("paramB", Some("descB"), _.sparkParamB)
+    val paramA = StringParam("paramA")
+    val paramB = IntParameter[ExampleSparkParameters]("paramB", _.sparkParamB)
 
-    val choiceWithParametersInValues = new ChoiceParameter[ChoiceWithWrappers]("choice"))
+    val choiceWithParametersInValues = new ChoiceParameter[ChoiceWithWrappers]("choice")
     val notWrappedParameter = BooleanParameter("booleanparameterName")
 
     val parameters = Array(paramA, paramB, choiceWithParametersInValues, notWrappedParameter)

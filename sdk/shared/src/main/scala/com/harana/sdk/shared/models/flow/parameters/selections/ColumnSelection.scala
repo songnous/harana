@@ -9,7 +9,7 @@ import io.circe.generic.JsonCodec
 @JsonCodec
 sealed trait ColumnSelection {
   val typeName: String
-  def validate = Vector.empty[FlowError]
+  def validate = List.empty[FlowError]
 }
 
 case class NameColumnSelection(names: Set[String]) extends ColumnSelection {
@@ -41,7 +41,7 @@ case class IndexRangeColumnSelection(lowerBound: Option[Int], upperBound: Option
       upper <- upperBound
     } yield lower <= upper
     val valid = lowerLessThanUpper.getOrElse(false)
-    if (valid) Vector.empty[FlowError] else Vector(IllegalIndexRangeColumnSelectionError(this))
+    if (valid) List.empty[FlowError] else List(IllegalIndexRangeColumnSelectionError(this))
   }
 }
 
@@ -69,12 +69,12 @@ object NameSingleColumnSelection {
   val typeName = "column"
 }
 
-case class MultipleColumnSelection(selections: Vector[ColumnSelection], excluding: Boolean = false) {
+case class MultipleColumnSelection(selections: List[ColumnSelection], excluding: Boolean = false) {
   def validate = selections.flatMap(selection => selection.validate)
 }
 
 object MultipleColumnSelection {
-  val emptySelection = new MultipleColumnSelection(Vector.empty)
+  val emptySelection = new MultipleColumnSelection(List.empty)
   val selectionsField = "selections"
   val excludingField = "excluding"
 }

@@ -39,15 +39,15 @@ object NumericToVectorUtils {
   def revertDataFrame(sdf: SparkDataFrame, expectedSchema: StructType, inputColumn: String, outputColumn: String, context: ExecutionContext, convertOutputVectorToDouble: Boolean) = {
     val inputColumnIdx              = sdf.schema.fieldIndex(inputColumn)
     val outputColumnIdx             = sdf.schema.fieldIndex(outputColumn)
-    val extractFirstValueFromVector = (columnIdx: Int) =>
+    val extractFirstValueFromList   = (columnIdx: Int) =>
       (r: Row) => {
         val vector = r.get(columnIdx)
         Row.fromSeq(r.toSeq.updated(columnIdx, if (vector != null) vector.asInstanceOf[com.harana.spark.Linalg.Vector].apply(0) else null))
       }
-    val transformedInputColumnRdd   = sdf.rdd.map(extractFirstValueFromVector(inputColumnIdx))
+    val transformedInputColumnRdd   = sdf.rdd.map(extractFirstValueFromList(inputColumnIdx))
     val transformedRdd              =
       if (convertOutputVectorToDouble && inputColumnIdx != outputColumnIdx)
-        transformedInputColumnRdd.map(extractFirstValueFromVector(outputColumnIdx))
+        transformedInputColumnRdd.map(extractFirstValueFromList(outputColumnIdx))
       else
         transformedInputColumnRdd
     context.sparkSQLSession.createDataFrame(transformedRdd, expectedSchema)

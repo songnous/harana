@@ -22,7 +22,7 @@ class EvaluateSpec extends UnitSpec with TestSupport {
       val evaluator = new MockEvaluator
 
       def testEvaluate(op: Evaluate, expected: MetricValue) = {
-        val Vector(outputDataFrame) = op.executeUntyped(Vector(evaluator, mock[DataFrame]))(createExecutionContext)
+        val List(outputDataFrame) = op.executeUntyped(List(evaluator, mock[DataFrame]))(createExecutionContext)
         outputDataFrame shouldBe expected
       }
 
@@ -40,7 +40,7 @@ class EvaluateSpec extends UnitSpec with TestSupport {
 
       val parametersForEvaluator = Map(evaluator.paramA.name -> 2).asJson
       val op = new Evaluate().setEvaluatorParameters(parametersForEvaluator)
-      op.executeUntyped(Vector(evaluator, mock[DataFrame]))(createExecutionContext)
+      op.executeUntyped(List(evaluator, mock[DataFrame]))(createExecutionContext)
 
       evaluator should have(theSameParametersAs(originalEvaluator))
     }
@@ -50,10 +50,10 @@ class EvaluateSpec extends UnitSpec with TestSupport {
 
       def testInference(op: Evaluate, expectedKnowledge: Knowledge[MetricValue]) = {
         val inputDF = DataFrame.forInference(createSchema())
-        val (knowledge, warnings) = op.inferKnowledgeUntyped(Vector(Knowledge(evaluator), Knowledge(inputDF)))(mock[InferContext])
+        val (knowledge, warnings) = op.inferKnowledgeUntyped(List(Knowledge(evaluator), Knowledge(inputDF)))(mock[InferContext])
         // Currently, InferenceWarnings are always empty.
         warnings shouldBe InferenceWarnings.empty
-        val Vector(dataFrameKnowledge) = knowledge
+        val List(dataFrameKnowledge) = knowledge
         dataFrameKnowledge shouldBe expectedKnowledge
       }
 
@@ -72,7 +72,7 @@ class EvaluateSpec extends UnitSpec with TestSupport {
       val parametersForEvaluator = Map(evaluator.paramA.name -> 2).asJson
       val op = new Evaluate().setEvaluatorParameters(parametersForEvaluator)
       val inputDF = DataFrame.forInference(createSchema())
-      op.inferKnowledgeUntyped(Vector(Knowledge(evaluator), Knowledge(inputDF)))(mock[InferContext])
+      op.inferKnowledgeUntyped(List(Knowledge(evaluator), Knowledge(inputDF)))(mock[InferContext])
 
       evaluator should have(theSameParametersAs(originalEvaluator))
     }
@@ -84,7 +84,7 @@ class EvaluateSpec extends UnitSpec with TestSupport {
 
         val op = new Evaluate()
         a[TooManyPossibleTypesError] shouldBe thrownBy {
-          op.inferKnowledgeUntyped(Vector(Knowledge(evaluators), Knowledge(inputDF)))(mock[InferContext])
+          op.inferKnowledgeUntyped(List(Knowledge(evaluators), Knowledge(inputDF)))(mock[InferContext])
         }
       }
       "values of dynamic parameters are invalid" in {
@@ -95,7 +95,7 @@ class EvaluateSpec extends UnitSpec with TestSupport {
         val evaluatorWithParameters = new Evaluate().setEvaluatorParameters(parametersForEvaluator)
 
         a[FlowMultiError] shouldBe thrownBy {
-          evaluatorWithParameters.inferKnowledgeUntyped(Vector(Knowledge(evaluator), Knowledge(inputDF)))(
+          evaluatorWithParameters.inferKnowledgeUntyped(List(Knowledge(evaluator), Knowledge(inputDF)))(
             mock[InferContext]
           )
         }

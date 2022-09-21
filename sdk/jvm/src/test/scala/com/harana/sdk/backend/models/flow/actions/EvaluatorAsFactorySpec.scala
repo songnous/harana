@@ -31,7 +31,7 @@ class EvaluatorAsFactorySpec extends UnitSpec {
     "produce an Evaluator with parameters set" in {
       val mockFactory = new MockEvaluatorFactory
       mockFactory.set(mockFactory.evaluator.param -> paramValue1)
-      val Vector(evaluator: MockEvaluator) = mockFactory.executeUntyped(Vector.empty)(mock[ExecutionContext])
+      val List(evaluator: MockEvaluator) = mockFactory.executeUntyped(List.empty)(mock[ExecutionContext])
 
       evaluator.get(mockFactory.evaluator.param) shouldBe Some(paramValue1)
     }
@@ -51,7 +51,7 @@ class EvaluatorAsFactorySpec extends UnitSpec {
       val mockFactory = new MockEvaluatorFactory
       mockFactory.set(mockFactory.evaluator.param -> paramValue1)
 
-      val (Vector(knowledge), warnings) = mockFactory.inferKnowledgeUntyped(Vector.empty)(mock[InferContext])
+      val (List(knowledge), warnings) = mockFactory.inferKnowledgeUntyped(List.empty)(mock[InferContext])
 
       knowledge should have size 1
       knowledge.single shouldBe a[MockEvaluator]
@@ -63,7 +63,7 @@ class EvaluatorAsFactorySpec extends UnitSpec {
   }
 
   private def execute(factory: MockEvaluatorFactory): MockEvaluator =
-    factory.executeUntyped(Vector.empty)(mock[ExecutionContext]).head.asInstanceOf[MockEvaluator]
+    factory.executeUntyped(List.empty)(mock[ExecutionContext]).head.asInstanceOf[MockEvaluator]
 
 }
 

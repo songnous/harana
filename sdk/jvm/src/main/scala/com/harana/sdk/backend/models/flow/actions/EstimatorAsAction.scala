@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.actions
 
-import com.harana.sdk.backend.models.flow.{Action1To2, ExecutionContext, Knowledge}
+import com.harana.sdk.backend.models.flow.{ActionType1To2, ExecutionContext, Knowledge}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.{Estimator, Transformer}
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
@@ -12,7 +12,7 @@ import com.harana.sdk.shared.models.flow.utils.TypeUtils
 import scala.reflect.runtime.universe.{TypeTag, typeTag}
 
 abstract class EstimatorAsAction[E <: Estimator[T], T <: Transformer]()(implicit typeTagE: TypeTag[E], typeTagT: TypeTag[T])
-  extends Action1To2[DataFrame, DataFrame, T] {
+  extends ActionType1To2[DataFrame, DataFrame, T] {
 
   val estimator: E = TypeUtils.instanceOfType(typeTagE)
 

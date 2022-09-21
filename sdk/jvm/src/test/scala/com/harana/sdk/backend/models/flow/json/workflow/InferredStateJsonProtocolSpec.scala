@@ -70,14 +70,14 @@ class InferredStateJsonProtocolSpec extends WorkflowJsonTestSupport {
     val graphKnowledge = GraphKnowledge().addInference(
       node1.id,
       NodeInferenceResult(
-        Vector(
+        List(
           Knowledge(Set(actionObject)),
           Knowledge(Set(actionObject, parametricActionObject)),
           Knowledge(Set[ActionObjectInfo](parametricActionObject)),
           Knowledge(Set[ActionObjectInfo](dataFrame))
         ),
         InferenceWarnings(new InferenceWarning("warning1") {}, new InferenceWarning("warning2") {}),
-        Vector(
+        List(
           new FlowError("error1") {},
           new FlowError("error2") {}
         )

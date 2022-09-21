@@ -237,7 +237,7 @@ object StringIndexerIntegSpec extends UnitSpec {
     knowledge.single
   }
 
-  def validate(knowledge: (Vector[Knowledge[ActionObjectInfo]], InferenceWarnings))(f: (Knowledge[DataFrame], Knowledge[Transformer]) => Unit) = {
+  def validate(knowledge: (List[Knowledge[ActionObjectInfo]], InferenceWarnings))(f: (Knowledge[DataFrame], Knowledge[Transformer]) => Unit) = {
     val dfKnowledge = knowledge._1(0).asInstanceOf[Knowledge[DataFrame]]
     val modelKnowledge = knowledge._1(1).asInstanceOf[Knowledge[Transformer]]
     f(dfKnowledge, modelKnowledge)
@@ -249,7 +249,7 @@ object StringIndexerIntegSpec extends UnitSpec {
 
   val knownSchemaKnowledge = dataframeKnowledge(Some(schema))
   val unknownSchemaKnowledge = dataframeKnowledge(None)
-  val knownSchemaKnowledgeVector = Vector(knownSchemaKnowledge.asInstanceOf[Knowledge[ActionObjectInfo]])
-  val unknownSchemaKnowledgeVector = Vector(unknownSchemaKnowledge.asInstanceOf[Knowledge[ActionObjectInfo]])
+  val knownSchemaKnowledgeVector = List(knownSchemaKnowledge.asInstanceOf[Knowledge[ActionObjectInfo]])
+  val unknownSchemaKnowledgeVector = List(unknownSchemaKnowledge.asInstanceOf[Knowledge[ActionObjectInfo]])
 
 }

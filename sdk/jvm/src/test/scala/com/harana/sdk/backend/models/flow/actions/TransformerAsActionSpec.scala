@@ -7,7 +7,7 @@ import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarn
 import com.harana.sdk.backend.models.flow.{ExecutionContext, Knowledge}
 import com.harana.sdk.backend.models.flow.actionobjects.Transformer
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
-import com.harana.sdk.shared.models.flow.ActionInfo.{Id, ReportParameter}
+import com.harana.sdk.shared.models.flow.ActionTypeInfo.{Id, ReportParameter}
 import com.harana.sdk.shared.models.flow.parameters.{NumericParameter, ParameterMap}
 import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
 import org.apache.spark.sql.types.StructType
@@ -83,7 +83,7 @@ class TransformerAsActionSpec extends UnitSpec {
 
     "execute transform using transformer with properly set parameters and return it" in {
       op.set(op.transformer.paramA -> 2)
-      val result = op.executeUntyped(Vector(mock[DataFrame]))(mock[ExecutionContext])
+      val result = op.executeUntyped(List(mock[DataFrame]))(mock[ExecutionContext])
 
       (result should have).length(2)
       result(0).asInstanceOf[DataFrame] shouldBe outputDataFrame2
@@ -94,7 +94,7 @@ class TransformerAsActionSpec extends UnitSpec {
       op.set(op.transformer.paramA -> 2)
 
       val inputDF = inputDataFrame
-      val (result, warnings) = op.inferKnowledgeUntyped(Vector(Knowledge(inputDF)))(mock[InferContext])
+      val (result, warnings) = op.inferKnowledgeUntyped(List(Knowledge(inputDF)))(mock[InferContext])
 
       warnings shouldBe InferenceWarnings.empty
 

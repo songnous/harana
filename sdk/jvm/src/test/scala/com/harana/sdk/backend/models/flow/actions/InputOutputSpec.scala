@@ -92,7 +92,7 @@ class InputOutputSpec extends AnyFreeSpec with BeforeAndAfter with BeforeAndAfte
           .setSourceFile(path)
           .setFileFormat(fileFormat)
       )
-    readDF.executeUntyped(Vector.empty[ActionObject])(ctx).head.asInstanceOf[DataFrame]
+    readDF.executeUntyped(List.empty[ActionObject])(ctx).head.asInstanceOf[DataFrame]
   }
 
   private def write(path: String, fileFormat: OutputFileFormatChoice)(dataframe: DataFrame) = {
@@ -102,7 +102,7 @@ class InputOutputSpec extends AnyFreeSpec with BeforeAndAfter with BeforeAndAfte
           .setOutputFile(path)
           .setFileFormat(fileFormat)
       )
-    write.executeUntyped(Vector(dataframe))(ctx)
+    write.executeUntyped(List(dataframe))(ctx)
   }
 
   */

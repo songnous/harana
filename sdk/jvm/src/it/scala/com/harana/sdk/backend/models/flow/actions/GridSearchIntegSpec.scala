@@ -48,7 +48,7 @@ class GridSearchIntegSpec extends IntegratedTestSupport {
       gridSearch.setEstimatorParameters(estimatorParameters)
       gridSearch.setNumberOfFolds(2)
 
-      val results = gridSearch.executeUntyped(Vector(estimator, dataFrame, evaluator))(executionContext)
+      val results = gridSearch.executeUntyped(List(estimator, dataFrame, evaluator))(executionContext)
       val report  = results.head.asInstanceOf[Report]
       val tables = report.content.tables
 
@@ -88,7 +88,7 @@ class GridSearchIntegSpec extends IntegratedTestSupport {
         gridSearch.setNumberOfFolds(2)
 
         a[ColumnDoesNotExistError] should be thrownBy {
-          gridSearch.inferKnowledgeUntyped(Vector(Knowledge(estimator), Knowledge(dataFrame), Knowledge(evaluator)))(
+          gridSearch.inferKnowledgeUntyped(List(Knowledge(estimator), Knowledge(dataFrame), Knowledge(evaluator)))(
             executionContext.inferContext
           )
         }
@@ -112,7 +112,7 @@ class GridSearchIntegSpec extends IntegratedTestSupport {
         gridSearch.setNumberOfFolds(2)
 
         a[ColumnDoesNotExistError] should be thrownBy {
-          gridSearch.inferKnowledgeUntyped(Vector(Knowledge(estimator), Knowledge(dataFrame), Knowledge(evaluator)))(
+          gridSearch.inferKnowledgeUntyped(List(Knowledge(estimator), Knowledge(dataFrame), Knowledge(evaluator)))(
             executionContext.inferContext
           )
         }

@@ -26,7 +26,7 @@ class NodeStateWithResultsSpec extends AnyWordSpec with Matchers with MockitoSug
 
       finished.nodeState.isCompleted shouldBe true
       finished.knowledge shouldBe Some(
-        graph.NodeInferenceResult(actionObjects.map(Knowledge(_)).toVector, draftNode.knowledge.get.warnings, Vector())
+        graph.NodeInferenceResult(actionObjects.map(Knowledge(_)).toList, draftNode.knowledge.get.warnings, List.empty)
       )
     }
 
@@ -36,13 +36,13 @@ class NodeStateWithResultsSpec extends AnyWordSpec with Matchers with MockitoSug
       val finished = draftNode.enqueue.start.finish(entityIds, reportsMap, actionObjectsMap)
 
       finished.nodeState.isCompleted shouldBe true
-      finished.knowledge shouldBe Some(graph.NodeInferenceResult(Vector(), draftNode.knowledge.get.warnings, Vector()))
+      finished.knowledge shouldBe Some(graph.NodeInferenceResult(List.empty, draftNode.knowledge.get.warnings, List.empty))
     }
   }
 
   private def draftNodeState = {
     NodeStateWithResults.draft.withKnowledge(
-      NodeInferenceResult(Vector(Knowledge(mock[ActionObjectInfo])), mock[InferenceWarnings], Vector(mock[FlowError]))
+      NodeInferenceResult(List(Knowledge(mock[ActionObjectInfo])), mock[InferenceWarnings], List(mock[FlowError]))
     )
   }
 

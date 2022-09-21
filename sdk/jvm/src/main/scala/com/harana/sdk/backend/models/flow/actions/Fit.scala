@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.actions
 
-import com.harana.sdk.backend.models.flow.{Action2To1, ExecutionContext, Knowledge}
+import com.harana.sdk.backend.models.flow.{ActionType2To1, ExecutionContext, Knowledge}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.{Estimator, Transformer}
 import com.harana.sdk.backend.models.flow.actions.exceptions.TooManyPossibleTypesError
@@ -9,7 +9,7 @@ import com.harana.sdk.shared.models.flow.actions.FitInfo
 
 import scala.reflect.runtime.universe.TypeTag
 
-class Fit extends Action2To1[Estimator[Transformer], DataFrame, Transformer]
+class Fit extends ActionType2To1[Estimator[Transformer], DataFrame, Transformer]
   with FitInfo {
 
   def execute(estimator: Estimator[Transformer], dataFrame: DataFrame)(ctx: ExecutionContext) =

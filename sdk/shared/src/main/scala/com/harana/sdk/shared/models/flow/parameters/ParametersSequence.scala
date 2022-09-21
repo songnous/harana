@@ -17,6 +17,6 @@ case class ParametersSequence[T <: Parameters](name: String)(implicit tag: TypeT
 
   override def replicate(name: String) = copy(name = name)
 
-  override def validate(value: Seq[T]) = value.flatMap(_.validateParameters).toVector
+  override def validate(value: Seq[T]) = value.flatMap(_.validateParameters).toList
 
 }

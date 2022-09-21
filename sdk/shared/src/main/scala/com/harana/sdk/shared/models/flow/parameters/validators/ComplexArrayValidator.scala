@@ -6,11 +6,11 @@ import com.harana.sdk.shared.models.flow.exceptions.FlowError
 case class ComplexArrayValidator[T <: Any](rangeValidator: RangeValidator[T], lengthValidator: ArrayLengthValidator = ArrayLengthValidator.withAtLeast(1)) extends Validator[Array[T]] {
   val validatorType = ValidatorType.ArrayComplex
 
-  def validate(name: String, parameter: Array[T]): Vector[FlowError] = {
+  def validate(name: String, parameter: Array[T]): List[FlowError] = {
     val arrayExceptions = lengthValidator.validate(name, parameter)
     val elementsRangesExceptions = parameter.zipWithIndex.flatMap { case (value, idx) =>
       rangeValidator.validate(s"$name[$idx]", value)
-    }.toVector
+    }.toList
     arrayExceptions ++ elementsRangesExceptions
   }
 

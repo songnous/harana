@@ -8,7 +8,7 @@ import com.harana.sdk.backend.models.flow.graph.DClassesForActions._
 import com.harana.sdk.backend.models.flow.graph.ActionTestClasses._
 import com.harana.sdk.backend.models.flow.graph.FlowGraph.FlowNode
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarning, InferenceWarnings}
-import com.harana.sdk.backend.models.flow.{Action2To1, ExecutionContext, Knowledge}
+import com.harana.sdk.backend.models.flow.{ActionType2To1, ExecutionContext, Knowledge}
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarning, InferenceWarnings}
 import com.harana.sdk.shared.models.designer.flow
 import com.harana.sdk.shared.models.designer.flow.catalogs.ActionObjectCatalog
@@ -32,13 +32,13 @@ class AbstractInferenceSpec extends AnyWordSpec with TestSupport with Matchers {
 
   val inferenceCtx: InferContext = createInferContext(hierarchy)
 
-  case class ActionA1A2ToFirst() extends Action2To1[A1, A2, A] with ActionBaseFields {
+  case class ActionTypeA1A2ToFirst() extends ActionType2To1[A1, A2, A] with ActionBaseFields {
 
-    import ActionA1A2ToFirst._
+    import ActionTypeA1A2ToFirst._
 
     def execute(t1: A1, t2: A2)(context: ExecutionContext): A = ???
 
-    override def validateParameters = if (parametersValid) Vector.empty else Vector(parameterInvalidError)
+    override def validateParameters = if (parametersValid) List.empty else List(parameterInvalidError)
 
     private var parametersValid: Boolean = _
 
@@ -66,13 +66,13 @@ class AbstractInferenceSpec extends AnyWordSpec with TestSupport with Matchers {
     lazy val tTagTI_1: ru.TypeTag[A2] = ru.typeTag[A2]
   }
 
-  object ActionA1A2ToFirst {
+  object ActionTypeA1A2ToFirst {
 
     val parameterInvalidError = new ValidationError("") {}
 
     val inferenceError = new FlowError("") {}
 
-    val multiInferenceError = FlowMultiError(Vector(mock[FlowError], mock[FlowError]))
+    val multiInferenceError = FlowMultiError(List(mock[FlowError], mock[FlowError]))
 
     val warning = mock[InferenceWarning]
 
@@ -83,10 +83,10 @@ class AbstractInferenceSpec extends AnyWordSpec with TestSupport with Matchers {
   val idAToA1A2 = Node.Id.randomId
   val idA1A2ToFirst = Node.Id.randomId
 
-  def nodeCreateA1 = Node(idCreateA1, ActionCreateA1())
-  def nodeA1ToA = Node(idA1ToA, ActionA1ToA())
-  def nodeAToA1A2 = Node(idAToA1A2, ActionAToA1A2())
-  def nodeA1A2ToFirst = Node(idA1A2ToFirst, ActionA1A2ToFirst())
+  def nodeCreateA1 = Node(idCreateA1, ActionTypeCreateA1())
+  def nodeA1ToA = Node(idA1ToA, ActionTypeA1ToA())
+  def nodeAToA1A2 = Node(idAToA1A2, ActionTypeAToA1A2())
+  def nodeA1A2ToFirst = Node(idA1A2ToFirst, ActionTypeA1A2ToFirst())
 
   def validGraph = FlowGraph(
     nodes = Set(nodeCreateA1, nodeAToA1A2, nodeA1A2ToFirst),
@@ -97,14 +97,14 @@ class AbstractInferenceSpec extends AnyWordSpec with TestSupport with Matchers {
     )
   )
 
-  def setParametersValid(node: FlowNode) = node.value.asInstanceOf[ActionA1A2ToFirst].setParametersValid()
-  def setInferenceErrorThrowing(node: FlowNode) = node.value.asInstanceOf[ActionA1A2ToFirst].setInferenceErrorThrowing()
-  def setInferenceErrorMultiThrowing(node: FlowNode) = node.value.asInstanceOf[ActionA1A2ToFirst].setInferenceErrorThrowingMultiException()
-  def setParametersInvalid(node: FlowNode) = node.value.asInstanceOf[ActionA1A2ToFirst].setParametersInvalid()
+  def setParametersValid(node: FlowNode) = node.value.asInstanceOf[ActionTypeA1A2ToFirst].setParametersValid()
+  def setInferenceErrorThrowing(node: FlowNode) = node.value.asInstanceOf[ActionTypeA1A2ToFirst].setInferenceErrorThrowing()
+  def setInferenceErrorMultiThrowing(node: FlowNode) = node.value.asInstanceOf[ActionTypeA1A2ToFirst].setInferenceErrorThrowingMultiException()
+  def setParametersInvalid(node: FlowNode) = node.value.asInstanceOf[ActionTypeA1A2ToFirst].setParametersInvalid()
   def setParametersValid(graph: FlowGraph) = setInGraph(graph, _.setParametersValid())
 
-  def setInGraph(graph: FlowGraph, f: ActionA1A2ToFirst => Unit) = {
+  def setInGraph(graph: FlowGraph, f: ActionTypeA1A2ToFirst => Unit) = {
     val node = graph.node(idA1A2ToFirst)
-    f(node.value.asInstanceOf[ActionA1A2ToFirst])
+    f(node.value.asInstanceOf[ActionTypeA1A2ToFirst])
   }
 }

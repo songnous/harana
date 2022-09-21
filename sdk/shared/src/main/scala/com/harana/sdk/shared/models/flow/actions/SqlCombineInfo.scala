@@ -2,7 +2,7 @@ package com.harana.sdk.shared.models.flow.actions
 
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.SetAction
-import com.harana.sdk.shared.models.flow.{Action2To1Info, PortPosition}
+import com.harana.sdk.shared.models.flow.{Action2To1TypeInfo, PortPosition}
 import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.SetAction
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
@@ -13,7 +13,7 @@ import com.harana.sdk.shared.models.flow.utils.Id
 
 import scala.reflect.runtime.{universe => ru}
 
-trait SqlCombineInfo extends Action2To1Info[DataFrameInfo, DataFrameInfo, DataFrameInfo]
+trait SqlCombineInfo extends Action2To1TypeInfo[DataFrameInfo, DataFrameInfo, DataFrameInfo]
   with ActionDocumentation {
 
   val id: Id = "8f254d75-276f-48b7-872d-e4a18b6a86c6"
@@ -21,7 +21,7 @@ trait SqlCombineInfo extends Action2To1Info[DataFrameInfo, DataFrameInfo, DataFr
   val since = Version(1, 4, 0)
   val category = SetAction
 
-  override val inPortsLayout = Vector(PortPosition.Left, PortPosition.Right)
+  override val inputPortsLayout = List(PortPosition.Left, PortPosition.Right)
 
   val leftTableNameParameter = StringParameter("Left dataframe id")
   setDefault(leftTableNameParameter, "")
@@ -42,9 +42,9 @@ trait SqlCombineInfo extends Action2To1Info[DataFrameInfo, DataFrameInfo, DataFr
 
   override def customValidateParameters =
     if (getLeftTableName == getRightTableName)
-      Vector(ParametersEqualError("left dataframe id", "right dataframe id", getLeftTableName))
+      List(ParametersEqualError("left dataframe id", "right dataframe id", getLeftTableName))
     else
-      Vector.empty[FlowError]
+      List.empty[FlowError]
 
   val parameters = Array(leftTableNameParameter, rightTableNameParameter, sqlCombineExpressionParameter)
 

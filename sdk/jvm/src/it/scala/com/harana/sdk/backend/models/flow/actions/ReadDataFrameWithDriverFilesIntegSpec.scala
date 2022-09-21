@@ -193,7 +193,7 @@ class ReadDataFrameWithDriverFilesIntegSpec extends IntegratedTestSupport with B
         )
 
       an[ParquetNotSupported.type] shouldBe thrownBy {
-        rdf.inferKnowledgeUntyped(Vector())(executionContext.inferContext)
+        rdf.inferKnowledgeUntyped(List.empty)(executionContext.inferContext)
       }
     }
 
@@ -206,7 +206,7 @@ class ReadDataFrameWithDriverFilesIntegSpec extends IntegratedTestSupport with B
         )
 
       an[UnknownFileSchemaForPath] shouldBe thrownBy {
-        rdf.inferKnowledgeUntyped(Vector())(executionContext.inferContext)
+        rdf.inferKnowledgeUntyped(List.empty)(executionContext.inferContext)
       }
     }
 
@@ -223,7 +223,7 @@ class ReadDataFrameWithDriverFilesIntegSpec extends IntegratedTestSupport with B
       csvColumnSeparator,
       csvNamesIncluded,
       csvConvertToBoolean
-    ).executeUntyped(Vector.empty[ActionObjectInfo])(executionContext)
+    ).executeUntyped(List.empty[ActionObjectInfo])(executionContext)
       .head
       .asInstanceOf[DataFrame]
   }

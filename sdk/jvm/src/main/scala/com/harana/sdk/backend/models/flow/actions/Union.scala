@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.actions
 
-import com.harana.sdk.backend.models.flow.{Action2To1, DataFrame2To1Action, ExecutionContext}
+import com.harana.sdk.backend.models.flow.{ActionType2To1, DataFrame2To1Action, ExecutionContext}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actions.exceptions.SchemaMismatchError
 import com.harana.sdk.backend.models.flow.inference.InferenceWarnings
@@ -12,7 +12,7 @@ import org.apache.spark.sql.types.StructType
 
 import scala.reflect.runtime.universe.TypeTag
 
-class Union extends Action2To1[DataFrame, DataFrame, DataFrame]
+class Union extends ActionType2To1[DataFrame, DataFrame, DataFrame]
   with UnionInfo
   with DataFrame2To1Action
   with Parameters {

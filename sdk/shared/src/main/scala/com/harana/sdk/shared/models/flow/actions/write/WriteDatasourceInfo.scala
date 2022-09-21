@@ -1,7 +1,7 @@
 package com.harana.sdk.shared.models.flow.actions.write
 
 import com.harana.sdk.shared.models.common.Version
-import com.harana.sdk.shared.models.flow.Action1To0Info
+import com.harana.sdk.shared.models.flow.Action1To0TypeInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
 import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
@@ -11,7 +11,7 @@ import com.harana.sdk.shared.models.flow.utils.Id
 import java.util.UUID
 import scala.reflect.runtime.{universe => ru}
 
-trait WriteDatasourceInfo extends Action1To0Info[DataFrameInfo]
+trait WriteDatasourceInfo extends Action1To0TypeInfo[DataFrameInfo]
   with WriteDatasourceParameters
   with ActionDocumentation {
 

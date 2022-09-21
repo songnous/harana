@@ -43,8 +43,8 @@ class WorkflowVersionUtilSpec extends StandardSpec with UnitTestSupport with Log
       extractVersion(okJson.compactPrint) shouldBe Success(Version(versionString))
 
       val wrongJson = Json("metadataFOO" -> Json("apiVersion" -> versionString))
-      extractVersion(wrongJson) shouldBe 'Failure
-      extractVersion(wrongJson.compactPrint) shouldBe 'Failure
+      extractVersion(wrongJson) shouldBe Symbol(Failure)
+      extractVersion(wrongJson.compactPrint) shouldBe Symbol(Failure)
     }
 
     "parse a Workflow and return an object or a string if version is invalid" in {

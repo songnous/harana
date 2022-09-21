@@ -8,7 +8,7 @@ import com.harana.sdk.backend.models.flow.actions.GetFromVector
 class GetFromVectorExample extends AbstractActionExample[GetFromVector] {
 
   def action: GetFromVector = {
-    val op = new GetFromVector()
+    val op = new GetFromList.empty
     op.transformer.setIndex(1)
     op.transformer.setSingleColumn("features", "second_feature")
     op.set(op.transformer.extractParameterMap())

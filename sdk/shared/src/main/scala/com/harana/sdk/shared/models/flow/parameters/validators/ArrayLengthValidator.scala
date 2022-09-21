@@ -11,9 +11,9 @@ case class ArrayLengthValidator(min: Int = 1, max: Int = Int.MaxValue) extends V
 
   def validate(name: String, parameter: Array[_]) = {
     val length = parameter.length
-    if (length < min) Vector(ArrayTooShort(name, length, min))
-    else if (length > max) Vector(ArrayTooLong(name, length, max))
-    else Vector.empty
+    if (length < min) List(ArrayTooShort(name, length, min))
+    else if (length > max) List(ArrayTooLong(name, length, max))
+    else List.empty
   }
 
   override def toHumanReadable(parameterName: String) =

@@ -44,8 +44,8 @@ class DistributionJsonSpec
       "description"   -> DistributionTestFactory.distributionDescription,
       "missingValues" -> 0,
       "buckets"       ->
-        Seq(DistributionTestFactory.categoricalDistributionBuckets.map(_)).toVector,
-      "counts"        -> Seq(DistributionTestFactory.distributionCounts.map(_)).toVector
+        Seq(DistributionTestFactory.categoricalDistributionBuckets.map(_)).toList,
+      "counts"        -> Seq(DistributionTestFactory.distributionCounts.map(_)).toList
     )
     "serialize to Json" in {
       val json = testCategoricalDistribution.asJson
@@ -64,8 +64,8 @@ class DistributionJsonSpec
       "description"   -> DistributionTestFactory.distributionDescription,
       "missingValues" -> 0,
       "buckets"       ->
-        Seq(DistributionTestFactory.continuousDistributionBuckets.map(_)).toVector,
-      "counts"        -> Seq(DistributionTestFactory.distributionCounts.map(_)).toVector,
+        Seq(DistributionTestFactory.continuousDistributionBuckets.map(_)).toList,
+      "counts"        -> Seq(DistributionTestFactory.distributionCounts.map(_)).toList,
       "statistics"    -> expectedStatisticsJson(statistics)
     )
     "serialize to Json" in {

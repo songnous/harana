@@ -11,7 +11,7 @@ class HandleMissingValuesExample extends AbstractActionExample[HandleMissingValu
     val op = new HandleMissingValues()
     op.transformer
       .setUserDefinedMissingValues(Seq("-1.0"))
-      .setSelectedColumns(MultipleColumnSelection(Vector(NameColumnSelection(Set("baths", "price")))))
+      .setSelectedColumns(MultipleColumnSelection(List(NameColumnSelection(Set("baths", "price")))))
       .setStrategy(RemoveRow())
       .setMissingValueIndicator(No())
     op.set(op.transformer.extractParameterMap())

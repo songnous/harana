@@ -4,7 +4,7 @@ import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
 import org.apache.spark.sql.types.StructType
 
-trait DataFrame2To1Action { self: Action2To1[DataFrame, DataFrame, DataFrame] =>
+trait DataFrame2To1Action { self: ActionType2To1[DataFrame, DataFrame, DataFrame] =>
 
   final override def inferKnowledge(leftDataFrameKnowledge: Knowledge[DataFrame], rightDataFrameKnowledge: Knowledge[DataFrame])(context: InferContext) = {
     val leftSchema  = leftDataFrameKnowledge.single.schema

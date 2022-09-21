@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.actions
 
-import com.harana.sdk.backend.models.flow.{Action2To2, ExecutionContext, Knowledge}
+import com.harana.sdk.backend.models.flow.{ActionType2To2, ExecutionContext, Knowledge}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.{Estimator, Transformer}
 import com.harana.sdk.backend.models.flow.actions.exceptions.TooManyPossibleTypesError
@@ -9,7 +9,7 @@ import com.harana.sdk.shared.models.flow.actions.FitPlusTransformInfo
 
 import scala.reflect.runtime.universe.TypeTag
 
-class FitPlusTransform extends Action2To2[Estimator[Transformer], DataFrame, DataFrame, Transformer] with FitPlusTransformInfo {
+class FitPlusTransform extends ActionType2To2[Estimator[Transformer], DataFrame, DataFrame, Transformer] with FitPlusTransformInfo {
 
   def execute(estimator: Estimator[Transformer], dataFrame: DataFrame)(context: ExecutionContext): (DataFrame, Transformer) = {
     val estimatorToRun = estimatorWithParameters(estimator)

@@ -11,7 +11,7 @@ trait VectorAssemblerInfo extends TransformerInfo with Parameters {
   val inputColumnsParameter = ColumnSelectorParameter("input columns", portIndex = 0)
   val outputColumnParameter = SingleColumnCreatorParameter("output column")
 
-  def setInputColumns(selection: Set[String]): this.type = set(inputColumnsParameter, MultipleColumnSelection(Vector(NameColumnSelection(selection))))
+  def setInputColumns(selection: Set[String]): this.type = set(inputColumnsParameter, MultipleColumnSelection(List(NameColumnSelection(selection))))
   def setOutputColumn(name: String): this.type = set(outputColumnParameter, name)
 
   val parameters = Array(inputColumnsParameter, outputColumnParameter)

@@ -44,7 +44,7 @@ object DataFrameReportGenerator {
   }
 
   private def calculateMultiColStats(df: DataFrame) =
-    Statistics.colStats(df.rdd.map(SparkTypeConverter.rowToDoubleVector))
+    Statistics.colStats(df.rdd.map(SparkTypeConverter.rowToDoubleList))
 
   private def simplifiedReport(df: DataFrame) =
     Report(

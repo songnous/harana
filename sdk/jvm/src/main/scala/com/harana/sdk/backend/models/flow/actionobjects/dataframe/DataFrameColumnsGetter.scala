@@ -58,7 +58,7 @@ object DataFrameColumnsGetter {
   }
 
   def assertColumnNamesValid(schema: StructType, columns: Seq[String]) =
-    assertColumnSelectionsValid(schema, MultipleColumnSelection(Vector(NameColumnSelection(columns.toSet))))
+    assertColumnSelectionsValid(schema, MultipleColumnSelection(List(NameColumnSelection(columns.toSet))))
 
   private def checkSelectionValidity(schema: StructType, selection: ColumnSelection) = {
     val valid = selection match {

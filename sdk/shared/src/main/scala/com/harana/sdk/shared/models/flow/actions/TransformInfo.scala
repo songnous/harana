@@ -1,7 +1,7 @@
 package com.harana.sdk.shared.models.flow.actions
 
 import com.harana.sdk.shared.models.common.Version
-import com.harana.sdk.shared.models.flow.Action2To1Info
+import com.harana.sdk.shared.models.flow.Action2To1TypeInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Action
 import com.harana.sdk.shared.models.flow.actionobjects.TransformerInfo
 import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
@@ -14,7 +14,7 @@ import io.circe.Json
 
 import scala.reflect.runtime.universe.TypeTag
 
-trait TransformInfo extends Action2To1Info[TransformerInfo, DataFrameInfo, DataFrameInfo] with SmallBlockLayout2To1 with ActionDocumentation {
+trait TransformInfo extends Action2To1TypeInfo[TransformerInfo, DataFrameInfo, DataFrameInfo] with SmallBlockLayout2To1 with ActionDocumentation {
 
   val id: Id = "643d8706-24db-4674-b5b4-10b5129251fc"
   val name = "Transform"

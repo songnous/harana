@@ -81,7 +81,7 @@ class WriteDataFrameWithDriverFilesIntegSpec extends IntegratedTestSupport with 
                   .setNamesIncluded(false)
               )
           )
-      wdf.executeUntyped(Vector(dataframe))(executionContext)
+      wdf.executeUntyped(List(dataframe))(executionContext)
       verifySavedDataFrame("without-header", rows, withHeader = false, ",")
     }
 
@@ -97,7 +97,7 @@ class WriteDataFrameWithDriverFilesIntegSpec extends IntegratedTestSupport with 
                   .setNamesIncluded(true)
               )
           )
-      wdf.executeUntyped(Vector(dataframe))(executionContext)
+      wdf.executeUntyped(List(dataframe))(executionContext)
       verifySavedDataFrame("with-header", rows, withHeader = true, ",")
     }
 
@@ -113,7 +113,7 @@ class WriteDataFrameWithDriverFilesIntegSpec extends IntegratedTestSupport with 
                   .setNamesIncluded(false)
               )
           )
-      wdf.executeUntyped(Vector(dataframe))(executionContext)
+      wdf.executeUntyped(List(dataframe))(executionContext)
       verifySavedDataFrame("semicolon-separator", rows, withHeader = false, ";")
     }
 
@@ -129,7 +129,7 @@ class WriteDataFrameWithDriverFilesIntegSpec extends IntegratedTestSupport with 
                   .setNamesIncluded(false)
               )
           )
-      wdf.executeUntyped(Vector(dataframe))(executionContext)
+      wdf.executeUntyped(List(dataframe))(executionContext)
       verifySavedDataFrame("colon-separator", rows, withHeader = false, ":")
     }
 
@@ -140,7 +140,7 @@ class WriteDataFrameWithDriverFilesIntegSpec extends IntegratedTestSupport with 
 //        columnSep(ColumnSeparator.SPACE),
 //        writeHeader = false,
 //        absoluteWriteDataFrameTestPath + "space-separator")
-//      wdf.execute(Vector(dataframe))(executionContext)
+//      wdf.execute(List(dataframe))(executionContext)
 //      verifySavedDataFrame("space-separator", rows, withHeader = false, " ")
 //    }
 
@@ -151,7 +151,7 @@ class WriteDataFrameWithDriverFilesIntegSpec extends IntegratedTestSupport with 
 //        columnSep(ColumnSeparator.TAB),
 //        writeHeader = false,
 //        absoluteWriteDataFrameTestPath + "tab-separator")
-//      wdf.execute(Vector(dataframe))(executionContext)
+//      wdf.execute(List(dataframe))(executionContext)
 //      verifySavedDataFrame("tab-separator", rows, withHeader = false, "\t")
 //    }
 
@@ -171,7 +171,7 @@ class WriteDataFrameWithDriverFilesIntegSpec extends IntegratedTestSupport with 
                   .setNamesIncluded(false)
               )
           )
-      wdf.executeUntyped(Vector(dataframe))(executionContext)
+      wdf.executeUntyped(List(dataframe))(executionContext)
       verifySavedDataFrame("custom-separator", rows, withHeader = false, "X")
     }
 
@@ -183,7 +183,7 @@ class WriteDataFrameWithDriverFilesIntegSpec extends IntegratedTestSupport with 
               .setOutputFile(absoluteTestsDirPath.fullPath + "json-array")
               .setFileFormat(new OutputFileFormatChoice.Json())
           )
-      wdf.executeUntyped(Vector(arrayDataFrame))(executionContext)
+      wdf.executeUntyped(List(arrayDataFrame))(executionContext)
     }
 
     "throw an exception when writing ArrayType to CSV" in {
@@ -199,7 +199,7 @@ class WriteDataFrameWithDriverFilesIntegSpec extends IntegratedTestSupport with 
               )
           )
       an[UnsupportedColumnTypeError] shouldBe thrownBy {
-        wdf.executeUntyped(Vector(arrayDataFrame))(executionContext)
+        wdf.executeUntyped(List(arrayDataFrame))(executionContext)
       }
     }
 
@@ -212,7 +212,7 @@ class WriteDataFrameWithDriverFilesIntegSpec extends IntegratedTestSupport with 
         )
 
       an[ParquetNotSupported.type] shouldBe thrownBy {
-        wdf.inferKnowledgeUntyped(Vector(Knowledge(dataframe)))(executionContext.inferContext)
+        wdf.inferKnowledgeUntyped(List(Knowledge(dataframe)))(executionContext.inferContext)
       }
     }
 
@@ -225,7 +225,7 @@ class WriteDataFrameWithDriverFilesIntegSpec extends IntegratedTestSupport with 
         )
 
       an[UnknownFileSchemaForPath] shouldBe thrownBy {
-        wdf.inferKnowledgeUntyped(Vector(Knowledge(dataframe)))(executionContext.inferContext)
+        wdf.inferKnowledgeUntyped(List(Knowledge(dataframe)))(executionContext.inferContext)
       }
     }
 
@@ -243,7 +243,7 @@ class WriteDataFrameWithDriverFilesIntegSpec extends IntegratedTestSupport with 
                   .setNamesIncluded(false)
               )
           )
-      wdf.executeUntyped(Vector(dataframe))(executionContext)
+      wdf.executeUntyped(List(dataframe))(executionContext)
       val wdf1 =
         new WriteDataFrame()
           .setStorageType(
@@ -256,7 +256,7 @@ class WriteDataFrameWithDriverFilesIntegSpec extends IntegratedTestSupport with 
                   .setNamesIncluded(true)
               )
           )
-      wdf1.executeUntyped(Vector(dataframe))(executionContext)
+      wdf1.executeUntyped(List(dataframe))(executionContext)
       verifySavedDataFrame(outputName, rows, withHeader = true, ",")
     }
 
@@ -274,7 +274,7 @@ class WriteDataFrameWithDriverFilesIntegSpec extends IntegratedTestSupport with 
                   .setNamesIncluded(false)
               )
           )
-      wdf.executeUntyped(Vector(dataframe))(executionContext)
+      wdf.executeUntyped(List(dataframe))(executionContext)
       val wdf1 =
         new WriteDataFrame()
           .setStorageType(
@@ -288,7 +288,7 @@ class WriteDataFrameWithDriverFilesIntegSpec extends IntegratedTestSupport with 
               )
           )
       a[HaranaIOError] shouldBe thrownBy {
-        wdf1.executeUntyped(Vector(dataframe))(executionContext)
+        wdf1.executeUntyped(List(dataframe))(executionContext)
       }
     }
   }

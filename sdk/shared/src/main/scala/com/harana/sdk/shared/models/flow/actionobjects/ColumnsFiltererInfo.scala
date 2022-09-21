@@ -10,7 +10,7 @@ trait ColumnsFiltererInfo extends TransformerInfo {
   val selectedColumnsParameter = ColumnSelectorParameter("selected columns", portIndex = 0)
   def getSelectedColumns = $(selectedColumnsParameter)
   def setSelectedColumns(value: MultipleColumnSelection): this.type = set(selectedColumnsParameter, value)
-  def setSelectedColumns(retainedColumns: Seq[String]): this.type = setSelectedColumns(MultipleColumnSelection(Vector(NameColumnSelection(retainedColumns.toSet))))
+  def setSelectedColumns(retainedColumns: Seq[String]): this.type = setSelectedColumns(MultipleColumnSelection(List(NameColumnSelection(retainedColumns.toSet))))
 
   override val parameters = Array(selectedColumnsParameter)
 

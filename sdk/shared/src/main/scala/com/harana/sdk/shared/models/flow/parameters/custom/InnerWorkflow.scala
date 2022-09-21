@@ -1,6 +1,6 @@
 package com.harana.sdk.shared.models.flow.parameters.custom
 
-import com.harana.sdk.shared.models.flow.ActionInfo
+import com.harana.sdk.shared.models.flow.ActionTypeInfo
 import com.harana.sdk.shared.models.flow.actions.custom.{SinkInfo, SourceInfo}
 import com.harana.sdk.shared.models.flow.graph.FlowGraph
 import com.harana.sdk.shared.models.flow.graph.FlowGraph.FlowNode
@@ -20,7 +20,7 @@ case class InnerWorkflow(graph: FlowGraph, thirdPartyData: Json = Json.Null, pub
   val source: FlowNode = findNodeOfType(sourceId).get
   val sink: FlowNode = findNodeOfType(sinkId).get
 
-  private def findNodeOfType(actionId: ActionInfo.Id) = graph.nodes.find(_.value.id == actionId)
+  private def findNodeOfType(actionId: ActionTypeInfo.Id) = graph.nodes.find(_.value.id == actionId)
   def getDatasourcesIds = graph.getDatasourcesIds
 
 }

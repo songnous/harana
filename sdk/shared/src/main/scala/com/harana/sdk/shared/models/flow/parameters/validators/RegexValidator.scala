@@ -9,8 +9,8 @@ import scala.util.matching.Regex
 trait RegexValidator extends Validator[String] {
   val regex: Regex
 
-  def validate(name: String, parameter: String): Vector[FlowError] =
-    if (parameter.matches(regex.toString)) Vector.empty else Vector(MatchError(parameter, regex))
+  def validate(name: String, parameter: String): List[FlowError] =
+    if (parameter.matches(regex.toString)) List.empty else List(MatchError(parameter, regex))
 }
 
 object RegexValidator {

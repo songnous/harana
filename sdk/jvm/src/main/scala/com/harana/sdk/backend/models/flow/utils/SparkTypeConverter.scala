@@ -26,7 +26,7 @@ object SparkTypeConverter {
   def getColumnAsString(columnIndex: Int)(row: Row) =
     getOption(columnIndex)(row).map(SparkTypeConverter.sparkAnyToString).getOrElse("NULL")
 
-  def rowToDoubleVector(row: Row): Vector = {
+  def rowToDoubleList(row: Row): Vector = {
     val values = (0 until row.size).map(columnIndex => getOption(columnIndex)(row).map(SparkTypeConverter.sparkAnyToDouble).getOrElse(Double.NaN))
     Vectors.dense(values.toArray)
   }

@@ -1,8 +1,6 @@
 package com.harana.sdk.backend.models.flow.actions
 
 import org.scalatest._
-import com.harana.sdk.backend.models.flow._
-import com.harana.sdk.backend.models.flow.actions.inout._
 import com.harana.sdk.backend.models.flow.actions.readwritedataframe.googlestorage._
 import com.harana.sdk.backend.models.flow.{Jenkins, LocalExecutionContext, TestFiles}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
@@ -52,7 +50,7 @@ class GoogleSheetSpec
       .setStorageType(
         new OutputStorageTypeChoice.GoogleSheet().setGoogleServiceAccountCredentials(credentials).setGoogleSheetId(googleSheetId)
       )
-    write.executeUntyped(Vector(dataframe))(executionContext)
+    write.executeUntyped(List(dataframe))(executionContext)
   }
 
   private def readGoogleSheet(googleSheetId: GoogleSheetId) = {
@@ -60,7 +58,7 @@ class GoogleSheetSpec
       .setStorageType(
         new InputStorageTypeChoice.GoogleSheet().setGoogleSheetId(googleSheetId).setGoogleServiceAccountCredentials(credentials)
       )
-    readDF.executeUntyped(Vector.empty[ActionObjectInfo])(executionContext).head
+    readDF.executeUntyped(List.empty[ActionObjectInfo])(executionContext).head
   }
 
   private def readCsvFileFromDriver(filePath: FilePath) = {
@@ -70,6 +68,6 @@ class GoogleSheetSpec
         new InputStorageTypeChoice.File()
           .setSourceFile(filePath.fullPath).setFileFormat(new InputFileFormatChoice.Csv().setNamesIncluded(true))
       )
-    readDF.executeUntyped(Vector.empty[ActionObjectInfo])(executionContext).head
+    readDF.executeUntyped(List.empty[ActionObjectInfo])(executionContext).head
   }
 }

@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.actions
 
-import com.harana.sdk.backend.models.flow.{Action2To1, DataFrame2To1Action, ExecutionContext}
+import com.harana.sdk.backend.models.flow.{ActionType2To1, DataFrame2To1Action, ExecutionContext}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.inference.SqlSchemaInferrer
 import com.harana.sdk.shared.models.flow.actions.SqlCombineInfo
@@ -10,7 +10,7 @@ import org.apache.spark.sql.types.StructType
 
 import scala.reflect.runtime.universe.TypeTag
 
-class SqlCombine extends Action2To1[DataFrame, DataFrame, DataFrame]
+class SqlCombine extends ActionType2To1[DataFrame, DataFrame, DataFrame]
   with SqlCombineInfo
   with DataFrame2To1Action {
 

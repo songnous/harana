@@ -12,21 +12,21 @@ trait Parameters extends Serializable with HasInferenceResult {
 
   private lazy val parametersByName = parameters.map(param => param.name -> param).toMap[String, Parameter[_]]
 
-  def customValidateParameters = Vector.empty[FlowError]
+  def customValidateParameters = List.empty[FlowError]
 
   def validateParameters = {
     val singleParameterErrors = parameters.flatMap { param =>
       if (isDefined(param))
         param.asInstanceOf[Parameter[Any]].validate($(param))
       else
-        Vector(ParamValueNotProvidedError(param.name))
-    }.toVector
+        List(ParamValueNotProvidedError(param.name))
+    }.toList
     val customValidationErrors = customValidateParameters
     singleParameterErrors ++ customValidationErrors
   }
 
   def validateDynamicParameters(parameters: Parameters*) = {
-    val validationResult = parameters.flatMap(param => param.validateParameters).toVector
+    val validationResult = parameters.flatMap(param => param.validateParameters).toList
     if (validationResult.nonEmpty) throw FlowMultiError(validationResult).toException
   }
 

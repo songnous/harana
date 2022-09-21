@@ -16,11 +16,11 @@ class GraphKnowledgeSpec extends AnyWordSpec with Matchers with MockitoSugar {
       val node2Id = Node.Id.randomId
       val inferenceResultsWithErrors = mock[NodeInferenceResult]
 
-      val errors = Vector(mock[FlowError], mock[FlowError])
+      val errors = List(mock[FlowError], mock[FlowError])
       when(inferenceResultsWithErrors.errors).thenReturn(errors)
 
       val inferenceResultsWithoutErrors = mock[NodeInferenceResult]
-      when(inferenceResultsWithoutErrors.errors).thenReturn(Vector.empty)
+      when(inferenceResultsWithoutErrors.errors).thenReturn(List.empty)
 
       val knowledge = GraphKnowledge()
         .addInference(node1Id, inferenceResultsWithErrors)

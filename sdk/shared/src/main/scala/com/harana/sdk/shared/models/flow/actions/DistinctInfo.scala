@@ -1,7 +1,7 @@
 package com.harana.sdk.shared.models.flow.actions
 
 import com.harana.sdk.shared.models.common.Version
-import com.harana.sdk.shared.models.flow.Action3To1Info
+import com.harana.sdk.shared.models.flow.Action3To1TypeInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Filtering
 import com.harana.sdk.shared.models.flow.actionobjects.ProjectorInfo
 import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
@@ -12,7 +12,7 @@ import com.harana.sdk.shared.models.flow.utils.Id
 
 import scala.reflect.runtime.universe.{TypeTag, typeTag}
 
-trait DistinctInfo extends Action3To1Info[DataFrameInfo, DataFrameInfo, DataFrameInfo, DataFrameInfo] with ActionDocumentation {
+trait DistinctInfo extends Action3To1TypeInfo[DataFrameInfo, DataFrameInfo, DataFrameInfo, DataFrameInfo] with ActionDocumentation {
 
   val id: Id = "53c98d28-10c7-46cb-8173-b7b6b9651afa"
   val name = "Distinct"

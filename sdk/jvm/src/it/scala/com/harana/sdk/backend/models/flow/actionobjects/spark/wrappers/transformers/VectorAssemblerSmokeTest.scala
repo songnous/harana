@@ -8,7 +8,7 @@ class VectorAssemblerSmokeTest extends AbstractTransformerWrapperSmokeTest[Vecto
     val transformer = new VectorAssembler()
     transformer.set(
       Seq(
-        transformer.inputColumnsParameter -> MultipleColumnSelection(Vector(NameColumnSelection(Set("i", "i2")))),
+        transformer.inputColumnsParameter -> MultipleColumnSelection(List(NameColumnSelection(Set("i", "i2")))),
         transformer.outputColumnParameter -> "outputVector"
       ): _*
     )

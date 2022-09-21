@@ -12,7 +12,7 @@ abstract class Parameter[T] extends java.io.Serializable {
 
   val parameterType: ParameterType
 
-  def validate(value: T): Vector[FlowError] = Vector.empty
+  def validate(value: T): List[FlowError] = List.empty
 
   val isGriddable: Boolean = false
 

@@ -2,7 +2,7 @@ package com.harana.sdk.backend.models.flow.json.workflow
 
 import com.harana.sdk.shared.models.designer.flow.utils.catalog.SortPriority
 import com.harana.sdk.shared.models.flow.catalogs.{ActionCategory, ActionDescriptor}
-import com.harana.sdk.shared.models.flow.{ActionInfo, PortPosition}
+import com.harana.sdk.shared.models.flow.{ActionTypeInfo, PortPosition}
 import com.harana.sdk.shared.models.flow.parameters.Parameters
 import io.circe.Json
 import io.circe.syntax.EncoderOps
@@ -45,7 +45,7 @@ class ActionDescriptorJsonProtocolSpec extends AnyFlatSpec with MockitoSugar wit
     when(parameters.parametersToJson).thenReturn(parametersJsRepresentation)
 
     val actionDescriptor = ActionDescriptor(
-      ActionInfo.Id.randomId,
+      ActionTypeInfo.Id.randomId,
       "action name",
       "action description",
       category,
@@ -53,9 +53,9 @@ class ActionDescriptorJsonProtocolSpec extends AnyFlatSpec with MockitoSugar wit
       hasDocumentation = false,
       parameters.parametersToJson,
       Seq(typeOf[A], typeOf[A with T1]),
-      Vector(PortPosition.Left, PortPosition.Center),
+      List(PortPosition.Left, PortPosition.Center),
       Seq(typeOf[B], typeOf[B with T2]),
-      Vector(PortPosition.Right, PortPosition.Center)
+      List(PortPosition.Right, PortPosition.Center)
     )
 
     def name[T: TypeTag] = typeOf[T].typeSymbol.fullName

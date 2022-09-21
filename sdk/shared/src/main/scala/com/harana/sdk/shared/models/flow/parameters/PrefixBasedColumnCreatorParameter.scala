@@ -6,7 +6,7 @@ case class PrefixBasedColumnCreatorParameter(name: String, emptyPrefixValidation
 
   override def validate(value: String) =
     if (emptyPrefixValidation && value.isEmpty)
-      Vector()
+      List.empty
     else
         ColumnValidator.Name.validate(name, value) ++ super.validate(value)
 

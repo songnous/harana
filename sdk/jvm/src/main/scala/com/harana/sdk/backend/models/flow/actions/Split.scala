@@ -1,7 +1,7 @@
 package com.harana.sdk.backend.models.flow.actions
 
 import com.harana.sdk.backend.models.flow._
-import com.harana.sdk.backend.models.flow.{Action1To2, ExecutionContext}
+import com.harana.sdk.backend.models.flow.{ActionType1To2, ExecutionContext}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.shared.models.flow.actions.{SplitInfo, SplitModeChoice}
 import com.harana.sdk.shared.models.flow.parameters.Parameters
@@ -13,7 +13,7 @@ import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 import scala.reflect.runtime.universe.TypeTag
 
-class Split extends Action1To2[DataFrame, DataFrame, DataFrame]
+class Split extends ActionType1To2[DataFrame, DataFrame, DataFrame]
   with SplitInfo
   with Parameters {
 

@@ -121,7 +121,7 @@ class ColumnsFiltererIntegSpec extends IntegratedTestSupport with ScalaCheckDriv
     filterColumnTransformer(names, ids)._transformSchema(schema)
 
   private def filterColumnTransformer(names: Set[String], ids: Set[Int]): Transformer =
-    new ColumnsFilterer().setSelectedColumns(MultipleColumnSelection(Vector(NameColumnSelection(names), IndexColumnSelection(ids), TypeColumnSelection(Set()))))
+    new ColumnsFilterer().setSelectedColumns(MultipleColumnSelection(List(NameColumnSelection(names), IndexColumnSelection(ids), TypeColumnSelection(Set()))))
 
   private def selectWithIndices[T](indices: Set[Int], sequence: Seq[T]): Seq[T] =
     sequence.zipWithIndex.collect { case (v, index) if indices.contains(index) => v }

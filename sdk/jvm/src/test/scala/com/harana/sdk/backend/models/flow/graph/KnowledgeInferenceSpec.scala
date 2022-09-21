@@ -34,10 +34,10 @@ class KnowledgeInferenceSpec extends AbstractInferenceSpec with BeforeAndAfter {
           nodeA1A2ToFirst
         )
         val nodeInferenceResultForNodes = List(
-          NodeInferenceResult(Vector(knowledgeA1)),
-          NodeInferenceResult(Vector(knowledgeA1, knowledgeA2)),
-          NodeInferenceResult(Vector(knowledgeA1)),
-          NodeInferenceResult(Vector(knowledgeA1), warnings = mock[InferenceWarnings])
+          NodeInferenceResult(List(knowledgeA1)),
+          NodeInferenceResult(List(knowledgeA1, knowledgeA2)),
+          NodeInferenceResult(List(knowledgeA1)),
+          NodeInferenceResult(List(knowledgeA1), warnings = mock[InferenceWarnings])
         )
         when(topologicallySortedMock.topologicallySorted).thenReturn(Some(topologicallySortedNodes))
         topologicallySortedNodes.zip(nodeInferenceResultForNodes).foreach {
@@ -58,13 +58,13 @@ class KnowledgeInferenceSpec extends AbstractInferenceSpec with BeforeAndAfter {
       "given initial knowledge" in {
 
         val initialKnowledge = Map(
-          nodeCreateA1.id -> NodeInferenceResult(Vector(knowledgeA1)),
-          nodeA1ToA.id -> NodeInferenceResult(Vector(knowledgeA1, knowledgeA2))
+          nodeCreateA1.id -> NodeInferenceResult(List(knowledgeA1)),
+          nodeA1ToA.id -> NodeInferenceResult(List(knowledgeA1, knowledgeA2))
         )
 
         val knowledgeToInfer = Map(
-          nodeAToA1A2.id -> NodeInferenceResult(Vector(knowledgeA1)),
-          nodeA1A2ToFirst.id -> NodeInferenceResult(Vector(knowledgeA1), warnings = mock[InferenceWarnings])
+          nodeAToA1A2.id -> NodeInferenceResult(List(knowledgeA1)),
+          nodeA1A2ToFirst.id -> NodeInferenceResult(List(knowledgeA1), warnings = mock[InferenceWarnings])
         )
 
         val nodesWithKnowledge  = List(nodeCreateA1, nodeA1ToA)

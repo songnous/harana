@@ -1,7 +1,7 @@
 package com.harana.sdk.shared.models.flow
 
-import ActionInfo.ReportParameter.{Extended, Metadata}
-import ActionInfo.{ReportParameter, ReportType}
+import ActionTypeInfo.ReportParameter.{Extended, Metadata}
+import ActionTypeInfo.{ReportParameter, ReportType}
 import Gravity.{GravitateLeft, GravitateRight}
 import PortPosition._
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
@@ -10,18 +10,17 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory
 import com.harana.sdk.shared.models.flow.graph.GraphAction
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
 import com.harana.sdk.shared.models.flow.parameters.{Parameter, Parameters}
-import com.harana.sdk.shared.models.flow.utils.Identifiable
 
 import java.util.UUID
 import scala.reflect.runtime.{universe => ru}
 
 @SerialVersionUID(1L)
-trait ActionInfo extends GraphAction with Serializable with Parameters {
+trait ActionTypeInfo extends GraphAction with Serializable with Parameters {
 
   val inArity: Int
   val outArity: Int
 
-  val id: ActionInfo.Id
+  val id: ActionTypeInfo.Id
   val name: String
   val category: ActionCategory
 
@@ -30,34 +29,34 @@ trait ActionInfo extends GraphAction with Serializable with Parameters {
 
   def hasDocumentation: Boolean = false
 
-  def inPortTypes: Vector[ru.TypeTag[_]]
-  def inPortsLayout: Vector[PortPosition] = defaultPortLayout(inPortTypes, GravitateLeft)
-  def outPortTypes: Vector[ru.TypeTag[_]]
-  def outPortsLayout: Vector[PortPosition] = defaultPortLayout(outPortTypes, GravitateRight)
+  def inputPorts: List[ru.TypeTag[_]]
+  def inputPortsLayout: List[PortPosition] = defaultPortLayout(inputPorts, GravitateLeft)
+  def outputPorts: List[ru.TypeTag[_]]
+  def outputPortsLayout: List[PortPosition] = defaultPortLayout(outputPorts, GravitateRight)
 
   def getDatasourcesIds: Set[UUID] = Set[UUID]()
 
-  private def defaultPortLayout(portTypes: Vector[ru.TypeTag[_]], gravity: Gravity): Vector[PortPosition] = {
+  private def defaultPortLayout(portTypes: List[ru.TypeTag[_]], gravity: Gravity): List[PortPosition] = {
     portTypes.size match {
-      case 0 => Vector.empty[PortPosition]
-      case 1 => Vector(Center)
+      case 0 => List.empty[PortPosition]
+      case 1 => List(Center)
       case 2 =>
         gravity match {
-          case GravitateLeft  => Vector(Left, Center)
-          case GravitateRight => Vector(Center, Right)
+          case GravitateLeft  => List(Left, Center)
+          case GravitateRight => List(Center, Right)
         }
-      case 3 => Vector(Left, Center, Right)
+      case 3 => List(Left, Center, Right)
       case other => throw new IllegalStateException(s"Unsupported number of output ports: $other")
     }
   }
 
   def validate() = {
-    require(outPortsLayout.size == outPortTypes.size, "Every output port must be laid out")
-    require(!outPortsLayout.hasDuplicates, "Output port positions must be unique")
-    require(inPortsLayout.size == inPortTypes.size, "Every input port must be laid out")
-    require(!inPortsLayout.hasDuplicates, "Input port positions must be unique")
-    require(inPortsLayout.isSorted, "Input ports must be laid out from left to right")
-    require(outPortsLayout.isSorted, "Output ports must be laid out from left to right")
+    require(outputPortsLayout.size == outputPorts.size, "Every output port must be laid out")
+    require(!outputPortsLayout.hasDuplicates, "Output port positions must be unique")
+    require(inputPortsLayout.size == inputPorts.size, "Every input port must be laid out")
+    require(!inputPortsLayout.hasDuplicates, "Input port positions must be unique")
+    require(inputPortsLayout.isSorted, "Input ports must be laid out from left to right")
+    require(outputPortsLayout.isSorted, "Output ports must be laid out from left to right")
   }
 
   def typeTag[T: ru.TypeTag]: ru.TypeTag[T] = ru.typeTag[T]
@@ -69,7 +68,7 @@ trait ActionInfo extends GraphAction with Serializable with Parameters {
 
 }
 
-object ActionInfo {
+object ActionTypeInfo {
 
   type Id = utils.Id
   val Id = utils.Id

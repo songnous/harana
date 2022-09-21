@@ -23,7 +23,7 @@ class UnionIntegSpec extends IntegratedTestSupport {
       val df1 = createDataFrame(rows1_1, schema1)
       val df2 = createDataFrame(rows1_2, schema1)
 
-      val merged = Union().executeUntyped(Vector(df1, df2))(executionContext).head.asInstanceOf[DataFrame]
+      val merged = Union().executeUntyped(List(df1, df2))(executionContext).head.asInstanceOf[DataFrame]
       assertDataFramesEqual(merged, createDataFrame(rows1_1 ++ rows1_2, schema1))
     }
 
@@ -35,7 +35,7 @@ class UnionIntegSpec extends IntegratedTestSupport {
       val df2 = createDataFrame(rows2_1, schema2)
 
       a[SchemaMismatchError] should be thrownBy {
-        Union().executeUntyped(Vector(df1, df2))(executionContext)
+        Union().executeUntyped(List(df1, df2))(executionContext)
       }
     }
 
@@ -48,7 +48,7 @@ class UnionIntegSpec extends IntegratedTestSupport {
       val df2 = createDataFrame(rows2_1, schema2)
 
       a[SchemaMismatchError] should be thrownBy {
-        Union().executeUntyped(Vector(df1, df2))(executionContext)
+        Union().executeUntyped(List(df1, df2))(executionContext)
       }
     }
   }
@@ -58,7 +58,7 @@ class UnionIntegSpec extends IntegratedTestSupport {
       val structType = StructType(Seq(StructField("x", DoubleType), StructField("y", DoubleType)))
       val knowledgeDF1 = Knowledge(DataFrame.forInference(structType))
       val knowledgeDF2 = Knowledge(DataFrame.forInference(structType))
-      Union().inferKnowledgeUntyped(Vector(knowledgeDF1, knowledgeDF2))(mock[InferContext]) shouldBe(Vector(knowledgeDF1), InferenceWarnings())
+      Union().inferKnowledgeUntyped(List(knowledgeDF1, knowledgeDF2))(mock[InferContext]) shouldBe(List(knowledgeDF1), InferenceWarnings())
     }
     "generate error when schemas don't match" in {
       val structType1 = StructType(Seq(StructField("x", DoubleType)))
@@ -66,7 +66,7 @@ class UnionIntegSpec extends IntegratedTestSupport {
       val knowledgeDF1 = Knowledge(DataFrame.forInference(structType1))
       val knowledgeDF2 = Knowledge(DataFrame.forInference(structType2))
       an[SchemaMismatchError] shouldBe thrownBy(
-        Union().inferKnowledgeUntyped(Vector(knowledgeDF1, knowledgeDF2))(mock[InferContext])
+        Union().inferKnowledgeUntyped(List(knowledgeDF1, knowledgeDF2))(mock[InferContext])
       )
     }
   }

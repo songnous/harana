@@ -2,7 +2,7 @@ package com.harana.sdk.shared.models.flow.actions
 
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Action
-import com.harana.sdk.shared.models.flow.Action2To2Info
+import com.harana.sdk.shared.models.flow.Action2To2TypeInfo
 import com.harana.sdk.shared.models.flow.actionobjects.{EstimatorInfo, TransformerInfo}
 import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
 import com.harana.sdk.shared.models.flow.actions.layout.SmallBlockLayout2To2
@@ -15,7 +15,7 @@ import io.circe.Json
 import scala.reflect.runtime.universe._
 
 trait FitPlusTransformInfo
-    extends Action2To2Info[EstimatorInfo, DataFrameInfo, DataFrameInfo, TransformerInfo]
+    extends Action2To2TypeInfo[EstimatorInfo, DataFrameInfo, DataFrameInfo, TransformerInfo]
     with SmallBlockLayout2To2
     with ActionDocumentation {
 

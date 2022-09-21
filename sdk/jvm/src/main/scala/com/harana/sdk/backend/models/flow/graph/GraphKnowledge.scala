@@ -25,7 +25,7 @@ case class GraphKnowledge(private[graph] val resultsMap: Map[Id, NodeInferenceRe
   def results: Map[Id, NodeInferenceResult] = resultsMap
 
   def containsNodeKnowledge(id: Id): Boolean = resultsMap.contains(id)
-  def getKnowledge(id: Id): Vector[Knowledge[ActionObjectInfo]] = getResult(id).ports
+  def getKnowledge(id: Id): List[Knowledge[ActionObjectInfo]] = getResult(id).ports
 
   lazy val errors =
     for {
@@ -39,19 +39,19 @@ object GraphKnowledge {
   def apply(): GraphKnowledge = GraphKnowledge(Map.empty)
 }
 
-case class NodeInferenceResult(ports: Vector[Knowledge[ActionObjectInfo]],
+case class NodeInferenceResult(ports: List[Knowledge[ActionObjectInfo]],
                                warnings: InferenceWarnings = InferenceWarnings.empty,
-                               errors: Vector[FlowError] = Vector.empty
+                               errors: List[FlowError] = List.empty
 )
 
 object NodeInferenceResult {
-  def empty: NodeInferenceResult = NodeInferenceResult(Vector.empty)
+  def empty: NodeInferenceResult = NodeInferenceResult(List.empty)
 }
 
 object TypesAccordance {
 
   trait TypesAccordance {
-    def errors: Vector[FlowError] = Vector.empty
+    def errors: List[FlowError] = List.empty
     def warnings: InferenceWarnings = InferenceWarnings.empty
   }
 
@@ -62,10 +62,10 @@ object TypesAccordance {
   }
 
   case class None(portIndex: Int) extends TypesAccordance {
-    override def errors = Vector(AllTypesNotCompilableError(portIndex))
+    override def errors = List(AllTypesNotCompilableError(portIndex))
   }
 
   case class NotProvided(portIndex: Int) extends TypesAccordance {
-    override def errors = Vector(NoInputEdgesError(portIndex))
+    override def errors = List(NoInputEdgesError(portIndex))
   }
 }

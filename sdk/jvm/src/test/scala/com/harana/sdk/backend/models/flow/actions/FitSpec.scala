@@ -23,7 +23,7 @@ class FitSpec extends UnitSpec with TestSupport {
       val estimator = new MockEstimator
 
       def testFit(op: Fit, expectedTransformer: Transformer) = {
-        val Vector(outputTransformer: Transformer) = op.executeUntyped(Vector(estimator, mock[DataFrame]))(createExecutionContext)
+        val List(outputTransformer: Transformer) = op.executeUntyped(List(estimator, mock[DataFrame]))(createExecutionContext)
         outputTransformer shouldBe expectedTransformer
       }
       val op1 = new Fit()
@@ -39,7 +39,7 @@ class FitSpec extends UnitSpec with TestSupport {
       val originalEstimator = estimator.replicate()
       val parametersForEstimator = Map(estimator.paramA.name -> 2).asJson
       val op = new Fit().setEstimatorParameters(parametersForEstimator)
-      op.executeUntyped(Vector(estimator, mock[DataFrame]))(createExecutionContext)
+      op.executeUntyped(List(estimator, mock[DataFrame]))(createExecutionContext)
 
       estimator should have(theSameParametersAs(originalEstimator))
     }
@@ -49,9 +49,9 @@ class FitSpec extends UnitSpec with TestSupport {
 
       def testInference(op: Fit, expectedTransformerKnowledge: Knowledge[Transformer]) = {
         val inputDF = DataFrame.forInference(createSchema())
-        val (knowledge, warnings) = op.inferKnowledgeUntyped(Vector(Knowledge(estimator), Knowledge(inputDF)))(mock[InferContext])
+        val (knowledge, warnings) = op.inferKnowledgeUntyped(List(Knowledge(estimator), Knowledge(inputDF)))(mock[InferContext])
         warnings shouldBe InferenceWarnings.empty
-        val Vector(transformerKnowledge) = knowledge
+        val List(transformerKnowledge) = knowledge
         transformerKnowledge shouldBe expectedTransformerKnowledge
       }
       val op1 = new Fit()
@@ -69,7 +69,7 @@ class FitSpec extends UnitSpec with TestSupport {
       val parametersForEstimator = Map(estimator.paramA.name -> 2).asJson
       val op = new Fit().setEstimatorParameters(parametersForEstimator)
       val inputDF = DataFrame.forInference(createSchema())
-      op.inferKnowledgeUntyped(Vector(Knowledge(estimator), Knowledge(inputDF)))(mock[InferContext])
+      op.inferKnowledgeUntyped(List(Knowledge(estimator), Knowledge(inputDF)))(mock[InferContext])
 
       estimator should have(theSameParametersAs(originalEstimator))
     }
@@ -82,7 +82,7 @@ class FitSpec extends UnitSpec with TestSupport {
 
         val op = new Fit()
         a[TooManyPossibleTypesError] shouldBe thrownBy {
-          op.inferKnowledgeUntyped(Vector(Knowledge(estimators), Knowledge(inputDF)))(mock[InferContext])
+          op.inferKnowledgeUntyped(List(Knowledge(estimators), Knowledge(inputDF)))(mock[InferContext])
         }
       }
 
@@ -91,7 +91,7 @@ class FitSpec extends UnitSpec with TestSupport {
         val estimator = new MockEstimator
         val fit = new Fit().setEstimatorParameters(Map(estimator.paramA.name -> -2).asJson)
         a[FlowMultiError] shouldBe thrownBy {
-          fit.inferKnowledgeUntyped(Vector(Knowledge(estimator), Knowledge(inputDF)))(mock[InferContext])
+          fit.inferKnowledgeUntyped(List(Knowledge(estimator), Knowledge(inputDF)))(mock[InferContext])
         }
       }
     }

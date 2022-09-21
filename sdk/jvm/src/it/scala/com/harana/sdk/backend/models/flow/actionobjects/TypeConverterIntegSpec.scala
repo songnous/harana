@@ -188,7 +188,7 @@ class TypeConverterIntegSpec extends IntegratedTestSupport with MultiColumnTrans
       val transformedSchema = TypeConverter
         .setSelectedColumns(
           MultipleColumnSelection(
-            Vector(
+            List(
               TypeColumnSelection(Set(ColumnType.Numeric)),
               NameColumnSelection(Set("col5"))
             )
@@ -369,7 +369,7 @@ class TypeConverterIntegSpec extends IntegratedTestSupport with MultiColumnTrans
     val action = TypeConverter
       .setSelectedColumns(
         MultipleColumnSelection(
-          Vector(NameColumnSelection(names), IndexColumnSelection(ids), TypeColumnSelection(types))
+          List(NameColumnSelection(names), IndexColumnSelection(ids), TypeColumnSelection(types))
         )
       )
       .setTargetType(targetTypeChoice)

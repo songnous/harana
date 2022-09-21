@@ -10,7 +10,7 @@ import com.harana.sdk.backend.models.flow.{ExecutionContext, Knowledge}
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
 import com.harana.sdk.shared
 import com.harana.sdk.shared.models.designer.flow
-import com.harana.sdk.shared.models.flow.{ActionInfo, ActionObjectInfo}
+import com.harana.sdk.shared.models.flow.{ActionTypeInfo, ActionObjectInfo}
 import com.harana.sdk.shared.models.flow.catalogs.{ActionCategory, ActionCategoryNode, ActionDescriptor}
 import com.harana.sdk.shared.models.flow.exceptions.ActionNotFoundError
 import com.harana.sdk.shared.models.flow.parameters.Parameter
@@ -36,13 +36,13 @@ object ActionCatalogTestResources {
     object Utils extends ActionCategory(ActionCategory.Id.randomId, "Utilities", ML.Evaluation.priority.nextCore)
   }
 
-  abstract class ActionMock extends Action {
-    def inPortTypes = Vector.empty[TypeTag[_]]
-    def outPortTypes = Vector.empty[TypeTag[_]]
+  abstract class ActionTypeMock extends ActionType {
+    def inputPorts = List.empty[TypeTag[_]]
+    def outputPorts = List.empty[TypeTag[_]]
 
-    override def inferKnowledgeUntyped(l: Vector[Knowledge[ActionObjectInfo]])(context: InferContext): (Vector[Knowledge[ActionObjectInfo]], InferenceWarnings) = ???
+    override def inferKnowledgeUntyped(l: List[Knowledge[ActionObjectInfo]])(context: InferContext): (List[Knowledge[ActionObjectInfo]], InferenceWarnings) = ???
 
-    def executeUntyped(l: Vector[ActionObjectInfo])(context: ExecutionContext): Vector[ActionObjectInfo] = ???
+    def executeUntyped(l: List[ActionObjectInfo])(context: ExecutionContext): List[ActionObjectInfo] = ???
 
     val inArity: Int = 2
     val outArity: Int = 3
@@ -57,10 +57,10 @@ object ActionCatalogTestResources {
   val XTypeTag = typeTag[X]
   val YTypeTag = typeTag[Y]
 
-  val idA = ActionInfo.Id.randomId
-  val idB = ActionInfo.Id.randomId
-  val idC = ActionInfo.Id.randomId
-  val idD = ActionInfo.Id.randomId
+  val idA = ActionTypeInfo.Id.randomId
+  val idB = ActionTypeInfo.Id.randomId
+  val idC = ActionTypeInfo.Id.randomId
+  val idD = ActionTypeInfo.Id.randomId
 
   val nameA = "nameA"
   val nameB = "nameB"
@@ -77,30 +77,30 @@ object ActionCatalogTestResources {
   val versionC = "versionC"
   val versionD = "versionD"
 
-  case class ActionA() extends ActionMock {
+  case class ActionTypeA() extends ActionTypeMock {
     val id = idA
     val name = nameA
     val description = descriptionA
   }
 
-  case class ActionB() extends ActionMock {
+  case class ActionTypeB() extends ActionTypeMock {
     val id = idB
     val name = nameB
     val description = descriptionB
   }
 
-  case class ActionC() extends ActionMock {
+  case class ActionTypeC() extends ActionTypeMock {
     val id = idC
     val name = nameC
     val description = descriptionC
   }
 
-  case class ActionD() extends ActionMock {
+  case class ActionTypeD() extends ActionTypeMock {
     val id = idD
     val name = nameD
     val description = descriptionD
-    override val inPortTypes = Vector(XTypeTag, YTypeTag)
-    override val outPortTypes = Vector(XTypeTag)
+    override val inputPorts = List(XTypeTag, YTypeTag)
+    override val outputPorts = List(XTypeTag)
   }
 }
 
@@ -120,10 +120,10 @@ object ViewingTestResources extends MockitoSugar {
   val priorityC = SortPriority(2)
   val priorityD = SortPriority(3)
 
-  catalog.registerAction(categoryA, () => new ActionA(), priorityA)
-  catalog.registerAction(categoryB, () => new ActionB(), priorityB)
-  catalog.registerAction(categoryC, () => new ActionC(), priorityC)
-  catalog.registerAction(categoryD, () => new ActionD(), priorityD)
+  catalog.registerAction(categoryA, () => new ActionTypeA(), priorityA)
+  catalog.registerAction(categoryB, () => new ActionTypeB(), priorityB)
+  catalog.registerAction(categoryC, () => new ActionTypeC(), priorityC)
+  catalog.registerAction(categoryD, () => new ActionTypeD(), priorityD)
 
   val actionD = catalog.createAction(idD)
 
@@ -134,11 +134,11 @@ object ViewingTestResources extends MockitoSugar {
     categoryA,
     priorityA,
     hasDocumentation = false,
-    ActionA().parametersToJson,
+    ActionTypeA().parametersToJson,
     Nil,
-    Vector.empty,
+    List.empty,
     Nil,
-    Vector.empty
+    List.empty
   )
 
   val expectedB = shared.models.flow.catalogs.ActionDescriptor(
@@ -148,11 +148,11 @@ object ViewingTestResources extends MockitoSugar {
     categoryB,
     priorityB,
     hasDocumentation = false,
-    ActionB().parametersToJson,
+    ActionTypeB().parametersToJson,
     Nil,
-    Vector.empty,
+    List.empty,
     Nil,
-    Vector.empty
+    List.empty
   )
 
   val expectedC = shared.models.flow.catalogs.ActionDescriptor(
@@ -162,11 +162,11 @@ object ViewingTestResources extends MockitoSugar {
     categoryC,
     priorityC,
     hasDocumentation = false,
-    ActionC().parametersToJson,
+    ActionTypeC().parametersToJson,
     Nil,
-    Vector.empty,
+    List.empty,
     Nil,
-    Vector.empty
+    List.empty
   )
 
   val expectedD = ActionDescriptor(
@@ -176,11 +176,11 @@ object ViewingTestResources extends MockitoSugar {
     categoryD,
     priorityD,
     hasDocumentation = false,
-    ActionD().parametersToJson,
+    ActionTypeD().parametersToJson,
     List(XTypeTag.tpe, YTypeTag.tpe),
-    actionD.inPortsLayout,
+    actionD.inputPortsLayout,
     List(XTypeTag.tpe),
-    actionD.outPortsLayout
+    actionD.outputPortsLayout
   )
 
 }
@@ -190,13 +190,13 @@ class ActionCatalogSuite extends AnyFunSuite with Matchers with MockitoSugar {
   test("It is possible to create instance of registered Action") {
     import ActionCatalogTestResources._
     val catalog  = new ActionCatalog()
-    catalog.registerAction(CategoryTree.ML.Regression, () => new ActionA(), ViewingTestResources.priorityA)
+    catalog.registerAction(CategoryTree.ML.Regression, () => new ActionTypeA(), ViewingTestResources.priorityA)
     val instance = catalog.createAction(idA)
-    assert(instance == ActionA())
+    assert(instance == ActionTypeA())
   }
 
   test("Attempt of creating unregistered Action raises exception") {
-    val nonExistingActionId = ActionInfo.Id.randomId
+    val nonExistingActionId = ActionTypeInfo.Id.randomId
     val exception = intercept[ActionNotFoundError] {
       ActionCatalog().createAction(nonExistingActionId)
     }

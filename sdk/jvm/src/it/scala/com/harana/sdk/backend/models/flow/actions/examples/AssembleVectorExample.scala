@@ -5,7 +5,7 @@ import com.harana.sdk.backend.models.flow.actions.spark.wrappers.transformers.As
 class AssembleVectorExample extends AbstractActionExample[AssembleVector] {
 
   def action = {
-    val op = new AssembleVector()
+    val op = new AssembleList.empty
     op.transformer
       .setInputColumns(Set("windspeed", "hum", "temp"))
       .setOutputColumn("assembled")

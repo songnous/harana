@@ -41,7 +41,7 @@ class CreateCustomTransformerSpec extends UnitSpec {
       val action = MockCreateCustomTransformer.createWithParameter
       val executionContext = mock[ExecutionContext]
 
-      val results = action.executeUntyped(Vector.empty)(executionContext)
+      val results = action.executeUntyped(List.empty)(executionContext)
       results.length shouldBe 1
       results(0) shouldBe a[CustomTransformer]
       val result  = results(0)
@@ -59,7 +59,7 @@ class CreateCustomTransformerSpec extends UnitSpec {
       val action = new CreateCustomTransformer()
       val executionContext = mock[ExecutionContext]
 
-      val results = action.executeUntyped(Vector.empty)(executionContext)
+      val results = action.executeUntyped(List.empty)(executionContext)
       results.size shouldBe 1
       results(0) shouldBe a[CustomTransformer]
       val result = results(0)
@@ -71,7 +71,7 @@ class CreateCustomTransformerSpec extends UnitSpec {
       val action = MockCreateCustomTransformer.createWithParameter
       val inferContext = mock[InferContext]
 
-      val results = action.inferKnowledgeUntyped(Vector.empty)(inferContext)._1.map(_.single)
+      val results = action.inferKnowledgeUntyped(List.empty)(inferContext)._1.map(_.single)
       results.length shouldBe 1
       results(0) shouldBe a[CustomTransformer]
       val result  = results(0).asInstanceOf[CustomTransformer]
@@ -96,7 +96,7 @@ class CreateCustomTransformerSpec extends UnitSpec {
     val node1Action = {
       val parameters = TypeConverterInfo
         .setTargetType(TargetTypeChoices.StringTargetTypeChoice())
-        .setSelectedColumns(MultipleColumnSelection(Vector(NameColumnSelection(Set("column1")))))
+        .setSelectedColumns(MultipleColumnSelection(List(NameColumnSelection(Set("column1")))))
         .parameterValuesToJson
       new ConvertType().setParametersFromJson(parameters)
     }
@@ -104,7 +104,7 @@ class CreateCustomTransformerSpec extends UnitSpec {
     val node2Action = {
       val parameters = TypeConverterInfo
         .setTargetType(TargetTypeChoices.StringTargetTypeChoice())
-        .setSelectedColumns(MultipleColumnSelection(Vector(NameColumnSelection(Set("column1")))))
+        .setSelectedColumns(MultipleColumnSelection(List(NameColumnSelection(Set("column1")))))
         .parameterValuesToJson
       new ConvertType().setParametersFromJson(parameters)
     }

@@ -1,7 +1,7 @@
 package com.harana.sdk.shared.models.flow.actions
 
 import com.harana.sdk.shared.models.common.Version
-import com.harana.sdk.shared.models.flow.Action1To1Info
+import com.harana.sdk.shared.models.flow.Action1To1TypeInfo
 import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Filtering
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
@@ -10,7 +10,7 @@ import com.harana.sdk.shared.models.flow.utils.Id
 
 import scala.reflect.runtime.universe.TypeTag
 
-trait DropColumnsInfo extends Action1To1Info[DataFrameInfo, DataFrameInfo] with ActionDocumentation {
+trait DropColumnsInfo extends Action1To1TypeInfo[DataFrameInfo, DataFrameInfo] with ActionDocumentation {
 
   val id: Id = "50f4a041-c710-4f1b-b3b2-d0a6bd976b61"
   val name = "Distinct"

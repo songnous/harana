@@ -67,9 +67,9 @@ class JoinSpec extends IntegratedTestSupport {
 
         val join = joinWithMultipleColumnSelection(
           leftJoinColumns,
-          Vector.empty,
+          List.empty,
           rightJoinColumns,
-          Vector.empty,
+          List.empty,
           leftPrefix = None,
           rightPrefix = None,
           joinType = defaultJoinType
@@ -82,9 +82,9 @@ class JoinSpec extends IntegratedTestSupport {
         val (ldf, rdf, expected, leftJoinIndices, rightJoinIndices) = twoColumnsDifferentIndicesFixture()
 
         val join = joinWithMultipleColumnSelection(
-          Vector.empty,
+          List.empty,
           leftJoinIndices,
-          Vector.empty,
+          List.empty,
           rightJoinIndices,
           leftPrefix = None,
           rightPrefix = None,
@@ -209,9 +209,9 @@ class JoinSpec extends IntegratedTestSupport {
 
         val join = joinWithMultipleColumnSelection(
           leftJoinColumns,
-          Vector.empty,
+          List.empty,
           rightJoinColumns,
-          Vector.empty,
+          List.empty,
           leftPrefix = None,
           rightPrefix = None,
           joinType = defaultJoinType
@@ -225,9 +225,9 @@ class JoinSpec extends IntegratedTestSupport {
         val (ldf, rdf, expected, leftJoinIndices, rightJoinIndices) = twoColumnsDifferentIndicesFixture()
 
         val join = joinWithMultipleColumnSelection(
-          Vector.empty,
+          List.empty,
           leftJoinIndices,
-          Vector.empty,
+          List.empty,
           rightJoinIndices,
           leftPrefix = None,
           rightPrefix = None,
@@ -330,7 +330,7 @@ class JoinSpec extends IntegratedTestSupport {
     val joinColumns = Set(column1)
 
     // Left dataframe
-    val colsL = Vector("column2", "column3", column1, "column4")
+    val colsL = List("column2", "column3", column1, "column4")
     val schemaL = StructType(
       Seq(
         StructField(colsL(0), DoubleType),
@@ -349,7 +349,7 @@ class JoinSpec extends IntegratedTestSupport {
     val ldf = createDataFrame(rowsL, schemaL)
 
     // Right dataframe
-    val colsR = Vector(column1, "column22", "column5")
+    val colsR = List(column1, "column22", "column5")
     val schemaR = StructType(
       Seq(
         StructField(colsR(0), DoubleType),
@@ -391,7 +391,7 @@ class JoinSpec extends IntegratedTestSupport {
     val column1 = "column1"
 
     // Left dataframe
-    val colsL   = Vector(column1, "column2", "column3", "column4")
+    val colsL   = List(column1, "column2", "column3", "column4")
     val schemaL = StructType(
       Seq(
         StructField(colsL(0), DoubleType),
@@ -410,7 +410,7 @@ class JoinSpec extends IntegratedTestSupport {
     val ldf     = createDataFrame(rowsL, schemaL)
 
     // Right dataframe
-    val colsR   = Vector(column1, "column22", "column5")
+    val colsR   = List(column1, "column22", "column5")
     val schemaR = StructType(
       Seq(
         StructField(colsR(0), DoubleType),
@@ -451,7 +451,7 @@ class JoinSpec extends IntegratedTestSupport {
     val joinColumns = Set(column1, column2)
 
     // Left dataframe
-    val colsL   = Vector(column2, "column3", column1, "column4")
+    val colsL   = List(column2, "column3", column1, "column4")
     val schemaL = StructType(
       Seq(
         StructField(colsL(0), DoubleType),
@@ -468,7 +468,7 @@ class JoinSpec extends IntegratedTestSupport {
     val ldf     = createDataFrame(rowsL, schemaL)
 
     // Right dataframe
-    val colsR   = Vector(column1, column2, "column5")
+    val colsR   = List(column1, column2, "column5")
     val schemaR = StructType(
       Seq(
         StructField(colsR(0), DoubleType),
@@ -498,10 +498,10 @@ class JoinSpec extends IntegratedTestSupport {
     (ldf, rdf, edf, joinColumns)
   }
 
-  def twoColumnsDifferentNamesFixture(): (DataFrame, DataFrame, DataFrame, Vector[String], Vector[String]) = {
+  def twoColumnsDifferentNamesFixture(): (DataFrame, DataFrame, DataFrame, List[String], List[String]) = {
 
     // Left dataframe
-    val colsL   = Vector("a", "b", "c", "d")
+    val colsL   = List("a", "b", "c", "d")
     val schemaL = StructType(
       Seq(
         StructField(colsL(0), DoubleType),
@@ -518,7 +518,7 @@ class JoinSpec extends IntegratedTestSupport {
     val ldf     = createDataFrame(rowsL, schemaL)
 
     // Right dataframe
-    val colsR   = Vector("e", "f", "g")
+    val colsR   = List("e", "f", "g")
     val schemaR = StructType(
       Seq(
         StructField(colsR(0), DoubleType),
@@ -544,13 +544,13 @@ class JoinSpec extends IntegratedTestSupport {
     )
     val edf        = createDataFrame(joinRows, joinSchema)
 
-    (ldf, rdf, edf, Vector("c", "a"), Vector("e", "f"))
+    (ldf, rdf, edf, List("c", "a"), List("e", "f"))
   }
 
-  def twoColumnsDifferentIndicesFixture(): (DataFrame, DataFrame, DataFrame, Vector[Int], Vector[Int]) = {
+  def twoColumnsDifferentIndicesFixture(): (DataFrame, DataFrame, DataFrame, List[Int], List[Int]) = {
 
     // Left dataframe
-    val colsL   = Vector("a", "b", "c", "d")
+    val colsL   = List("a", "b", "c", "d")
     val schemaL = StructType(
       Seq(
         StructField(colsL(0), DoubleType),
@@ -567,7 +567,7 @@ class JoinSpec extends IntegratedTestSupport {
     val ldf     = createDataFrame(rowsL, schemaL)
 
     // Right dataframe
-    val colsR   = Vector("e", "f", "g")
+    val colsR   = List("e", "f", "g")
     val schemaR = StructType(
       Seq(
         StructField(colsR(0), DoubleType),
@@ -593,7 +593,7 @@ class JoinSpec extends IntegratedTestSupport {
     )
     val edf        = createDataFrame(joinRows, joinSchema)
 
-    (ldf, rdf, edf, Vector(2, 0), Vector(0, 1))
+    (ldf, rdf, edf, List(2, 0), List(0, 1))
   }
 
   def differentTypesFixture(): (DataFrame, DataFrame, DataFrame, Set[String]) = {
@@ -601,7 +601,7 @@ class JoinSpec extends IntegratedTestSupport {
     val joinColumns = Set(column1)
 
     // Left dataframe
-    val colsL   = Vector(column1, "column2", "column3", "column4")
+    val colsL   = List(column1, "column2", "column3", "column4")
     val rowsL   = Seq(
       (1.5, 2.5, "a", 3.5),
       (1.6, 2.6, "b", 3.6),
@@ -618,7 +618,7 @@ class JoinSpec extends IntegratedTestSupport {
     val ldf     = createDataFrame(rowsL, schemaL)
 
     // Right dataframe
-    val colsR   = Vector(column1, "column22")
+    val colsR   = List(column1, "column22")
     val rowsR   = Seq(
       ("1.5", 0.5),
       ("1.6", 0.6),
@@ -641,7 +641,7 @@ class JoinSpec extends IntegratedTestSupport {
     val joinColumns = Set.empty[String]
 
     // Left dataframe
-    val colsL   = Vector("column1", "column2", "column3", "column4")
+    val colsL   = List("column1", "column2", "column3", "column4")
     val rowsL   = Seq(
       (1.5, 2.5, "a", 3.5),
       (1.6, 2.6, "b", 3.6),
@@ -658,7 +658,7 @@ class JoinSpec extends IntegratedTestSupport {
     val ldf     = createDataFrame(rowsL, schemaL)
 
     // Right dataframe
-    val colsR   = Vector("column1", "column22")
+    val colsR   = List("column1", "column22")
     val rowsR   = Seq(
       ("1.5", 0.5),
       ("1.6", 0.6),
@@ -682,7 +682,7 @@ class JoinSpec extends IntegratedTestSupport {
     val joinColumns = Set(column1)
 
     // Left dataframe
-    val colsL   = Vector(column1)
+    val colsL   = List(column1)
     val rowsL   = Seq(
       1.5,
       1.6,
@@ -696,7 +696,7 @@ class JoinSpec extends IntegratedTestSupport {
     val ldf     = createDataFrame(rowsL, schemaL)
 
     // Right dataframe
-    val colsR   = Vector(column1, "column2")
+    val colsR   = List(column1, "column2")
     val rowsR   = Seq(
       (1.4, 0.5),
       (1.7, 2.7)
@@ -729,7 +729,7 @@ class JoinSpec extends IntegratedTestSupport {
     val joinColumns = Set(column1)
 
     // Left dataframe
-    val colsL   = Vector(column1)
+    val colsL   = List(column1)
     val schemaL = StructType(
       Seq(
         StructField(column1, DoubleType)
@@ -743,7 +743,7 @@ class JoinSpec extends IntegratedTestSupport {
     val ldf     = createDataFrame(rowsL, schemaL)
 
     // Right dataframe
-    val colsR   = Vector(column1, "column2")
+    val colsR   = List(column1, "column2")
     val schemaR = StructType(
       Seq(
         StructField(colsR(0), DoubleType),
@@ -776,7 +776,7 @@ class JoinSpec extends IntegratedTestSupport {
     val joinColumns = Set(column1)
 
     // Left dataframe
-    val colsL   = Vector(column1)
+    val colsL   = List(column1)
     val rowsL   = Seq(
       1.5,
       1.6,
@@ -790,7 +790,7 @@ class JoinSpec extends IntegratedTestSupport {
     val ldf     = createDataFrame(rowsL, schemaL)
 
     // Right dataframe
-    val colsR   = Vector(column1, "column2")
+    val colsR   = List(column1, "column2")
     val rowsR   = Seq(
       (null, 0.5),
       (null, 0.7),
@@ -824,7 +824,7 @@ class JoinSpec extends IntegratedTestSupport {
     val joinColumns = Set(column1)
 
     // Left dataframe
-    val colsL   = Vector(column1)
+    val colsL   = List(column1)
     val schemaL = StructType(
       Seq(
         StructField(colsL(0), StringType)
@@ -836,7 +836,7 @@ class JoinSpec extends IntegratedTestSupport {
     val ldf     = createDataFrame(rowsL, schemaL)
 
     // Right dataframe
-    val colsR   = Vector(column1, "owner")
+    val colsR   = List(column1, "owner")
     val schemaR = StructType(
       Seq(
         StructField(colsL(0), StringType),
@@ -881,7 +881,7 @@ class JoinSpec extends IntegratedTestSupport {
     import Gen._
 
     // Left dataframe
-    val colsL   = Vector(column1) ++ sameNameColumns.map { case (name, _) => name }
+    val colsL   = List(column1) ++ sameNameColumns.map { case (name, _) => name }
     val schemaL = StructType(
       Seq(
         StructField(colsL(0), StringType)
@@ -893,7 +893,7 @@ class JoinSpec extends IntegratedTestSupport {
     val ldf     = createDataFrame(rowsL, schemaL)
 
     // Right dataframe
-    val colsR   = Vector(column1, "owner") ++ sameNameColumns.map { case (name, _) => name }
+    val colsR   = List(column1, "owner") ++ sameNameColumns.map { case (name, _) => name }
     val schemaR = StructType(
       Seq(
         StructField(colsL(0), StringType),
@@ -911,10 +911,10 @@ class JoinSpec extends IntegratedTestSupport {
   }
 
   private def joinWithMultipleColumnSelection(
-      namesLeft: Vector[String],
-      idsLeft: Vector[Int],
-      namesRight: Vector[String],
-      idsRight: Vector[Int],
+      namesLeft: List[String],
+      idsLeft: List[Int],
+      namesRight: List[String],
+      idsRight: List[Int],
       leftPrefix: Option[String],
       rightPrefix: Option[String],
       joinType: JoinTypeChoice.Option
@@ -951,8 +951,8 @@ class JoinSpec extends IntegratedTestSupport {
       rightPrefix: Option[String] = rightTablePrefix,
       joinType: JoinTypeChoice.Option = defaultJoinType
   ): Join = {
-    val namesVector = names.toVector
-    val idsVector   = ids.toVector
+    val namesVector = names.toList
+    val idsVector   = ids.toList
     joinWithMultipleColumnSelection(namesVector, idsVector, namesVector, idsVector, leftPrefix, rightPrefix, joinType)
   }
 
@@ -961,7 +961,7 @@ class JoinSpec extends IntegratedTestSupport {
 
   private def inferSchema(action: Join, leftDataFrame: DataFrame, rightDataFrame: DataFrame): StructType = {
     val (knowledge, _) = action.inferKnowledgeUntyped(
-      Vector(
+      List(
         Knowledge(DataFrame.forInference(leftDataFrame.sparkDataFrame.schema)),
         Knowledge(DataFrame.forInference(rightDataFrame.sparkDataFrame.schema))
       )

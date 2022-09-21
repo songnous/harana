@@ -8,7 +8,7 @@ import io.circe.{Decoder, Encoder, HCursor, Json}
 @SerialVersionUID(1)
 trait Validator[ParameterType] extends Serializable {
 
-  def validate(name: String, parameter: ParameterType): Vector[FlowError]
+  def validate(name: String, parameter: ParameterType): List[FlowError]
 
   def toHumanReadable(parameterName: String) = ""
 

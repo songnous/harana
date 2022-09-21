@@ -58,7 +58,7 @@ object MultiColumnParameters {
       val inputColumnsParameter = ColumnSelectorParameter("input columns", portIndex = 0)
       def getInputColumns = $(inputColumnsParameter)
       def setInputColumns(value: MultipleColumnSelection): this.type = set(inputColumnsParameter, value)
-      def setInputColumns(inputColumnNames: Set[String]): this.type = setInputColumns(MultipleColumnSelection(Vector(NameColumnSelection(inputColumnNames))))
+      def setInputColumns(inputColumnNames: Set[String]): this.type = setInputColumns(MultipleColumnSelection(List(NameColumnSelection(inputColumnNames))))
 
       val inPlaceChoiceParameter = ChoiceParameter[MultiColumnInPlaceChoice]("output")
       setDefault(inPlaceChoiceParameter, MultiColumnYesInPlace())

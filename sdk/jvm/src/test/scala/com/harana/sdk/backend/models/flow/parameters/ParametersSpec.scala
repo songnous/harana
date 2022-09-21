@@ -246,7 +246,7 @@ object ParametersSpec extends UnitSpec {
 
     def valueToJson(value: Int) = value.asJson
     def valueFromJson(jsValue: Json) = jsValue.as[Int]
-    override def validate(value: Int) = Vector(MockError(name))
+    override def validate(value: Int) = List(MockError(name))
     override def replicate(name: String) = copy(name = name)
   }
 

@@ -30,9 +30,9 @@ case class NodeStateWithResults(nodeState: NodeState, actionObjects: Map[Id, Act
 
   def finish(entitiesIds: Seq[Id], reports: Map[Id, ReportContent], actionObjects: Map[Id, ActionObjectInfo]) = {
     val results = flow.EntitiesMap(actionObjects, reports)
-    val actionObjectsKnowledge = entitiesIds.flatMap(id => actionObjects.get(id)).map(Knowledge(_)).toVector
+    val actionObjectsKnowledge = entitiesIds.flatMap(id => actionObjects.get(id)).map(Knowledge(_)).toList
     val newWarnings = knowledge.map(_.warnings).getOrElse(InferenceWarnings.empty)
-    val newKnowledge = Some(NodeInferenceResult(actionObjectsKnowledge, newWarnings, Vector()))
+    val newKnowledge = Some(NodeInferenceResult(actionObjectsKnowledge, newWarnings, List.empty))
     NodeStateWithResults(nodeState.finish(entitiesIds, results), actionObjects, newKnowledge)
   }
 }

@@ -1,7 +1,7 @@
 package com.harana.sdk.shared.models.flow.actions.read
 
 import com.harana.sdk.shared.models.common.Version
-import com.harana.sdk.shared.models.flow.Action0To1Info
+import com.harana.sdk.shared.models.flow.Action0To1TypeInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
 import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
 import com.harana.sdk.shared.models.flow.actions.inout.InputStorageTypeChoice
@@ -15,7 +15,7 @@ import scala.reflect.runtime.{universe => ru}
 
 // TODO Remake this case class into class
 trait ReadDataFrameInfo
-  extends Action0To1Info[DataFrameInfo]
+  extends Action0To1TypeInfo[DataFrameInfo]
     with Parameters
     with ActionDocumentation {
 

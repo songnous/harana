@@ -25,7 +25,7 @@ class ColumnSelectorParameterSpec extends AbstractParameterSpec[MultipleColumnSe
   }
 
   def valueFixture: (MultipleColumnSelection, Json) = {
-    val value = MultipleColumnSelection(selections = Vector[ColumnSelection](NameColumnSelection(Set("a", "b"))))
+    val value = MultipleColumnSelection(selections = List[ColumnSelection](NameColumnSelection(Set("a", "b"))))
     val expectedJson = Map(
                         "selections" -> Seq(Map(
                             "type"    -> Json.fromString("columnList"),

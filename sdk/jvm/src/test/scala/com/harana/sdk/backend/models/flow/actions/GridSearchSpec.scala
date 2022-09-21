@@ -19,10 +19,10 @@ class GridSearchSpec extends UnitSpec with TestSupport {
       val evaluator = new MockEvaluator
 
       val gridSearch = new GridSearch()
-      gridSearch.inferKnowledgeUntyped(Vector(Knowledge(estimator), Knowledge(inputDF), Knowledge(evaluator)))(
+      gridSearch.inferKnowledgeUntyped(List(Knowledge(estimator), Knowledge(inputDF), Knowledge(evaluator)))(
         mock[InferContext]
       ) shouldBe
-        (Vector(Knowledge(Report())), InferenceWarnings.empty)
+        (List(Knowledge(Report())), InferenceWarnings.empty)
     }
 
     "throw Exception" when {
@@ -51,7 +51,7 @@ class GridSearchSpec extends UnitSpec with TestSupport {
       .setEvaluatorParameters(prepareParamDictionary(evaluator.paramA.name, evaluatorParamValue))
 
     val multiException = the[FlowMultiError] thrownBy {
-      gridSearch.inferKnowledgeUntyped(Vector(Knowledge(estimator), Knowledge(inputDF), Knowledge(evaluator)))(
+      gridSearch.inferKnowledgeUntyped(List(Knowledge(estimator), Knowledge(inputDF), Knowledge(evaluator)))(
         mock[InferContext]
       )
     }

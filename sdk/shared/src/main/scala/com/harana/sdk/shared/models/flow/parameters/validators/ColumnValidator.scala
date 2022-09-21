@@ -11,7 +11,7 @@ trait ColumnValidator extends RegexValidator {
   def exception: ValidationError
 
   override def validate(name: String, parameter: String) =
-    if (parameter.nonEmpty) super.validate(name, parameter) else Vector(exception)
+    if (parameter.nonEmpty) super.validate(name, parameter) else List(exception)
 }
 
 object ColumnValidator {

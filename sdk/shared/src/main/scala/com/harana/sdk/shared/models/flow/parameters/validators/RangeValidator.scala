@@ -22,30 +22,30 @@ case class RangeValidator[T](begin: Double,
   step.foreach(s => require(s > 0))
   step.foreach(s => require(math.abs(takeSteps(countStepsTo(end, s), s) - end) < Epsilon, "Length of range should be divisible by step."))
 
-  def validate(name: String, parameter: T): Vector[FlowError] =
+  def validate(name: String, parameter: T): List[FlowError] =
     parameter match {
       case d: Double => validateDouble(name, d)
       case f: Float => validateDouble(name, f)
       case i: Int => validateDouble(name, i)
       case s: String => validateDouble(name, s.toDouble)
-      case _ => Vector()
+      case _ => List.empty
     }
 
   private def validateDouble(name: String, parameter: Double) = {
     val beginComparison: (Double, Double) => Boolean = if (beginIncluded) (_ >= _) else (_ > _)
     val endComparison: (Double, Double) => Boolean = if (endIncluded) (_ <= _) else (_ < _)
     if (!(beginComparison(parameter, begin) && endComparison(parameter, end)))
-      Vector(OutOfRangeError(name, parameter, begin, end))
+      List(OutOfRangeError(name, parameter, begin, end))
     else
       validateStep(name, parameter)
   }
 
-  private def validateStep(name: String, value: Double): Vector[FlowError] = {
+  private def validateStep(name: String, value: Double): List[FlowError] = {
     step.foreach { s =>
       if (math.abs(takeSteps(countStepsTo(value, s), s) - value) >= Epsilon)
-        return Vector(OutOfRangeWithStepError(name, value, begin, end, s))
+        return List(OutOfRangeWithStepError(name, value, begin, end, s))
     }
-    Vector.empty
+    List.empty
   }
 
   private def countStepsTo(value: Double, step: Double) = ((value - begin) / step).floor.toLong

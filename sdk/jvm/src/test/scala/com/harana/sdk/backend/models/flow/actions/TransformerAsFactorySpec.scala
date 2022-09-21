@@ -39,7 +39,7 @@ class TransformerAsFactorySpec extends UnitSpec {
       val op = action
       op.set(op.transformer.paramA -> 2)
 
-      val result = op.executeUntyped(Vector())(mock[ExecutionContext])
+      val result = op.executeUntyped(List.empty)(mock[ExecutionContext])
       (result should have).length(1)
       result(0).asInstanceOf[MockTransformer].extractParameterMap() shouldBe ParameterMap(op.transformer.paramA -> 2, ReportTypeDefault(op.reportTypeParameter))
     }
@@ -48,7 +48,7 @@ class TransformerAsFactorySpec extends UnitSpec {
       val op = action
       op.set(op.transformer.paramA -> 2)
 
-      val (result, warnings) = op.inferKnowledgeUntyped(Vector(Knowledge()))(mock[InferContext])
+      val (result, warnings) = op.inferKnowledgeUntyped(List(Knowledge()))(mock[InferContext])
       warnings shouldBe InferenceWarnings.empty
       (result should have).length(1)
       result(0).single.asInstanceOf[MockTransformer].extractParameterMap() shouldBe ParameterMap(op.transformer.paramA -> 2, ReportTypeDefault(op.reportTypeParameter))

@@ -1,7 +1,7 @@
 package com.harana.sdk.backend.models.flow.actions
 
 import com.harana.sdk.backend.models.flow.actionobjects._
-import com.harana.sdk.backend.models.flow.{Action3To1, ExecutionContext}
+import com.harana.sdk.backend.models.flow.{ActionType3To1, ExecutionContext}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.wrappers.{EstimatorWrapper, EvaluatorWrapper}
 import com.harana.sdk.backend.models.flow.actionobjects.{Estimator, Evaluator, Transformer}
@@ -18,7 +18,7 @@ import org.apache.spark.ml.tuning.{CrossValidator, ParamGridBuilder}
 import scala.reflect.runtime.universe.TypeTag
 
 class GridSearch()
-  extends Action3To1[Estimator[Transformer], DataFrame, Evaluator, Report]
+  extends ActionType3To1[Estimator[Transformer], DataFrame, Evaluator, Report]
   with GridSearchInfo {
 
   def execute(estimator: Estimator[Transformer], dataFrame: DataFrame, evaluator: Evaluator)(context: ExecutionContext) = {

@@ -39,7 +39,7 @@ class MissingValuesHandlerIntegSpec
     val uut = new MissingValuesHandler
 
     val allColumnsInSchemaSelection = MultipleColumnSelection(
-      Vector(IndexRangeColumnSelection(Some(0), Some(schema.fields.length - 1)))
+      List(IndexRangeColumnSelection(Some(0), Some(schema.fields.length - 1)))
     )
 
   }
@@ -66,7 +66,7 @@ class MissingValuesHandlerIntegSpec
         )
       )
 
-      val columnSelection = MultipleColumnSelection(Vector(IndexColumnSelection(Set(0, 2))))
+      val columnSelection = MultipleColumnSelection(List(IndexColumnSelection(Set(0, 2))))
 
       val handler =
         new MissingValuesHandler()
@@ -118,7 +118,7 @@ class MissingValuesHandlerIntegSpec
         )
       )
 
-      val columnSelection = MultipleColumnSelection(Vector(IndexRangeColumnSelection(Some(0), Some(2))))
+      val columnSelection = MultipleColumnSelection(List(IndexRangeColumnSelection(Some(0), Some(2))))
       val resultDf        = executeTransformer(
         new MissingValuesHandler()
           .setUserDefinedMissingValues(Seq("-1.0"))
@@ -178,7 +178,7 @@ class MissingValuesHandlerIntegSpec
         )
       )
 
-      val columnSelection = MultipleColumnSelection(Vector(TypeColumnSelection(Set(ColumnType.Numeric))))
+      val columnSelection = MultipleColumnSelection(List(TypeColumnSelection(Set(ColumnType.Numeric))))
 
       val handler = new MissingValuesHandler()
         .setUserDefinedMissingValues(Seq())
@@ -285,7 +285,7 @@ class MissingValuesHandlerIntegSpec
         )
       )
 
-      val columnSelection = MultipleColumnSelection(Vector(IndexRangeColumnSelection(Some(0), Some(0))))
+      val columnSelection = MultipleColumnSelection(List(IndexRangeColumnSelection(Some(0), Some(0))))
       val resultDf        = executeTransformer(
         new MissingValuesHandler()
           .setUserDefinedMissingValues(Seq("missing"))
@@ -334,7 +334,7 @@ class MissingValuesHandlerIntegSpec
         )
       )
 
-      val columnSelection = MultipleColumnSelection(Vector(IndexRangeColumnSelection(Some(0), Some(0))))
+      val columnSelection = MultipleColumnSelection(List(IndexRangeColumnSelection(Some(0), Some(0))))
       val resultDf        = executeTransformer(
         new MissingValuesHandler()
           .setUserDefinedMissingValues(Seq("false"))
@@ -388,7 +388,7 @@ class MissingValuesHandlerIntegSpec
         )
       )
 
-      val columnSelection = MultipleColumnSelection(Vector(IndexRangeColumnSelection(Some(0), Some(0))))
+      val columnSelection = MultipleColumnSelection(List(IndexRangeColumnSelection(Some(0), Some(0))))
       val resultDf        = executeTransformer(
         new MissingValuesHandler()
           .setUserDefinedMissingValues(Seq(missing.toString))
@@ -438,7 +438,7 @@ class MissingValuesHandlerIntegSpec
         )
       )
 
-      val columnSelection = MultipleColumnSelection(Vector(IndexRangeColumnSelection(Some(0), Some(1))))
+      val columnSelection = MultipleColumnSelection(List(IndexRangeColumnSelection(Some(0), Some(1))))
 
       an[MultipleTypesReplacementError] should be thrownBy executeTransformer(
         new MissingValuesHandler()
@@ -471,7 +471,7 @@ class MissingValuesHandlerIntegSpec
         )
       )
 
-      val columnSelection = MultipleColumnSelection(Vector(IndexRangeColumnSelection(Some(0), Some(0))))
+      val columnSelection = MultipleColumnSelection(List(IndexRangeColumnSelection(Some(0), Some(0))))
 
       an[ValueConversionError] should be thrownBy executeTransformer(
         new MissingValuesHandler()
@@ -506,7 +506,7 @@ class MissingValuesHandlerIntegSpec
         )
       )
 
-      val columnSelection = MultipleColumnSelection(Vector(IndexRangeColumnSelection(Some(0), Some(2))))
+      val columnSelection = MultipleColumnSelection(List(IndexRangeColumnSelection(Some(0), Some(2))))
 
       val handler =
         new MissingValuesHandler()
@@ -571,7 +571,7 @@ class MissingValuesHandlerIntegSpec
 
       val df = rawDf
 
-      val columnSelection = MultipleColumnSelection(Vector(IndexRangeColumnSelection(Some(0), Some(3))))
+      val columnSelection = MultipleColumnSelection(List(IndexRangeColumnSelection(Some(0), Some(3))))
       val resultDf        = executeTransformer(
         new MissingValuesHandler()
           .setUserDefinedMissingValues(Seq("missing", "NA", "undefined"))
@@ -616,7 +616,7 @@ class MissingValuesHandlerIntegSpec
         )
       )
 
-      val columnSelection = MultipleColumnSelection(Vector(IndexRangeColumnSelection(Some(0), Some(1))))
+      val columnSelection = MultipleColumnSelection(List(IndexRangeColumnSelection(Some(0), Some(1))))
 
       val transformation = new MissingValuesHandler()
         .setUserDefinedMissingValues(Seq())
@@ -639,7 +639,7 @@ class MissingValuesHandlerIntegSpec
         )
       )
 
-      val columnSelection = MultipleColumnSelection(Vector(IndexRangeColumnSelection(Some(0), Some(0))))
+      val columnSelection = MultipleColumnSelection(List(IndexRangeColumnSelection(Some(0), Some(0))))
 
       val transformation = new MissingValuesHandler()
         .setUserDefinedMissingValues(Seq())
@@ -664,7 +664,7 @@ class MissingValuesHandlerIntegSpec
 
   "with REMOVE_COLUMN strategy transformSchema should return None" in {
     new TestData {
-      val columnSelection = MultipleColumnSelection(Vector(IndexRangeColumnSelection(Some(0), Some(1))))
+      val columnSelection = MultipleColumnSelection(List(IndexRangeColumnSelection(Some(0), Some(1))))
 
       val transformation = new MissingValuesHandler()
         .setUserDefinedMissingValues(Seq())

@@ -29,7 +29,7 @@ class CustomTransformer(innerWorkflow: InnerWorkflow = InnerWorkflow.empty,
 
   override def applyTransformSchema(schema: StructType, inferCtx: InferContext): Option[StructType] = {
     val workflow = workflowWithParameters()
-    val initialKnowledge = GraphKnowledge(Map(workflow.source.id -> NodeInferenceResult(Vector(Knowledge(DataFrame.forInference(schema))))))
+    val initialKnowledge = GraphKnowledge(Map(workflow.source.id -> NodeInferenceResult(List(Knowledge(DataFrame.forInference(schema))))))
     val graphKnowledge = GraphInference.inferKnowledge(workflow.graph, inferCtx, initialKnowledge)
 
     if (graphKnowledge.errors.nonEmpty) {

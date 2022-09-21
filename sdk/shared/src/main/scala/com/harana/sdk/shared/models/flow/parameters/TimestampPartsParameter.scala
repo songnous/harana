@@ -11,7 +11,7 @@ case class TimestampPartsParameter(name: String,
 
   val parameterType = ParameterType.TimestampParts
 
-  override def validate(value: Set[TimestampPartColumnChoice]) = value.toVector.flatMap(_.validateParameters)
+  override def validate(value: Set[TimestampPartColumnChoice]) = value.toList.flatMap(_.validateParameters)
 
   def replicate(name: String) = copy(name = name)
 
