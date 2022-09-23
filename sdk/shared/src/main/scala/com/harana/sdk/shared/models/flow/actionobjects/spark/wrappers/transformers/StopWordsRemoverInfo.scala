@@ -10,9 +10,10 @@ trait StopWordsRemoverInfo extends TransformerInfo with Parameters {
   val caseSensitiveParameter = BooleanParameter("case sensitive")
   setDefault(caseSensitiveParameter, false)
 
-  val parameters = Left(Array.empty[Parameter[_]])
   val specificParameters = Array[Parameter[_]](caseSensitiveParameter)
 
 }
 
-object StopWordsRemoverInfo extends StopWordsRemoverInfo
+object StopWordsRemoverInfo extends StopWordsRemoverInfo {
+  val parameters = Left(Array.empty[Parameter[_]])
+}

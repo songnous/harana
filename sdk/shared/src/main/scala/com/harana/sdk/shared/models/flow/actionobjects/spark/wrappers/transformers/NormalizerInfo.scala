@@ -12,9 +12,10 @@ trait NormalizerInfo extends TransformerInfo with Parameters {
   def getP = $(pParameter)
   setDefault(pParameter, 2.0)
 
-  val parameters = Left(Array.empty[Parameter[_]])
   val specificParameters = Array[Parameter[_]](pParameter)
 
 }
 
-object NormalizerInfo extends NormalizerInfo
+object NormalizerInfo extends NormalizerInfo {
+  val parameters = Left(Array.empty[Parameter[_]])
+}

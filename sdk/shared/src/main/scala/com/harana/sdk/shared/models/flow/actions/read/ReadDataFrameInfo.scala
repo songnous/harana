@@ -25,11 +25,11 @@ trait ReadDataFrameInfo
   val category = IO
 
   val storageTypeParameter = ChoiceParameter[InputStorageTypeChoice]("data storage type")
+  setDefault(storageTypeParameter, new InputStorageTypeChoice.File())
   def getStorageType = $(storageTypeParameter)
   def setStorageType(value: InputStorageTypeChoice): this.type = set(storageTypeParameter, value)
 
   override val parameters = Left(Array(storageTypeParameter))
-  setDefault(storageTypeParameter, new InputStorageTypeChoice.File())
 
   @transient
   lazy val portO_0: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]

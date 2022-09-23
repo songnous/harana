@@ -1,6 +1,5 @@
 package com.harana.sdk.shared.models.flow.parameters.choice
 
-import com.harana.sdk.shared.models.flow.parameters.ParameterType
 import com.harana.sdk.shared.models.flow.parameters.ParameterType.MultipleChoice
 
 import scala.reflect.runtime.universe._

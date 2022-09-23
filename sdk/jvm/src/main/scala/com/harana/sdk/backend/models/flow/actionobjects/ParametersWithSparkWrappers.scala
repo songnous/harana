@@ -7,7 +7,7 @@ import org.apache.spark.sql.types.StructType
 
 trait ParametersWithSparkWrappers extends Parameters {
 
-  lazy val sparkParamWrappers: Array[SparkParamWrapper[_, _, _]] = parameters.collect {
+  lazy val sparkParamWrappers: Array[SparkParamWrapper[_, _, _]] = allParameters.collect {
     case wrapper: SparkParamWrapper[_, _, _] => wrapper +: wrapper.nestedWrappers
   }.flatten
 
@@ -30,7 +30,7 @@ trait ParametersWithSparkWrappers extends Parameters {
         })
       ): _*)
 
-    val paramsNestedInParamValues = parameters.flatMap(param => {
+    val paramsNestedInParamValues = allParameters.flatMap(param => {
       get(param) match {
         case Some(nestedParams: ParametersWithSparkWrappers) =>
           Some(nestedParams.sparkParamMap(sparkEntity, schema))

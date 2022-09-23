@@ -6,6 +6,7 @@ import io.circe.generic.JsonCodec
 @JsonCodec
 case class StringParameter(name: String,
                            required: Boolean = false,
+                           multiLine: Boolean = false,
                            validator: Validator[String] = RegexValidator.AcceptAll) extends Parameter[String] with HasValidator[String] {
 
   val parameterType = ParameterType.String

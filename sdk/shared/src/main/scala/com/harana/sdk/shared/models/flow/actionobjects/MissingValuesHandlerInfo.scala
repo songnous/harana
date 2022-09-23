@@ -22,9 +22,9 @@ trait MissingValuesHandlerInfo extends TransformerInfo {
   def setStrategy(value: Strategy): this.type = set(strategyParameter, value)
 
   val userDefinedMissingValuesParameter = ParametersSequence[UserDefinedMissingValue]("user-defined missing values")
+  setDefault(userDefinedMissingValuesParameter, Seq(UserDefinedMissingValue().setMissingValue("NA"), UserDefinedMissingValue().setMissingValue("NaN")))
   def getUserDefinedMissingValues = $(userDefinedMissingValuesParameter).map(_.getMissingValue)
   def setUserDefinedMissingValues(value: Seq[String]): this.type = set(userDefinedMissingValuesParameter, value.map(UserDefinedMissingValue().setMissingValue(_)))
-  setDefault(userDefinedMissingValuesParameter, Seq(UserDefinedMissingValue().setMissingValue("NA"), UserDefinedMissingValue().setMissingValue("NaN")))
 
   val missingValueIndicatorParameter = ChoiceParameter[MissingValueIndicatorChoice]("missing value indicator")
   setDefault(missingValueIndicatorParameter, MissingValueIndicatorChoice.No())
@@ -126,9 +126,9 @@ object MissingValuesHandlerInfo extends MissingValuesHandlerInfo {
 case class UserDefinedMissingValue() extends Parameters {
 
   val missingValueParameter = StringParameter("missing value", validator = RegexValidator.AcceptAll)
+  setDefault(missingValueParameter, "")
   def getMissingValue = $(missingValueParameter)
   def setMissingValue(value: String): this.type = set(missingValueParameter, value)
-  setDefault(missingValueParameter, "")
   val parameters = Left(Array(missingValueParameter))
 
 }

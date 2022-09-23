@@ -12,7 +12,7 @@ object CustomTransformerFactory {
         innerWorkflow.graph.nodes
           .find(_.id == nodeId)
           .flatMap(node =>
-            node.value.parameters
+            node.value.allParameters
               .find(_.name == parameterName)
               .map(p => {
                 ParameterWithValues(
