@@ -23,5 +23,8 @@ trait CreateLDAInfo extends EstimatorAsFactoryInfo[LDAInfo] {
 }
 
 object CreateLDAInfo extends CreateLDAInfo {
-  def apply() = new CreateLDAInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new CreateLDAInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

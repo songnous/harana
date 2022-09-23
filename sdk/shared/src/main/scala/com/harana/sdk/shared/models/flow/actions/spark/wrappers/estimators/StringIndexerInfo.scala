@@ -27,5 +27,8 @@ trait StringIndexerInfo
 }
 
 object StringIndexerInfo extends StringIndexerInfo {
-  def apply() = new StringIndexerInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new StringIndexerInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

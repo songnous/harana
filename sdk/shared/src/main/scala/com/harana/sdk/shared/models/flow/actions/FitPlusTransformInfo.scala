@@ -3,8 +3,7 @@ package com.harana.sdk.shared.models.flow.actions
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Action
 import com.harana.sdk.shared.models.flow.Action2To2Info
-import com.harana.sdk.shared.models.flow.actionobjects.{EstimatorInfo, TransformerInfo}
-import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
+import com.harana.sdk.shared.models.flow.actionobjects.{DataFrameInfo, EstimatorInfo, TransformerInfo}
 import com.harana.sdk.shared.models.flow.actions.layout.SmallBlockLayout2To2
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Action
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
@@ -38,5 +37,8 @@ trait FitPlusTransformInfo
 }
 
 object FitPlusTransformInfo extends FitPlusTransformInfo {
-  def apply() = new FitPlusTransformInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new FitPlusTransformInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

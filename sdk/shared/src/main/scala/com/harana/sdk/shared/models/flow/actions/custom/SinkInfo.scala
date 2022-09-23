@@ -2,9 +2,9 @@ package com.harana.sdk.shared.models.flow.actions.custom
 
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.Action1To1Info
+import com.harana.sdk.shared.models.flow.actionobjects.DataFrameInfo
 import com.harana.sdk.shared.models.flow.actions.AddColumnInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
-import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
 import com.harana.sdk.shared.models.flow.parameters.Parameter
 
@@ -27,5 +27,8 @@ trait SinkInfo extends Action1To1Info[DataFrameInfo, DataFrameInfo] {
 }
 
 object SinkInfo extends SinkInfo {
-  def apply() = new SinkInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new SinkInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

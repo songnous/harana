@@ -1,9 +1,9 @@
 package com.harana.sdk.shared.models.flow.actions
 
 import com.harana.sdk.shared.models.common.Version
+import com.harana.sdk.shared.models.flow.actionobjects.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.SetAction
 import com.harana.sdk.shared.models.flow.{Action2To1Info, PortPosition}
-import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.SetAction
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.exceptions.FlowError
@@ -60,5 +60,8 @@ trait SqlCombineInfo extends Action2To1Info[DataFrameInfo, DataFrameInfo, DataFr
 }
 
 object SqlCombineInfo extends SqlCombineInfo {
-  def apply() = new SqlCombineInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new SqlCombineInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

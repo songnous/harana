@@ -25,5 +25,8 @@ trait PCAInfo extends EstimatorAsActionInfo[PCAEstimatorInfo, PCAModelInfo] with
 }
 
 object PCAInfo extends PCAInfo {
-  def apply() = new PCAInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new PCAInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

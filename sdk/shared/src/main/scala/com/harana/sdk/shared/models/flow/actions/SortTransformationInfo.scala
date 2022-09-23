@@ -21,5 +21,8 @@ trait SortTransformationInfo extends TransformerAsActionInfo[SortTransformerInfo
 }
 
 object SortTransformationInfo extends SortTransformationInfo {
-  def apply() = new SortTransformationInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new SortTransformationInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

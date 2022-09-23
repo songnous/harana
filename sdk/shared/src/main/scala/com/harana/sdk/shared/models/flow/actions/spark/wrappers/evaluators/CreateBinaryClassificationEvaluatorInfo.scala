@@ -21,5 +21,8 @@ trait CreateBinaryClassificationEvaluatorInfo extends EvaluatorAsFactoryInfo[Bin
 }
 
 object CreateBinaryClassificationEvaluatorInfo extends CreateBinaryClassificationEvaluatorInfo {
-  def apply() = new CreateBinaryClassificationEvaluatorInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new CreateBinaryClassificationEvaluatorInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

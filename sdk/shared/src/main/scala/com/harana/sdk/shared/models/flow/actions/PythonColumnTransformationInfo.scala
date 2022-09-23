@@ -21,5 +21,8 @@ trait PythonColumnTransformationInfo extends TransformerAsActionInfo[PythonColum
 }
 
 object PythonColumnTransformationInfo extends PythonColumnTransformationInfo {
-  def apply() = new PythonColumnTransformationInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new PythonColumnTransformationInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

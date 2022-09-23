@@ -28,5 +28,8 @@ trait UnknownActionInfo extends ActionInfo {
 }
 
 object UnknownActionInfo extends UnknownActionInfo {
-  def apply() = new UnknownActionInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new UnknownActionInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

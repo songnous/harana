@@ -22,5 +22,8 @@ trait CreatePythonEvaluatorInfo extends EvaluatorAsFactoryInfo[PythonEvaluatorIn
 }
 
 object CreatePythonEvaluatorInfo extends CreatePythonEvaluatorInfo {
-  def apply() = new CreatePythonEvaluatorInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new CreatePythonEvaluatorInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

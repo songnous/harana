@@ -32,5 +32,8 @@ trait ReadTransformerInfo
 }
 
 object ReadTransformerInfo extends ReadTransformerInfo {
-  def apply() = new ReadTransformerInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new ReadTransformerInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

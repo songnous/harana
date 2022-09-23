@@ -2,8 +2,8 @@ package com.harana.sdk.shared.models.flow.actions.read
 
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.Action0To1Info
+import com.harana.sdk.shared.models.flow.actionobjects.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
-import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.parameters.datasource.DatasourceIdForReadParameter
@@ -34,5 +34,8 @@ trait ReadDatasourceInfo extends Action0To1Info[DataFrameInfo] with ActionDocume
 }
 
 object ReadDatasourceInfo extends ReadDatasourceInfo {
-  def apply() = new ReadDatasourceInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new ReadDatasourceInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

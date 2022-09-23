@@ -24,5 +24,8 @@ trait CreateGBTRegressionInfo extends EstimatorAsFactoryInfo[GBTRegressionInfo] 
 }
 
 object CreateGBTRegressionInfo extends CreateGBTRegressionInfo {
-  def apply() = new CreateGBTRegressionInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new CreateGBTRegressionInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

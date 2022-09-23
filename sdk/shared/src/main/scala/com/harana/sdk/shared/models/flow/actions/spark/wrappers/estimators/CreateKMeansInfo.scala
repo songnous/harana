@@ -23,5 +23,8 @@ trait CreateKMeansInfo extends EstimatorAsFactoryInfo[KMeansInfo] with SparkActi
 }
 
 object CreateKMeansInfo extends CreateKMeansInfo {
-  def apply() = new CreateKMeansInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new CreateKMeansInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

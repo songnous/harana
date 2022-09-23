@@ -23,5 +23,8 @@ trait CreateALSInfo extends EstimatorAsFactoryInfo[ALSInfo] with SparkActionDocu
 }
 
 object CreateALSInfo extends CreateALSInfo {
-  def apply() = new CreateALSInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new CreateALSInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

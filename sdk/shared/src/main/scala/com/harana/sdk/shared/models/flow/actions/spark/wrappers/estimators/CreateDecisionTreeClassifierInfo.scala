@@ -24,5 +24,8 @@ trait CreateDecisionTreeClassifierInfo extends EstimatorAsFactoryInfo[DecisionTr
 }
 
 object CreateDecisionTreeClassifierInfo extends CreateDecisionTreeClassifierInfo {
-  def apply() = new CreateDecisionTreeClassifierInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new CreateDecisionTreeClassifierInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

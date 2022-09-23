@@ -23,6 +23,8 @@ trait ActionInfo extends GraphAction with Serializable with Parameters {
   val id: ActionInfo.Id
   val name: String
   val category: ActionCategory
+  val position: Option[(Int, Int)] = None
+  val overrideColor: Option[String] = None
 
   val parameters: Array[Parameter[_]]
   lazy val reportParameters: Option[Parameter[_]] = Option(reportTypeParameter).filter(_ => outArity != 0)

@@ -23,5 +23,8 @@ trait TokenizeWithRegexInfo extends TransformerAsActionInfo[RegexTokenizerInfo] 
 }
 
 object TokenizeWithRegexInfo extends TokenizeWithRegexInfo {
-  def apply() = new TokenizeWithRegexInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new TokenizeWithRegexInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

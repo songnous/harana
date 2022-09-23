@@ -1,7 +1,7 @@
 package com.harana.sdk.shared.models.flow.actions
 
 import com.harana.sdk.shared.models.common.Version
-import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
+import com.harana.sdk.shared.models.flow.actionobjects.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.SetAction
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
@@ -80,7 +80,10 @@ trait JoinInfo extends Action2To1Info[DataFrameInfo, DataFrameInfo, DataFrameInf
 
 object JoinInfo extends JoinInfo {
 
-  def apply() = new JoinInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new JoinInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 
   case class ColumnPair() extends Parameters {
 

@@ -1,9 +1,9 @@
 package com.harana.sdk.shared.models.flow.actions
 
 import com.harana.sdk.shared.models.common.Version
+import com.harana.sdk.shared.models.flow.actionobjects.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.SetAction
 import com.harana.sdk.shared.models.flow.{Action2To1Info, PortPosition}
-import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.SetAction
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.parameters.{Parameter, Parameters}
@@ -36,5 +36,8 @@ trait UnionInfo extends Action2To1Info[DataFrameInfo, DataFrameInfo, DataFrameIn
 }
 
 object UnionInfo extends UnionInfo {
-  def apply() = new UnionInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new UnionInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

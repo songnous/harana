@@ -1,11 +1,11 @@
 package com.harana.sdk.shared.models.flow.actions
 
 import com.harana.sdk.shared.models.common.Version
+import com.harana.sdk.shared.models.flow.actionobjects.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.SetAction
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.{Action1To2Info, PortPosition, parameters}
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.HasSeedParameter
-import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.SetAction
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
@@ -45,7 +45,10 @@ trait SplitInfo extends Action1To2Info[DataFrameInfo, DataFrameInfo, DataFrameIn
 }
 
 object SplitInfo extends SplitInfo {
-  def apply() = new SplitInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new SplitInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }
 
 sealed trait SplitModeChoice extends Choice {

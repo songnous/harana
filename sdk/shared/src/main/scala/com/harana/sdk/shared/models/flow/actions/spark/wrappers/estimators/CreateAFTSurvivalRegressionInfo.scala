@@ -23,5 +23,8 @@ trait CreateAFTSurvivalRegressionInfo extends EstimatorAsFactoryInfo[AFTSurvival
 }
 
 object CreateAFTSurvivalRegressionInfo extends CreateAFTSurvivalRegressionInfo {
-  def apply() = new CreateAFTSurvivalRegressionInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new CreateAFTSurvivalRegressionInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

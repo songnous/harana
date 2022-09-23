@@ -24,5 +24,8 @@ trait RemoveStopWordsInfo extends TransformerAsActionInfo[StopWordsRemoverInfo] 
 }
 
 object RemoveStopWordsInfo extends RemoveStopWordsInfo {
-  def apply() = new RemoveStopWordsInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new RemoveStopWordsInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

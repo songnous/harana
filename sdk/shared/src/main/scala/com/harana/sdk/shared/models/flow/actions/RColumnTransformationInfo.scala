@@ -21,5 +21,8 @@ trait RColumnTransformationInfo extends TransformerAsActionInfo[RColumnTransform
 }
 
 object RColumnTransformationInfo extends RColumnTransformationInfo {
-  def apply() = new RColumnTransformationInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new RColumnTransformationInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

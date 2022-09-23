@@ -3,9 +3,8 @@ package com.harana.sdk.shared.models.flow.actions
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML
 import com.harana.sdk.shared.models.flow.Action3To1Info
-import com.harana.sdk.shared.models.flow.actionobjects.{EstimatorInfo, EvaluatorInfo}
+import com.harana.sdk.shared.models.flow.actionobjects.{DataFrameInfo, EstimatorInfo, EvaluatorInfo}
 import com.harana.sdk.shared.models.flow.actionobjects.report.Report
-import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.HyperOptimization
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.parameters.{DynamicParameter, NumericParameter}
@@ -50,5 +49,8 @@ trait GridSearchInfo
 }
 
 object GridSearchInfo extends GridSearchInfo {
-  def apply() = new GridSearchInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new GridSearchInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

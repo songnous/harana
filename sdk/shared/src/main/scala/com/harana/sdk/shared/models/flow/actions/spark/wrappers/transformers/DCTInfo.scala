@@ -23,5 +23,8 @@ trait DCTInfo extends TransformerAsActionInfo[DiscreteCosineTransformerInfo] wit
 }
 
 object DCTInfo extends DCTInfo {
-  def apply() = new DCTInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new DCTInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

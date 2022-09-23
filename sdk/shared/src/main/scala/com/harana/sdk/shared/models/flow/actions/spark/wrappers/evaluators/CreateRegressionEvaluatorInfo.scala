@@ -25,5 +25,8 @@ trait CreateRegressionEvaluatorInfo extends EvaluatorAsFactoryInfo[RegressionEva
 }
 
 object CreateRegressionEvaluatorInfo extends CreateRegressionEvaluatorInfo {
-  def apply() = new CreateRegressionEvaluatorInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new CreateRegressionEvaluatorInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

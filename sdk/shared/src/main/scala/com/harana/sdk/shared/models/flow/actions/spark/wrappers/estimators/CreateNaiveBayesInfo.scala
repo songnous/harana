@@ -23,5 +23,8 @@ trait CreateNaiveBayesInfo extends EstimatorAsFactoryInfo[NaiveBayesInfo] with S
 }
 
 object CreateNaiveBayesInfo extends CreateNaiveBayesInfo {
-  def apply() = new CreateNaiveBayesInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new CreateNaiveBayesInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

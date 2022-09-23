@@ -23,5 +23,8 @@ trait TokenizeInfo extends TransformerAsActionInfo[StringTokenizerInfo] with Spa
 }
 
 object TokenizeInfo extends TokenizeInfo {
-  def apply() = new TokenizeInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new TokenizeInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

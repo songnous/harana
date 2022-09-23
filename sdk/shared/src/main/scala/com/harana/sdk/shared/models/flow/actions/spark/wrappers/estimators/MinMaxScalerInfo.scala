@@ -25,5 +25,8 @@ trait MinMaxScalerInfo extends EstimatorAsActionInfo[MinMaxScalerEstimatorInfo, 
 }
 
 object MinMaxScalerInfo extends MinMaxScalerInfo {
-  def apply() = new MinMaxScalerInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new MinMaxScalerInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

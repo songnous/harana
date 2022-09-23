@@ -25,5 +25,8 @@ trait QuantileDiscretizerInfo extends EstimatorAsActionInfo[QuantileDiscretizerE
 }
 
 object QuantileDiscretizerInfo extends QuantileDiscretizerInfo {
-  def apply() = new QuantileDiscretizerInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new QuantileDiscretizerInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

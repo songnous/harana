@@ -24,5 +24,8 @@ trait Word2VecInfo extends EstimatorAsActionInfo[Word2VecEstimatorInfo, Word2Vec
 }
 
 object Word2VecInfo extends Word2VecInfo {
-  def apply() = new Word2VecInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new Word2VecInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

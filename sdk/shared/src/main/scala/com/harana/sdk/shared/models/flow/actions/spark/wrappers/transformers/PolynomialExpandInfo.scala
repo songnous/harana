@@ -23,5 +23,8 @@ trait PolynomialExpandInfo extends TransformerAsActionInfo[PolynomialExpanderInf
 }
 
 object PolynomialExpandInfo extends PolynomialExpandInfo {
-  def apply() = new PolynomialExpandInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new PolynomialExpandInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

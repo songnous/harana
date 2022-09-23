@@ -22,5 +22,8 @@ trait CreateMulticlassClassificationEvaluatorInfo extends EvaluatorAsFactoryInfo
 }
 
 object CreateMulticlassClassificationEvaluatorInfo extends CreateMulticlassClassificationEvaluatorInfo {
-  def apply() = new CreateMulticlassClassificationEvaluatorInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new CreateMulticlassClassificationEvaluatorInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

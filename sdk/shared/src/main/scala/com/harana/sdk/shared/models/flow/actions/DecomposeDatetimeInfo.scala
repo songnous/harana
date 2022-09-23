@@ -21,5 +21,8 @@ trait DecomposeDatetimeInfo extends TransformerAsActionInfo[DatetimeDecomposerIn
 }
 
 object DecomposeDatetimeInfo extends DecomposeDatetimeInfo {
-  def apply() = new DecomposeDatetimeInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new DecomposeDatetimeInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

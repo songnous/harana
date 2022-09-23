@@ -23,5 +23,8 @@ trait CreateRandomForestRegressionInfo extends EstimatorAsFactoryInfo[RandomFore
 }
 
 object CreateRandomForestRegressionInfo extends CreateRandomForestRegressionInfo {
-  def apply() = new CreateRandomForestRegressionInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new CreateRandomForestRegressionInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

@@ -23,5 +23,8 @@ trait CreateLogisticRegressionInfo extends EstimatorAsFactoryInfo[LogisticRegres
 }
 
 object CreateLogisticRegressionInfo extends CreateLogisticRegressionInfo {
-  def apply() = new CreateLogisticRegressionInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new CreateLogisticRegressionInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

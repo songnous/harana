@@ -23,5 +23,8 @@ trait NormalizeInfo extends TransformerAsActionInfo[NormalizerInfo] with SparkAc
 }
 
 object NormalizeInfo extends NormalizeInfo {
-  def apply() = new NormalizeInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new NormalizeInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

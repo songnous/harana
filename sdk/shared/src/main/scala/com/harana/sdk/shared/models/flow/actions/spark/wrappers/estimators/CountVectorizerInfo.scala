@@ -28,5 +28,8 @@ trait CountVectorizerInfo extends EstimatorAsActionInfo[CountVectorizerEstimator
 }
 
 object CountVectorizerInfo extends CountVectorizerInfo {
-  def apply() = new CountVectorizerInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new CountVectorizerInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

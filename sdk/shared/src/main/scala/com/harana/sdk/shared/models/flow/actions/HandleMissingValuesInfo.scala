@@ -21,5 +21,8 @@ trait HandleMissingValuesInfo extends TransformerAsActionInfo[MissingValuesHandl
 }
 
 object HandleMissingValuesInfo extends HandleMissingValuesInfo {
-  def apply() = new HandleMissingValuesInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new HandleMissingValuesInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

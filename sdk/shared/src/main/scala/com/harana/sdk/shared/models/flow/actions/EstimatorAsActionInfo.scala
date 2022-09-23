@@ -1,8 +1,7 @@
 package com.harana.sdk.shared.models.flow.actions
 
 import com.harana.sdk.shared.models.flow.Action1To2Info
-import com.harana.sdk.shared.models.flow.actionobjects.{EstimatorInfo, TransformerInfo}
-import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
+import com.harana.sdk.shared.models.flow.actionobjects.{DataFrameInfo, EstimatorInfo, TransformerInfo}
 import com.harana.sdk.shared.models.flow.utils.TypeUtils
 
 import scala.reflect.runtime.universe.TypeTag

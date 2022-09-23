@@ -2,8 +2,8 @@ package com.harana.sdk.shared.models.flow.actions.write
 
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.Action1To0Info
+import com.harana.sdk.shared.models.flow.actionobjects.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
-import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
 import com.harana.sdk.shared.models.flow.actions.inout.OutputStorageTypeChoice
 import com.harana.sdk.shared.models.flow.actions.spark.wrappers.transformers.TokenizeWithRegexInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
@@ -36,5 +36,8 @@ trait WriteDataFrameInfo
 }
 
 object WriteDataFrameInfo extends WriteDataFrameInfo {
-  def apply() = new WriteDataFrameInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new WriteDataFrameInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

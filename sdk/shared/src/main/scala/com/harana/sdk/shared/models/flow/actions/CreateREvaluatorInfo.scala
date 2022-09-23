@@ -21,5 +21,8 @@ trait CreateREvaluatorInfo extends EvaluatorAsFactoryInfo[REvaluatorInfo] with A
 }
 
 object CreateREvaluatorInfo extends CreateREvaluatorInfo {
-  def apply() = new CreateREvaluatorInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new CreateREvaluatorInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

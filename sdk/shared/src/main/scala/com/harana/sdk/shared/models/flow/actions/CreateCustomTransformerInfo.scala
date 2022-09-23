@@ -41,7 +41,10 @@ object CreateCustomTransformerInfo extends CreateCustomTransformerInfo {
   private val sourceNode = Node(sourceNodeId, new SourceInfo() {})
   private val sinkNode = Node(sinkNodeId, new SinkInfo() {})
 
-  def apply() = new CreateCustomTransformerInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new CreateCustomTransformerInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 
   val default = InnerWorkflow(
     FlowGraph(nodes = Set(sourceNode, sinkNode), edges = Set(Edge((sourceNode, 0), (sinkNode, 0))))

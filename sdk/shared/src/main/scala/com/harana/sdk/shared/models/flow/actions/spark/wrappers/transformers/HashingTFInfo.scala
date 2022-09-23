@@ -23,5 +23,8 @@ trait HashingTFInfo extends TransformerAsActionInfo[HashingTFTransformerInfo] wi
 }
 
 object HashingTFInfo extends HashingTFInfo {
-  def apply() = new HashingTFInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new HashingTFInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

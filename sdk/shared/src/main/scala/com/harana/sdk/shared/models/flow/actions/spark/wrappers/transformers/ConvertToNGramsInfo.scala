@@ -23,5 +23,8 @@ trait ConvertToNGramsInfo extends TransformerAsActionInfo[NGramTransformerInfo] 
 }
 
 object ConvertToNGramsInfo extends ConvertToNGramsInfo {
-  def apply() = new ConvertToNGramsInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new ConvertToNGramsInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

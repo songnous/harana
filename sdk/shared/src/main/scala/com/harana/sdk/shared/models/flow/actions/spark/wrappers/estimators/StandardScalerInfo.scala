@@ -25,5 +25,8 @@ trait StandardScalerInfo extends EstimatorAsActionInfo[StandardScalerEstimatorIn
 }
 
 object StandardScalerInfo extends StandardScalerInfo {
-  def apply() = new StandardScalerInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new StandardScalerInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

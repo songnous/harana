@@ -4,7 +4,6 @@ import com.harana.sdk.shared.models.common.Entity.EntityId
 import com.harana.sdk.shared.models.common.User.UserId
 import com.harana.sdk.shared.models.common.{Entity, Status}
 import com.harana.sdk.shared.models.designer.flow.container.EnvironmentVariable
-import com.harana.sdk.shared.models.flow.Action.ActionId
 import com.harana.sdk.shared.models.flow.Flow.FlowId
 import com.harana.sdk.shared.models.flow.FlowExecution.FlowExecutionId
 import com.harana.sdk.shared.models.flow.execution.spark._
@@ -16,7 +15,7 @@ import java.time.Instant
 @JsonCodec
 case class FlowExecution(flowId: FlowId,
                          actionExecutions: List[ActionExecution],
-                         outputVariables: Map[ActionId, List[EnvironmentVariable]],
+                         outputVariables: Map[ActionInfo.Id, List[EnvironmentVariable]],
                          sparkMetrics: Option[SparkMetrics],
                          startTime: Option[Instant],
                          acceptedTime: Option[Instant],

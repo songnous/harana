@@ -21,5 +21,8 @@ trait ComposeDatetimeInfo extends TransformerAsActionInfo[DatetimeComposerInfo] 
 }
 
 object ComposeDatetimeInfo extends ComposeDatetimeInfo {
-  def apply() = new ComposeDatetimeInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new ComposeDatetimeInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

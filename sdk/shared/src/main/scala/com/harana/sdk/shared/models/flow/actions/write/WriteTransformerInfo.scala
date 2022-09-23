@@ -35,5 +35,8 @@ trait WriteTransformerInfo extends Action1To0Info[TransformerInfo] with Paramete
 }
 
 object WriteTransformerInfo extends WriteTransformerInfo {
-  def apply() = new WriteTransformerInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new WriteTransformerInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

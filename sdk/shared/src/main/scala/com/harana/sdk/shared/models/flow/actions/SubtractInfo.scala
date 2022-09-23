@@ -2,7 +2,7 @@ package com.harana.sdk.shared.models.flow.actions
 
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.Action1To1Info
-import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
+import com.harana.sdk.shared.models.flow.actionobjects.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Filtering
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.parameters.Parameter
@@ -24,5 +24,8 @@ trait SubtractInfo extends Action1To1Info[DataFrameInfo, DataFrameInfo] with Act
 }
 
 object SubtractInfo extends SubtractInfo {
-  def apply() = new SubtractInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new SubtractInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

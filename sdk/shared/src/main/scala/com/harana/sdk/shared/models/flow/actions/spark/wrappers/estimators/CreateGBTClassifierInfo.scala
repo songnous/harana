@@ -23,5 +23,8 @@ trait CreateGBTClassifierInfo extends EstimatorAsFactoryInfo[GBTClassifierInfo] 
 }
 
 object CreateGBTClassifierInfo extends CreateGBTClassifierInfo {
-  def apply() = new CreateGBTClassifierInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new CreateGBTClassifierInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

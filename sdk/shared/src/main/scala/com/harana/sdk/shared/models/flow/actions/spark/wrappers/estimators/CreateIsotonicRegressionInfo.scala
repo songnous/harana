@@ -23,5 +23,8 @@ trait CreateIsotonicRegressionInfo extends EstimatorAsFactoryInfo[IsotonicRegres
 }
 
 object CreateIsotonicRegressionInfo extends CreateIsotonicRegressionInfo {
-  def apply() = new CreateIsotonicRegressionInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new CreateIsotonicRegressionInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

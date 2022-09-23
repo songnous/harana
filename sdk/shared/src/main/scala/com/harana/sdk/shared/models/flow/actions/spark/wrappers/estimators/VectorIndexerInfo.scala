@@ -24,5 +24,8 @@ trait VectorIndexerInfo extends EstimatorAsActionInfo[VectorIndexerEstimatorInfo
 }
 
 object VectorIndexerInfo extends VectorIndexerInfo {
-  def apply() = new VectorIndexerInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new VectorIndexerInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

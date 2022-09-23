@@ -2,8 +2,8 @@ package com.harana.sdk.shared.models.flow.actions.custom
 
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.Action0To1Info
+import com.harana.sdk.shared.models.flow.actionobjects.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
-import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
 import com.harana.sdk.shared.models.flow.parameters.Parameter
 
@@ -23,5 +23,8 @@ trait SourceInfo extends Action0To1Info[DataFrameInfo] {
 }
 
 object SourceInfo extends SourceInfo {
-  def apply() = new SourceInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new SourceInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

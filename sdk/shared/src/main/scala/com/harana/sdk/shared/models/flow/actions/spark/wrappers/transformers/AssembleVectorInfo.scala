@@ -25,5 +25,8 @@ trait AssembleVectorInfo extends TransformerAsActionInfo[VectorAssemblerInfo] wi
 }
 
 object AssembleVectorInfo extends AssembleVectorInfo {
-  def apply() = new AssembleVectorInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new AssembleVectorInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

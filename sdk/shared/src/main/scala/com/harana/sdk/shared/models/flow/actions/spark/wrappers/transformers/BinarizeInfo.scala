@@ -24,5 +24,8 @@ trait BinarizeInfo extends TransformerAsActionInfo[BinarizerInfo] with SparkActi
 }
 
 object BinarizeInfo extends BinarizeInfo {
-  def apply() = new BinarizeInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new BinarizeInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

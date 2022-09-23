@@ -26,5 +26,8 @@ trait UnivariateFeatureSelectorInfo extends EstimatorAsActionInfo[UnivariateFeat
 }
 
 object UnivariateFeatureSelectorInfo extends UnivariateFeatureSelectorInfo {
-  def apply() = new UnivariateFeatureSelectorInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new UnivariateFeatureSelectorInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

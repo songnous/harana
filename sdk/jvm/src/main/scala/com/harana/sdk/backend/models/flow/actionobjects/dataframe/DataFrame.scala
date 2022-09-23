@@ -6,9 +6,8 @@ import com.harana.sdk.backend.models.flow.actionobjects.dataframe.report.DataFra
 import com.harana.sdk.backend.models.flow.actions.exceptions.{BacktickInColumnNameError, DuplicatedColumnsError, WrongColumnTypeError}
 import com.harana.sdk.backend.models.flow.utils.{SparkConversions, SparkTypeConverter}
 import com.harana.sdk.shared.models.flow.ActionObjectInfo
-import com.harana.sdk.shared.models.flow.actionobjects.descriptions
+import com.harana.sdk.shared.models.flow.actionobjects.{DataFrameInfo, descriptions}
 import com.harana.sdk.shared.models.flow.actionobjects.descriptions.DataFrameInferenceResult
-import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
 import com.harana.sdk.shared.models.flow.utils.ColumnType
 import org.apache.spark.sql
 import org.apache.spark.sql.Row

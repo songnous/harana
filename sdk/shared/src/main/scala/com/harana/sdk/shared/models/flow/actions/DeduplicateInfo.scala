@@ -3,8 +3,7 @@ package com.harana.sdk.shared.models.flow.actions
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.Action3To1Info
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Filtering
-import com.harana.sdk.shared.models.flow.actionobjects.ProjectorInfo
-import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
+import com.harana.sdk.shared.models.flow.actionobjects.{DataFrameInfo, ProjectorInfo}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Filtering
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.parameters.Parameter
@@ -30,5 +29,8 @@ trait DeduplicateInfo extends Action3To1Info[DataFrameInfo, DataFrameInfo, DataF
 }
 
 object DeduplicateInfo extends DeduplicateInfo {
-  def apply() = new DeduplicateInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new DeduplicateInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

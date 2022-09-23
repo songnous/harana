@@ -1,12 +1,9 @@
 package com.harana.sdk.shared.models.flow.actions
 
 import com.harana.sdk.shared.models.common.Version
-import com.harana.sdk.shared.models.flow.Action
-import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation
 import com.harana.sdk.shared.models.flow.actionobjects.TypeConverterInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.FeatureConversion
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
-import com.harana.sdk.shared.models.flow.utils.Id
 
 import scala.reflect.runtime.universe.TypeTag
 
@@ -21,5 +18,8 @@ trait ConvertTypeInfo extends TransformerAsActionInfo[TypeConverterInfo] with Ac
 }
 
 object ConvertTypeInfo extends ConvertTypeInfo {
-  def apply() = new ConvertTypeInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new ConvertTypeInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

@@ -23,5 +23,8 @@ trait CreateMultilayerPerceptronClassifierInfo extends EstimatorAsFactoryInfo[Mu
 }
 
 object CreateMultilayerPerceptronClassifierInfo extends CreateMultilayerPerceptronClassifierInfo {
-  def apply() = new CreateMultilayerPerceptronClassifierInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new CreateMultilayerPerceptronClassifierInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

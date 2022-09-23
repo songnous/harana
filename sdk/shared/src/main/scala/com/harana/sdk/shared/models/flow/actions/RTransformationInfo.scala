@@ -21,5 +21,8 @@ trait RTransformationInfo extends TransformerAsActionInfo[RTransformerInfo] with
 }
 
 object RTransformationInfo extends RTransformationInfo {
-  def apply() = new RTransformationInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new RTransformationInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

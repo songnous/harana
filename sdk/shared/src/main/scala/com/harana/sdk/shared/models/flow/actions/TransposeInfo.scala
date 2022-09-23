@@ -2,7 +2,7 @@ package com.harana.sdk.shared.models.flow.actions
 
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.Action1To1Info
-import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
+import com.harana.sdk.shared.models.flow.actionobjects.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Filtering
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.parameters.Parameter
@@ -25,5 +25,8 @@ trait TransposeInfo extends Action1To1Info[DataFrameInfo, DataFrameInfo] with Ac
 }
 
 object TransposeInfo extends TransposeInfo {
-  def apply() = new TransposeInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new TransposeInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }

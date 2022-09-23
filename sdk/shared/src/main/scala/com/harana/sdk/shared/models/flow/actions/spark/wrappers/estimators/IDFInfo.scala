@@ -25,5 +25,8 @@ trait IDFInfo extends EstimatorAsActionInfo[IDFEstimatorInfo, IDFModelInfo] with
 }
 
 object IDFInfo extends IDFInfo {
-  def apply() = new IDFInfo {}
+  def apply(pos: (Int, Int), color: Option[String] = None) = new IDFInfo {
+    override val position = Some(pos)
+    override val overrideColor = color
+  }
 }
