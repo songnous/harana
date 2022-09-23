@@ -3,7 +3,7 @@ package com.harana.sdk.shared.models.flow.actions
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.SetAction
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
-import com.harana.sdk.shared.models.flow.{Action1To2TypeInfo, PortPosition, parameters}
+import com.harana.sdk.shared.models.flow.{Action1To2Info, PortPosition, parameters}
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.HasSeedParameter
 import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.SetAction
@@ -15,7 +15,7 @@ import com.harana.sdk.shared.models.flow.utils.Id
 
 import scala.reflect.runtime.{universe => ru}
 
-trait SplitInfo extends Action1To2TypeInfo[DataFrameInfo, DataFrameInfo, DataFrameInfo]
+trait SplitInfo extends Action1To2Info[DataFrameInfo, DataFrameInfo, DataFrameInfo]
   with Parameters
   with ActionDocumentation {
 

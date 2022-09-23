@@ -2,18 +2,18 @@ package com.harana.sdk.backend.models.flow.catalogs
 
 import scala.reflect.runtime.{universe => ru}
 import com.harana.sdk.backend.models.flow.graph.DClassesForActions.A1
-import com.harana.sdk.backend.models.flow.{ActionType, ActionType0To1, ExecutionContext}
+import com.harana.sdk.backend.models.flow.{Action, Action0To1, ExecutionContext}
 import com.harana.sdk.shared.models.designer.flow.ActionCategories
 import com.harana.sdk.shared.models.designer.flow.utils.catalog.SortPriority
-import com.harana.sdk.shared.models.flow.ActionTypeInfo
+import com.harana.sdk.shared.models.flow.ActionInfo
 import com.harana.sdk.shared.models.flow.utils.Id
 
 object SpiLoadedAction {
   val spiLoadedActionUuid = "adf440aa-d3eb-4cb9-bf17-bb7fc1d34a0b"
-  val spiLoadedActionId = ActionTypeInfo.Id.fromString(SpiLoadedAction.spiLoadedActionUuid)
+  val spiLoadedActionId = ActionInfo.Id.fromString(SpiLoadedAction.spiLoadedActionUuid)
 }
 
-class SpiLoadedAction extends ActionType0To1[A1] {
+class SpiLoadedAction extends Action0To1[A1] {
 
   def execute()(context: ExecutionContext): A1 = ???
 

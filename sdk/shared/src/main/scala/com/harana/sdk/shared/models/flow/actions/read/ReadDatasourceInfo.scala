@@ -1,7 +1,7 @@
 package com.harana.sdk.shared.models.flow.actions.read
 
 import com.harana.sdk.shared.models.common.Version
-import com.harana.sdk.shared.models.flow.Action0To1TypeInfo
+import com.harana.sdk.shared.models.flow.Action0To1Info
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
 import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
@@ -12,7 +12,7 @@ import com.harana.sdk.shared.models.flow.utils.Id
 import java.util.UUID
 import scala.reflect.runtime.{universe => ru}
 
-trait ReadDatasourceInfo extends Action0To1TypeInfo[DataFrameInfo] with ActionDocumentation {
+trait ReadDatasourceInfo extends Action0To1Info[DataFrameInfo] with ActionDocumentation {
 
   val id: Id = "1a3b32f0-f56d-4c44-a396-29d2dfd43423"
   val name = "Read DataFrame"

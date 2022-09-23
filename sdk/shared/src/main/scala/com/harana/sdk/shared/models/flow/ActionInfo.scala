@@ -1,7 +1,7 @@
 package com.harana.sdk.shared.models.flow
 
-import ActionTypeInfo.ReportParameter.{Extended, Metadata}
-import ActionTypeInfo.{ReportParameter, ReportType}
+import ActionInfo.ReportParameter.{Extended, Metadata}
+import ActionInfo.{ReportParameter, ReportType}
 import Gravity.{GravitateLeft, GravitateRight}
 import PortPosition._
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
@@ -15,12 +15,12 @@ import java.util.UUID
 import scala.reflect.runtime.{universe => ru}
 
 @SerialVersionUID(1L)
-trait ActionTypeInfo extends GraphAction with Serializable with Parameters {
+trait ActionInfo extends GraphAction with Serializable with Parameters {
 
   val inArity: Int
   val outArity: Int
 
-  val id: ActionTypeInfo.Id
+  val id: ActionInfo.Id
   val name: String
   val category: ActionCategory
 
@@ -68,7 +68,7 @@ trait ActionTypeInfo extends GraphAction with Serializable with Parameters {
 
 }
 
-object ActionTypeInfo {
+object ActionInfo {
 
   type Id = utils.Id
   val Id = utils.Id

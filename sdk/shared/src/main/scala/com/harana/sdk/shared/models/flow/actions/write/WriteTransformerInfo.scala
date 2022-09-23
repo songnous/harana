@@ -2,7 +2,7 @@ package com.harana.sdk.shared.models.flow.actions.write
 
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
-import com.harana.sdk.shared.models.flow.Action1To0TypeInfo
+import com.harana.sdk.shared.models.flow.Action1To0Info
 import com.harana.sdk.shared.models.flow.actionobjects.TransformerInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
@@ -11,7 +11,7 @@ import com.harana.sdk.shared.models.flow.utils.Id
 
 import scala.reflect.runtime.{universe => ru}
 
-trait WriteTransformerInfo extends Action1To0TypeInfo[TransformerInfo] with Parameters with ActionDocumentation {
+trait WriteTransformerInfo extends Action1To0Info[TransformerInfo] with Parameters with ActionDocumentation {
 
   val id: Id = "58368deb-68d0-4657-ae3f-145160cb1e2b"
   val name = "Write Transformer"

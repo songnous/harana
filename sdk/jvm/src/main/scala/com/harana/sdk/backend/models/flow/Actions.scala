@@ -22,7 +22,7 @@ object ActionTypeConversions {
   }
 }
 
-trait ActionType0To1[TO_0 <: ActionObjectInfo] extends ActionType {
+trait Action0To1[TO_0 <: ActionObjectInfo] extends Action {
   final def executeUntyped(arguments: List[ActionObjectInfo])(context: ExecutionContext) =
     execute()(context)
 
@@ -37,7 +37,7 @@ trait ActionType0To1[TO_0 <: ActionObjectInfo] extends ActionType {
   val tTagTO_0: ru.TypeTag[TO_0]
 }
 
-trait ActionType0To2[TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo] extends ActionType {
+trait Action0To2[TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo] extends Action {
   final def executeUntyped(arguments: List[ActionObjectInfo])(context: ExecutionContext): List[ActionObjectInfo] =
     (execute()(context))
 
@@ -60,7 +60,7 @@ trait ActionType0To2[TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo] extends
   val tTagTO_1: ru.TypeTag[TO_1]
 }
 
-trait ActionType0To3[TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo, TO_2 <: ActionObjectInfo] extends ActionType {
+trait Action0To3[TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo, TO_2 <: ActionObjectInfo] extends Action {
   def execute()(context: ExecutionContext): (TO_0, TO_1)
 
   final def executeUntyped(arguments: List[ActionObjectInfo])(context: ExecutionContext): List[ActionObjectInfo] =
@@ -87,7 +87,7 @@ trait ActionType0To3[TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo, TO_2 <:
   val tTagTO_2: ru.TypeTag[TO_2]
 }
 
-trait ActionType1To0[TI_0 <: ActionObjectInfo] extends ActionType {
+trait Action1To0[TI_0 <: ActionObjectInfo] extends Action {
 
   final def executeUntyped(arguments: List[ActionObjectInfo])(context: ExecutionContext): List[ActionObjectInfo] = {
     execute(arguments(0).asInstanceOf[TI_0])(context)
@@ -104,7 +104,7 @@ trait ActionType1To0[TI_0 <: ActionObjectInfo] extends ActionType {
   def inferKnowledge(k0: Knowledge[TI_0])(context: InferContext): (Unit, InferenceWarnings) = ((), InferenceWarnings.empty)
 }
 
-trait ActionType1To1[TI_0 <: ActionObjectInfo, TO_0 <: ActionObjectInfo] extends ActionType {
+trait Action1To1[TI_0 <: ActionObjectInfo, TO_0 <: ActionObjectInfo] extends Action {
 
   final def executeUntyped(arguments: List[ActionObjectInfo])(context: ExecutionContext): List[ActionObjectInfo] =
     execute(arguments.head.asInstanceOf[TI_0])(context)
@@ -120,10 +120,10 @@ trait ActionType1To1[TI_0 <: ActionObjectInfo, TO_0 <: ActionObjectInfo] extends
   val tTagTO_0: ru.TypeTag[TO_0]
 }
 
-trait ActionType1To2[
+trait Action1To2[
   TI_0 <: ActionObjectInfo,
   TO_0 <: ActionObjectInfo,
-  TO_1 <: ActionObjectInfo] extends ActionType {
+  TO_1 <: ActionObjectInfo] extends Action {
 
   final def executeUntyped(arguments: List[ActionObjectInfo])(context: ExecutionContext): List[ActionObjectInfo] =
     execute(arguments(0).asInstanceOf[TI_0])(context)
@@ -147,11 +147,11 @@ trait ActionType1To2[
   val tTagTO_1: ru.TypeTag[TO_1]
 }
 
-trait ActionType1To3[
+trait Action1To3[
   TI_0 <: ActionObjectInfo,
   TO_0 <: ActionObjectInfo,
   TO_1 <: ActionObjectInfo,
-  TO_2 <: ActionObjectInfo] extends ActionType {
+  TO_2 <: ActionObjectInfo] extends Action {
 
   final def executeUntyped(arguments: List[ActionObjectInfo])(context: ExecutionContext): List[ActionObjectInfo] =
     execute(arguments(0).asInstanceOf[TI_0])(context)
@@ -177,7 +177,7 @@ trait ActionType1To3[
   val tTagTO_2: ru.TypeTag[TO_2]
 }
 
-trait ActionType2To0[TI_0 <: ActionObjectInfo, TI_1 <: ActionObjectInfo] extends ActionType {
+trait Action2To0[TI_0 <: ActionObjectInfo, TI_1 <: ActionObjectInfo] extends Action {
 
   final def executeUntyped(arguments: List[ActionObjectInfo])(context: ExecutionContext): List[ActionObjectInfo] = {
     execute(arguments(0).asInstanceOf[TI_0], arguments(1).asInstanceOf[TI_1])(context)
@@ -195,10 +195,10 @@ trait ActionType2To0[TI_0 <: ActionObjectInfo, TI_1 <: ActionObjectInfo] extends
     ((), InferenceWarnings.empty)
 }
 
-trait ActionType2To1[
+trait Action2To1[
   TI_0 <: ActionObjectInfo,
   TI_1 <: ActionObjectInfo,
-  TO_0 <: ActionObjectInfo] extends ActionType {
+  TO_0 <: ActionObjectInfo] extends Action {
 
   final def executeUntyped(arguments: List[ActionObjectInfo])(context: ExecutionContext): List[ActionObjectInfo] =
     execute(arguments(0).asInstanceOf[TI_0], arguments(1).asInstanceOf[TI_1])(context)
@@ -214,11 +214,11 @@ trait ActionType2To1[
   val tTagTO_0: ru.TypeTag[TO_0]
 }
 
-trait ActionType2To2[
+trait Action2To2[
   TI_0 <: ActionObjectInfo,
   TI_1 <: ActionObjectInfo,
   TO_0 <: ActionObjectInfo,
-  TO_1 <: ActionObjectInfo] extends ActionType {
+  TO_1 <: ActionObjectInfo] extends Action {
 
   final def executeUntyped(arguments: List[ActionObjectInfo])(context: ExecutionContext): List[ActionObjectInfo] =
     execute(arguments(0).asInstanceOf[TI_0], arguments(1).asInstanceOf[TI_1])(context)
@@ -243,13 +243,13 @@ trait ActionType2To2[
   val tTagTO_1: ru.TypeTag[TO_1]
 }
 
-trait ActionType2To3[
+trait Action2To3[
     TI_0 <: ActionObjectInfo,
     TI_1 <: ActionObjectInfo,
     TO_0 <: ActionObjectInfo,
     TO_1 <: ActionObjectInfo,
     TO_2 <: ActionObjectInfo
-] extends ActionType {
+] extends Action {
 
   final def executeUntyped(arguments: List[ActionObjectInfo])(context: ExecutionContext): List[ActionObjectInfo] =
     execute(arguments(0).asInstanceOf[TI_0], arguments(1).asInstanceOf[TI_1])(context)
@@ -275,10 +275,10 @@ trait ActionType2To3[
   val tTagTO_2: ru.TypeTag[TO_2]
 }
 
-trait ActionType3To0[
+trait Action3To0[
   TI_0 <: ActionObjectInfo,
   TI_1 <: ActionObjectInfo,
-  TI_2 <: ActionObjectInfo] extends ActionType {
+  TI_2 <: ActionObjectInfo] extends Action {
 
   final def executeUntyped(arguments: List[ActionObjectInfo])(context: ExecutionContext): List[ActionObjectInfo] = {
     execute(arguments(0).asInstanceOf[TI_0], arguments(1).asInstanceOf[TI_1], arguments(2).asInstanceOf[TI_2])(context)
@@ -299,11 +299,11 @@ trait ActionType3To0[
   def inferKnowledge(k0: Knowledge[TI_0], k1: Knowledge[TI_1], k2: Knowledge[TI_2])(context: InferContext): (Unit, InferenceWarnings) = ((), InferenceWarnings.empty)
 }
 
-trait ActionType3To1[
+trait Action3To1[
   TI_0 <: ActionObjectInfo,
   TI_1 <: ActionObjectInfo,
   TI_2 <: ActionObjectInfo,
-  TO_0 <: ActionObjectInfo] extends ActionType {
+  TO_0 <: ActionObjectInfo] extends Action {
 
   final def executeUntyped(arguments: List[ActionObjectInfo])(context: ExecutionContext): List[ActionObjectInfo] =
     execute(arguments(0).asInstanceOf[TI_0], arguments(1).asInstanceOf[TI_1], arguments(2).asInstanceOf[TI_2])(context)
@@ -324,13 +324,13 @@ trait ActionType3To1[
   val tTagTO_0: ru.TypeTag[TO_0]
 }
 
-trait ActionType3To2[
+trait Action3To2[
     TI_0 <: ActionObjectInfo,
     TI_1 <: ActionObjectInfo,
     TI_2 <: ActionObjectInfo,
     TO_0 <: ActionObjectInfo,
     TO_1 <: ActionObjectInfo
-] extends ActionType {
+] extends Action {
 
   final def executeUntyped(arguments: List[ActionObjectInfo])(context: ExecutionContext): List[ActionObjectInfo] =
     execute(arguments(0).asInstanceOf[TI_0], arguments(1).asInstanceOf[TI_1], arguments(2).asInstanceOf[TI_2])(context)
@@ -358,14 +358,14 @@ trait ActionType3To2[
   val tTagTO_1: ru.TypeTag[TO_1]
 }
 
-trait ActionType3To3[
+trait Action3To3[
     TI_0 <: ActionObjectInfo,
     TI_1 <: ActionObjectInfo,
     TI_2 <: ActionObjectInfo,
     TO_0 <: ActionObjectInfo,
     TO_1 <: ActionObjectInfo,
     TO_2 <: ActionObjectInfo
-] extends ActionType {
+] extends Action {
 
   final def executeUntyped(arguments: List[ActionObjectInfo])(context: ExecutionContext): List[ActionObjectInfo] =
     execute(arguments(0).asInstanceOf[TI_0], arguments(1).asInstanceOf[TI_1], arguments(2).asInstanceOf[TI_2])(context)

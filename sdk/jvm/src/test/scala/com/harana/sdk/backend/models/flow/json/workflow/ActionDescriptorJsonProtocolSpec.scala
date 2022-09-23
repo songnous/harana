@@ -2,7 +2,7 @@ package com.harana.sdk.backend.models.flow.json.workflow
 
 import com.harana.sdk.shared.models.designer.flow.utils.catalog.SortPriority
 import com.harana.sdk.shared.models.flow.catalogs.{ActionCategory, ActionDescriptor}
-import com.harana.sdk.shared.models.flow.{ActionTypeInfo, PortPosition}
+import com.harana.sdk.shared.models.flow.{ActionInfo, PortPosition}
 import com.harana.sdk.shared.models.flow.parameters.Parameters
 import io.circe.Json
 import io.circe.syntax.EncoderOps
@@ -45,7 +45,7 @@ class ActionDescriptorJsonProtocolSpec extends AnyFlatSpec with MockitoSugar wit
     when(parameters.parametersToJson).thenReturn(parametersJsRepresentation)
 
     val actionDescriptor = ActionDescriptor(
-      ActionTypeInfo.Id.randomId,
+      ActionInfo.Id.randomId,
       "action name",
       "action description",
       category,

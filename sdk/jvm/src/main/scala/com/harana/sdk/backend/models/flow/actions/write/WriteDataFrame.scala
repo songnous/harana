@@ -17,7 +17,7 @@ import org.apache.spark.sql.SaveMode
 import java.io.IOException
 import java.util.Properties
 
-class WriteDataFrame extends ActionType1To0[DataFrame] with WriteDataFrameInfo {
+class WriteDataFrame extends Action1To0[DataFrame] with WriteDataFrameInfo {
 
   def execute(df: DataFrame)(context: ExecutionContext) = {
     import OutputStorageTypeChoice._

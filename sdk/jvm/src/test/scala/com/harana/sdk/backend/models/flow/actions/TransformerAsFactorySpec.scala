@@ -2,7 +2,7 @@ package com.harana.sdk.backend.models.flow.actions
 
 import com.harana.sdk.backend.models.flow._
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
-import com.harana.sdk.shared.models.flow.ActionTypeInfo.ReportParameter
+import com.harana.sdk.shared.models.flow.ActionInfo.ReportParameter
 import com.harana.sdk.shared.models.flow.parameters.ParameterMap
 import com.harana.sdk.shared.models.flow.utils.Id
 

@@ -3,14 +3,14 @@ package com.harana.sdk.backend.models.flow.actions.examples
 import java.io.File
 import java.io.PrintWriter
 import com.harana.sdk.shared.models.flow.actions.inout.CsvParameters.ColumnSeparatorChoice.Comma
-import com.harana.sdk.backend.models.flow.{ActionType, IntegratedTestSupport}
+import com.harana.sdk.backend.models.flow.{Action, IntegratedTestSupport}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actions.read.ReadDataFrame
 import com.harana.sdk.backend.models.flow.actions.readwritedataframe.FileScheme
 import com.harana.sdk.backend.models.flow.utils.Logging
 import com.harana.sdk.shared.models.flow.ActionObjectInfo
 
-abstract class AbstractActionExample[T <: ActionType] extends IntegratedTestSupport with Logging {
+abstract class AbstractActionExample[T <: Action] extends IntegratedTestSupport with Logging {
 
   def action: T
 

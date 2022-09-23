@@ -1,7 +1,7 @@
 package com.harana.sdk.backend.models.flow.json.workflow
 
 import com.harana.sdk.shared.models.designer.flow.utils.catalog.SortPriority
-import com.harana.sdk.shared.models.flow.ActionTypeInfo
+import com.harana.sdk.shared.models.flow.ActionInfo
 import com.harana.sdk.shared.models.flow.catalogs.{ActionCategory, ActionCategoryNode, ActionDescriptor}
 import io.circe.Json
 import io.circe.syntax.EncoderOps
@@ -19,7 +19,7 @@ class ActionCategoryNodeJsonProtocolSpec extends AnyFlatSpec with Matchers with 
     val childNode = ActionCategoryNode(Some(childCategory))
 
     val actionDescriptor = mock[ActionDescriptor]
-    when(actionDescriptor.id).thenReturn(ActionTypeInfo.Id.randomId)
+    when(actionDescriptor.id).thenReturn(ActionInfo.Id.randomId)
     when(actionDescriptor.name).thenReturn("mock action descriptor name")
     when(actionDescriptor.description).thenReturn("mock operator descriptor description")
 

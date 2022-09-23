@@ -1,7 +1,7 @@
 package com.harana.sdk.shared.models.flow.actions.write
 
 import com.harana.sdk.shared.models.common.Version
-import com.harana.sdk.shared.models.flow.Action1To0TypeInfo
+import com.harana.sdk.shared.models.flow.Action1To0Info
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
 import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
 import com.harana.sdk.shared.models.flow.actions.inout.OutputStorageTypeChoice
@@ -15,7 +15,7 @@ import com.harana.sdk.shared.models.flow.utils.Id
 import scala.reflect.runtime.{universe => ru}
 
 trait WriteDataFrameInfo
-  extends Action1To0TypeInfo[DataFrameInfo]
+  extends Action1To0Info[DataFrameInfo]
     with Parameters
     with ActionDocumentation {
 

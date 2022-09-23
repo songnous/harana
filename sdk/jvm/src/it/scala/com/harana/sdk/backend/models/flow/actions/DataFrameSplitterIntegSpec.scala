@@ -1,7 +1,7 @@
 package com.harana.sdk.backend.models.flow.actions
 
 import com.harana.sdk.backend.models.flow._
-import com.harana.sdk.backend.models.flow.{ActionType, ExecutionContext, IntegratedTestSupport}
+import com.harana.sdk.backend.models.flow.{Action, ExecutionContext, IntegratedTestSupport}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.shared.models.flow.ActionObjectInfo
 import com.harana.sdk.shared.models.flow.actions.SplitModeChoice
@@ -61,7 +61,7 @@ class DataFrameSplitterIntegSpec extends IntegratedTestSupport with ScalaCheckDr
 
   private def createData(data: Seq[Int]) = sparkContext.parallelize(data.map(Row(_)))
 
-  private def executeAction(context: ExecutionContext, action: ActionType)(dataFrame: DataFrame) ={
+  private def executeAction(context: ExecutionContext, action: Action)(dataFrame: DataFrame) ={
     val actionResult = action.executeUntyped(List[ActionObjectInfo](dataFrame))(context)
     val df1 = actionResult.head.asInstanceOf[DataFrame]
     val df2 = actionResult.last.asInstanceOf[DataFrame]

@@ -2,16 +2,16 @@ package com.harana.sdk.backend.models.flow.json.graph
 
 import com.harana.models.json.graph.GraphJsonTestSupport
 import com.harana.sdk.shared.models.designer.flow.graph.Endpoint
-import com.harana.sdk.shared.models.flow.ActionTypeInfo
+import com.harana.sdk.shared.models.flow.ActionInfo
 import com.harana.sdk.shared.models.flow.graph.{Edge, FlowGraph}
 import com.harana.sdk.shared.models.flow.graph.node.Node
 
 class GraphWriterSpec extends GraphJsonTestSupport {
 
-  val action1 = mockAction(0, 1, ActionTypeInfo.Id.randomId, "name1")
-  val action2 = mockAction(1, 1, ActionTypeInfo.Id.randomId, "name2")
-  val action3 = mockAction(1, 1, ActionTypeInfo.Id.randomId, "name3")
-  val action4 = mockAction(2, 1, ActionTypeInfo.Id.randomId, "name4")
+  val action1 = mockAction(0, 1, ActionInfo.Id.randomId, "name1")
+  val action2 = mockAction(1, 1, ActionInfo.Id.randomId, "name2")
+  val action3 = mockAction(1, 1, ActionInfo.Id.randomId, "name3")
+  val action4 = mockAction(2, 1, ActionInfo.Id.randomId, "name4")
 
   val node1 = Node(Node.Id.randomId, action1)
   val node2 = Node(Node.Id.randomId, action2)

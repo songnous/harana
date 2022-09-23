@@ -3,7 +3,7 @@ package com.harana.sdk.backend.models.flow.graph
 import com.harana.sdk.backend.models.flow.Catalog.ActionObjectCatalog
 import com.harana.sdk.backend.models.flow.graph.TypesAccordance.TypesAccordance
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
-import com.harana.sdk.backend.models.flow.{ActionType, Catalog, Knowledge}
+import com.harana.sdk.backend.models.flow.{Action, Catalog, Knowledge}
 import com.harana.sdk.shared.models.flow.ActionObjectInfo
 import com.harana.sdk.shared.models.flow.exceptions.FlowError
 import com.harana.sdk.shared.models.flow.graph.Endpoint
@@ -80,7 +80,7 @@ object NodeInference {
     else (filteredTypes, TypesAccordance.Some(portIndex))
   }
 
-  private def createDefaultKnowledge(catalog: ActionObjectCatalog, action: ActionType, warnings: InferenceWarnings, errors: List[FlowError]) = {
+  private def createDefaultKnowledge(catalog: ActionObjectCatalog, action: Action, warnings: InferenceWarnings, errors: List[FlowError]) = {
     val outKnowledge = KnowledgeService.defaultOutputKnowledge(catalog, action)
     NodeInferenceResult(outKnowledge, warnings, errors)
   }

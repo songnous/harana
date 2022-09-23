@@ -67,7 +67,7 @@ class NodeInferenceImplSpec extends AbstractInferenceSpec {
       setParametersValid(node)
       val inputInferenceForNode = NodeInferenceResult(List(knowledgeA1, knowledgeA2))
       val inferenceResult = nodeInference.inferKnowledge(node, inferenceCtx, inputInferenceForNode)
-      inferenceResult shouldBe NodeInferenceResult(List(knowledgeA1), warnings = InferenceWarnings(ActionTypeA1A2ToFirst.warning))
+      inferenceResult shouldBe NodeInferenceResult(List(knowledgeA1), warnings = InferenceWarnings(ActionA1A2ToFirst.warning))
     }
 
     "not infer types and return default knowledge with validation errors when parameters are not valid" in {
@@ -75,7 +75,7 @@ class NodeInferenceImplSpec extends AbstractInferenceSpec {
       setParametersInvalid(node)
       val inputInferenceForNode = NodeInferenceResult(List(knowledgeA1, knowledgeA2))
       val inferenceResult = nodeInference.inferKnowledge(node, inferenceCtx, inputInferenceForNode)
-      inferenceResult shouldBe NodeInferenceResult(List(knowledgeA12), errors = List(ActionTypeA1A2ToFirst.parameterInvalidError))
+      inferenceResult shouldBe NodeInferenceResult(List(knowledgeA12), errors = List(ActionA1A2ToFirst.parameterInvalidError))
     }
 
     "return default knowledge when node inference throws an error" in {
@@ -86,7 +86,7 @@ class NodeInferenceImplSpec extends AbstractInferenceSpec {
       val inferenceResult       = nodeInference.inferKnowledge(node, inferenceCtx, inputInferenceForNode)
       inferenceResult shouldBe NodeInferenceResult(
         List(knowledgeA12),
-        errors = List(ActionTypeA1A2ToFirst.inferenceError)
+        errors = List(ActionA1A2ToFirst.inferenceError)
       )
     }
 
@@ -96,14 +96,14 @@ class NodeInferenceImplSpec extends AbstractInferenceSpec {
       setParametersInvalid(node)
       val inputInferenceForNode = graph.NodeInferenceResult(
         ports = List(knowledgeA1, knowledgeA2),
-        errors = List(ActionTypeA1A2ToFirst.parameterInvalidError, ActionTypeA1A2ToFirst.inferenceError)
+        errors = List(ActionA1A2ToFirst.parameterInvalidError, ActionA1A2ToFirst.inferenceError)
       )
       val inferenceResult = nodeInference.inferKnowledge(node, inferenceCtx, inputInferenceForNode)
       inferenceResult shouldBe graph.NodeInferenceResult(
         List(knowledgeA12),
         errors = List(
-          ActionTypeA1A2ToFirst.parameterInvalidError,
-          ActionTypeA1A2ToFirst.inferenceError
+          ActionA1A2ToFirst.parameterInvalidError,
+          ActionA1A2ToFirst.inferenceError
         )
       )
     }
@@ -112,10 +112,10 @@ class NodeInferenceImplSpec extends AbstractInferenceSpec {
       setInferenceErrorMultiThrowing(node)
       val inputInferenceForNode = graph.NodeInferenceResult(
         ports = List(knowledgeA1, knowledgeA2),
-        errors = List(ActionTypeA1A2ToFirst.parameterInvalidError)
+        errors = List(ActionA1A2ToFirst.parameterInvalidError)
       )
       val inferenceResult = nodeInference.inferKnowledge(node, inferenceCtx, inputInferenceForNode)
-      inferenceResult shouldBe graph.NodeInferenceResult(List(knowledgeA12), errors = List(ActionTypeA1A2ToFirst.parameterInvalidError))
+      inferenceResult shouldBe graph.NodeInferenceResult(List(knowledgeA12), errors = List(ActionA1A2ToFirst.parameterInvalidError))
     }
   }
 

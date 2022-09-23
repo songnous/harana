@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.actions
 
-import com.harana.sdk.backend.models.flow.{ActionType2To1, DataFrame2To1Action, ExecutionContext}
+import com.harana.sdk.backend.models.flow.{Action2To1, DataFrame2To1Action, ExecutionContext}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.{DataFrame, DataFrameColumnsGetter}
 import com.harana.sdk.backend.models.flow.actions.exceptions.ColumnsDoNotExistError
 import com.harana.sdk.backend.models.flow.utils.SparkTypeConverter
@@ -13,7 +13,7 @@ import org.apache.spark.sql.types.StructType
 
 import scala.reflect.runtime.universe.TypeTag
 
-class Join extends ActionType2To1[DataFrame, DataFrame, DataFrame]
+class Join extends Action2To1[DataFrame, DataFrame, DataFrame]
   with DataFrame2To1Action
   with JoinInfo {
 

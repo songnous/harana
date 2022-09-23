@@ -4,7 +4,7 @@ import com.harana.sdk.backend.models.flow.actionobjects.Transformer
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
 import com.harana.sdk.backend.models.flow._
-import com.harana.sdk.shared.models.flow.ActionTypeInfo.{Id, ReportParameter}
+import com.harana.sdk.shared.models.flow.ActionInfo.{Id, ReportParameter}
 import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
 import com.harana.sdk.shared.models.flow.parameters.{NumericParameter, ParameterMap}
 import org.apache.spark.sql.types.StructType

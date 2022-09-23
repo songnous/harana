@@ -2,7 +2,7 @@ package com.harana.sdk.shared.models.flow.actions
 
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML
-import com.harana.sdk.shared.models.flow.Action3To1TypeInfo
+import com.harana.sdk.shared.models.flow.Action3To1Info
 import com.harana.sdk.shared.models.flow.actionobjects.{EstimatorInfo, EvaluatorInfo}
 import com.harana.sdk.shared.models.flow.actionobjects.report.Report
 import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
@@ -17,7 +17,7 @@ import io.circe.Json
 import scala.reflect.runtime.universe.TypeTag
 
 trait GridSearchInfo
-  extends Action3To1TypeInfo[EstimatorInfo, DataFrameInfo, EvaluatorInfo, Report]
+  extends Action3To1Info[EstimatorInfo, DataFrameInfo, EvaluatorInfo, Report]
     with ActionDocumentation {
 
   val id: Id = "9163f706-eaaf-46f6-a5b0-4114d92032b7"

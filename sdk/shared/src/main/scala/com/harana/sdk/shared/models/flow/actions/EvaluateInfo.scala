@@ -1,7 +1,7 @@
 package com.harana.sdk.shared.models.flow.actions
 
 import com.harana.sdk.shared.models.common.Version
-import com.harana.sdk.shared.models.flow.Action2To1TypeInfo
+import com.harana.sdk.shared.models.flow.Action2To1Info
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Action
 import com.harana.sdk.shared.models.flow.actionobjects.{EvaluatorInfo, MetricValue}
 import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
@@ -14,7 +14,7 @@ import io.circe.Json
 
 import scala.reflect.runtime.universe.TypeTag
 
-trait EvaluateInfo extends Action2To1TypeInfo[EvaluatorInfo, DataFrameInfo, MetricValue] with SmallBlockLayout2To1 with ActionDocumentation {
+trait EvaluateInfo extends Action2To1Info[EvaluatorInfo, DataFrameInfo, MetricValue] with SmallBlockLayout2To1 with ActionDocumentation {
 
   val id: Id = "a88eaf35-9061-4714-b042-ddd2049ce917"
   val name = "Evaluate"

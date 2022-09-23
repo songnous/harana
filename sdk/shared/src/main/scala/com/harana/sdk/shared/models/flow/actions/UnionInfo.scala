@@ -2,7 +2,7 @@ package com.harana.sdk.shared.models.flow.actions
 
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.SetAction
-import com.harana.sdk.shared.models.flow.{Action2To1TypeInfo, PortPosition}
+import com.harana.sdk.shared.models.flow.{Action2To1Info, PortPosition}
 import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.SetAction
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
@@ -11,7 +11,7 @@ import com.harana.sdk.shared.models.flow.utils.Id
 
 import scala.reflect.runtime.{universe => ru}
 
-trait UnionInfo extends Action2To1TypeInfo[DataFrameInfo, DataFrameInfo, DataFrameInfo]
+trait UnionInfo extends Action2To1Info[DataFrameInfo, DataFrameInfo, DataFrameInfo]
   with Parameters
   with ActionDocumentation {
 

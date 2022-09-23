@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.actions.read
 
-import com.harana.sdk.backend.models.flow.{ActionType0To1, ExecutionContext}
+import com.harana.sdk.backend.models.flow.{Action0To1, ExecutionContext}
 import com.harana.sdk.backend.models.flow.actionobjects.Transformer
 import com.harana.sdk.backend.models.flow.actions.exceptions.HaranaIOError
 import com.harana.sdk.shared.models.flow.actions.read.ReadTransformerInfo
@@ -8,7 +8,7 @@ import com.harana.sdk.shared.models.flow.actions.read.ReadTransformerInfo
 import scala.reflect.runtime.universe.TypeTag
 import java.io._
 
-class ReadTransformer extends ActionType0To1[Transformer] with ReadTransformerInfo {
+class ReadTransformer extends Action0To1[Transformer] with ReadTransformerInfo {
 
   def execute()(context: ExecutionContext) = {
     val path = getSourcePath

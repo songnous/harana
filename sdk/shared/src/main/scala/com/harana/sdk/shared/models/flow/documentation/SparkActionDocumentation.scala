@@ -1,8 +1,8 @@
 package com.harana.sdk.shared.models.flow.documentation
 
-import com.harana.sdk.shared.models.flow.ActionTypeInfo
+import com.harana.sdk.shared.models.flow.ActionInfo
 
-trait SparkActionDocumentation extends ActionDocumentation { self: ActionTypeInfo =>
+trait SparkActionDocumentation extends ActionDocumentation { self: ActionInfo =>
 
   val docsGuideLocation: Option[String]
 

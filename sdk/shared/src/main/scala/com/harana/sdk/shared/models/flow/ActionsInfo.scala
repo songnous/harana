@@ -10,7 +10,7 @@ object ActionTypeConversions {
   implicit def tuple3ToList[T1 <: ActionObjectInfo, T2 <: ActionObjectInfo, T3 <: ActionObjectInfo](t: (T1, T2, T3)) = List(t._1, t._2, t._3)
 }
 
-trait Action0To1TypeInfo[TO_0 <: ActionObjectInfo] extends ActionTypeInfo {
+trait Action0To1Info[TO_0 <: ActionObjectInfo] extends ActionInfo {
 
   final val inArity = 0
   final val outArity = 1
@@ -25,7 +25,7 @@ trait Action0To1TypeInfo[TO_0 <: ActionObjectInfo] extends ActionTypeInfo {
 
 }
 
-trait Action0To2TypeInfo[TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo] extends ActionTypeInfo {
+trait Action0To2Info[TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo] extends ActionInfo {
 
   final val inArity = 0
   final val outArity = 2
@@ -42,7 +42,7 @@ trait Action0To2TypeInfo[TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo] ext
 
 }
 
-trait Action0To3TypeInfo[TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo, TO_2 <: ActionObjectInfo] extends ActionTypeInfo {
+trait Action0To3Info[TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo, TO_2 <: ActionObjectInfo] extends ActionInfo {
 
   final val inArity = 0
   final val outArity = 3
@@ -60,7 +60,7 @@ trait Action0To3TypeInfo[TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo, TO_
 
 }
 
-trait Action1To0TypeInfo[TI_0 <: ActionObjectInfo] extends ActionTypeInfo {
+trait Action1To0Info[TI_0 <: ActionObjectInfo] extends ActionInfo {
 
   final val inArity = 1
   final val outArity = 0
@@ -75,7 +75,7 @@ trait Action1To0TypeInfo[TI_0 <: ActionObjectInfo] extends ActionTypeInfo {
 
 }
 
-trait Action1To1TypeInfo[TI_0 <: ActionObjectInfo, TO_0 <: ActionObjectInfo] extends ActionTypeInfo {
+trait Action1To1Info[TI_0 <: ActionObjectInfo, TO_0 <: ActionObjectInfo] extends ActionInfo {
 
   final val inArity = 1
   final val outArity = 1
@@ -91,7 +91,7 @@ trait Action1To1TypeInfo[TI_0 <: ActionObjectInfo, TO_0 <: ActionObjectInfo] ext
 
 }
 
-trait Action1To2TypeInfo[TI_0 <: ActionObjectInfo, TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo] extends ActionTypeInfo {
+trait Action1To2Info[TI_0 <: ActionObjectInfo, TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo] extends ActionInfo {
 
   final val inArity = 1
   final val outArity = 2
@@ -109,7 +109,7 @@ trait Action1To2TypeInfo[TI_0 <: ActionObjectInfo, TO_0 <: ActionObjectInfo, TO_
 
 }
 
-trait Action1To3TypeInfo[TI_0 <: ActionObjectInfo, TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo, TO_2 <: ActionObjectInfo] extends ActionTypeInfo {
+trait Action1To3Info[TI_0 <: ActionObjectInfo, TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo, TO_2 <: ActionObjectInfo] extends ActionInfo {
 
   final val inArity = 1
   final val outArity = 3
@@ -128,7 +128,7 @@ trait Action1To3TypeInfo[TI_0 <: ActionObjectInfo, TO_0 <: ActionObjectInfo, TO_
 
 }
 
-trait Action2To0TypeInfo[TI_0 <: ActionObjectInfo, TI_1 <: ActionObjectInfo] extends ActionTypeInfo {
+trait Action2To0Info[TI_0 <: ActionObjectInfo, TI_1 <: ActionObjectInfo] extends ActionInfo {
   final val inArity = 2
   final val outArity = 0
 
@@ -144,7 +144,7 @@ trait Action2To0TypeInfo[TI_0 <: ActionObjectInfo, TI_1 <: ActionObjectInfo] ext
 
 }
 
-trait Action2To1TypeInfo[TI_0 <: ActionObjectInfo, TI_1 <: ActionObjectInfo, TO_0 <: ActionObjectInfo] extends ActionTypeInfo {
+trait Action2To1Info[TI_0 <: ActionObjectInfo, TI_1 <: ActionObjectInfo, TO_0 <: ActionObjectInfo] extends ActionInfo {
 
   final val inArity = 2
   final val outArity = 1
@@ -162,7 +162,7 @@ trait Action2To1TypeInfo[TI_0 <: ActionObjectInfo, TI_1 <: ActionObjectInfo, TO_
 
 }
 
-trait Action2To2TypeInfo[TI_0 <: ActionObjectInfo, TI_1 <: ActionObjectInfo, TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo] extends ActionTypeInfo {
+trait Action2To2Info[TI_0 <: ActionObjectInfo, TI_1 <: ActionObjectInfo, TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo] extends ActionInfo {
 
   final val inArity = 2
   final val outArity = 2
@@ -182,13 +182,13 @@ trait Action2To2TypeInfo[TI_0 <: ActionObjectInfo, TI_1 <: ActionObjectInfo, TO_
 
 }
 
-trait Action2To3TypeInfo[
+trait Action2To3Info[
   TI_0 <: ActionObjectInfo,
   TI_1 <: ActionObjectInfo,
   TO_0 <: ActionObjectInfo,
   TO_1 <: ActionObjectInfo,
   TO_2 <: ActionObjectInfo
-] extends ActionTypeInfo {
+] extends ActionInfo {
 
   final val inArity = 2
 
@@ -210,7 +210,7 @@ trait Action2To3TypeInfo[
 
 }
 
-trait Action3To0TypeInfo[TI_0 <: ActionObjectInfo, TI_1 <: ActionObjectInfo, TI_2 <: ActionObjectInfo] extends ActionTypeInfo {
+trait Action3To0Info[TI_0 <: ActionObjectInfo, TI_1 <: ActionObjectInfo, TI_2 <: ActionObjectInfo] extends ActionInfo {
 
   final val inArity = 3
   final val outArity = 0
@@ -228,7 +228,7 @@ trait Action3To0TypeInfo[TI_0 <: ActionObjectInfo, TI_1 <: ActionObjectInfo, TI_
 
 }
 
-trait Action3To1TypeInfo[TI_0 <: ActionObjectInfo, TI_1 <: ActionObjectInfo, TI_2 <: ActionObjectInfo, TO_0 <: ActionObjectInfo] extends ActionTypeInfo {
+trait Action3To1Info[TI_0 <: ActionObjectInfo, TI_1 <: ActionObjectInfo, TI_2 <: ActionObjectInfo, TO_0 <: ActionObjectInfo] extends ActionInfo {
   final val inArity = 3
   final val outArity = 1
 
@@ -246,13 +246,13 @@ trait Action3To1TypeInfo[TI_0 <: ActionObjectInfo, TI_1 <: ActionObjectInfo, TI_
 
 }
 
-trait Action3To2TypeInfo[
+trait Action3To2Info[
   TI_0 <: ActionObjectInfo,
   TI_1 <: ActionObjectInfo,
   TI_2 <: ActionObjectInfo,
   TO_0 <: ActionObjectInfo,
   TO_1 <: ActionObjectInfo
-] extends ActionTypeInfo {
+] extends ActionInfo {
 
   final val inArity = 3
   final val outArity = 2
@@ -273,14 +273,14 @@ trait Action3To2TypeInfo[
 
 }
 
-trait Action3To3TypeInfo[
+trait Action3To3Info[
   TI_0 <: ActionObjectInfo,
   TI_1 <: ActionObjectInfo,
   TI_2 <: ActionObjectInfo,
   TO_0 <: ActionObjectInfo,
   TO_1 <: ActionObjectInfo,
   TO_2 <: ActionObjectInfo
-] extends ActionTypeInfo {
+] extends ActionInfo {
 
   final val outArity = 3
 

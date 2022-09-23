@@ -5,7 +5,7 @@ import com.harana.sdk.backend.models.flow.actionobjects.ActionObjectInfoMock
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
 import com.harana.sdk.backend.models.flow.actionobjects.ActionObjectInfoMock
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
-import com.harana.sdk.shared.models.flow.{ActionTypeInfo, ActionObjectInfo}
+import com.harana.sdk.shared.models.flow.{ActionInfo, ActionObjectInfo}
 import com.harana.sdk.shared.models.flow.parameters.Parameter
 import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
 import com.harana.sdk.shared.models.flow.utils.Id
@@ -26,11 +26,11 @@ object DClassesForActions {
 object ActionForPortTypes {
   import DClassesForActions._
 
-  class SimpleAction extends ActionType1To1[A1, A2] {
+  class SimpleAction extends Action1To1[A1, A2] {
 
     def execute(t0: A1)(context: ExecutionContext): A2 = ???
 
-    val id: Id = ActionTypeInfo.Id.randomId
+    val id: Id = ActionInfo.Id.randomId
     val name = ""
       val parameters = Array.empty[Parameter[_]]
 
@@ -44,8 +44,8 @@ class ActionSuite extends AnyFunSuite with TestSupport {
   test("It is possible to implement simple actions") {
     import DClassesForActions._
 
-    class PickOne extends ActionType2To1[A1, A2, A] {
-      val id: Id = ActionTypeInfo.Id.randomId
+    class PickOne extends Action2To1[A1, A2, A] {
+      val id: Id = ActionInfo.Id.randomId
 
       val param = NumericParameter("param", None, RangeValidator.allInt)
       def setParam(int: Int): this.type = set(param -> int)
@@ -84,8 +84,8 @@ class ActionSuite extends AnyFunSuite with TestSupport {
 
     val mockedWarnings = mock[InferenceWarnings]
 
-    class GeneratorOfA extends ActionType0To1[A] {
-      val id = ActionTypeInfo.Id.randomId
+    class GeneratorOfA extends Action0To1[A] {
+      val id = ActionInfo.Id.randomId
 
       def execute()(context: ExecutionContext): A                                             = ???
       override def inferKnowledge()(context: InferContext): (Knowledge[A], InferenceWarnings) = (Knowledge(A1(), A2()), mockedWarnings)
@@ -95,7 +95,7 @@ class ActionSuite extends AnyFunSuite with TestSupport {
       lazy val tTagTO_0: ru.TypeTag[A] = ru.typeTag[A]
     }
 
-    val generator: ActionType = new GeneratorOfA
+    val generator: Action = new GeneratorOfA
 
     val h = new ActionObjectCatalog
     h.register[A1]()

@@ -1,7 +1,7 @@
 package com.harana.sdk.backend.models.flow.graph
 
 import com.harana.sdk.backend.models.flow._
-import com.harana.sdk.backend.models.flow.{ActionType0To1, ActionType1To1, ActionType2To2}
+import com.harana.sdk.backend.models.flow.{Action0To1, Action1To1, Action2To2}
 import com.harana.sdk.shared.models.flow.graph.FlowGraph.FlowNode
 import com.harana.sdk.shared.models.designer.flow.graph.Endpoint
 import com.harana.sdk.shared.models.flow.ActionObjectInfo
@@ -19,21 +19,21 @@ import java.time.temporal.ChronoUnit
 trait GraphTestSupport { self: MockitoSugar =>
 
   val op0To1 = {
-    val m = mock[ActionType0To1[ActionObjectInfo]]
+    val m = mock[Action0To1[ActionObjectInfo]]
     when(m.sameAs(any())).thenReturn(true)
     m
   }
 
   val op1To1 = createOp1To1
 
-  def createOp1To1: ActionType1To1[ActionObjectInfo, ActionObjectInfo] = {
-    val m = mock[ActionType1To1[ActionObjectInfo, ActionObjectInfo]]
+  def createOp1To1: Action1To1[ActionObjectInfo, ActionObjectInfo] = {
+    val m = mock[Action1To1[ActionObjectInfo, ActionObjectInfo]]
     when(m.sameAs(any())).thenReturn(true)
     m
   }
 
   val op2To2 = {
-    val m = mock[ActionType2To2[ActionObjectInfo, ActionObjectInfo, ActionObjectInfo, ActionObjectInfo]]
+    val m = mock[Action2To2[ActionObjectInfo, ActionObjectInfo, ActionObjectInfo, ActionObjectInfo]]
     when(m.sameAs(any())).thenReturn(true)
     m
   }

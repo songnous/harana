@@ -9,11 +9,11 @@ import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParame
 import com.harana.sdk.shared.models.flow.parameters.selections.SingleColumnSelection
 import com.harana.sdk.shared.models.flow.parameters._
 import com.harana.sdk.shared.models.flow.utils.Id
-import com.harana.sdk.shared.models.flow.{Action2To1TypeInfo, PortPosition}
+import com.harana.sdk.shared.models.flow.{Action2To1Info, PortPosition}
 
 import scala.reflect.runtime.{universe => ru}
 
-trait JoinInfo extends Action2To1TypeInfo[DataFrameInfo, DataFrameInfo, DataFrameInfo]
+trait JoinInfo extends Action2To1Info[DataFrameInfo, DataFrameInfo, DataFrameInfo]
   with Parameters
   with ActionDocumentation {
 

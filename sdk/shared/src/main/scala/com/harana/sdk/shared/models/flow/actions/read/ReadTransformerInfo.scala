@@ -2,7 +2,7 @@ package com.harana.sdk.shared.models.flow.actions.read
 
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
-import com.harana.sdk.shared.models.flow.Action0To1TypeInfo
+import com.harana.sdk.shared.models.flow.Action0To1Info
 import com.harana.sdk.shared.models.flow.actionobjects.TransformerInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
@@ -12,7 +12,7 @@ import com.harana.sdk.shared.models.flow.utils.Id
 import scala.reflect.runtime.{universe => ru}
 
 trait ReadTransformerInfo
-  extends Action0To1TypeInfo[TransformerInfo]
+  extends Action0To1Info[TransformerInfo]
     with Parameters
     with ActionDocumentation {
 

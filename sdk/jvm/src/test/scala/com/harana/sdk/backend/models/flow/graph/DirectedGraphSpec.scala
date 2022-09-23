@@ -26,8 +26,8 @@ class DirectedGraphSpec extends AnyFunSuite with Matchers with Serialization wit
   test("Graph with two nodes should have size 2") {
     import com.harana.sdk.backend.models.flow.graph.ActionTestClasses._
 
-    val node1 = randomNode(ActionTypeA1ToA())
-    val node2 = randomNode(ActionTypeA1ToA())
+    val node1 = randomNode(ActionA1ToA())
+    val node2 = randomNode(ActionA1ToA())
     val nodes = Set(node1, node2)
     val edges = Set(Edge((node1, 0), (node2, 0)))
     val graph = flow.graph.FlowGraph(nodes, edges)
@@ -37,10 +37,10 @@ class DirectedGraphSpec extends AnyFunSuite with Matchers with Serialization wit
   test("Programmer can validate if graph doesn't contain a cycle") {
     import com.harana.sdk.backend.models.flow.graph.ActionTestClasses._
 
-    val node1 = randomNode(ActionTypeA1ToA())
-    val node2 = randomNode(ActionTypeA1A2ToA())
-    val node3 = randomNode(ActionTypeA1ToA())
-    val node4 = randomNode(ActionTypeA1ToA())
+    val node1 = randomNode(ActionA1ToA())
+    val node2 = randomNode(ActionA1A2ToA())
+    val node3 = randomNode(ActionA1ToA())
+    val node4 = randomNode(ActionA1ToA())
     val nodes = Set(node1, node2, node3, node4)
     val nonCyclicEdges = Set(
       Edge((node1, 0), (node2, 0)),
@@ -56,10 +56,10 @@ class DirectedGraphSpec extends AnyFunSuite with Matchers with Serialization wit
   test("Simple Graph can be sorted topologically") {
     import com.harana.sdk.backend.models.flow.graph.ActionTestClasses._
 
-    val node1 = randomNode(ActionTypeA1ToA())
-    val node2 = randomNode(ActionTypeA1ToA())
-    val node3 = randomNode(ActionTypeA1ToA())
-    val node4 = randomNode(ActionTypeA1ToA())
+    val node1 = randomNode(ActionA1ToA())
+    val node2 = randomNode(ActionA1ToA())
+    val node3 = randomNode(ActionA1ToA())
+    val node4 = randomNode(ActionA1ToA())
     val edges = Set(Edge((node1, 0), (node2, 0)), Edge((node2, 0), (node3, 0)), Edge((node3, 0), (node4, 0)))
     val graph  = flow.graph.FlowGraph(Set(node1, node2, node3, node4), edges)
     val sorted = graph.topologicallySorted
@@ -69,10 +69,10 @@ class DirectedGraphSpec extends AnyFunSuite with Matchers with Serialization wit
   test("Simple Graph can calculate its direct and non-direct precedessors") {
     import com.harana.sdk.backend.models.flow.graph.ActionTestClasses._
 
-    val node1 = randomNode(ActionTypeA1ToA())
-    val node2 = randomNode(ActionTypeA1ToA())
-    val node3 = randomNode(ActionTypeA1ToA())
-    val node4 = randomNode(ActionTypeA1ToA())
+    val node1 = randomNode(ActionA1ToA())
+    val node2 = randomNode(ActionA1ToA())
+    val node3 = randomNode(ActionA1ToA())
+    val node4 = randomNode(ActionA1ToA())
     val edges = Set(Edge((node1, 0), (node2, 0)), Edge((node2, 0), (node3, 0)), Edge((node3, 0), (node4, 0)))
 
     val graph = flow.graph.FlowGraph(Set(node1, node2, node3, node4), edges)
@@ -87,13 +87,13 @@ class DirectedGraphSpec extends AnyFunSuite with Matchers with Serialization wit
     def checkIfInOrder(node1: FlowNode, node2: FlowNode, order: List[FlowNode]) =
       assert(order.indexOf(node1) < order.indexOf(node2))
 
-    val node1 = randomNode(ActionTypeA1ToA())
-    val node2 = randomNode(ActionTypeA1ToA())
-    val node3 = randomNode(ActionTypeA1ToA())
-    val node4 = randomNode(ActionTypeA1A2ToA())
-    val node5 = randomNode(ActionTypeA1ToA())
-    val node6 = randomNode(ActionTypeA1ToA())
-    val node7 = randomNode(ActionTypeA1A2ToA())
+    val node1 = randomNode(ActionA1ToA())
+    val node2 = randomNode(ActionA1ToA())
+    val node3 = randomNode(ActionA1ToA())
+    val node4 = randomNode(ActionA1A2ToA())
+    val node5 = randomNode(ActionA1ToA())
+    val node6 = randomNode(ActionA1ToA())
+    val node7 = randomNode(ActionA1A2ToA())
     val nodes = Set(node1, node2, node3, node4, node5, node6, node7)
     val edges = List(
       (node1, node2, 0, 0),
@@ -117,10 +117,10 @@ class DirectedGraphSpec extends AnyFunSuite with Matchers with Serialization wit
   test("Graph's nodes have correct predecessors and successors") {
     import com.harana.sdk.backend.models.flow.graph.ActionTestClasses._
 
-    val node1 = randomNode(ActionTypeCreateA1())
-    val node2 = randomNode(ActionTypeA1ToA())
-    val node3 = randomNode(ActionTypeA1ToA())
-    val node4 = randomNode(ActionTypeA1A2ToA())
+    val node1 = randomNode(ActionCreateA1())
+    val node2 = randomNode(ActionA1ToA())
+    val node3 = randomNode(ActionA1ToA())
+    val node4 = randomNode(ActionA1A2ToA())
     val nodes = Set(node1, node2, node3, node4)
     val edges = Set(
       Edge((node1, 0), (node2, 0)),
