@@ -8,7 +8,7 @@ import scala.language.reflectiveCalls
 
 trait HasMinInstancePerNodeParameter extends Parameters {
 
-  val minInstancesPerNodeParameter = IntParameter("min instances per node", RangeValidator(1, Int.MaxValue, step = Some(1)))
+  val minInstancesPerNodeParameter = IntParameter("min instances per node", validator = RangeValidator(1, Int.MaxValue, step = Some(1)))
   setDefault(minInstancesPerNodeParameter, 1)
 
 }

@@ -8,7 +8,7 @@ import scala.language.reflectiveCalls
 
 trait HasMaxBinsParameter extends Parameters {
 
-  val maxBinsParameter = IntParameter("max bins", RangeValidator(2, Int.MaxValue, step = Some(1)))
+  val maxBinsParameter = IntParameter("max bins", validator = RangeValidator(2, Int.MaxValue, step = Some(1)))
   setDefault(maxBinsParameter, 32)
 
 }

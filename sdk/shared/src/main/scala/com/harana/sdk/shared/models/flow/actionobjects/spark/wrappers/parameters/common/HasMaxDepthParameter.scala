@@ -7,7 +7,7 @@ import scala.language.reflectiveCalls
 
 trait HasMaxDepthParameter extends Parameters {
 
-  val maxDepthParameter = IntParameter("max depth", RangeValidator(0, 30, step = Some(1)))
+  val maxDepthParameter = IntParameter("max depth", validator = RangeValidator(0, 30, step = Some(1)))
   setDefault(maxDepthParameter, 5)
 
 }

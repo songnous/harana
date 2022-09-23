@@ -8,6 +8,8 @@ trait Parameter[T] {
 
   val name: String
 
+  val required: Boolean
+
   def constraints = ""
 
   val parameterType: ParameterType

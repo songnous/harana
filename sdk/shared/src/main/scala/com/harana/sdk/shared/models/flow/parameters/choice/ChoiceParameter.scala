@@ -4,7 +4,8 @@ import com.harana.sdk.shared.models.flow.parameters.ParameterType
 
 import scala.reflect.runtime.universe._
 
-class ChoiceParameter[T <: Choice](val name: String)(implicit tag: TypeTag[T]) extends AbstractChoiceParameter[T, T] {
+class ChoiceParameter[T <: Choice](val name: String,
+                                   val required: Boolean = false)(implicit tag: TypeTag[T]) extends AbstractChoiceParameter[T, T] {
 
   val parameterType = ParameterType.Choice
 

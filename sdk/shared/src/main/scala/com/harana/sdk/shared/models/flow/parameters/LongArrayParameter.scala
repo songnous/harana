@@ -5,10 +5,7 @@ import io.circe.generic.JsonCodec
 
 @JsonCodec
 case class LongArrayParameter(name: String,
-                              default: Option[Long] = None,
-                              tags: List[String] = List(),
                               required: Boolean = false,
-                              placeholder: Option[Long] = None,
                               validator: Validator[Long] = RangeValidator.allLong) extends Parameter[Long] with HasValidator[Long] {
 
   val parameterType = ParameterType.LongArray

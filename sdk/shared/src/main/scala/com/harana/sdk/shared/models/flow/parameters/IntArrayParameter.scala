@@ -4,6 +4,7 @@ import com.harana.sdk.shared.models.flow.parameters.validators.{ComplexArrayVali
 
 
 case class IntArrayParameter(name: String,
+                             required: Boolean = false,
                              validator: Validator[Array[Int]] = ComplexArrayValidator.allInt)
     extends Parameter[Array[Int]] {
 

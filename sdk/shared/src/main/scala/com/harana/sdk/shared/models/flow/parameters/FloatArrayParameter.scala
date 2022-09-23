@@ -3,8 +3,8 @@ package com.harana.sdk.shared.models.flow.parameters
 import com.harana.sdk.shared.models.flow.parameters.validators.{RangeValidator, Validator}
 
 case class FloatArrayParameter(name: String,
-                               tags: List[String] = List(),
                                required: Boolean = false,
+                               tags: List[String] = List(),
                                validator: Validator[Float] = RangeValidator.allFloat)
   extends Parameter[Float] with HasValidator[Float] {
 

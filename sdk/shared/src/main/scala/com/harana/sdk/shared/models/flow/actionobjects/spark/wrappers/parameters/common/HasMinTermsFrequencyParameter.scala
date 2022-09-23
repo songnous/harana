@@ -7,7 +7,7 @@ import scala.language.reflectiveCalls
 
 trait HasMinTermsFrequencyParameter extends HasInputColumnParameter with HasOutputColumnParameter {
 
-  val minTFParameter = DoubleParameter("min term frequency", RangeValidator(0.0, Double.MaxValue))
+  val minTFParameter = DoubleParameter("min term frequency", validator = RangeValidator(0.0, Double.MaxValue))
   setDefault(minTFParameter, 1.0)
   def setMinTF(value: Double): this.type = set(minTFParameter, value)
 

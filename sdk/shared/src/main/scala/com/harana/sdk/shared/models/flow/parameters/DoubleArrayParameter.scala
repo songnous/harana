@@ -3,6 +3,7 @@ package com.harana.sdk.shared.models.flow.parameters
 import com.harana.sdk.shared.models.flow.parameters.validators.{ComplexArrayValidator, Validator}
 
 case class DoubleArrayParameter(name: String,
+                                required: Boolean = false,
                                 validator: Validator[Array[Double]] = ComplexArrayValidator.allDouble)
   extends Parameter[Array[Double]] {
 

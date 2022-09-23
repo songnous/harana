@@ -2,7 +2,8 @@ package com.harana.sdk.shared.models.flow.parameters
 
 import com.harana.sdk.shared.models.flow.parameters.validators.{ColumnValidator, Validator}
 
-case class SingleColumnCreatorParameter(name: String) extends Parameter[String] with HasValidator[String] {
+case class SingleColumnCreatorParameter(name: String,
+                                        required: Boolean = false) extends Parameter[String] with HasValidator[String] {
 
   val validator: Validator[String] = ColumnValidator.Name
 

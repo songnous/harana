@@ -2,7 +2,9 @@ package com.harana.sdk.shared.models.flow.parameters
 
 import com.harana.sdk.shared.models.flow.parameters.validators.ColumnValidator
 
-case class PrefixBasedColumnCreatorParameter(name: String, emptyPrefixValidation: Boolean = false) extends Parameter[String] {
+case class PrefixBasedColumnCreatorParameter(name: String,
+                                             required: Boolean = false,
+                                             emptyPrefixValidation: Boolean = false) extends Parameter[String] {
 
   override def validate(value: String) =
     if (emptyPrefixValidation && value.isEmpty)

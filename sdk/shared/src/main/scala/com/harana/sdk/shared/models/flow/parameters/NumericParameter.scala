@@ -2,7 +2,9 @@ package com.harana.sdk.shared.models.flow.parameters
 
 import com.harana.sdk.shared.models.flow.parameters.validators.{RangeValidator, Validator}
 
-case class NumericParameter(name: String, validator: Validator[Double] = RangeValidator.allDouble)
+case class NumericParameter(name: String,
+                            required: Boolean = false,
+                            validator: Validator[Double] = RangeValidator.allDouble)
     extends Parameter[Double]
     with HasValidator[Double] {
 

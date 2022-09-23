@@ -4,7 +4,9 @@ import com.harana.sdk.shared.models.flow.parameters.validators.{RangeValidator, 
 import io.circe.generic.JsonCodec
 
 @JsonCodec
-case class LongParameter(name: String, validator: Validator[Long] = RangeValidator.allLong)
+case class LongParameter(name: String,
+                         required: Boolean = false,
+                         validator: Validator[Long] = RangeValidator.allLong)
   extends Parameter[Long] with HasValidator[Long] {
 
   val parameterType = ParameterType.Numeric
