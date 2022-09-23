@@ -1,6 +1,7 @@
 package com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.estimators
 
 import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.parameters.common.RegressionImpurity.Variance
+import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.RegressionImpurity.Variance
 import com.harana.sdk.shared.models.flow.parameters.ParameterPair
 import com.harana.sdk.shared.models.flow.parameters.selections.NameSingleColumnSelection
 
@@ -11,7 +12,7 @@ class DecisionTreeRegressionSmokeTest extends AbstractEstimatorModelWrapperSmoke
   val estimator = new DecisionTreeRegression()
   import estimator._
 
-  val estimatorParameters = Seq(
+  val estimatorParameters = Seq[ParameterPair[_]](
     maxDepthParameter            -> 4.0,
     maxBinsParameter             -> 25.0,
     minInstancesPerNodeParameter -> 1.0,

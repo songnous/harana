@@ -1,5 +1,6 @@
 package com.harana.sdk.backend.models.flow.actionobjects
 
+import cats.conversions.all.autoWidenFunctor
 import com.harana.sdk.backend.models.flow.IntegratedTestSupport
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.shared.models.flow.actionobjects.TargetTypeChoices.{DoubleTargetTypeChoice, StringTargetTypeChoice}

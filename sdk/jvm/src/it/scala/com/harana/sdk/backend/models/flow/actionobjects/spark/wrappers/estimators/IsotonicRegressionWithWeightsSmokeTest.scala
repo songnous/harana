@@ -17,7 +17,7 @@ class IsotonicRegressionWithWeightsSmokeTest extends AbstractEstimatorModelWrapp
     .WeightColumnYesOption()
     .setWeightColumn(NameSingleColumnSelection(weightColumnName))
 
-  val estimatorParameters = Seq(
+  val estimatorParameters = Seq[ParameterPair[_]](
     featureIndexParameter         -> 1,
     featuresColumnParameter       -> NameSingleColumnSelection("myFeatures"),
     isotonicParameter             -> true,

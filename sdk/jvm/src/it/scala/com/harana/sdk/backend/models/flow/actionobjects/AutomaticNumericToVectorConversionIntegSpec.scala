@@ -1,10 +1,9 @@
 package com.harana.sdk.backend.models.flow.actionobjects
 
-import com.harana.sdk.backend.models.flow._
 import com.harana.sdk.backend.models.flow.IntegratedTestSupport
+import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.transformers.{DiscreteCosineTransformer, Normalizer, PolynomialExpander, TransformerSerialization}
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.MultiColumnParameters.SingleOrMultiColumnChoices.SingleColumnChoice
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.SingleColumnParameters.SingleTransformInPlaceChoices.NoInPlaceChoice
-import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.transformers.{DiscreteCosineTransformer, Normalizer, PolynomialExpander, TransformerSerialization}
 import com.harana.sdk.shared.models.flow.parameters.selections.NameSingleColumnSelection
 import com.harana.spark.Linalg.Vectors
 import org.apache.spark.sql.Row
@@ -85,7 +84,7 @@ class AutomaticNumericToVectorConversionIntegSpec
 
   "PolynomialExpander" should {
     val transformer = new PolynomialExpander()
-    transformer.set(transformer.degreeParameter, 3.0)
+    transformer.set(transformer.degreeParameter, 3)
 
     "work correctly on double type column in noInPlace mode" in {
       transformer.setSingleOrMultiChoice(singleNoInPlace)

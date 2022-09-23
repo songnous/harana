@@ -25,43 +25,27 @@ class SortTransformationIntegSpec extends IntegratedTestSupport with Transformer
 
     case class OrderingSpec[T](columnIndex: Int, descendingFlag: Boolean, scalaOrderingForColumnValues: Ordering[T])
 
-    /** <p> Creates lexicographic <code>Ordering</code> for <code>Row</code>s taking into account column indices,
-      * ascending/descending flag and the importance of columns as given in the <code>Seq</code> (more important columns
-      * come first). </p> <p> Also returns a <code>Seq</code> of <code>SortColumnParameter</code>s to be given to the
-      * <code>SortTransformer</code> which should match the <code>Ordering</code> in order to pass the test. </p> <p> In
-      * other words - after running the transformer parameterized with the <code>SortColumnParameter</code>s the resulting
-      * <code>DataFrame</code> should be sorted according to the lexicographical <code>Ordering</code>. </p>
-      *
-      * @param columnIndices
-      *   sequence of <code>OrderingSpecs</code>
-      * @return
-      *   <code>Row Ordering</code> and <code>SortColumnParameter</code>s to be used in test
-      */
-    def generateOrderingAndSortColumnParameters(columnIndices: Seq[OrderingSpec[_]]) = {
-      (
+    def generateOrderingAndSortColumnParameters(columnIndices: Seq[OrderingSpec[_]]) = {(
         new Ordering[Row] {
           val tieredOrdering: Ordering[Row] =
             columnIndices.map { case OrderingSpec(i, desc, o) =>
               new Ordering[Row] {
                 override def compare(x: Row, y: Row): Int = {
                   val ordering = if (desc) o.reverse else o
-                  ordering.asInstanceOf[Ordering[Any]].compare(x.get(i), y.get(i))
+                  ordering.compare(x.get(i), y.get(i))
                 }
               }
             }.reduceRight((o1: Ordering[Row], o2: Ordering[Row]) => {
-              new Ordering[Row] {
-                override def compare(x: Row, y: Row): Int = {
-                  val cmp = o1.compare(x, y)
-                  if (cmp == 0) o2.compare(x, y) else cmp
-                }
+              (x: Row, y: Row) => {
+                val cmp = o1.compare(x, y)
+                if (cmp == 0) o2.compare(x, y) else cmp
               }
             })
 
           def compare(x: Row, y: Row): Int = tieredOrdering.compare(x, y)
         },
         columnIndices.map { case OrderingSpec(i, desc, _) => SortColumnParameter(i, desc) }
-      )
-    }
+      )}
 
     val data = Seq[Row](
       Row("2016-01-01": Date, 2, "A"),
@@ -74,9 +58,7 @@ class SortTransformationIntegSpec extends IntegratedTestSupport with Transformer
     )
 
     val col1StructField = StructField("col1", DateType)
-
     val col2StructField = StructField("col2", IntegerType)
-
     val col3StructField = StructField("col3", StringType)
 
     val schema = StructType(
@@ -130,7 +112,6 @@ class SortTransformationIntegSpec extends IntegratedTestSupport with Transformer
 
     "sort a single column in ascending order" in {
       new SampleData {
-
         val (ordering, sortColumns) = generateOrderingAndSortColumnParameters(
           Seq(OrderingSpec(0, descendingFlag = false, implicitly[Ordering[java.util.Date]]))
         )
@@ -148,7 +129,6 @@ class SortTransformationIntegSpec extends IntegratedTestSupport with Transformer
 
     "sort multiple columns" in {
       new SampleData {
-
         val (ordering, sortColumns) = generateOrderingAndSortColumnParameters(
           Seq(
             OrderingSpec(1, descendingFlag = true, implicitly[Ordering[Integer]]),

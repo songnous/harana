@@ -13,7 +13,7 @@ class GBTRegressionSmokeTest extends AbstractEstimatorModelWrapperSmokeTest {
   val estimator = new GBTRegression()
   import estimator._
 
-  val estimatorParameters = Seq(
+  val estimatorParameters = Seq[ParameterPair[_]](
     featuresColumnParameter      -> NameSingleColumnSelection("myFeatures"),
     impurityParameter            -> Variance(),
     labelColumnParameter         -> NameSingleColumnSelection(labelColumnName),

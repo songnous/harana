@@ -1,11 +1,9 @@
 package com.harana.sdk.backend.models.flow.actionobjects
 
-import com.harana.sdk.backend.models.flow._
 import com.harana.sdk.backend.models.flow.IntegratedTestSupport
-import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.MultiColumnParameters.SingleOrMultiColumnChoices.SingleColumnChoice
-import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.transformers.TransformerSerialization
 import com.harana.sdk.backend.models.flow.actions.exceptions.ColumnDoesNotExistError
+import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.MultiColumnParameters.SingleOrMultiColumnChoices.SingleColumnChoice
 import com.harana.sdk.shared.models.flow.parameters.selections.NameSingleColumnSelection
 import com.harana.spark.Linalg.Vectors
 import org.apache.spark.sql.Row
@@ -19,8 +17,8 @@ class GetFromVectorTransformerIntegSpec
     with Matchers
     with TransformerSerialization {
 
-  import com.harana.sdk.backend.models.flow.IntegratedTestSupport._
   import TransformerSerialization._
+  import com.harana.sdk.backend.models.flow.IntegratedTestSupport._
 
   val columns = Seq(StructField("id", IntegerType), StructField("data", new com.harana.spark.Linalg.VectorUDT()))
 

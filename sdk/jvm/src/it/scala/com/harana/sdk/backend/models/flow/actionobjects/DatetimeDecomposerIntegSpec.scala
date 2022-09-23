@@ -1,6 +1,7 @@
 package com.harana.sdk.backend.models.flow.actionobjects
 
 import com.harana.sdk.backend.models.flow.IntegratedTestSupport
+
 import java.sql.Timestamp
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
@@ -10,6 +11,8 @@ import org.joda.time.DateTime
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.transformers.TransformerSerialization
 import com.harana.sdk.backend.models.flow.actions.exceptions.{ColumnDoesNotExistError, WrongColumnTypeError}
+import com.harana.sdk.shared.models.flow.actionobjects.DatetimeComposerInfo.TimestampPartColumnChoice._
+import com.harana.sdk.shared.models.flow.actionobjects.DatetimeDecomposerInfo.TimestampPart
 import com.harana.sdk.shared.models.flow.parameters.selections.{IndexSingleColumnSelection, NameSingleColumnSelection}
 import org.scalatest.Assertion
 
@@ -245,8 +248,7 @@ class DatetimeDecomposerIntegSpec extends IntegratedTestSupport with Transformer
       ._transform(executionContext, dataFrame)
   }
 
-  private def partsFromStrings(names: String*): Set[DatetimeDecomposer.TimestampPart] = {
-    import DatetimeDecomposer.TimestampPart._
+  private def partsFromStrings(names: String*): Set[TimestampPart] = {
     val allParts = Set(Year(), Month(), Day(), Hour(), Minutes(), Seconds())
     names.map(name => allParts.filter(_.name == name).head).toSet
   }

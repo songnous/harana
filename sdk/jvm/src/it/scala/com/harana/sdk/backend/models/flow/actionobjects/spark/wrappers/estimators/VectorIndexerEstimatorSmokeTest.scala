@@ -11,7 +11,7 @@ class VectorIndexerEstimatorSmokeTest extends AbstractEstimatorModelWrapperSmoke
   val estimator = new VectorIndexerEstimator()
   import estimator._
 
-  val estimatorParameters = Seq(
+  val estimatorParameters = Seq[ParameterPair[_]](
     maxCategoriesParameter       -> 2,
     inputColumnParameter         -> NameSingleColumnSelection("myFeatures"),
     singleInPlaceChoiceParameter -> NoInPlaceChoice().setOutputColumn("testOutputColumn")

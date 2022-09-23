@@ -1,6 +1,7 @@
 package com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.estimators
 
 import com.harana.sdk.shared.models.designer.flow.actionobjects.spark.wrappers.estimators.LDA.OnlineLDAOptimizer
+import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimators.LDAInfo.OnlineLDAOptimizer
 import com.harana.sdk.shared.models.flow.parameters.ParameterPair
 import com.harana.sdk.shared.models.flow.parameters.selections.NameSingleColumnSelection
 
@@ -11,7 +12,7 @@ class LDASmokeTest extends AbstractEstimatorModelWrapperSmokeTest {
   val estimator = new LDA()
   import estimator._
 
-  val estimatorParameters = Seq(
+  val estimatorParameters = Seq[ParameterPair[_]](
     checkpointIntervalParameter      -> 4.0,
     featuresColumnParameter          -> NameSingleColumnSelection("myFeatures"),
     kParameter                       -> 3.0,

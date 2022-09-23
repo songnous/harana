@@ -11,7 +11,7 @@ class StandardScalerEstimatorSmokeTest extends AbstractEstimatorModelWrapperSmok
   val estimator = new StandardScalerEstimator()
   import estimator._
 
-  val estimatorParameters = Seq(
+  val estimatorParameters = Seq[ParameterPair[_]](
     withMeanParameter            -> false,
     withStdParameter             -> true,
     inputColumnParameter         -> NameSingleColumnSelection("myFeatures"),

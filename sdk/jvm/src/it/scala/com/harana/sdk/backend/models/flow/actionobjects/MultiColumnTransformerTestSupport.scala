@@ -37,7 +37,7 @@ trait MultiColumnTransformerTestSupport { self: IntegratedTestSupport =>
       "return a schema that reflects changes done by transformation" in {
         val t = transformer
         val out = t.transformSingleColumnSchema(inputColumnName, outputColumnName, supportInputDataFrame.schema.get)
-        out shouldBe 'Defined
+        out shouldBe Symbol("Defined")
         assertSchemaEqual(out.get, supportExpectedOutputDataFrame.schema.get, checkNullability = false)
       }
 

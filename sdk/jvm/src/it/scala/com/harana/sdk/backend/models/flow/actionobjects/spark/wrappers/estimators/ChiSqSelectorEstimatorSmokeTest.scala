@@ -1,5 +1,6 @@
 package com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.estimators
 
+import com.harana.sdk.shared.models.flow.parameters.ParameterPair
 import com.harana.sdk.shared.models.flow.parameters.selections.NameSingleColumnSelection
 
 class ChiSqSelectorEstimatorSmokeTest extends AbstractEstimatorModelWrapperSmokeTest {
@@ -9,7 +10,7 @@ class ChiSqSelectorEstimatorSmokeTest extends AbstractEstimatorModelWrapperSmoke
   val estimator = new UnivariateFeatureSelectorEstimator()
   import estimator._
 
-  val estimatorParameters = Seq(
+  val estimatorParameters = Seq[ParameterPair[_]](
     numTopFeaturesParameter -> 2,
     featuresColumnParameter -> NameSingleColumnSelection("myFeatures"),
     labelColumnParameter    -> NameSingleColumnSelection("myLabel"),

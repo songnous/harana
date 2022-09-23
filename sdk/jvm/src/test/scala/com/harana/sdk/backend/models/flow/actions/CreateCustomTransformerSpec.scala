@@ -114,7 +114,7 @@ class CreateCustomTransformerSpec extends UnitSpec {
 
     val simpleGraph = FlowGraph(
       Set(sourceNode, sinkNode, node1, node2),
-      Set(Edge(sourceNode, 0, node1, 0), Edge(node1, 0, node2, 0), Edge(node2, 0, sinkNode, 0))
+      Set(Edge((sourceNode, 0), (node1, 0)), Edge((node1, 0), (node2, 0)), Edge((node2, 0), (sinkNode, 0)))
     )
 
     InnerWorkflow(simpleGraph, Json.Null, publicParameters.toList)

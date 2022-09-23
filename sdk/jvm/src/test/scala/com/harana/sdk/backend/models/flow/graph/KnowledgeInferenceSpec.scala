@@ -1,12 +1,10 @@
 package com.harana.sdk.backend.models.flow.graph
 
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
-import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
-import com.harana.sdk.shared.models.flow.graph.FlowGraph.FlowNode
-import com.harana.sdk.shared.models.designer.flow.graph._
 import com.harana.sdk.shared.models.flow.exceptions.CyclicGraphError
-import com.harana.sdk.shared.models.flow.graph.{Edge, GraphAction, TopologicallySortable}
+import com.harana.sdk.shared.models.flow.graph.FlowGraph.FlowNode
 import com.harana.sdk.shared.models.flow.graph.node.Node
+import com.harana.sdk.shared.models.flow.graph.{Edge, GraphAction, TopologicallySortable}
 import org.mockito.ArgumentMatchers.{any, eq => isEqualTo}
 import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfter

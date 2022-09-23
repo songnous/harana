@@ -10,6 +10,7 @@ import org.scalatestplus.mockito.MockitoSugar._
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.{DataFrame, DataFrameBuilder}
 import com.harana.sdk.backend.models.flow.client.datasources.{DatasourceClient, DatasourceInMemoryClientFactory}
 import com.harana.sdk.backend.models.flow.filesystemclients.LocalFileSystemClient
+import com.harana.sdk.shared.models.flow.ExecutionMode
 import com.harana.spark.SparkSQLSession
 
 trait LocalExecutionContext {

@@ -1,11 +1,11 @@
 package com.harana.sdk.backend.models.flow.graph
 
 import com.harana.sdk.shared.models.flow.exceptions.FlowError
-import org.mockito.Mockito._
-import org.scalatestplus.mockito.MockitoSugar
-import org.scalatest.wordspec.AnyWordSpec
 import com.harana.sdk.shared.models.flow.graph.node.Node
+import org.mockito.Mockito._
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.mockito.MockitoSugar
 
 class GraphKnowledgeSpec extends AnyWordSpec with Matchers with MockitoSugar {
 

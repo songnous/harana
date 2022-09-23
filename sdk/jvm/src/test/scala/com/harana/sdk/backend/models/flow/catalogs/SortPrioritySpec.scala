@@ -2,6 +2,7 @@ package com.harana.sdk.backend.models.flow.catalogs
 
 import com.harana.sdk.backend.models.flow.UnitSpec
 import com.harana.sdk.shared.models.designer.flow.utils.catalog.SortPriority
+import com.harana.sdk.shared.models.flow.utils.SortPriority
 
 class SortPrioritySpec extends UnitSpec {
 

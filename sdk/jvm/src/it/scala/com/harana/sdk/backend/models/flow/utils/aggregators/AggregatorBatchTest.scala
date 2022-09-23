@@ -1,25 +1,17 @@
 package com.harana.sdk.backend.models.flow.utils.aggregators
 
-import com.harana.sdk.backend.models.flow.{IntegratedTestSupport, UnitSpec}
+import com.harana.sdk.backend.models.flow.IntegratedTestSupport
 
-case class SetAggregator() extends Aggregator[Set[Int], Int] {
-
+case class SetAggregator() extends Aggregator[Set[Int], Int] with Serializable {
   def initialElement = Set.empty
-
   def mergeValue(acc: Set[Int], elem: Int) = acc + elem
-
   def mergeCombiners(left: Set[Int], right: Set[Int]) = left ++ right
-
 }
 
-case class SumAggregator() extends Aggregator[Int, Int] {
-
+case class SumAggregator() extends Aggregator[Int, Int] with Serializable {
   def initialElement = 0
-
   def mergeValue(acc: Int, elem: Int) = acc + elem
-
   def mergeCombiners(left: Int, right: Int) = left + right
-
 }
 
 class AggregatorBatchTest extends IntegratedTestSupport {

@@ -17,7 +17,7 @@ class GBTClassifierSmokeTest extends AbstractEstimatorModelWrapperSmokeTest {
 
   private val labelColumnName = "myRating"
 
-  val estimatorParameters = Seq(
+  val estimatorParameters = Seq[ParameterPair[_]](
     featuresColumnParameter      -> NameSingleColumnSelection("myFeatures"),
     impurityParameter            -> ClassificationImpurity.Entropy(),
     labelColumnParameter         -> NameSingleColumnSelection(labelColumnName),

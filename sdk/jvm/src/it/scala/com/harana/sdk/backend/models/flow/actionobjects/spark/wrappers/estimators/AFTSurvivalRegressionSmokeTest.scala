@@ -13,7 +13,7 @@ class AFTSurvivalRegressionSmokeTest extends AbstractEstimatorModelWrapperSmokeT
 
   val optionalQuantilesChoice = OptionalQuantilesColumnChoice.QuantilesColumnNoOption()
 
-  val estimatorParameters = Seq(
+  val estimatorParameters = Seq[ParameterPair[_]](
     censorColumnParameter            -> NameSingleColumnSelection("myCensor"),
     fitInterceptParameter            -> true,
     maxIterationsParameter           -> 2.0,

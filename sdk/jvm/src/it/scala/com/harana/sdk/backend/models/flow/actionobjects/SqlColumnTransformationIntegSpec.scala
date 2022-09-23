@@ -88,24 +88,24 @@ class SqlColumnTransformationIntegSpec extends IntegratedTestSupport with Transf
       a[ColumnDoesNotExistError] shouldBe thrownBy {
         val inPlace = NoInPlaceChoice().setOutputColumn(column3)
         val single = SingleColumnChoice().setInputColumn(NameSingleColumnSelection("nonExistingCol")).setInPlaceChoice(inPlace)
-        SqlColumnTransformer().setFormula("x * 2").setSingleOrMultiChoice(single)._transformSchema(schema)
+        new SqlColumnTransformer().setFormula("x * 2").setSingleOrMultiChoice(single)._transformSchema(schema)
       }
     }
     val inPlace = NoInPlaceChoice().setOutputColumn(column3)
     val single = SingleColumnChoice().setInputColumn(NameSingleColumnSelection(column1)).setInPlaceChoice(inPlace)
     "detect SQL syntax error during inference" in {
       a[SqlColumnExpressionSyntaxError] shouldBe thrownBy(
-        SqlColumnTransformer().setFormula("+++---").setSingleOrMultiChoice(single)._transformSchema(schema)
+        new SqlColumnTransformer().setFormula("+++---").setSingleOrMultiChoice(single)._transformSchema(schema)
       )
     }
     "detect non-existent column during inference" in {
       a[ColumnsDoNotExistError] shouldBe thrownBy(
-        SqlColumnTransformer().setFormula("nonExistingCol").setSingleOrMultiChoice(single)._transformSchema(schema)
+        new SqlColumnTransformer().setFormula("nonExistingCol").setSingleOrMultiChoice(single)._transformSchema(schema)
       )
     }
     "detect that alias conflicts with a column name form input DF" in {
       a[ColumnAliasNotUniqueError] shouldBe thrownBy(
-        SqlColumnTransformer().setFormula("c0").setInputColumnAlias("c0").setSingleOrMultiChoice(single)._transformSchema(schema)
+        new SqlColumnTransformer().setFormula("c0").setInputColumnAlias("c0").setSingleOrMultiChoice(single)._transformSchema(schema)
       )
     }
   }
@@ -199,7 +199,7 @@ class SqlColumnTransformationIntegSpec extends IntegratedTestSupport with Transf
   def prepareTransformation(formula: String, inputColumnName: String, outputColumnName: String, columnAlias: String) = {
     val inPlace = NoInPlaceChoice().setOutputColumn(outputColumnName)
     val single = SingleColumnChoice().setInputColumn(NameSingleColumnSelection(inputColumnName)).setInPlaceChoice(inPlace)
-    SqlColumnTransformer().setFormula(formula).setSingleOrMultiChoice(single).setInputColumnAlias(columnAlias)
+    new SqlColumnTransformer().setFormula(formula).setSingleOrMultiChoice(single).setInputColumnAlias(columnAlias)
   }
 
   def validateSchema(schema: StructType, finalType: NumericType) = {

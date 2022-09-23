@@ -1,15 +1,12 @@
 package com.harana.sdk.backend.models.flow.actions
 
-import com.harana.sdk.backend.models.flow._
 import com.harana.sdk.backend.models.flow.actionobjects.Transformer
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
-import com.harana.sdk.backend.models.flow.{ExecutionContext, Knowledge}
-import com.harana.sdk.backend.models.flow.actionobjects.Transformer
-import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
+import com.harana.sdk.backend.models.flow._
 import com.harana.sdk.shared.models.flow.ActionTypeInfo.{Id, ReportParameter}
-import com.harana.sdk.shared.models.flow.parameters.{NumericParameter, ParameterMap}
 import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
+import com.harana.sdk.shared.models.flow.parameters.{NumericParameter, ParameterMap}
 import org.apache.spark.sql.types.StructType
 
 import scala.reflect.runtime.universe.TypeTag
@@ -29,7 +26,7 @@ object MockTransformers extends UnitSpec with TestSupport {
   class MockTransformer extends Transformer {
     val id = "test"
 
-    val paramA = NumericParameter("a", Some("desc"), RangeValidator(0.0, Double.MaxValue))
+    val paramA = NumericParameter("a", RangeValidator(0.0, Double.MaxValue))
     setDefault(paramA -> DefaultForA)
     val parameters = Array(paramA)
 

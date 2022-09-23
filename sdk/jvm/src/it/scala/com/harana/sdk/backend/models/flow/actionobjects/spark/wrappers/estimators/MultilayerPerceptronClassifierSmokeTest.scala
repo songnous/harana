@@ -10,7 +10,7 @@ class MultilayerPerceptronClassifierSmokeTest extends AbstractEstimatorModelWrap
   val estimator = new MultilayerPerceptronClassifier()
   import estimator._
 
-  val estimatorParameters = Seq(
+  val estimatorParameters = Seq[ParameterPair[_]](
     featuresColumnParameter   -> NameSingleColumnSelection("myFeatures"),
     labelColumnParameter      -> NameSingleColumnSelection("myRating"),
     layersParameter           -> Array(3.0, 2.0, 1.0),

@@ -1,5 +1,6 @@
 package com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.estimators
 
+import com.harana.sdk.shared.models.flow.parameters.ParameterPair
 import com.harana.sdk.shared.models.flow.parameters.selections.NameSingleColumnSelection
 
 class ALSSmokeTest extends AbstractEstimatorModelWrapperSmokeTest {
@@ -9,7 +10,7 @@ class ALSSmokeTest extends AbstractEstimatorModelWrapperSmokeTest {
   val estimator = new ALS()
   import estimator._
 
-  val estimatorParameters = Seq(
+  val estimatorParameters = Seq[ParameterPair[_]](
     alphaParameter               -> 1.0,
     checkpointIntervalParameter  -> 15.0,
     implicitPrefsParameter       -> false,

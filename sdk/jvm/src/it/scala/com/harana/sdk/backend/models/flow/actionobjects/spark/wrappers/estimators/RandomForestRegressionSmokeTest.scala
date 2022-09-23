@@ -12,7 +12,7 @@ class RandomForestRegressionSmokeTest extends AbstractEstimatorModelWrapperSmoke
   val estimator = new RandomForestRegression()
   import estimator._
 
-  val estimatorParameters = Seq(
+  val estimatorParameters = Seq[ParameterPair[_]](
     maxDepthParameter              -> 5.0,
     maxBinsParameter               -> 32.0,
     minInstancesPerNodeParameter   -> 1.0,

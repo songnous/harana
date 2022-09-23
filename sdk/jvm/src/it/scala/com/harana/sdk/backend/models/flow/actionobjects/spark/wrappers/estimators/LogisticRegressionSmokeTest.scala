@@ -15,7 +15,7 @@ class LogisticRegressionSmokeTest extends AbstractEstimatorModelWrapperSmokeTest
     .WeightColumnYesOption()
     .setWeightColumn(NameSingleColumnSelection("myWeight"))
 
-  val estimatorParameters = Seq(
+  val estimatorParameters = Seq[ParameterPair[_]](
     elasticNetParameter           -> 0.8,
     fitInterceptParameter         -> true,
     maxIterationsParameter        -> 2.0,

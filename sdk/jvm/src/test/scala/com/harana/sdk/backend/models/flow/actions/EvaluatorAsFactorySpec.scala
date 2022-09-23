@@ -71,7 +71,7 @@ object EvaluatorAsFactorySpec {
 
   class MockEvaluator extends Evaluator {
     val id = "test"
-    val param = NumericParameter("b", Some("desc"))
+    val param = NumericParameter("b")
     setDefault(param -> 5)
     val parameters = Array(param)
 

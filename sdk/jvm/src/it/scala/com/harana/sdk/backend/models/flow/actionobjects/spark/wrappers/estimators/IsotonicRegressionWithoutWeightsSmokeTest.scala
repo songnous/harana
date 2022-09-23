@@ -11,7 +11,7 @@ class IsotonicRegressionWithoutWeightsSmokeTest extends AbstractEstimatorModelWr
   val estimator = new IsotonicRegression()
   import estimator._
 
-  val estimatorParameters = Seq(
+  val estimatorParameters = Seq[ParameterPair[_]](
     featureIndexParameter         -> 1,
     featuresColumnParameter       -> NameSingleColumnSelection("myFeatures"),
     isotonicParameter             -> true,

@@ -2,8 +2,7 @@ package com.harana.sdk.backend.models.flow.actions
 
 import com.harana.sdk.backend.models.flow._
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
-import com.harana.sdk.backend.models.flow.ExecutionContext
-import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
+import com.harana.sdk.shared.models.flow.ActionTypeInfo.ReportParameter
 import com.harana.sdk.shared.models.flow.parameters.ParameterMap
 import com.harana.sdk.shared.models.flow.utils.Id
 
@@ -26,7 +25,7 @@ class TransformerAsFactorySpec extends UnitSpec {
 
     "have report type param set to extended" in {
       val op = action
-      op.extractParameterMap().get(op.reportTypeParameter).get shouldBe Action.ReportParameter.Extended()
+      op.extractParameterMap().get(op.reportTypeParameter).get shouldBe ReportParameter.Extended()
     }
 
     "have defaults same as in Transformer" in {
@@ -41,7 +40,7 @@ class TransformerAsFactorySpec extends UnitSpec {
 
       val result = op.executeUntyped(List.empty)(mock[ExecutionContext])
       (result should have).length(1)
-      result(0).asInstanceOf[MockTransformer].extractParameterMap() shouldBe ParameterMap(op.transformer.paramA -> 2, ReportTypeDefault(op.reportTypeParameter))
+      result.head.extractParameterMap() shouldBe ParameterMap(op.transformer.paramA -> 2, ReportTypeDefault(op.reportTypeParameter))
     }
 
     "infer knowledge" in {
@@ -51,7 +50,7 @@ class TransformerAsFactorySpec extends UnitSpec {
       val (result, warnings) = op.inferKnowledgeUntyped(List(Knowledge()))(mock[InferContext])
       warnings shouldBe InferenceWarnings.empty
       (result should have).length(1)
-      result(0).single.asInstanceOf[MockTransformer].extractParameterMap() shouldBe ParameterMap(op.transformer.paramA -> 2, ReportTypeDefault(op.reportTypeParameter))
+      result.head.single.extractParameterMap() shouldBe ParameterMap(op.transformer.paramA -> 2, ReportTypeDefault(op.reportTypeParameter))
     }
   }
 }

@@ -3,7 +3,7 @@ package com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.estimato
 import com.harana.sdk.backend.models.flow.ExecutionContext
 import com.harana.sdk.backend.models.flow.actionobjects.{SparkEstimatorWrapper, SparkModelWrapper}
 import com.harana.sdk.backend.models.flow.actionobjects.serialization.SerializableSparkModel
-import com.harana.sdk.shared.models.flow.parameters.Parameters
+import com.harana.sdk.shared.models.flow.parameters.{Parameters, SingleColumnCreatorParameter}
 import com.harana.spark.ML
 import org.apache.spark.annotation.DeveloperApi
 import org.apache.spark.ml

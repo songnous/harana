@@ -18,15 +18,10 @@ class SqlTransformationIntegSpec extends IntegratedTestSupport with TransformerS
   import TransformerSerialization._
 
   val dataFrameId = "ThisIsAnId"
-
   val validExpression = s"select * from $dataFrameId"
-
   val invalidExpression = "foobar"
-
   val firstColumn = "firstColumn"
-
   val secondColumn = "secondColumn"
-
   val thirdColumn = "thirdColumn"
 
   val schema = StructType(
@@ -117,7 +112,6 @@ class SqlTransformationIntegSpec extends IntegratedTestSupport with TransformerS
   }
 
   def executeSqlTransformation(expression: String, dataFrameId: String, input: DataFrame) = {
-
     val transformer = new SqlTransformer()
       .setExpression(expression)
       .setDataFrameId(dataFrameId)
@@ -125,7 +119,6 @@ class SqlTransformationIntegSpec extends IntegratedTestSupport with TransformerS
   }
 
   def executeSqlSchemaTransformation(expression: String, dataFrameId: String, input: StructType): StructType = {
-
     val transformer = new SqlTransformer()
       .setExpression(expression)
       .setDataFrameId(dataFrameId)

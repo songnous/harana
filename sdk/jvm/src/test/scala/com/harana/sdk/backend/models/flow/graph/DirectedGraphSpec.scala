@@ -2,13 +2,11 @@ package com.harana.sdk.backend.models.flow.graph
 
 import com.harana.sdk.backend.models.flow.graph.RandomNodeFactory._
 import com.harana.sdk.backend.models.flow.utils.{Logging, Serialization}
-import com.harana.sdk.backend.models.flow.utils.{Logging, Serialization}
-import com.harana.sdk.shared.models.{designer, flow}
-import com.harana.sdk.shared.models.flow.graph.FlowGraph.FlowNode
-import com.harana.sdk.shared.models.designer.flow.graph.Endpoint
+import com.harana.sdk.shared.models.flow
 import com.harana.sdk.shared.models.flow.graph
-import com.harana.sdk.shared.models.flow.graph.{Edge, FlowGraph}
+import com.harana.sdk.shared.models.flow.graph.FlowGraph.FlowNode
 import com.harana.sdk.shared.models.flow.graph.node.Node
+import com.harana.sdk.shared.models.flow.graph.{Edge, FlowGraph}
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
@@ -20,7 +18,7 @@ class DirectedGraphSpec extends AnyFunSuite with Matchers with Serialization wit
   }
 
   test("An edge added to an empty graph should be filtered out as invalid") {
-    val edge  = Edge(Endpoint(Node.Id.randomId, 0), Endpoint(Node.Id.randomId, 0))
+    val edge  = Edge((Node.Id.randomId, 0), (Node.Id.randomId, 0))
     val graph = FlowGraph(Set(), Set(edge))
     graph.getValidEdges shouldBe Set()
   }
@@ -31,7 +29,7 @@ class DirectedGraphSpec extends AnyFunSuite with Matchers with Serialization wit
     val node1 = randomNode(ActionTypeA1ToA())
     val node2 = randomNode(ActionTypeA1ToA())
     val nodes = Set(node1, node2)
-    val edges = Set(Edge(node1, 0, node2, 0))
+    val edges = Set(Edge((node1, 0), (node2, 0)))
     val graph = flow.graph.FlowGraph(nodes, edges)
     graph.size shouldBe 2
   }
@@ -45,13 +43,13 @@ class DirectedGraphSpec extends AnyFunSuite with Matchers with Serialization wit
     val node4 = randomNode(ActionTypeA1ToA())
     val nodes = Set(node1, node2, node3, node4)
     val nonCyclicEdges = Set(
-      designer.flow.graph.Edge(node1, 0, node2, 0),
-      designer.flow.graph.Edge(node2, 0, node3, 0),
-      designer.flow.graph.Edge(node3, 0, node4, 0)
+      Edge((node1, 0), (node2, 0)),
+      Edge((node2, 0), (node3, 0)),
+      Edge((node3, 0), (node4, 0))
     )
     var graph = FlowGraph(nodes, nonCyclicEdges)
     assert(!graph.containsCycle)
-    graph = graph.copy(edges = graph.edges + Edge(Endpoint(node4.id, 0), Endpoint(node2.id, 1)))
+    graph = graph.copy(edges = graph.edges + Edge((node4.id, 0), (node2.id, 1)))
     assert(graph.containsCycle)
   }
 
@@ -62,7 +60,7 @@ class DirectedGraphSpec extends AnyFunSuite with Matchers with Serialization wit
     val node2 = randomNode(ActionTypeA1ToA())
     val node3 = randomNode(ActionTypeA1ToA())
     val node4 = randomNode(ActionTypeA1ToA())
-    val edges = Set(designer.flow.graph.Edge(node1, 0, node2, 0), designer.flow.graph.Edge(node2, 0, node3, 0), designer.flow.graph.Edge(node3, 0, node4, 0))
+    val edges = Set(Edge((node1, 0), (node2, 0)), Edge((node2, 0), (node3, 0)), Edge((node3, 0), (node4, 0)))
     val graph  = flow.graph.FlowGraph(Set(node1, node2, node3, node4), edges)
     val sorted = graph.topologicallySorted
     assert(sorted.contains(List(node1, node2, node3, node4)))
@@ -75,7 +73,7 @@ class DirectedGraphSpec extends AnyFunSuite with Matchers with Serialization wit
     val node2 = randomNode(ActionTypeA1ToA())
     val node3 = randomNode(ActionTypeA1ToA())
     val node4 = randomNode(ActionTypeA1ToA())
-    val edges = Set(designer.flow.graph.Edge(node1, 0, node2, 0), designer.flow.graph.Edge(node2, 0, node3, 0), designer.flow.graph.Edge(node3, 0, node4, 0))
+    val edges = Set(Edge((node1, 0), (node2, 0)), Edge((node2, 0), (node3, 0)), Edge((node3, 0), (node4, 0)))
 
     val graph = flow.graph.FlowGraph(Set(node1, node2, node3, node4), edges)
 
@@ -107,7 +105,7 @@ class DirectedGraphSpec extends AnyFunSuite with Matchers with Serialization wit
       (node5, node7, 0, 0),
       (node6, node7, 0, 1)
     )
-    val edgesSet = edges.map(n => Edge(Endpoint(n._1.id, n._3), Endpoint(n._2.id, n._4))).toSet
+    val edgesSet = edges.map(n => Edge((n._1.id, n._3), (n._2.id, n._4))).toSet
     val graph = flow.graph.FlowGraph(nodes, edgesSet)
 
     val sortedOption = graph.topologicallySorted
@@ -125,21 +123,21 @@ class DirectedGraphSpec extends AnyFunSuite with Matchers with Serialization wit
     val node4 = randomNode(ActionTypeA1A2ToA())
     val nodes = Set(node1, node2, node3, node4)
     val edges = Set(
-      designer.flow.graph.Edge(node1, 0, node2, 0),
-      designer.flow.graph.Edge(node1, 0, node3, 0),
-      designer.flow.graph.Edge(node2, 0, node4, 0),
-      designer.flow.graph.Edge(node3, 0, node4, 1)
+      Edge((node1, 0), (node2, 0)),
+      Edge((node1, 0), (node3, 0)),
+      Edge((node2, 0), (node4, 0)),
+      Edge((node3, 0), (node4, 1))
     )
     val graph = flow.graph.FlowGraph(nodes, edges)
 
     graph.predecessors(node1.id).size shouldBe 0
-    graph.predecessors(node2.id) should contain theSameElementsAs List(Some(Endpoint(node1.id, 0)))
-    graph.predecessors(node3.id) should contain theSameElementsAs List(Some(Endpoint(node1.id, 0)))
-    graph.predecessors(node4.id) should contain theSameElementsAs List(Some(Endpoint(node2.id, 0)), Some(Endpoint(node3.id, 0)))
+    graph.predecessors(node2.id) should contain theSameElementsAs List(Some((node1.id, 0)))
+    graph.predecessors(node3.id) should contain theSameElementsAs List(Some((node1.id, 0)))
+    graph.predecessors(node4.id) should contain theSameElementsAs List(Some((node2.id, 0)), Some((node3.id, 0)))
 
-    graph.successors(node1.id) should contain theSameElementsAs List(Set(Endpoint(node2.id, 0), Endpoint(node3.id, 0)))
-    graph.successors(node2.id) should contain theSameElementsAs List(Set(Endpoint(node4.id, 0)))
-    graph.successors(node3.id) should contain theSameElementsAs List(Set(Endpoint(node4.id, 1)))
+    graph.successors(node1.id) should contain theSameElementsAs List(Set((node2.id, 0), (node3.id, 0)))
+    graph.successors(node2.id) should contain theSameElementsAs List(Set((node4.id, 0)))
+    graph.successors(node3.id) should contain theSameElementsAs List(Set((node4.id, 1)))
     graph.successors(node4.id) should contain theSameElementsAs List(Set.empty)
   }
 
@@ -160,7 +158,7 @@ class DirectedGraphSpec extends AnyFunSuite with Matchers with Serialization wit
     val node2 = Node(Node.Id.randomId, op1To1)
     val cyclicGraph = FlowGraph(
       Set(node1, node2),
-      Set(Edge(node1, 0, node2, 0), Edge(node2, 0, node1, 0))
+      Set(Edge((node1, 0), (node2, 0)), Edge((node2, 0), (node1, 0)))
     )
 
     cyclicGraph.subgraph(Set(node1.id)) shouldBe cyclicGraph

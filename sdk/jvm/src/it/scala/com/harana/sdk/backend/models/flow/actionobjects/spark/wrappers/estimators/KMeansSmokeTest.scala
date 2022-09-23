@@ -10,7 +10,7 @@ class KMeansSmokeTest extends AbstractEstimatorModelWrapperSmokeTest {
   val estimator = new KMeans()
   import estimator._
 
-  val estimatorParameters = Seq(
+  val estimatorParameters = Seq[ParameterPair[_]](
     featuresColumnParameter   -> NameSingleColumnSelection("myFeatures"),
     kParameter                -> 3.0,
     maxIterationsParameter    -> 20.0,

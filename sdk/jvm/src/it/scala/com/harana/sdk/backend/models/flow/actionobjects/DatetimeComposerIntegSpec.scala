@@ -1,6 +1,7 @@
 package com.harana.sdk.backend.models.flow.actionobjects
 
 import com.harana.sdk.backend.models.flow.IntegratedTestSupport
+
 import java.sql.Timestamp
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRowWithSchema
@@ -9,6 +10,8 @@ import org.joda.time.DateTime
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.transformers.TransformerSerialization
 import com.harana.sdk.backend.models.flow.actions.exceptions.{ColumnDoesNotExistError, WrongColumnTypeError}
+import com.harana.sdk.shared.models.flow.actionobjects.DatetimeComposerInfo.TimestampPartColumnChoice.{Hour, Year}
+import com.harana.sdk.shared.models.flow.actionobjects.DatetimeComposerInfo.orderedTimestampParts
 import com.harana.sdk.shared.models.flow.parameters.selections.{IndexSingleColumnSelection, NameSingleColumnSelection}
 
 class DatetimeComposerIntegSpec extends IntegratedTestSupport with TransformerSerialization {
@@ -132,7 +135,7 @@ class DatetimeComposerIntegSpec extends IntegratedTestSupport with TransformerSe
     new GenericRowWithSchema(
       Array(
         t.getYear,
-        t.getmonthOfYear,
+        t.getMonthOfYear,
         t.getDayOfMonth,
         t.getHourOfDay,
         t.getMinuteOfHour,
@@ -144,7 +147,7 @@ class DatetimeComposerIntegSpec extends IntegratedTestSupport with TransformerSe
 
   private def createUncomposedTimestampRow(schema: StructType, t: DateTime): Row =
     new GenericRowWithSchema(
-      Array(t.getYear, t.getmonthOfYear, t.getDayOfMonth, t.getHourOfDay, t.getMinuteOfHour, t.getSecondOfMinute),
+      Array(t.getYear, t.getMonthOfYear, t.getDayOfMonth, t.getHourOfDay, t.getMinuteOfHour, t.getSecondOfMinute),
       schema
     )
 

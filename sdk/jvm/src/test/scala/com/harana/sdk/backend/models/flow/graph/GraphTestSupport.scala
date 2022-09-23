@@ -65,11 +65,11 @@ trait GraphTestSupport { self: MockitoSugar =>
 
   private def edges(idA: Id, idB: Id, idC: Id, idD: Id, idE: Id): List[Edge] = {
     List(
-      Edge(Endpoint(idA, 0), Endpoint(idB, 0)),
-      Edge(Endpoint(idB, 0), Endpoint(idC, 0)),
-      Edge(Endpoint(idC, 0), Endpoint(idD, 0)),
-      Edge(Endpoint(idA, 0), Endpoint(idE, 0)),
-      Edge(Endpoint(idB, 0), Endpoint(idE, 1))
+      Edge((idA, 0), (idB, 0)),
+      Edge((idB, 0), (idC, 0)),
+      Edge((idC, 0), (idD, 0)),
+      Edge((idA, 0), (idE, 0)),
+      Edge((idB, 0), (idE, 1))
     )
   }
 

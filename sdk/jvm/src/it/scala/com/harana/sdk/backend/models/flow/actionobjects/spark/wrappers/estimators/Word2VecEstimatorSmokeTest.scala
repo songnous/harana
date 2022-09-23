@@ -11,7 +11,7 @@ class Word2VecEstimatorSmokeTest extends AbstractEstimatorModelWrapperSmokeTest 
   val estimator = new Word2VecEstimator()
   import estimator._
 
-  val estimatorParameters = Seq(
+  val estimatorParameters = Seq[ParameterPair[_]](
     inputColumnParameter         -> NameSingleColumnSelection("myStringFeatures"),
     singleInPlaceChoiceParameter -> NoInPlaceChoice().setOutputColumn("testOutputColumn"),
     maxIterationsParameter       -> 2,

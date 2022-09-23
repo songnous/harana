@@ -12,8 +12,6 @@ class HashingTFTransformerSmokeTest
     extends AbstractTransformerWrapperSmokeTest[HashingTFTransformer]
     with MultiColumnTransformerWrapperTestSupport {
 
-  import HashingTFTransformerSmokeTest.NumFeatures
-
   def transformerWithParameters: HashingTFTransformer = {
     val inPlace = NoInPlaceChoice().setOutputColumn("mapped")
     val single = SingleColumnChoice().setInputColumn(NameSingleColumnSelection("as")).setInPlaceChoice(inPlace)
@@ -22,7 +20,7 @@ class HashingTFTransformerSmokeTest
     transformer.set(
       Seq(
         transformer.singleOrMultiChoiceParameter -> single,
-        transformer.numFeaturesParameter -> NumFeatures
+        transformer.numFeaturesParameter -> 20
       ): _*
     )
   }
@@ -35,10 +33,9 @@ class HashingTFTransformerSmokeTest
     )
 
     val outputArray = {
-      // unfortunately, we cannot write outputs explicitly, because the behaviour changes between Spark 1.6 and 2.0
       val inputCol = "test_input"
       val outputCol = "test_output"
-      val sparkHashingTF = new SparkHashingTF().setNumFeatures(NumFeatures.toInt).setInputCol(inputCol).setOutputCol(outputCol)
+      val sparkHashingTF = new SparkHashingTF().setNumFeatures(20).setInputCol(inputCol).setOutputCol(outputCol)
       val inputDF = sparkSQLSession.createDataFrame(sparkContext.parallelize(arrays.map(Row(_))),
         StructType(Seq(StructField(inputCol, dataType = ArrayType(StringType))))
       )
@@ -50,8 +47,4 @@ class HashingTFTransformerSmokeTest
 
   def inputType: DataType = ArrayType(StringType)
   def outputType: DataType = new com.harana.spark.Linalg.VectorUDT
-}
-
-object HashingTFTransformerSmokeTest {
-  val NumFeatures = 20.0
 }

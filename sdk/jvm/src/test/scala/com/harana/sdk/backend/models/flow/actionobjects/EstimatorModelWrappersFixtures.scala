@@ -28,9 +28,6 @@ object EstimatorModelWrappersFixtures extends MockitoSugar with TestSupport {
   }
 
   class ExampleSparkEstimator extends ML.Estimator[ExampleSparkModel] {
-
-    def this(id: String) = this()
-
     val uid = "estimatorId"
 
     val numericParameter = new DoubleParam(uid, "numeric", "description")
@@ -55,7 +52,6 @@ object EstimatorModelWrappersFixtures extends MockitoSugar with TestSupport {
   }
 
   class ExampleSparkModel extends ML.Model[ExampleSparkModel] {
-
     val uid = "modelId"
 
     val numericParameter = new DoubleParam(uid, "name", "description")
@@ -75,17 +71,11 @@ object EstimatorModelWrappersFixtures extends MockitoSugar with TestSupport {
   }
 
   class ExampleSparkModelWrapper extends SparkModelWrapper[ExampleSparkModel, ExampleSparkEstimator] with HasNumericParameter {
-
     val id = "test"
-
     def setNumericParameter(value: Double): this.type = set(numericParameter, value)
-
     override def report(extended: Boolean = true) = ???
-
     val parameters = Array(numericParameter)
-
     def loadModel(ctx: ExecutionContext, path: String): SerializableSparkModel[ExampleSparkModel] = ???
-
   }
 
   val fitModel = new ExampleSparkModel()

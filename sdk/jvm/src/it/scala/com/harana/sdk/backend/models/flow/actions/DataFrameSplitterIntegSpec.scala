@@ -26,7 +26,7 @@ class DataFrameSplitterIntegSpec extends IntegratedTestSupport with ScalaCheckDr
         val df = executionContext.dataFrameBuilder.buildDataFrame(createSchema, rdd)
         val (df1, df2) = executeAction(
           executionContext,
-          Split().setSplitMode(SplitModeChoice.Random().setSplitRatio(splitRatio).setSeed(seed / 2))
+          new Split().setSplitMode(SplitModeChoice.Random().setSplitRatio(splitRatio).setSeed(seed / 2))
         )(df)
         validateSplitProperties(df, df1, df2)
       }
@@ -43,7 +43,7 @@ class DataFrameSplitterIntegSpec extends IntegratedTestSupport with ScalaCheckDr
       val df = executionContext.dataFrameBuilder.buildDataFrame(createSchema, rdd)
       val (df1, df2) = executeAction(
         executionContext,
-        Split().setSplitMode(SplitModeChoice.Conditional().setCondition(condition))
+        new Split().setSplitMode(SplitModeChoice.Conditional().setCondition(condition))
       )(df)
       df1.sparkDataFrame.collect().map(_.get(0)) should contain theSameElementsAs expectedDF1
       df2.sparkDataFrame.collect().map(_.get(0)) should contain theSameElementsAs expectedDF2

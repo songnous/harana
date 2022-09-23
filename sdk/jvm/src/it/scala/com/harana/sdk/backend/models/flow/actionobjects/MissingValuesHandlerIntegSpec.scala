@@ -1,11 +1,10 @@
 package com.harana.sdk.backend.models.flow.actionobjects
 
-import com.harana.sdk.shared.models.designer.flow.actionobjects.MissingValuesHandler.{EmptyColumnsStrategy, MissingValueIndicatorChoice}
 import com.harana.sdk.backend.models.flow.IntegratedTestSupport
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.transformers.TransformerSerialization
 import com.harana.sdk.backend.models.flow.actions.exceptions.{MultipleTypesReplacementError, ValueConversionError}
-import com.harana.sdk.shared.models.designer.flow.actionobjects
+import com.harana.sdk.shared.models.flow.actionobjects.MissingValuesHandlerInfo.{EmptyColumnsStrategy, MissingValueIndicatorChoice}
 import com.harana.sdk.shared.models.flow.parameters.exceptions.EmptyColumnPrefixNameError$
 import com.harana.sdk.shared.models.flow.parameters.selections.{IndexColumnSelection, IndexRangeColumnSelection, MultipleColumnSelection, TypeColumnSelection}
 import com.harana.sdk.shared.models.flow.utils.ColumnType
@@ -72,9 +71,9 @@ class MissingValuesHandlerIntegSpec
         new MissingValuesHandler()
           .setUserDefinedMissingValues(Seq("NaN", "undefined"))
           .setSelectedColumns(columnSelection)
-          .setStrategy(actionobjects.MissingValuesHandler.Strategy.RemoveRow())
+          .setStrategy(MissingValuesHandler.Strategy.RemoveRow())
           .setMissingValueIndicator(
-            actionobjects.MissingValuesHandler.MissingValueIndicatorChoice
+            MissingValuesHandler.MissingValueIndicatorChoice
               .Yes()
               .setIndicatorPrefix("prefix_")
           )
@@ -123,9 +122,9 @@ class MissingValuesHandlerIntegSpec
         new MissingValuesHandler()
           .setUserDefinedMissingValues(Seq("-1.0"))
           .setSelectedColumns(columnSelection)
-          .setStrategy(actionobjects.MissingValuesHandler.Strategy.RemoveColumn())
+          .setStrategy(MissingValuesHandler.Strategy.RemoveColumn())
           .setMissingValueIndicator(
-            actionobjects.MissingValuesHandler.MissingValueIndicatorChoice
+            MissingValuesHandler.MissingValueIndicatorChoice
               .Yes()
               .setIndicatorPrefix("prefix_")
           ),
@@ -183,8 +182,8 @@ class MissingValuesHandlerIntegSpec
       val handler = new MissingValuesHandler()
         .setUserDefinedMissingValues(Seq())
         .setSelectedColumns(columnSelection)
-        .setStrategy(actionobjects.MissingValuesHandler.Strategy.ReplaceWithCustomValue().setCustomValue("3"))
-        .setMissingValueIndicator(actionobjects.MissingValuesHandler.MissingValueIndicatorChoice.Yes().setIndicatorPrefix("prefix_"))
+        .setStrategy(MissingValuesHandler.Strategy.ReplaceWithCustomValue().setCustomValue("3"))
+        .setMissingValueIndicator(MissingValuesHandler.MissingValueIndicatorChoice.Yes().setIndicatorPrefix("prefix_"))
 
       val resultDf = executeTransformer(handler, df)
 
@@ -622,7 +621,7 @@ class MissingValuesHandlerIntegSpec
         .setUserDefinedMissingValues(Seq())
         .setSelectedColumns(columnSelection)
         .setStrategy(
-          actionobjects.MissingValuesHandler.Strategy
+          MissingValuesHandler.Strategy
             .ReplaceWithCustomValue()
             .setCustomValue("aaaa")
         )
@@ -644,9 +643,9 @@ class MissingValuesHandlerIntegSpec
       val transformation = new MissingValuesHandler()
         .setUserDefinedMissingValues(Seq())
         .setSelectedColumns(columnSelection)
-        .setStrategy(actionobjects.MissingValuesHandler.Strategy.RemoveRow())
+        .setStrategy(MissingValuesHandler.Strategy.RemoveRow())
         .setMissingValueIndicator(
-          actionobjects.MissingValuesHandler.MissingValueIndicatorChoice
+          MissingValuesHandler.MissingValueIndicatorChoice
             .Yes()
             .setIndicatorPrefix("prefix_")
         )
@@ -669,9 +668,9 @@ class MissingValuesHandlerIntegSpec
       val transformation = new MissingValuesHandler()
         .setUserDefinedMissingValues(Seq())
         .setSelectedColumns(columnSelection)
-        .setStrategy(actionobjects.MissingValuesHandler.Strategy.RemoveColumn())
+        .setStrategy(MissingValuesHandler.Strategy.RemoveColumn())
         .setMissingValueIndicator(
-          actionobjects.MissingValuesHandler.MissingValueIndicatorChoice
+          MissingValuesHandler().MissingValueIndicatorChoice
             .Yes()
             .setIndicatorPrefix("prefix_")
         )
@@ -683,8 +682,7 @@ class MissingValuesHandlerIntegSpec
   "not throw an error" when {
     "all DataFrame values are missing for RemoveEmptyColumns strategy" in {
       new TestData {
-        val strategy = actionobjects.MissingValuesHandler.Strategy.ReplaceWithMode()
-
+        val strategy = MissingValuesHandler.Strategy.ReplaceWithMode()
         strategy.setEmptyColumnStrategy(EmptyColumnsStrategy.RemoveEmptyColumns())
         uut
           .setUserDefinedMissingValues(Seq())

@@ -2,10 +2,9 @@ package com.harana.sdk.backend.models.flow.actionobjects
 
 import com.harana.sdk.backend.models.flow.actions.ConvertType
 import com.harana.sdk.backend.models.flow.actions.custom.{Sink, Source}
-import com.harana.sdk.shared.models.designer.flow.graph
 import com.harana.sdk.shared.models.flow.actionobjects.{TargetTypeChoice, TargetTypeChoices, TypeConverterInfo}
-import com.harana.sdk.shared.models.flow.graph.FlowGraph
 import com.harana.sdk.shared.models.flow.graph.node.Node
+import com.harana.sdk.shared.models.flow.graph.{Edge, FlowGraph}
 import com.harana.sdk.shared.models.flow.parameters.selections.{MultipleColumnSelection, NameColumnSelection}
 
 object InnerWorkflowTestFactory {
@@ -32,7 +31,7 @@ object InnerWorkflowTestFactory {
     val innerNode = createInnerNode(targetType)
     FlowGraph(
       Set(sourceNode, sinkNode, innerNode),
-      Set(graph.Edge(sourceNode, 0, innerNode, 0), graph.Edge(innerNode, 0, sinkNode, 0))
+      Set(Edge((sourceNode.id, 0), (innerNode.id, 0)), Edge((innerNode.id, 0), (sinkNode.id, 0)))
     )
   }
 }

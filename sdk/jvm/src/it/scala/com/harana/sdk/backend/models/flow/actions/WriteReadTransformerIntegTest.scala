@@ -3,7 +3,6 @@ package com.harana.sdk.backend.models.flow.actions
 import com.harana.sdk.backend.models.flow.IntegratedTestSupport
 import com.harana.sdk.backend.models.flow.actionobjects.Transformer
 import com.harana.sdk.backend.models.flow.actions.write.WriteTransformer
-import com.harana.sdk.shared.models.designer.flow.actions.read.ReadTransformer
 
 abstract class WriteReadTransformerIntegTest extends IntegratedTestSupport {
 

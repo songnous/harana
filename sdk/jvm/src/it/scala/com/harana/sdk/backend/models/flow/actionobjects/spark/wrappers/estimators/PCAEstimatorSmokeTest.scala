@@ -11,7 +11,7 @@ class PCAEstimatorSmokeTest extends AbstractEstimatorModelWrapperSmokeTest {
   val estimator = new PCAEstimator()
   import estimator._
 
-  val estimatorParameters = Seq(
+  val estimatorParameters = Seq[ParameterPair[_]](
     kParameter                   -> 2,
     inputColumnParameter         -> NameSingleColumnSelection("myFeatures"),
     singleInPlaceChoiceParameter -> NoInPlaceChoice().setOutputColumn("testOutputColumn")

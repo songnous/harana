@@ -60,7 +60,7 @@ object MockActionObjectsFactory extends UnitSpec with TestSupport {
   class MockEstimator extends Estimator[Transformer] {
     val id = "test"
 
-    val paramA = NumericParameter("b", Some("desc"), RangeValidator(0.0, Double.MaxValue))
+    val paramA = NumericParameter("b", RangeValidator(0.0, Double.MaxValue))
     setDefault(paramA -> DefaultForA)
 
     val parameters = Array(paramA)
@@ -95,7 +95,7 @@ object MockActionObjectsFactory extends UnitSpec with TestSupport {
   class MockEvaluator extends Evaluator {
     val id = "test"
 
-    val paramA = NumericParameter("b", Some("desc"), RangeValidator(0.0, Double.MaxValue))
+    val paramA = NumericParameter("b", RangeValidator(0.0, Double.MaxValue))
     setDefault(paramA -> DefaultForA)
 
     val parameters = Array(paramA)

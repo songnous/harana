@@ -41,8 +41,6 @@ class GoogleSheetSpec
 
   private def credentials = GoogleServices.serviceAccountJson match {
     case Some(credentials) => credentials
-    case None if Jenkins.isRunningOnJenkins  => throw GoogleServices.serviceAccountNotExistsException()
-    case None if !Jenkins.isRunningOnJenkins => cancel(GoogleServices.serviceAccountNotExistsException())
   }
 
   private def writeGoogleSheet(dataframe: DataFrame, googleSheetId: GoogleSheetId) = {

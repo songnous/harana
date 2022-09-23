@@ -1,26 +1,26 @@
 package com.harana.sdk.backend.models.flow.actions
 
-import java.sql.Timestamp
-import scala.io.Source
+import com.harana.sdk.backend.models.flow.actions.exceptions.{HaranaIOError, UnsupportedColumnTypeError}
+import com.harana.sdk.backend.models.flow.actions.readwritedataframe.FileScheme.File
+import com.harana.sdk.backend.models.flow.actions.readwritedataframe.UnknownFileSchemaForPath
+import com.harana.sdk.backend.models.flow.actions.readwritedataframe.filestorage.ParquetNotSupported
+import com.harana.sdk.backend.models.flow.actions.write.WriteDataFrame
+import com.harana.sdk.backend.models.flow.{IntegratedTestSupport, Knowledge, TestFiles}
+import com.harana.sdk.shared.models.flow.actions.inout.{CsvParameters, OutputFileFormatChoice, OutputStorageTypeChoice}
+import com.harana.spark.CSV
 import org.apache.spark.sql._
 import org.apache.spark.sql.types._
 import org.scalatest.BeforeAndAfter
-import com.harana.sdk.backend.models.flow.actions.inout._
-import com.harana.sdk.backend.models.flow.{IntegratedTestSupport, Knowledge, TestFiles}
-import com.harana.sdk.backend.models.flow.actions.exceptions.{HaranaIOError, UnsupportedColumnTypeError}
-import com.harana.sdk.backend.models.flow.actions.readwritedataframe.FileScheme.File
-import com.harana.sdk.backend.models.flow.actions.readwritedataframe.{FileScheme, UnknownFileSchemaForPath}
-import com.harana.sdk.backend.models.flow.actions.readwritedataframe.filestorage.ParquetNotSupported
-import com.harana.sdk.backend.models.flow.actions.write.WriteDataFrame
-import com.harana.sdk.shared.models.designer.flow.utils.DateTimeConverter
-import com.harana.sdk.shared.models.flow.actions.inout.{CsvParameters, OutputFileFormatChoice, OutputStorageTypeChoice}
-import com.harana.spark.CSV
+
+import java.sql.Timestamp
+import java.time.Instant
+import scala.io.Source
 
 class WriteDataFrameWithDriverFilesIntegSpec extends IntegratedTestSupport with BeforeAndAfter with TestFiles {
 
   val dateTime = Instant.now
 
-  val timestamp = new Timestamp(dateTime.getMillis)
+  val timestamp = new Timestamp(dateTime.toEpochMilli)
 
   val schema: StructType = StructType(
     Seq(

@@ -20,11 +20,7 @@ class StringTokenizerSmokeTest
       .setInPlaceChoice(inPlace)
 
     val transformer = new StringTokenizer()
-    transformer.set(
-      Seq(
-        transformer.singleOrMultiChoiceParameter -> single
-      ): _*
-    )
+    transformer.set(Seq(transformer.singleOrMultiChoiceParameter -> single): _*)
   }
 
   def testValues: Seq[(Any, Any)] = {

@@ -11,7 +11,7 @@ class RandomForestClassifierSmokeTest extends AbstractEstimatorModelWrapperSmoke
   val estimator = new RandomForestClassifier()
   import estimator.vanillaRandomForestClassifier._
 
-  val estimatorParameters = Seq(
+  val estimatorParameters = Seq[ParameterPair[_]](
     maxDepthParameter              -> 3,
     maxBinsParameter               -> 40,
     impurityParameter              -> ClassificationImpurity.Entropy(),

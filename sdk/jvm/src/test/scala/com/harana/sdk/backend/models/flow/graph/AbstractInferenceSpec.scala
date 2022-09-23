@@ -1,24 +1,19 @@
 package com.harana.sdk.backend.models.flow.graph
 
-import scala.reflect.runtime.{universe => ru}
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
-import com.harana.sdk.backend.models.flow._
-import com.harana.sdk.backend.models.flow.graph.DClassesForActions._
 import com.harana.sdk.backend.models.flow.graph.ActionTestClasses._
-import com.harana.sdk.backend.models.flow.graph.FlowGraph.FlowNode
+import com.harana.sdk.backend.models.flow.graph.DClassesForActions._
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarning, InferenceWarnings}
-import com.harana.sdk.backend.models.flow.{ActionType2To1, ExecutionContext, Knowledge}
-import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarning, InferenceWarnings}
-import com.harana.sdk.shared.models.designer.flow
-import com.harana.sdk.shared.models.designer.flow.catalogs.ActionObjectCatalog
-import com.harana.sdk.shared.models.designer.flow.ActionObjectCatalog
-import com.harana.sdk.shared.models.flow.graph.FlowGraph.FlowNode
+import com.harana.sdk.backend.models.flow._
 import com.harana.sdk.shared.models.flow.ActionObjectInfo
 import com.harana.sdk.shared.models.flow.exceptions.{FlowError, FlowMultiError}
-import com.harana.sdk.shared.models.flow.graph.{Edge, FlowGraph}
+import com.harana.sdk.shared.models.flow.graph.FlowGraph.FlowNode
 import com.harana.sdk.shared.models.flow.graph.node.Node
+import com.harana.sdk.shared.models.flow.graph.{Edge, FlowGraph}
 import com.harana.sdk.shared.models.flow.parameters.exceptions.ValidationError
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+
+import scala.reflect.runtime.{universe => ru}
 
 class AbstractInferenceSpec extends AnyWordSpec with TestSupport with Matchers {
 
@@ -91,9 +86,9 @@ class AbstractInferenceSpec extends AnyWordSpec with TestSupport with Matchers {
   def validGraph = FlowGraph(
     nodes = Set(nodeCreateA1, nodeAToA1A2, nodeA1A2ToFirst),
     edges = Set(
-      flow.graph.Edge(nodeCreateA1, 0, nodeAToA1A2, 0),
-      flow.graph.Edge(nodeAToA1A2, 0, nodeA1A2ToFirst, 0),
-      flow.graph.Edge(nodeAToA1A2, 1, nodeA1A2ToFirst, 1)
+      Edge((nodeCreateA1, 0), (nodeAToA1A2, 0)),
+      Edge((nodeAToA1A2, 0), (nodeA1A2ToFirst, 0)),
+      Edge((nodeAToA1A2, 1), (nodeA1A2ToFirst, 1))
     )
   )
 

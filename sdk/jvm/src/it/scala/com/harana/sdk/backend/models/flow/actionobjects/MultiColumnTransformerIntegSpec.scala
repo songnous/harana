@@ -146,7 +146,7 @@ object MultiColumnTransformerIntegSpec {
 
   case class AddAConstantTransformer() extends MultiColumnTransformer {
 
-    val magicConstantParameter = NumericParameter("aconstant", Some("Constant that will be added to columns"))
+    val magicConstantParameter = NumericParameter("aconstant")
     def getMagicConstant = $(magicConstantParameter)
     def setMagicConstant(value: Double): this.type = set(magicConstantParameter, value)
 

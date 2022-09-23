@@ -59,7 +59,6 @@ class EstimatorModelWrapperIntegSpec extends IntegratedTestSupport {
     }
 
     "_fit_infer().transformSchema() with parameters inherited" in {
-
       val estimatorWrapper = new SimpleSparkEstimatorWrapper()
         .setPredictionColumn(estimatorPredictionParamValue)
 
@@ -69,7 +68,6 @@ class EstimatorModelWrapperIntegSpec extends IntegratedTestSupport {
     }
 
     "_fit_infer().transformSchema() with parameters overwritten" in {
-
       val estimatorWrapper = new SimpleSparkEstimatorWrapper().setPredictionColumn(estimatorPredictionParamValue)
       val transformer = estimatorWrapper._fit_infer(inputDF.schema)
       val transformerWithParameters = transformer.setPredictionColumn(transformerPredictionParamValue)

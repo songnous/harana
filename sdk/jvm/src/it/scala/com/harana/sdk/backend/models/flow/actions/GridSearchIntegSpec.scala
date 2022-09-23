@@ -99,7 +99,7 @@ class GridSearchIntegSpec extends IntegratedTestSupport {
         val estimator = new LinearRegression()
         val dataFrame = buildDataFrame()
         val evaluator = new RegressionEvaluator()
-        val parameters = Json(
+        val parameters =  Json(
           evaluator.parameterValuesToJson.fields.updated(
             "label column",
             Json(

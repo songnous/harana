@@ -8,6 +8,8 @@ import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarn
 import com.harana.sdk.shared.models.flow.actionobjects.report.Report
 import com.harana.sdk.shared.models.flow.actions.GridSearchInfo
 import com.harana.sdk.shared.models.flow.exceptions.FlowMultiError
+import io.circe.Json
+import io.circe.syntax.EncoderOps
 
 class GridSearchSpec extends UnitSpec with TestSupport {
 
@@ -60,10 +62,9 @@ class GridSearchSpec extends UnitSpec with TestSupport {
     multiException.exceptions should have size invalidParamCount
   }
 
-  private def prepareParamDictionary(parameterName: String, maybeValue: Option[Double]): Json = {
-    val jsonEntries = maybeValue
+  private def prepareParamDictionary(parameterName: String, maybeValue: Option[Double]): Json =
+    maybeValue
       .map(value => Seq(parameterName -> value))
       .getOrElse(Seq())
-    Json(jsonEntries: _*)
-  }
+      .asJson
 }

@@ -5,11 +5,7 @@ import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.Estimator
 import com.harana.sdk.backend.models.flow.actionobjects.Transformer
-import com.harana.sdk.backend.models.flow.ExecutionContext
-import com.harana.sdk.backend.models.flow.reportTypeDefault
-import com.harana.sdk.backend.models.flow.UnitSpec
-import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
-import com.harana.sdk.backend.models.flow.parameters
+import com.harana.sdk.backend.models.flow.{ExecutionContext, ReportTypeDefault, UnitSpec, parameters, reportTypeDefault}
 import com.harana.sdk.backend.models.flow.ExecutionContext
 import com.harana.sdk.backend.models.flow.actionobjects.Transformer
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
@@ -60,7 +56,7 @@ class EstimatorAsFactorySpec extends UnitSpec {
 
       knowledge should have size 1
       knowledge.single shouldBe a[MockEstimator]
-      val estimator = knowledge.single.asInstanceOf[MockEstimator]
+      val estimator = knowledge.single
       estimator.extractParameterMap() shouldBe execute(mockFactory).extractParameterMap()
 
       warnings shouldBe InferenceWarnings.empty
@@ -68,7 +64,7 @@ class EstimatorAsFactorySpec extends UnitSpec {
   }
 
   private def execute(factory: MockEstimatorFactory): MockEstimator =
-    factory.executeUntyped(List.empty)(mock[ExecutionContext]).head.asInstanceOf[MockEstimator]
+    factory.executeUntyped(List.empty)(mock[ExecutionContext]).head
 
 }
 
@@ -76,7 +72,7 @@ object EstimatorAsFactorySpec {
 
   class MockEstimator extends Estimator[Transformer] {
     val id = "test"
-    val param = NumericParameter("b", Some("desc"))
+    val param = NumericParameter("b")
     setDefault(param -> 5)
     val parameters = Array(param)
     override def _fit(ctx: ExecutionContext, df: DataFrame) = ???
@@ -87,5 +83,5 @@ object EstimatorAsFactorySpec {
   class MockEstimatorFactory extends EstimatorAsFactory[MockEstimator] {
     val id: Id = Id.randomId
     val name = "Mock Estimator factory used for tests purposes"
-    }
+  }
 }

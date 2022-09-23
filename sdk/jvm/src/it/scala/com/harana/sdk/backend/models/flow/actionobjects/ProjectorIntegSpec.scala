@@ -1,19 +1,18 @@
 package com.harana.sdk.backend.models.flow.actionobjects
 
-import java.sql.Timestamp
+import com.harana.sdk.backend.models.flow.IntegratedTestSupport
+import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.transformers.TransformerSerialization
+import com.harana.sdk.backend.models.flow.actions.exceptions.{ColumnDoesNotExistError, DuplicatedColumnsError}
+import com.harana.sdk.shared.models.flow.actionobjects.ProjectorInfo.ColumnProjection
+import com.harana.sdk.shared.models.flow.actionobjects.ProjectorInfo.RenameColumnChoice.Yes
+import com.harana.sdk.shared.models.flow.parameters.selections.{IndexSingleColumnSelection, NameSingleColumnSelection}
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.types._
 import org.joda.time.DateTime
-import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import com.harana.sdk.backend.models.flow._
-import com.harana.sdk.backend.models.flow.actionobjects.Projector.ColumnProjection
-import com.harana.sdk.backend.models.flow.actionobjects.Projector.RenameColumnChoice.Yes
-import com.harana.sdk.backend.models.flow.IntegratedTestSupport
-import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
-import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.transformers.TransformerSerialization
-import com.harana.sdk.backend.models.flow.actions.exceptions.{ColumnDoesNotExistError, DuplicatedColumnsError}
-import com.harana.sdk.shared.models.flow.parameters.selections.{IndexSingleColumnSelection, NameSingleColumnSelection}
 import org.scalatest.matchers.should.Matchers
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
+
+import java.sql.Timestamp
 
 class ProjectorIntegSpec
     extends IntegratedTestSupport
@@ -21,8 +20,8 @@ class ProjectorIntegSpec
     with Matchers
     with TransformerSerialization {
 
-  import com.harana.sdk.backend.models.flow.IntegratedTestSupport._
   import TransformerSerialization._
+  import com.harana.sdk.backend.models.flow.IntegratedTestSupport._
 
   val specialCharactersName = "a'a-z"
 
@@ -54,7 +53,7 @@ class ProjectorIntegSpec
         ColumnProjection().setOriginalColumn(NameSingleColumnSelection(specialCharactersName)),
         ColumnProjection()
           .setOriginalColumn(NameSingleColumnSelection(specialCharactersName))
-          .setRenameColumn(new Yes().setColumnName(s"renamed_$specialCharactersName"))
+          .setRenameColumn(Yes().setColumnName(s"renamed_$specialCharactersName"))
       )
     )
 

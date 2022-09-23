@@ -11,7 +11,7 @@ class QuantileDiscretizerEstimatorSmokeTest extends AbstractEstimatorModelWrappe
   val estimator = new QuantileDiscretizerEstimator()
   import estimator._
 
-  val estimatorParameters = Seq(
+  val estimatorParameters = Seq[ParameterPair[_]](
     numBucketsParameter -> 2,
     inputColumnParameter -> NameSingleColumnSelection("myRating"),
     singleInPlaceChoiceParameter -> NoInPlaceChoice().setOutputColumn("testOutputColumn")

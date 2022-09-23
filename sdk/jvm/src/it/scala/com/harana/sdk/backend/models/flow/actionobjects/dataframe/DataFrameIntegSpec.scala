@@ -39,7 +39,7 @@ class DataFrameIntegSpec extends IntegratedTestSupport {
           List(
             NameColumnSelection(Set("a")),
             IndexColumnSelection(Set(1, 3)),
-            TypeColumnSelection(Set(ColumnType.String, ColumnType.timestamp))
+            TypeColumnSelection(Set(ColumnType.String, ColumnType.Timestamp))
           ),
           false
         )
@@ -76,7 +76,7 @@ class DataFrameIntegSpec extends IntegratedTestSupport {
       }
 
       "timestamp type is selected" in {
-        selectSingleType(ColumnType.timestamp) shouldBe Seq("p")
+        selectSingleType(ColumnType.Timestamp) shouldBe Seq("p")
       }
 
       "excluding selector is used" in {

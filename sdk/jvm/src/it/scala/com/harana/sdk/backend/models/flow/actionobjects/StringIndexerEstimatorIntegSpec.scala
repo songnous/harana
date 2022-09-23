@@ -7,6 +7,7 @@ import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.transform
 import com.harana.sdk.backend.models.flow.{IntegratedTestSupport, Knowledge}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.estimators.StringIndexerEstimator
+import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.models.{MultiColumnStringIndexerModel, SingleColumnStringIndexerModelParameter}
 import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.transformers.TransformerSerialization
 import com.harana.sdk.backend.models.flow.inference.InferContext
 import com.harana.sdk.shared.models.designer.flow.actionobjects.spark.wrappers.models.{MultiColumnStringIndexerModel, SingleColumnStringIndexerModelParameter}

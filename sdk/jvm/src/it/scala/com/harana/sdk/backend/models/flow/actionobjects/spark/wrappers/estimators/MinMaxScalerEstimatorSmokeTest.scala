@@ -11,7 +11,7 @@ class MinMaxScalerEstimatorSmokeTest extends AbstractEstimatorModelWrapperSmokeT
   val estimator = new MinMaxScalerEstimator()
   import estimator._
 
-  val estimatorParameters = Seq(
+  val estimatorParameters = Seq[ParameterPair[_]](
     minParameter                 -> 0.0,
     maxParameter                 -> 1.0,
     inputColumnParameter         -> NameSingleColumnSelection("myFeatures"),
