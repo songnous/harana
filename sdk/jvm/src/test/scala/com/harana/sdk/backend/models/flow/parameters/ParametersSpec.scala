@@ -9,6 +9,7 @@ import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParame
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.parameters.exceptions.ParamValueNotProvidedError
 import io.circe.Json
+import io.circe.syntax.EncoderOps
 
 class ParametersSpec extends UnitSpec {
 
@@ -29,8 +30,8 @@ class ParametersSpec extends UnitSpec {
     "describe its parameters as json ordered as in parameters Array()" in {
       val p = WithParameters()
       p.parametersToJson shouldBe Seq(
-        p.param2.asJson(maybeDefault = None),
-        p.param1.asJson(maybeDefault = Some(defaultForParam1))
+        p.param2.asJson,
+        p.param1.asJson
       )
     }
     "describe values of its parameters as json" in {
@@ -273,7 +274,7 @@ object ParametersSpec extends UnitSpec {
   class WithParametersB extends WithParameters
 
   case class ParametersWithChoice() extends Parameters {
-    val choiceParameter = ChoiceParameter[ChoiceWithRepeatedParameter]("choice", Some("choice"))
+    val choiceParameter = ChoiceParameter[ChoiceWithRepeatedParameter]("choice")
     def setChoice(v: ChoiceWithRepeatedParameter) = set(choiceParameter, v)
     val parameters = Left(Array(choiceParameter))
   }
@@ -284,13 +285,13 @@ object ParametersSpec extends UnitSpec {
 
   case class ChoiceOne() extends ChoiceWithRepeatedParameter {
     val name = "one"
-    val numericParameter = NumericParameter("x", Some("numericParameter"))
+    val numericParameter = NumericParameter("x"))
     val parameters = Left(Array(numericParameter))
   }
 
   case class ChoiceTwo() extends ChoiceWithRepeatedParameter {
     val name = "two"
-    val numericParameter = NumericParameter("x", Some("numericParameter"))
+    val numericParameter = NumericParameter("x")
     val parameters = Left(Array(numericParameter))
   }
 

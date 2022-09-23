@@ -9,15 +9,10 @@ class CodeSnippetParameterSpec extends AbstractParameterSpec[String, CodeSnippet
   def className = "CodeSnippetParameter"
 
   def paramFixture: (CodeSnippetParameter, Json) = {
-      val param       = CodeSnippetParameter(
-      "myName",
-      Some(description),
-      CodeSnippetLanguage(CodeSnippetLanguage.python)
-    )
+    val param       = CodeSnippetParameter("myName", language = CodeSnippetLanguage(CodeSnippetLanguage.python))
     val js          = Map(
                         "type"        -> Json.fromString("codeSnippet"),
                         "name"        -> Json.fromString(param.name),
-                        "description" -> Json.fromString(description),
                         "language"    -> Map("name" -> Json.fromString("python")).asJson,
                         "isGriddable" -> Json.False,
                         "default"     -> Json.Null

@@ -31,18 +31,16 @@ class ParametersSequenceSpec extends AbstractParameterSpec[Seq[ClassWithParamete
   }
 
   def paramFixture: (ParametersSequence[ClassWithParameters], Json) = {
-      val parametersSequence = ParametersSequence[ClassWithParameters]("Parameters sequence name", Some(description))
+    val parametersSequence = ParametersSequence[ClassWithParameters]("Parameters sequence name")
     val expectedJson = Map(
       "type"        -> Json.fromString("multiplier"),
       "name"        -> Json.fromString(parametersSequence.name),
-      "description" -> Json.fromString(description),
       "default"     -> Json.Null,
       "isGriddable" -> Json.False,
       "values"      -> Seq(
                         Map(
                           "type"        -> Json.fromString("string"),
                           "name"        -> Json.fromString("string"),
-                          "description" -> Json.fromString(""),
                           "default"     -> Json.Null,
                           "isGriddable" -> Json.False,
                           "validator"   -> Map(
@@ -53,7 +51,6 @@ class ParametersSequenceSpec extends AbstractParameterSpec[Seq[ClassWithParamete
                         Map(
                           "type"        -> Json.fromString("boolean"),
                           "name"        -> Json.fromString("bool"),
-                          "description" -> Json.fromString(""),
                           "isGriddable" -> Json.False,
                           "default"     -> Json.Null
                         )

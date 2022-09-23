@@ -11,7 +11,7 @@ trait SqlTransformerInfo extends TransformerInfo {
   def getDataFrameId = $(dataFrameIdParameter)
   def setDataFrameId(value: String): this.type = set(dataFrameIdParameter, value)
 
-  val expressionParameter = CodeSnippetParameter("expression", language = CodeSnippetLanguage(CodeSnippetLanguage.sql))
+  val expressionParameter = CodeSnippetParameter("expression", language = CodeSnippetLanguage.SQL)
   setDefault(expressionParameter -> "SELECT * FROM df")
   def getExpression = $(expressionParameter)
   def setExpression(value: String): this.type = set(expressionParameter, value)

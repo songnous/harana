@@ -6,7 +6,7 @@ trait REvaluatorInfo extends CustomCodeEvaluatorInfo {
 
   val id = "1331BA0B-4D5F-4856-A7D0-0ABFEE190702"
 
-  val codeParameter = CodeSnippetParameter("R evaluator code", language = CodeSnippetLanguage(CodeSnippetLanguage.r))
+  val codeParameter = CodeSnippetParameter("R evaluator code", language = CodeSnippetLanguage.R)
   setDefault(
     codeParameter ->
       """evaluate <- function(dataframe){

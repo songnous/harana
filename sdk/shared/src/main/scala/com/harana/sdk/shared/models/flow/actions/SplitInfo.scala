@@ -76,7 +76,7 @@ object SplitModeChoice {
   case class Conditional() extends SplitModeChoice {
     val name = "CONDITIONAL"
 
-    val conditionParameter = CodeSnippetParameter("condition", language = CodeSnippetLanguage(CodeSnippetLanguage.sql))
+    val conditionParameter = CodeSnippetParameter("condition", language = CodeSnippetLanguage.SQL)
     def getCondition = $(conditionParameter)
     def setCondition(value: String): this.type = set(conditionParameter, value)
 

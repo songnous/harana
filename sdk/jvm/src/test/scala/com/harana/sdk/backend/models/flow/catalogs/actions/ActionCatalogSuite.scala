@@ -67,11 +67,6 @@ object ActionCatalogTestResources {
   val nameC = "nameC"
   val nameD = "nameD"
 
-  val descriptionA = "descriptionA"
-  val descriptionB = "descriptionB"
-  val descriptionC = "descriptionC"
-  val descriptionD = "descriptionD"
-
   val versionA = "versionA"
   val versionB = "versionB"
   val versionC = "versionC"
@@ -80,25 +75,21 @@ object ActionCatalogTestResources {
   case class ActionA() extends ActionMock {
     val id = idA
     val name = nameA
-    val description = descriptionA
   }
 
   case class ActionB() extends ActionMock {
     val id = idB
     val name = nameB
-    val description = descriptionB
   }
 
   case class ActionC() extends ActionMock {
     val id = idC
     val name = nameC
-    val description = descriptionC
   }
 
   case class ActionD() extends ActionMock {
     val id = idD
     val name = nameD
-    val description = descriptionD
     override val inputPorts = List(XTypeTag, YTypeTag)
     override val outputPorts = List(XTypeTag)
   }

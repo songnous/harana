@@ -14,7 +14,6 @@ trait CreateDecisionTreeClassifierInfo extends EstimatorAsFactoryInfo[DecisionTr
 
   val id: Id = "81039036-bb26-445b-81b5-63fbc9295c00"
   val name = "Decision Tree Classifier"
-  val description = """Creates a decision tree classifier. It supports both binary and multiclass labels, as well as both continuous and categorical features.""".stripMargin
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-classification-regression.html#decision-tree-classifier")
   val category = Classification

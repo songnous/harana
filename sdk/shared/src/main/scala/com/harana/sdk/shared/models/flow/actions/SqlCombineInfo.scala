@@ -33,9 +33,7 @@ trait SqlCombineInfo extends Action2To1Info[DataFrameInfo, DataFrameInfo, DataFr
   def getRightTableName = $(rightTableNameParameter)
   def setRightTableName(name: String): this.type = set(rightTableNameParameter, name)
 
-  val sqlCombineExpressionParameter = CodeSnippetParameter("expression",
-    language = CodeSnippetLanguage(CodeSnippetLanguage.sql)
-  )
+  val sqlCombineExpressionParameter = CodeSnippetParameter("expression", language = CodeSnippetLanguage.SQL)
   setDefault(sqlCombineExpressionParameter, "")
   def getSqlCombineExpression = $(sqlCombineExpressionParameter)
   def setSqlCombineExpression(expression: String): this.type = set(sqlCombineExpressionParameter, expression)

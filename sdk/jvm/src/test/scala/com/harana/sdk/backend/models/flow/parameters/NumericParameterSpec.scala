@@ -11,14 +11,10 @@ class NumericParameterSpec extends AbstractParameterSpec[Double, NumericParamete
   def className = "NumericParameter"
 
   def paramFixture: (NumericParameter, Json) = {
-      val param  = NumericParameter(
-      name = "Numeric parameter",
-      validator = RangeValidator(1.0, 3.0, endIncluded = false)
-    )
+    val param  = NumericParameter("Numeric parameter", validator = RangeValidator(1.0, 3.0, endIncluded = false))
     val json = Map(
       "type"        -> Json.fromString("numeric"),
       "name"        -> Json.fromString(param.name),
-      "description" -> Json.fromString(param.constraints),
       "default"     -> Json.Null,
       "isGriddable" -> Json.True,
       "validator"   -> Map(

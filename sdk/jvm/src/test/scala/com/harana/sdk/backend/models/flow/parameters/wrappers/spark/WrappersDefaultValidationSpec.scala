@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.parameters.wrappers.spark
 
-import com.harana.sdk.shared.models.flow.parameters.{FloatParameter, IntParameter, Parameters}
+import com.harana.sdk.shared.models.flow.parameters.{DoubleParameter, FloatParameter, IntParameter, Parameters}
 import org.apache.spark.ml
 import org.apache.spark.ml.param._
 import org.scalatestplus.mockito.MockitoSugar

@@ -1,14 +1,12 @@
 package com.harana.sdk.shared.models.flow.parameters
 
-@SerialVersionUID(1)
-case class CodeSnippetLanguage(language: CodeSnippetLanguage.CodeSnippetLanguage)
+import enumeratum.values.{StringCirceEnum, StringEnum, StringEnumEntry}
 
-object CodeSnippetLanguage extends Enumeration {
+sealed abstract class CodeSnippetLanguage(val value: String) extends StringEnumEntry
 
-  type CodeSnippetLanguage = Value
-
-  val python = Value("python")
-  val sql = Value("sql")
-  val r = Value("r")
-
+case object CodeSnippetLanguage extends StringEnum[CodeSnippetLanguage] with StringCirceEnum[CodeSnippetLanguage] {
+  case object Python extends CodeSnippetLanguage("python")
+  case object R extends CodeSnippetLanguage("r")
+  case object SQL extends CodeSnippetLanguage("sql")
+  val values = findValues
 }

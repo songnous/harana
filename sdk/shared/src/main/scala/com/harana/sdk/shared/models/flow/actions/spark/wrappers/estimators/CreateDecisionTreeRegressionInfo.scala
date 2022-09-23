@@ -14,7 +14,6 @@ trait CreateDecisionTreeRegressionInfo extends EstimatorAsFactoryInfo[DecisionTr
 
   val id: Id = "a88db4fb-695e-4f44-8435-4999ccde36de"
   val name = "Decision Tree Regression"
-  val description = """Creates a decision tree regression model. It supports both continuous and categorical features.""".stripMargin
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-classification-regression.html#decision-tree-regression")
   val category = Regression
