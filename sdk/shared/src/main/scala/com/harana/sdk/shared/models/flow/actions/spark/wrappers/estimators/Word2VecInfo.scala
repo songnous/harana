@@ -14,7 +14,6 @@ trait Word2VecInfo extends EstimatorAsActionInfo[Word2VecEstimatorInfo, Word2Vec
 
   val id: Id = "131c6765-6b60-44c7-9a09-0f79fbb4ad2f"
   val name = "Word2Vec"
-  val description = """Transforms vectors of words into vectors of numeric codes for the purpose of further processing by NLP or machine learning algorithms.""".stripMargin
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-features.html#word2vec")
   val category = TextProcessing
@@ -24,4 +23,6 @@ trait Word2VecInfo extends EstimatorAsActionInfo[Word2VecEstimatorInfo, Word2Vec
 
 }
 
-object Word2VecInfo extends Word2VecInfo
+object Word2VecInfo extends Word2VecInfo {
+  def apply() = new Word2VecInfo {}
+}

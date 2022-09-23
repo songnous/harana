@@ -22,4 +22,6 @@ trait TokenizeInfo extends TransformerAsActionInfo[StringTokenizerInfo] with Spa
 
 }
 
-object TokenizeInfo extends TokenizeInfo
+object TokenizeInfo extends TokenizeInfo {
+  def apply() = new TokenizeInfo {}
+}

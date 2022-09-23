@@ -25,4 +25,6 @@ trait SelectColumnsInfo extends Action1To1TypeInfo[DataFrameInfo, DataFrameInfo]
 
 }
 
-object SelectColumnsInfo extends SelectColumnsInfo
+object SelectColumnsInfo extends SelectColumnsInfo {
+  def apply() = new SelectColumnsInfo {}
+}

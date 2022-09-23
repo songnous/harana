@@ -1,4 +1,4 @@
-package com.harana.sdk.shared.models.designer.flow.execution
+package com.harana.sdk.shared.models.flow.execution.spark
 
 import enumeratum.{CirceEnum, Enum, EnumEntry}
 

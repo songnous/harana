@@ -59,4 +59,6 @@ trait SqlCombineInfo extends Action2To1TypeInfo[DataFrameInfo, DataFrameInfo, Da
 
 }
 
-object SqlCombineInfo extends SqlCombineInfo
+object SqlCombineInfo extends SqlCombineInfo {
+  def apply() = new SqlCombineInfo {}
+}

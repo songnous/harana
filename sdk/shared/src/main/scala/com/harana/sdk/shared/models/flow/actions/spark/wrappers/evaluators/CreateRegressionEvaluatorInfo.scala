@@ -24,4 +24,6 @@ trait CreateRegressionEvaluatorInfo extends EvaluatorAsFactoryInfo[RegressionEva
 
 }
 
-object CreateRegressionEvaluatorInfo extends CreateRegressionEvaluatorInfo
+object CreateRegressionEvaluatorInfo extends CreateRegressionEvaluatorInfo {
+  def apply() = new CreateRegressionEvaluatorInfo {}
+}

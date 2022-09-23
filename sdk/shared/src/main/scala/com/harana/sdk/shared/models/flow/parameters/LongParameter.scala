@@ -1,7 +1,9 @@
 package com.harana.sdk.shared.models.flow.parameters
 
 import com.harana.sdk.shared.models.flow.parameters.validators.{RangeValidator, Validator}
+import io.circe.generic.JsonCodec
 
+@JsonCodec
 case class LongParameter(name: String, validator: Validator[Long] = RangeValidator.allLong)
   extends Parameter[Long] with HasValidator[Long] {
 

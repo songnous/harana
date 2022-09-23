@@ -20,4 +20,6 @@ trait ConvertTypeInfo extends TransformerAsActionInfo[TypeConverterInfo] with Ac
   lazy val portO_1: TypeTag[TypeConverterInfo] = typeTag
 }
 
-object ConvertTypeInfo extends ConvertTypeInfo
+object ConvertTypeInfo extends ConvertTypeInfo {
+  def apply() = new ConvertTypeInfo {}
+}

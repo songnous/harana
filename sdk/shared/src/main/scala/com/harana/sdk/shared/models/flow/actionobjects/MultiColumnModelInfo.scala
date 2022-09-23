@@ -6,10 +6,7 @@ import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.MultiColumnPa
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.HasSpecificParameters
 import com.harana.sdk.shared.models.flow.parameters.selections.MultipleColumnSelection
 
-trait MultiColumnModelInfo
-    extends SparkModelWrapperInfo
-    with ActionObjectInfo
-    with HasSpecificParameters {
+trait MultiColumnModelInfo extends SparkModelWrapperInfo with ActionObjectInfo with HasSpecificParameters {
 
   val multiColumnChoice = MultiColumnChoice()
 

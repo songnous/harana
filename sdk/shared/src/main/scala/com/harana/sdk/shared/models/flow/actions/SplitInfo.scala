@@ -44,7 +44,9 @@ trait SplitInfo extends Action1To2TypeInfo[DataFrameInfo, DataFrameInfo, DataFra
 
 }
 
-object SplitInfo extends SplitInfo
+object SplitInfo extends SplitInfo {
+  def apply() = new SplitInfo {}
+}
 
 sealed trait SplitModeChoice extends Choice {
   import SplitModeChoice._

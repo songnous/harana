@@ -6,6 +6,7 @@ import com.harana.sdk.shared.models.flow.actionobjects.TransformerInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimators.CountVectorizerEstimatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.models.CountVectorizerModelInfo
 import com.harana.sdk.shared.models.flow.actions.EstimatorAsActionInfo
+import com.harana.sdk.shared.models.flow.actions.read.ReadTransformerInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.TextProcessing
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
@@ -26,4 +27,6 @@ trait CountVectorizerInfo extends EstimatorAsActionInfo[CountVectorizerEstimator
 
 }
 
-object CountVectorizerInfo extends CountVectorizerInfo
+object CountVectorizerInfo extends CountVectorizerInfo {
+  def apply() = new CountVectorizerInfo {}
+}

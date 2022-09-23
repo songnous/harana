@@ -1,18 +1,12 @@
 package com.harana.sdk.backend.models.flow.actions
 
-import org.apache.spark.sql.types.StructType
-import com.harana.sdk.shared.models.common.Version
+import com.harana.sdk.backend.models.flow.actionobjects.{Estimator, Transformer}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
-import com.harana.sdk.backend.models.flow.actionobjects.Estimator
-import com.harana.sdk.backend.models.flow.actionobjects.Transformer
-import com.harana.sdk.backend.models.flow.{ExecutionContext, ReportTypeDefault, UnitSpec, parameters, reportTypeDefault}
-import com.harana.sdk.backend.models.flow.ExecutionContext
-import com.harana.sdk.backend.models.flow.actionobjects.Transformer
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
-import com.harana.sdk.shared.models.flow.ActionTypeInfo
-import com.harana.sdk.shared.models.flow.actionobjects.report.Report
-import com.harana.sdk.shared.models.flow.parameters.{NumericParameter, Parameter, ParameterMap}
+import com.harana.sdk.backend.models.flow.{ExecutionContext, UnitSpec}
+import com.harana.sdk.shared.models.flow.parameters.NumericParameter
 import com.harana.sdk.shared.models.flow.utils.Id
+import org.apache.spark.sql.types.StructType
 
 class EstimatorAsFactorySpec extends UnitSpec {
 

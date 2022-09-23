@@ -20,4 +20,6 @@ trait GetFromVectorInfo extends TransformerAsActionInfo[GetFromVectorTransformer
 
 }
 
-object GetFromVectorInfo extends GetFromVectorInfo
+object GetFromVectorInfo extends GetFromVectorInfo {
+  def apply() = new GetFromVectorInfo {}
+}

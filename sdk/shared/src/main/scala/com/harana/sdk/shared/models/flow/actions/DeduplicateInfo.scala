@@ -29,4 +29,6 @@ trait DeduplicateInfo extends Action3To1TypeInfo[DataFrameInfo, DataFrameInfo, D
 
 }
 
-object DeduplicateInfo extends DeduplicateInfo
+object DeduplicateInfo extends DeduplicateInfo {
+  def apply() = new DeduplicateInfo {}
+}

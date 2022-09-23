@@ -20,4 +20,6 @@ trait PythonColumnTransformationInfo extends TransformerAsActionInfo[PythonColum
 
 }
 
-object PythonColumnTransformationInfo extends PythonColumnTransformationInfo
+object PythonColumnTransformationInfo extends PythonColumnTransformationInfo {
+  def apply() = new PythonColumnTransformationInfo {}
+}

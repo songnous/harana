@@ -25,4 +25,6 @@ trait UnivariateFeatureSelectorInfo extends EstimatorAsActionInfo[UnivariateFeat
 
 }
 
-object UnivariateFeatureSelectorInfo extends UnivariateFeatureSelectorInfo
+object UnivariateFeatureSelectorInfo extends UnivariateFeatureSelectorInfo {
+  def apply() = new UnivariateFeatureSelectorInfo {}
+}

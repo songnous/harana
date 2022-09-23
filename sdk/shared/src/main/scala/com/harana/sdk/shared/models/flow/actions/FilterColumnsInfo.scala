@@ -20,4 +20,6 @@ trait FilterColumnsInfo extends TransformerAsActionInfo[ColumnsFiltererInfo] wit
 
 }
 
-object FilterColumnsInfo extends FilterColumnsInfo
+object FilterColumnsInfo extends FilterColumnsInfo {
+  def apply() = new FilterColumnsInfo {}
+}

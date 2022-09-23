@@ -8,9 +8,9 @@ sealed trait Background
 object Background {
   case class Gradient(colors: List[String], direction: Option[String] = scala.None) extends Background
   case class Hex(hex: String) extends Background
-  case class HSL(hue: String, saturation: String, lightness: String, alpha: String) extends Background
+  case class HSL(hue: Double, saturation: Double, lightness: Double, alpha: Double) extends Background
   case class Image(url: String) extends Background
-  case class RGB(red: String, green: String, blue: String, alpha: String) extends Background
+  case class RGB(red: Double, green: Double, blue: Double, alpha: Double) extends Background
 
   implicit val encoder: Encoder[Background] = JsonTaggedAdtCodec.createEncoder[Background]("type")
   implicit val decoder: Decoder[Background] = JsonTaggedAdtCodec.createDecoder[Background]("type")

@@ -20,4 +20,6 @@ trait PythonTransformationInfo extends TransformerAsActionInfo[PythonTransformer
 
 }
 
-object PythonTransformationInfo extends PythonTransformationInfo
+object PythonTransformationInfo extends PythonTransformationInfo {
+  def apply() = new PythonTransformationInfo {}
+}

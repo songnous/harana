@@ -29,7 +29,7 @@ trait LDAInfo
   setDefault(subsamplingRateParameter, 0.05)
 
   val topicDistributionColumnParameter = SingleColumnCreatorParameter("topic distribution column")
-    setDefault(topicDistributionColumnParameter, "topicDistribution")
+  setDefault(topicDistributionColumnParameter, "topicDistribution")
 
   val parameters = Array(
     checkpointIntervalParameter,

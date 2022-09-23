@@ -33,4 +33,6 @@ trait ReadDatasourceInfo extends Action0To1TypeInfo[DataFrameInfo] with ActionDo
   private def getDatasourceId = $(datasourceIdParameter)
 }
 
-object ReadDatasourceInfo extends ReadDatasourceInfo
+object ReadDatasourceInfo extends ReadDatasourceInfo {
+  def apply() = new ReadDatasourceInfo {}
+}

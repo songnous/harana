@@ -24,4 +24,6 @@ trait StandardScalerInfo extends EstimatorAsActionInfo[StandardScalerEstimatorIn
 
 }
 
-object StandardScalerInfo extends StandardScalerInfo
+object StandardScalerInfo extends StandardScalerInfo {
+  def apply() = new StandardScalerInfo {}
+}

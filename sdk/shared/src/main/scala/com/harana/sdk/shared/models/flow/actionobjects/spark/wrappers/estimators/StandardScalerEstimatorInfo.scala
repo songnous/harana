@@ -14,6 +14,7 @@ trait StandardScalerEstimatorInfo extends EstimatorInfo with Parameters {
   setDefault(withStdParameter, true)
 
   val specificParameters = Array[Parameter[_]](withMeanParameter, withStdParameter)
+
 }
 
 object StandardScalerEstimatorInfo extends StandardScalerEstimatorInfo {

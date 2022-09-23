@@ -34,4 +34,6 @@ trait EvaluateInfo extends Action2To1TypeInfo[EvaluatorInfo, DataFrameInfo, Metr
 
 }
 
-object EvaluateInfo extends EvaluateInfo
+object EvaluateInfo extends EvaluateInfo {
+  def apply() = new EvaluateInfo {}
+}

@@ -23,4 +23,6 @@ trait SubtractInfo extends Action1To1TypeInfo[DataFrameInfo, DataFrameInfo] with
   val parameters = Array.empty[Parameter[_]]
 }
 
-object SubtractInfo extends SubtractInfo
+object SubtractInfo extends SubtractInfo {
+  def apply() = new SubtractInfo {}
+}

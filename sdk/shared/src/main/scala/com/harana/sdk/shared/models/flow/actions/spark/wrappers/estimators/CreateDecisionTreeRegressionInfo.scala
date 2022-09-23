@@ -23,4 +23,6 @@ trait CreateDecisionTreeRegressionInfo extends EstimatorAsFactoryInfo[DecisionTr
 
 }
 
-object CreateDecisionTreeRegressionInfo extends CreateDecisionTreeRegressionInfo
+object CreateDecisionTreeRegressionInfo extends CreateDecisionTreeRegressionInfo {
+  def apply() = new CreateDecisionTreeRegressionInfo {}
+}

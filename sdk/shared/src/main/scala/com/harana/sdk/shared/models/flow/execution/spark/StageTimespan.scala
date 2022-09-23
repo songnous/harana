@@ -1,12 +1,8 @@
-package com.harana.sdk.shared.models.designer.flow.execution
-
-import java.time.Instant
+package com.harana.sdk.shared.models.flow.execution.spark
 
 import io.circe.generic.JsonCodec
 
-import scala.collection.mutable
-import scala.collection.mutable.ListBuffer
-import com.harana.sdk.shared.utils.CirceCodecs._
+import java.time.Instant
 
 @JsonCodec
 case class StageTimespan(stageId: Int,

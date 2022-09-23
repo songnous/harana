@@ -24,4 +24,9 @@ trait UnknownActionInfo extends ActionTypeInfo {
   override lazy val outputPorts: List[ru.TypeTag[_]] = List.empty
 
   val parameters = Array.empty[Parameter[_]]
+
+}
+
+object UnknownActionInfo extends UnknownActionInfo {
+  def apply() = new UnknownActionInfo {}
 }

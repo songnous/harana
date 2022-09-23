@@ -20,4 +20,6 @@ trait DecomposeDatetimeInfo extends TransformerAsActionInfo[DatetimeDecomposerIn
 
 }
 
-object DecomposeDatetimeInfo extends DecomposeDatetimeInfo
+object DecomposeDatetimeInfo extends DecomposeDatetimeInfo {
+  def apply() = new DecomposeDatetimeInfo {}
+}

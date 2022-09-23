@@ -21,4 +21,6 @@ trait CreateMulticlassClassificationEvaluatorInfo extends EvaluatorAsFactoryInfo
 
 }
 
-object CreateMulticlassClassificationEvaluatorInfo extends CreateMulticlassClassificationEvaluatorInfo
+object CreateMulticlassClassificationEvaluatorInfo extends CreateMulticlassClassificationEvaluatorInfo {
+  def apply() = new CreateMulticlassClassificationEvaluatorInfo {}
+}

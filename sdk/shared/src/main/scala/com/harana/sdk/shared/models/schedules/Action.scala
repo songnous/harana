@@ -2,10 +2,10 @@ package com.harana.sdk.shared.models.schedules
 
 import com.harana.sdk.shared.models.data.DataSource.DataSourceId
 import Schedule.ScheduleId
+import com.harana.sdk.shared.models.flow.Flow.FlowId
 import io.circe.derivation.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
-import utils.ReflectUtils
 
 import scala.scalajs.reflect.annotation.EnableReflectiveInstantiation
 
@@ -45,9 +45,9 @@ object Action {
                         path: Option[String] = None,
                         newName: Option[String] = None) extends Action
 
-//  case class FlowStart(flowId: Option[FlowId] = None) extends Action
-//
-//  case class FlowStop(flowId: Option[FlowId] = None) extends Action
+  case class FlowStart(flowId: Option[FlowId] = None) extends Action
+
+  case class FlowStop(flowId: Option[FlowId] = None) extends Action
 
   case class HttpRequest(url: Option[String] = None,
                          method: Option[String] = None,
@@ -86,8 +86,8 @@ object Action {
     FileMkDir,
     FileMove,
     FileRename,
-//    FlowStart,
-//    FlowStop,
+    FlowStart,
+    FlowStop,
     HttpRequest,
     ScheduleEnable,
     ScheduleDisable
@@ -105,8 +105,8 @@ object Action {
       case "FileMkDir" => deriveDecoder[FileMkDir].apply(content)
       case "FileMove" => deriveDecoder[FileMove].apply(content)
       case "FileRename" => deriveDecoder[FileRename].apply(content)
-//      case "FlowStart" => deriveDecoder[FlowStart].apply(content)
-//      case "FlowStop" => deriveDecoder[FlowStop].apply(content)
+      case "FlowStart" => deriveDecoder[FlowStart].apply(content)
+      case "FlowStop" => deriveDecoder[FlowStop].apply(content)
       case "HttpRequest" => deriveDecoder[HttpRequest].apply(content)
       case "ScheduleEnable" => deriveDecoder[ScheduleEnable].apply(content)
       case "ScheduleDisable" => deriveDecoder[ScheduleDisable].apply(content)
@@ -125,8 +125,8 @@ object Action {
       case "FileMkDir" => deriveEncoder[FileMkDir].apply(action.asInstanceOf[FileMkDir])
       case "FileMove" => deriveEncoder[FileMove].apply(action.asInstanceOf[FileMove])
       case "FileRename" => deriveEncoder[FileRename].apply(action.asInstanceOf[FileRename])
-//      case "FlowStart" => deriveEncoder[FlowStart].apply(action.asInstanceOf[FlowStart])
-//      case "FlowStop" => deriveEncoder[FlowStop].apply(action.asInstanceOf[FlowStop])
+      case "FlowStart" => deriveEncoder[FlowStart].apply(action.asInstanceOf[FlowStart])
+      case "FlowStop" => deriveEncoder[FlowStop].apply(action.asInstanceOf[FlowStop])
       case "HttpRequest" => deriveEncoder[HttpRequest].apply(action.asInstanceOf[HttpRequest])
       case "ScheduleEnable" => deriveEncoder[ScheduleEnable].apply(action.asInstanceOf[ScheduleEnable])
       case "ScheduleDisable" => deriveEncoder[ScheduleDisable].apply(action.asInstanceOf[ScheduleDisable])

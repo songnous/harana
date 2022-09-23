@@ -14,7 +14,6 @@ trait VectorIndexerInfo extends EstimatorAsActionInfo[VectorIndexerEstimatorInfo
 
   val id: Id = "d62abcbf-1540-4d58-8396-a92b017f2ef0"
   val name = "Vector Indexer"
-  val description = """Vector Indexer indexes categorical features inside of a Vector. It decides which features are categorical and converts them to category indices. The decision is based on the number of distinct values of a feature.""".stripMargin
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-features.html#vectorindexer")
   val category = FeatureConversion
@@ -24,4 +23,6 @@ trait VectorIndexerInfo extends EstimatorAsActionInfo[VectorIndexerEstimatorInfo
 
 }
 
-object VectorIndexerInfo extends VectorIndexerInfo
+object VectorIndexerInfo extends VectorIndexerInfo {
+  def apply() = new VectorIndexerInfo {}
+}

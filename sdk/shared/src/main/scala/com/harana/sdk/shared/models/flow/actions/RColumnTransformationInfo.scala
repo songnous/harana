@@ -20,4 +20,6 @@ trait RColumnTransformationInfo extends TransformerAsActionInfo[RColumnTransform
 
 }
 
-object RColumnTransformationInfo extends RColumnTransformationInfo
+object RColumnTransformationInfo extends RColumnTransformationInfo {
+  def apply() = new RColumnTransformationInfo {}
+}

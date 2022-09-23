@@ -1,9 +1,8 @@
-package com.harana.sdk.shared.models.designer.flow.execution
-
-import java.time.Instant
-import com.harana.sdk.shared.utils.CirceCodecs._
+package com.harana.sdk.shared.models.flow.execution.spark
 
 import io.circe.generic.JsonCodec
+
+import java.time.Instant
 
 @JsonCodec
 case class ExecutionLog(level: String,

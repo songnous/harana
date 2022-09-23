@@ -22,4 +22,6 @@ trait PolynomialExpandInfo extends TransformerAsActionInfo[PolynomialExpanderInf
 
 }
 
-object PolynomialExpandInfo extends PolynomialExpandInfo
+object PolynomialExpandInfo extends PolynomialExpandInfo {
+  def apply() = new PolynomialExpandInfo {}
+}

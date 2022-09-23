@@ -5,7 +5,10 @@ import com.harana.sdk.shared.models.common.User.UserId
 import com.harana.sdk.shared.models.common.{Background, Entity, Status, Visibility}
 import com.harana.sdk.shared.models.data.DataSource
 import com.harana.sdk.shared.models.flow.Flow.FlowId
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, Parameters, StringParameter}
+import com.harana.sdk.shared.utils.CirceCodecs.encodeEntity
 import com.harana.sdk.shared.utils.Random
+import io.circe.{Decoder, Encoder}
 import io.circe.generic.JsonCodec
 
 import java.time.Instant
@@ -33,6 +36,10 @@ case class Flow(title: String,
 
 object Flow {
   type FlowId = String
+
+
+  implicit val decodeUri: Decoder[Parameter[_]] = Decoder.decodeString.emap { str => Left("") }
+  implicit val encodeUri: Encoder[Parameter[_]] = Encoder.encodeString.contramap[Parameter[_]](_.toString)
 
   def apply(title: String,
             description: String,

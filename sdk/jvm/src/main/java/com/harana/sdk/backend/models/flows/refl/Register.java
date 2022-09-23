@@ -1,4 +1,4 @@
-package com.harana.sdk.backend.models.designer.flows.refl;
+package com.harana.sdk.backend.models.flows.refl;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

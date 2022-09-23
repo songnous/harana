@@ -4,10 +4,10 @@ import com.harana.sdk.backend.models.flow.Knowledge
 import com.harana.sdk.backend.models.flow.graph.NodeInferenceResult
 import com.harana.sdk.backend.models.flow.inference.InferenceWarnings
 import com.harana.sdk.shared.models.flow
-import com.harana.sdk.shared.models.flow.{ActionObjectInfo, EntitiesMap, NodeState}
 import com.harana.sdk.shared.models.flow.exceptions.FailureDescription
 import com.harana.sdk.shared.models.flow.report.ReportContent
 import com.harana.sdk.shared.models.flow.utils.Id
+import com.harana.sdk.shared.models.flow.{ActionObjectInfo, NodeState}
 
 case class NodeStateWithResults(nodeState: NodeState, actionObjects: Map[Id, ActionObjectInfo], knowledge: Option[NodeInferenceResult]) {
 

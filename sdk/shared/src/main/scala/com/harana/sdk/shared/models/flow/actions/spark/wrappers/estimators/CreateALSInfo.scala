@@ -22,4 +22,6 @@ trait CreateALSInfo extends EstimatorAsFactoryInfo[ALSInfo] with SparkActionDocu
 
 }
 
-object CreateALSInfo extends CreateALSInfo
+object CreateALSInfo extends CreateALSInfo {
+  def apply() = new CreateALSInfo {}
+}

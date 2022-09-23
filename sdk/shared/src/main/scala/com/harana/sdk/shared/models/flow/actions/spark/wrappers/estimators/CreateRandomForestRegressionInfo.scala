@@ -22,4 +22,6 @@ trait CreateRandomForestRegressionInfo extends EstimatorAsFactoryInfo[RandomFore
 
 }
 
-object CreateRandomForestRegressionInfo extends CreateRandomForestRegressionInfo
+object CreateRandomForestRegressionInfo extends CreateRandomForestRegressionInfo {
+  def apply() = new CreateRandomForestRegressionInfo {}
+}

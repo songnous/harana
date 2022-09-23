@@ -22,4 +22,6 @@ trait FilterRowsInfo
 
 }
 
-object FilterRowsInfo extends FilterRowsInfo
+object FilterRowsInfo extends FilterRowsInfo {
+  def apply() = new FilterRowsInfo {}
+}

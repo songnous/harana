@@ -4,7 +4,7 @@ import com.harana.sdk.shared.models.flow.exceptions.FlowError
 
 import java.util.Objects
 
-abstract class Parameter[T] extends java.io.Serializable {
+trait Parameter[T] {
 
   val name: String
 

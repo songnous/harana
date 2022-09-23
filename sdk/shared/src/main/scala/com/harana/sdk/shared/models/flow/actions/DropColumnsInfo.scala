@@ -24,4 +24,6 @@ trait DropColumnsInfo extends Action1To1TypeInfo[DataFrameInfo, DataFrameInfo] w
 
 }
 
-object DropColumnsInfo extends DropColumnsInfo
+object DropColumnsInfo extends DropColumnsInfo {
+  def apply() = new DropColumnsInfo {}
+}

@@ -22,4 +22,6 @@ trait DCTInfo extends TransformerAsActionInfo[DiscreteCosineTransformerInfo] wit
 
 }
 
-object DCTInfo extends DCTInfo
+object DCTInfo extends DCTInfo {
+  def apply() = new DCTInfo {}
+}

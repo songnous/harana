@@ -24,4 +24,6 @@ trait TransposeInfo extends Action1To1TypeInfo[DataFrameInfo, DataFrameInfo] wit
 
 }
 
-object TransposeInfo extends TransposeInfo
+object TransposeInfo extends TransposeInfo {
+  def apply() = new TransposeInfo {}
+}

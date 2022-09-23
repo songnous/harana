@@ -15,7 +15,6 @@ trait CreateGBTRegressionInfo extends EstimatorAsFactoryInfo[GBTRegressionInfo] 
 
   val id: Id = "e18c13f8-2108-46f0-979f-bba5a11ea312"
   val name = "GBT Regression"
-  val description = """Gradient-Boosted Trees (GBTs) is a learning algorithm for regression. It supports both continuous and categorical features.""".stripMargin
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-classification-regression.html#gradient-boosted-tree-regression")
   val category = Regression
@@ -24,4 +23,6 @@ trait CreateGBTRegressionInfo extends EstimatorAsFactoryInfo[GBTRegressionInfo] 
 
 }
 
-object CreateGBTRegressionInfo extends CreateGBTRegressionInfo
+object CreateGBTRegressionInfo extends CreateGBTRegressionInfo {
+  def apply() = new CreateGBTRegressionInfo {}
+}

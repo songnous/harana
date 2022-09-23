@@ -25,4 +25,6 @@ trait StandardiseColumnNamesInfo extends Action2To1TypeInfo[DataFrameInfo, DataF
 
 }
 
-object StandardiseColumnNamesInfo extends StandardiseColumnNamesInfo
+object StandardiseColumnNamesInfo extends StandardiseColumnNamesInfo {
+  def apply() = new StandardiseColumnNamesInfo {}
+}

@@ -23,4 +23,6 @@ trait CreateDecisionTreeClassifierInfo extends EstimatorAsFactoryInfo[DecisionTr
 
 }
 
-object CreateDecisionTreeClassifierInfo extends CreateDecisionTreeClassifierInfo
+object CreateDecisionTreeClassifierInfo extends CreateDecisionTreeClassifierInfo {
+  def apply() = new CreateDecisionTreeClassifierInfo {}
+}

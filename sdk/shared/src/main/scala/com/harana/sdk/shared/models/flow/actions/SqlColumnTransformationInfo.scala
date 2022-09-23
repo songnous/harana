@@ -20,4 +20,6 @@ trait SqlColumnTransformationInfo extends TransformerAsActionInfo[SqlColumnTrans
 
 }
 
-object SqlColumnTransformationInfo extends SqlColumnTransformationInfo
+object SqlColumnTransformationInfo extends SqlColumnTransformationInfo {
+  def apply() = new SqlColumnTransformationInfo {}
+}

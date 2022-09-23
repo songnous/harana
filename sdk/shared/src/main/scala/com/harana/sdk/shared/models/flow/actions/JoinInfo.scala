@@ -80,6 +80,8 @@ trait JoinInfo extends Action2To1TypeInfo[DataFrameInfo, DataFrameInfo, DataFram
 
 object JoinInfo extends JoinInfo {
 
+  def apply() = new JoinInfo {}
+
   case class ColumnPair() extends Parameters {
 
     val leftColumnParameter = SingleColumnSelectorParameter("left column", portIndex = 0)

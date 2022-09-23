@@ -19,4 +19,6 @@ trait SqlTransformationInfo extends TransformerAsActionInfo[SqlTransformerInfo] 
   lazy val portO_1: TypeTag[SqlTransformerInfo] = typeTag
 }
 
-object SqlTransformationInfo extends SqlTransformationInfo
+object SqlTransformationInfo extends SqlTransformationInfo {
+  def apply() = new SqlTransformationInfo {}
+}

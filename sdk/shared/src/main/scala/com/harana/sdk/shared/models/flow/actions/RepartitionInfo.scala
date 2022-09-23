@@ -25,4 +25,6 @@ trait RepartitionInfo extends Action2To1TypeInfo[DataFrameInfo, DataFrameInfo, D
 
 }
 
-object RepartitionInfo extends RepartitionInfo
+object RepartitionInfo extends RepartitionInfo {
+  def apply() = new RepartitionInfo {}
+}

@@ -20,4 +20,6 @@ trait HandleMissingValuesInfo extends TransformerAsActionInfo[MissingValuesHandl
 
 }
 
-object HandleMissingValuesInfo extends HandleMissingValuesInfo
+object HandleMissingValuesInfo extends HandleMissingValuesInfo {
+  def apply() = new HandleMissingValuesInfo {}
+}

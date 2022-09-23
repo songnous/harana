@@ -7,9 +7,7 @@ import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
 
 import scala.language.reflectiveCalls
 
-trait QuantileDiscretizerEstimatorInfo
-  extends EstimatorInfo
-    with Parameters {
+trait QuantileDiscretizerEstimatorInfo extends EstimatorInfo with Parameters {
 
   val id = "BE138D50-B5A8-428B-8600-1F22718A5BCC"
 

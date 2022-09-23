@@ -35,4 +35,6 @@ trait FitInfo
 
 }
 
-object FitInfo extends FitInfo
+object FitInfo extends FitInfo {
+  def apply() = new FitInfo {}
+}

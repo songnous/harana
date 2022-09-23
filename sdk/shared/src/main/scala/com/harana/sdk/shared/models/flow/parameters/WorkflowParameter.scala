@@ -1,8 +1,9 @@
 package com.harana.sdk.shared.models.flow.parameters
 
 import com.harana.sdk.shared.models.flow.parameters.custom.InnerWorkflow
+import io.circe.generic.JsonCodec
 
-
+@JsonCodec
 case class WorkflowParameter(name: String) extends Parameter[InnerWorkflow] {
 
   val parameterType = ParameterType.Workflow

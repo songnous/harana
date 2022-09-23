@@ -29,4 +29,6 @@ trait AddColumnInfo extends Action3To1TypeInfo[DataFrameInfo, DataFrameInfo, Dat
 
 }
 
-object AddColumnInfo extends AddColumnInfo
+object AddColumnInfo extends AddColumnInfo {
+  def apply() = new AddColumnInfo {}
+}

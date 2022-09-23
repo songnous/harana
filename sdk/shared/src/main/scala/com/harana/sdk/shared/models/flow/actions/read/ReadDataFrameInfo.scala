@@ -35,4 +35,6 @@ trait ReadDataFrameInfo
   lazy val portO_0: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]
 }
 
-object ReadDataFrameInfo extends ReadDataFrameInfo
+object ReadDataFrameInfo extends ReadDataFrameInfo {
+  def apply() = new ReadDataFrameInfo {}
+}

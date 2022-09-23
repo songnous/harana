@@ -1,16 +1,13 @@
 package com.harana.sdk.backend.models.flow.actions
 
-import org.apache.spark.sql.types.StructType
-import com.harana.sdk.backend.models.flow._
-import com.harana.sdk.backend.models.flow.actionobjects._
+import com.harana.sdk.backend.models.flow.actionobjects.Transformer
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actions.MockActionObjectsFactory._
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
-import com.harana.sdk.backend.models.flow.{ExecutionContext, Knowledge}
-import com.harana.sdk.backend.models.flow.actionobjects.Transformer
-import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
+import com.harana.sdk.backend.models.flow._
 import com.harana.sdk.shared.models.flow.parameters.ParameterMap
 import com.harana.sdk.shared.models.flow.utils.Id
+import org.apache.spark.sql.types.StructType
 
 class EstimatorAsActionSpec extends UnitSpec with TestSupport {
 

@@ -22,4 +22,6 @@ trait TokenizeWithRegexInfo extends TransformerAsActionInfo[RegexTokenizerInfo] 
 
 }
 
-object TokenizeWithRegexInfo extends TokenizeWithRegexInfo
+object TokenizeWithRegexInfo extends TokenizeWithRegexInfo {
+  def apply() = new TokenizeWithRegexInfo {}
+}

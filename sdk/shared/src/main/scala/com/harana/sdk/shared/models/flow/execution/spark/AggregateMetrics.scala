@@ -1,8 +1,7 @@
-  package com.harana.sdk.shared.models.designer.flow.execution
+  package com.harana.sdk.shared.models.flow.execution.spark
 
 import enumeratum._
 import io.circe.generic.JsonCodec
-import com.harana.sdk.shared.utils.CirceCodecs._
 
 @JsonCodec
 case class AggregateMetrics(count: Long,

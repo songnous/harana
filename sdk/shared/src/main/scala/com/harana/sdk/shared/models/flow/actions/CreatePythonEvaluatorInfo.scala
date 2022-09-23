@@ -5,6 +5,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML
 import com.harana.sdk.shared.models.flow.actionobjects.PythonEvaluatorInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.ModelEvaluation
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
+import com.harana.sdk.shared.models.flow.parameters.Parameter
 import com.harana.sdk.shared.models.flow.utils.Id
 
 import scala.reflect.runtime.universe.{TypeTag, typeTag}
@@ -20,4 +21,6 @@ trait CreatePythonEvaluatorInfo extends EvaluatorAsFactoryInfo[PythonEvaluatorIn
 
 }
 
-object CreatePythonEvaluatorInfo extends CreatePythonEvaluatorInfo
+object CreatePythonEvaluatorInfo extends CreatePythonEvaluatorInfo {
+  def apply() = new CreatePythonEvaluatorInfo {}
+}

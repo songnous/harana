@@ -34,4 +34,6 @@ trait TransformInfo extends Action2To1TypeInfo[TransformerInfo, DataFrameInfo, D
 
 }
 
-object TransformInfo extends TransformInfo
+object TransformInfo extends TransformInfo {
+  def apply() = new TransformInfo {}
+}

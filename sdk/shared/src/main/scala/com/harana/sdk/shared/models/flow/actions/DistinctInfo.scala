@@ -28,4 +28,6 @@ trait DistinctInfo extends Action3To1TypeInfo[DataFrameInfo, DataFrameInfo, Data
 
 }
 
-object DistinctInfo extends DistinctInfo
+object DistinctInfo extends DistinctInfo {
+  def apply() = new DistinctInfo {}
+}

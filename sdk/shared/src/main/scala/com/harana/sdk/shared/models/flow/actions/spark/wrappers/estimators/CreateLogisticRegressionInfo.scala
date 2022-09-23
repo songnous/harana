@@ -22,4 +22,6 @@ trait CreateLogisticRegressionInfo extends EstimatorAsFactoryInfo[LogisticRegres
 
 }
 
-object CreateLogisticRegressionInfo extends CreateLogisticRegressionInfo
+object CreateLogisticRegressionInfo extends CreateLogisticRegressionInfo {
+  def apply() = new CreateLogisticRegressionInfo {}
+}

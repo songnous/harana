@@ -24,4 +24,6 @@ trait PCAInfo extends EstimatorAsActionInfo[PCAEstimatorInfo, PCAModelInfo] with
 
 }
 
-object PCAInfo extends PCAInfo
+object PCAInfo extends PCAInfo {
+  def apply() = new PCAInfo {}
+}

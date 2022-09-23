@@ -22,4 +22,6 @@ trait CreateMultilayerPerceptronClassifierInfo extends EstimatorAsFactoryInfo[Mu
 
 }
 
-object CreateMultilayerPerceptronClassifierInfo extends CreateMultilayerPerceptronClassifierInfo
+object CreateMultilayerPerceptronClassifierInfo extends CreateMultilayerPerceptronClassifierInfo {
+  def apply() = new CreateMultilayerPerceptronClassifierInfo {}
+}

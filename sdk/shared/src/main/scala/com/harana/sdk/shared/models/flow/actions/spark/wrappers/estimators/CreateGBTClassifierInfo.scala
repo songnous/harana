@@ -22,4 +22,6 @@ trait CreateGBTClassifierInfo extends EstimatorAsFactoryInfo[GBTClassifierInfo] 
 
 }
 
-object CreateGBTClassifierInfo extends CreateGBTClassifierInfo
+object CreateGBTClassifierInfo extends CreateGBTClassifierInfo {
+  def apply() = new CreateGBTClassifierInfo {}
+}

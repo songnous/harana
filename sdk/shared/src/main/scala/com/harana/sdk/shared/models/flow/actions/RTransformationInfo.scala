@@ -20,4 +20,6 @@ trait RTransformationInfo extends TransformerAsActionInfo[RTransformerInfo] with
 
 }
 
-object RTransformationInfo extends RTransformationInfo
+object RTransformationInfo extends RTransformationInfo {
+  def apply() = new RTransformationInfo {}
+}

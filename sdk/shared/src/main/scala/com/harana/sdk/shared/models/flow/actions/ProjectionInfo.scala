@@ -20,4 +20,6 @@ trait ProjectionInfo extends TransformerAsActionInfo[ProjectorInfo] with ActionD
 
 }
 
-object ProjectionInfo extends ProjectionInfo
+object ProjectionInfo extends ProjectionInfo {
+  def apply() = new ProjectionInfo {}
+}

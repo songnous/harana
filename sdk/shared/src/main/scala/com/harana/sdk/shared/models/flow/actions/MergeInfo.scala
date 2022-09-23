@@ -24,4 +24,6 @@ trait MergeInfo extends Action1To1TypeInfo[DataFrameInfo, DataFrameInfo] with Ac
 
 }
 
-object MergeInfo extends MergeInfo
+object MergeInfo extends MergeInfo {
+  def apply() = new MergeInfo {}
+}

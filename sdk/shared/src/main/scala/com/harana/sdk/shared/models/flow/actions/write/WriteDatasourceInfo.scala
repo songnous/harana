@@ -34,4 +34,6 @@ trait WriteDatasourceInfo extends Action1To0TypeInfo[DataFrameInfo]
   val parameters = Array(datasourceIdParameter, shouldOverwriteParameter)
 }
 
-object WriteDatasourceInfo extends WriteDatasourceInfo
+object WriteDatasourceInfo extends WriteDatasourceInfo {
+  def apply() = new WriteDatasourceInfo {}
+}

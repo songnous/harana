@@ -24,4 +24,6 @@ trait RenameColumnsInfo extends Action1To1TypeInfo[DataFrameInfo, DataFrameInfo]
 
 }
 
-object RenameColumnsInfo extends RenameColumnsInfo
+object RenameColumnsInfo extends RenameColumnsInfo {
+  def apply() = new RenameColumnsInfo {}
+}

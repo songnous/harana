@@ -34,4 +34,6 @@ trait WriteTransformerInfo extends Action1To0TypeInfo[TransformerInfo] with Para
 
 }
 
-object WriteTransformerInfo extends WriteTransformerInfo
+object WriteTransformerInfo extends WriteTransformerInfo {
+  def apply() = new WriteTransformerInfo {}
+}

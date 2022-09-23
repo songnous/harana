@@ -23,4 +23,6 @@ trait RemoveStopWordsInfo extends TransformerAsActionInfo[StopWordsRemoverInfo] 
 
 }
 
-object RemoveStopWordsInfo extends RemoveStopWordsInfo
+object RemoveStopWordsInfo extends RemoveStopWordsInfo {
+  def apply() = new RemoveStopWordsInfo {}
+}

@@ -26,4 +26,6 @@ trait StringIndexerInfo
 
 }
 
-object StringIndexerInfo extends StringIndexerInfo
+object StringIndexerInfo extends StringIndexerInfo {
+  def apply() = new StringIndexerInfo {}
+}

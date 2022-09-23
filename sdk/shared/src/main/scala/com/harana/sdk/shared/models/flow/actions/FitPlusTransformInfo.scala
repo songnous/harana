@@ -37,4 +37,6 @@ trait FitPlusTransformInfo
 
 }
 
-object FitPlusTransformInfo extends FitPlusTransformInfo
+object FitPlusTransformInfo extends FitPlusTransformInfo {
+  def apply() = new FitPlusTransformInfo {}
+}

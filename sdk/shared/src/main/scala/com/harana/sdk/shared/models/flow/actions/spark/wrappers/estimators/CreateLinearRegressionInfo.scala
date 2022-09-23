@@ -22,4 +22,6 @@ trait CreateLinearRegressionInfo extends EstimatorAsFactoryInfo[LinearRegression
 
 }
 
-object CreateLinearRegressionInfo extends CreateLinearRegressionInfo
+object CreateLinearRegressionInfo extends CreateLinearRegressionInfo {
+  def apply() = new CreateLinearRegressionInfo {}
+}

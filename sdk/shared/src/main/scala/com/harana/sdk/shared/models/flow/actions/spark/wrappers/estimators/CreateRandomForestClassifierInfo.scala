@@ -16,11 +16,12 @@ trait CreateRandomForestClassifierInfo extends EstimatorAsFactoryInfo[RandomFore
   val name = "Random Forest Classifier"
   val since = Version(1,0,0)
   val docsGuideLocation = Some("ml-classification-regression.html#random-forest-classifier")
-
   val category = Classification
 
   lazy val portO_0: TypeTag[RandomForestClassifierInfo] = typeTag
 
 }
 
-object CreateRandomForestClassifierInfo extends CreateRandomForestClassifierInfo
+object CreateRandomForestClassifierInfo extends CreateRandomForestClassifierInfo {
+  def apply() = new CreateRandomForestClassifierInfo {}
+}

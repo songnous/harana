@@ -5,6 +5,7 @@ import com.harana.sdk.shared.models.flow.Action1To0TypeInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
 import com.harana.sdk.shared.models.flow.actions.dataframe.DataFrameInfo
 import com.harana.sdk.shared.models.flow.actions.inout.OutputStorageTypeChoice
+import com.harana.sdk.shared.models.flow.actions.spark.wrappers.transformers.TokenizeWithRegexInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.parameters.Parameters
@@ -32,4 +33,8 @@ trait WriteDataFrameInfo
   def setStorageType(value: OutputStorageTypeChoice): this.type = set(storageTypeParameter, value)
 
   override val parameters = Array(storageTypeParameter)
+}
+
+object WriteDataFrameInfo extends WriteDataFrameInfo {
+  def apply() = new WriteDataFrameInfo {}
 }

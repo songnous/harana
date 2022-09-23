@@ -22,4 +22,6 @@ trait CreateKMeansInfo extends EstimatorAsFactoryInfo[KMeansInfo] with SparkActi
 
 }
 
-object CreateKMeansInfo extends CreateKMeansInfo
+object CreateKMeansInfo extends CreateKMeansInfo {
+  def apply() = new CreateKMeansInfo {}
+}

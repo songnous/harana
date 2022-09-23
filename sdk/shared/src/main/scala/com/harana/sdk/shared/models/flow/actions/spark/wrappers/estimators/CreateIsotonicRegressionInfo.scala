@@ -22,4 +22,6 @@ trait CreateIsotonicRegressionInfo extends EstimatorAsFactoryInfo[IsotonicRegres
 
 }
 
-object CreateIsotonicRegressionInfo extends CreateIsotonicRegressionInfo
+object CreateIsotonicRegressionInfo extends CreateIsotonicRegressionInfo {
+  def apply() = new CreateIsotonicRegressionInfo {}
+}

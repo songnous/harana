@@ -23,4 +23,6 @@ trait BinarizeInfo extends TransformerAsActionInfo[BinarizerInfo] with SparkActi
 
 }
 
-object BinarizeInfo extends BinarizeInfo
+object BinarizeInfo extends BinarizeInfo {
+  def apply() = new BinarizeInfo {}
+}

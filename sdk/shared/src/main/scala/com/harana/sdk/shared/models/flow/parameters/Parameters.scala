@@ -9,8 +9,14 @@ import io.circe.Json
 trait Parameters extends Serializable with HasInferenceResult {
 
   val parameters: Array[Parameter[_]]
+  private val _paramMap: ParameterMap = ParameterMap.empty
+  private val _defaultParamMap: ParameterMap = ParameterMap.empty
 
   private lazy val parametersByName = parameters.map(param => param.name -> param).toMap[String, Parameter[_]]
+
+  def paramMap: ParameterMap = _paramMap
+
+  def defaultParamMap: ParameterMap = _defaultParamMap
 
   def customValidateParameters = List.empty[FlowError]
 
@@ -108,13 +114,6 @@ trait Parameters extends Serializable with HasInferenceResult {
 //    }
 //    JsObject(fields.flatten.toMap)
   }
-
-
-  def paramMap: ParameterMap = _paramMap
-  private val _paramMap: ParameterMap = ParameterMap.empty
-  def defaultParamMap: ParameterMap = _defaultParamMap
-  private val _defaultParamMap: ParameterMap = ParameterMap.empty
-
 
   def objectExpectedException(jsValue: Any) = ???
 

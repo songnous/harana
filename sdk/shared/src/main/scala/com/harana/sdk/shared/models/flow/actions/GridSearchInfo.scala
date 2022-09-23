@@ -49,4 +49,6 @@ trait GridSearchInfo
 
 }
 
-object GridSearchInfo extends GridSearchInfo
+object GridSearchInfo extends GridSearchInfo {
+  def apply() = new GridSearchInfo {}
+}

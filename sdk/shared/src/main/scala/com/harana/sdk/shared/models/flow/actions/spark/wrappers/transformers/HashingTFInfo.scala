@@ -22,4 +22,6 @@ trait HashingTFInfo extends TransformerAsActionInfo[HashingTFTransformerInfo] wi
 
 }
 
-object HashingTFInfo extends HashingTFInfo
+object HashingTFInfo extends HashingTFInfo {
+  def apply() = new HashingTFInfo {}
+}

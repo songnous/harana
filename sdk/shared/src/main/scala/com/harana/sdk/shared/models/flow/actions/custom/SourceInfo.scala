@@ -22,4 +22,6 @@ trait SourceInfo extends Action0To1TypeInfo[DataFrameInfo] {
 
 }
 
-object SourceInfo extends SourceInfo
+object SourceInfo extends SourceInfo {
+  def apply() = new SourceInfo {}
+}

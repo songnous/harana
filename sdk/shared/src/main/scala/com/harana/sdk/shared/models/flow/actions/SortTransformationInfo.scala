@@ -20,4 +20,6 @@ trait SortTransformationInfo extends TransformerAsActionInfo[SortTransformerInfo
 
 }
 
-object SortTransformationInfo extends SortTransformationInfo
+object SortTransformationInfo extends SortTransformationInfo {
+  def apply() = new SortTransformationInfo {}
+}

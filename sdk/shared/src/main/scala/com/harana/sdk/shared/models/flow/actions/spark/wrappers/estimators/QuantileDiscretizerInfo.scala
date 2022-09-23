@@ -24,4 +24,6 @@ trait QuantileDiscretizerInfo extends EstimatorAsActionInfo[QuantileDiscretizerE
 
 }
 
-object QuantileDiscretizerInfo extends QuantileDiscretizerInfo
+object QuantileDiscretizerInfo extends QuantileDiscretizerInfo {
+  def apply() = new QuantileDiscretizerInfo {}
+}

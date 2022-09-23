@@ -22,4 +22,6 @@ trait NormalizeInfo extends TransformerAsActionInfo[NormalizerInfo] with SparkAc
 
 }
 
-object NormalizeInfo extends NormalizeInfo
+object NormalizeInfo extends NormalizeInfo {
+  def apply() = new NormalizeInfo {}
+}

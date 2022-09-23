@@ -38,10 +38,12 @@ object CreateCustomTransformerInfo extends CreateCustomTransformerInfo {
   private val sourceNodeId: Id = "2603a7b5-aaa9-40ad-9598-23f234ec5c32"
   private val sinkNodeId: Id = "d7798d5e-b1c6-4027-873e-a6d653957418"
 
+  private val sourceNode = Node(sourceNodeId, new SourceInfo() {})
+  private val sinkNode = Node(sinkNodeId, new SinkInfo() {})
+
+  def apply() = new CreateCustomTransformerInfo {}
+
   val default = InnerWorkflow(
-    FlowGraph(
-      nodes = Set(Node(sourceNodeId, new SourceInfo() {}), Node(sinkNodeId, new SinkInfo() {})),
-      edges = Set(Edge((sourceNodeId, 0), (sinkNodeId, 0)))
-    )
+    FlowGraph(nodes = Set(sourceNode, sinkNode), edges = Set(Edge((sourceNode, 0), (sinkNode, 0))))
   )
 }

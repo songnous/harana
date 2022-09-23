@@ -35,4 +35,6 @@ trait UnionInfo extends Action2To1TypeInfo[DataFrameInfo, DataFrameInfo, DataFra
 
 }
 
-object UnionInfo extends UnionInfo
+object UnionInfo extends UnionInfo {
+  def apply() = new UnionInfo {}
+}

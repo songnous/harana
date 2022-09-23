@@ -20,4 +20,6 @@ trait ComposeDatetimeInfo extends TransformerAsActionInfo[DatetimeComposerInfo] 
 
 }
 
-object ComposeDatetimeInfo extends ComposeDatetimeInfo
+object ComposeDatetimeInfo extends ComposeDatetimeInfo {
+  def apply() = new ComposeDatetimeInfo {}
+}

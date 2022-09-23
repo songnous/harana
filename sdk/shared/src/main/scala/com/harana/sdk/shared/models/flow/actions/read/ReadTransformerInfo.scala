@@ -31,4 +31,6 @@ trait ReadTransformerInfo
   lazy val portO_0: ru.TypeTag[TransformerInfo] = ru.typeTag[TransformerInfo]
 }
 
-object ReadTransformerInfo extends ReadTransformerInfo
+object ReadTransformerInfo extends ReadTransformerInfo {
+  def apply() = new ReadTransformerInfo {}
+}

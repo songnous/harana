@@ -22,4 +22,6 @@ trait CreateAFTSurvivalRegressionInfo extends EstimatorAsFactoryInfo[AFTSurvival
 
 }
 
-object CreateAFTSurvivalRegressionInfo extends CreateAFTSurvivalRegressionInfo
+object CreateAFTSurvivalRegressionInfo extends CreateAFTSurvivalRegressionInfo {
+  def apply() = new CreateAFTSurvivalRegressionInfo {}
+}

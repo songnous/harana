@@ -20,4 +20,6 @@ trait CreateREvaluatorInfo extends EvaluatorAsFactoryInfo[REvaluatorInfo] with A
 
 }
 
-object CreateREvaluatorInfo extends CreateREvaluatorInfo
+object CreateREvaluatorInfo extends CreateREvaluatorInfo {
+  def apply() = new CreateREvaluatorInfo {}
+}

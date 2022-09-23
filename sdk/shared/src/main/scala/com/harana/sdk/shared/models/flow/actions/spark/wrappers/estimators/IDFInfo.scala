@@ -24,4 +24,6 @@ trait IDFInfo extends EstimatorAsActionInfo[IDFEstimatorInfo, IDFModelInfo] with
 
 }
 
-object IDFInfo extends IDFInfo
+object IDFInfo extends IDFInfo {
+  def apply() = new IDFInfo {}
+}

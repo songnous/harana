@@ -4,6 +4,7 @@ import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.transformers.VectorAssemblerInfo
 import com.harana.sdk.shared.models.flow.actions.TransformerAsActionInfo
+import com.harana.sdk.shared.models.flow.actions.spark.wrappers.evaluators.CreateRegressionEvaluatorInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.FeatureConversion
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
@@ -23,4 +24,6 @@ trait AssembleVectorInfo extends TransformerAsActionInfo[VectorAssemblerInfo] wi
 
 }
 
-object AssembleVectorInfo extends AssembleVectorInfo
+object AssembleVectorInfo extends AssembleVectorInfo {
+  def apply() = new AssembleVectorInfo {}
+}
