@@ -10,12 +10,11 @@ trait BinarizerInfo extends TransformerInfo with Parameters {
   val thresholdParameter = DoubleParameter("threshold")
   setDefault(thresholdParameter, 0.0)
 
+  val parameters = Left(Array.empty[Parameter[_]])
   val specificParameters = Array[Parameter[_]](thresholdParameter)
 
   def setThreshold(value: Double): this.type = set(thresholdParameter, value)
 
 }
 
-object BinarizerInfo extends BinarizerInfo {
-  val parameters = Array.empty
-}
+object BinarizerInfo extends BinarizerInfo

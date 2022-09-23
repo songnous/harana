@@ -59,13 +59,13 @@ object ParametersWithSparkWrappersSpec {
 
     val exampleSparkParameters = new ExampleSparkParameters
 
-    val paramA = StringParam("paramA")
+    val paramA = StringParameter("paramA")
     val paramB = IntParameter[ExampleSparkParameters]("paramB", _.sparkParamB)
 
     val choiceWithParametersInValues = new ChoiceParameter[ChoiceWithWrappers]("choice")
     val notWrappedParameter = BooleanParameter("booleanparameterName")
 
-    val parameters = Array(paramA, paramB, choiceWithParametersInValues, notWrappedParameter)
+    val parameters = Left(Array(paramA, paramB, choiceWithParametersInValues, notWrappedParameter))
 
     def setParamA(v: String): this.type = set(paramA, v)
     def setParamB(v: Double) = set(paramB, v)
@@ -80,11 +80,11 @@ object ParametersWithSparkWrappersSpec {
     val name = "one param"
     val paramC = StringParameter("paramC")
     def setParamC(v: String): this.type = set(paramC, v)
-    val parameters = Array(paramC)
+    val parameters = Left(Array(paramC))
   }
 
   case class EmptyChoiceWithWrappers() extends ChoiceWithWrappers {
     val name = "no parameters"
-    val parameters = Array.empty[Parameter[_]]
+    val parameters = Left(Array.empty[Parameter[_]])
   }
 }

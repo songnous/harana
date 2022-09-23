@@ -17,7 +17,7 @@ trait GBTClassifierInfo extends EstimatorInfo with GBTParameters with HasClassif
   val lossTypeParameter = ChoiceParameter[LossType]("loss function")
   setDefault(lossTypeParameter, Logistic())
 
-  val parameters = Array(
+  val parameters = Left(Array(
     impurityParameter,
     lossTypeParameter,
     maxBinsParameter,
@@ -30,13 +30,13 @@ trait GBTClassifierInfo extends EstimatorInfo with GBTParameters with HasClassif
     subsamplingRateParameter,
     labelColumnParameter,
     featuresColumnParameter,
-    predictionColumnParameter)
+    predictionColumnParameter))
 }
 
 object GBTClassifierInfo extends GBTClassifierInfo {
   sealed abstract class LossType(val name: String) extends Choice {
     val choiceOrder: List[ChoiceOption] = List(classOf[Logistic])
-    val parameters = Array.empty[Parameter[_]]
+    val parameters = Left(Array.empty[Parameter[_]])
   }
 
   case class Logistic() extends LossType("logistic")

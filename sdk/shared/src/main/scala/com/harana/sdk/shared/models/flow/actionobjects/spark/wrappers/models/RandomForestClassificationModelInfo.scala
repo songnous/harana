@@ -20,7 +20,7 @@ trait VanillaRandomForestClassificationModelInfo extends SparkModelWrapperInfo w
 
   val id = "94CD2E91-C1E4-49D1-A1FD-6BF110628D1E"
 
-  val parameters = Array.empty[Parameter[_]]
+  val parameters = Left(Array.empty[Parameter[_]])
 
   val specificParameters = Array(
     featuresColumnParameter,

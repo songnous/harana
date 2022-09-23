@@ -10,14 +10,14 @@ case class ClassWithParameters() extends Parameters {
   val string = StringParameter("string")
   val bool = BooleanParameter("bool")
 
-  val parameters = Array(string, bool)
+  val parameters = Left(Array(string, bool))
 
   def setBool(b: Boolean) = set(bool, b)
   def setString(s: String): this.type = set(string, s)
 }
 
 case class ParametersWithoutNoArgConstructor(x: String) extends Parameters {
-  val parameters = Array.empty[Parameter[_]]
+  val parameters = Left(Array.empty[Parameter[_]])
 }
 
 class ParametersSequenceSpec extends AbstractParameterSpec[Seq[ClassWithParameters], ParametersSequence[ClassWithParameters]] {

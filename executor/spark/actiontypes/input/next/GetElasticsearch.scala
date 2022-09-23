@@ -4,13 +4,13 @@ import com.harana.sdk.shared.models.common.Parameter.ParameterValues
 import com.harana.sdk.shared.models.designer.data.DataSourceTypes.Elasticsearch._
 import com.harana.sdk.backend.models.flow.ActionType.{Inputs, Outputs}
 import com.harana.sdk.backend.models.flow.execution.ExecutionError
-import com.harana.sdk.backend.models.flow.{ActionType, FlowContext}
+import com.harana.sdk.backend.models.flow.{Action, FlowContext}
 import com.harana.sdk.backend.models.flow.actiontypes.input.next.GetElasticsearchInfo
 import com.harana.sdk.backend.models.flow.actiontypes.pathParameter
 import com.harana.executor.spark.actiontypes.dataSourceParameterValues
 import zio.{IO, Task, UIO}
 
-class GetElasticsearch extends GetElasticsearchInfo with ActionType {
+class GetElasticsearch extends GetElasticsearchInfo with Action {
 
   def validate(parameters: ParameterValues, context: FlowContext): UIO[List[ExecutionError]] = null
 

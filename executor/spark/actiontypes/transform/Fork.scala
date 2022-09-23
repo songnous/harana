@@ -5,10 +5,10 @@ import com.harana.sdk.shared.models.common.ParameterValue
 import com.harana.sdk.backend.models.flow.actiontypes.transform.ForkInfo
 import com.harana.sdk.backend.models.flow.execution.ExecutionError
 import com.harana.sdk.backend.models.flow.ActionType.{Inputs, Outputs}
-import com.harana.sdk.backend.models.flow.{ActionType, FlowContext}
+import com.harana.sdk.backend.models.flow.{Action, FlowContext}
 import zio.{IO, Task, UIO}
 
-class Fork extends ForkInfo with ActionType {
+class Fork extends ForkInfo with Action {
 
   def validate(parameters: ParameterValues, context: FlowContext): UIO[List[ExecutionError]] = null
 

@@ -32,7 +32,7 @@ trait FitPlusTransformInfo
   setDefault(estimatorParameters -> Json.Null)
   def setEstimatorParameters(jsValue: Json): this.type = set(estimatorParameters -> jsValue)
 
-  override val parameters = Array(estimatorParameters)
+  override val parameters = Left(Array(estimatorParameters))
 
 }
 

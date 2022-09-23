@@ -11,8 +11,10 @@ trait MultiColumnModelInfo extends SparkModelWrapperInfo with ActionObjectInfo w
   val multiColumnChoice = MultiColumnChoice()
 
   override lazy val parameters =
-    if (specificParameters == null) Array(multiColumnChoice.inputColumnsParameter, multiColumnChoice.inPlaceChoiceParameter)
-    else specificParameters ++ Array(multiColumnChoice.inputColumnsParameter, multiColumnChoice.inPlaceChoiceParameter)
+    Left(
+      if (specificParameters == null) Array(multiColumnChoice.inputColumnsParameter, multiColumnChoice.inPlaceChoiceParameter)
+      else specificParameters ++ Array(multiColumnChoice.inputColumnsParameter, multiColumnChoice.inPlaceChoiceParameter)
+    )
 
   def setInputColumns(selection: MultipleColumnSelection): this.type = set(multiColumnChoice.inputColumnsParameter -> selection)
   def setInPlaceChoice(choice: MultiColumnInPlaceChoice): this.type = set(multiColumnChoice.inPlaceChoiceParameter -> choice)

@@ -3,7 +3,7 @@ package com.harana.sdk.shared.models.flow
 import ActionInfo.ReportParameter.{Extended, Metadata}
 import ActionInfo.{ReportParameter, ReportType}
 import Gravity.{GravitateLeft, GravitateRight}
-import PortPosition._
+import com.harana.sdk.shared.models.common.ParameterGroup
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.utils.CollectionExtensions._
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory
@@ -26,7 +26,6 @@ trait ActionInfo extends GraphAction with Serializable with Parameters {
   val position: Option[(Int, Int)] = None
   val overrideColor: Option[String] = None
 
-  val parameters: Array[Parameter[_]]
   lazy val reportParameters: Option[Parameter[_]] = Option(reportTypeParameter).filter(_ => outArity != 0)
 
   def hasDocumentation: Boolean = false
@@ -41,13 +40,13 @@ trait ActionInfo extends GraphAction with Serializable with Parameters {
   private def defaultPortLayout(portTypes: List[ru.TypeTag[_]], gravity: Gravity): List[PortPosition] = {
     portTypes.size match {
       case 0 => List.empty[PortPosition]
-      case 1 => List(Center)
+      case 1 => List(PortPosition.Center)
       case 2 =>
         gravity match {
-          case GravitateLeft  => List(Left, Center)
-          case GravitateRight => List(Center, Right)
+          case GravitateLeft  => List(PortPosition.Left, PortPosition.Center)
+          case GravitateRight => List(PortPosition.Center, PortPosition.Right)
         }
-      case 3 => List(Left, Center, Right)
+      case 3 => List(PortPosition.Left, PortPosition.Center, PortPosition.Right)
       case other => throw new IllegalStateException(s"Unsupported number of output ports: $other")
     }
   }
@@ -79,12 +78,12 @@ object ActionInfo {
 
     case class Metadata() extends ReportType {
       val name = "Metadata report"
-      val parameters = Array.empty[Parameter[_]]
+      val parameters = Left(Array.empty[Parameter[_]])
     }
 
     case class Extended() extends ReportType {
       val name = "Extended report"
-      val parameters = Array.empty[Parameter[_]]
+      val parameters = Left(Array.empty[Parameter[_]])
     }
   }
 

@@ -5,11 +5,11 @@ import com.harana.sdk.shared.models.designer.data.DataSourceTypes.SqlServer._
 import com.harana.sdk.backend.models.flow.ActionType.{Inputs, Outputs}
 import com.harana.sdk.backend.models.flow.actiontypes.output.PutSqlServerInfo
 import com.harana.sdk.backend.models.flow.execution.ExecutionError
-import com.harana.sdk.backend.models.flow.{ActionType, FlowContext}
+import com.harana.sdk.backend.models.flow.{Action, FlowContext}
 import com.harana.executor.spark.actiontypes.{dataSourceParameterValues, log}
 import zio.{IO, Task, UIO}
 
-class PutSqlServer extends PutSqlServerInfo with ActionType {
+class PutSqlServer extends PutSqlServerInfo with Action {
 
   def validate(parameters: ParameterValues, context: FlowContext): UIO[List[ExecutionError]] = null
 

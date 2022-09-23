@@ -6,11 +6,11 @@ import com.harana.sdk.backend.models.flow.actiontypes.query.ExecuteSQLInfo
 import com.harana.sdk.backend.models.flow.actiontypes.transform.ForkInfo
 import com.harana.sdk.backend.models.flow.execution.ExecutionError
 import com.harana.sdk.backend.models.flow.ActionType.{Inputs, Outputs}
-import com.harana.sdk.backend.models.flow.{ActionType, FlowContext}
+import com.harana.sdk.backend.models.flow.{Action, FlowContext}
 import com.harana.executor.spark.actiontypes.log
 import zio.{IO, Task, UIO}
 
-class ExecuteSQL extends ExecuteSQLInfo with ActionType {
+class ExecuteSQL extends ExecuteSQLInfo with Action {
 
   def validate(parameters: ParameterValues, context: FlowContext): UIO[List[ExecutionError]] = null
 

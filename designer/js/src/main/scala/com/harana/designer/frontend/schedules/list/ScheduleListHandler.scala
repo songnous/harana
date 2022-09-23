@@ -105,8 +105,8 @@ class ScheduleListHandler extends GridHandler[Schedule, ScheduleEditState]("sche
 
   override def onInit(preferences: Map[String, String]) =
     Some {
-      val actions: ListBuffer[Action] = if (state.value.editState.item.isEmpty) ListBuffer(Action.DataSync()) else state.value.editState.item.get.actions.to[ListBuffer]
-      val events: ListBuffer[Event] = if (state.value.editState.item.isEmpty) ListBuffer(Event.CalendarInterval()) else state.value.editState.item.get.events.to[ListBuffer]
+      val actions = if (state.value.editState.item.isEmpty) List(Action.DataSync()) else state.value.editState.item.get.actions
+      val events = if (state.value.editState.item.isEmpty) List(Event.CalendarInterval()) else state.value.editState.item.get.events
 
       Effect(
         Http.getRelativeAs[List[String]](s"/api/schedules/actionTypes").map(at =>
@@ -123,7 +123,7 @@ class ScheduleListHandler extends GridHandler[Schedule, ScheduleEditState]("sche
           Parameter.String("description", multiLine = true, required = true)
         ))
       ))) +
-      Effect.action(UpdateEditState("schedules", state.value.editState.copy(itemActions = actions, itemEvents = events)))
+      Effect.action(UpdateEditState("schedules", state.value.editState.copy(itemActions = ListBuffer.from(actions), itemEvents = ListBuffer.from(events))))
     }
 
 

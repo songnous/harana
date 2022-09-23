@@ -6,12 +6,12 @@ import com.harana.sdk.backend.models.flow.ActionType.{Inputs, Outputs}
 import com.harana.sdk.backend.models.flow.actiontypes.input.{GetHaranaFilesInfo, GetS3Info}
 import com.harana.sdk.backend.models.flow.actiontypes.{fileNameParameter, formatParameter, pathParameter}
 import com.harana.sdk.backend.models.flow.execution.ExecutionError
-import com.harana.sdk.backend.models.flow.{ActionType, FlowContext}
+import com.harana.sdk.backend.models.flow.{Action, FlowContext}
 import com.harana.executor.spark.actiontypes.{dataSourceParameterValues, log}
 import com.harana.executor.spark.utils.PathUtils
 import zio.{IO, Task, UIO}
 
-class GetHaranaFiles extends GetHaranaFilesInfo with ActionType {
+class GetHaranaFiles extends GetHaranaFilesInfo with Action {
 
   def validate(parameters: ParameterValues, context: FlowContext): UIO[List[ExecutionError]] = null
 

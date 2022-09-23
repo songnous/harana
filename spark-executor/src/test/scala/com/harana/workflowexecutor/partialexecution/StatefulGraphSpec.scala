@@ -315,7 +315,7 @@ class StatefulGraphSpec
         )
         val graphKnowledge = mock[GraphKnowledge]
         when(graphKnowledge.errors).thenReturn(
-          Map(idD -> Vector(TestError()))
+          Map(idD -> List(TestError()))
         )
 
         val graphSpy = Mockito.spy(graph)

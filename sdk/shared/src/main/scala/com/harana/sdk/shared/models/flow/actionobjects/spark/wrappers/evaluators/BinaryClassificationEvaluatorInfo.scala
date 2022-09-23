@@ -17,7 +17,7 @@ trait BinaryClassificationEvaluatorInfo extends EvaluatorInfo with HasLabelColum
   def getMetricName = $(metricNameParameter)
   def setMetricName(value: Metric): this.type = set(metricNameParameter, value)
 
-  val parameters = Array(metricNameParameter, labelColumnParameter)
+  val parameters = Left(Array(metricNameParameter, labelColumnParameter))
 
   def isLargerBetter: Boolean = true
 }
@@ -55,26 +55,26 @@ object BinaryClassificationEvaluatorInfo extends BinaryClassificationEvaluatorIn
 
   case class AreaUnderROC() extends Metric(areaUnderROC) with RawPredictionMetric {
     val name = areaUnderROC
-    val parameters = Array(rawPredictionColumnParameter)
+    val parameters = Left(Array(rawPredictionColumnParameter))
   }
 
   case class AreaUnderPR() extends Metric(areaUnderPR) with RawPredictionMetric {
     val name = areaUnderPR
-    val parameters = Array(rawPredictionColumnParameter)
+    val parameters = Left(Array(rawPredictionColumnParameter))
   }
 
   case class Precision() extends Metric(precision) with PredictionMetric {
     val name = precision
-    val parameters = Array(predictionColumnParameter)
+    val parameters = Left(Array(predictionColumnParameter))
   }
 
   case class Recall() extends Metric(recall) with PredictionMetric {
     val name = recall
-    val parameters = Array(predictionColumnParameter)
+    val parameters = Left(Array(predictionColumnParameter))
   }
 
   case class F1Score() extends Metric(f1Score) with PredictionMetric {
     val name = f1Score
-    val parameters = Array(predictionColumnParameter)
+    val parameters = Left(Array(predictionColumnParameter))
   }
 }

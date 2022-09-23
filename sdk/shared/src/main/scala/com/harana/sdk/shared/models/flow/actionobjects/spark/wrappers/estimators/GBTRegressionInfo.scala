@@ -22,7 +22,7 @@ trait GBTRegressionInfo
   val lossTypeParameter = ChoiceParameter[LossType]("loss function")
   setDefault(lossTypeParameter, Squared())
 
-  val parameters = Array(
+  val parameters = Left(Array(
     impurityParameter,
     lossTypeParameter,
     maxBinsParameter,
@@ -35,12 +35,12 @@ trait GBTRegressionInfo
     subsamplingRateParameter,
     labelColumnParameter,
     featuresColumnParameter,
-    predictionColumnParameter)
+    predictionColumnParameter))
 }
 
 object GBTRegressionInfo extends GBTRegressionInfo {
   sealed abstract class LossType(val name: String) extends Choice {
-    val parameters = Array.empty[Parameter[_]]
+    val parameters = Left(Array.empty[Parameter[_]])
     val choiceOrder: List[ChoiceOption] = List(classOf[Squared], classOf[Absolute])
   }
 

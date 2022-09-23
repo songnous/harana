@@ -30,7 +30,7 @@ trait CreateCustomTransformerInfo extends TransformerAsFactoryInfo[CustomTransfo
   def setInnerWorkflow(workflow: Json): this.type = set(innerWorkflowParameter, workflow.as[InnerWorkflow].toOption.get)
   def setInnerWorkflow(workflow: InnerWorkflow): this.type = set(innerWorkflowParameter, workflow)
 
-  override val parameters = Array(innerWorkflowParameter)
+  override val parameters = Left(Array(innerWorkflowParameter))
   override def getDatasourcesIds: Set[UUID] = getInnerWorkflow.getDatasourcesIds
 }
 

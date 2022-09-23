@@ -50,7 +50,7 @@ object CommonSettingsPlugin extends AutoPlugin {
     Seq(
       testOptions ++= Seq(Tests.Argument(TestFrameworks.ScalaTest, "-oF", "-u", s"target/test-reports-${Version.spark}")),
       javaOptions := Seq(s"-DlogFile=${name.value}", "-Xmx2G", "-Xms2G"),
-      fork := true,
+      fork := false,
       unmanagedClasspath += baseDirectory.value / "conf"
     )
   }
@@ -58,7 +58,7 @@ object CommonSettingsPlugin extends AutoPlugin {
   lazy val testSettings = inConfig(Test) {
     Seq(
       testOptions := Seq(Tests.Argument(TestFrameworks.ScalaTest, "-o", "-u", s"target/test-reports-${Version.spark}")),
-      fork := true,
+      fork := false,
       javaOptions := Seq(s"-DlogFile=${name.value}"),
       unmanagedClasspath += baseDirectory.value / "conf"
     )

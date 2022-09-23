@@ -28,7 +28,7 @@ trait ReadDataFrameInfo
   def getStorageType = $(storageTypeParameter)
   def setStorageType(value: InputStorageTypeChoice): this.type = set(storageTypeParameter, value)
 
-  override val parameters = Array(storageTypeParameter)
+  override val parameters = Left(Array(storageTypeParameter))
   setDefault(storageTypeParameter, new InputStorageTypeChoice.File())
 
   @transient

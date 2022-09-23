@@ -15,7 +15,7 @@ trait SinkInfo extends Action1To1Info[DataFrameInfo, DataFrameInfo] {
   val id = "e652238f-7415-4da6-95c6-ee33808561b2"
   val name = "Sink"
   val since = Version(1, 0, 0)
-  val parameters = Array.empty[Parameter[_]]
+  val parameters = Left(Array.empty[Parameter[_]])
   val category = IO
 
   @transient

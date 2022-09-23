@@ -17,7 +17,10 @@ trait MultiColumnTransformerInfo extends TransformerInfo with HasSpecificParamet
   def setSingleOrMultiChoice(value: SingleOrMultiColumnChoice): this.type = set(singleOrMultiChoiceParameter, value)
 
   override lazy val parameters =
-    if (specificParameters == null) Array(singleOrMultiChoiceParameter) else specificParameters :+ singleOrMultiChoiceParameter
+    Left(
+      if (specificParameters == null) Array(singleOrMultiChoiceParameter)
+      else specificParameters :+ singleOrMultiChoiceParameter
+    )
 
   def setSingleColumn(inputColumnName: String, outputColumnName: String): this.type = {
     val choice = SingleColumnChoice()

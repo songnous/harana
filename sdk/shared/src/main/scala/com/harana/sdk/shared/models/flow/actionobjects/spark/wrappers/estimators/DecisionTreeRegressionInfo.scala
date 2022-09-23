@@ -12,7 +12,7 @@ trait DecisionTreeRegressionInfo
 
   val id = "8DE8BDEC-EA24-40BB-9A81-8C62DB59F65E"
 
-  val parameters = Array(
+  val parameters = Left(Array(
     maxDepthParameter,
     maxBinsParameter,
     minInstancesPerNodeParameter,
@@ -24,7 +24,7 @@ trait DecisionTreeRegressionInfo
     impurityParameter,
     labelColumnParameter,
     featuresColumnParameter,
-    predictionColumnParameter)
+    predictionColumnParameter))
 
 }
 

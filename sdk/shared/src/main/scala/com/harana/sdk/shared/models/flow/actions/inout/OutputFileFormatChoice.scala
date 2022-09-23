@@ -13,17 +13,17 @@ object OutputFileFormatChoice {
 
   class Csv() extends OutputFileFormatChoice with CsvParameters {
     val name = FileFormat.CSV.toString
-    val parameters = Array(csvColumnSeparatorParameter, namesIncludedParameter)
+    val parameters = Left(Array(csvColumnSeparatorParameter, namesIncludedParameter))
   }
 
   class Parquet() extends OutputFileFormatChoice {
     val name = FileFormat.PARQUET.toString
-    val parameters = Array.empty[Parameter[_]]
+    val parameters = Left(Array.empty[Parameter[_]])
   }
 
   class Json() extends OutputFileFormatChoice {
     val name = FileFormat.JSON.toString
-    val parameters = Array.empty[Parameter[_]]
+    val parameters = Left(Array.empty[Parameter[_]])
   }
 }
 
@@ -31,14 +31,9 @@ object OutputFromInputFileFormat {
 
   def apply(inputFileFormatChoice: InputFileFormatChoice): OutputFileFormatChoice =
     inputFileFormatChoice match {
-      case csv: InputFileFormatChoice.Csv         =>
-        val output = new OutputFileFormatChoice.Csv()
-        csv.copyValues(output)
+      case csv: InputFileFormatChoice.Csv         => csv.copyValues(new OutputFileFormatChoice.Csv())
       case json: InputFileFormatChoice.Json       => new OutputFileFormatChoice.Json()
       case parquet: InputFileFormatChoice.Parquet => new OutputFileFormatChoice.Parquet()
-      case unsupported                            =>
-        throw new IllegalStateException(
-          s"Unsupported input file format $inputFileFormatChoice"
-        )
+      case unsupported                            => throw new IllegalStateException(s"Unsupported input file format $inputFileFormatChoice")
     }
 }

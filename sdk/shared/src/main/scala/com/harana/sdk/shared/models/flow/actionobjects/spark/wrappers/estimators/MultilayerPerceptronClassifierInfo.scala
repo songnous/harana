@@ -21,7 +21,7 @@ trait MultilayerPerceptronClassifierInfo
   val layersParameter = IntArrayParameter("layers", validator = ComplexArrayValidator(RangeValidator.positiveIntegers, ArrayLengthValidator.withAtLeast(2)))
   setDefault(layersParameter, Array(1, 1))
 
-  val parameters = Array(
+  val parameters = Left(Array(
     layersParameter,
     maxIterationsParameter,
     seedParameter,
@@ -29,7 +29,7 @@ trait MultilayerPerceptronClassifierInfo
     labelColumnParameter,
     featuresColumnParameter,
     predictionColumnParameter
-  )
+  ))
 }
 
 object MultilayerPerceptronClassifierInfo extends MultilayerPerceptronClassifierInfo

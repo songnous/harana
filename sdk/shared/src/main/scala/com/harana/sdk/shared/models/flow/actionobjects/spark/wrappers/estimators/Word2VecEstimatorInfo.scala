@@ -23,5 +23,5 @@ trait Word2VecEstimatorInfo extends EstimatorInfo with Word2VecParameters {
 }
 
 object Word2VecEstimatorInfo extends Word2VecEstimatorInfo {
-  val parameters = Array.empty[Parameter[_]]
+  val parameters = Left(Array.empty[Parameter[_]])
 }

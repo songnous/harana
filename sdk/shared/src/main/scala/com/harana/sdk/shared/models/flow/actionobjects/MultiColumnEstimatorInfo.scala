@@ -16,7 +16,10 @@ trait MultiColumnEstimatorInfo extends EstimatorInfo with HasSpecificParameters 
   val singleOrMultiChoiceParameter = IOColumnsParameter()
 
   lazy val parameters =
-    if (specificParameters == null) Array(singleOrMultiChoiceParameter) else specificParameters :+ singleOrMultiChoiceParameter
+    Left(
+      if (specificParameters == null) Array(singleOrMultiChoiceParameter)
+      else specificParameters :+ singleOrMultiChoiceParameter
+    )
 
   def setSingleColumn(inputColumnName: String, outputColumnName: String) = {
     val choice = SingleColumnChoice().setInPlaceChoice(NoInPlaceChoice().setOutputColumn(outputColumnName)).setInputColumn(NameSingleColumnSelection(inputColumnName))

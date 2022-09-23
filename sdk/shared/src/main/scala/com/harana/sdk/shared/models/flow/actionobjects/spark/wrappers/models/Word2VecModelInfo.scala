@@ -18,5 +18,5 @@ trait Word2VecModelInfo extends TransformerInfo with Word2VecParameters {
 }
 
 object Word2VecModelInfo extends Word2VecModelInfo {
-  val parameters = Array.empty
+  val parameters = Left(Array.empty[Parameter[_]])
 }

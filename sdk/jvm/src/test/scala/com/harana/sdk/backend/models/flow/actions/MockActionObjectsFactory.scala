@@ -63,7 +63,7 @@ object MockActionObjectsFactory extends UnitSpec with TestSupport {
     val paramA = NumericParameter("b", RangeValidator(0.0, Double.MaxValue))
     setDefault(paramA -> DefaultForA)
 
-    val parameters = Array(paramA)
+    val parameters = Left(Array(paramA))
 
     override def report(extended: Boolean = true) = ???
 
@@ -98,7 +98,7 @@ object MockActionObjectsFactory extends UnitSpec with TestSupport {
     val paramA = NumericParameter("b", RangeValidator(0.0, Double.MaxValue))
     setDefault(paramA -> DefaultForA)
 
-    val parameters = Array(paramA)
+    val parameters = Left(Array(paramA))
 
     override def report(extended: Boolean = true) = ???
 

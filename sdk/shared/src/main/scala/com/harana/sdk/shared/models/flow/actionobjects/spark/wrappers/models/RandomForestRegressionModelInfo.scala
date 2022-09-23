@@ -7,10 +7,10 @@ trait RandomForestRegressionModelInfo extends ActionObjectInfo with PredictorPar
 
   val id = "1526C59C-D6E3-4AA8-AA8A-CE1CF30DB909"
 
-  val parameters = Array(
+  val parameters = Left(Array(
     featuresColumnParameter,
     predictionColumnParameter
-  )
+  ))
 }
 
 object RandomForestRegressionModelInfo extends RandomForestRegressionModelInfo

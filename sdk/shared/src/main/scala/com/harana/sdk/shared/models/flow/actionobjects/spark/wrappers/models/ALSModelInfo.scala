@@ -11,11 +11,11 @@ trait ALSModelInfo
 
   val id = "F098E949-BAE3-4C97-985F-A7B76A3C480E"
 
-  val parameters = Array(
+  val parameters = Left(Array(
     itemColumnParameter,
     predictionColumnParameter,
     userColumnParameter
-  )
+  ))
 }
 
 object ALSModelInfo extends ALSModelInfo

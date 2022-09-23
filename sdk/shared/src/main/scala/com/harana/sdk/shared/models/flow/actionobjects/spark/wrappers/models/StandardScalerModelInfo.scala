@@ -12,5 +12,5 @@ trait StandardScalerModelInfo extends TransformerInfo with Parameters {
 }
 
 object StandardScalerModelInfo extends StandardScalerModelInfo {
-  val parameters = Array.empty[Parameter[_]]
+  val parameters = Left(Array.empty[Parameter[_]])
 }

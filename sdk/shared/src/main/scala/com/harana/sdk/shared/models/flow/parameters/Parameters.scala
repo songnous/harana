@@ -3,16 +3,20 @@ package com.harana.sdk.shared.models.flow.parameters
 import com.harana.sdk.shared.models.flow.actionobjects.descriptions.HasInferenceResult
 import com.harana.sdk.shared.models.flow.exceptions.{FlowError, FlowMultiError}
 import com.harana.sdk.shared.models.flow.parameters.exceptions.ParamValueNotProvidedError
-import com.harana.sdk.shared.models.flow.parameters.multivalue.MultipleValuesParameter
 import io.circe.Json
 
 trait Parameters extends Serializable with HasInferenceResult {
 
-  val parameters: Array[Parameter[_]]
+  val parameters: Either[Array[Parameter[_]], Array[ParameterGroup]]
+  private val allParameters = parameters match {
+    case Left(a) => a
+    case Right(pg) => pg.flatMap(_.parameters)
+  }
+
   private val _paramMap: ParameterMap = ParameterMap.empty
   private val _defaultParamMap: ParameterMap = ParameterMap.empty
 
-  private lazy val parametersByName = parameters.map(param => param.name -> param).toMap[String, Parameter[_]]
+  private lazy val parametersByName = allParameters.map(param => param.name -> param).toMap[String, Parameter[_]]
 
   def paramMap: ParameterMap = _paramMap
 
@@ -21,7 +25,7 @@ trait Parameters extends Serializable with HasInferenceResult {
   def customValidateParameters = List.empty[FlowError]
 
   def validateParameters = {
-    val singleParameterErrors = parameters.flatMap { param =>
+    val singleParameterErrors = allParameters.flatMap { param =>
       if (isDefined(param))
         param.asInstanceOf[Parameter[Any]].validate($(param))
       else
@@ -38,8 +42,8 @@ trait Parameters extends Serializable with HasInferenceResult {
 
   def isSet(param: Parameter[_]) = paramMap.contains(param)
   def isDefined(param: Parameter[_]) = defaultParamMap.contains(param) || paramMap.contains(param)
-  def hasParameter(parameterName: String) = parameters.exists(_.name == parameterName)
-  def getParam(parameterName: String) = parameters.find(_.name == parameterName).getOrElse {
+  def hasParameter(parameterName: String) = allParameters.exists(_.name == parameterName)
+  def getParam(parameterName: String) = allParameters.find(_.name == parameterName).getOrElse {
     throw new NoSuchElementException(s"Param $parameterName does not exist.")
   }.asInstanceOf[Parameter[Any]]
 
@@ -99,7 +103,7 @@ trait Parameters extends Serializable with HasInferenceResult {
 
   def copyValues[T <: Parameters](to: T, extra: ParameterMap = ParameterMap.empty): T = {
     val map = paramMap ++ extra
-    parameters.foreach { param =>
+    allParameters.foreach { param =>
       if (map.contains(param) && to.hasParameter(param.name)) to.set(param.name, map(param))
     }
     to

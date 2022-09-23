@@ -18,5 +18,5 @@ trait HashingTFTransformerInfo extends TransformerInfo with Parameters {
 }
 
 object HashingTFTransformerInfo extends HashingTFTransformerInfo {
-  val parameters = Array.empty
+  val parameters = Left(Array.empty[Parameter[_]])
 }

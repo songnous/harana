@@ -20,5 +20,5 @@ trait PolynomialExpanderInfo extends ActionObjectInfo
 }
 
 object PolynomialExpanderInfo extends PolynomialExpanderInfo {
-  val parameters = Array.empty
+  val parameters = Left(Array.empty[Parameter[_]])
 }

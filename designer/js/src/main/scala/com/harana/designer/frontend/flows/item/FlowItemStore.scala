@@ -5,8 +5,7 @@ import com.harana.designer.frontend.utils.UndoHistory
 import com.harana.sdk.shared.models.common.Parameter.ParameterName
 import com.harana.sdk.shared.models.common.ParameterValue
 import com.harana.sdk.shared.models.flow.Flow.FlowId
-import com.harana.sdk.shared.models.flow.Action.ActionId
-import com.harana.sdk.shared.models.flow.{Action, Flow, FlowExecution}
+import com.harana.sdk.shared.models.flow.{ActionInfo, Flow, FlowExecution}
 import com.harana.sdk.shared.utils.Random
 import com.harana.ui.external.flow.types.FlowElement
 import com.harana.ui.external.flow.{Connection, Edge, FlowInstance, Node}
@@ -26,11 +25,11 @@ object FlowItemStore {
                            logsKey: String,
                            nodes: List[Node],
                            edges: List[Edge],
-                           actionTypes: List[ActionType],
-                           activeActionIds: List[ActionId],
-                           completedActionIds: List[ActionId],
-                           selectedActionId: Option[ActionId],
-                           selectedActionType: Option[ActionType],
+                           actionTypes: List[ActionInfo],
+                           activeActionIds: List[ActionInfo.Id],
+                           completedActionIds: List[ActionInfo.Id],
+                           selectedActionId: Option[ActionInfo.Id],
+                           selectedActionType: Option[ActionInfo],
                            selectedTab: FlowTab,
                            portsOrientation: Boolean,
                            showLogs: Boolean,
@@ -64,20 +63,20 @@ object FlowItemStore {
 
   case class AddAction(event: SyntheticMouseEvent[_]) extends DiodeAction
   case class AddConnection(connection: Connection) extends DiodeAction
-  case class RunAction(action: Action) extends DiodeAction
-  case class SelectAction(actionId: ActionId) extends DiodeAction
-  case class SelectActionType(actionType: ActionType) extends DiodeAction
+  case class RunAction(action: ActionInfo.Id) extends DiodeAction
+  case class SelectAction(actionId: ActionInfo.Id) extends DiodeAction
+  case class SelectActionType(actionType: ActionInfo) extends DiodeAction
   case object DeselectAllActions extends DiodeAction
 
   case class DeleteElements(elements: List[FlowElement]) extends DiodeAction
 
-  case class UpdateActionTypes(actionTypes: List[ActionType]) extends DiodeAction
+  case class UpdateActionTypes(actionTypes: List[ActionInfo]) extends DiodeAction
   case class UpdateFlow(flow: Flow) extends DiodeAction
   case class UpdateFlowExecution(flowExecution: FlowExecution) extends DiodeAction
   case class UpdateFlowInstance(instance: FlowInstance) extends DiodeAction
   case class UpdateIsEditingParameters(editing: Boolean) extends DiodeAction
   case class UpdateNode(node: Node) extends DiodeAction
-  case class UpdateParameterValues(actionId: ActionId, parameterValues: Map[ParameterName, ParameterValue]) extends DiodeAction
+  case class UpdateParameterValues(actionId: ActionInfo.Id, parameterValues: Map[ParameterName, ParameterValue]) extends DiodeAction
   case class UpdatePercentage(node: Node, percentage: Int) extends DiodeAction
   case class UpdatePortsOrientation(vertical: Boolean) extends DiodeAction
 

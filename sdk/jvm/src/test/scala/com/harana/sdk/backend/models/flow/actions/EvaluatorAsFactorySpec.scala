@@ -73,7 +73,7 @@ object EvaluatorAsFactorySpec {
     val id = "test"
     val param = NumericParameter("b")
     setDefault(param -> 5)
-    val parameters = Array(param)
+    val parameters = Left(Array(param))
 
     override def _evaluate(ctx: ExecutionContext, df: DataFrame): MetricValue = ???
     override def _infer(k: Knowledge[DataFrame]): MetricValue = ???

@@ -10,8 +10,10 @@ abstract class SparkSingleColumnParameterEstimatorWrapperInfo
     with HasSpecificParameters {
 
   override lazy val parameters =
-    if (specificParameters == null) Array(inputColumnParameter, singleInPlaceChoiceParameter)
-    else Array(inputColumnParameter, singleInPlaceChoiceParameter) ++ specificParameters
+    Left(
+      if (specificParameters == null) Array(inputColumnParameter, singleInPlaceChoiceParameter)
+      else Array(inputColumnParameter, singleInPlaceChoiceParameter) ++ specificParameters
+    )
 
   def setNoInPlace(outputColumn: String): this.type = setSingleInPlaceChoice(NoInPlaceChoice().setOutputColumn(outputColumn))
 }

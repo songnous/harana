@@ -13,7 +13,7 @@ trait DecisionTreeClassifierInfo
 
   val id = "2F39BEFD-FC2B-4034-B13F-D308BB0C8078"
 
-  val parameters = Array(
+  val parameters = Left(Array(
     maxDepthParameter,
     maxBinsParameter,
     minInstancesPerNodeParameter,
@@ -28,7 +28,7 @@ trait DecisionTreeClassifierInfo
     probabilityColumnParameter,
     rawPredictionColumnParameter,
     predictionColumnParameter
-  )
+  ))
 }
 
 object DecisionTreeClassifierInfo extends DecisionTreeClassifierInfo

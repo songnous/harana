@@ -43,7 +43,7 @@ class InnerWorkflowExecutorImpl extends InnerWorkflowExecutor with InnerWorkflow
 
     statefulWorkflow.nodeStarted(innerWorkflow.source.id)
 
-    nodeCompleted(statefulWorkflow, innerWorkflow.source.id, nodeExecutionResultsFrom(Vector(dataFrame)))
+    nodeCompleted(statefulWorkflow, innerWorkflow.source.id, nodeExecutionResultsFrom(List(dataFrame)))
 
     run(statefulWorkflow, executionContext)
 
@@ -54,7 +54,7 @@ class InnerWorkflowExecutorImpl extends InnerWorkflowExecutor with InnerWorkflow
     statefulWorkflow.currentExecution match {
       case _: RunningExecution =>
         statefulWorkflow.startReadyNodes().foreach { readyNode =>
-          val input = readyNode.input.toVector
+          val input = readyNode.input.toList
           val nodeExecutionContext = executionContext.createExecutionContext(statefulWorkflow.workflowId, readyNode.node.id)
           val results = executeAction(readyNode.node, input, nodeExecutionContext)
           val nodeResults = nodeExecutionResultsFrom(results)
@@ -65,13 +65,13 @@ class InnerWorkflowExecutorImpl extends InnerWorkflowExecutor with InnerWorkflow
     }
   }
 
-  private def executeAction(node: FlowNode, input: Vector[ActionObjectInfo], executionContext: ExecutionContext) = {
+  private def executeAction(node: FlowNode, input: List[ActionObjectInfo], executionContext: ExecutionContext) = {
     val inputKnowledge = input.map(actionObject => Knowledge(actionObject))
     node.value.inferKnowledgeUntyped(inputKnowledge)(executionContext.inferContext)
     node.value.executeUntyped(input)(executionContext)
   }
 
-  private def nodeExecutionResultsFrom(actionResults: Vector[ActionObjectInfo]) = {
+  private def nodeExecutionResultsFrom(actionResults: List[ActionObjectInfo]) = {
     val results = actionResults.map(actionObject => (Entity.Id.randomId, actionObject))
     NodeExecutionResults(results.map(_._1), Map(), results.toMap)
   }

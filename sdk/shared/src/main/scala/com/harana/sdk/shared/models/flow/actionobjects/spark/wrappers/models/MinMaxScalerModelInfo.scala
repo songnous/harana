@@ -15,5 +15,5 @@ trait MinMaxScalerModelInfo extends TransformerInfo with MinMaxParameters {
 }
 
 object MinMaxScalerModelInfo extends MinMaxScalerModelInfo {
-  val parameters = Array.empty[Parameter[_]]
+  val parameters = Left(Array.empty[Parameter[_]])
 }

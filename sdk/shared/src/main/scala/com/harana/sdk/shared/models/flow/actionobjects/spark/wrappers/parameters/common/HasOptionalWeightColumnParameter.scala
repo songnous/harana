@@ -28,11 +28,11 @@ object OptionalWeightColumnChoice {
     def getWeightColumn = $(weightColumnParameter)
     def setWeightColumn(value: SingleColumnSelection): this.type = set(weightColumnParameter -> value)
 
-    val parameters = Array(weightColumnParameter)
+    val parameters = Left(Array(weightColumnParameter))
   }
 
   case class WeightColumnNoOption() extends WeightColumnOption {
     val name = "no"
-    val parameters = Array.empty[Parameter[_]]
+    val parameters = Left(Array.empty[Parameter[_]])
   }
 }

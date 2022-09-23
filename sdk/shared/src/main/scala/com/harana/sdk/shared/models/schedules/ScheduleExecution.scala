@@ -9,6 +9,6 @@ import java.time.Instant
 case class ScheduleExecution(executed: Instant,
                              executionStatus: ScheduleExecutionStatus,
                              completedEvents: List[EventId],
-//                             completedActions: List[ActionId],
-//                             failedActions: List[ActionId],
+//                             completedActions: List[ActionInfo.Id],
+//                             failedActions: List[ActionInfo.Id],
                              errorMessages: List[String])

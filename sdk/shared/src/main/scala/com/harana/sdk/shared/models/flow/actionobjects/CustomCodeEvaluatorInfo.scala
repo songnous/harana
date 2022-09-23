@@ -14,7 +14,7 @@ trait CustomCodeEvaluatorInfo extends EvaluatorInfo with HasIsLargerBetterParame
 
   val codeParameter: CodeSnippetParameter
 
-  lazy val parameters = Array(metricNameParameter, codeParameter, isLargerBetterParameter)
+  lazy val parameters = Left(Array(metricNameParameter, codeParameter, isLargerBetterParameter))
 
   def isLargerBetter = $(isLargerBetterParameter)
 

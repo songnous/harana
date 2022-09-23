@@ -23,7 +23,7 @@ trait RandomForestClassifierInfo
 
   val id = "F237228D-0C36-454B-A562-04939D65B1FB"
 
-  val parameters = Array(
+  val parameters = Left(Array(
     maxDepthParameter,
     maxBinsParameter,
     minInstancesPerNodeParameter,
@@ -41,7 +41,7 @@ trait RandomForestClassifierInfo
     probabilityColumnParameter,
     rawPredictionColumnParameter,
     predictionColumnParameter
-  )
+  ))
 }
 
 object RandomForestClassifierInfo extends RandomForestClassifierInfo

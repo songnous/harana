@@ -6,11 +6,11 @@ import com.harana.sdk.shared.models.designer.data.DataSourceTypes.Snowflake._
 import com.harana.sdk.backend.models.flow.ActionType.{Inputs, Outputs}
 import com.harana.sdk.backend.models.flow.actiontypes.input.GetSnowflakeInfo
 import com.harana.sdk.backend.models.flow.execution.ExecutionError
-import com.harana.sdk.backend.models.flow.{ActionType, FlowContext}
+import com.harana.sdk.backend.models.flow.{Action, FlowContext}
 import com.harana.executor.spark.actiontypes.dataSourceParameterValues
 import zio.{IO, Task, UIO}
 
-class GetSnowflake extends GetSnowflakeInfo with ActionType {
+class GetSnowflake extends GetSnowflakeInfo with Action {
 
   def validate(parameters: ParameterValues, context: FlowContext): UIO[List[ExecutionError]] = null
 

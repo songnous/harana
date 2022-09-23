@@ -27,7 +27,7 @@ trait WriteTransformerInfo extends Action1To0Info[TransformerInfo] with Paramete
   def getOutputPath = $(outputPathParameter)
   def setOutputPath(value: String): this.type = set(outputPathParameter, value)
 
-  override val parameters =  Array(outputPathParameter, shouldOverwriteParameter)
+  override val parameters =  Left(Array(outputPathParameter, shouldOverwriteParameter))
 
   @transient
   lazy val portI_0: ru.TypeTag[TransformerInfo] = ru.typeTag[TransformerInfo]

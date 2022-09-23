@@ -6,11 +6,12 @@ import com.harana.designer.frontend.flows.item.FlowItemStore._
 import com.harana.designer.frontend.flows.item.ui._
 import com.harana.designer.frontend.utils.http.Http
 import com.harana.designer.frontend.{Circuit, State}
-import com.harana.sdk.shared.models.designer.flow.execution.ExecutionStatus
-import com.harana.sdk.shared.models.flow.{Flow, FlowExecution}
+import com.harana.sdk.shared.models.flow.execution.spark.ExecutionStatus
+import com.harana.sdk.shared.models.flow.{ActionInfo, Flow, FlowExecution}
 import com.harana.sdk.shared.utils.Random
 import com.harana.ui.external.flow.{Connection, Edge, Node, XYPosition}
 import diode.{ActionHandler, ActionResult, Effect, NoAction}
+import io.circe.syntax.EncoderOps
 
 import java.util.Timer
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -25,7 +26,7 @@ class FlowItemHandler extends ActionHandler(zoomTo(_.flowItemState)) {
 
     case Init(preferences) =>
       effectOnly(
-       Effect(Http.getRelativeAs[List[ActionType]](s"/api/flows/basic/actionTypes").map(f => if (f.isDefined) UpdateActionTypes(f.get) else NoAction))
+       Effect(Http.getRelativeAs[List[ActionInfo]](s"/api/flows/basic/actionTypes").map(f => if (f.isDefined) UpdateActionTypes(f.get) else NoAction))
       )
 
       new Timer().scheduleAtFixedRate(new java.util.TimerTask {
@@ -50,7 +51,7 @@ class FlowItemHandler extends ActionHandler(zoomTo(_.flowItemState)) {
       updated(value.copy(nodes = value.nodes, isRunning = true, selectedTab = FlowTab.Run), Effect(
         Http.putRelativeAs[FlowExecution](s"/api/flows/start/${value.flow.map(_.id).getOrElse("")}", List(), "").map(fe =>
           if (fe.isDefined) {
-            Analytics.flowStart(value.flow.get.id, value.flow.get.actions.size)
+            Analytics.flowStart(value.flow.get.id, value.flow.get.graph.nodes.size)
             UpdateFlowExecution(fe.get)
           } else NoAction)
       ))
@@ -215,8 +216,8 @@ class FlowItemHandler extends ActionHandler(zoomTo(_.flowItemState)) {
 
 
     case UpdateFlow(flow) =>
-      val nodes = flow.actions.map(toNode)
-      val edges = flow.links.map(toEdge)
+      val nodes = flow.graph.nodes.map(toNode)
+      val edges = flow.graph.edges.map(toEdge)
 
       value.undoHistory.init((nodes, edges))
       updated(value.copy(flow = Some(flow), nodes = nodes, edges = edges))

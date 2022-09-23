@@ -24,11 +24,11 @@ trait DatetimeDecomposerInfo extends TransformerInfo {
   def getTimestampPrefix = $(timestampPrefixParameter)
   def setTimestampPrefix(timestampPrefix: String): this.type = set(timestampPrefixParameter, timestampPrefix)
 
-  val parameters = Array(
+  val parameters = Left(Array(
     timestampColumnParameter,
     timestampPartsParameter,
     timestampPrefixParameter
-  )
+  ))
 }
 
 object DatetimeDecomposerInfo extends DatetimeDecomposerInfo {
@@ -43,32 +43,32 @@ object DatetimeDecomposerInfo extends DatetimeDecomposerInfo {
 
     case class Year() extends TimestampPart {
       val name = "year"
-      val parameters = Array.empty[Parameter[_]]
+      val parameters = Left(Array.empty[Parameter[_]])
     }
 
     case class Month() extends TimestampPart {
       val name = "month"
-      val parameters = Array.empty[Parameter[_]]
+      val parameters = Left(Array.empty[Parameter[_]])
     }
 
     case class Day() extends TimestampPart {
       val name = "day"
-      val parameters = Array.empty[Parameter[_]]
+      val parameters = Left(Array.empty[Parameter[_]])
     }
 
     case class Hour() extends TimestampPart {
       val name = "hour"
-      val parameters = Array.empty[Parameter[_]]
+      val parameters = Left(Array.empty[Parameter[_]])
     }
 
     case class Minutes() extends TimestampPart {
       val name = "minutes"
-      val parameters = Array.empty[Parameter[_]]
+      val parameters = Left(Array.empty[Parameter[_]])
     }
 
     case class Seconds() extends TimestampPart {
       val name = "seconds"
-      val parameters = Array.empty[Parameter[_]]
+      val parameters = Left(Array.empty[Parameter[_]])
     }
   }
 

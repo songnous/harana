@@ -21,6 +21,8 @@ import com.harana.sdk.shared.models.designer.flow.actionobjects.report.Report
 import com.harana.sdk.shared.models.designer.flow.graph.node.Node
 import com.harana.sdk.shared.models.designer.flow.report.ReportContent
 import com.harana.sdk.shared.models.designer.flow.ActionObjectInfo
+import com.harana.sdk.shared.models.flow.ActionObjectInfo
+import com.harana.sdk.shared.models.flow.graph.FlowGraph.FlowNode
 import com.harana.spark.AkkaUtils
 import com.harana.workflowexecutor.WorkflowExecutorActor.Messages.NodeCompleted
 import com.harana.workflowexecutor.WorkflowExecutorActor.Messages.NodeFailed
@@ -78,7 +80,7 @@ class WorkflowNodeExecutorActorSpec
         val dataFrameStorage = mock[ContextualDataFrameStorage]
         when(removedExecutedContext.dataFrameStorage).thenReturn(dataFrameStorage)
 
-        val wnea = TestActorRef(new WorkflowNodeExecutorActor(removedExecutedContext, node, Vector.empty))
+        val wnea = TestActorRef(new WorkflowNodeExecutorActor(removedExecutedContext, node, List.empty))
         val probe = TestProbe()
         probe.send(wnea, Delete())
 
@@ -128,7 +130,7 @@ class WorkflowNodeExecutorActorSpec
     }
   }
 
-  private def nodeExecutorActor(input: Vector[ActionObjectInfo], node: FlowNode) =
+  private def nodeExecutorActor(input: List[ActionObjectInfo], node: FlowNode) =
     system.actorOf(Props(new WorkflowNodeExecutorActor(executionContext, node, input)))
 
   private def inferableActionObject = {
@@ -160,7 +162,7 @@ class WorkflowNodeExecutorActorSpec
   private def fixtureFailingAction() = {
     val action = mockAction
     val cause = new NullPointerException("test exception")
-    when(action.executeUntyped(any[Vector[ActionObjectInfo]]())(any[ExecutionContext]())).thenThrow(cause)
+    when(action.executeUntyped(any[List[ActionObjectInfo]]())(any[ExecutionContext]())).thenThrow(cause)
     val (probe, testedActor, node, _, _) = fixtureWithAction(action)
     (probe, testedActor, node, cause)
   }
@@ -168,33 +170,34 @@ class WorkflowNodeExecutorActorSpec
   private def fixtureFailingActionError() = {
     val action = mockAction
     val cause = new AssertionError("test exception")
-    when(action.executeUntyped(any[Vector[ActionObjectInfo]]())(any[ExecutionContext]())).thenThrow(cause)
+    when(action.executeUntyped(any[List[ActionObjectInfo]]())(any[ExecutionContext]())).thenThrow(cause)
     val (probe, testedActor, node, _, _) = fixtureWithAction(action)
     (probe, testedActor, node, cause)
   }
 
   private def fixtureSucceedingAction() = {
     val action = mockAction
-    val output = Vector(actionObjectWithReports, actionObjectWithReports)
+    val output = List(actionObjectWithReports, actionObjectWithReports)
     when(action.executeUntyped(any())(any())).thenReturn(output)
     val (probe, testedActor, node, _, _) = fixtureWithAction(action)
     (probe, testedActor, node, output)
   }
 
-  private def fixtureWithAction(action: Action) = {
+  private def fixtureW
+  ithAction(action: Action) = {
     val node = mock[FlowNode]
     when(node.id).thenReturn(Node.Id.randomId)
     when(node.value).thenReturn(action)
     val probe = TestProbe()
-    val input = Vector(inferableActionObject, inferableActionObject)
+    val input = List(inferableActionObject, inferableActionObject)
     val testedActor = nodeExecutorActor(input, node)
     (probe, testedActor, node, action, input)
   }
 
   private def fixture() = {
     val action = mockAction
-    when(action.inferKnowledgeUntyped(any())(any())).thenReturn((Vector[Knowledge[ActionObjectInfo]](), mock[InferenceWarnings]))
-    when(action.executeUntyped(any())(any())).thenReturn(Vector())
+    when(action.inferKnowledgeUntyped(any())(any())).thenReturn((List[Knowledge[ActionObjectInfo]](), mock[InferenceWarnings]))
+    when(action.executeUntyped(any())(any())).thenReturn(List.empty)
     fixtureWithAction(action)
   }
 

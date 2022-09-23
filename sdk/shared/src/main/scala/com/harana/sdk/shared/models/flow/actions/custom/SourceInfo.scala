@@ -14,7 +14,7 @@ trait SourceInfo extends Action0To1Info[DataFrameInfo] {
   val id = "f94b04d7-ec34-42f7-8100-93fe235c89f8"
   val name = "Source"
   val since = Version(1, 0, 0)
-  val parameters = Array.empty[Parameter[_]]
+  val parameters = Left(Array.empty[Parameter[_]])
   val category = IO
 
   @transient

@@ -24,7 +24,7 @@ trait NaiveBayesInfo
   val modelTypeParameter = ChoiceParameter[ModelType]("modelType")
   setDefault(modelTypeParameter, Multinomial())
 
-  val parameters = Array(
+  val parameters = Left(Array(
     smoothingParameter,
     modelTypeParameter,
     labelColumnParameter,
@@ -32,13 +32,13 @@ trait NaiveBayesInfo
     probabilityColumnParameter,
     rawPredictionColumnParameter,
     predictionColumnParameter
-  )
+  ))
 }
 
 object NaiveBayesInfo extends NaiveBayesInfo {
   sealed abstract class ModelType(val name: String) extends Choice {
     val choiceOrder: List[ChoiceOption] = List(classOf[Multinomial], classOf[Bernoulli])
-    val parameters = Array.empty[Parameter[_]]
+    val parameters = Left(Array.empty[Parameter[_]])
   }
 
   case class Multinomial() extends ModelType("multinomial")

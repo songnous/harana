@@ -7,10 +7,10 @@ trait LDAModelInfo extends ActionObjectInfo with HasFeaturesColumnParameter with
 
   val id = "AF4AA9E2-2406-4D28-9BF6-26B94C5135A0"
 
-  val parameters = Array(
+  val parameters = Left(Array(
     featuresColumnParameter,
     seedParameter
-  )
+  ))
 }
 
 object LDAModelInfo extends LDAModelInfo

@@ -60,7 +60,7 @@ object LiveFlowExecutor {
 
         context                       =  FlowContext(sparkSession, sparkSession.sparkContext, dataSources.map { ds => ds.id -> ds }.toMap, flowExecution.createdBy.get, haranaFilesPath, temporaryPath)
 
-        completedActionsRef           <- Ref.make(Map[ActionId, Option[Outputs]]())
+        completedActionsRef           <- Ref.make(Map[ActionInfo.Id, Option[Outputs]]())
         completedActionsCount         <- IO.effectTotal(new AtomicInteger(0))
         _                             <- executeAvailableActions(flow, flowExecution, context, completedActionsRef, completedActionsCount).repeatWhile(_ => completedActionsCount.intValue() < flow.actions.size)
 
@@ -75,7 +75,7 @@ object LiveFlowExecutor {
     private def executeAvailableActions(flow: Flow,
                                         flowExecution: FlowExecution,
                                         context: FlowContext,
-                                        completedActionsRef: Ref[Map[ActionId, Option[Outputs]]],
+                                        completedActionsRef: Ref[Map[ActionInfo.Id, Option[Outputs]]],
                                         completedActionsCount: AtomicInteger) =
       for {
         completedActions              <- completedActionsRef.get
@@ -90,8 +90,8 @@ object LiveFlowExecutor {
                               action: Action,
                               context: FlowContext,
                               inputLinks: List[Link],
-                              completedActions: Map[ActionId, Option[Outputs]],
-                              completedActionsCount: AtomicInteger): Task[(ActionId, Option[Outputs])] =
+                              completedActions: Map[ActionInfo.Id, Option[Outputs]],
+                              completedActionsCount: AtomicInteger): Task[(ActionInfo.Id, Option[Outputs])] =
       for {
         progressTimer                 <- updateProgress(config, vertx, flowExecution.id).repeat(everySecond).provide(Has(clock)).fork
 

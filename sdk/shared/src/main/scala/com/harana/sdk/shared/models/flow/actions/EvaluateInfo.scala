@@ -25,7 +25,7 @@ trait EvaluateInfo extends Action2To1Info[EvaluatorInfo, DataFrameInfo, MetricVa
   def getEvaluatorParameters = $(evaluatorParameters)
   def setEvaluatorParameters(jsValue: Json): this.type = set(evaluatorParameters, jsValue)
 
-  override val parameters =  Array(evaluatorParameters)
+  override val parameters =  Left(Array(evaluatorParameters))
 
   lazy val portI_0: TypeTag[EvaluatorInfo] = typeTag
   lazy val portI_1: TypeTag[DataFrameInfo] = typeTag

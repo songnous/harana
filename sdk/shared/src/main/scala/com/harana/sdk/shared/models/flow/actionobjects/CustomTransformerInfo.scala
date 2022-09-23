@@ -7,7 +7,7 @@ case class CustomTransformerInfo(publicParametersWithValues: Seq[ParameterWithVa
 
   val id = "A7D6EF00-5B5F-44AA-8F49-ECA974703E8E"
 
-  val parameters = publicParametersWithValues.map(_.param).toArray
+  val parameters = Left(publicParametersWithValues.map(_.param).toArray)
 
   publicParametersWithValues.foreach {
     case ParameterWithValues(param, defaultValue, setValue) =>

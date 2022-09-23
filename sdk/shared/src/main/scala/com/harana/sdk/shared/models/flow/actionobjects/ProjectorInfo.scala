@@ -14,7 +14,7 @@ trait ProjectorInfo extends TransformerInfo {
   def getProjectionColumns = $(projectionColumnsParameter)
   def setProjectionColumns(value: Seq[ColumnProjection]): this.type = set(projectionColumnsParameter, value)
 
-  val parameters = Array(projectionColumnsParameter)
+  val parameters = Left(Array(projectionColumnsParameter))
 }
 
 object ProjectorInfo extends ProjectorInfo{
@@ -33,7 +33,7 @@ object ProjectorInfo extends ProjectorInfo{
     def getRenameColumn = $(renameColumnParameter)
     def setRenameColumn(value: RenameColumnChoice): this.type = set(renameColumnParameter, value)
 
-    val parameters = Array(originalColumnParameter, renameColumnParameter)
+    val parameters = Left(Array(originalColumnParameter, renameColumnParameter))
 
   }
 
@@ -53,13 +53,13 @@ object ProjectorInfo extends ProjectorInfo{
       def getColumnName: Option[String] = Some($(columnNameParameter))
       def setColumnName(value: String): this.type = set(columnNameParameter, value)
 
-      val parameters = Array(columnNameParameter)
+      val parameters = Left(Array(columnNameParameter))
     }
 
     case class No() extends RenameColumnChoice {
       val name = "No"
       def getColumnName: Option[String] = None
-      val parameters = Array.empty[Parameter[_]]
+      val parameters = Left(Array.empty[Parameter[_]])
     }
   }
 }

@@ -17,5 +17,5 @@ trait GBTClassificationModelInfo extends TransformerInfo {
 
 trait VanillaGBTClassificationModelInfo extends SparkModelWrapperInfo with PredictorParameters {
   val id = "7C3C18A8-65D5-4D6C-98CA-EF71D510CAFA"
-  val parameters = Array(featuresColumnParameter, predictionColumnParameter)
+  val parameters = Left(Array(featuresColumnParameter, predictionColumnParameter))
 }

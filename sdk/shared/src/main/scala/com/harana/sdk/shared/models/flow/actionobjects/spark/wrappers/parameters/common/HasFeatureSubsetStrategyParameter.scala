@@ -17,7 +17,7 @@ trait HasFeatureSubsetStrategyParameter extends Parameters {
 object FeatureSubsetStrategy {
 
   sealed abstract class Option(val name: String) extends Choice {
-    val parameters = Array.empty[Parameter[_]]
+    val parameters = Left(Array.empty[Parameter[_]])
 
     val choiceOrder: List[ChoiceOption] = List(
       classOf[Auto],

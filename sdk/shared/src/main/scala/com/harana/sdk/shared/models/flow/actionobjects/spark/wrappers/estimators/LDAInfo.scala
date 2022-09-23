@@ -31,7 +31,7 @@ trait LDAInfo
   val topicDistributionColumnParameter = SingleColumnCreatorParameter("topic distribution column")
   setDefault(topicDistributionColumnParameter, "topicDistribution")
 
-  val parameters = Array(
+  val parameters = Left(Array(
     checkpointIntervalParameter,
     kParameter,
     maxIterationsParameter,
@@ -40,7 +40,7 @@ trait LDAInfo
     topicDistributionColumnParameter,
     featuresColumnParameter,
     seedParameter
-  )
+  ))
 }
 
 object LDAInfo extends LDAInfo {
@@ -65,7 +65,7 @@ object LDAInfo extends LDAInfo {
     def createTopicConcentrationParam(): TopicConcentrationParameter
 
     val choiceOrder: List[ChoiceOption] = List(classOf[OnlineLDAOptimizer], classOf[ExpectationMaximizationLDAOptimizer])
-    val parameters = Array(docConcentrationParameter, topicConcentrationParameter)
+    val parameters = Left(Array(docConcentrationParameter, topicConcentrationParameter))
   }
 
   case class OnlineLDAOptimizer() extends LDAOptimizer {

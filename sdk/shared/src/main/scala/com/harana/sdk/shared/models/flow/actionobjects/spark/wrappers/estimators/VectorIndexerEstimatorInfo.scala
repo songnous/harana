@@ -18,5 +18,5 @@ trait VectorIndexerEstimatorInfo extends EstimatorInfo with Parameters {
 }
 
 object VectorIndexerEstimatorInfo extends VectorIndexerEstimatorInfo {
-  val parameters = Array.empty[Parameter[_]]
+  val parameters = Left(Array.empty[Parameter[_]])
 }

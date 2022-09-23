@@ -11,5 +11,5 @@ trait IDFModelInfo extends TransformerInfo with Parameters {
 }
 
 object IDFModelInfo extends IDFModelInfo {
-  val parameters = Array.empty[Parameter[_]]
+  val parameters = Left(Array.empty[Parameter[_]])
 }

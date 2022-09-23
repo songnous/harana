@@ -22,7 +22,7 @@ trait RandomForestRegressionInfo
 
   val id = "929760DE-008C-4C47-8648-55A001901B46"
 
-  val parameters = Array(
+  val parameters = Left(Array(
     maxDepthParameter,
     maxBinsParameter,
     minInstancesPerNodeParameter,
@@ -38,7 +38,7 @@ trait RandomForestRegressionInfo
     labelColumnParameter,
     featuresColumnParameter,
     predictionColumnParameter
-  )
+  ))
 }
 
 object RandomForestRegressionInfo extends RandomForestRegressionInfo

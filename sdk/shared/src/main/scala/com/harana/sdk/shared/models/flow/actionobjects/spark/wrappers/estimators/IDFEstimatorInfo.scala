@@ -17,5 +17,5 @@ trait IDFEstimatorInfo extends EstimatorInfo with Parameters {
 }
 
 object IDFEstimatorInfo extends IDFEstimatorInfo {
-  val parameters = Array.empty[Parameter[_]]
+  val parameters = Left(Array.empty[Parameter[_]])
 }

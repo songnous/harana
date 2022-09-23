@@ -27,5 +27,5 @@ trait CountVectorizerEstimatorInfo extends EstimatorInfo with HasMinTermsFrequen
 }
 
 object CountVectorizerEstimatorInfo extends CountVectorizerEstimatorInfo {
-  val parameters = Array.empty[Parameter[_]]
+  val parameters = Left(Array.empty[Parameter[_]])
 }

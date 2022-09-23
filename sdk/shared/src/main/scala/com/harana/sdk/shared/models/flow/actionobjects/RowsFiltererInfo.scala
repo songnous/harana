@@ -9,7 +9,7 @@ trait RowsFiltererInfo extends TransformerInfo {
   val conditionParameter = CodeSnippetParameter("condition", language = CodeSnippetLanguage(CodeSnippetLanguage.sql))
   def getCondition = $(conditionParameter)
   def setCondition(value: String): this.type = set(conditionParameter, value)
-  val parameters = Array(conditionParameter)
+  val parameters = Left(Array(conditionParameter))
 
 }
 

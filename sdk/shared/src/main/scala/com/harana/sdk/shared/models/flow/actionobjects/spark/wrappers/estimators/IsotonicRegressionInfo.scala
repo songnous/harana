@@ -17,14 +17,14 @@ trait IsotonicRegressionInfo
 
   setDefault(isotonicParameter, true)
 
-  val parameters = Array(
+  val parameters = Left(Array(
     isotonicParameter,
     optionalWeightColumnParameter,
     featureIndexParameter,
     labelColumnParameter,
     featuresColumnParameter,
     predictionColumnParameter
-  )
+  ))
 }
 
 object IsotonicRegressionInfo extends IsotonicRegressionInfo

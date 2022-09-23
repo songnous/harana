@@ -12,7 +12,7 @@ trait ColumnsFiltererInfo extends TransformerInfo {
   def setSelectedColumns(value: MultipleColumnSelection): this.type = set(selectedColumnsParameter, value)
   def setSelectedColumns(retainedColumns: Seq[String]): this.type = setSelectedColumns(MultipleColumnSelection(List(NameColumnSelection(retainedColumns.toSet))))
 
-  override val parameters = Array(selectedColumnsParameter)
+  override val parameters = Left(Array(selectedColumnsParameter))
 
 }
 

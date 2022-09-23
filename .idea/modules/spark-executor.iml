@@ -25,10 +25,10 @@
       <excludeFolder url="file://$MODULE_DIR$/../../spark-executor/target/streams" />
     </content>
     <orderEntry type="inheritedJdk" />
-    <orderEntry type="library" name="sbt: org.scalactic:scalactic_2.13:3.2.12:jar" level="project" />
     <orderEntry type="library" scope="TEST" name="sbt: net.sf.jopt-simple:jopt-simple:5.0.3:jar" level="project" />
     <orderEntry type="library" name="sbt: com.sun.istack:istack-commons-runtime:3.0.8:jar" level="project" />
     <orderEntry type="library" name="sbt: org.glassfish.jaxb:jaxb-runtime:2.3.2:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.scalactic:scalactic_2.13:3.2.12:jar" level="project" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="sbt: ai.x:play-json-extensions_2.13:0.42.0:jar" level="project" />
     <orderEntry type="library" name="sbt: aopalliance:aopalliance:1.0:jar" level="project" />

@@ -19,5 +19,5 @@ trait QuantileDiscretizerEstimatorInfo extends EstimatorInfo with Parameters {
 }
 
 object QuantileDiscretizerEstimatorInfo extends QuantileDiscretizerEstimatorInfo {
-  val parameters = Array.empty[Parameter[_]]
+  val parameters = Left(Array.empty[Parameter[_]])
 }

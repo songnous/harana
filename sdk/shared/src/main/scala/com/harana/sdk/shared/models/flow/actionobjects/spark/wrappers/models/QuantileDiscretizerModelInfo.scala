@@ -13,5 +13,5 @@ trait QuantileDiscretizerModelInfo extends TransformerInfo with Parameters {
 }
 
 object QuantileDiscretizerModelInfo extends QuantileDiscretizerModelInfo {
-  val parameters = Array.empty[Parameter[_]]
+  val parameters = Left(Array.empty[Parameter[_]])
 }

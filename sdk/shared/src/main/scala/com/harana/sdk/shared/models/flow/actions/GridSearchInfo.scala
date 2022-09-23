@@ -39,7 +39,7 @@ trait GridSearchInfo
   def getNumberOfFolds = $(numberOfFoldsParameter).toInt
   def setNumberOfFolds(numOfFolds: Int): this.type = set(numberOfFoldsParameter, numOfFolds.toDouble)
 
-  override val parameters = Array(estimatorParameters, evaluatorParameters, numberOfFoldsParameter)
+  override val parameters = Left(Array(estimatorParameters, evaluatorParameters, numberOfFoldsParameter))
 
   lazy val portI_0: TypeTag[EstimatorInfo] = typeTag
   lazy val portI_1: TypeTag[DataFrameInfo] = typeTag

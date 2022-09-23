@@ -12,6 +12,7 @@ import com.harana.designer.frontend.utils.ColorUtils
 import com.harana.designer.frontend.flows.list.FlowListStore._
 import com.harana.sdk.shared.models.common.Parameter.ParameterName
 import com.harana.sdk.shared.models.flow.Flow
+import com.harana.sdk.shared.models.flow.graph.FlowGraph
 import diode.Effect
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -44,7 +45,7 @@ class FlowListHandler extends GridHandler[Flow, FlowEditState]("flows", zoomTo(_
           title = "",
           description = "",
           connections = List(),
-          actions = List(),
+          graph = FlowGraph(),
           createdBy = Some(Main.claims.userId),
           visibility = Visibility.Owner,
           background = Background.Image(ColorUtils.randomBackground),

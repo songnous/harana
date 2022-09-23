@@ -7,7 +7,7 @@ trait LinearRegressionInfo extends EstimatorInfo with LinearRegressionParameters
 
   val id = "13B22557-FD3E-4C05-9F53-EACEE20297DD"
 
-  val parameters = Array(
+  val parameters = Left(Array(
     elasticNetParameter,
     fitInterceptParameter,
     maxIterationsParameter,
@@ -19,7 +19,7 @@ trait LinearRegressionInfo extends EstimatorInfo with LinearRegressionParameters
     labelColumnParameter,
     featuresColumnParameter,
     predictionColumnParameter
-  )
+  ))
 
 }
 

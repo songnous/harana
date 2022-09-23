@@ -16,7 +16,7 @@ trait SqlTransformerInfo extends TransformerInfo {
   def getExpression = $(expressionParameter)
   def setExpression(value: String): this.type = set(expressionParameter, value)
 
-  val parameters = Array(dataFrameIdParameter, expressionParameter)
+  val parameters = Left(Array(dataFrameIdParameter, expressionParameter))
 
 }
 

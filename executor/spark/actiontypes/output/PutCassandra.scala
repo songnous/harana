@@ -5,12 +5,12 @@ import com.harana.sdk.shared.models.designer.data.DataSourceTypes.Cassandra._
 import com.harana.sdk.backend.models.flow.actiontypes.output.PutCassandraInfo
 import com.harana.sdk.backend.models.flow.execution.ExecutionError
 import com.harana.sdk.backend.models.flow.ActionType.{Inputs, Outputs}
-import com.harana.sdk.backend.models.flow.{ActionType, FlowContext}
+import com.harana.sdk.backend.models.flow.{Action, FlowContext}
 import com.harana.executor.spark.actiontypes.log
 import com.harana.executor.spark.actiontypes.dataSourceParameterValues
 import zio.{IO, Task, UIO}
 
-class PutCassandra extends PutCassandraInfo with ActionType {
+class PutCassandra extends PutCassandraInfo with Action {
 
   def validate(parameters: ParameterValues, context: FlowContext): UIO[List[ExecutionError]] = null
 

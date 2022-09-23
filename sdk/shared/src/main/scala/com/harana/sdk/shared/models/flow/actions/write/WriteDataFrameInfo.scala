@@ -32,7 +32,7 @@ trait WriteDataFrameInfo
   def getStorageType = $(storageTypeParameter)
   def setStorageType(value: OutputStorageTypeChoice): this.type = set(storageTypeParameter, value)
 
-  override val parameters = Array(storageTypeParameter)
+  override val parameters = Left(Array(storageTypeParameter))
 }
 
 object WriteDataFrameInfo extends WriteDataFrameInfo {

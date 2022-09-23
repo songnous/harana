@@ -68,7 +68,7 @@ object EstimatorAsFactorySpec {
     val id = "test"
     val param = NumericParameter("b")
     setDefault(param -> 5)
-    val parameters = Array(param)
+    val parameters = Left(Array(param))
     override def _fit(ctx: ExecutionContext, df: DataFrame) = ???
     override def _fit_infer(schema: Option[StructType]) = ???
     override def report(extended: Boolean = true) = ???

@@ -17,7 +17,7 @@ import com.harana.workflowexecutor.WorkflowExecutorActor.Messages.NodeStarted
 /** WorkflowNodeExecutorActor is responsible for execution of single node. Sends NodeStarted at the beginning and
   * NodeCompleted or NodeFailed at the end of execution depending on whether the execution succeeded or failed.
   */
-class WorkflowNodeExecutorActor(executionContext: ExecutionContext, node: FlowNode, input: Vector[ActionObjectInfo]) extends Actor with Logging {
+class WorkflowNodeExecutorActor(executionContext: ExecutionContext, node: FlowNode, input: List[ActionObjectInfo]) extends Actor with Logging {
 
   import com.harana.workflowexecutor.WorkflowNodeExecutorActor.Messages._
 
@@ -72,7 +72,7 @@ class WorkflowNodeExecutorActor(executionContext: ExecutionContext, node: FlowNo
     logger.debug(s"Sending $nodeStarted.")
   }
 
-  def nodeExecutionResultsFrom(actionResults: Vector[ActionObjectInfo]): NodeExecutionResults = {
+  def nodeExecutionResultsFrom(actionResults: List[ActionObjectInfo]): NodeExecutionResults = {
     val registeredResults: Seq[(Id, ActionObjectInfo)]  = registerResults(actionResults)
     val registeredResultsMap: Map[Id, ActionObjectInfo] = registeredResults.toMap
     val reports: Map[Id, ReportContent]          = collectReports(registeredResultsMap)
@@ -93,7 +93,7 @@ class WorkflowNodeExecutorActor(executionContext: ExecutionContext, node: FlowNo
     }
   }
 
-  def executeAction(): Vector[ActionObjectInfo] = {
+  def executeAction(): List[ActionObjectInfo] = {
     logger.debug(s"$nodeDescription inputVector.size = ${input.size}")
     val inputKnowledge = input.map(actionObject => Knowledge(actionObject))
     // if inference throws, we do not perform execution

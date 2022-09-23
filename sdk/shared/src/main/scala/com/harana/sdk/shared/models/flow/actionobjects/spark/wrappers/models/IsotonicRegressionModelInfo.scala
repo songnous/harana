@@ -7,11 +7,11 @@ trait IsotonicRegressionModelInfo extends ActionObjectInfo with PredictorParamet
 
   val id = "328370B5-5C44-43F8-8840-A1904DA9E44A"
 
-  val parameters = Array(
+  val parameters = Left(Array(
     featureIndexParameter,
     featuresColumnParameter,
     predictionColumnParameter
-  )
+  ))
 }
 
 object IsotonicRegressionModelInfo extends IsotonicRegressionModelInfo

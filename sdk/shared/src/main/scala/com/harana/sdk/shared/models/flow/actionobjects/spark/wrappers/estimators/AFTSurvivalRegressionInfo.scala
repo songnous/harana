@@ -22,7 +22,7 @@ trait AFTSurvivalRegressionInfo
   val censorColumnParameter = SingleColumnSelectorParameter("censor column", portIndex = 0)
   setDefault(censorColumnParameter, NameSingleColumnSelection("censor"))
 
-  val parameters = Array(
+  val parameters = Left(Array(
     fitInterceptParameter,
     maxIterationsParameter,
     toleranceParameter,
@@ -31,7 +31,7 @@ trait AFTSurvivalRegressionInfo
     featuresColumnParameter,
     predictionColumnParameter,
     quantileProbabilitiesParameter,
-    optionalQuantilesColumnParameter)
+    optionalQuantilesColumnParameter))
 }
 
 object AFTSurvivalRegressionInfo extends AFTSurvivalRegressionInfo

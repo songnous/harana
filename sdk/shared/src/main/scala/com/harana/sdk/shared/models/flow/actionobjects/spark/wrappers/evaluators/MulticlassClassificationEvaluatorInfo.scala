@@ -19,13 +19,13 @@ trait MulticlassClassificationEvaluatorInfo
   setDefault(metricNameParameter, F1())
   def getMetricName = $(metricNameParameter).name
 
-  val parameters = Array(metricNameParameter, predictionColumnParameter, labelColumnParameter)
+  val parameters = Left(Array(metricNameParameter, predictionColumnParameter, labelColumnParameter))
 }
 
 object MulticlassClassificationEvaluatorInfo extends MulticlassClassificationEvaluatorInfo {
   sealed abstract class Metric(val name: String) extends Choice {
     val choiceOrder: List[ChoiceOption] = List(classOf[F1], classOf[Precision], classOf[Recall], classOf[WeightedPrecision], classOf[WeightedRecall])
-    val parameters = Array.empty[Parameter[_]]
+    val parameters = Left(Array.empty[Parameter[_]])
   }
 
   case class F1() extends Metric("f1")

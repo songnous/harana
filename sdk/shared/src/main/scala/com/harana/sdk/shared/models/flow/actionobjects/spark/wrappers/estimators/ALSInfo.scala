@@ -40,7 +40,7 @@ trait ALSInfo
   def getRatingColumn = $(ratingColumnParameter)
   setDefault(ratingColumnParameter, NameSingleColumnSelection("rating"))
 
-  val parameters = Array(
+  val parameters = Left(Array(
     alphaParameter,
     checkpointIntervalParameter,
     implicitPrefsParameter,
@@ -54,7 +54,7 @@ trait ALSInfo
     seedParameter,
     itemColumnParameter,
     predictionColumnParameter,
-    userColumnParameter)
+    userColumnParameter))
 }
 
 object ALSInfo extends ALSInfo

@@ -28,7 +28,7 @@ object OutputStorageTypeChoice {
 
     def getFileFormat = $(fileFormatParameter)
     def setFileFormat(value: OutputFileFormatChoice): this.type = set(fileFormatParameter, value)
-    val parameters = Array(outputFileParameter, shouldOverwriteParameter, fileFormatParameter)
+    val parameters = Left(Array(outputFileParameter, shouldOverwriteParameter, fileFormatParameter))
   }
 
   class Jdbc() extends OutputStorageTypeChoice with JdbcParameters {
@@ -40,18 +40,18 @@ object OutputStorageTypeChoice {
     def getShouldOverwrite = $(shouldOverwriteParameter)
     def setShouldOverwrite(value: Boolean): this.type = set(shouldOverwriteParameter, value)
 
-    val parameters = Array(jdbcUrlParameter, jdbcDriverClassNameParameter, jdbcTableNameParameter, shouldOverwriteParameter)
+    val parameters = Left(Array(jdbcUrlParameter, jdbcDriverClassNameParameter, jdbcTableNameParameter, shouldOverwriteParameter))
   }
 
   class GoogleSheet() extends OutputStorageTypeChoice with GoogleSheetParameters with NamesIncludedParameter with HasShouldConvertToBooleanParameter {
 
     val name = "Google Sheet"
 
-    override val parameters = Array(
+    override val parameters = Left(Array(
       googleSheetIdParameter,
       serviceAccountCredentialsParameter,
       namesIncludedParameter,
       shouldConvertToBooleanParameter
-    )
+    ))
   }
 }

@@ -7,7 +7,7 @@ import com.harana.designer.frontend.utils.FileUtils
 import com.harana.ui.components.elements.{Dialog, HeadingItem}
 import com.harana.ui.external.shoelace.{MenuDivider, MenuItem, MenuLabel}
 import com.harana.designer.frontend.utils.i18nUtils.ops
-import slinky.core.facade.ReactRef
+import slinky.core.facade.{ReactElement, ReactRef}
 
 import scala.scalajs.js
 import scala.scalajs.js.JSConverters._
@@ -46,26 +46,24 @@ object toolbar {
 
   def pathTree(state: FilesState) =
     HeadingItem.IconMenu(("icomoon", "arrow-up8"), i"files.menu.new", className = Some("heading-icon"), menuItems =
-      List(
+      List[ReactElement](
         MenuItem(
           label = i"files.menu.pathtree.home",
           iconPrefix = Some("icomoon", "home6"),
           onClick = Some(_ => Circuit.dispatch(PopToHome))
         ).withKey("pathtree-home")
       ) ++ (
-        if (state.item.isDefined)
-          if (state.item.get.path.isEmpty)
-            List()
-          else
-            state.item.get.path.split("/").filter(_.nonEmpty).dropRight(1).zipWithIndex.map { case (folder, index) =>
-              MenuItem(
-                label = folder,
-                iconPrefix = Some("icomoon", "folder4"),
-                onClick = Some(_ => Circuit.dispatch(PopPath(index+1)))
-              ).withKey(s"pathtree-$folder")
-            }
+        if (state.item.isDefined && state.item.get.path.nonEmpty) {
+          state.item.get.path.split("/").toList.filter(_.nonEmpty).dropRight(1).zipWithIndex.map { case (folder, index) =>
+            MenuItem(
+              label = folder,
+              iconPrefix = Some("icomoon", "folder4"),
+              onClick = Some(_ => Circuit.dispatch(PopPath(index+1)))
+            ).withKey(s"pathtree-$folder")
+          }
+        }
         else
-          List()
+          List.empty[ReactElement]
         )
     )
 

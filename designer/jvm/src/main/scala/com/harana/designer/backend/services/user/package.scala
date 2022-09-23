@@ -1,14 +1,13 @@
 package com.harana.designer.backend.services
 
 import com.harana.sdk.shared.models.common.User.UserId
-import com.harana.sdk.shared.models.common.{ParameterValue, Visibility}
+import com.harana.sdk.shared.models.common.{Background, ParameterValue, Visibility}
+import com.harana.sdk.shared.models.designer.flow.execution.ExecutionStatus
 import com.harana.sdk.shared.models.flow.{Flow, FlowExecution}
 
 package object user {
 
   def createSampleFlow(userId: UserId): (Flow, FlowExecution) = {
-    val inPort = Port.Int("In")
-    val outPort = Port.Int("Out")
 
     val parameters = Map(
       "string" -> ParameterValue.String("a"),
@@ -27,7 +26,8 @@ package object user {
 //    val link2 = Link(action2.id, outPort, action3.id, inPort)
 //    val links = List(link1, link2)
 //
-    val flow = Flow("Test Flow", "This is a description about this flow", List(), List(), List(), Some(userId), Visibility.Owner, None, Set("Flow"))
+
+    val flow = Flow("Test Flow", "This is a description about this flow", List(), List(), List(), Some(userId), Visibility.Owner, Background.RGB(10, 10, 10, 1), Set("Flow"))
     val execution = FlowExecution(flow.id, Some(userId), ExecutionStatus.PendingExecution, Some(0), Some(0))
     (flow, execution)
   }

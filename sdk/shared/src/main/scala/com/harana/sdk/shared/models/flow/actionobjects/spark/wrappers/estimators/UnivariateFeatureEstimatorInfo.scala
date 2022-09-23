@@ -19,12 +19,12 @@ trait UnivariateFeatureEstimatorInfo
   setDefault(numTopFeaturesParameter -> 50)
   def setNumTopFeatures(value: Int): this.type = set(numTopFeaturesParameter -> value)
 
-  val parameters = Array(
+  val parameters = Left(Array(
     numTopFeaturesParameter,
     featuresColumnParameter,
     outputColumnParameter,
     labelColumnParameter
-  )
+  ))
 }
 
 object UnivariateFeatureEstimatorInfo extends UnivariateFeatureEstimatorInfo

@@ -71,7 +71,7 @@ abstract class WorkflowExecutorActor(
     statefulWorkflow.updateStructure(workflow)
 
     removedNodes.foreach { node =>
-      val nodeRef = getGraphNodeExecutor(node, Vector.empty)
+      val nodeRef = getGraphNodeExecutor(node, List.empty)
       nodeRef ! WorkflowNodeExecutorActor.Messages.Delete()
     }
 
@@ -139,13 +139,13 @@ abstract class WorkflowExecutorActor(
 
   def launchReadyNodes() =
     statefulWorkflow.startReadyNodes().foreach { readyNode =>
-      val input = readyNode.input.toVector
+      val input = readyNode.input.toList
       val nodeRef = getGraphNodeExecutor(readyNode.node, input)
       nodeRef ! WorkflowNodeExecutorActor.Messages.Start()
       logger.debug(s"Starting node $readyNode")
     }
 
-  private def getGraphNodeExecutor(node: FlowNode, doactionObject: Vector[ActionObjectInfo]): ActorRef = {
+  private def getGraphNodeExecutor(node: FlowNode, doactionObject: List[ActionObjectInfo]): ActorRef = {
     val nodeExecutionContext = executionContext.createExecutionContext(workflowId, node.id)
     nodeExecutorFactory.createGraphNodeExecutor(context, nodeExecutionContext, node, doactionObject)
   }
@@ -199,11 +199,11 @@ object WorkflowExecutorActor {
 }
 
 trait GraphNodeExecutorFactory {
-  def createGraphNodeExecutor(context: ActorContext, executionContext: ExecutionContext, node: FlowNode, input: Vector[ActionObjectInfo]): ActorRef
+  def createGraphNodeExecutor(context: ActorContext, executionContext: ExecutionContext, node: FlowNode, input: List[ActionObjectInfo]): ActorRef
 }
 
 class GraphNodeExecutorFactoryImpl extends GraphNodeExecutorFactory {
-  override def createGraphNodeExecutor(context: ActorContext, executionContext: ExecutionContext, node: FlowNode, input: Vector[ActionObjectInfo]) = {
+  override def createGraphNodeExecutor(context: ActorContext, executionContext: ExecutionContext, node: FlowNode, input: List[ActionObjectInfo]) = {
     val props = Props(new WorkflowNodeExecutorActor(executionContext, node, input)).withDispatcher("node-executor-dispatcher")
     context.actorOf(props, s"node-executor-${node.id.value.toString}")
   }

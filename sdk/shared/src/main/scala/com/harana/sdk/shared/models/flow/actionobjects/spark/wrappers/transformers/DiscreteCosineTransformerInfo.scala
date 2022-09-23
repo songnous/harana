@@ -16,5 +16,5 @@ trait DiscreteCosineTransformerInfo extends TransformerInfo with Parameters {
 }
 
 object DiscreteCosineTransformerInfo extends DiscreteCosineTransformerInfo {
-  val parameters = Array.empty
+  val parameters = Left(Array.empty[Parameter[_]])
 }

@@ -20,7 +20,7 @@ trait DropColumnsInfo extends Action1To1Info[DataFrameInfo, DataFrameInfo] with 
   lazy val portI_0: TypeTag[DataFrameInfo] = typeTag
   lazy val portO_0: TypeTag[DataFrameInfo] = typeTag
 
-  val parameters = Array.empty[Parameter[_]]
+  val parameters = Left(Array.empty[Parameter[_]])
 
 }
 

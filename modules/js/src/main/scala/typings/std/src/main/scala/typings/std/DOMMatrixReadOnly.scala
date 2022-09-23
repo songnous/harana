@@ -44,9 +44,9 @@ trait DOMMatrixReadOnly extends js.Object {
   def rotateAxisAngle(x: Double, y: Double): DOMMatrix = js.native
   def rotateAxisAngle(x: Double, y: Double, z: Double): DOMMatrix = js.native
   def rotateAxisAngle(x: Double, y: Double, z: Double, angle: Double): DOMMatrix = js.native
-  def rotateFromVector(): DOMMatrix = js.native
-  def rotateFromVector(x: Double): DOMMatrix = js.native
-  def rotateFromVector(x: Double, y: Double): DOMMatrix = js.native
+  def rotateFromList(): DOMMatrix = js.native
+  def rotateFromList(x: Double): DOMMatrix = js.native
+  def rotateFromList(x: Double, y: Double): DOMMatrix = js.native
   def scale(
     scaleX: js.UndefOr[Double],
     scaleY: js.UndefOr[Double],

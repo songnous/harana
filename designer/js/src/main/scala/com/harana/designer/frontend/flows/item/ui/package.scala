@@ -1,8 +1,10 @@
 package com.harana.designer.frontend.flows.item
 
 import com.harana.sdk.shared.models.designer.flow.execution.ExecutionStatus
-import com.harana.sdk.shared.models.flow.Action
+import com.harana.sdk.shared.models.flow.execution.spark.ExecutionStatus
+import com.harana.sdk.shared.models.flow.{Action, ActionInfo}
 import com.harana.sdk.shared.utils.Random
+import com.harana.ui.components.elements.Link
 import com.harana.ui.external.flow.types.{FlowElement, HandleType}
 import com.harana.ui.external.flow.{Connection, Edge, Node, XYPosition}
 import enumeratum._
@@ -29,7 +31,7 @@ package object ui {
 
 
   @inline
-  def actionTypeColour(info: ActionType) =
+  def actionTypeColour(info: ActionInfo) =
     info.group match {
       case "info" => "#beabca"
       case "input" => "#caabc2"
@@ -62,7 +64,7 @@ package object ui {
 
 
   @inline
-  def toNode(action: Action) =
+  def toNode(action: ActionInfo) =
     new Node {
       val id = action.id
       val position = new XYPosition {

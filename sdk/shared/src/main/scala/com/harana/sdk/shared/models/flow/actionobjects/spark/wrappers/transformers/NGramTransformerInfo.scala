@@ -19,5 +19,5 @@ trait NGramTransformerInfo extends TransformerInfo with Parameters {
 }
 
 object NGramTransformerInfo extends NGramTransformerInfo {
-  val parameters = Array.empty
+  val parameters = Left(Array.empty[Parameter[_]])
 }

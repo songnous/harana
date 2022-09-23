@@ -72,7 +72,7 @@ object SparkEvaluatorWrapperSpec {
     setDefault(column, NameSingleColumnSelection("column"))
     def setColumnWrapper(value: SingleColumnSelection): this.type = set(column, value)
 
-    val parameters = Array(paramWrapper, column)
+    val parameters = Left(Array(paramWrapper, column))
 
     def getMetricName = metricName
 

@@ -25,7 +25,7 @@ trait TransformInfo extends Action2To1Info[TransformerInfo, DataFrameInfo, DataF
   def getTransformerParameters = $(transformerParameters)
   def setTransformerParameters(jsValue: Json): this.type = set(transformerParameters, jsValue)
 
-  override val parameters =  Array(transformerParameters)
+  override val parameters =  Left(Array(transformerParameters))
 
   lazy val portI_0: TypeTag[TransformerInfo] = typeTag
   lazy val portI_1: TypeTag[DataFrameInfo] = typeTag

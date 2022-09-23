@@ -6,10 +6,9 @@ import com.harana.designer.frontend.utils.DateUtils
 import com.harana.designer.frontend.utils.i18nUtils._
 import com.harana.sdk.shared.models.common.Parameter.ParameterName
 import com.harana.sdk.shared.models.common.ParameterValue
-import com.harana.sdk.shared.models.designer.flow.execution.AggregateMetric._
-import com.harana.sdk.shared.models.designer.flow.execution.{AggregateMetric, ExecutionStatus}
-import com.harana.sdk.shared.models.flow.Action.ActionId
-import com.harana.sdk.shared.models.flow.{Flow, FlowExecution}
+import com.harana.sdk.shared.models.flow.execution.spark.AggregateMetric._
+import com.harana.sdk.shared.models.flow.execution.spark.ExecutionStatus
+import com.harana.sdk.shared.models.flow.{ActionInfo, Flow, FlowExecution}
 import com.harana.ui.components.elements.{Color, Label}
 import com.harana.ui.components.sidebar.ParametersSection
 import com.harana.ui.external.shoelace.ProgressBar
@@ -20,7 +19,7 @@ import scala.util.Try
 
 package object sidebar {
 
-  def actionTypes(state: FlowItemState): ReactElement =
+  def actions(state: FlowItemState): ReactElement =
     div(className := "flow-sidebar-components")(
       state.actionTypes.map { at =>
         li(className := "flow-component-item", draggable := (!state.isRunning).toString, onDrag := (_ => Circuit.dispatch(SelectActionType(at))))(
@@ -33,17 +32,16 @@ package object sidebar {
     )
 
 
-  def parameters(flow: Option[Flow], actionType: Option[ActionType], actionId: Option[ActionId], parameterValues: Map[ParameterName, ParameterValue], isRunning: Boolean): ReactElement =
+  def parameters(flow: Option[Flow], action: Option[ActionInfo], actionId: Option[ActionInfo.Id], parameterValues: Map[ParameterName, ParameterValue], isRunning: Boolean): ReactElement =
     div(className := "flow-sidebar-components")(
-      actionType match {
-        case Some(at) =>
-          val name = at.getClass.getSimpleName
+      action match {
+        case Some(a) =>
           Fragment(
             div(className := "category-content")(
-              h6(i"actiontypes.$name")
+              h6(i"actiontypes.${a.name}")
             ),
             ParametersSection(
-              parameterGroups = at.parameterGroups,
+              parameterGroups = a.pa
               i18nPrefix = "flows",
               values = parameterValues,
               onChange = Some((parameter, value) =>

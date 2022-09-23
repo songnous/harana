@@ -13,7 +13,7 @@ import scala.collection.mutable.ListBuffer
 object MetricsManager {
   private val dirtyFlowExecutions = mutable.HashSet[FlowExecutionId]()
   private val flowExecutions = mutable.Map[FlowExecutionId, (FlowExecution, FlowExecutionLogs)]()
-  private val activeActions = mutable.Map[FlowExecutionId, ListBuffer[ActionId]]()
+  private val activeActions = mutable.Map[FlowExecutionId, ListBuffer[ActionInfo.Id]]()
 
 
   def isDirty(flowExecutionId: FlowExecutionId): Boolean =
@@ -40,7 +40,7 @@ object MetricsManager {
 
   def updateFlow(flowExecution: FlowExecution, flowLogs: FlowExecutionLogs): Unit = {
     flowExecutions += flowExecution.id -> (flowExecution, flowLogs)
-    activeActions += flowExecution.id -> new ListBuffer[ActionId]()
+    activeActions += flowExecution.id -> new ListBuffer[ActionInfo.Id]()
     dirtyFlowExecutions += flowExecution.id
   }
 
@@ -54,19 +54,19 @@ object MetricsManager {
   }
 
 
-  def startAction(flowExecutionId: FlowExecutionId, actionId: ActionId): Unit = {
+  def startAction(flowExecutionId: FlowExecutionId, actionId: ActionInfo.Id): Unit = {
     activeActions(flowExecutionId) += actionId
     updateAction(flowExecutionId, ActionExecution(actionId, 50, ExecutionStatus.Executing, None))
   }
 
 
-  def stopAction(flowExecutionId: FlowExecutionId, actionId: ActionId): Unit = {
+  def stopAction(flowExecutionId: FlowExecutionId, actionId: ActionInfo.Id): Unit = {
     activeActions(flowExecutionId) -= actionId
     updateAction(flowExecutionId, ActionExecution(actionId, 100, ExecutionStatus.Succeeded, None))
   }
 
 
-  def failAction(flowExecutionId: FlowExecutionId, actionId: ActionId, message: String): Unit = {
+  def failAction(flowExecutionId: FlowExecutionId, actionId: ActionInfo.Id, message: String): Unit = {
     activeActions(flowExecutionId).clear()
     updateAction(flowExecutionId, ActionExecution(actionId, 50, ExecutionStatus.Failed, Some(message)))
     updateFlow(flowExecutions(flowExecutionId)._1.copy(completedTime = Some(Instant.now), executionStatus = ExecutionStatus.Failed, executionFailure = Some(message)), flowExecutions(flowExecutionId)._2)

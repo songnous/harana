@@ -47,7 +47,7 @@ object ActionCatalogTestResources {
     val inArity: Int = 2
     val outArity: Int = 3
 
-    val parameters = Array.empty[Parameter[_]]
+    val parameters = Left(Array.empty[Parameter[_]])
 
   }
 

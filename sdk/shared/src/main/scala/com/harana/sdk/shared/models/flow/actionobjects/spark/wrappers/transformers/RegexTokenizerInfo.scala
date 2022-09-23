@@ -23,5 +23,5 @@ trait RegexTokenizerInfo extends TransformerInfo with Parameters {
 }
 
 object RegexTokenizerInfo extends RegexTokenizerInfo {
-  val parameters = Array.empty
+  val parameters = Left(Array.empty[Parameter[_]])
 }

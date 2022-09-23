@@ -7,10 +7,10 @@ trait MultilayerPerceptronClassifierModelInfo extends ActionObjectInfo with Pred
 
   val id = "FE2E65C3-CF0A-411C-926C-9A58A86B058E"
 
-  val parameters = Array(
+  val parameters = Left(Array(
     featuresColumnParameter,
     predictionColumnParameter
-  )
+  ))
 }
 
 object MultilayerPerceptronClassifierModelInfo extends MultilayerPerceptronClassifierModelInfo

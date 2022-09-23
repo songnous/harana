@@ -11,12 +11,12 @@ trait AFTSurvivalRegressionModelInfo
 
   val id = "E8112371-B8BB-4EF1-A4A5-E02073B00531"
 
-  val parameters = Array(
+  val parameters = Left(Array(
     featuresColumnParameter,
     predictionColumnParameter,
     quantileProbabilitiesParameter,
     optionalQuantilesColumnParameter
-  )
+  ))
 
 }
 

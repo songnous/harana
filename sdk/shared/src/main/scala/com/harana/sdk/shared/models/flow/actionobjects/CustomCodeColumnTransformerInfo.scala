@@ -13,8 +13,6 @@ trait CustomCodeColumnTransformerInfo extends MultiColumnTransformerInfo {
   def getCodeParameter = $(codeParameter)
   def setCodeParameter(value: String): this.type = set(codeParameter, value)
 
-  val parameters: Array[Parameter[_]]
-
 }
 
 object CustomCodeColumnTransformerInfo {
