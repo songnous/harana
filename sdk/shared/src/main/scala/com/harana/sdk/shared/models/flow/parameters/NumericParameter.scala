@@ -4,9 +4,9 @@ import com.harana.sdk.shared.models.flow.parameters.validators.{RangeValidator, 
 
 case class NumericParameter(name: String,
                             required: Boolean = false,
+                            default: Option[Double] = None,
                             validator: Validator[Double] = RangeValidator.allDouble)
-    extends Parameter[Double]
-    with HasValidator[Double] {
+    extends Parameter[Double] with HasValidator[Double] {
 
   val parameterType = ParameterType.Numeric
 

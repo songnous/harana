@@ -1,12 +1,12 @@
 package com.harana.sdk.shared.models.flow.parameters
 
-import com.harana.sdk.shared.models.flow.parameters.validators.{RangeValidator, Validator}
+import com.harana.sdk.shared.models.flow.parameters.validators.{ComplexArrayValidator, Validator}
 
 case class FloatArrayParameter(name: String,
                                required: Boolean = false,
-                               tags: List[String] = List(),
-                               validator: Validator[Float] = RangeValidator.allFloat)
-  extends Parameter[Float] with HasValidator[Float] {
+                               default: Option[Array[Float]] = None,
+                               validator: Validator[Array[Float]] = ComplexArrayValidator.allFloat)
+  extends Parameter[Array[Float]] with HasValidator[Array[Float]] {
 
   val parameterType = ParameterType.MultipleNumeric
 

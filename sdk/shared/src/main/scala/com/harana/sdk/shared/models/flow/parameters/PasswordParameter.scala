@@ -4,6 +4,7 @@ import com.harana.sdk.shared.models.flow.parameters.validators.{RegexValidator, 
 
 case class PasswordParameter(name: String,
                              required: Boolean = false,
+                             default: Option[String] = None,
                              validator: Validator[String] = RegexValidator.AcceptAll) extends Parameter[String] with HasValidator[String] {
 
   val parameterType = ParameterType.Password

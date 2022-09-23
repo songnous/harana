@@ -4,6 +4,7 @@ import com.harana.sdk.shared.models.flow.parameters.validators.{ArrayValidator, 
 
 case class StringArrayParameter(name: String,
                                 required: Boolean = false,
+                                default: Option[Array[String]] = None,
                                 validator: Validator[Array[String]] = ArrayValidator(RegexValidator.AcceptAll)) extends Parameter[Array[String]] {
 
   val parameterType = ParameterType.MultipleNumeric

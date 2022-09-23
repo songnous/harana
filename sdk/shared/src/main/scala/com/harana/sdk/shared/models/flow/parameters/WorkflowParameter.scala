@@ -5,7 +5,8 @@ import io.circe.generic.JsonCodec
 
 @JsonCodec
 case class WorkflowParameter(name: String,
-                             required: Boolean = false) extends Parameter[InnerWorkflow] {
+                             required: Boolean = false,
+                             default: Option[InnerWorkflow] = None) extends Parameter[InnerWorkflow] {
 
   val parameterType = ParameterType.Workflow
 

@@ -9,7 +9,9 @@ import io.circe.Json
 import io.circe.generic.JsonCodec
 
 @JsonCodec
-case class InnerWorkflow(graph: FlowGraph, thirdPartyData: Json = Json.Null, publicParameters: List[PublicParameter] = List.empty) {
+case class InnerWorkflow(graph: FlowGraph,
+                         thirdPartyData: Json = Json.Null,
+                         publicParameters: List[PublicParameter] = List.empty) {
 
   val sourceId = SourceInfo.id
   val sinkId = SinkInfo.id

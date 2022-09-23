@@ -1,7 +1,8 @@
 package com.harana.sdk.shared.models.flow.parameters
 
 case class BooleanParameter(name: String,
-                            required: Boolean = false) extends Parameter[Boolean] {
+                            required: Boolean = false,
+                            default: Option[Boolean] = None) extends Parameter[Boolean] {
 
   val parameterType = ParameterType.Boolean
 

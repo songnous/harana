@@ -4,6 +4,7 @@ import com.harana.sdk.shared.models.flow.parameters.validators.{RegexValidator, 
 
 case class URIParameter(name: String,
                         required: Boolean = false,
+                        default: Option[String] = None,
                         options: List[(String, String)] = List(),
                         validator: Validator[String] = RegexValidator.URI) extends Parameter[String] with HasValidator[String] {
 

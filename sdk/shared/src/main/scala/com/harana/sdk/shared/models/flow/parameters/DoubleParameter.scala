@@ -4,6 +4,7 @@ import com.harana.sdk.shared.models.flow.parameters.validators.{RangeValidator, 
 
 case class DoubleParameter(name: String,
                            required: Boolean = false,
+                           default: Option[Double] = None,
                            validator: Validator[Double] = RangeValidator.allDouble) extends Parameter[Double]
     with HasValidator[Double] {
 

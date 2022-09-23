@@ -4,6 +4,7 @@ import com.harana.sdk.shared.models.flow.parameters.selections.MultipleColumnSel
 
 case class ColumnSelectorParameter(name: String,
                                    required: Boolean = false,
+                                   default: Option[MultipleColumnSelection] = None,
                                    portIndex: Int) extends AbstractColumnSelectorParameter[MultipleColumnSelection] {
 
   val parameterType = ParameterType.ColumnSelector

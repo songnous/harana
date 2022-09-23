@@ -4,6 +4,7 @@ import com.harana.sdk.shared.models.flow.parameters.validators.ColumnValidator
 
 case class PrefixBasedColumnCreatorParameter(name: String,
                                              required: Boolean = false,
+                                             default: Option[String] = None,
                                              emptyPrefixValidation: Boolean = false) extends Parameter[String] {
 
   override def validate(value: String) =

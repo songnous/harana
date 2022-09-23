@@ -4,6 +4,7 @@ import com.harana.sdk.shared.models.flow.parameters.selections.SingleColumnSelec
 
 case class SingleColumnSelectorParameter(name: String,
                                          required: Boolean = false,
+                                         default: Option[SingleColumnSelection] = None,
                                          portIndex: Int) extends AbstractColumnSelectorParameter[SingleColumnSelection] {
 
   val parameterType = ParameterType.ColumnSelector

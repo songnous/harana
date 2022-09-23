@@ -16,7 +16,7 @@ trait CountVectorizerEstimatorInfo extends EstimatorInfo with HasMinTermsFrequen
   setDefault(minDFParameter, 1.0)
 
   val vocabSizeParameter = IntParameter("max vocabulary size", validator = RangeValidator(0, Int.MaxValue, beginIncluded = false, step = Some(1)))
-  setDefault(vocabSizeParameter, (1 << 18).toInt)
+  setDefault(vocabSizeParameter, 1 << 18)
 
   val specificParameters = Array[Parameter[_]](
     vocabSizeParameter,

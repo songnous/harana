@@ -1,12 +1,13 @@
 package com.harana.sdk.shared.models.flow.parameters
 
-import com.harana.sdk.shared.models.flow.parameters.validators.{RangeValidator, Validator}
+import com.harana.sdk.shared.models.flow.parameters.validators.{ComplexArrayValidator, RangeValidator, Validator}
 import io.circe.generic.JsonCodec
 
 @JsonCodec
 case class LongArrayParameter(name: String,
                               required: Boolean = false,
-                              validator: Validator[Long] = RangeValidator.allLong) extends Parameter[Long] with HasValidator[Long] {
+                              default: Option[Array[Long]] = None,
+                              validator: Validator[Array[Long]] = ComplexArrayValidator.allLong) extends Parameter[Array[Long]] with HasValidator[Array[Long]] {
 
   val parameterType = ParameterType.LongArray
 

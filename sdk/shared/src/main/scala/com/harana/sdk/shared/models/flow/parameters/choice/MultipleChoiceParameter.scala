@@ -5,7 +5,8 @@ import com.harana.sdk.shared.models.flow.parameters.ParameterType.MultipleChoice
 import scala.reflect.runtime.universe._
 
 case class MultipleChoiceParameter[T <: Choice](name: String,
-                                                required: Boolean = false)(implicit tag: TypeTag[T]) extends AbstractChoiceParameter[T, Set[T]] {
+                                                required: Boolean = false,
+                                                default: Option[T] = None)(implicit tag: TypeTag[T]) extends AbstractChoiceParameter[T, Set[T]] {
 
   val parameterType = MultipleChoice
 

@@ -6,7 +6,8 @@ import com.harana.sdk.shared.models.flow.utils.TypeUtils
 import scala.reflect.runtime.universe._
 
 case class ParametersSequence[T <: Parameters](name: String,
-                                               required: Boolean = false)(implicit tag: TypeTag[T]) extends Parameter[Seq[T]] {
+                                               required: Boolean = false,
+                                               default: Option[Seq[T]] = None)(implicit tag: TypeTag[T]) extends Parameter[Seq[T]] {
 
   val parameterType = ParameterType.Multiplier
 

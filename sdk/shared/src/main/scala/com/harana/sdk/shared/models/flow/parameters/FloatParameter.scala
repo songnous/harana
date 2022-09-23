@@ -4,6 +4,7 @@ import com.harana.sdk.shared.models.flow.parameters.validators.{RangeValidator, 
 
 case class FloatParameter(name: String,
                           required: Boolean = false,
+                          default: Option[Float] = None,
                           validator: Validator[Float] = RangeValidator.allFloat)
   extends Parameter[Float] with HasValidator[Float] {
 

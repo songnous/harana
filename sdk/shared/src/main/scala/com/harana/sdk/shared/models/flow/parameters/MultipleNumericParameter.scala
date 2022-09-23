@@ -5,6 +5,7 @@ import com.harana.sdk.shared.models.flow.parameters.validators.{ComplexArrayVali
 
 case class MultipleNumericParameter(name: String,
                                     required: Boolean = false,
+                                    default: Option[Array[Double]] = None,
                                     validator: Validator[Array[Double]] = ComplexArrayValidator.allDouble)
     extends Parameter[Array[Double]] {
 
