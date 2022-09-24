@@ -12,17 +12,17 @@ object InputFileFormatChoice {
 
   class Csv() extends InputFileFormatChoice with CsvParameters with HasShouldConvertToBooleanParameter {
     val name = FileFormat.CSV.toString
-    val parameters = Left(Array(csvColumnSeparatorParameter, namesIncludedParameter, shouldConvertToBooleanParameter))
+    val parameters = Left(List(csvColumnSeparatorParameter, namesIncludedParameter, shouldConvertToBooleanParameter))
   }
 
   class Parquet() extends InputFileFormatChoice {
     val name = FileFormat.PARQUET.toString
-    val parameters = Left(Array.empty[Parameter[_]])
+    val parameters = Left(List.empty[Parameter[_]])
   }
 
   class Json() extends InputFileFormatChoice {
     val name = FileFormat.JSON.toString
-    val parameters = Left(Array.empty[Parameter[_]])
+    val parameters = Left(List.empty[Parameter[_]])
   }
 
   val choiceOrder: List[ChoiceOption] = List(

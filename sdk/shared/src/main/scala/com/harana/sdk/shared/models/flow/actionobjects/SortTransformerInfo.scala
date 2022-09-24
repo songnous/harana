@@ -11,7 +11,7 @@ trait SortTransformerInfo extends TransformerInfo {
   val columnsParameter = ParametersSequence[SortColumnParameter]("sort columns")
   def getColumns = $(columnsParameter)
   def setColumns(sortColumnParameters: Seq[SortColumnParameter]): this.type = set(columnsParameter, sortColumnParameters)
-  val parameters = Left(Array(columnsParameter))
+  val parameters = Left(List(columnsParameter))
 
 }
 
@@ -28,7 +28,7 @@ class SortColumnParameter extends Parameters {
   def isDescending: Boolean = getDescending
   def setDescending(desc: Boolean): this.type = set(descendingParameter, desc)
 
-  val parameters = Left(Array(columnNameParameter, descendingParameter))
+  val parameters = Left(List(columnNameParameter, descendingParameter))
 }
 
 object SortColumnParameter {

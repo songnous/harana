@@ -23,7 +23,7 @@ object EstimatorModelWrappersFixtures extends MockitoSugar with TestSupport {
     val id = "test"
     def setNumericParamWrapper(value: Double): this.type = set(numericParameter, value)
     override def report(extended: Boolean = true) = ???
-    val parameters = Left(Array(numericParameter))
+    val parameters = Left(List(numericParameter))
   }
 
   class ExampleSparkEstimator extends ML.Estimator[ExampleSparkModel] {
@@ -72,7 +72,7 @@ object EstimatorModelWrappersFixtures extends MockitoSugar with TestSupport {
     val id = "test"
     def setNumericParameter(value: Double): this.type = set(numericParameter, value)
     override def report(extended: Boolean = true) = ???
-    val parameters = Left(Array(numericParameter))
+    val parameters = Left(List(numericParameter))
     def loadModel(ctx: ExecutionContext, path: String): SerializableSparkModel[ExampleSparkModel] = ???
   }
 

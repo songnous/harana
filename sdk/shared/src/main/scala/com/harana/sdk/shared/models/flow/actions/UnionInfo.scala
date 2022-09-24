@@ -22,7 +22,7 @@ trait UnionInfo extends Action2To1Info[DataFrameInfo, DataFrameInfo, DataFrameIn
 
   override val inputPortsLayout = List(PortPosition.Left, PortPosition.Right)
 
-  val parameters = Left(Array.empty[Parameter[_]])
+  val parameters = Left(List.empty[Parameter[_]])
 
   @transient
   lazy val portI_0: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]

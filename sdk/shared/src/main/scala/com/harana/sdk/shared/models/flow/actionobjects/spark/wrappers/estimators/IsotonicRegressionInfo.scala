@@ -15,7 +15,7 @@ trait IsotonicRegressionInfo
 
   val isotonicParameter = BooleanParameter("isotonic", default = Some(true))
 
-  val parameters = Left(Array(
+  val parameters = Left(List(
     isotonicParameter,
     optionalWeightColumnParameter,
     featureIndexParameter,

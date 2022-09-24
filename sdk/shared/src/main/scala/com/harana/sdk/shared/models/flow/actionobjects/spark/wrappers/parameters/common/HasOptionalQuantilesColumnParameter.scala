@@ -26,11 +26,11 @@ object OptionalQuantilesColumnChoice {
   case class QuantilesColumnYesOption() extends QuantilesColumnOption {
     val name = "yes"
     val quantilesColumnParameter = SingleColumnCreatorParameter("quantiles column", default = Some("quantiles"))
-    val parameters = Left(Array(quantilesColumnParameter))
+    val parameters = Left(List(quantilesColumnParameter))
   }
 
   case class QuantilesColumnNoOption() extends QuantilesColumnOption {
     val name = "no"
-    val parameters = Left(Array.empty[Parameter[_]])
+    val parameters = Left(List.empty[Parameter[_]])
   }
 }

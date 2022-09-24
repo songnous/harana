@@ -18,7 +18,7 @@ object MultiColumnParameters {
 
     case class MultiColumnYesInPlace() extends MultiColumnInPlaceChoice {
       val name = "replace input columns"
-      val parameters = Left(Array.empty[Parameter[_]])
+      val parameters = Left(List.empty[Parameter[_]])
     }
 
     case class MultiColumnNoInPlace() extends MultiColumnInPlaceChoice {
@@ -28,7 +28,7 @@ object MultiColumnParameters {
       def getColumnsPrefix = $(outputColumnsPrefixParameter)
       def setColumnsPrefix(prefix: String): this.type = set(outputColumnsPrefixParameter, prefix)
 
-      val parameters = Left(Array(outputColumnsPrefixParameter))
+      val parameters = Left(List(outputColumnsPrefixParameter))
     }
   }
 
@@ -49,7 +49,7 @@ object MultiColumnParameters {
       def getInPlaceChoice = $(singleInPlaceChoiceParameter)
       def setInPlaceChoice(value: SingleColumnInPlaceChoice): this.type = set(singleInPlaceChoiceParameter, value)
 
-      val parameters = Left(Array(inputColumnParameter, singleInPlaceChoiceParameter))
+      val parameters = Left(List(inputColumnParameter, singleInPlaceChoiceParameter))
     }
 
     case class MultiColumnChoice() extends SingleOrMultiColumnChoice {
@@ -64,7 +64,7 @@ object MultiColumnParameters {
       def getInPlaceChoice = $(inPlaceChoiceParameter)
       def setInPlaceChoice(value: MultiColumnInPlaceChoice): this.type = set(inPlaceChoiceParameter, value)
 
-      val parameters = Left(Array(inputColumnsParameter, inPlaceChoiceParameter))
+      val parameters = Left(List(inputColumnsParameter, inPlaceChoiceParameter))
     }
 
     object MultiColumnChoice {

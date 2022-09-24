@@ -24,7 +24,7 @@ trait DeduplicateInfo extends Action3To1Info[DataFrameInfo, DataFrameInfo, DataF
 
   lazy val portO_0: TypeTag[DataFrameInfo] = typeTag
 
-  val parameters = Left(Array.empty[Parameter[_]])
+  val parameters = Left(List.empty[Parameter[_]])
 
 }
 

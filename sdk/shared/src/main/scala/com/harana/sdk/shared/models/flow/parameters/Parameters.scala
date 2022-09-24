@@ -7,7 +7,8 @@ import io.circe.Json
 
 trait Parameters extends Serializable with HasInferenceResult {
 
-  val parameters: Either[Array[Parameter[_]], Array[ParameterGroup]]
+  val parameters: Either[List[Parameter[_]], List[ParameterGroup]]
+
   lazy val allParameters = parameters match {
     case Left(a) => a
     case Right(pg) => pg.flatMap(_.parameters)

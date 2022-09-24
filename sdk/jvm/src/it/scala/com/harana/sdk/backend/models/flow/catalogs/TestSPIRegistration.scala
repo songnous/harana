@@ -22,7 +22,7 @@ class SpiLoadedAction extends Action0To1[A1] {
 
   val id: Id = SpiLoadedAction.spiLoadedActionUuid
   val name = "SpiLoadedAction"
-  val parameters = Left(Array.empty[Parameter[_]])
+  val parameters = Left(List.empty[Parameter[_]])
 }
 
 class TestSPIRegistration extends CatalogRegistrant {

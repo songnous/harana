@@ -7,7 +7,7 @@ import org.apache.spark.sql.types.StructType
 
 trait ParametersWithSparkWrappers extends Parameters {
 
-  lazy val sparkParamWrappers: Array[SparkParamWrapper[_, _, _]] = allParameters.collect {
+  lazy val sparkParamWrappers: Array[SparkParamWrapper[_, _, _]] = allParameters.toArray.collect {
     case wrapper: SparkParamWrapper[_, _, _] => wrapper +: wrapper.nestedWrappers
   }.flatten
 

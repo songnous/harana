@@ -25,7 +25,7 @@ trait ReadTransformerInfo
   def getSourcePath = $(sourcePathParameter)
   def setSourcePath(value: String): this.type = set(sourcePathParameter, value)
 
-  override val parameters =  Left(Array(sourcePathParameter))
+  override val parameters =  Left(List(sourcePathParameter))
 
   @transient
   lazy val portO_0: ru.TypeTag[TransformerInfo] = ru.typeTag[TransformerInfo]

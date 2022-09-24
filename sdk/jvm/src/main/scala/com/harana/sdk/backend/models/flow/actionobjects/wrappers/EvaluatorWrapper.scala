@@ -22,7 +22,7 @@ class EvaluatorWrapper(context: ExecutionContext, evaluator: Evaluator) extends 
   }
 
   override lazy val params: Array[Param[_]] =
-    evaluator.allParameters.map(new ParamWrapper(uid, _))
+    evaluator.allParameters.map(new ParamWrapper(uid, _)).toArray
 
   override def isLargerBetter: Boolean = evaluator.isLargerBetter
 

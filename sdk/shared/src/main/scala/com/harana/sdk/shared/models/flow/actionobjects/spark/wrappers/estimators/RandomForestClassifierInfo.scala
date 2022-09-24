@@ -23,7 +23,7 @@ trait RandomForestClassifierInfo
 
   val id = "F237228D-0C36-454B-A562-04939D65B1FB"
 
-  val parameters = Left(Array(
+  val parameters = Left(List(
     maxDepthParameter,
     maxBinsParameter,
     minInstancesPerNodeParameter,

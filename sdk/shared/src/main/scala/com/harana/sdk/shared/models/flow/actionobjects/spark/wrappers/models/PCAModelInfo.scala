@@ -14,5 +14,5 @@ trait PCAModelInfo extends TransformerInfo with Parameters {
 }
 
 object PCAModelInfo extends PCAModelInfo {
-  val parameters = Left(Array.empty[Parameter[_]])
+  val parameters = Left(List.empty[Parameter[_]])
 }

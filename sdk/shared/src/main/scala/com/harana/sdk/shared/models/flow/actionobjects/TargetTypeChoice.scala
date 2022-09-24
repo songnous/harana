@@ -10,7 +10,7 @@ import com.harana.sdk.shared.models.flow.parameters.choice.Choice
 
 sealed abstract class TargetTypeChoice(val columnType: DataType) extends Choice {
   val choiceOrder = TargetTypeChoices.choiceOrder
-  val parameters = Left(Array.empty[Parameter[_]])
+  val parameters = Left(List.empty[Parameter[_]])
   val name = columnType.getClass.getSimpleName
 }
 

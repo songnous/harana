@@ -13,7 +13,7 @@ trait DecisionTreeClassifierInfo
 
   val id = "2F39BEFD-FC2B-4034-B13F-D308BB0C8078"
 
-  val parameters = Left(Array(
+  val parameters = Left(List(
     maxDepthParameter,
     maxBinsParameter,
     minInstancesPerNodeParameter,

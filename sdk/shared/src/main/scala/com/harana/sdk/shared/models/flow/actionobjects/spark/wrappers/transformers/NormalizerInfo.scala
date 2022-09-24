@@ -16,5 +16,5 @@ trait NormalizerInfo extends TransformerInfo with Parameters {
 }
 
 object NormalizerInfo extends NormalizerInfo {
-  val parameters = Left(Array.empty[Parameter[_]])
+  val parameters = Left(List.empty[Parameter[_]])
 }

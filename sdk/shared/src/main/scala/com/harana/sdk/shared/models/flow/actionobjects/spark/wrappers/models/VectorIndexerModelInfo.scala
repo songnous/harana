@@ -11,5 +11,5 @@ trait VectorIndexerModelInfo extends TransformerInfo with Parameters {
 }
 
 object VectorIndexerModelInfo extends VectorIndexerModelInfo {
-  val parameters = Left(Array.empty[Parameter[_]])
+  val parameters = Left(List.empty[Parameter[_]])
 }

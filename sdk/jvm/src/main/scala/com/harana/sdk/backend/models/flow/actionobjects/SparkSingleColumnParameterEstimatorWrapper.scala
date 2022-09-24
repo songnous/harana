@@ -21,8 +21,8 @@ abstract class SparkSingleColumnParameterEstimatorWrapper[MD <: ml.Model[MD] { v
 
   val parameters =
     Left(
-      if (specificParameters == null) Array(inputColumnParameter, singleInPlaceChoiceParameter)
-      else Array(inputColumnParameter, singleInPlaceChoiceParameter) ++ specificParameters
+      if (specificParameters == null) List(inputColumnParameter, singleInPlaceChoiceParameter)
+      else List(inputColumnParameter, singleInPlaceChoiceParameter) ++ specificParameters
     )
 
   def setNoInPlace(outputColumn: String): this.type = setSingleInPlaceChoice(NoInPlaceChoice().setOutputColumn(outputColumn))

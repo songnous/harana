@@ -21,7 +21,7 @@ trait NaiveBayesInfo
   val smoothingParameter = DoubleParameter("smoothing", default = Some(1.0), validator = RangeValidator(begin = 0.0, end = Double.MaxValue))
   val modelTypeParameter = ChoiceParameter[ModelType]("modelType", default = Some(Multinomial()))
 
-  val parameters = Left(Array(
+  val parameters = Left(List(
     smoothingParameter,
     modelTypeParameter,
     labelColumnParameter,
@@ -35,7 +35,7 @@ trait NaiveBayesInfo
 object NaiveBayesInfo extends NaiveBayesInfo {
   sealed abstract class ModelType(val name: String) extends Choice {
     val choiceOrder: List[ChoiceOption] = List(classOf[Multinomial], classOf[Bernoulli])
-    val parameters = Left(Array.empty[Parameter[_]])
+    val parameters = Left(List.empty[Parameter[_]])
   }
 
   case class Multinomial() extends ModelType("multinomial")

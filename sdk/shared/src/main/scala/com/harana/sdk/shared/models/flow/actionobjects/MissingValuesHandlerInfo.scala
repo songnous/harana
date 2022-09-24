@@ -31,7 +31,7 @@ trait MissingValuesHandlerInfo extends TransformerInfo {
   def getMissingValueIndicator = $(missingValueIndicatorParameter)
   def setMissingValueIndicator(value: MissingValueIndicatorChoice): this.type = set(missingValueIndicatorParameter, value)
 
-  val parameters = Left(Array(
+  val parameters = Left(List(
     selectedColumnsParameter,
     strategyParameter,
     missingValueIndicatorParameter,
@@ -50,12 +50,12 @@ object MissingValuesHandlerInfo extends MissingValuesHandlerInfo {
 
     case class RemoveRow() extends Strategy {
       val name = "remove row"
-      val parameters = Left(Array.empty[Parameter[_]])
+      val parameters = Left(List.empty[Parameter[_]])
     }
 
     case class RemoveColumn() extends Strategy {
       val name = "remove column"
-      val parameters = Left(Array.empty[Parameter[_]])
+      val parameters = Left(List.empty[Parameter[_]])
     }
 
     case class ReplaceWithCustomValue() extends Strategy {
@@ -64,7 +64,7 @@ object MissingValuesHandlerInfo extends MissingValuesHandlerInfo {
       def getCustomValue = $(customValueParameter)
       def setCustomValue(value: String): this.type = set(customValueParameter, value)
 
-      val parameters = Left(Array(customValueParameter))
+      val parameters = Left(List(customValueParameter))
     }
 
     case class ReplaceWithMode() extends Strategy {
@@ -73,7 +73,7 @@ object MissingValuesHandlerInfo extends MissingValuesHandlerInfo {
       def getEmptyColumnStrategy = $(emptyColumnStrategyParameter)
       def setEmptyColumnStrategy(value: EmptyColumnsStrategy): this.type = set(emptyColumnStrategyParameter, value)
 
-      val parameters = Left(Array(emptyColumnStrategyParameter))
+      val parameters = Left(List(emptyColumnStrategyParameter))
     }
   }
 
@@ -86,12 +86,12 @@ object MissingValuesHandlerInfo extends MissingValuesHandlerInfo {
 
     case class RemoveEmptyColumns() extends EmptyColumnsStrategy {
       val name = "remove"
-      val parameters = Left(Array.empty[Parameter[_]])
+      val parameters = Left(List.empty[Parameter[_]])
     }
 
     case class RetainEmptyColumns() extends EmptyColumnsStrategy {
       val name = "retain"
-      val parameters = Left(Array.empty[Parameter[_]])
+      val parameters = Left(List.empty[Parameter[_]])
     }
   }
 
@@ -110,13 +110,13 @@ object MissingValuesHandlerInfo extends MissingValuesHandlerInfo {
       val indicatorPrefixParameter = PrefixBasedColumnCreatorParameter("indicator column prefix", default = Some(""))
       def getIndicatorPrefix = Some($(indicatorPrefixParameter))
       def setIndicatorPrefix(value: String): this.type = set(indicatorPrefixParameter, value)
-      val parameters = Left(Array(indicatorPrefixParameter))
+      val parameters = Left(List(indicatorPrefixParameter))
     }
 
     case class No() extends MissingValueIndicatorChoice {
       val name = "No"
       def getIndicatorPrefix = None
-      val parameters = Left(Array.empty[Parameter[_]])
+      val parameters = Left(List.empty[Parameter[_]])
     }
   }
 }
@@ -126,6 +126,6 @@ case class UserDefinedMissingValue() extends Parameters {
   val missingValueParameter = StringParameter("missing value", default = Some(""), validator = RegexValidator.AcceptAll)
   def getMissingValue = $(missingValueParameter)
   def setMissingValue(value: String): this.type = set(missingValueParameter, value)
-  val parameters = Left(Array(missingValueParameter))
+  val parameters = Left(List(missingValueParameter))
 
 }

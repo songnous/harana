@@ -30,7 +30,7 @@ class EstimatorWrapper(executionContext: ExecutionContext, estimator: Estimator[
     schema
 
   override lazy val params: Array[ml.param.Param[_]] =
-    estimator.allParameters.map(new ParamWrapper(uid, _))
+    estimator.allParameters.map(new ParamWrapper(uid, _)).toArray
 
   val uid = Identifiable.randomUID("EstimatorWrapper")
 

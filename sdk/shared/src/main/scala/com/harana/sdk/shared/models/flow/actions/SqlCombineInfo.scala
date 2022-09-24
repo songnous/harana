@@ -41,7 +41,7 @@ trait SqlCombineInfo extends Action2To1Info[DataFrameInfo, DataFrameInfo, DataFr
     else
       List.empty[FlowError]
 
-  val parameters = Left(Array(leftTableNameParameter, rightTableNameParameter, sqlCombineExpressionParameter))
+  val parameters = Left(List(leftTableNameParameter, rightTableNameParameter, sqlCombineExpressionParameter))
 
   @transient
   lazy val portI_0: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]

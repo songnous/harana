@@ -17,5 +17,5 @@ trait PCAEstimatorInfo extends EstimatorInfo with Parameters {
 }
 
 object PCAEstimatorInfo extends PCAEstimatorInfo {
-  val parameters = Left(Array.empty[Parameter[_]])
+  val parameters = Left(List.empty[Parameter[_]])
 }

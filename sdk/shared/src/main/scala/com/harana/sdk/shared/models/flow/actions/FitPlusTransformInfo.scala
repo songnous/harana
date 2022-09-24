@@ -31,7 +31,7 @@ trait FitPlusTransformInfo
   val estimatorParameters = new DynamicParameter("Parameters of input Estimator", default = Some(Json.Null), inputPort = 0)
   def setEstimatorParameters(jsValue: Json): this.type = set(estimatorParameters -> jsValue)
 
-  override val parameters = Left(Array(estimatorParameters))
+  override val parameters = Left(List(estimatorParameters))
 
 }
 

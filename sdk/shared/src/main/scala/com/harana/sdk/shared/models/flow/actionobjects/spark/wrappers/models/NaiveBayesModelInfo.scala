@@ -7,7 +7,7 @@ trait NaiveBayesModelInfo extends ActionObjectInfo with ProbabilisticClassifierP
 
   val id = "3ACD4481-B305-45BD-9A63-5111D6CC457D"
 
-  val parameters = Left(Array(
+  val parameters = Left(List(
     featuresColumnParameter,
     probabilityColumnParameter,
     rawPredictionColumnParameter,

@@ -10,7 +10,7 @@ trait DecisionTreeRegressionModelInfo
 
   val id = "324FFAB6-4EB0-4B14-8106-99C294400C3C"
 
-  val parameters = Left(Array(featuresColumnParameter, predictionColumnParameter))
+  val parameters = Left(List(featuresColumnParameter, predictionColumnParameter))
 
 }
 

@@ -52,8 +52,8 @@ class CustomTransformer(innerWorkflow: InnerWorkflow = InnerWorkflow.empty,
     innerWorkflow.publicParameters.foreach { case PublicParameter(nodeId, parameterName, publicName) =>
       val node = innerWorkflow.graph.node(nodeId)
       val action = node.value
-      val innerParameter = getParameter(action.allParameters, parameterName).asInstanceOf[Parameter[Any]]
-      action.set(innerParameter -> $(getParameter(allParameters, publicName)))
+      val innerParameter = getParameter(action.allParameters.toArray, parameterName).asInstanceOf[Parameter[Any]]
+      action.set(innerParameter -> $(getParameter(allParameters.toArray, publicName)))
     }
     innerWorkflow
   }

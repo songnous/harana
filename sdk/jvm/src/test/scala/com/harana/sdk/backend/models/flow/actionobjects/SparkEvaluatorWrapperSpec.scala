@@ -70,7 +70,7 @@ object SparkEvaluatorWrapperSpec {
     val column = SingleColumnSelectorParameter(name = "column", default = Some(NameSingleColumnSelection("column")), portIndex = 0)
     def setColumnWrapper(value: SingleColumnSelection): this.type = set(column, value)
 
-    val parameters = Left(Array(paramWrapper, column))
+    val parameters = Left(List(paramWrapper, column))
 
     def getMetricName = metricName
 

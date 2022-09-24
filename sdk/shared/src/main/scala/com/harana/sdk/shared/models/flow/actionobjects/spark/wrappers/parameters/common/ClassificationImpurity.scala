@@ -11,7 +11,7 @@ sealed abstract class ClassificationImpurity(val name: String) extends Choice {
     classOf[Gini]
   )
 
-  val parameters = Left(Array.empty[Parameter[_]])
+  val parameters = Left(List.empty[Parameter[_]])
 }
 
 object ClassificationImpurity {

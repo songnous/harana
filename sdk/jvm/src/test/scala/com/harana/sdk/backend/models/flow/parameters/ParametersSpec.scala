@@ -259,7 +259,7 @@ object ParametersSpec extends UnitSpec {
   case class WithParameters() extends Parameters {
     val param1 = MockParameter("name of param1", default = Some(defaultForParam1))
     val param2 = MockParameter(nameOfParam2)
-    val parameters = Left(Array(param2, param1))
+    val parameters = Left(List(param2, param1))
 
     def set1(v: Int) = set(param1 -> v)
     def set2(v: Int) = set(param2 -> v)
@@ -277,7 +277,7 @@ object ParametersSpec extends UnitSpec {
   case class ParametersWithChoice() extends Parameters {
     val choiceParameter = ChoiceParameter[ChoiceWithRepeatedParameter]("choice")
     def setChoice(v: ChoiceWithRepeatedParameter) = set(choiceParameter, v)
-    val parameters = Left(Array(choiceParameter))
+    val parameters = Left(List(choiceParameter))
   }
 
   sealed trait ChoiceWithRepeatedParameter extends Choice {
@@ -287,13 +287,13 @@ object ParametersSpec extends UnitSpec {
   case class ChoiceOne() extends ChoiceWithRepeatedParameter {
     val name = "one"
     val numericParameter = NumericParameter("x"))
-    val parameters = Left(Array(numericParameter))
+    val parameters = Left(List(numericParameter))
   }
 
   case class ChoiceTwo() extends ChoiceWithRepeatedParameter {
     val name = "two"
     val numericParameter = NumericParameter("x")
-    val parameters = Left(Array(numericParameter))
+    val parameters = Left(List(numericParameter))
   }
 
   object DeclareParametersFixtures {
@@ -301,25 +301,25 @@ object ParametersSpec extends UnitSpec {
 
     class ParametersFromOutside extends Parameters {
       val nameParameter = MockParameter("name")
-      val parameters = Left(Array(outsideParameter, nameParameter))
+      val parameters = Left(List(outsideParameter, nameParameter))
     }
 
     class ParametersWithNotUniqueNames extends Parameters {
       val param1 = MockParameter("some name")
       val param2 = MockParameter(param1.name)
-      val parameters = Left(Array(param1, param2))
+      val parameters = Left(List(param1, param2))
     }
 
     class NotparametersDeclared extends Parameters {
       val param1 = MockParameter("some name")
       val param2 = MockParameter("some other name")
-      val parameters = Left(Array(param1))
+      val parameters = Left(List(param1))
     }
 
     class ParametersRepeated extends Parameters {
       val param1 = MockParameter("some name")
       val param2 = MockParameter("some other name")
-      val parameters = Left(Array(param1, param2, param1))
+      val parameters = Left(List(param1, param2, param1))
     }
   }
 }

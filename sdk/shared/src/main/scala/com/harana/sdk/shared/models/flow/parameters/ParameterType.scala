@@ -8,9 +8,18 @@ case object ParameterType extends Enum[ParameterType] {
   case object Boolean extends ParameterType
   case object Numeric extends ParameterType
   case object MultipleNumeric extends ParameterType
+  case object MultipleString extends ParameterType
   case object Password extends ParameterType
   case object String extends ParameterType
+  case object Email extends ParameterType
+  case object HTML extends ParameterType
   case object Choice extends ParameterType
+  case object SearchQuery extends ParameterType
+  case object Emoji extends ParameterType
+  case object Country extends ParameterType
+  case object TimeZone extends ParameterType
+  case object Tags extends ParameterType
+  case object Color extends ParameterType
   case object LongArray extends ParameterType
   case object IPAddress extends ParameterType
   case object DataSource extends ParameterType
@@ -20,6 +29,7 @@ case object ParameterType extends Enum[ParameterType] {
   case object Multiplier extends ParameterType
   case object ColumnSelector extends ParameterType
   case object JSON extends ParameterType
+  case object Markdown extends ParameterType
   case object SingleColumnCreator extends ParameterType
   case object MultipleColumnCreator extends ParameterType
   case object TimestampColumns extends ParameterType

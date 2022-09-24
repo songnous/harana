@@ -19,6 +19,10 @@ object RegexValidator {
     val regex = ".*".r
   }
 
+  object Email extends RegexValidator {
+    val regex = "/^\\S+@\\S+\\.\\S+$/".r
+  }
+
   object SingleChar extends RegexValidator {
     val regex = ".".r
   }

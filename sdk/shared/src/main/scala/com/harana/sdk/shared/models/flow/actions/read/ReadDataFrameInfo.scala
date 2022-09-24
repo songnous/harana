@@ -28,7 +28,7 @@ trait ReadDataFrameInfo
   def getStorageType = $(storageTypeParameter)
   def setStorageType(value: InputStorageTypeChoice): this.type = set(storageTypeParameter, value)
 
-  override val parameters = Left(Array(storageTypeParameter))
+  override val parameters = Left(List(storageTypeParameter))
 
   @transient
   lazy val portO_0: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]

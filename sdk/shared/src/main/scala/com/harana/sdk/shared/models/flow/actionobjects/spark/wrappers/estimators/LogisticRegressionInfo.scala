@@ -22,7 +22,7 @@ trait LogisticRegressionInfo
 
   override val maxIterationsDefault = 100
 
-  val parameters = Left(Array(
+  val parameters = Left(List(
     elasticNetParameter,
     fitInterceptParameter,
     maxIterationsParameter,

@@ -25,7 +25,7 @@ trait ReadDatasourceInfo extends Action0To1Info[DataFrameInfo] with ActionDocume
   val datasourceIdParameter = DatasourceIdForReadParameter(name = "data source")
   def getDataSourceId = $(datasourceIdParameter)
 
-  val parameters = Left(Array(datasourceIdParameter))
+  val parameters = Left(List(datasourceIdParameter))
 
   override def getDatasourcesIds: Set[UUID] = get(datasourceIdParameter).toSet
   def setDatasourceId(value: UUID): this.type = set(datasourceIdParameter, value)

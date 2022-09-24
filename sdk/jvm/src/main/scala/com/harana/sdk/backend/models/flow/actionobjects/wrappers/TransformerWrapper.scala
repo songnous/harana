@@ -25,7 +25,7 @@ class TransformerWrapper(executionContext: ExecutionContext, transformer: Transf
     transformer._transformSchema(schema).get
 
   override lazy val params: Array[Param[_]] =
-    transformer.allParameters.map(new ParamWrapper(uid, _))
+    transformer.allParameters.map(new ParamWrapper(uid, _)).toArray
 
   val uid = Identifiable.randomUID("TransformerWrapper")
 

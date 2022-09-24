@@ -17,14 +17,14 @@ trait RegressionEvaluatorInfo
   val metricNameParameter = ChoiceParameter[Metric]("regression metric", default = Some(Rmse()))
   def getMetricName = $(metricNameParameter).name
 
-  val parameters = Left(Array(metricNameParameter, predictionColumnParameter, labelColumnParameter))
+  val parameters = Left(List(metricNameParameter, predictionColumnParameter, labelColumnParameter))
 }
 
 object RegressionEvaluatorInfo extends RegressionEvaluatorInfo {
 
   sealed abstract class Metric(val name: String) extends Choice {
     val choiceOrder: List[ChoiceOption] = List(classOf[Mse], classOf[Rmse], classOf[R2], classOf[Mae])
-    val parameters = Left(Array.empty[Parameter[_]])
+    val parameters = Left(List.empty[Parameter[_]])
   }
 
   case class Mae() extends Metric("mae")

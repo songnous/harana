@@ -26,7 +26,7 @@ trait KMeansInfo
   val initModeParameter = ChoiceParameter[KMeansInitMode]("init mode", default = Some(ParallelInitMode()))
   val initStepsParameter = IntParameter("init steps", default = Some(5), validator = RangeValidator(begin = 1, end = Int.MaxValue, step = Some(1)))
 
-  val parameters = Left(Array(
+  val parameters = Left(List(
     kParameter,
     maxIterationsParameter,
     seedParameter,
@@ -41,7 +41,7 @@ trait KMeansInfo
 object KMeansInfo extends KMeansInfo {
   sealed trait KMeansInitMode extends Choice {
     val choiceOrder: List[ChoiceOption] = List(classOf[RandomInitMode], classOf[ParallelInitMode])
-    val parameters = Left(Array.empty[Parameter[_]])
+    val parameters = Left(List.empty[Parameter[_]])
   }
 
   case class RandomInitMode() extends KMeansInitMode {

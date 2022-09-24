@@ -16,5 +16,5 @@ trait MinMaxScalerEstimatorInfo
 }
 
 object MinMaxScalerEstimatorInfo extends MinMaxScalerEstimatorInfo {
-  val parameters = Left(Array.empty[Parameter[_]])
+  val parameters = Left(List.empty[Parameter[_]])
 }

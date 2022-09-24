@@ -77,12 +77,12 @@ object ActionInfo {
 
     case class Metadata() extends ReportType {
       val name = "Metadata report"
-      val parameters = Left(Array.empty[Parameter[_]])
+      val parameters = Left(List.empty[Parameter[_]])
     }
 
     case class Extended() extends ReportType {
       val name = "Extended report"
-      val parameters = Left(Array.empty[Parameter[_]])
+      val parameters = Left(List.empty[Parameter[_]])
     }
   }
 

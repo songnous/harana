@@ -7,7 +7,7 @@ trait GBTRegressionModelInfo extends ActionObjectInfo with PredictorParameters {
 
   val id = "1F71A0AA-2D2B-40C5-9004-C036D7BAEF73"
 
-  val parameters = Left(Array(
+  val parameters = Left(List(
     featuresColumnParameter,
     predictionColumnParameter
   ))

@@ -19,7 +19,7 @@ trait SparkSingleColumnParameterModelWrapperInfo extends SparkModelWrapperInfo
 
   lazy val parameters =
     Left(
-      if (specificParameters == null) Array(inputColumnParameter, singleInPlaceChoiceParameter)
-      else Array(inputColumnParameter, singleInPlaceChoiceParameter) ++ specificParameters
+      if (specificParameters == null) List(inputColumnParameter, singleInPlaceChoiceParameter)
+      else List(inputColumnParameter, singleInPlaceChoiceParameter) ++ specificParameters
     )
 }

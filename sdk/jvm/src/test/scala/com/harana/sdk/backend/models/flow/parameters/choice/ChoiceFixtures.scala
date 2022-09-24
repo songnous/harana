@@ -13,18 +13,18 @@ sealed trait ChoiceABC extends Choice {
 case class OptionA() extends ChoiceABC {
   val name = "A"
   val bool = BooleanParameter("bool")
-  val parameters = Left(Array(bool))
+  val parameters = Left(List(bool))
   def setBool(b: Boolean) = set(bool, b)
 }
 
 case class OptionB() extends ChoiceABC {
   val name = "B"
-  val parameters = Left(Array.empty[Parameter[_]])
+  val parameters = Left(List.empty[Parameter[_]])
 }
 
 case class OptionC() extends ChoiceABC {
   val name = "C"
-  val parameters = Left(Array.empty[Parameter[_]])
+  val parameters = Left(List.empty[Parameter[_]])
 }
 
 sealed trait BaseChoice extends Choice {
@@ -33,7 +33,7 @@ sealed trait BaseChoice extends Choice {
 
 case class ChoiceWithoutNoArgConstructor(x: String) extends BaseChoice {
   val name = "choiceWithoutNoArgConstructor"
-  val parameters = Left(Array.empty[Parameter[_]])
+  val parameters = Left(List.empty[Parameter[_]])
 }
 
 sealed trait ChoiceWithoutDeclaration extends Choice {
@@ -42,7 +42,7 @@ sealed trait ChoiceWithoutDeclaration extends Choice {
 
 case class ChoiceWithoutDeclarationInstance() extends ChoiceWithoutDeclaration {
   val name = "choiceWithoutDeclarationInstance"
-  val parameters = Left(Array.empty[Parameter[_]])
+  val parameters = Left(List.empty[Parameter[_]])
 }
 
 object ChoiceFixtures {

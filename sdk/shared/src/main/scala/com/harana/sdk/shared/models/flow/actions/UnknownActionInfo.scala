@@ -23,7 +23,7 @@ trait UnknownActionInfo extends ActionInfo {
   @transient
   override lazy val outputPorts: List[ru.TypeTag[_]] = List.empty
 
-  val parameters = Left(Array.empty[Parameter[_]])
+  val parameters = Left(List.empty[Parameter[_]])
 
 }
 

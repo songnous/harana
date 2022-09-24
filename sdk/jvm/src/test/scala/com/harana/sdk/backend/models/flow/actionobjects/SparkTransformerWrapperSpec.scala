@@ -52,7 +52,7 @@ object SparkTransformerWrapperSpec extends MockitoSugar {
     val paramWrapper = DoubleParameter("name", default = Some(0.0))
     def setParamWrapper(value: Double): this.type = set(paramWrapper, value)
 
-    val parameters = Left(Array(paramWrapper))
+    val parameters = Left(List(paramWrapper))
 
     override def report(extended: Boolean = true) = ???
 

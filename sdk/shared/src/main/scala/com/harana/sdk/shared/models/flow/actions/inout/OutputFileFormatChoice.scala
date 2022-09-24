@@ -13,17 +13,17 @@ object OutputFileFormatChoice {
 
   class Csv() extends OutputFileFormatChoice with CsvParameters {
     val name = FileFormat.CSV.toString
-    val parameters = Left(Array(csvColumnSeparatorParameter, namesIncludedParameter))
+    val parameters = Left(List(csvColumnSeparatorParameter, namesIncludedParameter))
   }
 
   class Parquet() extends OutputFileFormatChoice {
     val name = FileFormat.PARQUET.toString
-    val parameters = Left(Array.empty[Parameter[_]])
+    val parameters = Left(List.empty[Parameter[_]])
   }
 
   class Json() extends OutputFileFormatChoice {
     val name = FileFormat.JSON.toString
-    val parameters = Left(Array.empty[Parameter[_]])
+    val parameters = Left(List.empty[Parameter[_]])
   }
 }
 

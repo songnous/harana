@@ -13,5 +13,5 @@ trait CountVectorizerModelInfo extends TransformerInfo with HasMinTermsFrequency
 }
 
 object CountVectorizerModelInfo extends CountVectorizerModelInfo {
-  val parameters = Left(Array.empty[Parameter[_]])
+  val parameters = Left(List.empty[Parameter[_]])
 }

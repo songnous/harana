@@ -15,5 +15,5 @@ trait StandardScalerEstimatorInfo extends EstimatorInfo with Parameters {
 }
 
 object StandardScalerEstimatorInfo extends StandardScalerEstimatorInfo {
-  val parameters = Left(specificParameters)
+  val parameters = Left(specificParameters.toList)
 }

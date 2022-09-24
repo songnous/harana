@@ -7,7 +7,7 @@ case class StringArrayParameter(name: String,
                                 default: Option[Array[String]] = None,
                                 validator: Validator[Array[String]] = ArrayValidator(RegexValidator.AcceptAll)) extends Parameter[Array[String]] {
 
-  val parameterType = ParameterType.MultipleNumeric
+  val parameterType = ParameterType.MultipleString
 
   override def replicate(name: String): StringArrayParameter = copy(name = name)
   override def validate(values: Array[String]) = validator.validate(name, values)

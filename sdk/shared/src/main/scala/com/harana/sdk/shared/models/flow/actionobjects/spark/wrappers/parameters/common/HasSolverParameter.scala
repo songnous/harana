@@ -16,7 +16,7 @@ trait HasSolverParameter extends Parameters {
 object SolverChoice {
 
   sealed abstract class SolverOption(val name: String) extends Choice {
-    val parameters = Left(Array.empty[Parameter[_]])
+    val parameters = Left(List.empty[Parameter[_]])
 
     val choiceOrder: List[ChoiceOption] = List(
       classOf[Auto],

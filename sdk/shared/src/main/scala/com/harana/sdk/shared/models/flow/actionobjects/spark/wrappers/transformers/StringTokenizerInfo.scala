@@ -8,5 +8,5 @@ trait StringTokenizerInfo extends TransformerInfo with Parameters {
 }
 
 object StringTokenizerInfo extends StringTokenizerInfo {
-  val parameters = Left(Array.empty[Parameter[_]])
+  val parameters = Left(List.empty[Parameter[_]])
 }

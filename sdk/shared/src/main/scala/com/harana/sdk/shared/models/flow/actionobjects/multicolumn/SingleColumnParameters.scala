@@ -14,7 +14,7 @@ object SingleColumnParameters {
 
     case class YesInPlaceChoice() extends SingleColumnInPlaceChoice {
       val name = "replace input column"
-      val parameters = Left(Array.empty[Parameter[_]])
+      val parameters = Left(List.empty[Parameter[_]])
     }
 
     case class NoInPlaceChoice() extends SingleColumnInPlaceChoice {
@@ -24,7 +24,7 @@ object SingleColumnParameters {
       def getOutputColumn = $(outputColumnParameter)
       def setOutputColumn(columnName: String): this.type = set(outputColumnParameter, columnName)
 
-      val parameters = Left(Array(outputColumnParameter))
+      val parameters = Left(List(outputColumnParameter))
     }
   }
 }

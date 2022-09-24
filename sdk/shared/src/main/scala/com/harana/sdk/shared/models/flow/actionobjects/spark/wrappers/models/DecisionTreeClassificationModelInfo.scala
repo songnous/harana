@@ -17,5 +17,5 @@ trait DecisionTreeClassificationModelInfo extends TransformerInfo {
 
 trait VanillaDecisionTreeClassificationModelInfo extends SparkModelWrapperInfo with ProbabilisticClassifierParameters {
   val id = "90FACCEF-6B9C-46E2-9594-D8A3C7A040F5"
-  val parameters = Left(Array(featuresColumnParameter, probabilityColumnParameter, rawPredictionColumnParameter, predictionColumnParameter))
+  val parameters = Left(List(featuresColumnParameter, probabilityColumnParameter, rawPredictionColumnParameter, predictionColumnParameter))
 }

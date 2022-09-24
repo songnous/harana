@@ -30,7 +30,7 @@ trait WriteDatasourceInfo extends Action1To0Info[DataFrameInfo]
 
   private def getShouldOverwrite = $(shouldOverwriteParameter)
 
-  val parameters = Left(Array(datasourceIdParameter, shouldOverwriteParameter))
+  val parameters = Left(List(datasourceIdParameter, shouldOverwriteParameter))
 }
 
 object WriteDatasourceInfo extends WriteDatasourceInfo {

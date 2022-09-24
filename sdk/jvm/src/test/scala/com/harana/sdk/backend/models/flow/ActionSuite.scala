@@ -32,7 +32,7 @@ object ActionForPortTypes {
 
     val id: Id = ActionInfo.Id.randomId
     val name = ""
-      val parameters = Left(Array.empty[Parameter[_]])
+      val parameters = Left(List.empty[Parameter[_]])
 
     lazy val tTagTI_0: ru.TypeTag[A1] = ru.typeTag[A1]
     lazy val tTagTO_0: ru.TypeTag[A2] = ru.typeTag[A2]
@@ -49,7 +49,7 @@ class ActionSuite extends AnyFunSuite with TestSupport {
 
       val param = NumericParameter("param", None, RangeValidator.allInt)
       def setParam(int: Int): this.type = set(param -> int)
-      val parameters =  Left(Array(param))
+      val parameters =  Left(List(param))
 
       def execute(t1: A1, t2: A2)(context: ExecutionContext): A = if ($(param) % 2 == 1) t1 else t2
       val name = "Some name"
@@ -91,7 +91,7 @@ class ActionSuite extends AnyFunSuite with TestSupport {
       override def inferKnowledge()(context: InferContext): (Knowledge[A], InferenceWarnings) = (Knowledge(A1(), A2()), mockedWarnings)
 
       val name = ""
-          val parameters = Left(Array.empty[Parameter[_]])
+          val parameters = Left(List.empty[Parameter[_]])
       lazy val tTagTO_0: ru.TypeTag[A] = ru.typeTag[A]
     }
 
