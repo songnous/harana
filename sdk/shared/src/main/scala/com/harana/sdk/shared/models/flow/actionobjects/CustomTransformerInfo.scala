@@ -16,7 +16,7 @@ case class CustomTransformerInfo(publicParametersWithValues: Seq[ParameterWithVa
       setValue.foreach(setValue => paramMap.put(ParameterPair(paramAny, setValue)))
   }
 
-  def getParameter(parameters: Array[Parameter[_]], name: String) =
+  def getParameter(parameters: List[Parameter[_]], name: String) =
     parameters.find(_.name == name).get
 }
 

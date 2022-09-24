@@ -1,6 +1,5 @@
 package com.harana.sdk.shared.models.flow
 
-import ActionTypeConversions._
 import scala.language.implicitConversions
 import scala.reflect.runtime.{universe => ru}
 
