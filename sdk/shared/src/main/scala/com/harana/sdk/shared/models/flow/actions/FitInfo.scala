@@ -23,8 +23,7 @@ trait FitInfo
   val since = Version(1,0,0)
   val category = Action
 
-  val estimatorParameters = new DynamicParameter("Parameters of input Estimator", inputPort = 0)
-  setDefault(estimatorParameters -> Json.Null)
+  val estimatorParameters = new DynamicParameter("Parameters of input Estimator", default = Some(Json.Null), inputPort = 0)
   def setEstimatorParameters(jsValue: Json): this.type = set(estimatorParameters -> jsValue)
   override val parameters =  Left(Array(estimatorParameters))
 

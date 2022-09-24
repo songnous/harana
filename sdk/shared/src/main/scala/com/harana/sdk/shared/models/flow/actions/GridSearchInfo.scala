@@ -24,18 +24,15 @@ trait GridSearchInfo
   val since = Version(1, 0, 0)
   val category = HyperOptimization
 
-  val estimatorParameters = new GridSearchParameter("Parameters of input Estimator", inputPort = 0)
-  setDefault(estimatorParameters, Json.Null)
+  val estimatorParameters = new GridSearchParameter("Parameters of input Estimator", default = Some(Json.Null), inputPort = 0)
   def getEstimatorParameters = $(estimatorParameters)
   def setEstimatorParameters(jsValue: Json): this.type = set(estimatorParameters, jsValue)
 
-  val evaluatorParameters = new DynamicParameter("Parameters of input Evaluator", inputPort = 2)
-  setDefault(evaluatorParameters, Json.Null)
+  val evaluatorParameters = new DynamicParameter("Parameters of input Evaluator", default = Some(Json.Null), inputPort = 2)
   def getEvaluatorParameters = $(evaluatorParameters)
   def setEvaluatorParameters(jsValue: Json): this.type = set(evaluatorParameters, jsValue)
 
-  val numberOfFoldsParameter = NumericParameter("number of folds", validator = RangeValidator(begin = 2.0, end = Int.MaxValue, step = Some(1.0)))
-  setDefault(numberOfFoldsParameter, 2.0)
+  val numberOfFoldsParameter = NumericParameter("number of folds", default = Some(2.0), validator = RangeValidator(begin = 2.0, end = Int.MaxValue, step = Some(1.0)))
   def getNumberOfFolds = $(numberOfFoldsParameter).toInt
   def setNumberOfFolds(numOfFolds: Int): this.type = set(numberOfFoldsParameter, numOfFolds.toDouble)
 

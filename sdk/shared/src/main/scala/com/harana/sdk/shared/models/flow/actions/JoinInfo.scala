@@ -31,13 +31,11 @@ trait JoinInfo extends Action2To1Info[DataFrameInfo, DataFrameInfo, DataFrameInf
   def getJoinType = $(joinTypeParameter)
   def setJoinType(value: JoinTypeChoice.Option): this.type = set(joinTypeParameter, value)
 
-  val leftPrefixParameter = PrefixBasedColumnCreatorParameter("left prefix", emptyPrefixValidation = true)
-  setDefault(leftPrefixParameter, "")
+  val leftPrefixParameter = PrefixBasedColumnCreatorParameter("left prefix", default = Some(""), emptyPrefixValidation = true)
   def getLeftPrefix = $(leftPrefixParameter)
   def setLeftPrefix(value: String): this.type = set(leftPrefixParameter, value)
 
-  val rightPrefixParameter = PrefixBasedColumnCreatorParameter("right prefix", emptyPrefixValidation = true)
-  setDefault(rightPrefixParameter, "")
+  val rightPrefixParameter = PrefixBasedColumnCreatorParameter("right prefix", default = Some(""), emptyPrefixValidation = true)
   def getRightPrefix = $(rightPrefixParameter)
   def setRightPrefix(value: String): this.type = set(rightPrefixParameter, value)
 

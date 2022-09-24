@@ -19,8 +19,7 @@ trait DatetimeDecomposerInfo extends TransformerInfo {
   def getTimestampParts = $(timestampPartsParameter)
   def setTimestampParts(timestampParts: Set[TimestampPart]): this.type = set(timestampPartsParameter, timestampParts)
 
-  val timestampPrefixParameter = PrefixBasedColumnCreatorParameter("prefix")
-  setDefault(timestampPrefixParameter, "")
+  val timestampPrefixParameter = PrefixBasedColumnCreatorParameter("prefix", default = Some(""))
   def getTimestampPrefix = $(timestampPrefixParameter)
   def setTimestampPrefix(timestampPrefix: String): this.type = set(timestampPrefixParameter, timestampPrefix)
 

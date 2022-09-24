@@ -18,16 +18,14 @@ object OutputStorageTypeChoice {
     def getOutputFile = $(outputFileParameter)
     def setOutputFile(value: String): this.type = set(outputFileParameter, value)
 
-    val shouldOverwriteParameter = BooleanParameter("overwrite")
-    setDefault(shouldOverwriteParameter, true)
+    val shouldOverwriteParameter = BooleanParameter("overwrite", default = Some(true))
     def getShouldOverwrite = $(shouldOverwriteParameter)
     def setShouldOverwrite(value: Boolean): this.type = set(shouldOverwriteParameter, value)
 
-    val fileFormatParameter = ChoiceParameter[OutputFileFormatChoice]("format")
-    setDefault(fileFormatParameter, new OutputFileFormatChoice.Csv())
-
+    val fileFormatParameter = ChoiceParameter[OutputFileFormatChoice]("format", default = Some(new OutputFileFormatChoice.Csv()))
     def getFileFormat = $(fileFormatParameter)
     def setFileFormat(value: OutputFileFormatChoice): this.type = set(fileFormatParameter, value)
+
     val parameters = Left(Array(outputFileParameter, shouldOverwriteParameter, fileFormatParameter))
   }
 
@@ -35,8 +33,7 @@ object OutputStorageTypeChoice {
 
     val name = StorageType.Jdbc.toString
 
-    val shouldOverwriteParameter = BooleanParameter("overwrite")
-    setDefault(shouldOverwriteParameter, true)
+    val shouldOverwriteParameter = BooleanParameter("overwrite", default = Some(true))
     def getShouldOverwrite = $(shouldOverwriteParameter)
     def setShouldOverwrite(value: Boolean): this.type = set(shouldOverwriteParameter, value)
 

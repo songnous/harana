@@ -6,7 +6,6 @@ import scala.language.reflectiveCalls
 
 trait HasStandardizationParameter extends Parameters {
 
-  val standardizationParameter = BooleanParameter("standardization")
-  setDefault(standardizationParameter, true)
+  val standardizationParameter = BooleanParameter("standardization", default = Some(true))
 
 }

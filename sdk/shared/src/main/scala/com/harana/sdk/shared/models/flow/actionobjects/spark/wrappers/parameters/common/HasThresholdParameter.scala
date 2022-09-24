@@ -7,7 +7,6 @@ import scala.language.reflectiveCalls
 
 trait HasThresholdParameter extends Parameters {
 
-  val thresholdParameter = DoubleParameter("threshold", validator = RangeValidator(0.0, 1.0))
-  setDefault(thresholdParameter, 0.5)
+  val thresholdParameter = DoubleParameter("threshold", default = Some(0.5), validator = RangeValidator(0.0, 1.0))
 
 }

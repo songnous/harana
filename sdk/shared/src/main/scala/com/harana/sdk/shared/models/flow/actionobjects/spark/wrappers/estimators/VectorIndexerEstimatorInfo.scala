@@ -9,8 +9,7 @@ trait VectorIndexerEstimatorInfo extends EstimatorInfo with Parameters {
 
   val id = "8A163FA6-170D-4953-A0D1-89259DA59CEA"
 
-  val maxCategoriesParameter = IntParameter("max categories", validator = RangeValidator(begin = 2, end = Int.MaxValue, step = Some(1)))
-  setDefault(maxCategoriesParameter, 20)
+  val maxCategoriesParameter = IntParameter("max categories", default = Some(20), validator = RangeValidator(begin = 2, end = Int.MaxValue, step = Some(1)))
   def setMaxCategories(value: Int): this.type = set(maxCategoriesParameter -> value)
 
   val specificParameters = Array[Parameter[_]](maxCategoriesParameter)

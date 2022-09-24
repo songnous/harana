@@ -9,8 +9,7 @@ import scala.language.reflectiveCalls
 
 trait HasFeatureSubsetStrategyParameter extends Parameters {
 
-  val featureSubsetStrategyParameter = ChoiceParameter[FeatureSubsetStrategy.Option]("feature subset strategy")
-  setDefault(featureSubsetStrategyParameter, Auto())
+  val featureSubsetStrategyParameter = ChoiceParameter[FeatureSubsetStrategy.Option]("feature subset strategy", default = Some(Auto()))
 
 }
 

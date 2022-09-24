@@ -7,7 +7,6 @@ import scala.language.reflectiveCalls
 
 trait HasSubsamplingRateParameter extends Parameters {
 
-  val subsamplingRateParameter = DoubleParameter("subsampling rate", validator = RangeValidator(0.0, 1.0, beginIncluded = false))
-  setDefault(subsamplingRateParameter, 1.0)
+  val subsamplingRateParameter = DoubleParameter("subsampling rate", default = Some(1.0), validator = RangeValidator(0.0, 1.0, beginIncluded = false))
 
 }

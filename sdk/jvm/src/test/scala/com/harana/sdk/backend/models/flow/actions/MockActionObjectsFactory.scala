@@ -60,9 +60,7 @@ object MockActionObjectsFactory extends UnitSpec with TestSupport {
   class MockEstimator extends Estimator[Transformer] {
     val id = "test"
 
-    val paramA = NumericParameter("b", RangeValidator(0.0, Double.MaxValue))
-    setDefault(paramA -> DefaultForA)
-
+    val paramA = NumericParameter("b", default = Some(DefaultForA), validator = RangeValidator(0.0, Double.MaxValue))
     val parameters = Left(Array(paramA))
 
     override def report(extended: Boolean = true) = ???
@@ -95,9 +93,7 @@ object MockActionObjectsFactory extends UnitSpec with TestSupport {
   class MockEvaluator extends Evaluator {
     val id = "test"
 
-    val paramA = NumericParameter("b", RangeValidator(0.0, Double.MaxValue))
-    setDefault(paramA -> DefaultForA)
-
+    val paramA = NumericParameter("b", default = Some(DefaultForA), validator = RangeValidator(0.0, Double.MaxValue))
     val parameters = Left(Array(paramA))
 
     override def report(extended: Boolean = true) = ???

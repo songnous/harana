@@ -18,8 +18,7 @@ trait WriteTransformerInfo extends Action1To0Info[TransformerInfo] with Paramete
   val since = Version(1, 1, 0)
   val category = IO
 
-  val shouldOverwriteParameter = BooleanParameter("overwrite")
-  setDefault(shouldOverwriteParameter, true)
+  val shouldOverwriteParameter = BooleanParameter("overwrite", default = Some(true))
   def getShouldOverwrite = $(shouldOverwriteParameter)
   def setShouldOverwrite(value: Boolean): this.type = set(shouldOverwriteParameter, value)
 

@@ -11,8 +11,7 @@ import com.harana.sdk.shared.models.flow.parameters.{IOColumnsParameter, Paramet
 
 trait MultiColumnTransformerInfo extends TransformerInfo with HasSpecificParameters {
 
-  val singleOrMultiChoiceParameter = IOColumnsParameter()
-  setDefault(singleOrMultiChoiceParameter, SingleColumnChoice())
+  val singleOrMultiChoiceParameter = IOColumnsParameter(default = Some(SingleColumnChoice()))
   def getSingleOrMultiChoice = $(singleOrMultiChoiceParameter)
   def setSingleOrMultiChoice(value: SingleOrMultiColumnChoice): this.type = set(singleOrMultiChoiceParameter, value)
 

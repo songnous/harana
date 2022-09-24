@@ -26,8 +26,7 @@ trait SplitInfo extends Action1To2Info[DataFrameInfo, DataFrameInfo, DataFrameIn
 
   override def outputPortsLayout = List(PortPosition.Left, PortPosition.Right)
 
-  val splitModeParameter = ChoiceParameter[SplitModeChoice]("split mode")
-  setDefault(splitModeParameter, SplitModeChoice.Random())
+  val splitModeParameter = ChoiceParameter[SplitModeChoice]("split mode", default = Some(SplitModeChoice.Random()))
   def getSplitMode = $(splitModeParameter)
   def setSplitMode(value: SplitModeChoice): this.type = set(splitModeParameter, value)
 
@@ -61,8 +60,7 @@ object SplitModeChoice {
   case class Random() extends SplitModeChoice with HasSeedParameter {
     val name = "RANDOM"
 
-    val splitRatioParameter = DoubleParameter("split ratio", validator = RangeValidator(0.0, 1.0))
-    setDefault(splitRatioParameter, 0.5)
+    val splitRatioParameter = DoubleParameter("split ratio", default = Some(0.5), validator = RangeValidator(0.0, 1.0))
     def getSplitRatio = $(splitRatioParameter)
     def setSplitRatio(value: Double): this.type = set(splitRatioParameter, value)
 

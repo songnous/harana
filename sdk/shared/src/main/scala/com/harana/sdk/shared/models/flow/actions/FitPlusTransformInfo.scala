@@ -28,8 +28,7 @@ trait FitPlusTransformInfo
   lazy val portO_0: TypeTag[DataFrameInfo] = typeTag[DataFrameInfo]
   lazy val portO_1: TypeTag[TransformerInfo] = typeTag[TransformerInfo]
 
-  val estimatorParameters = new DynamicParameter("Parameters of input Estimator", inputPort = 0)
-  setDefault(estimatorParameters -> Json.Null)
+  val estimatorParameters = new DynamicParameter("Parameters of input Estimator", default = Some(Json.Null), inputPort = 0)
   def setEstimatorParameters(jsValue: Json): this.type = set(estimatorParameters -> jsValue)
 
   override val parameters = Left(Array(estimatorParameters))

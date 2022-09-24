@@ -10,6 +10,8 @@ trait Parameter[T] {
 
   val required: Boolean
 
+  val default: Option[T]
+
   def constraints = ""
 
   val parameterType: ParameterType

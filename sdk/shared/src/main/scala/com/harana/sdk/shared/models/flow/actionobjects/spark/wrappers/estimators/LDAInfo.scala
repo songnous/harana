@@ -22,14 +22,9 @@ trait LDAInfo
 
   override val maxIterationsDefault = 20
 
-  val optimizerParameter = ChoiceParameter[OnlineLDAOptimizer]("optimizer")
-  setDefault(optimizerParameter, OnlineLDAOptimizer())
-
-  val subsamplingRateParameter = DoubleParameter("subsampling rate", validator = RangeValidator(0.0, 1.0, beginIncluded = false))
-  setDefault(subsamplingRateParameter, 0.05)
-
-  val topicDistributionColumnParameter = SingleColumnCreatorParameter("topic distribution column")
-  setDefault(topicDistributionColumnParameter, "topicDistribution")
+  val optimizerParameter = ChoiceParameter[OnlineLDAOptimizer]("optimizer", default = Some(OnlineLDAOptimizer()))
+  val subsamplingRateParameter = DoubleParameter("subsampling rate", default = Some(0.05), validator = RangeValidator(0.0, 1.0, beginIncluded = false))
+  val topicDistributionColumnParameter = SingleColumnCreatorParameter("topic distribution column", default = Some("topicDistribution"))
 
   val parameters = Left(Array(
     checkpointIntervalParameter,
@@ -45,14 +40,15 @@ trait LDAInfo
 
 object LDAInfo extends LDAInfo {
 
-  class DocConcentrationParameter(name: String, validator: ComplexArrayValidator[Double]) extends DoubleArrayParameter(
-      name = name,
-      validator = validator
-    )
+  class DocConcentrationParameter(name: String,
+                                  required: Boolean = false,
+                                  default: Option[Array[Double]] = None,
+                                  validator: ComplexArrayValidator[Double]) extends DoubleArrayParameter(name, required, default, validator)
 
-  class TopicConcentrationParameter(name: String, validator: RangeValidator[Double]) extends DoubleParameter(
-      name = name,
-      validator = validator)
+  class TopicConcentrationParameter(name: String,
+                                    required: Boolean = false,
+                                    default: Option[Double] = None,
+                                    validator: RangeValidator[Double]) extends DoubleParameter(name, required, default, validator)
 
   sealed trait LDAOptimizer extends Choice {
     val docConcentrationParameter = createDocumentConcentrationParam()
@@ -71,30 +67,26 @@ object LDAInfo extends LDAInfo {
   case class OnlineLDAOptimizer() extends LDAOptimizer {
     val name = "online"
 
-    def createDocumentConcentrationParam() = new DocConcentrationParameter("doc concentration", validator = ComplexArrayValidator(
+    def createDocumentConcentrationParam() = new DocConcentrationParameter("doc concentration", default = Some(Array(0.5, 0.5)), validator = ComplexArrayValidator(
           rangeValidator = RangeValidator(0.0, Double.MaxValue),
           lengthValidator = ArrayLengthValidator.withAtLeast(1)
         )
       )
 
-    setDefault(docConcentrationParameter, Array(0.5, 0.5))
-
-    def createTopicConcentrationParam() = new TopicConcentrationParameter("topic concentration", validator = RangeValidator(0.0, Double.MaxValue))
-    setDefault(topicConcentrationParameter, 0.5)
+    def createTopicConcentrationParam() = new TopicConcentrationParameter("topic concentration", default = Some(0.5), validator = RangeValidator(0.0, Double.MaxValue))
   }
 
   case class ExpectationMaximizationLDAOptimizer() extends LDAOptimizer {
     val name = "em"
 
     def createDocumentConcentrationParam() = new DocConcentrationParameter("doc concentration",
-        validator = ComplexArrayValidator(
+      default = Some(Array(26.0, 26.0)),
+      validator = ComplexArrayValidator(
           rangeValidator = RangeValidator(1.0, Double.MaxValue, beginIncluded = false),
           lengthValidator = ArrayLengthValidator.withAtLeast(1)
         )
       )
-    setDefault(docConcentrationParameter, Array(26.0, 26.0))
 
-    def createTopicConcentrationParam() = new TopicConcentrationParameter("topic concentration", RangeValidator(1.0, Double.MaxValue, beginIncluded = false))
-    setDefault(topicConcentrationParameter, 1.1)
+    def createTopicConcentrationParam() = new TopicConcentrationParameter("topic concentration", default = Some(1.1), validator = RangeValidator(1.0, Double.MaxValue, beginIncluded = false))
   }
 }

@@ -7,8 +7,7 @@ trait BinarizerInfo extends TransformerInfo with Parameters {
 
   val id = "837220CE-60D9-4D7E-925D-81AFCD82AFD1"
 
-  val thresholdParameter = DoubleParameter("threshold")
-  setDefault(thresholdParameter, 0.0)
+  val thresholdParameter = DoubleParameter("threshold", default = Some(0.0))
 
   val specificParameters = Array[Parameter[_]](thresholdParameter)
 

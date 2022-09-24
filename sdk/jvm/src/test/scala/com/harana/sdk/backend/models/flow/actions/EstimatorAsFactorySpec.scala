@@ -66,8 +66,7 @@ object EstimatorAsFactorySpec {
 
   class MockEstimator extends Estimator[Transformer] {
     val id = "test"
-    val param = NumericParameter("b")
-    setDefault(param -> 5)
+    val param = NumericParameter("b", default = Some(5))
     val parameters = Left(Array(param))
     override def _fit(ctx: ExecutionContext, df: DataFrame) = ???
     override def _fit_infer(schema: Option[StructType]) = ???

@@ -7,9 +7,8 @@ trait DiscreteCosineTransformerInfo extends TransformerInfo with Parameters {
 
   val id = "665D19BA-8817-4268-8CB1-7B7572E95A8B"
 
-  val inverseParameter = BooleanParameter("inverse")
+  val inverseParameter = BooleanParameter("inverse", default = Some(false))
   def getInverse = $(inverseParameter)
-  setDefault(inverseParameter, false)
 
   val specificParameters = Array[Parameter[_]](inverseParameter)
 

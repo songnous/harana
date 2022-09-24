@@ -23,11 +23,8 @@ trait KMeansInfo
   override val maxIterationsDefault = 20
   override val toleranceDefault = 1e-4
 
-  val initModeParameter = ChoiceParameter[KMeansInitMode]("init mode")
-  setDefault(initModeParameter, ParallelInitMode())
-
-  val initStepsParameter = IntParameter("init steps", validator = RangeValidator(begin = 1, end = Int.MaxValue, step = Some(1)))
-  setDefault(initStepsParameter, 5)
+  val initModeParameter = ChoiceParameter[KMeansInitMode]("init mode", default = Some(ParallelInitMode()))
+  val initStepsParameter = IntParameter("init steps", default = Some(5), validator = RangeValidator(begin = 1, end = Int.MaxValue, step = Some(1)))
 
   val parameters = Left(Array(
     kParameter,

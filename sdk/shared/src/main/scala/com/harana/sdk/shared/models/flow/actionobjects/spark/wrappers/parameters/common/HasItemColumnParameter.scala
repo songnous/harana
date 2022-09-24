@@ -7,8 +7,7 @@ import scala.language.reflectiveCalls
 
 trait HasItemColumnParameter extends Parameters {
 
-  val itemColumnParameter = SingleColumnSelectorParameter("item column", portIndex = 0)
+  val itemColumnParameter = SingleColumnSelectorParameter("item column", default = Some(NameSingleColumnSelection("item")), portIndex = 0)
   def getItemColumn = $(itemColumnParameter)
-  setDefault(itemColumnParameter, NameSingleColumnSelection("item"))
 
 }

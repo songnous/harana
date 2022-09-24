@@ -6,12 +6,11 @@ import scala.language.reflectiveCalls
 
 trait MinMaxParameters extends Parameters {
 
-  val minParameter = DoubleParameter("min")
-  setDefault(minParameter, 0.0)
+  val minParameter = DoubleParameter("min", default = Some(0.0))
   def setMin(value: Double): this.type = set(minParameter, value)
 
 
-  val maxParameter = DoubleParameter("max")
-  setDefault(maxParameter, 1.0)
+  val maxParameter = DoubleParameter("max", default = Some(1.0))
   def setMax(value: Double): this.type = set(maxParameter, value)
+
 }

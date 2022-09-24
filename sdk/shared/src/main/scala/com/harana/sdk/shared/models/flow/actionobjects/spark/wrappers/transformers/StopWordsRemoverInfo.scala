@@ -7,9 +7,7 @@ trait StopWordsRemoverInfo extends TransformerInfo with Parameters {
 
   val id = "D791C2E7-1843-490F-A672-67B2F02FFB79"
 
-  val caseSensitiveParameter = BooleanParameter("case sensitive")
-  setDefault(caseSensitiveParameter, false)
-
+  val caseSensitiveParameter = BooleanParameter("case sensitive", default = Some(false))
   val specificParameters = Array[Parameter[_]](caseSensitiveParameter)
 
 }

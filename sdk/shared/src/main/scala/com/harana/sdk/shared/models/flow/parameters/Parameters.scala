@@ -71,7 +71,7 @@ trait Parameters extends Serializable with HasInferenceResult {
   }
 
   def get[T](param: Parameter[T]): Option[T] = paramMap.get(param)
-  def getDefault[T](param: Parameter[T]) = defaultParamMap.get(param)
+  def getDefault[T](param: Parameter[T]) = param.default.orElse(defaultParamMap.get(param))
   def getOrDefaultOption[T](param: Parameter[T]) = get(param).orElse(getDefault(param))
   def getOrDefault[T](param: Parameter[T]): T = getOrDefaultOption(param).getOrElse {
     throw ParamValueNotProvidedError(param.name).toException

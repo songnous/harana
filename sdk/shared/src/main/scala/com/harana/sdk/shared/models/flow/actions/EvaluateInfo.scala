@@ -20,8 +20,7 @@ trait EvaluateInfo extends Action2To1Info[EvaluatorInfo, DataFrameInfo, MetricVa
   val since = Version(1, 0, 0)
   val category = Action
 
-  val evaluatorParameters = new DynamicParameter("Parameters of input Evaluator", inputPort = 0)
-  setDefault(evaluatorParameters, Json.Null)
+  val evaluatorParameters = new DynamicParameter("Parameters of input Evaluator", default = Some(Json.Null), inputPort = 0)
   def getEvaluatorParameters = $(evaluatorParameters)
   def setEvaluatorParameters(jsValue: Json): this.type = set(evaluatorParameters, jsValue)
 

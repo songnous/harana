@@ -7,8 +7,7 @@ import scala.language.reflectiveCalls
 
 trait HasLabelColumnParameter extends Parameters {
 
-  val labelColumnParameter = SingleColumnSelectorParameter("label column", portIndex = 0)
-  setDefault(labelColumnParameter, NameSingleColumnSelection("label"))
+  val labelColumnParameter = SingleColumnSelectorParameter("label column", default = Some(NameSingleColumnSelection("label")), portIndex = 0)
   def getLabelColumn = $(labelColumnParameter)
   def setLabelColumn(value: SingleColumnSelection): this.type = set(labelColumnParameter, value)
 

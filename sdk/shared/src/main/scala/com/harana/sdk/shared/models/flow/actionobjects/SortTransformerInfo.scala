@@ -23,8 +23,7 @@ class SortColumnParameter extends Parameters {
   def getColumnName = $(columnNameParameter)
   def setColumnName(col: SingleColumnSelection): this.type = set(columnNameParameter, col)
 
-  val descendingParameter = BooleanParameter(descendingFlagParameterName)
-  setDefault(descendingParameter, false)
+  val descendingParameter = BooleanParameter(descendingFlagParameterName, default = Some(false))
   def getDescending = $(descendingParameter)
   def isDescending: Boolean = getDescending
   def setDescending(desc: Boolean): this.type = set(descendingParameter, desc)

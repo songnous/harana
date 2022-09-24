@@ -6,13 +6,11 @@ trait SqlColumnTransformerInfo extends MultiColumnTransformerInfo {
 
   override val id = "DCA2270C-D170-4AFC-B35B-DF9CD61397EB"
 
-  val inputColumnAliasParameter = StringParameter("input column alias")
-  setDefault(inputColumnAliasParameter -> "x")
+  val inputColumnAliasParameter = StringParameter("input column alias", default = Some("x"))
   def getInputColumnAlias = $(inputColumnAliasParameter)
   def setInputColumnAlias(value: String): this.type = set(inputColumnAliasParameter, value)
 
-  val formulaParameter = StringParameter("formula")
-  setDefault(formulaParameter -> "x")
+  val formulaParameter = StringParameter("formula", default = Some("x"))
   def getFormula = $(formulaParameter)
   def setFormula(value: String): this.type = set(formulaParameter, value)
 

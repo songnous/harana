@@ -11,8 +11,7 @@ trait QuantileDiscretizerEstimatorInfo extends EstimatorInfo with Parameters {
 
   val id = "BE138D50-B5A8-428B-8600-1F22718A5BCC"
 
-  val numBucketsParameter = IntParameter("num buckets", validator = RangeValidator(2, Int.MaxValue, step = Some(1)))
-  setDefault(numBucketsParameter, 2)
+  val numBucketsParameter = IntParameter("num buckets", default = Some(2), validator = RangeValidator(2, Int.MaxValue, step = Some(1)))
   val specificParameters = Array[Parameter[_]](numBucketsParameter)
   def setNumBuckets(value: Int): this.type = set(numBucketsParameter -> value)
 

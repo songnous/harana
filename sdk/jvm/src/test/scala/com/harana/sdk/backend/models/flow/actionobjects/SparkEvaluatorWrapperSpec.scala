@@ -64,12 +64,10 @@ object SparkEvaluatorWrapperSpec {
 
   case class ExampleEvaluatorWrapper() extends SparkEvaluatorWrapper[ExampleSparkEvaluator] {
     val id = "test"
-    val paramWrapper = DoubleParameter("name")
-    setDefault(paramWrapper, 0.0)
+    val paramWrapper = DoubleParameter("name", default = Some(0.0))
     def setParamWrapper(value: Double): this.type = set(paramWrapper, value)
 
-    val column = SingleColumnSelectorParameter(name = "column", portIndex = 0)
-    setDefault(column, NameSingleColumnSelection("column"))
+    val column = SingleColumnSelectorParameter(name = "column", default = Some(NameSingleColumnSelection("column")), portIndex = 0)
     def setColumnWrapper(value: SingleColumnSelection): this.type = set(column, value)
 
     val parameters = Left(Array(paramWrapper, column))

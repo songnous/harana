@@ -7,7 +7,6 @@ import scala.language.reflectiveCalls
 
 trait HasNumberOfClustersParameter extends Parameters {
 
-  val kParameter = IntParameter("k", validator = RangeValidator(begin = 2, end = Int.MaxValue, step = Some(1)))
-  setDefault(kParameter, 2)
+  val kParameter = IntParameter("k", default = Some(2), validator = RangeValidator(begin = 2, end = Int.MaxValue, step = Some(1)))
 
 }

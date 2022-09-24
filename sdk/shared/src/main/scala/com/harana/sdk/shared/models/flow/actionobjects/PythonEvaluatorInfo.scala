@@ -6,20 +6,20 @@ trait PythonEvaluatorInfo extends CustomCodeEvaluatorInfo {
 
   val id = "1DE6C6F3-C6CC-4DDA-A09A-99CBDD00CFF6"
 
-  val codeParameter = CodeSnippetParameter("python evaluator code", language = CodeSnippetLanguage.Python)
+  val default =
+    """from math import sqrt
+      |from operator import add
+      |
+      |def evaluate(dataframe):
+      |    # Example Root-Mean-Square Error implementation
+      |    n = dataframe.count()
+      |    row_to_sq_error = lambda row: (row['label'] - row['prediction'])**2
+      |    sum_sq_error = dataframe.rdd.map(row_to_sq_error).reduce(add)
+      |    rmse = sqrt(sum_sq_error / n)
+      |    return rmse""".stripMargin
 
-  setDefault(codeParameter ->
-      """from math import sqrt
-        |from operator import add
-        |
-        |def evaluate(dataframe):
-        |    # Example Root-Mean-Square Error implementation
-        |    n = dataframe.count()
-        |    row_to_sq_error = lambda row: (row['label'] - row['prediction'])**2
-        |    sum_sq_error = dataframe.rdd.map(row_to_sq_error).reduce(add)
-        |    rmse = sqrt(sum_sq_error / n)
-        |    return rmse""".stripMargin
-  )
+
+  val codeParameter = CodeSnippetParameter("python evaluator code", default = Some(default), language = CodeSnippetLanguage.Python)
 
   // Creating a dataframe is a workaround. Currently we can pass to jvm DataFrames only.
   // TODO DS-3695 Fix a metric value - dataframe workaround.

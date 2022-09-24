@@ -4,4 +4,5 @@ import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.MultiColumnPa
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.MultiColumnParameters.SingleOrMultiColumnChoice
 import com.harana.sdk.shared.models.flow.parameters.choice.ChoiceParameter
 
-case class IOColumnsParameter() extends ChoiceParameter[SingleOrMultiColumnChoice]("operate on")
+case class IOColumnsParameter(override val required: Boolean = false,
+                              override val default: Option[SingleOrMultiColumnChoice] = None) extends ChoiceParameter[SingleOrMultiColumnChoice]("operate on")

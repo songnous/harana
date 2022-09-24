@@ -6,13 +6,13 @@ trait RTransformerInfo extends CustomCodeTransformerInfo {
 
   val id = "6E4BA79E-D953-4448-986A-5B620781912D"
 
-  override lazy val codeParameter = CodeSnippetParameter("code", language = CodeSnippetLanguage.R)
-  setDefault(codeParameter ->
-      """transform <- function(dataframe) {
-        |  return(dataframe)
-        |}
-    """.stripMargin
-  )
+  val default =
+    """transform <- function(dataframe) {
+      |  return(dataframe)
+      |}
+""".stripMargin
+
+  override lazy val codeParameter = CodeSnippetParameter("code", default = Some(default), language = CodeSnippetLanguage.R)
 }
 
 object RTransformerInfo extends RTransformerInfo

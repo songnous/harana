@@ -6,7 +6,7 @@ import scala.reflect.runtime.universe._
 
 case class MultipleChoiceParameter[T <: Choice](name: String,
                                                 required: Boolean = false,
-                                                default: Option[T] = None)(implicit tag: TypeTag[T]) extends AbstractChoiceParameter[T, Set[T]] {
+                                                default: Option[Set[T]] = None)(implicit tag: TypeTag[T]) extends AbstractChoiceParameter[T, Set[T]] {
 
   val parameterType = MultipleChoice
 

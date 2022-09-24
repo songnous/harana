@@ -12,8 +12,7 @@ trait BinaryClassificationEvaluatorInfo extends EvaluatorInfo with HasLabelColum
 
   val id = "AEC7A0F2-9916-439A-A854-D063B39CD1AF"
 
-  val metricNameParameter = new ChoiceParameter[Metric]("binary metric")
-  setDefault(metricNameParameter, AreaUnderROC())
+  val metricNameParameter = new ChoiceParameter[Metric]("binary metric", default = Some(AreaUnderROC()))
   def getMetricName = $(metricNameParameter)
   def setMetricName(value: Metric): this.type = set(metricNameParameter, value)
 
@@ -40,15 +39,13 @@ object BinaryClassificationEvaluatorInfo extends BinaryClassificationEvaluatorIn
   }
 
   trait RawPredictionMetric extends Parameters {
-    val rawPredictionColumnParameter = SingleColumnSelectorParameter("raw prediction column", portIndex = 0)
-    setDefault(rawPredictionColumnParameter, NameSingleColumnSelection("rawPrediction"))
+    val rawPredictionColumnParameter = SingleColumnSelectorParameter("raw prediction column", default = Some(NameSingleColumnSelection("rawPrediction")), portIndex = 0)
     def getRawPredictionColumn = $(rawPredictionColumnParameter)
     def setRawPredictionColumn(value: SingleColumnSelection): this.type = set(rawPredictionColumnParameter, value)
   }
 
   trait PredictionMetric extends Parameters {
-    val predictionColumnParameter = SingleColumnSelectorParameter("prediction column", portIndex = 0)
-    setDefault(predictionColumnParameter, NameSingleColumnSelection("prediction"))
+    val predictionColumnParameter = SingleColumnSelectorParameter("prediction column", default = Some(NameSingleColumnSelection("prediction")), portIndex = 0)
     def getPredictionColumn = $(predictionColumnParameter)
     def setPredictionColumn(value: SingleColumnSelection): this.type = set(predictionColumnParameter, value)
   }

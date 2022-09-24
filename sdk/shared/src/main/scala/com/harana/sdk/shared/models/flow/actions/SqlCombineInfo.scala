@@ -23,18 +23,15 @@ trait SqlCombineInfo extends Action2To1Info[DataFrameInfo, DataFrameInfo, DataFr
 
   override val inputPortsLayout = List(PortPosition.Left, PortPosition.Right)
 
-  val leftTableNameParameter = StringParameter("Left dataframe id")
-  setDefault(leftTableNameParameter, "")
+  val leftTableNameParameter = StringParameter("Left dataframe id", default = Some(""))
   def getLeftTableName = $(leftTableNameParameter)
   def setLeftTableName(name: String): this.type = set(leftTableNameParameter, name)
 
-  val rightTableNameParameter = StringParameter("Right dataframe id")
-  setDefault(rightTableNameParameter, "")
+  val rightTableNameParameter = StringParameter("Right dataframe id", default = Some(""))
   def getRightTableName = $(rightTableNameParameter)
   def setRightTableName(name: String): this.type = set(rightTableNameParameter, name)
 
-  val sqlCombineExpressionParameter = CodeSnippetParameter("expression", language = CodeSnippetLanguage.SQL)
-  setDefault(sqlCombineExpressionParameter, "")
+  val sqlCombineExpressionParameter = CodeSnippetParameter("expression", default = Some(""), language = CodeSnippetLanguage.SQL)
   def getSqlCombineExpression = $(sqlCombineExpressionParameter)
   def setSqlCombineExpression(expression: String): this.type = set(sqlCombineExpressionParameter, expression)
 

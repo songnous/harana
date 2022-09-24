@@ -6,7 +6,8 @@ import io.circe.generic.JsonCodec
 
 @JsonCodec
 case class TimestampPartsParameter(name: String,
-                                   required: Boolean = false)
+                                   required: Boolean = false,
+                                   default: Option[Set[TimestampPartColumnChoice]] = None)
   extends AbstractChoiceParameter[TimestampPartColumnChoice, Set[TimestampPartColumnChoice]] {
 
   val parameterType = ParameterType.TimestampParts

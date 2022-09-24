@@ -8,7 +8,6 @@ import scala.language.reflectiveCalls
 
 trait HasClassificationImpurityParameter extends Parameters {
 
-  val impurityParameter = ChoiceParameter[ClassificationImpurity]("classification impurity")
-  setDefault(impurityParameter, Gini())
+  val impurityParameter = ChoiceParameter[ClassificationImpurity]("classification impurity", default = Some(Gini()))
 
 }

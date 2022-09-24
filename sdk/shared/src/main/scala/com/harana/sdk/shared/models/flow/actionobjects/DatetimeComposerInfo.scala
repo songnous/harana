@@ -3,6 +3,7 @@ package com.harana.sdk.shared.models.flow.actionobjects
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, MultipleChoiceParameter}
 import com.harana.sdk.shared.models.flow.parameters.{SingleColumnCreatorParameter, SingleColumnSelectorParameter}
 import com.harana.sdk.shared.models.flow.parameters.selections.SingleColumnSelection
+import io.circe.generic.JsonCodec
 
 trait DatetimeComposerInfo extends TransformerInfo {
 
@@ -10,13 +11,11 @@ trait DatetimeComposerInfo extends TransformerInfo {
 
   val id = "DB26B2A0-658F-41D2-A8D1-10A17654B284"
 
-  val timestampColumnsParameter = MultipleChoiceParameter[TimestampPartColumnChoice]("parts")
-  setDefault(timestampColumnsParameter, Set.empty[TimestampPartColumnChoice])
+  val timestampColumnsParameter = MultipleChoiceParameter[TimestampPartColumnChoice]("parts", default = Some(Set.empty[TimestampPartColumnChoice]))
   def timestampColumns = $(timestampColumnsParameter)
   def setTimestampColumns(timestampParts: Set[TimestampPartColumnChoice]): this.type = set(timestampColumnsParameter, timestampParts)
 
-  val outputColumnParameter = SingleColumnCreatorParameter("output column")
-  setDefault(outputColumnParameter, "Timestamp")
+  val outputColumnParameter = SingleColumnCreatorParameter("output column", default = Some("Timestamp"))
   def outputColumn = $(outputColumnParameter)
   def setOutputColumn(outputColumn: String): this.type = set(outputColumnParameter, outputColumn)
 
@@ -30,6 +29,7 @@ object DatetimeComposerInfo extends DatetimeComposerInfo {
   val orderedTimestampParts = List[TimestampPartColumnChoice](Year(), Month(), Day(), Hour(), Minutes(), Seconds())
   val choiceOrder = orderedTimestampParts.map(_.getClass)
 
+  @JsonCodec
   sealed trait TimestampPartColumnChoice extends Choice {
     val name: String
     val defaultValue: Int

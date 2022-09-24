@@ -16,18 +16,18 @@ trait MissingValuesHandlerInfo extends TransformerInfo {
   def getSelectedColumns = $(selectedColumnsParameter)
   def setSelectedColumns(value: MultipleColumnSelection): this.type = set(selectedColumnsParameter, value)
 
-  val strategyParameter = ChoiceParameter[Strategy]("strategy")
-  setDefault(strategyParameter, Strategy.RemoveRow())
+  val strategyParameter = ChoiceParameter[Strategy]("strategy", default = Some(Strategy.RemoveRow()))
   def getStrategy = $(strategyParameter)
   def setStrategy(value: Strategy): this.type = set(strategyParameter, value)
 
-  val userDefinedMissingValuesParameter = ParametersSequence[UserDefinedMissingValue]("user-defined missing values")
-  setDefault(userDefinedMissingValuesParameter, Seq(UserDefinedMissingValue().setMissingValue("NA"), UserDefinedMissingValue().setMissingValue("NaN")))
+  val userDefinedMissingValuesParameter = ParametersSequence[UserDefinedMissingValue](
+    "user-defined missing values",
+    default = Some(Seq(UserDefinedMissingValue().setMissingValue("NA"), UserDefinedMissingValue().setMissingValue("NaN")))
+  )
   def getUserDefinedMissingValues = $(userDefinedMissingValuesParameter).map(_.getMissingValue)
   def setUserDefinedMissingValues(value: Seq[String]): this.type = set(userDefinedMissingValuesParameter, value.map(UserDefinedMissingValue().setMissingValue(_)))
 
-  val missingValueIndicatorParameter = ChoiceParameter[MissingValueIndicatorChoice]("missing value indicator")
-  setDefault(missingValueIndicatorParameter, MissingValueIndicatorChoice.No())
+  val missingValueIndicatorParameter = ChoiceParameter[MissingValueIndicatorChoice]("missing value indicator", default = Some(MissingValueIndicatorChoice.No()))
   def getMissingValueIndicator = $(missingValueIndicatorParameter)
   def setMissingValueIndicator(value: MissingValueIndicatorChoice): this.type = set(missingValueIndicatorParameter, value)
 
@@ -69,8 +69,7 @@ object MissingValuesHandlerInfo extends MissingValuesHandlerInfo {
 
     case class ReplaceWithMode() extends Strategy {
       val name = "replace with mode"
-      val emptyColumnStrategyParameter = ChoiceParameter[EmptyColumnsStrategy]("empty column strategy")
-      setDefault(emptyColumnStrategyParameter, EmptyColumnsStrategy.RemoveEmptyColumns())
+      val emptyColumnStrategyParameter = ChoiceParameter[EmptyColumnsStrategy]("empty column strategy", default = Some(EmptyColumnsStrategy.RemoveEmptyColumns()))
       def getEmptyColumnStrategy = $(emptyColumnStrategyParameter)
       def setEmptyColumnStrategy(value: EmptyColumnsStrategy): this.type = set(emptyColumnStrategyParameter, value)
 
@@ -108,8 +107,7 @@ object MissingValuesHandlerInfo extends MissingValuesHandlerInfo {
     case class Yes() extends MissingValueIndicatorChoice {
       val name = "Yes"
 
-      val indicatorPrefixParameter = PrefixBasedColumnCreatorParameter("indicator column prefix")
-      setDefault(indicatorPrefixParameter, "")
+      val indicatorPrefixParameter = PrefixBasedColumnCreatorParameter("indicator column prefix", default = Some(""))
       def getIndicatorPrefix = Some($(indicatorPrefixParameter))
       def setIndicatorPrefix(value: String): this.type = set(indicatorPrefixParameter, value)
       val parameters = Left(Array(indicatorPrefixParameter))
@@ -125,8 +123,7 @@ object MissingValuesHandlerInfo extends MissingValuesHandlerInfo {
 
 case class UserDefinedMissingValue() extends Parameters {
 
-  val missingValueParameter = StringParameter("missing value", validator = RegexValidator.AcceptAll)
-  setDefault(missingValueParameter, "")
+  val missingValueParameter = StringParameter("missing value", default = Some(""), validator = RegexValidator.AcceptAll)
   def getMissingValue = $(missingValueParameter)
   def setMissingValue(value: String): this.type = set(missingValueParameter, value)
   val parameters = Left(Array(missingValueParameter))

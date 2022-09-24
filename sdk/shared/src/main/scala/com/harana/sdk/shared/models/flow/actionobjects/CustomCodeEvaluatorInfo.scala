@@ -8,14 +8,13 @@ trait CustomCodeEvaluatorInfo extends EvaluatorInfo with HasIsLargerBetterParame
   val InputPortNumber: Int = 0
   val OutputPortNumber: Int = 0
 
-  val metricNameParameter = StringParameter(name = "metric name")
-  setDefault(metricNameParameter -> "custom metric")
+  val metricNameParameter = StringParameter("metric name", default = Some("custom metric"))
   def getMetricName = $(metricNameParameter)
 
   val codeParameter: CodeSnippetParameter
 
-  lazy val parameters = Left(Array(metricNameParameter, codeParameter, isLargerBetterParameter))
-
   def isLargerBetter = $(isLargerBetterParameter)
 
+  lazy val parameters = Left(Array(metricNameParameter, codeParameter, isLargerBetterParameter))
+  
 }

@@ -8,7 +8,6 @@ import scala.language.reflectiveCalls
 
 trait HasElasticNetParameter extends Parameters {
 
-  val elasticNetParameter = DoubleParameter("elastic net param", validator = RangeValidator(0.0, 1.0))
-  setDefault(elasticNetParameter, 0.0)
+  val elasticNetParameter = DoubleParameter("elastic net param", default = Some(0.0), validator = RangeValidator(0.0, 1.0))
 
 }

@@ -16,8 +16,7 @@ import scala.language.reflectiveCalls
 object EstimatorModelWrappersFixtures extends MockitoSugar with TestSupport {
 
   trait HasNumericParameter extends Parameters {
-    val numericParameter = DoubleParameter("name")
-    setDefault(numericParameter, 1.0)
+    val numericParameter = DoubleParameter("name", default = Some(1.0))
   }
 
   class ExampleSparkEstimatorWrapper extends SparkEstimatorWrapper[ExampleSparkModel, ExampleSparkEstimator, ExampleSparkModelWrapper] with HasNumericParameter {
@@ -39,7 +38,6 @@ object EstimatorModelWrappersFixtures extends MockitoSugar with TestSupport {
     }
 
     val transformSchemaShouldThrowParameter = new BooleanParam(uid, "throwing", "description")
-    setDefault(transformSchemaShouldThrowParameter -> false)
     def setTransformSchemaShouldThrow(b: Boolean): this.type = set(transformSchemaShouldThrowParameter, b)
 
     def transformSchema(schema: StructType): StructType = {

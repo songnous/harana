@@ -16,5 +16,7 @@ class ChoiceParameter[T <: Choice](val name: String,
 }
 
 object ChoiceParameter {
-  def apply[T <: Choice: TypeTag](name: String) = new ChoiceParameter[T](name)
+  def apply[T <: Choice: TypeTag](name: String,
+                                  required: Boolean = false,
+                                  default: Option[T] = None) = new ChoiceParameter[T](name, required, default)
 }

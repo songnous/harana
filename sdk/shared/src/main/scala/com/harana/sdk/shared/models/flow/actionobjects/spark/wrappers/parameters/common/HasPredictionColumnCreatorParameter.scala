@@ -6,8 +6,7 @@ import scala.language.reflectiveCalls
 
 trait HasPredictionColumnCreatorParameter extends Parameters {
 
-  val predictionColumnParameter = SingleColumnCreatorParameter("prediction column")
+  val predictionColumnParameter = SingleColumnCreatorParameter("prediction column", default = Some("prediction"))
   def getPredictionColumn = $(predictionColumnParameter)
-  setDefault(predictionColumnParameter, "prediction")
 
 }

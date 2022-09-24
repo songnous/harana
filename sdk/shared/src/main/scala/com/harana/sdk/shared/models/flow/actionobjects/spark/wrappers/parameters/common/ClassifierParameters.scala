@@ -5,8 +5,7 @@ import scala.language.reflectiveCalls
 
 trait ClassifierParameters extends PredictorParameters {
 
-  val rawPredictionColumnParameter = SingleColumnCreatorParameter("raw prediction column")
+  val rawPredictionColumnParameter = SingleColumnCreatorParameter("raw prediction column", default = Some("rawPrediction"))
   def getRawPredictionColumn = $(rawPredictionColumnParameter)
-  setDefault(rawPredictionColumnParameter, "rawPrediction")
 
 }

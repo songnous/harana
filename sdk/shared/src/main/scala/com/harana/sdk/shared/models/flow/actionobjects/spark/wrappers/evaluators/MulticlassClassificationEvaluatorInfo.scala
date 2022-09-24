@@ -15,8 +15,7 @@ trait MulticlassClassificationEvaluatorInfo
 
   val id = "45F4CAB1-954A-4CD2-AF83-E2883CE30CE4"
 
-  val metricNameParameter = ChoiceParameter[Metric]("multiclass metric")
-  setDefault(metricNameParameter, F1())
+  val metricNameParameter = ChoiceParameter[Metric]("multiclass metric", default = Some(F1()))
   def getMetricName = $(metricNameParameter).name
 
   val parameters = Left(Array(metricNameParameter, predictionColumnParameter, labelColumnParameter))

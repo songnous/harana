@@ -13,8 +13,7 @@ trait IsotonicRegressionInfo
 
   val id = "007FBD57-E166-4892-95AA-F8D9DC526BFA"
 
-  val isotonicParameter = BooleanParameter("isotonic")
-  setDefault(isotonicParameter, true)
+  val isotonicParameter = BooleanParameter("isotonic", default = Some(true))
 
   val parameters = Left(Array(
     isotonicParameter,

@@ -9,8 +9,8 @@ import scala.language.reflectiveCalls
 
 trait HasSolverParameter extends Parameters {
 
-  val solverParameter = ChoiceParameter[SolverOption]("solver")
-  setDefault(solverParameter, SolverChoice.Auto())
+  val solverParameter = ChoiceParameter[SolverOption]("solver", default = Some(SolverChoice.Auto()))
+
 }
 
 object SolverChoice {

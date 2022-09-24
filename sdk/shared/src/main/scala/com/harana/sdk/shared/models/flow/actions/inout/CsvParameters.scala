@@ -6,8 +6,7 @@ import com.harana.sdk.shared.models.flow.parameters.validators.RegexValidator
 import com.harana.sdk.shared.models.flow.parameters.{BooleanParameter, Parameter, Parameters, StringParameter}
 
 trait NamesIncludedParameter { this: Parameters =>
-  val namesIncludedParameter = BooleanParameter("names included")
-  setDefault(namesIncludedParameter, true)
+  val namesIncludedParameter = BooleanParameter("names included", default = Some(true))
   def getNamesIncluded = $(namesIncludedParameter)
   def setNamesIncluded(value: Boolean): this.type = set(namesIncludedParameter, value)
 }
@@ -15,8 +14,7 @@ trait NamesIncludedParameter { this: Parameters =>
 trait CsvParameters extends NamesIncludedParameter { this: Parameters =>
   import CsvParameters._
 
-  val csvColumnSeparatorParameter = ChoiceParameter[ColumnSeparatorChoice]("separator")
-  setDefault(csvColumnSeparatorParameter, ColumnSeparatorChoice.Comma())
+  val csvColumnSeparatorParameter = ChoiceParameter[ColumnSeparatorChoice]("separator", default = Some(ColumnSeparatorChoice.Comma()))
   def getCsvColumnSeparator = $(csvColumnSeparatorParameter)
   def setCsvColumnSeparator(value: ColumnSeparatorChoice): this.type = set(csvColumnSeparatorParameter, value)
   def determineColumnSeparator = CsvParameters.determineColumnSeparatorOf(getCsvColumnSeparator)
@@ -71,8 +69,7 @@ object CsvParameters {
     case class Custom() extends ColumnSeparatorChoice {
       val name = "Custom"
 
-      val customColumnSeparator = StringParameter(name = "custom separator", validator = RegexValidator.SingleChar)
-      setDefault(customColumnSeparator, ",")
+      val customColumnSeparator = StringParameter("custom separator", default = Some(","), validator = RegexValidator.SingleChar)
       def getCustomColumnSeparator = $(customColumnSeparator)
       def setCustomColumnSeparator(value: String): this.type = set(customColumnSeparator, value)
 

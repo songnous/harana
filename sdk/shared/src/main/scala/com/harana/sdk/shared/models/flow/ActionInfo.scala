@@ -62,8 +62,7 @@ trait ActionInfo extends GraphAction with Serializable with Parameters {
 
   def typeTag[T: ru.TypeTag]: ru.TypeTag[T] = ru.typeTag[T]
 
-  val reportTypeParameter: ChoiceParameter[ReportType] = ChoiceParameter[ReportType]("report type")
-  setDefault(reportTypeParameter, ReportParameter.Extended())
+  val reportTypeParameter: ChoiceParameter[ReportType] = ChoiceParameter[ReportType]("report type", default = Some(ReportParameter.Extended()))
   def getReportType = $(reportTypeParameter)
   def setReportType(value: ReportType): this.type = set(reportTypeParameter, value)
 

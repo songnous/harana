@@ -18,8 +18,7 @@ trait MultilayerPerceptronClassifierInfo
   override val maxIterationsDefault = 100
   override val toleranceDefault = 1e-4
 
-  val layersParameter = IntArrayParameter("layers", validator = ComplexArrayValidator(RangeValidator.positiveIntegers, ArrayLengthValidator.withAtLeast(2)))
-  setDefault(layersParameter, Array(1, 1))
+  val layersParameter = IntArrayParameter("layers", default = Some(Array(1, 1)), validator = ComplexArrayValidator(RangeValidator.positiveIntegers, ArrayLengthValidator.withAtLeast(2)))
 
   val parameters = Left(Array(
     layersParameter,

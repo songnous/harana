@@ -20,8 +20,7 @@ trait TransformInfo extends Action2To1Info[TransformerInfo, DataFrameInfo, DataF
   val since = Version(1, 0, 0)
   val category = Action
 
-  val transformerParameters = new DynamicParameter("Parameters of input Transformer", inputPort = 0)
-  setDefault(transformerParameters, Json.Null)
+  val transformerParameters = new DynamicParameter("Parameters of input Transformer", default = Some(Json.Null), inputPort = 0)
   def getTransformerParameters = $(transformerParameters)
   def setTransformerParameters(jsValue: Json): this.type = set(transformerParameters, jsValue)
 

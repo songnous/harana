@@ -27,8 +27,7 @@ trait WriteDataFrameInfo
   @transient
   lazy val portI_0: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]
 
-  val storageTypeParameter = ChoiceParameter[OutputStorageTypeChoice]("data storage type")
-  setDefault(storageTypeParameter, new OutputStorageTypeChoice.File())
+  val storageTypeParameter = ChoiceParameter[OutputStorageTypeChoice]("data storage type", default = Some(new OutputStorageTypeChoice.File()))
   def getStorageType = $(storageTypeParameter)
   def setStorageType(value: OutputStorageTypeChoice): this.type = set(storageTypeParameter, value)
 

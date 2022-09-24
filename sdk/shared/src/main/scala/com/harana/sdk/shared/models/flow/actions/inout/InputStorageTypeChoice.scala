@@ -20,8 +20,7 @@ object InputStorageTypeChoice {
     def getSourceFile = $(sourceFileParameter)
     def setSourceFile(value: String): this.type = set(sourceFileParameter, value)
 
-    val fileFormatParameter = ChoiceParameter[InputFileFormatChoice]("format")
-    setDefault(fileFormatParameter, new InputFileFormatChoice.Csv())
+    val fileFormatParameter = ChoiceParameter[InputFileFormatChoice]("format", default = Some(new InputFileFormatChoice.Csv()))
     def getFileFormat = $(fileFormatParameter)
     def setFileFormat(value: InputFileFormatChoice): this.type = set(fileFormatParameter, value)
 

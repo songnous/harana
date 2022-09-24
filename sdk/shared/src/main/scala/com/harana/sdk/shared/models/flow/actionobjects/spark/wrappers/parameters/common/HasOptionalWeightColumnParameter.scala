@@ -9,8 +9,7 @@ import scala.language.reflectiveCalls
 
 trait HasOptionalWeightColumnParameter extends Parameters {
 
-  val optionalWeightColumnParameter = new ChoiceParameter[OptionalWeightColumnChoice.WeightColumnOption]("use custom weights")
-  setDefault(optionalWeightColumnParameter, OptionalWeightColumnChoice.WeightColumnNoOption())
+  val optionalWeightColumnParameter = new ChoiceParameter[OptionalWeightColumnChoice.WeightColumnOption]("use custom weights", default = Some(OptionalWeightColumnChoice.WeightColumnNoOption()))
 
 }
 
@@ -23,8 +22,7 @@ object OptionalWeightColumnChoice {
   case class WeightColumnYesOption() extends WeightColumnOption {
     val name = "yes"
 
-    val weightColumnParameter = SingleColumnSelectorParameter("weight column", portIndex = 0)
-    setDefault(weightColumnParameter, NameSingleColumnSelection("weight"))
+    val weightColumnParameter = SingleColumnSelectorParameter("weight column", default = Some(NameSingleColumnSelection("weight")), portIndex = 0)
     def getWeightColumn = $(weightColumnParameter)
     def setWeightColumn(value: SingleColumnSelection): this.type = set(weightColumnParameter -> value)
 

@@ -5,8 +5,7 @@ import scala.language.reflectiveCalls
 
 trait ProbabilisticClassifierParameters extends ClassifierParameters {
 
-  val probabilityColumnParameter = SingleColumnCreatorParameter("probability column")
+  val probabilityColumnParameter = SingleColumnCreatorParameter("probability column", default = Some("probability"))
   def getProbabilityColumn = $(probabilityColumnParameter)
-  setDefault(probabilityColumnParameter, "probability")
 
 }

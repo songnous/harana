@@ -24,8 +24,7 @@ trait ReadDataFrameInfo
   val since = Version(0, 4, 0)
   val category = IO
 
-  val storageTypeParameter = ChoiceParameter[InputStorageTypeChoice]("data storage type")
-  setDefault(storageTypeParameter, new InputStorageTypeChoice.File())
+  val storageTypeParameter = ChoiceParameter[InputStorageTypeChoice]("data storage type", default = Some(new InputStorageTypeChoice.File()))
   def getStorageType = $(storageTypeParameter)
   def setStorageType(value: InputStorageTypeChoice): this.type = set(storageTypeParameter, value)
 

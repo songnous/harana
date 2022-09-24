@@ -12,15 +12,12 @@ trait Word2VecParameters extends Parameters
   with HasStepSizeParameter
   with HasSeedParameter {
 
-  val vectorSizeParameter = IntParameter("vector size", validator = RangeValidator.positiveIntegers)
-  setDefault(vectorSizeParameter -> 100)
+  val vectorSizeParameter = IntParameter("vector size", default = Some(100), validator = RangeValidator.positiveIntegers)
   def setVectorSize(value: Int): this.type = set(vectorSizeParameter -> value)
 
-  val numPartitionsParameter = IntParameter("num partitions", validator = RangeValidator.positiveIntegers)
-  setDefault(numPartitionsParameter -> 1)
+  val numPartitionsParameter = IntParameter("num partitions", default = Some(1), validator = RangeValidator.positiveIntegers)
 
-  val minCountParameter = IntParameter("min count", validator = RangeValidator.positiveIntegers)
-  setDefault(minCountParameter -> 5)
+  val minCountParameter = IntParameter("min count", default = Some(5), validator = RangeValidator.positiveIntegers)
   def setMinCount(value: Int): this.type = set(minCountParameter -> value)
 
 }

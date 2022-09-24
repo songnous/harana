@@ -28,8 +28,7 @@ object ProjectorInfo extends ProjectorInfo{
     def getOriginalColumn = $(originalColumnParameter)
     def setOriginalColumn(value: SingleColumnSelection): this.type = set(originalColumnParameter, value)
 
-    val renameColumnParameter = ChoiceParameter[RenameColumnChoice]("rename column")
-    setDefault(renameColumnParameter, RenameColumnChoice.No())
+    val renameColumnParameter = ChoiceParameter[RenameColumnChoice]("rename column", default = Some(RenameColumnChoice.No()))
     def getRenameColumn = $(renameColumnParameter)
     def setRenameColumn(value: RenameColumnChoice): this.type = set(renameColumnParameter, value)
 
@@ -48,8 +47,7 @@ object ProjectorInfo extends ProjectorInfo{
     case class Yes() extends RenameColumnChoice {
       val name = "Yes"
 
-      val columnNameParameter = SingleColumnCreatorParameter("column name")
-      setDefault(columnNameParameter, "")
+      val columnNameParameter = SingleColumnCreatorParameter("column name", default = Some(""))
       def getColumnName: Option[String] = Some($(columnNameParameter))
       def setColumnName(value: String): this.type = set(columnNameParameter, value)
 

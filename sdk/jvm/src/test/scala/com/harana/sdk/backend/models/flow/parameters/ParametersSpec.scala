@@ -242,7 +242,9 @@ object ParametersSpec extends UnitSpec {
 
   case class MockError(override val message: String) extends FlowError(message)
 
-  case class MockParameter(name: String) extends Parameter[Int] {
+  case class MockParameter(name: String,
+                           required: Boolean = false,
+                           default: Option[Int] = None) extends Parameter[Int] {
     val parameterType = mock[ParameterType]
 
     def valueToJson(value: Int) = value.asJson
@@ -255,7 +257,7 @@ object ParametersSpec extends UnitSpec {
   val nameOfParam2 = "name of param2"
 
   case class WithParameters() extends Parameters {
-    val param1 = MockParameter("name of param1")
+    val param1 = MockParameter("name of param1", default = Some(defaultForParam1))
     val param2 = MockParameter(nameOfParam2)
     val parameters = Left(Array(param2, param1))
 
@@ -267,7 +269,6 @@ object ParametersSpec extends UnitSpec {
     def is1Defined: Boolean = isDefined(param1)
     def is2Defined: Boolean = isDefined(param2)
     def clear1 = clear(param1)
-    setDefault(param1 -> defaultForParam1)
   }
 
   class WithParametersA extends WithParameters

@@ -9,14 +9,10 @@ trait RegexTokenizerInfo extends TransformerInfo with Parameters {
 
   val id = "DCD2E3C2-39A1-4289-A16D-4B4958C9264D"
 
-  val gapsParameter = BooleanParameter("gaps")
-  setDefault(gapsParameter, true)
+  val gapsParameter = BooleanParameter("gaps", default = Some(true))
+  val minTokenLengthParameter = IntParameter("min token length", default = Some(1), validator = RangeValidator.positiveIntegers)
 
-  val minTokenLengthParameter = IntParameter("min token length", validator = RangeValidator.positiveIntegers)
-  setDefault(minTokenLengthParameter, 1)
-
-  val patternParameter = StringParameter("pattern")
-  setDefault(patternParameter, "\\s+")
+  val patternParameter = StringParameter("pattern", default = Some("\\s+"))
 
   val specificParameters = Array[Parameter[_]](gapsParameter, minTokenLengthParameter, patternParameter)
 

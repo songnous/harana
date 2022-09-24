@@ -6,6 +6,6 @@ import scala.language.reflectiveCalls
 
 trait HasSeedParameter extends Parameters {
 
-  val seedParameter = LongParameter("seed")
-  setDefault(seedParameter, 0L)
+  val seedParameter = LongParameter("seed", default = Some(0L))
+
 }

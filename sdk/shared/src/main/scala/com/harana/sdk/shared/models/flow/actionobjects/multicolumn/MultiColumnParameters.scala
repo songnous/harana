@@ -60,8 +60,7 @@ object MultiColumnParameters {
       def setInputColumns(value: MultipleColumnSelection): this.type = set(inputColumnsParameter, value)
       def setInputColumns(inputColumnNames: Set[String]): this.type = setInputColumns(MultipleColumnSelection(List(NameColumnSelection(inputColumnNames))))
 
-      val inPlaceChoiceParameter = ChoiceParameter[MultiColumnInPlaceChoice]("output")
-      setDefault(inPlaceChoiceParameter, MultiColumnYesInPlace())
+      val inPlaceChoiceParameter = ChoiceParameter[MultiColumnInPlaceChoice]("output", default = Some(MultiColumnYesInPlace()))
       def getInPlaceChoice = $(inPlaceChoiceParameter)
       def setInPlaceChoice(value: MultiColumnInPlaceChoice): this.type = set(inPlaceChoiceParameter, value)
 

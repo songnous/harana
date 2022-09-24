@@ -12,11 +12,8 @@ trait CountVectorizerEstimatorInfo extends EstimatorInfo with HasMinTermsFrequen
 
   val id = "5DC0071A-640B-4FFF-AFFB-8EEEE8EF33C9"
 
-  val minDFParameter = DoubleParameter("min different documents", validator = RangeValidator(0.0, Double.MaxValue))
-  setDefault(minDFParameter, 1.0)
-
-  val vocabSizeParameter = IntParameter("max vocabulary size", validator = RangeValidator(0, Int.MaxValue, beginIncluded = false, step = Some(1)))
-  setDefault(vocabSizeParameter, 1 << 18)
+  val minDFParameter = DoubleParameter("min different documents", default = Some(1.0), validator = RangeValidator(0.0, Double.MaxValue))
+  val vocabSizeParameter = IntParameter("max vocabulary size", default = Some(1 << 18), validator = RangeValidator(0, Int.MaxValue, beginIncluded = false, step = Some(1)))
 
   val specificParameters = Array[Parameter[_]](
     vocabSizeParameter,

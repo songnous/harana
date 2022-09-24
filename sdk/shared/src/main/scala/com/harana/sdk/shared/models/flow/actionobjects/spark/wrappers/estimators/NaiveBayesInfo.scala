@@ -18,11 +18,8 @@ trait NaiveBayesInfo
 
   val id = "D0B14CE9-4DDF-4A74-B86C-63D9872C95F1"
 
-  val smoothingParameter = DoubleParameter("smoothing", validator = RangeValidator(begin = 0.0, end = Double.MaxValue))
-  setDefault(smoothingParameter, 1.0)
-
-  val modelTypeParameter = ChoiceParameter[ModelType]("modelType")
-  setDefault(modelTypeParameter, Multinomial())
+  val smoothingParameter = DoubleParameter("smoothing", default = Some(1.0), validator = RangeValidator(begin = 0.0, end = Double.MaxValue))
+  val modelTypeParameter = ChoiceParameter[ModelType]("modelType", default = Some(Multinomial()))
 
   val parameters = Left(Array(
     smoothingParameter,

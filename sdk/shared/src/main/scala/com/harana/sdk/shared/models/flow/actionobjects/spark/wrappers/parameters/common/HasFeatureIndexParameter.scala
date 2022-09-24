@@ -7,7 +7,6 @@ import scala.language.reflectiveCalls
 
 trait HasFeatureIndexParameter extends Parameters {
 
-  val featureIndexParameter = IntParameter("feature index", validator = RangeValidator.positiveIntegers)
-  setDefault(featureIndexParameter, 0)
+  val featureIndexParameter = IntParameter("feature index", default = Some(0), validator = RangeValidator.positiveIntegers)
 
 }

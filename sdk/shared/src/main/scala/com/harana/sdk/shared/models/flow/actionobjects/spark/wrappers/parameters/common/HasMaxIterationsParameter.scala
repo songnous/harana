@@ -9,7 +9,6 @@ import scala.language.reflectiveCalls
 trait HasMaxIterationsParameter extends Parameters {
 
   val maxIterationsDefault: Int = 10
-  val maxIterationsParameter = IntParameter("max iterations", validator = RangeValidator.positiveIntegers)
-  setDefault(maxIterationsParameter, maxIterationsDefault)
+  val maxIterationsParameter = IntParameter("max iterations", default = Some(maxIterationsDefault), validator = RangeValidator.positiveIntegers)
 
 }

@@ -5,5 +5,5 @@ import com.harana.sdk.shared.models.flow.parameters.datasource.DatasourceIdForWr
 
 trait WriteDatasourceParameters {
     val datasourceIdParameter = DatasourceIdForWriteParameter("data source")
-    val shouldOverwriteParameter = BooleanParameter("overwrite")
+    val shouldOverwriteParameter = BooleanParameter("overwrite", default = Some(true))
   }
