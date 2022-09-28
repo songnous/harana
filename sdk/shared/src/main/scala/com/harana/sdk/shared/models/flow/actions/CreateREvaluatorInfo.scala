@@ -20,7 +20,7 @@ trait CreateREvaluatorInfo extends EvaluatorAsFactoryInfo[REvaluatorInfo] with A
 
 }
 
-object CreateREvaluatorInfo extends CreateREvaluatorInfo {
+object CreateREvaluatorInfo extends CreateREvaluatorInfo with UIActionInfo[CreateREvaluatorInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new CreateREvaluatorInfo {
     override val position = Some(pos)
     override val overrideColor = color

@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.actionobjects.{DataFrameInfo, Evaluator
 import com.harana.sdk.shared.models.flow.actions.layout.SmallBlockLayout2To1
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Action
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
-import com.harana.sdk.shared.models.flow.parameters.DynamicParameter
+import com.harana.sdk.shared.models.flow.parameters.{DynamicParameter, ParameterGroup}
 import com.harana.sdk.shared.models.flow.utils.Id
 import io.circe.Json
 
@@ -24,7 +24,7 @@ trait EvaluateInfo extends Action2To1Info[EvaluatorInfo, DataFrameInfo, MetricVa
   def getEvaluatorParameters = $(evaluatorParameters)
   def setEvaluatorParameters(jsValue: Json): this.type = set(evaluatorParameters, jsValue)
 
-  override val parameters =  Left(List(evaluatorParameters))
+  override val parameterGroups = List(ParameterGroup(None, evaluatorParameters))
 
   lazy val portI_0: TypeTag[EvaluatorInfo] = typeTag
   lazy val portI_1: TypeTag[DataFrameInfo] = typeTag
@@ -32,7 +32,7 @@ trait EvaluateInfo extends Action2To1Info[EvaluatorInfo, DataFrameInfo, MetricVa
 
 }
 
-object EvaluateInfo extends EvaluateInfo {
+object EvaluateInfo extends EvaluateInfo with UIActionInfo[EvaluateInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new EvaluateInfo {
     override val position = Some(pos)
     override val overrideColor = color

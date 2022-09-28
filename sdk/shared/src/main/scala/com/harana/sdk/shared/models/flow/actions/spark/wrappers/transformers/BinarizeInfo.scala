@@ -3,7 +3,7 @@ package com.harana.sdk.shared.models.flow.actions.spark.wrappers.transformers
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.transformers.BinarizerInfo
-import com.harana.sdk.shared.models.flow.actions.TransformerAsActionInfo
+import com.harana.sdk.shared.models.flow.actions.{TransformerAsActionInfo, UIActionInfo}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.FeatureConversion
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
@@ -23,7 +23,7 @@ trait BinarizeInfo extends TransformerAsActionInfo[BinarizerInfo] with SparkActi
 
 }
 
-object BinarizeInfo extends BinarizeInfo {
+object BinarizeInfo extends BinarizeInfo with UIActionInfo[BinarizeInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new BinarizeInfo {
     override val position = Some(pos)
     override val overrideColor = color

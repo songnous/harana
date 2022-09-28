@@ -10,7 +10,7 @@ trait TransformerAsActionInfo[T <: TransformerInfo] extends Action1To2Info[DataF
 
   lazy val transformerInfo: T = TypeUtils.instanceOfType(portO_1)
 
-  override val parameters = transformerInfo.parameters
+  override val parameterGroups = transformerInfo.parameterGroups
 
   setDefault(transformerInfo.extractParameterMap().toSeq: _*)
 

@@ -2,7 +2,7 @@ package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.transform
 
 import com.harana.sdk.shared.models.flow.actionobjects.TransformerInfo
 import com.harana.sdk.shared.models.flow.parameters
-import com.harana.sdk.shared.models.flow.parameters.{BooleanParameter, IntParameter, Parameter, Parameters, StringParameter}
+import com.harana.sdk.shared.models.flow.parameters.{BooleanParameter, IntParameter, Parameter, ParameterGroup, Parameters, StringParameter}
 import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
 
 trait RegexTokenizerInfo extends TransformerInfo with Parameters {
@@ -19,5 +19,5 @@ trait RegexTokenizerInfo extends TransformerInfo with Parameters {
 }
 
 object RegexTokenizerInfo extends RegexTokenizerInfo {
-  val parameters = Left(List.empty[Parameter[_]])
+  val parameterGroups = List.empty[ParameterGroup]
 }

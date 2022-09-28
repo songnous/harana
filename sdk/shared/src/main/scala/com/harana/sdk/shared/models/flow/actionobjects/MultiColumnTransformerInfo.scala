@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.SingleColumnP
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.HasSpecificParameters
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.MultiColumnParameters.SingleOrMultiColumnChoice
 import com.harana.sdk.shared.models.flow.parameters.selections.{MultipleColumnSelection, NameSingleColumnSelection}
-import com.harana.sdk.shared.models.flow.parameters.{IOColumnsParameter, Parameter}
+import com.harana.sdk.shared.models.flow.parameters.{IOColumnsParameter, Parameter, ParameterGroup}
 
 trait MultiColumnTransformerInfo extends TransformerInfo with HasSpecificParameters {
 
@@ -15,11 +15,13 @@ trait MultiColumnTransformerInfo extends TransformerInfo with HasSpecificParamet
   def getSingleOrMultiChoice = $(singleOrMultiChoiceParameter)
   def setSingleOrMultiChoice(value: SingleOrMultiColumnChoice): this.type = set(singleOrMultiChoiceParameter, value)
 
-  override lazy val parameters =
-    Left(
+  override lazy val parameterGroups = {
+    val parameters =
       if (specificParameters == null) List(singleOrMultiChoiceParameter)
       else specificParameters.toList :+ singleOrMultiChoiceParameter
-    )
+
+    List(ParameterGroup(None, parameters: _*))
+  }
 
   def setSingleColumn(inputColumnName: String, outputColumnName: String): this.type = {
     val choice = SingleColumnChoice()

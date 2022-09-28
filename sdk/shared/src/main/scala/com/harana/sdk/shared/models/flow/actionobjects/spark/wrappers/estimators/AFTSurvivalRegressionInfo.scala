@@ -3,7 +3,7 @@ package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimator
 import com.harana.sdk.shared.models.flow.actionobjects.EstimatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.AFTSurvivalRegressionParameters
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common._
-import com.harana.sdk.shared.models.flow.parameters.SingleColumnSelectorParameter
+import com.harana.sdk.shared.models.flow.parameters.{ParameterGroup, SingleColumnSelectorParameter}
 import com.harana.sdk.shared.models.flow.parameters.selections.NameSingleColumnSelection
 
 import scala.language.reflectiveCalls
@@ -21,7 +21,7 @@ trait AFTSurvivalRegressionInfo
 
   val censorColumnParameter = SingleColumnSelectorParameter("censor column", default = Some(NameSingleColumnSelection("censor")), portIndex = 0)
 
-  val parameters = Left(List(
+  val parameterGroups = List(ParameterGroup(None,
     fitInterceptParameter,
     maxIterationsParameter,
     toleranceParameter,

@@ -6,7 +6,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.SetAction
 import com.harana.sdk.shared.models.flow.{Action2To1Info, PortPosition}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.SetAction
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
-import com.harana.sdk.shared.models.flow.parameters.{Parameter, Parameters}
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup, Parameters}
 import com.harana.sdk.shared.models.flow.utils.Id
 
 import scala.reflect.runtime.{universe => ru}
@@ -18,11 +18,10 @@ trait UnionInfo extends Action2To1Info[DataFrameInfo, DataFrameInfo, DataFrameIn
   val id: Id = "90fed07b-d0a9-49fd-ae23-dd7000a1d8ad"
   val name = "Union"
   val since = Version(0, 4, 0)
+  val parameterGroups = List.empty[ParameterGroup]
   val category = SetAction
 
   override val inputPortsLayout = List(PortPosition.Left, PortPosition.Right)
-
-  val parameters = Left(List.empty[Parameter[_]])
 
   @transient
   lazy val portI_0: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]
@@ -35,7 +34,7 @@ trait UnionInfo extends Action2To1Info[DataFrameInfo, DataFrameInfo, DataFrameIn
 
 }
 
-object UnionInfo extends UnionInfo {
+object UnionInfo extends UnionInfo with UIActionInfo[UnionInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new UnionInfo {
     override val position = Some(pos)
     override val overrideColor = color

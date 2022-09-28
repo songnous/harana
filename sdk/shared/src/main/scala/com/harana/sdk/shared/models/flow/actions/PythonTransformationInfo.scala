@@ -20,7 +20,7 @@ trait PythonTransformationInfo extends TransformerAsActionInfo[PythonTransformer
 
 }
 
-object PythonTransformationInfo extends PythonTransformationInfo {
+object PythonTransformationInfo extends PythonTransformationInfo with UIActionInfo[PythonTransformationInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new PythonTransformationInfo {
     override val position = Some(pos)
     override val overrideColor = color

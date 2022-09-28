@@ -6,7 +6,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Filtering
 import com.harana.sdk.shared.models.flow.actionobjects.{DataFrameInfo, ProjectorInfo}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Filtering
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
-import com.harana.sdk.shared.models.flow.parameters.Parameter
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup}
 import com.harana.sdk.shared.models.flow.utils.Id
 
 import scala.reflect.runtime.universe.{TypeTag, typeTag}
@@ -24,11 +24,11 @@ trait AddColumnInfo extends Action3To1Info[DataFrameInfo, DataFrameInfo, DataFra
 
   lazy val portO_0: TypeTag[DataFrameInfo] = typeTag
 
-  val parameters = Left(List.empty[Parameter[_]])
+  val parameterGroups = List.empty[ParameterGroup]
 
 }
 
-object AddColumnInfo extends AddColumnInfo {
+object AddColumnInfo extends AddColumnInfo with UIActionInfo[AddColumnInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new AddColumnInfo {
     override val position = Some(pos)
     override val overrideColor = color

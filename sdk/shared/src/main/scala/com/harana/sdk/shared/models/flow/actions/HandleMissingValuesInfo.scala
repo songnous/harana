@@ -20,7 +20,7 @@ trait HandleMissingValuesInfo extends TransformerAsActionInfo[MissingValuesHandl
 
 }
 
-object HandleMissingValuesInfo extends HandleMissingValuesInfo {
+object HandleMissingValuesInfo extends HandleMissingValuesInfo with UIActionInfo[HandleMissingValuesInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new HandleMissingValuesInfo {
     override val position = Some(pos)
     override val overrideColor = color

@@ -20,7 +20,7 @@ trait DecomposeDatetimeInfo extends TransformerAsActionInfo[DatetimeDecomposerIn
 
 }
 
-object DecomposeDatetimeInfo extends DecomposeDatetimeInfo {
+object DecomposeDatetimeInfo extends DecomposeDatetimeInfo with UIActionInfo[DecomposeDatetimeInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new DecomposeDatetimeInfo {
     override val position = Some(pos)
     override val overrideColor = color

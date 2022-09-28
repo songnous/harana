@@ -1,15 +1,14 @@
 package com.harana.sdk.shared.models.flow
 
-import ActionInfo.ReportParameter.{Extended, Metadata}
-import ActionInfo.{ReportParameter, ReportType}
-import Gravity.{GravitateLeft, GravitateRight}
-import com.harana.sdk.shared.models.common.ParameterGroup
-import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
-import com.harana.sdk.shared.models.flow.utils.CollectionExtensions._
+import com.harana.sdk.shared.models.flow.ActionInfo.ReportParameter.{Extended, Metadata}
+import com.harana.sdk.shared.models.flow.ActionInfo.{ReportParameter, ReportType}
+import com.harana.sdk.shared.models.flow.Gravity.{GravitateLeft, GravitateRight}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory
 import com.harana.sdk.shared.models.flow.graph.GraphAction
+import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
-import com.harana.sdk.shared.models.flow.parameters.{Parameter, Parameters}
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup, Parameters}
+import com.harana.sdk.shared.models.flow.utils.CollectionExtensions._
 
 import java.util.UUID
 import scala.reflect.runtime.{universe => ru}
@@ -77,12 +76,12 @@ object ActionInfo {
 
     case class Metadata() extends ReportType {
       val name = "Metadata report"
-      val parameters = Left(List.empty[Parameter[_]])
+      val parameterGroups = List.empty[ParameterGroup]
     }
 
     case class Extended() extends ReportType {
       val name = "Extended report"
-      val parameters = Left(List.empty[Parameter[_]])
+      val parameterGroups = List.empty[ParameterGroup]
     }
   }
 

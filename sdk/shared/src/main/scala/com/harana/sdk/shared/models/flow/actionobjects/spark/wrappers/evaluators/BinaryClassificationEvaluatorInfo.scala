@@ -6,7 +6,7 @@ import com.harana.sdk.shared.models.flow.actionobjects.EvaluatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.HasLabelColumnParameter
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
 import com.harana.sdk.shared.models.flow.parameters.selections.{NameSingleColumnSelection, SingleColumnSelection}
-import com.harana.sdk.shared.models.flow.parameters.{Parameters, SingleColumnSelectorParameter}
+import com.harana.sdk.shared.models.flow.parameters.{ParameterGroup, Parameters, SingleColumnSelectorParameter}
 
 trait BinaryClassificationEvaluatorInfo extends EvaluatorInfo with HasLabelColumnParameter {
 
@@ -16,7 +16,7 @@ trait BinaryClassificationEvaluatorInfo extends EvaluatorInfo with HasLabelColum
   def getMetricName = $(metricNameParameter)
   def setMetricName(value: Metric): this.type = set(metricNameParameter, value)
 
-  val parameters = Left(List(metricNameParameter, labelColumnParameter))
+  val parameterGroups = List(ParameterGroup(None, metricNameParameter, labelColumnParameter))
 
   def isLargerBetter: Boolean = true
 }
@@ -52,26 +52,26 @@ object BinaryClassificationEvaluatorInfo extends BinaryClassificationEvaluatorIn
 
   case class AreaUnderROC() extends Metric(areaUnderROC) with RawPredictionMetric {
     val name = areaUnderROC
-    val parameters = Left(List(rawPredictionColumnParameter))
+    val parameterGroups = List(ParameterGroup(None, rawPredictionColumnParameter))
   }
 
   case class AreaUnderPR() extends Metric(areaUnderPR) with RawPredictionMetric {
     val name = areaUnderPR
-    val parameters = Left(List(rawPredictionColumnParameter))
+    val parameterGroups = List(ParameterGroup(None, rawPredictionColumnParameter))
   }
 
   case class Precision() extends Metric(precision) with PredictionMetric {
     val name = precision
-    val parameters = Left(List(predictionColumnParameter))
+    val parameterGroups = List(ParameterGroup(None, predictionColumnParameter))
   }
 
   case class Recall() extends Metric(recall) with PredictionMetric {
     val name = recall
-    val parameters = Left(List(predictionColumnParameter))
+    val parameterGroups = List(ParameterGroup(None, predictionColumnParameter))
   }
 
   case class F1Score() extends Metric(f1Score) with PredictionMetric {
     val name = f1Score
-    val parameters = Left(List(predictionColumnParameter))
+    val parameterGroups = List(ParameterGroup(None, predictionColumnParameter))
   }
 }

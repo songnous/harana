@@ -4,7 +4,7 @@ import com.harana.sdk.shared.models.flow.actionobjects.EstimatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common._
 import com.harana.sdk.shared.models.flow.parameters.selections.NameSingleColumnSelection
 import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
-import com.harana.sdk.shared.models.flow.parameters.{BooleanParameter, DoubleParameter, IntParameter, SingleColumnSelectorParameter}
+import com.harana.sdk.shared.models.flow.parameters.{BooleanParameter, DoubleParameter, IntParameter, ParameterGroup, SingleColumnSelectorParameter}
 
 trait ALSInfo
   extends EstimatorInfo
@@ -28,7 +28,7 @@ trait ALSInfo
   val ratingColumnParameter = SingleColumnSelectorParameter("rating column", default = Some(NameSingleColumnSelection("rating")), portIndex = 0)
   def getRatingColumn = $(ratingColumnParameter)
 
-  val parameters = Left(List(
+  val parameterGroups = List(ParameterGroup(None,
     alphaParameter,
     checkpointIntervalParameter,
     implicitPrefsParameter,

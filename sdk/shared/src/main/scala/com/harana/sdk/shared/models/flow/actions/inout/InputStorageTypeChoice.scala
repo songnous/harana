@@ -1,7 +1,7 @@
 package com.harana.sdk.shared.models.flow.actions.inout
 
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
-import com.harana.sdk.shared.models.flow.parameters.StorageType
+import com.harana.sdk.shared.models.flow.parameters.{ParameterGroup, StorageType}
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
 import com.harana.sdk.shared.models.flow.parameters.library.LoadFromLibraryParameter
 
@@ -24,19 +24,19 @@ object InputStorageTypeChoice {
     def getFileFormat = $(fileFormatParameter)
     def setFileFormat(value: InputFileFormatChoice): this.type = set(fileFormatParameter, value)
 
-    val parameters = Left(List(sourceFileParameter, fileFormatParameter))
+    val parameterGroups = List(ParameterGroup(None, sourceFileParameter, fileFormatParameter))
   }
 
   class Jdbc extends InputStorageTypeChoice with JdbcParameters {
     val name = StorageType.Jdbc.toString
 
-    val parameters = Left(List(jdbcUrlParameter, jdbcDriverClassNameParameter, jdbcTableNameParameter))
+    val parameterGroups = List(ParameterGroup(None, jdbcUrlParameter, jdbcDriverClassNameParameter, jdbcTableNameParameter))
   }
 
   class GoogleSheet extends InputStorageTypeChoice with GoogleSheetParameters with NamesIncludedParameter with HasShouldConvertToBooleanParameter {
     val name = "Google Sheet"
 
-    val parameters = Left(List(
+    val parameterGroups = List(ParameterGroup(None,
       googleSheetIdParameter,
       serviceAccountCredentialsParameter,
       namesIncludedParameter,

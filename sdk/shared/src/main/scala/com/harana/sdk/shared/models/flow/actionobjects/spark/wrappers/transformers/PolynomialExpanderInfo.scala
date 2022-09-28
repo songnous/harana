@@ -2,7 +2,7 @@ package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.transform
 
 import com.harana.sdk.shared.models.flow.{ActionObjectInfo, parameters}
 import com.harana.sdk.shared.models.flow.actionobjects.TransformerInfo
-import com.harana.sdk.shared.models.flow.parameters.{IntParameter, Parameter, Parameters}
+import com.harana.sdk.shared.models.flow.parameters.{IntParameter, Parameter, ParameterGroup, Parameters}
 import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
 
 trait PolynomialExpanderInfo extends ActionObjectInfo
@@ -19,5 +19,5 @@ trait PolynomialExpanderInfo extends ActionObjectInfo
 }
 
 object PolynomialExpanderInfo extends PolynomialExpanderInfo {
-  val parameters = Left(List.empty[Parameter[_]])
+  val parameterGroups = List.empty[ParameterGroup]
 }

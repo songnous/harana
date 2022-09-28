@@ -1,13 +1,12 @@
 package com.harana.sdk.shared.models.flow.actionobjects
 
-import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterPair}
-import com.harana.sdk.shared.models.flow.parameters.custom.InnerWorkflow
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup, ParameterPair}
 
 case class CustomTransformerInfo(publicParametersWithValues: Seq[ParameterWithValues[_]] = Seq.empty) extends TransformerInfo {
 
   val id = "A7D6EF00-5B5F-44AA-8F49-ECA974703E8E"
 
-  val parameters = Left(publicParametersWithValues.map(_.param).toList)
+  val parameterGroups = List(ParameterGroup(None, publicParametersWithValues.map(_.param): _*))
 
   publicParametersWithValues.foreach {
     case ParameterWithValues(param, defaultValue, setValue) =>

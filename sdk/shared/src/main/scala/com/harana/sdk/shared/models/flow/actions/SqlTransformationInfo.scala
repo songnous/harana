@@ -19,7 +19,7 @@ trait SqlTransformationInfo extends TransformerAsActionInfo[SqlTransformerInfo] 
   lazy val portO_1: TypeTag[SqlTransformerInfo] = typeTag
 }
 
-object SqlTransformationInfo extends SqlTransformationInfo {
+object SqlTransformationInfo extends SqlTransformationInfo with UIActionInfo[SqlTransformationInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new SqlTransformationInfo {
     override val position = Some(pos)
     override val overrideColor = color

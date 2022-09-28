@@ -1,7 +1,7 @@
 package com.harana.sdk.shared.models.flow.actions.inout
 
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
-import com.harana.sdk.shared.models.flow.parameters.{BooleanParameter, StorageType}
+import com.harana.sdk.shared.models.flow.parameters.{BooleanParameter, ParameterGroup, StorageType}
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
 import com.harana.sdk.shared.models.flow.parameters.library.SaveToLibraryParameter
 
@@ -26,7 +26,7 @@ object OutputStorageTypeChoice {
     def getFileFormat = $(fileFormatParameter)
     def setFileFormat(value: OutputFileFormatChoice): this.type = set(fileFormatParameter, value)
 
-    val parameters = Left(List(outputFileParameter, shouldOverwriteParameter, fileFormatParameter))
+    val parameterGroups = List(ParameterGroup(None, outputFileParameter, shouldOverwriteParameter, fileFormatParameter))
   }
 
   class Jdbc() extends OutputStorageTypeChoice with JdbcParameters {
@@ -37,14 +37,14 @@ object OutputStorageTypeChoice {
     def getShouldOverwrite = $(shouldOverwriteParameter)
     def setShouldOverwrite(value: Boolean): this.type = set(shouldOverwriteParameter, value)
 
-    val parameters = Left(List(jdbcUrlParameter, jdbcDriverClassNameParameter, jdbcTableNameParameter, shouldOverwriteParameter))
+    val parameterGroups = List(ParameterGroup(None, jdbcUrlParameter, jdbcDriverClassNameParameter, jdbcTableNameParameter, shouldOverwriteParameter))
   }
 
   class GoogleSheet() extends OutputStorageTypeChoice with GoogleSheetParameters with NamesIncludedParameter with HasShouldConvertToBooleanParameter {
 
     val name = "Google Sheet"
 
-    override val parameters = Left(List(
+    override val parameterGroups = List(ParameterGroup(None,
       googleSheetIdParameter,
       serviceAccountCredentialsParameter,
       namesIncludedParameter,

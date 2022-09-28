@@ -5,7 +5,7 @@ import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.actionobjects.EstimatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.GBTParameters
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.HasClassificationImpurityParameter
-import com.harana.sdk.shared.models.flow.parameters.Parameter
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup}
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
 
 trait GBTClassifierInfo extends EstimatorInfo with GBTParameters with HasClassificationImpurityParameter {
@@ -16,7 +16,7 @@ trait GBTClassifierInfo extends EstimatorInfo with GBTParameters with HasClassif
 
   val lossTypeParameter = ChoiceParameter[LossType]("loss function", default = Some(Logistic()))
 
-  val parameters = Left(List(
+  val parameterGroups = List(ParameterGroup(None,
     impurityParameter,
     lossTypeParameter,
     maxBinsParameter,
@@ -35,7 +35,7 @@ trait GBTClassifierInfo extends EstimatorInfo with GBTParameters with HasClassif
 object GBTClassifierInfo extends GBTClassifierInfo {
   sealed abstract class LossType(val name: String) extends Choice {
     val choiceOrder: List[ChoiceOption] = List(classOf[Logistic])
-    val parameters = Left(List.empty[Parameter[_]])
+    val parameterGroups = List.empty[ParameterGroup]
   }
 
   case class Logistic() extends LossType("logistic")

@@ -15,7 +15,7 @@ import com.harana.sdk.backend.models.flow.{ExecutionContext, IntegratedTestSuppo
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.inference.InferContext
 import com.harana.sdk.shared.models.flow.parameters.selections.{MultipleColumnSelection, NameColumnSelection, NameSingleColumnSelection}
-import com.harana.sdk.shared.models.flow.parameters.{NumericParameter, Parameter}
+import com.harana.sdk.shared.models.flow.parameters.{NumericParameter, Parameter, ParameterGroup}
 
 class MultiColumnTransformerIntegSpec extends IntegratedTestSupport {
 
@@ -150,7 +150,7 @@ object MultiColumnTransformerIntegSpec {
     def getMagicConstant = $(magicConstantParameter)
     def setMagicConstant(value: Double): this.type = set(magicConstantParameter, value)
 
-    val parameters = Left(List.empty[Parameter[_]])(magicConstantParameter)
+    val parameterGroups = List(ParameterGroup(None, magicConstantParameter))
 
     def transformSingleColumn(
         inputColumn: String,

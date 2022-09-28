@@ -1,7 +1,7 @@
 package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.transformers
 
 import com.harana.sdk.shared.models.flow.actionobjects.TransformerInfo
-import com.harana.sdk.shared.models.flow.parameters.{BooleanParameter, Parameter, Parameters}
+import com.harana.sdk.shared.models.flow.parameters.{BooleanParameter, Parameter, ParameterGroup, Parameters}
 
 trait DiscreteCosineTransformerInfo extends TransformerInfo with Parameters {
 
@@ -15,5 +15,5 @@ trait DiscreteCosineTransformerInfo extends TransformerInfo with Parameters {
 }
 
 object DiscreteCosineTransformerInfo extends DiscreteCosineTransformerInfo {
-  val parameters = Left(List.empty[Parameter[_]])
+  val parameterGroups = List.empty[ParameterGroup]
 }

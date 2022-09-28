@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
 import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
-import com.harana.sdk.shared.models.flow.parameters.{IntParameter, Parameter}
+import com.harana.sdk.shared.models.flow.parameters.{IntParameter, Parameter, ParameterGroup}
 
 trait KMeansInfo
     extends ActionObjectInfo
@@ -26,7 +26,7 @@ trait KMeansInfo
   val initModeParameter = ChoiceParameter[KMeansInitMode]("init mode", default = Some(ParallelInitMode()))
   val initStepsParameter = IntParameter("init steps", default = Some(5), validator = RangeValidator(begin = 1, end = Int.MaxValue, step = Some(1)))
 
-  val parameters = Left(List(
+  val parameterGroups = List(ParameterGroup(None,
     kParameter,
     maxIterationsParameter,
     seedParameter,
@@ -41,7 +41,7 @@ trait KMeansInfo
 object KMeansInfo extends KMeansInfo {
   sealed trait KMeansInitMode extends Choice {
     val choiceOrder: List[ChoiceOption] = List(classOf[RandomInitMode], classOf[ParallelInitMode])
-    val parameters = Left(List.empty[Parameter[_]])
+    val parameterGroups = List.empty[ParameterGroup]
   }
 
   case class RandomInitMode() extends KMeansInitMode {

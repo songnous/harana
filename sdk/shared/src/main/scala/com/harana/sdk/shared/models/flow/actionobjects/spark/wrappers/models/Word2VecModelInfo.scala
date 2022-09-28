@@ -2,7 +2,7 @@ package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.models
 
 import com.harana.sdk.shared.models.flow.actionobjects.TransformerInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.Word2VecParameters
-import com.harana.sdk.shared.models.flow.parameters.Parameter
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup}
 
 trait Word2VecModelInfo extends TransformerInfo with Word2VecParameters {
 
@@ -18,5 +18,5 @@ trait Word2VecModelInfo extends TransformerInfo with Word2VecParameters {
 }
 
 object Word2VecModelInfo extends Word2VecModelInfo {
-  val parameters = Left(List.empty[Parameter[_]])
+  val parameterGroups = List.empty[ParameterGroup]
 }

@@ -3,7 +3,7 @@ package com.harana.sdk.shared.models.flow.actions.spark.wrappers.estimators
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimators.LogisticRegressionInfo
-import com.harana.sdk.shared.models.flow.actions.EstimatorAsFactoryInfo
+import com.harana.sdk.shared.models.flow.actions.{EstimatorAsFactoryInfo, UIActionInfo}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.Classification
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
@@ -22,7 +22,7 @@ trait CreateLogisticRegressionInfo extends EstimatorAsFactoryInfo[LogisticRegres
 
 }
 
-object CreateLogisticRegressionInfo extends CreateLogisticRegressionInfo {
+object CreateLogisticRegressionInfo extends CreateLogisticRegressionInfo with UIActionInfo[CreateLogisticRegressionInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new CreateLogisticRegressionInfo {
     override val position = Some(pos)
     override val overrideColor = color

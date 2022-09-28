@@ -3,7 +3,7 @@ package com.harana.sdk.shared.models.flow.actions.spark.wrappers.transformers
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.transformers.VectorAssemblerInfo
-import com.harana.sdk.shared.models.flow.actions.TransformerAsActionInfo
+import com.harana.sdk.shared.models.flow.actions.{TransformerAsActionInfo, UIActionInfo}
 import com.harana.sdk.shared.models.flow.actions.spark.wrappers.evaluators.CreateRegressionEvaluatorInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.FeatureConversion
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
@@ -24,7 +24,7 @@ trait AssembleVectorInfo extends TransformerAsActionInfo[VectorAssemblerInfo] wi
 
 }
 
-object AssembleVectorInfo extends AssembleVectorInfo {
+object AssembleVectorInfo extends AssembleVectorInfo with UIActionInfo[AssembleVectorInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new AssembleVectorInfo {
     override val position = Some(pos)
     override val overrideColor = color

@@ -1,7 +1,7 @@
 package com.harana.sdk.shared.models.flow.actionobjects
 
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.HasIsLargerBetterParameter
-import com.harana.sdk.shared.models.flow.parameters.{CodeSnippetParameter, StringParameter}
+import com.harana.sdk.shared.models.flow.parameters.{CodeSnippetParameter, ParameterGroup, StringParameter}
 
 trait CustomCodeEvaluatorInfo extends EvaluatorInfo with HasIsLargerBetterParameter {
 
@@ -15,6 +15,6 @@ trait CustomCodeEvaluatorInfo extends EvaluatorInfo with HasIsLargerBetterParame
 
   def isLargerBetter = $(isLargerBetterParameter)
 
-  lazy val parameters = Left(List(metricNameParameter, codeParameter, isLargerBetterParameter))
+  lazy val parameterGroups = List(ParameterGroup(None, metricNameParameter, codeParameter, isLargerBetterParameter))
   
 }

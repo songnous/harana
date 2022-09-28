@@ -9,7 +9,7 @@ import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.SetAction
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
-import com.harana.sdk.shared.models.flow.parameters.{CodeSnippetLanguage, CodeSnippetParameter, DoubleParameter, Parameters}
+import com.harana.sdk.shared.models.flow.parameters.{CodeSnippetLanguage, CodeSnippetParameter, DoubleParameter, ParameterGroup, Parameters}
 import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
 import com.harana.sdk.shared.models.flow.utils.Id
 
@@ -30,7 +30,7 @@ trait SplitInfo extends Action1To2Info[DataFrameInfo, DataFrameInfo, DataFrameIn
   def getSplitMode = $(splitModeParameter)
   def setSplitMode(value: SplitModeChoice): this.type = set(splitModeParameter, value)
 
-  override val parameters =  Left(List(splitModeParameter))
+  override val parameterGroups = List(ParameterGroup(None, splitModeParameter))
 
   @transient
   lazy val portI_0: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]
@@ -43,7 +43,7 @@ trait SplitInfo extends Action1To2Info[DataFrameInfo, DataFrameInfo, DataFrameIn
 
 }
 
-object SplitInfo extends SplitInfo {
+object SplitInfo extends SplitInfo with UIActionInfo[SplitInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new SplitInfo {
     override val position = Some(pos)
     override val overrideColor = color
@@ -67,7 +67,7 @@ object SplitModeChoice {
     def getSeed = $(seedParameter)
     def setSeed(value: Long): this.type = set(seedParameter, value)
 
-    val parameters = Left(List(splitRatioParameter, seedParameter))
+    val parameterGroups = List(ParameterGroup(None, splitRatioParameter, seedParameter))
 
   }
 
@@ -78,6 +78,6 @@ object SplitModeChoice {
     def getCondition = $(conditionParameter)
     def setCondition(value: String): this.type = set(conditionParameter, value)
 
-    val parameters = Left(List(conditionParameter))
+    val parameterGroups = List(ParameterGroup(None, conditionParameter))
   }
 }

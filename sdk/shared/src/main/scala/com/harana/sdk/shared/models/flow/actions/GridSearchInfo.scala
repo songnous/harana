@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.actionobjects.{DataFrameInfo, Estimator
 import com.harana.sdk.shared.models.flow.actionobjects.report.Report
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.HyperOptimization
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
-import com.harana.sdk.shared.models.flow.parameters.{DynamicParameter, NumericParameter}
+import com.harana.sdk.shared.models.flow.parameters.{DynamicParameter, NumericParameter, ParameterGroup}
 import com.harana.sdk.shared.models.flow.parameters.gridsearch.GridSearchParameter
 import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
 import com.harana.sdk.shared.models.flow.utils.Id
@@ -36,7 +36,7 @@ trait GridSearchInfo
   def getNumberOfFolds = $(numberOfFoldsParameter).toInt
   def setNumberOfFolds(numOfFolds: Int): this.type = set(numberOfFoldsParameter, numOfFolds.toDouble)
 
-  override val parameters = Left(List(estimatorParameters, evaluatorParameters, numberOfFoldsParameter))
+  override val parameterGroups = List(ParameterGroup(None, estimatorParameters, evaluatorParameters, numberOfFoldsParameter))
 
   lazy val portI_0: TypeTag[EstimatorInfo] = typeTag
   lazy val portI_1: TypeTag[DataFrameInfo] = typeTag
@@ -45,7 +45,7 @@ trait GridSearchInfo
 
 }
 
-object GridSearchInfo extends GridSearchInfo {
+object GridSearchInfo extends GridSearchInfo with UIActionInfo[GridSearchInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new GridSearchInfo {
     override val position = Some(pos)
     override val overrideColor = color

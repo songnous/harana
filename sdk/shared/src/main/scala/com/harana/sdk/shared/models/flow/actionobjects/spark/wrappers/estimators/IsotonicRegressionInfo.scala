@@ -2,7 +2,7 @@ package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimator
 
 import com.harana.sdk.shared.models.flow.actionobjects.EstimatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.{HasFeatureIndexParameter, HasLabelColumnParameter, HasOptionalWeightColumnParameter, PredictorParameters}
-import com.harana.sdk.shared.models.flow.parameters.BooleanParameter
+import com.harana.sdk.shared.models.flow.parameters.{BooleanParameter, ParameterGroup}
 
 trait IsotonicRegressionInfo
     extends EstimatorInfo
@@ -15,7 +15,7 @@ trait IsotonicRegressionInfo
 
   val isotonicParameter = BooleanParameter("isotonic", default = Some(true))
 
-  val parameters = Left(List(
+  val parameterGroups = List(ParameterGroup(None,
     isotonicParameter,
     optionalWeightColumnParameter,
     featureIndexParameter,

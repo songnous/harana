@@ -2,7 +2,7 @@ package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimator
 
 import com.harana.sdk.shared.models.flow.actionobjects.EstimatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.{HasInputColumnParameter, HasOutputColumnParameter, MinMaxParameters}
-import com.harana.sdk.shared.models.flow.parameters.Parameter
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup}
 
 trait MinMaxScalerEstimatorInfo
   extends EstimatorInfo
@@ -16,5 +16,5 @@ trait MinMaxScalerEstimatorInfo
 }
 
 object MinMaxScalerEstimatorInfo extends MinMaxScalerEstimatorInfo {
-  val parameters = Left(List.empty[Parameter[_]])
+  val parameterGroups = List.empty[ParameterGroup]
 }

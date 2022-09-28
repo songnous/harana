@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.graph.node.Node
 import com.harana.sdk.shared.models.flow.graph.{Edge, FlowGraph}
-import com.harana.sdk.shared.models.flow.parameters.WorkflowParameter
+import com.harana.sdk.shared.models.flow.parameters.{ParameterGroup, WorkflowParameter}
 import com.harana.sdk.shared.models.flow.parameters.custom.InnerWorkflow
 import com.harana.sdk.shared.models.flow.utils.Id
 import io.circe.Json
@@ -29,11 +29,11 @@ trait CreateCustomTransformerInfo extends TransformerAsFactoryInfo[CustomTransfo
   def setInnerWorkflow(workflow: Json): this.type = set(innerWorkflowParameter, workflow.as[InnerWorkflow].toOption.get)
   def setInnerWorkflow(workflow: InnerWorkflow): this.type = set(innerWorkflowParameter, workflow)
 
-  override val parameters = Left(List(innerWorkflowParameter))
+  override val parameterGroups = List(ParameterGroup(None, innerWorkflowParameter))
   override def getDatasourcesIds: Set[UUID] = getInnerWorkflow.getDatasourcesIds
 }
 
-object CreateCustomTransformerInfo extends CreateCustomTransformerInfo {
+object CreateCustomTransformerInfo extends CreateCustomTransformerInfo with UIActionInfo[CreateCustomTransformerInfo] {
   private val sourceNodeId: Id = "2603a7b5-aaa9-40ad-9598-23f234ec5c32"
   private val sinkNodeId: Id = "d7798d5e-b1c6-4027-873e-a6d653957418"
 

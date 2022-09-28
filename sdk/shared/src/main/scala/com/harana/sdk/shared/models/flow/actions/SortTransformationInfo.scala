@@ -20,7 +20,7 @@ trait SortTransformationInfo extends TransformerAsActionInfo[SortTransformerInfo
 
 }
 
-object SortTransformationInfo extends SortTransformationInfo {
+object SortTransformationInfo extends SortTransformationInfo with UIActionInfo[SortTransformationInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new SortTransformationInfo {
     override val position = Some(pos)
     override val overrideColor = color

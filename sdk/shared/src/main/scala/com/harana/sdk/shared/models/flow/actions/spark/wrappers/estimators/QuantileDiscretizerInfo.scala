@@ -4,7 +4,7 @@ import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimators.QuantileDiscretizerEstimatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.models.QuantileDiscretizerModelInfo
-import com.harana.sdk.shared.models.flow.actions.EstimatorAsActionInfo
+import com.harana.sdk.shared.models.flow.actions.{EstimatorAsActionInfo, UIActionInfo}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.FeatureConversion
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
@@ -24,7 +24,7 @@ trait QuantileDiscretizerInfo extends EstimatorAsActionInfo[QuantileDiscretizerE
 
 }
 
-object QuantileDiscretizerInfo extends QuantileDiscretizerInfo {
+object QuantileDiscretizerInfo extends QuantileDiscretizerInfo with UIActionInfo[QuantileDiscretizerInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new QuantileDiscretizerInfo {
     override val position = Some(pos)
     override val overrideColor = color

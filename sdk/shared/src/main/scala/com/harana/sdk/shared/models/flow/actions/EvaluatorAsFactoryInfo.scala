@@ -10,7 +10,7 @@ trait EvaluatorAsFactoryInfo[T <: EvaluatorInfo] extends Action0To1Info[T] {
 
   lazy val evaluatorInfo: T = TypeUtils.instanceOfType(portO_0)
 
-  override val parameters = evaluatorInfo.parameters
+  override val parameterGroups = evaluatorInfo.parameterGroups
   setDefault(evaluatorInfo.extractParameterMap().toSeq: _*)
 
 }

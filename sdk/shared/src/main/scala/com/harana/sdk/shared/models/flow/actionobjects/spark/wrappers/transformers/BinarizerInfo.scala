@@ -1,7 +1,7 @@
 package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.transformers
 
 import com.harana.sdk.shared.models.flow.actionobjects.TransformerInfo
-import com.harana.sdk.shared.models.flow.parameters.{DoubleParameter, Parameter, Parameters}
+import com.harana.sdk.shared.models.flow.parameters.{DoubleParameter, Parameter, ParameterGroup, Parameters}
 
 trait BinarizerInfo extends TransformerInfo with Parameters {
 
@@ -16,5 +16,5 @@ trait BinarizerInfo extends TransformerInfo with Parameters {
 }
 
 object BinarizerInfo extends BinarizerInfo {
-  val parameters = Left(List.empty[Parameter[_]])
+  val parameterGroups = List.empty[ParameterGroup]
 }

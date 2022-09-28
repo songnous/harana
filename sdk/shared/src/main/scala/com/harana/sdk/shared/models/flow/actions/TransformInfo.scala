@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.actionobjects.{DataFrameInfo, Transform
 import com.harana.sdk.shared.models.flow.actions.layout.SmallBlockLayout2To1
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Action
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
-import com.harana.sdk.shared.models.flow.parameters.DynamicParameter
+import com.harana.sdk.shared.models.flow.parameters.{DynamicParameter, ParameterGroup}
 import com.harana.sdk.shared.models.flow.utils.Id
 import io.circe.Json
 
@@ -24,7 +24,7 @@ trait TransformInfo extends Action2To1Info[TransformerInfo, DataFrameInfo, DataF
   def getTransformerParameters = $(transformerParameters)
   def setTransformerParameters(jsValue: Json): this.type = set(transformerParameters, jsValue)
 
-  override val parameters =  Left(List(transformerParameters))
+  override val parameterGroups = List(ParameterGroup(None, transformerParameters))
 
   lazy val portI_0: TypeTag[TransformerInfo] = typeTag
   lazy val portI_1: TypeTag[DataFrameInfo] = typeTag
@@ -32,7 +32,7 @@ trait TransformInfo extends Action2To1Info[TransformerInfo, DataFrameInfo, DataF
 
 }
 
-object TransformInfo extends TransformInfo {
+object TransformInfo extends TransformInfo with UIActionInfo[TransformInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new TransformInfo {
     override val position = Some(pos)
     override val overrideColor = color

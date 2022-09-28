@@ -1,7 +1,7 @@
 package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.models
 
 import com.harana.sdk.shared.models.flow.actionobjects.TransformerInfo
-import com.harana.sdk.shared.models.flow.parameters.{Parameter, Parameters}
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup, Parameters}
 
 trait IDFModelInfo extends TransformerInfo with Parameters {
 
@@ -11,5 +11,5 @@ trait IDFModelInfo extends TransformerInfo with Parameters {
 }
 
 object IDFModelInfo extends IDFModelInfo {
-  val parameters = Left(List.empty[Parameter[_]])
+  val parameterGroups = List.empty[ParameterGroup]
 }

@@ -39,8 +39,8 @@ object Flow {
   type FlowId = String
 
 
-  implicit val decodeUri: Decoder[Parameter[_]] = Decoder.decodeString.emap { str => Left("") }
-  implicit val encodeUri: Encoder[Parameter[_]] = Encoder.encodeString.contramap[Parameter[_]](_.toString)
+  implicit val decodeParameter: Decoder[Parameter[_]] = Decoder.decodeString.emap { str => Left("") }
+  implicit val encodeParameter: Encoder[Parameter[_]] = Encoder.encodeString.contramap[Parameter[_]](_.toString)
 
   def apply(title: String,
             description: String,

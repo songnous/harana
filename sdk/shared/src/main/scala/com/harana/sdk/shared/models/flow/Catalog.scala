@@ -19,7 +19,9 @@ import scala.collection.mutable
 object Catalog {
 
   val actionsMap = mutable.Map.empty[Id, ActionInfo]
-  def registerAction(ai: ActionInfo) = actionsMap += ai.id -> ai
+  def registerAction(ai: ActionInfo) = {
+    actionsMap += ai.id -> ai
+  }
 
   val objectsMap = mutable.Map.empty[Id, ActionObjectInfo]
   def registerObject(ai: ActionObjectInfo) = objectsMap += ai.id -> ai

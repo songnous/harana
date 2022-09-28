@@ -27,7 +27,7 @@ object MockTransformers extends UnitSpec with TestSupport {
     val id = "test"
 
     val paramA = NumericParameter("a", default = Some(DefaultForA), validator = RangeValidator(0.0, Double.MaxValue))
-    val parameters = Left(List(paramA))
+    val parameterGroups = List(ParameterGroup(None, paramA))
 
     override def report(extended: Boolean = true) = ???
 

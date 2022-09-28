@@ -1,6 +1,6 @@
 package com.harana.sdk.shared.models.flow.actionobjects
 
-import com.harana.sdk.shared.models.flow.parameters.{CodeSnippetLanguage, CodeSnippetParameter, StringParameter}
+import com.harana.sdk.shared.models.flow.parameters.{CodeSnippetLanguage, CodeSnippetParameter, ParameterGroup, StringParameter}
 
 trait SqlTransformerInfo extends TransformerInfo {
 
@@ -14,7 +14,7 @@ trait SqlTransformerInfo extends TransformerInfo {
   def getExpression = $(expressionParameter)
   def setExpression(value: String): this.type = set(expressionParameter, value)
 
-  val parameters = Left(List(dataFrameIdParameter, expressionParameter))
+  val parameterGroups = List(ParameterGroup(None, dataFrameIdParameter, expressionParameter))
 
 }
 

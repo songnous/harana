@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
 import com.harana.sdk.shared.models.flow.parameters.validators.{ArrayLengthValidator, ComplexArrayValidator, RangeValidator}
-import com.harana.sdk.shared.models.flow.parameters.{DoubleArrayParameter, DoubleParameter, SingleColumnCreatorParameter}
+import com.harana.sdk.shared.models.flow.parameters.{DoubleArrayParameter, DoubleParameter, ParameterGroup, SingleColumnCreatorParameter}
 
 trait LDAInfo
     extends ActionObjectInfo
@@ -26,7 +26,7 @@ trait LDAInfo
   val subsamplingRateParameter = DoubleParameter("subsampling rate", default = Some(0.05), validator = RangeValidator(0.0, 1.0, beginIncluded = false))
   val topicDistributionColumnParameter = SingleColumnCreatorParameter("topic distribution column", default = Some("topicDistribution"))
 
-  val parameters = Left(List(
+  val parameterGroups = List(ParameterGroup(None,
     checkpointIntervalParameter,
     kParameter,
     maxIterationsParameter,
@@ -61,7 +61,7 @@ object LDAInfo extends LDAInfo {
     def createTopicConcentrationParam(): TopicConcentrationParameter
 
     val choiceOrder: List[ChoiceOption] = List(classOf[OnlineLDAOptimizer], classOf[ExpectationMaximizationLDAOptimizer])
-    val parameters = Left(List(docConcentrationParameter, topicConcentrationParameter))
+    val parameterGroups = List(ParameterGroup(None, docConcentrationParameter, topicConcentrationParameter))
   }
 
   case class OnlineLDAOptimizer() extends LDAOptimizer {

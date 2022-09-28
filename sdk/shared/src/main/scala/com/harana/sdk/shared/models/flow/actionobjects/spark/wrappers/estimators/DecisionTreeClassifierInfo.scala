@@ -3,6 +3,7 @@ package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimator
 import com.harana.sdk.shared.models.flow.actionobjects.EstimatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.DecisionTreeParameters
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.{HasClassificationImpurityParameter, HasLabelColumnParameter, ProbabilisticClassifierParameters}
+import com.harana.sdk.shared.models.flow.parameters.ParameterGroup
 
 trait DecisionTreeClassifierInfo
     extends EstimatorInfo
@@ -13,7 +14,7 @@ trait DecisionTreeClassifierInfo
 
   val id = "2F39BEFD-FC2B-4034-B13F-D308BB0C8078"
 
-  val parameters = Left(List(
+  val parameterGroups = List(ParameterGroup(None,
     maxDepthParameter,
     maxBinsParameter,
     minInstancesPerNodeParameter,

@@ -13,7 +13,7 @@ trait EstimatorAsActionInfo[E <: EstimatorInfo, T <: TransformerInfo]
 
   lazy val estimatorInfo: E = TypeUtils.instanceOfType(tTagInfoE)
 
-  override val parameters = estimatorInfo.parameters
+  override val parameterGroups = estimatorInfo.parameterGroups
 
   setDefault(estimatorInfo.extractParameterMap().toSeq: _*)
 

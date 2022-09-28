@@ -3,7 +3,7 @@ package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimator
 import com.harana.sdk.shared.models.flow.actionobjects.EstimatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.HasMinTermsFrequencyParameter
 import com.harana.sdk.shared.models.flow.parameters
-import com.harana.sdk.shared.models.flow.parameters.{DoubleParameter, IntParameter, Parameter}
+import com.harana.sdk.shared.models.flow.parameters.{DoubleParameter, IntParameter, Parameter, ParameterGroup}
 import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
 
 import scala.language.reflectiveCalls
@@ -24,5 +24,5 @@ trait CountVectorizerEstimatorInfo extends EstimatorInfo with HasMinTermsFrequen
 }
 
 object CountVectorizerEstimatorInfo extends CountVectorizerEstimatorInfo {
-  val parameters = Left(List.empty[Parameter[_]])
+  val parameterGroups = List.empty[ParameterGroup]
 }

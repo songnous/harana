@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.{Action2To1Info, PortPosition}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.SetAction
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.exceptions.FlowError
-import com.harana.sdk.shared.models.flow.parameters.{CodeSnippetLanguage, CodeSnippetParameter, StringParameter}
+import com.harana.sdk.shared.models.flow.parameters.{CodeSnippetLanguage, CodeSnippetParameter, ParameterGroup, StringParameter}
 import com.harana.sdk.shared.models.flow.parameters.exceptions.ParametersEqualError
 import com.harana.sdk.shared.models.flow.utils.Id
 
@@ -41,7 +41,7 @@ trait SqlCombineInfo extends Action2To1Info[DataFrameInfo, DataFrameInfo, DataFr
     else
       List.empty[FlowError]
 
-  val parameters = Left(List(leftTableNameParameter, rightTableNameParameter, sqlCombineExpressionParameter))
+  val parameterGroups = List(ParameterGroup(None, leftTableNameParameter, rightTableNameParameter, sqlCombineExpressionParameter))
 
   @transient
   lazy val portI_0: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]
@@ -54,7 +54,7 @@ trait SqlCombineInfo extends Action2To1Info[DataFrameInfo, DataFrameInfo, DataFr
 
 }
 
-object SqlCombineInfo extends SqlCombineInfo {
+object SqlCombineInfo extends SqlCombineInfo with UIActionInfo[SqlCombineInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new SqlCombineInfo {
     override val position = Some(pos)
     override val overrideColor = color

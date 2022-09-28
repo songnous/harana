@@ -4,7 +4,7 @@ import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimators.PCAEstimatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.models.PCAModelInfo
-import com.harana.sdk.shared.models.flow.actions.EstimatorAsActionInfo
+import com.harana.sdk.shared.models.flow.actions.{EstimatorAsActionInfo, UIActionInfo}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.DimensionalityReduction
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
@@ -24,7 +24,7 @@ trait PCAInfo extends EstimatorAsActionInfo[PCAEstimatorInfo, PCAModelInfo] with
 
 }
 
-object PCAInfo extends PCAInfo {
+object PCAInfo extends PCAInfo with UIActionInfo[PCAInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new PCAInfo {
     override val position = Some(pos)
     override val overrideColor = color

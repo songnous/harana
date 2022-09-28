@@ -2,7 +2,7 @@ package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimator
 
 import com.harana.sdk.shared.models.flow.actionobjects.EstimatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.Word2VecParameters
-import com.harana.sdk.shared.models.flow.parameters.Parameter
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup}
 
 trait Word2VecEstimatorInfo extends EstimatorInfo with Word2VecParameters {
 
@@ -23,5 +23,5 @@ trait Word2VecEstimatorInfo extends EstimatorInfo with Word2VecParameters {
 }
 
 object Word2VecEstimatorInfo extends Word2VecEstimatorInfo {
-  val parameters = Left(List.empty[Parameter[_]])
+  val parameterGroups = List.empty[ParameterGroup]
 }

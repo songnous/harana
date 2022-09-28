@@ -2,6 +2,7 @@ package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimator
 
 import com.harana.sdk.shared.models.flow.actionobjects.EstimatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common._
+import com.harana.sdk.shared.models.flow.parameters.ParameterGroup
 
 trait RandomForestClassifierInfo
   extends EstimatorInfo
@@ -23,7 +24,7 @@ trait RandomForestClassifierInfo
 
   val id = "F237228D-0C36-454B-A562-04939D65B1FB"
 
-  val parameters = Left(List(
+  val parameterGroups = List(ParameterGroup(None,
     maxDepthParameter,
     maxBinsParameter,
     minInstancesPerNodeParameter,

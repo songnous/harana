@@ -5,7 +5,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimators.UnivariateFeatureEstimatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.evaluators.RegressionEvaluatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.models.UnivariateFeatureModelInfo
-import com.harana.sdk.shared.models.flow.actions.EstimatorAsActionInfo
+import com.harana.sdk.shared.models.flow.actions.{EstimatorAsActionInfo, UIActionInfo}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.FeatureSelection
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
@@ -25,7 +25,7 @@ trait UnivariateFeatureSelectorInfo extends EstimatorAsActionInfo[UnivariateFeat
 
 }
 
-object UnivariateFeatureSelectorInfo extends UnivariateFeatureSelectorInfo {
+object UnivariateFeatureSelectorInfo extends UnivariateFeatureSelectorInfo with UIActionInfo[UnivariateFeatureSelectorInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new UnivariateFeatureSelectorInfo {
     override val position = Some(pos)
     override val overrideColor = color

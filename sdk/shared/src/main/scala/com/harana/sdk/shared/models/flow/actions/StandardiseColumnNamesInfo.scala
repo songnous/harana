@@ -5,7 +5,7 @@ import com.harana.sdk.shared.models.flow.actionobjects.DataFrameInfo
 import com.harana.sdk.shared.models.flow.{Action1To1Info, Action2To1Info}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Filtering
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
-import com.harana.sdk.shared.models.flow.parameters.Parameter
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup}
 import com.harana.sdk.shared.models.flow.utils.Id
 
 import scala.reflect.runtime.universe.TypeTag
@@ -21,11 +21,11 @@ trait StandardiseColumnNamesInfo extends Action2To1Info[DataFrameInfo, DataFrame
   lazy val portI_1: TypeTag[DataFrameInfo] = typeTag
   lazy val portO_0: TypeTag[DataFrameInfo] = typeTag
 
-  val parameters = Left(List.empty[Parameter[_]])
+  val parameterGroups = List.empty[ParameterGroup]
 
 }
 
-object StandardiseColumnNamesInfo extends StandardiseColumnNamesInfo {
+object StandardiseColumnNamesInfo extends StandardiseColumnNamesInfo with UIActionInfo[StandardiseColumnNamesInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new StandardiseColumnNamesInfo {
     override val position = Some(pos)
     override val overrideColor = color

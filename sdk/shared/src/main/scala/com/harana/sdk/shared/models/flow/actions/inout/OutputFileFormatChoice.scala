@@ -1,7 +1,7 @@
 package com.harana.sdk.shared.models.flow.actions.inout
 
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
-import com.harana.sdk.shared.models.flow.parameters.{FileFormat, Parameter}
+import com.harana.sdk.shared.models.flow.parameters.{FileFormat, Parameter, ParameterGroup}
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice
 
 sealed trait OutputFileFormatChoice extends Choice {
@@ -13,17 +13,17 @@ object OutputFileFormatChoice {
 
   class Csv() extends OutputFileFormatChoice with CsvParameters {
     val name = FileFormat.CSV.toString
-    val parameters = Left(List(csvColumnSeparatorParameter, namesIncludedParameter))
+    val parameterGroups = List(ParameterGroup(None, csvColumnSeparatorParameter, namesIncludedParameter))
   }
 
   class Parquet() extends OutputFileFormatChoice {
     val name = FileFormat.PARQUET.toString
-    val parameters = Left(List.empty[Parameter[_]])
+    val parameterGroups = List.empty[ParameterGroup]
   }
 
   class Json() extends OutputFileFormatChoice {
     val name = FileFormat.JSON.toString
-    val parameters = Left(List.empty[Parameter[_]])
+    val parameterGroups = List.empty[ParameterGroup]
   }
 }
 

@@ -1,7 +1,7 @@
 package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common
 
 import ClassificationImpurity._
-import com.harana.sdk.shared.models.flow.parameters.Parameter
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup}
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice
 
@@ -11,7 +11,7 @@ sealed abstract class ClassificationImpurity(val name: String) extends Choice {
     classOf[Gini]
   )
 
-  val parameters = Left(List.empty[Parameter[_]])
+  val parameterGroups = List.empty[ParameterGroup]
 }
 
 object ClassificationImpurity {

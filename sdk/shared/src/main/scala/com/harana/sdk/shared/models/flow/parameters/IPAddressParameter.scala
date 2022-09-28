@@ -6,10 +6,11 @@ import io.circe.generic.JsonCodec
 @JsonCodec
 case class IPAddressParameter(name: String,
                               required: Boolean = false,
-                              default: Option[String] = None,
+                              default: Option[(String, String)] = None,
                               portDefault: Option[String] = None,
                               options: List[(String, String)] = List(),
-                              validator: Validator[String] = RegexValidator.AcceptAll) extends Parameter[String] with HasValidator[String] {
+                              validator: Validator[(String, String)] = null)
+  extends Parameter[(String, String)] with HasValidator[(String, String)] {
 
   val parameterType = ParameterType.String
 

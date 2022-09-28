@@ -12,6 +12,6 @@ trait EstimatorAsFactoryInfo[E <: EstimatorInfo] extends Action0To1Info[E] {
 
   setDefault(estimatorInfo.extractParameterMap().toSeq: _*)
 
-  override val parameters = estimatorInfo.parameters
+  override val parameterGroups = estimatorInfo.parameterGroups
 
 }

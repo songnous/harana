@@ -3,7 +3,7 @@ package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.evaluator
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.actionobjects.SparkEvaluatorWrapperInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.{HasLabelColumnParameter, HasPredictionColumnSelectorParameter}
-import com.harana.sdk.shared.models.flow.parameters.Parameter
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup}
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
 
 trait MulticlassClassificationEvaluatorInfo
@@ -18,13 +18,13 @@ trait MulticlassClassificationEvaluatorInfo
   val metricNameParameter = ChoiceParameter[Metric]("multiclass metric", default = Some(F1()))
   def getMetricName = $(metricNameParameter).name
 
-  val parameters = Left(List(metricNameParameter, predictionColumnParameter, labelColumnParameter))
+  val parameterGroups = List(ParameterGroup(None, metricNameParameter, predictionColumnParameter, labelColumnParameter))
 }
 
 object MulticlassClassificationEvaluatorInfo extends MulticlassClassificationEvaluatorInfo {
   sealed abstract class Metric(val name: String) extends Choice {
     val choiceOrder: List[ChoiceOption] = List(classOf[F1], classOf[Precision], classOf[Recall], classOf[WeightedPrecision], classOf[WeightedRecall])
-    val parameters = Left(List.empty[Parameter[_]])
+    val parameterGroups = List.empty[ParameterGroup]
   }
 
   case class F1() extends Metric("f1")

@@ -3,7 +3,7 @@ package com.harana.sdk.shared.models.flow.actions.spark.wrappers.transformers
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.transformers.DiscreteCosineTransformerInfo
-import com.harana.sdk.shared.models.flow.actions.TransformerAsActionInfo
+import com.harana.sdk.shared.models.flow.actions.{UIActionInfo, TransformerAsActionInfo}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.FeatureConversion
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
@@ -22,7 +22,7 @@ trait DCTInfo extends TransformerAsActionInfo[DiscreteCosineTransformerInfo] wit
 
 }
 
-object DCTInfo extends DCTInfo {
+object DCTInfo extends DCTInfo with UIActionInfo[DCTInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new DCTInfo {
     override val position = Some(pos)
     override val overrideColor = color

@@ -20,7 +20,7 @@ trait FilterColumnsInfo extends TransformerAsActionInfo[ColumnsFiltererInfo] wit
 
 }
 
-object FilterColumnsInfo extends FilterColumnsInfo {
+object FilterColumnsInfo extends FilterColumnsInfo with UIActionInfo[FilterColumnsInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new FilterColumnsInfo {
     override val position = Some(pos)
     override val overrideColor = color

@@ -32,7 +32,7 @@ object ActionForPortTypes {
 
     val id: Id = ActionInfo.Id.randomId
     val name = ""
-      val parameters = Left(List.empty[Parameter[_]])
+      val parameterGroups = List.empty[ParameterGroup]
 
     lazy val tTagTI_0: ru.TypeTag[A1] = ru.typeTag[A1]
     lazy val tTagTO_0: ru.TypeTag[A2] = ru.typeTag[A2]
@@ -91,7 +91,7 @@ class ActionSuite extends AnyFunSuite with TestSupport {
       override def inferKnowledge()(context: InferContext): (Knowledge[A], InferenceWarnings) = (Knowledge(A1(), A2()), mockedWarnings)
 
       val name = ""
-          val parameters = Left(List.empty[Parameter[_]])
+          val parameterGroups = List.empty[ParameterGroup]
       lazy val tTagTO_0: ru.TypeTag[A] = ru.typeTag[A]
     }
 

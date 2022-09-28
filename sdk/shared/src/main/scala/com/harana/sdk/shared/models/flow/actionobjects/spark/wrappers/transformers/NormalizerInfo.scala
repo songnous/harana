@@ -2,7 +2,7 @@ package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.transform
 
 import com.harana.sdk.shared.models.flow.actionobjects.TransformerInfo
 import com.harana.sdk.shared.models.flow.parameters
-import com.harana.sdk.shared.models.flow.parameters.{DoubleParameter, Parameter, Parameters}
+import com.harana.sdk.shared.models.flow.parameters.{DoubleParameter, Parameter, ParameterGroup, Parameters}
 import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
 
 trait NormalizerInfo extends TransformerInfo with Parameters {
@@ -16,5 +16,5 @@ trait NormalizerInfo extends TransformerInfo with Parameters {
 }
 
 object NormalizerInfo extends NormalizerInfo {
-  val parameters = Left(List.empty[Parameter[_]])
+  val parameterGroups = List.empty[ParameterGroup]
 }

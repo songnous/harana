@@ -4,7 +4,7 @@ import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.MultiColumnPa
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.MultiColumnParameters.SingleOrMultiColumnChoices.{MultiColumnChoice, SingleColumnChoice}
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.SingleColumnParameters.SingleTransformInPlaceChoices.{NoInPlaceChoice, YesInPlaceChoice}
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.HasSpecificParameters
-import com.harana.sdk.shared.models.flow.parameters.{IOColumnsParameter, Parameter}
+import com.harana.sdk.shared.models.flow.parameters.{IOColumnsParameter, Parameter, ParameterGroup}
 import com.harana.sdk.shared.models.flow.parameters.selections.NameSingleColumnSelection
 
 import scala.language.reflectiveCalls
@@ -15,11 +15,13 @@ trait MultiColumnEstimatorInfo extends EstimatorInfo with HasSpecificParameters 
 
   val singleOrMultiChoiceParameter = IOColumnsParameter()
 
-  lazy val parameters =
-    Left(
+  lazy val parameterGroups = {
+    val parameters =
       if (specificParameters == null) List(singleOrMultiChoiceParameter)
       else specificParameters.toList :+ singleOrMultiChoiceParameter
-    )
+
+    List(ParameterGroup(None, parameters: _*))
+  }
 
   def setSingleColumn(inputColumnName: String, outputColumnName: String) = {
     val choice = SingleColumnChoice().setInPlaceChoice(NoInPlaceChoice().setOutputColumn(outputColumnName)).setInputColumn(NameSingleColumnSelection(inputColumnName))

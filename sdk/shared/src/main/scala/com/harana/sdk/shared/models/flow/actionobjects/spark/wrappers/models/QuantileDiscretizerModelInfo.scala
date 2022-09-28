@@ -1,7 +1,7 @@
 package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.models
 
 import com.harana.sdk.shared.models.flow.actionobjects.TransformerInfo
-import com.harana.sdk.shared.models.flow.parameters.{Parameter, Parameters}
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup, Parameters}
 
 import scala.language.reflectiveCalls
 
@@ -13,5 +13,5 @@ trait QuantileDiscretizerModelInfo extends TransformerInfo with Parameters {
 }
 
 object QuantileDiscretizerModelInfo extends QuantileDiscretizerModelInfo {
-  val parameters = Left(List.empty[Parameter[_]])
+  val parameterGroups = List.empty[ParameterGroup]
 }

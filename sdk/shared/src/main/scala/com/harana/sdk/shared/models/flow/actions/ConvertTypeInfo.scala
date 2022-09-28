@@ -17,7 +17,7 @@ trait ConvertTypeInfo extends TransformerAsActionInfo[TypeConverterInfo] with Ac
   lazy val portO_1: TypeTag[TypeConverterInfo] = typeTag
 }
 
-object ConvertTypeInfo extends ConvertTypeInfo {
+object ConvertTypeInfo extends ConvertTypeInfo with UIActionInfo[ConvertTypeInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new ConvertTypeInfo {
     override val position = Some(pos)
     override val overrideColor = color

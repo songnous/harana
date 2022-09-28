@@ -1,6 +1,6 @@
 package com.harana.sdk.shared.models.flow.actionobjects
 
-import com.harana.sdk.shared.models.flow.parameters.ColumnSelectorParameter
+import com.harana.sdk.shared.models.flow.parameters.{ColumnSelectorParameter, ParameterGroup}
 import com.harana.sdk.shared.models.flow.parameters.selections.{MultipleColumnSelection, NameColumnSelection}
 
 trait ColumnsFiltererInfo extends TransformerInfo {
@@ -12,7 +12,7 @@ trait ColumnsFiltererInfo extends TransformerInfo {
   def setSelectedColumns(value: MultipleColumnSelection): this.type = set(selectedColumnsParameter, value)
   def setSelectedColumns(retainedColumns: Seq[String]): this.type = setSelectedColumns(MultipleColumnSelection(List(NameColumnSelection(retainedColumns.toSet))))
 
-  override val parameters = Left(List(selectedColumnsParameter))
+  override val parameterGroups = List(ParameterGroup(None, selectedColumnsParameter))
 
 }
 

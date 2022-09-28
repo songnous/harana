@@ -20,7 +20,7 @@ trait SqlColumnTransformationInfo extends TransformerAsActionInfo[SqlColumnTrans
 
 }
 
-object SqlColumnTransformationInfo extends SqlColumnTransformationInfo {
+object SqlColumnTransformationInfo extends SqlColumnTransformationInfo with UIActionInfo[SqlColumnTransformationInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new SqlColumnTransformationInfo {
     override val position = Some(pos)
     override val overrideColor = color

@@ -5,7 +5,7 @@ import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.actionobjects.EstimatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.GBTParameters
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.HasRegressionImpurityParameter
-import com.harana.sdk.shared.models.flow.parameters.Parameter
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup}
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
 
 import scala.language.reflectiveCalls
@@ -21,7 +21,7 @@ trait GBTRegressionInfo
 
   val lossTypeParameter = ChoiceParameter[LossType]("loss function", default = Some(Squared()))
 
-  val parameters = Left(List(
+  val parameterGroups = List(ParameterGroup(None,
     impurityParameter,
     lossTypeParameter,
     maxBinsParameter,
@@ -39,7 +39,7 @@ trait GBTRegressionInfo
 
 object GBTRegressionInfo extends GBTRegressionInfo {
   sealed abstract class LossType(val name: String) extends Choice {
-    val parameters = Left(List.empty[Parameter[_]])
+    val parameterGroups = List.empty[ParameterGroup]
     val choiceOrder: List[ChoiceOption] = List(classOf[Squared], classOf[Absolute])
   }
 

@@ -1,7 +1,7 @@
 package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimators
 
 import com.harana.sdk.shared.models.flow.actionobjects.EstimatorInfo
-import com.harana.sdk.shared.models.flow.parameters.{BooleanParameter, Parameter, Parameters}
+import com.harana.sdk.shared.models.flow.parameters.{BooleanParameter, Parameter, ParameterGroup, Parameters}
 
 trait StandardScalerEstimatorInfo extends EstimatorInfo with Parameters {
 
@@ -15,5 +15,5 @@ trait StandardScalerEstimatorInfo extends EstimatorInfo with Parameters {
 }
 
 object StandardScalerEstimatorInfo extends StandardScalerEstimatorInfo {
-  val parameters = Left(specificParameters.toList)
+  val parameterGroups = List(ParameterGroup(None, specificParameters.toList: _*))
 }

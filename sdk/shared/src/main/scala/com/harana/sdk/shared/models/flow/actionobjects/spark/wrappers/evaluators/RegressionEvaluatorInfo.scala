@@ -4,7 +4,7 @@ import RegressionEvaluatorInfo.{Metric, Rmse}
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.actionobjects.EvaluatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.{HasLabelColumnParameter, HasPredictionColumnSelectorParameter}
-import com.harana.sdk.shared.models.flow.parameters.Parameter
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup}
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
 
 trait RegressionEvaluatorInfo
@@ -17,14 +17,14 @@ trait RegressionEvaluatorInfo
   val metricNameParameter = ChoiceParameter[Metric]("regression metric", default = Some(Rmse()))
   def getMetricName = $(metricNameParameter).name
 
-  val parameters = Left(List(metricNameParameter, predictionColumnParameter, labelColumnParameter))
+  val parameterGroups = List(ParameterGroup(None, metricNameParameter, predictionColumnParameter, labelColumnParameter))
 }
 
 object RegressionEvaluatorInfo extends RegressionEvaluatorInfo {
 
   sealed abstract class Metric(val name: String) extends Choice {
     val choiceOrder: List[ChoiceOption] = List(classOf[Mse], classOf[Rmse], classOf[R2], classOf[Mae])
-    val parameters = Left(List.empty[Parameter[_]])
+    val parameterGroups = List.empty[ParameterGroup]
   }
 
   case class Mae() extends Metric("mae")

@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Action
 import com.harana.sdk.shared.models.flow.actions.layout.SmallBlockLayout2To1
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Action
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
-import com.harana.sdk.shared.models.flow.parameters.DynamicParameter
+import com.harana.sdk.shared.models.flow.parameters.{DynamicParameter, ParameterGroup}
 import com.harana.sdk.shared.models.flow.utils.Id
 import io.circe.Json
 
@@ -25,7 +25,7 @@ trait FitInfo
 
   val estimatorParameters = new DynamicParameter("Parameters of input Estimator", default = Some(Json.Null), inputPort = 0)
   def setEstimatorParameters(jsValue: Json): this.type = set(estimatorParameters -> jsValue)
-  override val parameters =  Left(List(estimatorParameters))
+  override val parameterGroups = List(ParameterGroup(None, estimatorParameters))
 
   lazy val portI_0: TypeTag[EstimatorInfo] = typeTag
   lazy val portI_1: TypeTag[DataFrameInfo] = typeTag
@@ -33,7 +33,7 @@ trait FitInfo
 
 }
 
-object FitInfo extends FitInfo {
+object FitInfo extends FitInfo with UIActionInfo[FitInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new FitInfo {
     override val position = Some(pos)
     override val overrideColor = color

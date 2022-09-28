@@ -1,7 +1,7 @@
 package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.transformers
 
 import com.harana.sdk.shared.models.flow.actionobjects.TransformerInfo
-import com.harana.sdk.shared.models.flow.parameters.{BooleanParameter, Parameter, Parameters}
+import com.harana.sdk.shared.models.flow.parameters.{BooleanParameter, Parameter, ParameterGroup, Parameters}
 
 trait StopWordsRemoverInfo extends TransformerInfo with Parameters {
 
@@ -13,5 +13,5 @@ trait StopWordsRemoverInfo extends TransformerInfo with Parameters {
 }
 
 object StopWordsRemoverInfo extends StopWordsRemoverInfo {
-  val parameters = Left(List.empty[Parameter[_]])
+  val parameterGroups = List.empty[ParameterGroup]
 }

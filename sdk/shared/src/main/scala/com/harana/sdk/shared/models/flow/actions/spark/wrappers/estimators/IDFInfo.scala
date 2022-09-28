@@ -4,7 +4,7 @@ import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimators.IDFEstimatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.models.IDFModelInfo
-import com.harana.sdk.shared.models.flow.actions.EstimatorAsActionInfo
+import com.harana.sdk.shared.models.flow.actions.{EstimatorAsActionInfo, UIActionInfo}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.TextProcessing
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
@@ -24,7 +24,7 @@ trait IDFInfo extends EstimatorAsActionInfo[IDFEstimatorInfo, IDFModelInfo] with
 
 }
 
-object IDFInfo extends IDFInfo {
+object IDFInfo extends IDFInfo with UIActionInfo[IDFInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new IDFInfo {
     override val position = Some(pos)
     override val overrideColor = color

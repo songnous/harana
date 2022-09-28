@@ -10,7 +10,7 @@ trait TransformerAsFactoryInfo[T <: TransformerInfo] extends Action0To1Info[T] {
 
   val transformerInfo: T = TypeUtils.instanceOfType(portO_0)
 
-  override val parameters = transformerInfo.parameters
+  override val parameterGroups = transformerInfo.parameterGroups
 
   setDefault(transformerInfo.extractParameterMap().toSeq: _*)
 

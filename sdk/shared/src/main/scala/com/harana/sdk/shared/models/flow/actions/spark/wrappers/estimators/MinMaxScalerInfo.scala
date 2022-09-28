@@ -4,7 +4,7 @@ import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimators.MinMaxScalerEstimatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.models.MinMaxScalerModelInfo
-import com.harana.sdk.shared.models.flow.actions.EstimatorAsActionInfo
+import com.harana.sdk.shared.models.flow.actions.{EstimatorAsActionInfo, UIActionInfo}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.FeatureScaling
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
@@ -24,7 +24,7 @@ trait MinMaxScalerInfo extends EstimatorAsActionInfo[MinMaxScalerEstimatorInfo, 
 
 }
 
-object MinMaxScalerInfo extends MinMaxScalerInfo {
+object MinMaxScalerInfo extends MinMaxScalerInfo with UIActionInfo[MinMaxScalerInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new MinMaxScalerInfo {
     override val position = Some(pos)
     override val overrideColor = color

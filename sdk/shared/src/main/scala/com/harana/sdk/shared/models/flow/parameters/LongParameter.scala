@@ -7,6 +7,9 @@ import io.circe.generic.JsonCodec
 case class LongParameter(name: String,
                          required: Boolean = false,
                          default: Option[Long] = None,
+                         maxLength: Option[Int] = None,
+                         placeholder: Option[Long] = None,
+                         pattern: Option[String] = None,
                          validator: Validator[Long] = RangeValidator.allLong)
   extends Parameter[Long] with HasValidator[Long] {
 

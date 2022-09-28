@@ -22,7 +22,7 @@ trait FilterRowsInfo
 
 }
 
-object FilterRowsInfo extends FilterRowsInfo {
+object FilterRowsInfo extends FilterRowsInfo with UIActionInfo[FilterRowsInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new FilterRowsInfo {
     override val position = Some(pos)
     override val overrideColor = color

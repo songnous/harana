@@ -3,7 +3,7 @@ package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameter
 import FeatureSubsetStrategy.Auto
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
-import com.harana.sdk.shared.models.flow.parameters.{Parameter, Parameters}
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup, Parameters}
 
 import scala.language.reflectiveCalls
 
@@ -16,7 +16,7 @@ trait HasFeatureSubsetStrategyParameter extends Parameters {
 object FeatureSubsetStrategy {
 
   sealed abstract class Option(val name: String) extends Choice {
-    val parameters = Left(List.empty[Parameter[_]])
+    val parameterGroups = List.empty[ParameterGroup]
 
     val choiceOrder: List[ChoiceOption] = List(
       classOf[Auto],

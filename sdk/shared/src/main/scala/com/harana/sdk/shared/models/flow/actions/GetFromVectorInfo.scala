@@ -20,7 +20,7 @@ trait GetFromVectorInfo extends TransformerAsActionInfo[GetFromVectorTransformer
 
 }
 
-object GetFromVectorInfo extends GetFromVectorInfo {
+object GetFromVectorInfo extends GetFromVectorInfo with UIActionInfo[GetFromVectorInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new GetFromVectorInfo {
     override val position = Some(pos)
     override val overrideColor = color

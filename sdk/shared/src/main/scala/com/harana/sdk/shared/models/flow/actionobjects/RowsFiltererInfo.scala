@@ -1,6 +1,6 @@
 package com.harana.sdk.shared.models.flow.actionobjects
 
-import com.harana.sdk.shared.models.flow.parameters.{CodeSnippetLanguage, CodeSnippetParameter}
+import com.harana.sdk.shared.models.flow.parameters.{CodeSnippetLanguage, CodeSnippetParameter, ParameterGroup}
 
 trait RowsFiltererInfo extends TransformerInfo {
 
@@ -9,7 +9,7 @@ trait RowsFiltererInfo extends TransformerInfo {
   val conditionParameter = CodeSnippetParameter("condition", language = CodeSnippetLanguage.SQL)
   def getCondition = $(conditionParameter)
   def setCondition(value: String): this.type = set(conditionParameter, value)
-  val parameters = Left(List(conditionParameter))
+  val parameterGroups = List(ParameterGroup(None, conditionParameter))
 
 }
 

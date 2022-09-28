@@ -10,7 +10,7 @@ import com.harana.sdk.shared.models.flow.parameters.ParameterMap
   */
 abstract class StringIndexingEstimatorWrapperInfo(private var wrappedEstimator: SparkEstimatorWrapperInfo with HasLabelColumnParameter with HasPredictionColumnCreatorParameter) extends EstimatorInfo {
 
-  final val parameters = wrappedEstimator.parameters
+  final val parameterGroups = wrappedEstimator.parameterGroups
 
   override def paramMap: ParameterMap = wrappedEstimator.paramMap
 

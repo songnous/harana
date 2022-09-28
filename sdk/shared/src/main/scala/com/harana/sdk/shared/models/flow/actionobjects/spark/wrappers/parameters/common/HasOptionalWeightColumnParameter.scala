@@ -3,7 +3,7 @@ package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameter
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
 import com.harana.sdk.shared.models.flow.parameters.selections.{NameSingleColumnSelection, SingleColumnSelection}
-import com.harana.sdk.shared.models.flow.parameters.{Parameter, Parameters, SingleColumnSelectorParameter}
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup, Parameters, SingleColumnSelectorParameter}
 
 import scala.language.reflectiveCalls
 
@@ -26,11 +26,11 @@ object OptionalWeightColumnChoice {
     def getWeightColumn = $(weightColumnParameter)
     def setWeightColumn(value: SingleColumnSelection): this.type = set(weightColumnParameter -> value)
 
-    val parameters = Left(List(weightColumnParameter))
+    val parameterGroups = List(ParameterGroup(None, weightColumnParameter))
   }
 
   case class WeightColumnNoOption() extends WeightColumnOption {
     val name = "no"
-    val parameters = Left(List.empty[Parameter[_]])
+    val parameterGroups = List.empty[ParameterGroup]
   }
 }

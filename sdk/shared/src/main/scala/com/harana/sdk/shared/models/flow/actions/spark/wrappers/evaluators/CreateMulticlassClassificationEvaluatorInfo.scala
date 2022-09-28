@@ -3,7 +3,7 @@ package com.harana.sdk.shared.models.flow.actions.spark.wrappers.evaluators
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.evaluators.MulticlassClassificationEvaluatorInfo
-import com.harana.sdk.shared.models.flow.actions.EvaluatorAsFactoryInfo
+import com.harana.sdk.shared.models.flow.actions.{EvaluatorAsFactoryInfo, UIActionInfo}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.ModelEvaluation
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
@@ -21,7 +21,7 @@ trait CreateMulticlassClassificationEvaluatorInfo extends EvaluatorAsFactoryInfo
 
 }
 
-object CreateMulticlassClassificationEvaluatorInfo extends CreateMulticlassClassificationEvaluatorInfo {
+object CreateMulticlassClassificationEvaluatorInfo extends CreateMulticlassClassificationEvaluatorInfo with UIActionInfo[CreateMulticlassClassificationEvaluatorInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new CreateMulticlassClassificationEvaluatorInfo {
     override val position = Some(pos)
     override val overrideColor = color

@@ -43,7 +43,7 @@ trait JoinInfo extends Action2To1Info[DataFrameInfo, DataFrameInfo, DataFrameInf
   def getJoinColumns = $(joinColumnsParameter)
   def setJoinColumns(value: Seq[ColumnPair]): this.type = set(joinColumnsParameter, value)
 
-  override val parameters = Left(List(joinTypeParameter, leftPrefixParameter, rightPrefixParameter, joinColumnsParameter))
+  override val parameterGroups = List(ParameterGroup(None, joinTypeParameter, leftPrefixParameter, rightPrefixParameter, joinColumnsParameter))
 
   @transient
   lazy val portI_0: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]
@@ -76,7 +76,7 @@ trait JoinInfo extends Action2To1Info[DataFrameInfo, DataFrameInfo, DataFrameInf
   }
 }
 
-object JoinInfo extends JoinInfo {
+object JoinInfo extends JoinInfo with UIActionInfo[JoinInfo] {
 
   def apply(pos: (Int, Int), color: Option[String] = None) = new JoinInfo {
     override val position = Some(pos)
@@ -93,7 +93,7 @@ object JoinInfo extends JoinInfo {
     def getRightColumn = $(rightColumnParameter)
     def setRightColumn(value: SingleColumnSelection): this.type = set(rightColumnParameter, value)
 
-    val parameters = Left(List(leftColumnParameter, rightColumnParameter))
+    val parameterGroups = List(ParameterGroup(None, leftColumnParameter, rightColumnParameter))
 
   }
 }
@@ -103,7 +103,7 @@ object JoinTypeChoice {
   sealed abstract class Option(val name: String) extends Choice {
     val toSpark: String
     val choiceOrder: List[ChoiceOption] = List(classOf[Inner], classOf[Outer], classOf[LeftOuter], classOf[RightOuter])
-    val parameters = Left(List.empty[Parameter[_]])
+    val parameterGroups = List.empty[ParameterGroup]
   }
 
   case class Inner() extends Option("Inner") { val toSpark = "inner" }

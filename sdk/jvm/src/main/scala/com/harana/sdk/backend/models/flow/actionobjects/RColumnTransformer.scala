@@ -22,7 +22,9 @@ class RColumnTransformer() extends CustomCodeColumnTransformer with RColumnTrans
     """.stripMargin
   }
 
-  def runCode(context: ExecutionContext, code: String) = context.customCodeExecutor.runR(code)
+  def runCode(context: ExecutionContext, code: String) =
+    context.customCodeExecutor.runR(code)
 
-  def isValid(context: ExecutionContext, code: String): Boolean = context.customCodeExecutor.isRValid(code)
+  def isValid(context: ExecutionContext, code: String): Boolean =
+    context.customCodeExecutor.isRValid(code)
 }

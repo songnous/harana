@@ -3,7 +3,7 @@ package com.harana.sdk.shared.models.flow.actions.inout
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
 import com.harana.sdk.shared.models.flow.parameters.validators.RegexValidator
-import com.harana.sdk.shared.models.flow.parameters.{BooleanParameter, Parameter, Parameters, StringParameter}
+import com.harana.sdk.shared.models.flow.parameters.{BooleanParameter, Parameter, ParameterGroup, Parameters, StringParameter}
 
 trait NamesIncludedParameter { this: Parameters =>
   val namesIncludedParameter = BooleanParameter("names included", default = Some(true))
@@ -43,27 +43,27 @@ object CsvParameters {
 
     case class Comma() extends ColumnSeparatorChoice {
       val name = ","
-      val parameters = Left(List.empty[Parameter[_]])
+      val parameterGroups = List.empty[ParameterGroup]
     }
 
     case class Semicolon() extends ColumnSeparatorChoice {
       val name = ";"
-      val parameters = Left(List.empty[Parameter[_]])
+      val parameterGroups = List.empty[ParameterGroup]
     }
 
     case class Colon() extends ColumnSeparatorChoice {
       val name = ":"
-      val parameters = Left(List.empty[Parameter[_]])
+      val parameterGroups = List.empty[ParameterGroup]
     }
 
     case class Space() extends ColumnSeparatorChoice {
       val name = "Space"
-      val parameters = Left(List.empty[Parameter[_]])
+      val parameterGroups = List.empty[ParameterGroup]
     }
 
     case class Tab() extends ColumnSeparatorChoice {
       val name = "Tab"
-      val parameters = Left(List.empty[Parameter[_]])
+      val parameterGroups = List.empty[ParameterGroup]
     }
 
     case class Custom() extends ColumnSeparatorChoice {
@@ -73,7 +73,7 @@ object CsvParameters {
       def getCustomColumnSeparator = $(customColumnSeparator)
       def setCustomColumnSeparator(value: String): this.type = set(customColumnSeparator, value)
 
-      val parameters = Left(List(customColumnSeparator))
+      val parameterGroups = List(ParameterGroup(None, customColumnSeparator))
     }
   }
 }

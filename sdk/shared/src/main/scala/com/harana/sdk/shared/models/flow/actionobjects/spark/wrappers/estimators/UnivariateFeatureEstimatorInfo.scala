@@ -2,7 +2,7 @@ package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimator
 
 import com.harana.sdk.shared.models.flow.actionobjects.EstimatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.{HasFeaturesColumnParameter, HasLabelColumnParameter, HasOutputColumnParameter}
-import com.harana.sdk.shared.models.flow.parameters.IntParameter
+import com.harana.sdk.shared.models.flow.parameters.{IntParameter, ParameterGroup}
 import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
 
 import scala.language.reflectiveCalls
@@ -18,7 +18,7 @@ trait UnivariateFeatureEstimatorInfo
   val numTopFeaturesParameter = IntParameter("num top features", default = Some(50), validator = RangeValidator(begin = 1, end = Int.MaxValue, step = Some(1)))
   def setNumTopFeatures(value: Int): this.type = set(numTopFeaturesParameter -> value)
 
-  val parameters = Left(List(
+  val parameterGroups = List(ParameterGroup(None,
     numTopFeaturesParameter,
     featuresColumnParameter,
     outputColumnParameter,

@@ -5,7 +5,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimators.Word2VecEstimatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.evaluators.BinaryClassificationEvaluatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.models.Word2VecModelInfo
-import com.harana.sdk.shared.models.flow.actions.EstimatorAsActionInfo
+import com.harana.sdk.shared.models.flow.actions.{EstimatorAsActionInfo, UIActionInfo}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.TextProcessing
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
@@ -23,7 +23,7 @@ trait Word2VecInfo extends EstimatorAsActionInfo[Word2VecEstimatorInfo, Word2Vec
 
 }
 
-object Word2VecInfo extends Word2VecInfo {
+object Word2VecInfo extends Word2VecInfo with UIActionInfo[Word2VecInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new Word2VecInfo {
     override val position = Some(pos)
     override val overrideColor = color

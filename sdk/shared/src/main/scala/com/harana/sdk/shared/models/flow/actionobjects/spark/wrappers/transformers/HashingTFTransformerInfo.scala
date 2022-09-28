@@ -2,7 +2,7 @@ package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.transform
 
 import com.harana.sdk.shared.models.flow.actionobjects.TransformerInfo
 import com.harana.sdk.shared.models.flow.parameters
-import com.harana.sdk.shared.models.flow.parameters.{IntParameter, Parameter, Parameters}
+import com.harana.sdk.shared.models.flow.parameters.{IntParameter, Parameter, ParameterGroup, Parameters}
 import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
 
 trait HashingTFTransformerInfo extends TransformerInfo with Parameters {
@@ -17,5 +17,5 @@ trait HashingTFTransformerInfo extends TransformerInfo with Parameters {
 }
 
 object HashingTFTransformerInfo extends HashingTFTransformerInfo {
-  val parameters = Left(List.empty[Parameter[_]])
+  val parameterGroups = List.empty[ParameterGroup]
 }

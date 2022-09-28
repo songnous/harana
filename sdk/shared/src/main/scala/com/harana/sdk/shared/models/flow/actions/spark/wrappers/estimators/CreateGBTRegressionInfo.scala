@@ -3,7 +3,7 @@ package com.harana.sdk.shared.models.flow.actions.spark.wrappers.estimators
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimators.{DecisionTreeRegressionInfo, GBTRegressionInfo}
-import com.harana.sdk.shared.models.flow.actions.EstimatorAsFactoryInfo
+import com.harana.sdk.shared.models.flow.actions.{EstimatorAsFactoryInfo, UIActionInfo}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.Regression
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
@@ -23,7 +23,7 @@ trait CreateGBTRegressionInfo extends EstimatorAsFactoryInfo[GBTRegressionInfo] 
 
 }
 
-object CreateGBTRegressionInfo extends CreateGBTRegressionInfo {
+object CreateGBTRegressionInfo extends CreateGBTRegressionInfo with UIActionInfo[CreateGBTRegressionInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new CreateGBTRegressionInfo {
     override val position = Some(pos)
     override val overrideColor = color

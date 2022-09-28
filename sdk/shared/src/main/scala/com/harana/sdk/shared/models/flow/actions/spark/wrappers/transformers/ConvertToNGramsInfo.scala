@@ -3,7 +3,7 @@ package com.harana.sdk.shared.models.flow.actions.spark.wrappers.transformers
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.transformers.NGramTransformerInfo
-import com.harana.sdk.shared.models.flow.actions.TransformerAsActionInfo
+import com.harana.sdk.shared.models.flow.actions.{TransformerAsActionInfo, UIActionInfo}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.TextProcessing
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
@@ -22,7 +22,7 @@ trait ConvertToNGramsInfo extends TransformerAsActionInfo[NGramTransformerInfo] 
 
 }
 
-object ConvertToNGramsInfo extends ConvertToNGramsInfo {
+object ConvertToNGramsInfo extends ConvertToNGramsInfo with UIActionInfo[ConvertToNGramsInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new ConvertToNGramsInfo {
     override val position = Some(pos)
     override val overrideColor = color

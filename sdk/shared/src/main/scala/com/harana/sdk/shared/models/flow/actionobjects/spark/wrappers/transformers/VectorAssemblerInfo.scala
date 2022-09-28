@@ -2,7 +2,7 @@ package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.transform
 
 import com.harana.sdk.shared.models.flow.actionobjects.TransformerInfo
 import com.harana.sdk.shared.models.flow.parameters.selections.{MultipleColumnSelection, NameColumnSelection}
-import com.harana.sdk.shared.models.flow.parameters.{ColumnSelectorParameter, Parameters, SingleColumnCreatorParameter}
+import com.harana.sdk.shared.models.flow.parameters.{ColumnSelectorParameter, ParameterGroup, Parameters, SingleColumnCreatorParameter}
 
 trait VectorAssemblerInfo extends TransformerInfo with Parameters {
 
@@ -14,7 +14,7 @@ trait VectorAssemblerInfo extends TransformerInfo with Parameters {
   def setInputColumns(selection: Set[String]): this.type = set(inputColumnsParameter, MultipleColumnSelection(List(NameColumnSelection(selection))))
   def setOutputColumn(name: String): this.type = set(outputColumnParameter, name)
 
-  val parameters = Left(List(inputColumnsParameter, outputColumnParameter))
+  val parameterGroups = List(ParameterGroup(None, inputColumnsParameter, outputColumnParameter))
 
 }
 

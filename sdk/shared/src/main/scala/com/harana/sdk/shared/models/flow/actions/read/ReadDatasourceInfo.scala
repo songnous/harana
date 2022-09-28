@@ -3,9 +3,11 @@ package com.harana.sdk.shared.models.flow.actions.read
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.Action0To1Info
 import com.harana.sdk.shared.models.flow.actionobjects.DataFrameInfo
+import com.harana.sdk.shared.models.flow.actions.UIActionInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
+import com.harana.sdk.shared.models.flow.parameters.ParameterGroup
 import com.harana.sdk.shared.models.flow.parameters.datasource.DatasourceIdForReadParameter
 import com.harana.sdk.shared.models.flow.utils.Id
 
@@ -25,7 +27,7 @@ trait ReadDatasourceInfo extends Action0To1Info[DataFrameInfo] with ActionDocume
   val datasourceIdParameter = DatasourceIdForReadParameter(name = "data source")
   def getDataSourceId = $(datasourceIdParameter)
 
-  val parameters = Left(List(datasourceIdParameter))
+  val parameterGroups = List(ParameterGroup(None, datasourceIdParameter))
 
   override def getDatasourcesIds: Set[UUID] = get(datasourceIdParameter).toSet
   def setDatasourceId(value: UUID): this.type = set(datasourceIdParameter, value)
@@ -33,7 +35,7 @@ trait ReadDatasourceInfo extends Action0To1Info[DataFrameInfo] with ActionDocume
   private def getDatasourceId = $(datasourceIdParameter)
 }
 
-object ReadDatasourceInfo extends ReadDatasourceInfo {
+object ReadDatasourceInfo extends ReadDatasourceInfo with UIActionInfo[ReadDatasourceInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new ReadDatasourceInfo {
     override val position = Some(pos)
     override val overrideColor = color

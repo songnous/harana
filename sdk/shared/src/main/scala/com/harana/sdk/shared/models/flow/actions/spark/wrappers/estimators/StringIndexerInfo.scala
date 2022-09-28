@@ -4,7 +4,7 @@ import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimators.StringIndexerEstimatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.models.{StringIndexerModelInfo, UnivariateFeatureModelInfo}
-import com.harana.sdk.shared.models.flow.actions.EstimatorAsActionInfo
+import com.harana.sdk.shared.models.flow.actions.{EstimatorAsActionInfo, UIActionInfo}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.FeatureConversion
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
@@ -26,7 +26,7 @@ trait StringIndexerInfo
 
 }
 
-object StringIndexerInfo extends StringIndexerInfo {
+object StringIndexerInfo extends StringIndexerInfo with UIActionInfo[StringIndexerInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new StringIndexerInfo {
     override val position = Some(pos)
     override val overrideColor = color

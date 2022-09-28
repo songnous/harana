@@ -3,10 +3,10 @@ package com.harana.sdk.shared.models.flow.actions.custom
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.Action1To1Info
 import com.harana.sdk.shared.models.flow.actionobjects.DataFrameInfo
-import com.harana.sdk.shared.models.flow.actions.AddColumnInfo
+import com.harana.sdk.shared.models.flow.actions.{AddColumnInfo, UIActionInfo}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
-import com.harana.sdk.shared.models.flow.parameters.Parameter
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup}
 
 import scala.reflect.runtime.{universe => ru}
 
@@ -15,7 +15,7 @@ trait SinkInfo extends Action1To1Info[DataFrameInfo, DataFrameInfo] {
   val id = "e652238f-7415-4da6-95c6-ee33808561b2"
   val name = "Sink"
   val since = Version(1, 0, 0)
-  val parameters = Left(List.empty[Parameter[_]])
+  val parameterGroups = List.empty[ParameterGroup]
   val category = IO
 
   @transient
@@ -26,7 +26,7 @@ trait SinkInfo extends Action1To1Info[DataFrameInfo, DataFrameInfo] {
 
 }
 
-object SinkInfo extends SinkInfo {
+object SinkInfo extends SinkInfo with UIActionInfo[SinkInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new SinkInfo {
     override val position = Some(pos)
     override val overrideColor = color

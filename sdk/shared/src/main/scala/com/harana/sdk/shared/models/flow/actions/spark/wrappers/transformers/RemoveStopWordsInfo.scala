@@ -3,7 +3,7 @@ package com.harana.sdk.shared.models.flow.actions.spark.wrappers.transformers
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.transformers.StopWordsRemoverInfo
-import com.harana.sdk.shared.models.flow.actions.TransformerAsActionInfo
+import com.harana.sdk.shared.models.flow.actions.{TransformerAsActionInfo, UIActionInfo}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.TextProcessing
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
@@ -23,7 +23,7 @@ trait RemoveStopWordsInfo extends TransformerAsActionInfo[StopWordsRemoverInfo] 
 
 }
 
-object RemoveStopWordsInfo extends RemoveStopWordsInfo {
+object RemoveStopWordsInfo extends RemoveStopWordsInfo with UIActionInfo[RemoveStopWordsInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new RemoveStopWordsInfo {
     override val position = Some(pos)
     override val overrideColor = color

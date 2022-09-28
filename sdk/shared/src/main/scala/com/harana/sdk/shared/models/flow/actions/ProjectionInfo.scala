@@ -20,7 +20,7 @@ trait ProjectionInfo extends TransformerAsActionInfo[ProjectorInfo] with ActionD
 
 }
 
-object ProjectionInfo extends ProjectionInfo {
+object ProjectionInfo extends ProjectionInfo with UIActionInfo[ProjectionInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new ProjectionInfo {
     override val position = Some(pos)
     override val overrideColor = color

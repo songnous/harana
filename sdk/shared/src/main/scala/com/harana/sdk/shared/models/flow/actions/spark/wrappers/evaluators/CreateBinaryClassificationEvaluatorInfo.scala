@@ -4,7 +4,7 @@ import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.evaluators.BinaryClassificationEvaluatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.transformers.RegexTokenizerInfo
-import com.harana.sdk.shared.models.flow.actions.EvaluatorAsFactoryInfo
+import com.harana.sdk.shared.models.flow.actions.{EvaluatorAsFactoryInfo, UIActionInfo}
 import com.harana.sdk.shared.models.flow.actions.spark.wrappers.estimators.UnivariateFeatureSelectorInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.ModelEvaluation
 import com.harana.sdk.shared.models.flow.utils.Id
@@ -20,7 +20,7 @@ trait CreateBinaryClassificationEvaluatorInfo extends EvaluatorAsFactoryInfo[Bin
 
 }
 
-object CreateBinaryClassificationEvaluatorInfo extends CreateBinaryClassificationEvaluatorInfo {
+object CreateBinaryClassificationEvaluatorInfo extends CreateBinaryClassificationEvaluatorInfo with UIActionInfo[CreateBinaryClassificationEvaluatorInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new CreateBinaryClassificationEvaluatorInfo {
     override val position = Some(pos)
     override val overrideColor = color

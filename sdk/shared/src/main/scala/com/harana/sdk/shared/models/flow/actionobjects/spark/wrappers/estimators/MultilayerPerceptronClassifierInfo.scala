@@ -2,7 +2,7 @@ package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimator
 
 import com.harana.sdk.shared.models.flow.actionobjects.EstimatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common._
-import com.harana.sdk.shared.models.flow.parameters.IntArrayParameter
+import com.harana.sdk.shared.models.flow.parameters.{IntArrayParameter, ParameterGroup}
 import com.harana.sdk.shared.models.flow.parameters.validators.{ArrayLengthValidator, ComplexArrayValidator, RangeValidator}
 
 trait MultilayerPerceptronClassifierInfo
@@ -20,7 +20,7 @@ trait MultilayerPerceptronClassifierInfo
 
   val layersParameter = IntArrayParameter("layers", default = Some(Array(1, 1)), validator = ComplexArrayValidator(RangeValidator.positiveIntegers, ArrayLengthValidator.withAtLeast(2)))
 
-  val parameters = Left(List(
+  val parameterGroups = List(ParameterGroup(None,
     layersParameter,
     maxIterationsParameter,
     seedParameter,

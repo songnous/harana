@@ -7,15 +7,17 @@ import com.harana.sdk.shared.models.common.User.UserId
 import com.harana.sdk.shared.models.common.{Background, Entity, ParameterValue, Status, User, Visibility}
 import DataSource.DataSourceId
 import DataSourceType.DataSourceTypeId
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup, Parameters}
 import com.harana.sdk.shared.utils.Random
 import io.circe.generic.JsonCodec
 import com.harana.sdk.shared.utils.CirceCodecs._
+import io.circe.{Decoder, Encoder}
 
 @JsonCodec
 case class DataSource(title: String,
 											description: String,
 											dataSourceType: DataSourceTypeId,
-											parameterValues: Map[ParameterName, ParameterValue],
+											parameters: List[ParameterGroup],
 											path: Option[String],
 											createdBy: Option[UserId],
 											created: Instant,
@@ -37,7 +39,7 @@ case class DataSource(title: String,
 object DataSource {
 	type DataSourceId = String
 
-	def apply(title: String, description: String, dataSourceType: DataSourceTypeId, parameterValues: Map[ParameterName, ParameterValue], path: Option[String], createdBy: Option[UserId], visibility: Visibility, background: Option[Background], tags: Set[String]): DataSource = {
-		apply(title, description, dataSourceType, parameterValues, path, createdBy, Instant.now, createdBy, Instant.now, None, Random.long, Status.Active, visibility, 1L, background, tags, Map())
+	def apply(title: String, description: String, dataSourceType: DataSourceTypeId, parameters: List[ParameterGroup], path: Option[String], createdBy: Option[UserId], visibility: Visibility, background: Option[Background], tags: Set[String]): DataSource = {
+		apply(title, description, dataSourceType, parameters, path, createdBy, Instant.now, createdBy, Instant.now, None, Random.long, Status.Active, visibility, 1L, background, tags, Map())
 	}
 }

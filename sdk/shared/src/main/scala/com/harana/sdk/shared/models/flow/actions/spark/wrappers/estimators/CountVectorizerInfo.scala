@@ -5,7 +5,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation
 import com.harana.sdk.shared.models.flow.actionobjects.TransformerInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimators.CountVectorizerEstimatorInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.models.CountVectorizerModelInfo
-import com.harana.sdk.shared.models.flow.actions.EstimatorAsActionInfo
+import com.harana.sdk.shared.models.flow.actions.{EstimatorAsActionInfo, UIActionInfo}
 import com.harana.sdk.shared.models.flow.actions.read.ReadTransformerInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.TextProcessing
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
@@ -26,7 +26,7 @@ trait CountVectorizerInfo extends EstimatorAsActionInfo[CountVectorizerEstimator
 
 }
 
-object CountVectorizerInfo extends CountVectorizerInfo {
+object CountVectorizerInfo extends CountVectorizerInfo with UIActionInfo[CountVectorizerInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new CountVectorizerInfo {
     override val position = Some(pos)
     override val overrideColor = color

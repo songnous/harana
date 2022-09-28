@@ -2,7 +2,7 @@ package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.models
 
 import com.harana.sdk.shared.models.flow.actionobjects.TransformerInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.MinMaxParameters
-import com.harana.sdk.shared.models.flow.parameters.Parameter
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup}
 
 trait MinMaxScalerModelInfo extends TransformerInfo with MinMaxParameters {
 
@@ -15,5 +15,5 @@ trait MinMaxScalerModelInfo extends TransformerInfo with MinMaxParameters {
 }
 
 object MinMaxScalerModelInfo extends MinMaxScalerModelInfo {
-  val parameters = Left(List.empty[Parameter[_]])
+  val parameterGroups = List.empty[ParameterGroup]
 }

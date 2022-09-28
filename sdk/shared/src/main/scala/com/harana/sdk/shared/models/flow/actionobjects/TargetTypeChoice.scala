@@ -5,12 +5,12 @@ import com.harana.sdk.shared.models.designer.flow._
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.DataType
 import com.harana.sdk.shared.models.flow.DataType.{BooleanType, DoubleType, FloatType, IntegerType, LongType, StringType, TimestampType}
-import com.harana.sdk.shared.models.flow.parameters.Parameter
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup}
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice
 
 sealed abstract class TargetTypeChoice(val columnType: DataType) extends Choice {
   val choiceOrder = TargetTypeChoices.choiceOrder
-  val parameters = Left(List.empty[Parameter[_]])
+  val parameterGroups = List.empty[ParameterGroup]
   val name = columnType.getClass.getSimpleName
 }
 

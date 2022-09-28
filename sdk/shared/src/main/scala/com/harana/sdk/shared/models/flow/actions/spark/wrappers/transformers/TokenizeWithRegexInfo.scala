@@ -3,7 +3,7 @@ package com.harana.sdk.shared.models.flow.actions.spark.wrappers.transformers
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.transformers.RegexTokenizerInfo
-import com.harana.sdk.shared.models.flow.actions.TransformerAsActionInfo
+import com.harana.sdk.shared.models.flow.actions.{TransformerAsActionInfo, UIActionInfo}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.TextProcessing
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
@@ -22,7 +22,7 @@ trait TokenizeWithRegexInfo extends TransformerAsActionInfo[RegexTokenizerInfo] 
 
 }
 
-object TokenizeWithRegexInfo extends TokenizeWithRegexInfo {
+object TokenizeWithRegexInfo extends TokenizeWithRegexInfo with UIActionInfo[TokenizeWithRegexInfo] {
   def apply(pos: (Int, Int), color: Option[String] = None) = new TokenizeWithRegexInfo {
     override val position = Some(pos)
     override val overrideColor = color

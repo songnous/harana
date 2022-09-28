@@ -5,7 +5,7 @@ import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.actionobjects.SparkEstimatorWrapperInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.{HasLabelColumnParameter, ProbabilisticClassifierParameters}
 import com.harana.sdk.shared.models.flow.parameters
-import com.harana.sdk.shared.models.flow.parameters.{DoubleParameter, Parameter}
+import com.harana.sdk.shared.models.flow.parameters.{DoubleParameter, Parameter, ParameterGroup}
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
 import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
 
@@ -21,7 +21,7 @@ trait NaiveBayesInfo
   val smoothingParameter = DoubleParameter("smoothing", default = Some(1.0), validator = RangeValidator(begin = 0.0, end = Double.MaxValue))
   val modelTypeParameter = ChoiceParameter[ModelType]("modelType", default = Some(Multinomial()))
 
-  val parameters = Left(List(
+  val parameterGroups = List(ParameterGroup(None,
     smoothingParameter,
     modelTypeParameter,
     labelColumnParameter,
@@ -35,7 +35,7 @@ trait NaiveBayesInfo
 object NaiveBayesInfo extends NaiveBayesInfo {
   sealed abstract class ModelType(val name: String) extends Choice {
     val choiceOrder: List[ChoiceOption] = List(classOf[Multinomial], classOf[Bernoulli])
-    val parameters = Left(List.empty[Parameter[_]])
+    val parameterGroups = List.empty[ParameterGroup]
   }
 
   case class Multinomial() extends ModelType("multinomial")
