@@ -13,7 +13,7 @@ abstract class EvaluatorAsFactory[T <: Evaluator](implicit typeTag: TypeTag[T]) 
 
   lazy val tTagTO_0: TypeTag[T] = typeTag[T]
 
-  val parameters = evaluator.parameters
+  val parameterGroups = evaluator.parameterGroups
 
   setDefault(evaluator.extractParameterMap().toSeq: _*)
 

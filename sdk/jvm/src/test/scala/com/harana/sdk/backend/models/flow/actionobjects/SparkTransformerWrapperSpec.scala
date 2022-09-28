@@ -3,7 +3,7 @@ package com.harana.sdk.backend.models.flow.actionobjects
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.inference.exceptions.TransformSchemaError
 import com.harana.sdk.backend.models.flow.{ExecutionContext, TestSupport, UnitSpec}
-import com.harana.sdk.shared.models.flow.parameters.DoubleParameter
+import com.harana.sdk.shared.models.flow.parameters.{DoubleParameter, ParameterGroup}
 import com.harana.spark.ML
 import org.apache.spark.ml
 import org.apache.spark.ml.param.{BooleanParam, DoubleParam, ParamMap}

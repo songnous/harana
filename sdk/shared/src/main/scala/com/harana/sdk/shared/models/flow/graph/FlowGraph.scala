@@ -19,11 +19,11 @@ case class FlowGraph(override val nodes: Set[Node[ActionInfo]] = Set.empty,
 
 object FlowGraph {
 
-  implicit val flowNodeEncoder: Encoder[Node[ActionInfo]] = Encoder.instance[Node[ActionInfo]] { port =>
+  implicit val nodeEncoder: Encoder[Node[ActionInfo]] = Encoder.instance[Node[ActionInfo]] { port =>
     Json.obj()
   }
 
-  implicit val flowNodeDecoder: Decoder[Node[ActionInfo]] = (c: HCursor) =>
+  implicit val nodeDecoder: Decoder[Node[ActionInfo]] = (c: HCursor) =>
     null
 
 }

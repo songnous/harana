@@ -6,6 +6,7 @@ import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.SingleColumnP
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.SingleColumnParameters.SingleTransformInPlaceChoices.NoInPlaceChoice
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.{HasSingleInPlaceParameter, HasSpecificParameters}
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.HasInputColumnParameter
+import com.harana.sdk.shared.models.flow.parameters.ParameterGroup
 import org.apache.spark.ml
 import org.apache.spark.sql.types.StructType
 
@@ -19,11 +20,13 @@ abstract class SparkSingleColumnParameterEstimatorWrapper[MD <: ml.Model[MD] { v
     with HasSingleInPlaceParameter
     with HasSpecificParameters {
 
-  val parameters =
-    Left(
+  val parameterGroups = {
+    val parameters =
       if (specificParameters == null) List(inputColumnParameter, singleInPlaceChoiceParameter)
       else List(inputColumnParameter, singleInPlaceChoiceParameter) ++ specificParameters
-    )
+
+    List(ParameterGroup(None, parameters: _*))
+  }
 
   def setNoInPlace(outputColumn: String): this.type = setSingleInPlaceChoice(NoInPlaceChoice().setOutputColumn(outputColumn))
 

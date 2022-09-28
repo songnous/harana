@@ -16,7 +16,7 @@ abstract class EstimatorAsAction[E <: Estimator[T], T <: Transformer]()(implicit
 
   val estimator: E = TypeUtils.instanceOfType(typeTagE)
 
-  val parameters = estimator.parameters
+  val parameterGroups = estimator.parameterGroups
 
   setDefault(estimator.extractParameterMap().toSeq: _*)
 

@@ -4,16 +4,16 @@ import com.harana.sdk.backend.models.flow.Catalog.ActionObjectCatalog
 import com.harana.sdk.backend.models.flow.graph.TypesAccordance.TypesAccordance
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
 import com.harana.sdk.backend.models.flow.{Action, Catalog, Knowledge}
-import com.harana.sdk.shared.models.flow.ActionObjectInfo
+import com.harana.sdk.shared.models.flow.{ActionInfo, ActionObjectInfo}
 import com.harana.sdk.shared.models.flow.exceptions.FlowError
 import com.harana.sdk.shared.models.flow.graph.Endpoint
-import com.harana.sdk.shared.models.flow.graph.FlowGraph.FlowNode
+import com.harana.sdk.shared.models.flow.graph.node.Node
 
 import scala.reflect.runtime.universe.TypeTag
 
 object NodeInference {
 
-  def inferKnowledge(node: FlowNode, context: InferContext, inputInferenceForNode: NodeInferenceResult) = {
+  def inferKnowledge(node: Node[ActionInfo], context: InferContext, inputInferenceForNode: NodeInferenceResult) = {
 
     val NodeInferenceResult(inKnowledge, warnings, errors) = inputInferenceForNode
 
@@ -41,7 +41,7 @@ object NodeInference {
     }
   }
 
-  def inputInferenceForNode(node: FlowNode, context: InferContext, graphKnowledge: GraphKnowledge, nodePredecessorsEndpoints: IndexedSeq[Option[Endpoint]]) = {
+  def inputInferenceForNode(node: Node[ActionInfo], context: InferContext, graphKnowledge: GraphKnowledge, nodePredecessorsEndpoints: IndexedSeq[Option[Endpoint]]) = {
     (0 until node.value.inArity).foldLeft(NodeInferenceResult.empty) {
       case (NodeInferenceResult(knowledge, warnings, errors), portIndex) =>
         val predecessorEndpoint = nodePredecessorsEndpoints(portIndex)
@@ -61,7 +61,7 @@ object NodeInference {
     }
   }
 
-  private def inputKnowledgeAndAccordanceForInputPort(node: FlowNode, catalog: ActionObjectCatalog, graphKnowledge: GraphKnowledge, portIndex: Int, predecessorEndpointOption: Option[Endpoint]): (Knowledge[ActionObjectInfo], TypesAccordance) = {
+  private def inputKnowledgeAndAccordanceForInputPort(node: Node[ActionInfo], catalog: ActionObjectCatalog, graphKnowledge: GraphKnowledge, portIndex: Int, predecessorEndpointOption: Option[Endpoint]): (Knowledge[ActionObjectInfo], TypesAccordance) = {
     val inPortType = node.value.inputPorts(portIndex).asInstanceOf[TypeTag[ActionObjectInfo]]
     predecessorEndpointOption match {
       case None => (KnowledgeService.defaultKnowledge(catalog, inPortType), TypesAccordance.NotProvided(portIndex))
