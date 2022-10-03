@@ -8,7 +8,7 @@ import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions._
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.transformers.TransformerSerialization
-import com.harana.sdk.backend.models.flow.actions.exceptions.SqlExpressionError
+import com.harana.sdk.backend.models.flow.actiontypes.exceptions.SqlExpressionError
 import com.harana.spark.SQL
 import com.harana.spark.spi.SparkSessionInitializer
 

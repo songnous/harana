@@ -2,7 +2,7 @@ package com.harana.sdk.backend.models.flow.actionobjects
 
 import com.harana.sdk.backend.models.flow.ExecutionContext
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
-import com.harana.sdk.backend.models.flow.actions.exceptions.{ColumnAliasNotUniqueError, ColumnsDoNotExistError, SqlColumnExpressionSyntaxError, SqlColumnTransformationExecutionError}
+import com.harana.sdk.backend.models.flow.actiontypes.exceptions.{ColumnAliasNotUniqueError, ColumnsDoNotExistError, SqlColumnExpressionSyntaxError, SqlColumnTransformationExecutionError}
 import com.harana.sdk.backend.models.flow.utils.{SparkTypeConverter, SparkUtils}
 import com.harana.sdk.shared.models.flow.actionobjects.SqlColumnTransformerInfo
 import com.harana.sdk.shared.models.flow.exceptions.FlowError

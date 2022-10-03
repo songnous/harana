@@ -1,6 +1,7 @@
 package com.harana.sdk.shared.models.flow.actionobjects
 
 import com.harana.sdk.shared.models.flow.parameters.Parameter
+
 import scala.language.reflectiveCalls
 
 abstract class SparkTransformerAsMultiColumnTransformerInfo extends MultiColumnTransformerInfo {

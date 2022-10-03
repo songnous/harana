@@ -3,13 +3,13 @@ package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameter
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
 import com.harana.sdk.shared.models.flow.parameters.selections.{NameSingleColumnSelection, SingleColumnSelection}
-import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup, Parameters, SingleColumnSelectorParameter}
+import com.harana.sdk.shared.models.flow.parameters.{ParameterGroup, Parameters, SingleColumnSelectorParameter}
 
 import scala.language.reflectiveCalls
 
 trait HasOptionalWeightColumnParameter extends Parameters {
 
-  val optionalWeightColumnParameter = new ChoiceParameter[OptionalWeightColumnChoice.WeightColumnOption]("use custom weights", default = Some(OptionalWeightColumnChoice.WeightColumnNoOption()))
+  val optionalWeightColumnParameter = new ChoiceParameter[OptionalWeightColumnChoice.WeightColumnOption]("use-custom-weights", default = Some(OptionalWeightColumnChoice.WeightColumnNoOption()))
 
 }
 
@@ -22,15 +22,15 @@ object OptionalWeightColumnChoice {
   case class WeightColumnYesOption() extends WeightColumnOption {
     val name = "yes"
 
-    val weightColumnParameter = SingleColumnSelectorParameter("weight column", default = Some(NameSingleColumnSelection("weight")), portIndex = 0)
+    val weightColumnParameter = SingleColumnSelectorParameter("weight-column", default = Some(NameSingleColumnSelection("weight")), portIndex = 0)
     def getWeightColumn = $(weightColumnParameter)
     def setWeightColumn(value: SingleColumnSelection): this.type = set(weightColumnParameter -> value)
 
-    val parameterGroups = List(ParameterGroup(None, weightColumnParameter))
+    override val parameterGroups = List(ParameterGroup(None, weightColumnParameter))
   }
 
   case class WeightColumnNoOption() extends WeightColumnOption {
     val name = "no"
-    val parameterGroups = List.empty[ParameterGroup]
+    override val parameterGroups = List.empty[ParameterGroup]
   }
 }

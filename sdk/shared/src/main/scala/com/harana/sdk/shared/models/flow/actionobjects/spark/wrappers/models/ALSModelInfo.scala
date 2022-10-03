@@ -1,6 +1,6 @@
 package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.models
 
-import com.harana.sdk.shared.models.flow.ActionObjectInfo
+import com.harana.sdk.shared.models.flow.actionobjects.ActionObjectInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.{HasItemColumnParameter, HasPredictionColumnCreatorParameter, HasUserColumnParameter}
 import com.harana.sdk.shared.models.flow.parameters.ParameterGroup
 
@@ -12,7 +12,7 @@ trait ALSModelInfo
 
   val id = "F098E949-BAE3-4C97-985F-A7B76A3C480E"
 
-  val parameterGroups = List(ParameterGroup(None,
+  override val parameterGroups = List(ParameterGroup(None,
     itemColumnParameter,
     predictionColumnParameter,
     userColumnParameter

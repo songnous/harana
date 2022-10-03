@@ -1,9 +1,9 @@
 package com.harana.sdk.shared.models.flow.actionobjects
 
+import com.harana.sdk.shared.models.flow.parameters._
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
 import com.harana.sdk.shared.models.flow.parameters.selections.SingleColumnSelection
-import com.harana.sdk.shared.models.flow.parameters._
 
 trait ProjectorInfo extends TransformerInfo {
   import ProjectorInfo._
@@ -14,7 +14,7 @@ trait ProjectorInfo extends TransformerInfo {
   def getProjectionColumns = $(projectionColumnsParameter)
   def setProjectionColumns(value: Seq[ColumnProjection]): this.type = set(projectionColumnsParameter, value)
 
-  val parameterGroups = List(ParameterGroup(None, projectionColumnsParameter))
+  override val parameterGroups = List(ParameterGroup(None, projectionColumnsParameter))
 }
 
 object ProjectorInfo extends ProjectorInfo{
@@ -24,15 +24,15 @@ object ProjectorInfo extends ProjectorInfo{
 
   case class ColumnProjection() extends Parameters {
 
-    val originalColumnParameter = SingleColumnSelectorParameter("original column", portIndex = 0)
+    val originalColumnParameter = SingleColumnSelectorParameter("original-column", portIndex = 0)
     def getOriginalColumn = $(originalColumnParameter)
     def setOriginalColumn(value: SingleColumnSelection): this.type = set(originalColumnParameter, value)
 
-    val renameColumnParameter = ChoiceParameter[RenameColumnChoice]("rename column", default = Some(RenameColumnChoice.No()))
+    val renameColumnParameter = ChoiceParameter[RenameColumnChoice]("rename-column", default = Some(RenameColumnChoice.No()))
     def getRenameColumn = $(renameColumnParameter)
     def setRenameColumn(value: RenameColumnChoice): this.type = set(renameColumnParameter, value)
 
-    val parameterGroups = List(ParameterGroup(None, originalColumnParameter, renameColumnParameter))
+    override val parameterGroups = List(ParameterGroup(None, originalColumnParameter, renameColumnParameter))
 
   }
 
@@ -45,19 +45,19 @@ object ProjectorInfo extends ProjectorInfo{
 
   object RenameColumnChoice {
     case class Yes() extends RenameColumnChoice {
-      val name = "Yes"
+      val name = "yes"
 
-      val columnNameParameter = SingleColumnCreatorParameter("column name", default = Some(""))
+      val columnNameParameter = SingleColumnCreatorParameter("column-name", default = Some(""))
       def getColumnName: Option[String] = Some($(columnNameParameter))
       def setColumnName(value: String): this.type = set(columnNameParameter, value)
 
-      val parameterGroups = List(ParameterGroup(None, columnNameParameter))
+      override val parameterGroups = List(ParameterGroup(None, columnNameParameter))
     }
 
     case class No() extends RenameColumnChoice {
-      val name = "No"
+      val name = "no"
       def getColumnName: Option[String] = None
-      val parameterGroups = List.empty[ParameterGroup]
+      override val parameterGroups = List.empty[ParameterGroup]
     }
   }
 }

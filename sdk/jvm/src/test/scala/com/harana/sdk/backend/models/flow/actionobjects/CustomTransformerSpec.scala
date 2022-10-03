@@ -2,7 +2,7 @@ package com.harana.sdk.backend.models.flow.actionobjects
 
 import com.harana.sdk.backend.models.flow.actionobjects.InnerWorkflowTestFactory.simpleGraph
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
-import com.harana.sdk.backend.models.flow.actions.ConvertType
+import com.harana.sdk.backend.models.flow.actiontypes.ConvertType
 import com.harana.sdk.backend.models.flow.filesystemclients.FileSystemClient
 import com.harana.sdk.backend.models.flow.inference.InferContext
 import com.harana.sdk.backend.models.flow._

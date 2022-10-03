@@ -16,7 +16,7 @@ trait REvaluatorInfo extends CustomCodeEvaluatorInfo {
       |    return(rmse)
       |}""".stripMargin
 
-  val codeParameter = CodeSnippetParameter("R evaluator code", default = Some(default), language = CodeSnippetLanguage.R)
+  val codeParameter = CodeSnippetParameter("code", default = Some(default), language = CodeSnippetLanguage.R)
 }
 
 object REvaluatorInfo extends REvaluatorInfo

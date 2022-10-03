@@ -1,11 +1,11 @@
 package com.harana.sdk.shared.models.flow.actionobjects.multicolumn
 
-import MultiColumnParameters.MultiColumnInPlaceChoices.MultiColumnYesInPlace
-import SingleColumnParameters.SingleColumnInPlaceChoice
+import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.MultiColumnParameters.MultiColumnInPlaceChoices.MultiColumnYesInPlace
+import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.SingleColumnParameters.SingleColumnInPlaceChoice
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
 import com.harana.sdk.shared.models.flow.parameters.selections.{MultipleColumnSelection, NameColumnSelection, SingleColumnSelection}
-import com.harana.sdk.shared.models.flow.parameters.{ColumnSelectorParameter, Parameter, ParameterGroup, PrefixBasedColumnCreatorParameter, SingleColumnSelectorParameter}
+import com.harana.sdk.shared.models.flow.parameters.{ColumnSelectorParameter, ParameterGroup, PrefixBasedColumnCreatorParameter, SingleColumnSelectorParameter}
 
 object MultiColumnParameters {
 
@@ -17,18 +17,18 @@ object MultiColumnParameters {
     val choiceOrder: List[ChoiceOption] = List(classOf[MultiColumnYesInPlace], classOf[MultiColumnNoInPlace])
 
     case class MultiColumnYesInPlace() extends MultiColumnInPlaceChoice {
-      val name = "replace input columns"
-      val parameterGroups = List.empty[ParameterGroup]
+      val name = "replace-input-columns"
+      override val parameterGroups = List.empty[ParameterGroup]
     }
 
     case class MultiColumnNoInPlace() extends MultiColumnInPlaceChoice {
-      val name = "append new columns"
+      val name = "append-new-columns"
 
-      val outputColumnsPrefixParameter = PrefixBasedColumnCreatorParameter("column name prefix")
+      val outputColumnsPrefixParameter = PrefixBasedColumnCreatorParameter("column-name-prefix")
       def getColumnsPrefix = $(outputColumnsPrefixParameter)
       def setColumnsPrefix(prefix: String): this.type = set(outputColumnsPrefixParameter, prefix)
 
-      val parameterGroups = List(ParameterGroup(None, outputColumnsPrefixParameter))
+      override val parameterGroups = List(ParameterGroup(None, outputColumnsPrefixParameter))
     }
   }
 
@@ -40,22 +40,22 @@ object MultiColumnParameters {
     val choiceOrder: List[ChoiceOption] = List(classOf[SingleColumnChoice], classOf[MultiColumnChoice])
 
     case class SingleColumnChoice() extends SingleOrMultiColumnChoice with HasSingleInPlaceParameter {
-      val name = "one column"
+      val name = "one-column"
 
-      val inputColumnParameter = SingleColumnSelectorParameter("input column", portIndex = 0)
+      val inputColumnParameter = SingleColumnSelectorParameter("input-column", portIndex = 0)
       def getInputColumn = $(inputColumnParameter)
       def setInputColumn(value: SingleColumnSelection): this.type = set(inputColumnParameter, value)
 
       def getInPlaceChoice = $(singleInPlaceChoiceParameter)
       def setInPlaceChoice(value: SingleColumnInPlaceChoice): this.type = set(singleInPlaceChoiceParameter, value)
 
-      val parameterGroups = List(ParameterGroup(None, inputColumnParameter, singleInPlaceChoiceParameter))
+      override val parameterGroups = List(ParameterGroup(None, inputColumnParameter, singleInPlaceChoiceParameter))
     }
 
     case class MultiColumnChoice() extends SingleOrMultiColumnChoice {
-      val name = "multiple columns"
+      val name = "multiple-columns"
 
-      val inputColumnsParameter = ColumnSelectorParameter("input columns", portIndex = 0)
+      val inputColumnsParameter = ColumnSelectorParameter("input-columns", portIndex = 0)
       def getInputColumns = $(inputColumnsParameter)
       def setInputColumns(value: MultipleColumnSelection): this.type = set(inputColumnsParameter, value)
       def setInputColumns(inputColumnNames: Set[String]): this.type = setInputColumns(MultipleColumnSelection(List(NameColumnSelection(inputColumnNames))))
@@ -64,7 +64,7 @@ object MultiColumnParameters {
       def getInPlaceChoice = $(inPlaceChoiceParameter)
       def setInPlaceChoice(value: MultiColumnInPlaceChoice): this.type = set(inPlaceChoiceParameter, value)
 
-      val parameterGroups = List(ParameterGroup(None, inputColumnsParameter, inPlaceChoiceParameter))
+      override val parameterGroups = List(ParameterGroup(None, inputColumnsParameter, inPlaceChoiceParameter))
     }
 
     object MultiColumnChoice {

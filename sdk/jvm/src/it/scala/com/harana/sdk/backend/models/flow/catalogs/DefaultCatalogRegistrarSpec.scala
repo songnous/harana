@@ -3,7 +3,7 @@ package com.harana.sdk.backend.models.flow.catalogs
 import com.harana.sdk.backend.models.flow.catalogs.spi.CatalogRegistrant
 import com.harana.sdk.backend.models.flow.catalogs.spi.CatalogRegistrar.DefaultCatalogRegistrar
 import com.harana.sdk.backend.models.flow.UnitSpec
-import com.harana.sdk.shared.models.flow.ActionInfo
+import com.harana.sdk.shared.models.flow.ActionTypeInfo
 import org.scalatest.BeforeAndAfter
 
 class DefaultCatalogRegistrarSpec extends UnitSpec with BeforeAndAfter {
@@ -16,12 +16,12 @@ class DefaultCatalogRegistrarSpec extends UnitSpec with BeforeAndAfter {
   "Default Catalog Registrar" should {
 
     "contain action loaded using test registrator" in {
-      actionCatalog.actions.keys should contain(SpiLoadedAction.spiLoadedActionId)
+      actionCatalog.actions.keys should contain(SpiLoadedActionType.spiLoadedActionId)
     }
 
     "create action loaded using test registrator" in {
-      val action = actionCatalog.createAction(SpiLoadedAction.spiLoadedActionUuid)
-      action.id shouldBe SpiLoadedAction.spiLoadedActionId
+      val action = actionCatalog.createAction(SpiLoadedActionType.spiLoadedActionUuid)
+      action.id shouldBe SpiLoadedActionType.spiLoadedActionId
     }
   }
 }

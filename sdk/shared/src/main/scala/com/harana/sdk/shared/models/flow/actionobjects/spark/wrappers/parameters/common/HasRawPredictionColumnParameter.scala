@@ -7,6 +7,6 @@ import scala.language.reflectiveCalls
 
 trait HasRawPredictionColumnParameter extends Parameters {
 
-  val rawPredictionColumnParameter = SingleColumnSelectorParameter("raw prediction column", default = Some(NameSingleColumnSelection("rawPrediction")), portIndex = 0)
+  val rawPredictionColumnParameter = SingleColumnSelectorParameter("raw-prediction-column", default = Some(NameSingleColumnSelection("rawPrediction")), portIndex = 0)
 
 }

@@ -8,7 +8,7 @@ import org.apache.hadoop.fs.Path
 import org.apache.spark.sql.types.StructType
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.serialization.JsonObjectPersistence
-import com.harana.sdk.backend.models.flow.actions.exceptions.CustomActionExecutionError
+import com.harana.sdk.backend.models.flow.actiontypes.exceptions.CustomActionExecutionError
 import com.harana.sdk.backend.models.flow.graph.{GraphInference, GraphKnowledge, NodeInferenceResult}
 import com.harana.sdk.backend.models.flow.inference.InferContext
 import com.harana.sdk.backend.models.flow.utils.CustomTransformerFactory

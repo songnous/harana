@@ -3,7 +3,7 @@ package com.harana.sdk.backend.models.flow.actionobjects
 import com.harana.sdk.backend.models.flow.ActionExecutionDispatcher.Result
 import com.harana.sdk.backend.models.flow.ExecutionContext
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
-import com.harana.sdk.backend.models.flow.actions.exceptions.CustomActionExecutionError
+import com.harana.sdk.backend.models.flow.actiontypes.exceptions.CustomActionExecutionError
 import com.harana.sdk.shared.models.flow.actionobjects.CustomCodeTransformerInfo
 import com.harana.sdk.shared.models.flow.parameters.CodeSnippetParameter
 

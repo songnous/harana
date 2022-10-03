@@ -13,5 +13,5 @@ trait QuantileDiscretizerModelInfo extends TransformerInfo with Parameters {
 }
 
 object QuantileDiscretizerModelInfo extends QuantileDiscretizerModelInfo {
-  val parameterGroups = List.empty[ParameterGroup]
+  override val parameterGroups = List.empty[ParameterGroup]
 }

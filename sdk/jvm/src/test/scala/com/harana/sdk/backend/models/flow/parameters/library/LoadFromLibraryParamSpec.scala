@@ -11,7 +11,7 @@ class LoadFromLibraryParamSpec extends AbstractParameterSpec[String, LoadFromLib
 
   def paramFixture: (LoadFromLibraryParameter, Json) = {
     val description  = "Load parameter description"
-    val param        = LoadFromLibraryParameter("Load parameter name", Some(description))
+    val param        = LoadFromLibraryParameter("load-parameter-name", Some(description))
     val expectedJson = Map(
                           "type"        -> Json.fromString("loadFromLibrary"),
                           "name"        -> Json.fromString(param.name),

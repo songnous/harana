@@ -150,7 +150,7 @@ object MultiColumnTransformerIntegSpec {
     def getMagicConstant = $(magicConstantParameter)
     def setMagicConstant(value: Double): this.type = set(magicConstantParameter, value)
 
-    val parameterGroups = List(ParameterGroup(None, magicConstantParameter))
+    override val parameterGroups = List(ParameterGroup(None, magicConstantParameter))
 
     def transformSingleColumn(
         inputColumn: String,

@@ -1,5 +1,6 @@
 package com.harana.sdk.backend.models.flow.parameters.wrappers.spark
 
+import com.harana.sdk.backend.models.flow.actionobjects.ParametersWithSparkWrappers
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
 import com.harana.sdk.shared.models.flow.parameters.{BooleanParameter, IntParameter, Parameter, StringParameter}
@@ -63,9 +64,9 @@ object ParametersWithSparkWrappersSpec {
     val paramB = IntParameter[ExampleSparkParameters]("paramB", _.sparkParamB)
 
     val choiceWithParametersInValues = new ChoiceParameter[ChoiceWithWrappers]("choice")
-    val notWrappedParameter = BooleanParameter("booleanparameterName")
+    val notWrappedParameter = BooleanParameter("boolean-parameter-name")
 
-    val parameterGroups = List(ParameterGroup(None, paramA, paramB, choiceWithParametersInValues, notWrappedParameter))
+    override val parameterGroups = List(ParameterGroup(None, paramA, paramB, choiceWithParametersInValues, notWrappedParameter))
 
     def setParamA(v: String): this.type = set(paramA, v)
     def setParamB(v: Double) = set(paramB, v)
@@ -80,11 +81,11 @@ object ParametersWithSparkWrappersSpec {
     val name = "one param"
     val paramC = StringParameter("paramC")
     def setParamC(v: String): this.type = set(paramC, v)
-    val parameterGroups = List(ParameterGroup(None, paramC))
+    override val parameterGroups = List(ParameterGroup(None, paramC))
   }
 
   case class EmptyChoiceWithWrappers() extends ChoiceWithWrappers {
     val name = "no parameters"
-    val parameterGroups = List.empty[ParameterGroup]
+    override val parameterGroups = List.empty[ParameterGroup]
   }
 }

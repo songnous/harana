@@ -13,5 +13,5 @@ trait CountVectorizerModelInfo extends TransformerInfo with HasMinTermsFrequency
 }
 
 object CountVectorizerModelInfo extends CountVectorizerModelInfo {
-  val parameterGroups = List.empty[ParameterGroup]
+  override val parameterGroups = List.empty[ParameterGroup]
 }

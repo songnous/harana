@@ -6,6 +6,6 @@ import scala.language.reflectiveCalls
 
 trait HasIsLargerBetterParameter extends Parameters {
 
-  val isLargerBetterParameter = BooleanParameter("is larger better", default = Some(false))
+  val isLargerBetterParameter = BooleanParameter("is-larger-better", default = Some(false))
 
 }

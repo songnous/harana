@@ -5,7 +5,7 @@ import com.harana.sdk.backend.models.flow.{ExecutionContext, Knowledge, Method1T
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.report.CommonTablesGenerators
 import com.harana.sdk.backend.models.flow.actionobjects.serialization.ParametersSerialization
-import com.harana.sdk.backend.models.flow.actions.exceptions.WriteFileError
+import com.harana.sdk.backend.models.flow.actiontypes.exceptions.WriteFileError
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
 import com.harana.sdk.backend.models.flow.utils.Logging
 import com.harana.sdk.shared.models.flow.actionobjects.TransformerInfo

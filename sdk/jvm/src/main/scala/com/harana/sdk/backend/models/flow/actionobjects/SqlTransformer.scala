@@ -2,7 +2,7 @@ package com.harana.sdk.backend.models.flow.actionobjects
 
 import com.harana.sdk.backend.models.flow.ExecutionContext
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
-import com.harana.sdk.backend.models.flow.actions.exceptions.SqlExpressionError
+import com.harana.sdk.backend.models.flow.actiontypes.exceptions.SqlExpressionError
 import com.harana.sdk.backend.models.flow.inference.{SqlInferenceWarning, SqlSchemaInferrer}
 import com.harana.sdk.backend.models.flow.utils.Logging
 import com.harana.sdk.shared.models.flow.actionobjects.SqlTransformerInfo

@@ -2,7 +2,7 @@ package com.harana.sdk.backend.models.flow.actionobjects
 
 import com.harana.sdk.backend.models.flow.ExecutionContext
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.{DataFrame, DataFrameColumnsGetter}
-import com.harana.sdk.backend.models.flow.actions.exceptions.{MultipleTypesReplacementError, ValueConversionError}
+import com.harana.sdk.backend.models.flow.actiontypes.exceptions.{MultipleTypesReplacementError, ValueConversionError}
 import com.harana.sdk.backend.models.flow.utils.SparkTypeConverter
 import com.harana.sdk.shared.models.flow.actionobjects.MissingValuesHandlerInfo.EmptyColumnsStrategy
 import com.harana.sdk.shared.models.flow.actionobjects.MissingValuesHandlerInfo.Strategy.{RemoveColumn, RemoveRow, ReplaceWithCustomValue, ReplaceWithMode}

@@ -2,7 +2,7 @@ package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.models
 
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.ProbabilisticClassifierParameters
 import com.harana.sdk.shared.models.flow.actionobjects.{SparkModelWrapperInfo, TransformerInfo}
-import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup, ParameterMap}
+import com.harana.sdk.shared.models.flow.parameters.{ParameterGroup, ParameterMap}
 
 trait RandomForestClassificationModelInfo extends TransformerInfo {
  val id = "5E45320A-D21C-4AC0-925C-82AED31B83D3"
@@ -20,7 +20,7 @@ trait VanillaRandomForestClassificationModelInfo extends SparkModelWrapperInfo w
 
   val id = "94CD2E91-C1E4-49D1-A1FD-6BF110628D1E"
 
-  val parameterGroups = List.empty[ParameterGroup]
+  override val parameterGroups = List.empty[ParameterGroup]
 
   val specificParameters = Array(
     featuresColumnParameter,

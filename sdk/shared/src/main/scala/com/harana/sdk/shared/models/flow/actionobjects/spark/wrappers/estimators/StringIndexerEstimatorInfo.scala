@@ -1,8 +1,7 @@
 package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimators
 
-import com.harana.sdk.shared.models.flow.ActionObjectInfo
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.MultiColumnParameters.SingleOrMultiColumnChoices.SingleColumnChoice
-import com.harana.sdk.shared.models.flow.actionobjects.{EstimatorInfo, SparkMultiColumnEstimatorWrapperInfo}
+import com.harana.sdk.shared.models.flow.actionobjects.{ActionObjectInfo, EstimatorInfo, SparkMultiColumnEstimatorWrapperInfo}
 import com.harana.sdk.shared.models.flow.parameters.{Parameter, Parameters}
 import com.harana.sdk.shared.models.flow.utils.Id.fromString
 

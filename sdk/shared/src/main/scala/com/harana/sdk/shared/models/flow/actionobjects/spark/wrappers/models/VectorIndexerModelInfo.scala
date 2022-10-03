@@ -11,5 +11,5 @@ trait VectorIndexerModelInfo extends TransformerInfo with Parameters {
 }
 
 object VectorIndexerModelInfo extends VectorIndexerModelInfo {
-  val parameterGroups = List.empty[ParameterGroup]
+  override val parameterGroups = List.empty[ParameterGroup]
 }

@@ -2,13 +2,13 @@ package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameter
 
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
-import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup, Parameters, SingleColumnCreatorParameter}
+import com.harana.sdk.shared.models.flow.parameters.{ParameterGroup, Parameters, SingleColumnCreatorParameter}
 
 import scala.language.reflectiveCalls
 
 trait HasOptionalQuantilesColumnParameter extends Parameters {
 
-  val optionalQuantilesColumnParameter = new ChoiceParameter[OptionalQuantilesColumnChoice.QuantilesColumnOption]("use custom quantiles",
+  val optionalQuantilesColumnParameter = new ChoiceParameter[OptionalQuantilesColumnChoice.QuantilesColumnOption]("use-custom-quantiles",
     default = Some(OptionalQuantilesColumnChoice.QuantilesColumnNoOption())
   )
 
@@ -25,12 +25,12 @@ object OptionalQuantilesColumnChoice {
 
   case class QuantilesColumnYesOption() extends QuantilesColumnOption {
     val name = "yes"
-    val quantilesColumnParameter = SingleColumnCreatorParameter("quantiles column", default = Some("quantiles"))
-    val parameterGroups = List(ParameterGroup(None, quantilesColumnParameter))
+    val quantilesColumnParameter = SingleColumnCreatorParameter("quantiles-column", default = Some("quantiles"))
+    override val parameterGroups = List(ParameterGroup(None, quantilesColumnParameter))
   }
 
   case class QuantilesColumnNoOption() extends QuantilesColumnOption {
     val name = "no"
-    val parameterGroups = List.empty[ParameterGroup]
+    override val parameterGroups = List.empty[ParameterGroup]
   }
 }

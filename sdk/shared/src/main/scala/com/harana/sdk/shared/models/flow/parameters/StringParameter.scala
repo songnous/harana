@@ -19,3 +19,7 @@ case class StringParameter(name: String,
 
   override def replicate(name: String) = copy(name = name)
 }
+
+object StringParameter {
+  implicit val valueMapping = new Parameter.Values[StringParameter, String]
+}

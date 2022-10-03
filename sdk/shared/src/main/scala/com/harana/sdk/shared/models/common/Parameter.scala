@@ -39,7 +39,6 @@ object Parameter {
   implicit val email = parameterValue[Email]
   implicit val emoji = parameterValue[Emoji]
   implicit val file = parameterValue[File]
-  implicit val geoAddress = parameterValue[GeoAddress]
   implicit val geoCoordinate = parameterValue[GeoCoordinate]
   implicit val geoLocation = parameterValue[GeoLocation]
   implicit val html = parameterValue[Html]
@@ -187,14 +186,6 @@ object Parameter {
                   allowFiles: scala.Boolean = true,
                   validators: List[ParameterValidator] = List()) extends Parameter {
     type Value = ParameterValue.String
-  }
-
-  @JsonCodec
-  case class GeoAddress(name: ParameterName,
-                        default: Option[ParameterValue.GeoAddress] = None,
-                        required:  scala.Boolean = false,
-                        validators: List[ParameterValidator] = List()) extends Parameter {
-    type Value = ParameterValue.GeoAddress
   }
 
   @JsonCodec

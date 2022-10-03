@@ -4,8 +4,7 @@ import com.harana.sdk.backend.models.flow.{ExecutionContext, Knowledge, Method1T
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.report.CommonTablesGenerators
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
-import com.harana.sdk.shared.models.flow.ActionObjectInfo
-import com.harana.sdk.shared.models.flow.actionobjects.{EvaluatorInfo, MetricValue}
+import com.harana.sdk.shared.models.flow.actionobjects.{ActionObjectInfo, EvaluatorInfo, MetricValue}
 import com.harana.sdk.shared.models.flow.parameters.Parameters
 import com.harana.sdk.shared.models.flow.report.ReportType
 

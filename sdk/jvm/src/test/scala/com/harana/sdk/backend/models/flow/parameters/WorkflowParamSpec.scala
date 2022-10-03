@@ -1,7 +1,7 @@
 package com.harana.sdk.backend.models.flow.parameters
 
-import com.harana.sdk.backend.models.flow.actions.custom.Sink
-import com.harana.sdk.backend.models.flow.actions.custom.Source
+import com.harana.sdk.backend.models.flow.actiontypes.custom.Sink
+import com.harana.sdk.backend.models.flow.actiontypes.custom.Source
 import com.harana.sdk.shared.models.flow.parameters.WorkflowParameter
 import com.harana.sdk.shared.models.flow.parameters.custom.InnerWorkflow
 import io.circe.Json
@@ -12,7 +12,7 @@ class WorkflowParamSpec extends AbstractParameterSpec[InnerWorkflow, WorkflowPar
   def className = "WorkflowParameter"
 
   def paramFixture: (WorkflowParameter, Json) = {
-      val param = WorkflowParameter("Workflow parameter name", Some(description))
+      val param = WorkflowParameter("workflow-parameter-name", Some(description))
     val expectedJson = Map(
                           "type" -> Json.fromString("workflow"),
                           "name" -> Json.fromString(param.name),

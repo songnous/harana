@@ -16,5 +16,5 @@ trait BinarizerInfo extends TransformerInfo with Parameters {
 }
 
 object BinarizerInfo extends BinarizerInfo {
-  val parameterGroups = List.empty[ParameterGroup]
+  override val parameterGroups = List.empty[ParameterGroup]
 }

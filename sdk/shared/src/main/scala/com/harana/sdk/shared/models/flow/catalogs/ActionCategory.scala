@@ -30,11 +30,8 @@ object ActionCategory {
   type Id = utils.Id
   val Id = utils.Id
 
-  implicit val keyEncoder: KeyEncoder[ActionCategory] =
-    (key: ActionCategory) => key.id.toString
-
-  implicit val keyDecoder: KeyDecoder[ActionCategory] = (s: String) =>
-    allCategories.get(s)
+  implicit val keyEncoder: KeyEncoder[ActionCategory] = (key: ActionCategory) => key.id.toString
+  implicit val keyDecoder: KeyDecoder[ActionCategory] = (s: String) => allCategories.get(s)
 
   object IO extends ActionCategory("5a39e324-15f4-464c-83a5-2d7fba2858aa", "Input/Output", SortPriority.coreDefault)
   object Action extends ActionCategory("f0202a40-7fe7-4d11-bfda-b11b2199cc12", "Action", IO.priority.nextCore)
@@ -62,7 +59,7 @@ object ActionCategory {
   object UserDefined extends ActionCategory("9a9c8c50-fcc6-44d5-90f1-967ef3295ded", "User defined", ML.priority.nextCore)
   object Other extends ActionCategory("57c7a964-0f53-43cb-af6d-b6c0f1f9d9bc", "Other", UserDefined.priority.nextCore)
 
-  val allCategories = Seq(
+  lazy val allCategories = Seq(
     IO, Action, SetAction, Filtering, Transformation, Transformation.Custom, Transformation.FeatureConversion, Transformation.FeatureScaling,
     Transformation.TextProcessing, ML, ML.HyperOptimization, ML.Regression, ML.Classification, ML.Clustering, ML.FeatureSelection, ML.DimensionalityReduction,
     ML.Recommendation, ML.ModelEvaluation, UserDefined, Other

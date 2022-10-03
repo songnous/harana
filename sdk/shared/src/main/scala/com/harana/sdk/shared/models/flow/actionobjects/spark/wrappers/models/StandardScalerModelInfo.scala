@@ -12,5 +12,5 @@ trait StandardScalerModelInfo extends TransformerInfo with Parameters {
 }
 
 object StandardScalerModelInfo extends StandardScalerModelInfo {
-  val parameterGroups = List.empty[ParameterGroup]
+  override val parameterGroups = List.empty[ParameterGroup]
 }

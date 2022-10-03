@@ -11,7 +11,7 @@ class SaveToLibraryParamSpec extends AbstractParameterSpec[String, SaveToLibrary
 
   def paramFixture: (SaveToLibraryParameter, Json) = {
     val description  = "Save parameter description"
-    val param        = SaveToLibraryParameter("Save parameter name", Some(description))
+    val param        = SaveToLibraryParameter("save-parameter-name", Some(description))
     val expectedJson = Map(
                           "type"        -> Json.fromString("saveToLibrary"),
                           "name"        -> Json.fromString(param.name),

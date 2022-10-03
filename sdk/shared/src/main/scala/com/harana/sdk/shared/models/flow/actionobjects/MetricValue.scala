@@ -1,6 +1,5 @@
 package com.harana.sdk.shared.models.flow.actionobjects
 
-import com.harana.sdk.shared.models.flow.ActionObjectInfo
 import com.harana.sdk.shared.models.flow.report.{ReportType, Table}
 import com.harana.sdk.shared.models.flow.utils.{ColumnType, DoubleUtils}
 import io.circe.generic.JsonCodec

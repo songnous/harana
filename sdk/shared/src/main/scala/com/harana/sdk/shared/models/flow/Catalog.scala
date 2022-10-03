@@ -5,21 +5,21 @@ import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.evaluators
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.models._
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.transformers._
 import com.harana.sdk.shared.models.flow.actionobjects._
-import com.harana.sdk.shared.models.flow.actions.custom.{SinkInfo, SourceInfo}
-import com.harana.sdk.shared.models.flow.actions.read.{ReadDatasourceInfo, ReadTransformerInfo}
-import com.harana.sdk.shared.models.flow.actions.spark.wrappers.estimators._
-import com.harana.sdk.shared.models.flow.actions.spark.wrappers.evaluators.{CreateBinaryClassificationEvaluatorInfo, CreateMulticlassClassificationEvaluatorInfo, CreateRegressionEvaluatorInfo}
-import com.harana.sdk.shared.models.flow.actions.spark.wrappers.transformers._
-import com.harana.sdk.shared.models.flow.actions.write.{WriteDatasourceInfo, WriteTransformerInfo}
-import com.harana.sdk.shared.models.flow.actions._
+import com.harana.sdk.shared.models.flow.actiontypes.custom.{SinkInfo, SourceInfo}
+import com.harana.sdk.shared.models.flow.actiontypes.read.{ReadDatasourceInfo, ReadTransformerInfo}
+import com.harana.sdk.shared.models.flow.actiontypes.spark.wrappers.estimators._
+import com.harana.sdk.shared.models.flow.actiontypes.spark.wrappers.evaluators.{CreateBinaryClassificationEvaluatorInfo, CreateMulticlassClassificationEvaluatorInfo, CreateRegressionEvaluatorInfo}
+import com.harana.sdk.shared.models.flow.actiontypes.spark.wrappers.transformers._
+import com.harana.sdk.shared.models.flow.actiontypes.write.{WriteDatasourceInfo, WriteTransformerInfo}
+import com.harana.sdk.shared.models.flow.actiontypes._
 import com.harana.sdk.shared.models.flow.utils.Id
 
 import scala.collection.mutable
 
 object Catalog {
 
-  val actionsMap = mutable.Map.empty[Id, ActionInfo]
-  def registerAction(ai: ActionInfo) = {
+  val actionsMap = mutable.Map.empty[Id, ActionTypeInfo]
+  def registerAction(ai: ActionTypeInfo) = {
     actionsMap += ai.id -> ai
   }
 

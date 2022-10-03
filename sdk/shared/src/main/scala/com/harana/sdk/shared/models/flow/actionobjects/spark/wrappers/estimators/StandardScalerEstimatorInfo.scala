@@ -7,13 +7,13 @@ trait StandardScalerEstimatorInfo extends EstimatorInfo with Parameters {
 
   val id = "0772BF36-7EA7-4814-8B49-8BF1E9A67052"
 
-  val withMeanParameter = BooleanParameter("with mean", default = Some(false))
-  val withStdParameter = BooleanParameter("with std", default = Some(true))
+  val withMeanParameter = BooleanParameter("with-mean", default = Some(false))
+  val withStdParameter = BooleanParameter("with-std", default = Some(true))
 
   val specificParameters = Array[Parameter[_]](withMeanParameter, withStdParameter)
 
 }
 
 object StandardScalerEstimatorInfo extends StandardScalerEstimatorInfo {
-  val parameterGroups = List(ParameterGroup(None, specificParameters.toList: _*))
+  override val parameterGroups = List(ParameterGroup(None, specificParameters.toList: _*))
 }

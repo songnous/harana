@@ -15,7 +15,7 @@ import java.time.Instant
 @JsonCodec
 case class FlowExecution(flowId: FlowId,
                          actionExecutions: List[ActionExecution],
-                         outputVariables: Map[ActionInfo.Id, List[EnvironmentVariable]],
+                         outputVariables: Map[ActionTypeInfo.Id, List[EnvironmentVariable]],
                          sparkMetrics: Option[SparkMetrics],
                          startTime: Option[Instant],
                          acceptedTime: Option[Instant],

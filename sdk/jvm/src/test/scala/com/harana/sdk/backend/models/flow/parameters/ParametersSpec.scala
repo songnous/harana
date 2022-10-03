@@ -1,10 +1,10 @@
 package com.harana.sdk.backend.models.flow.parameters
 
 import com.harana.sdk.backend.models.flow.UnitSpec
-import com.harana.sdk.shared.models.flow.actions.inout.InputStorageTypeChoice.File
+import com.harana.sdk.shared.models.flow.actiontypes.inout.InputStorageTypeChoice.File
 import com.harana.sdk.shared.models.designer.flow.parameters._
 import com.harana.sdk.shared.models.flow.exceptions.FlowError
-import com.harana.sdk.shared.models.flow.parameters.{NumericParameter, Parameter, ParameterMap, ParameterPair, ParameterType, Parameters}
+import com.harana.sdk.shared.models.flow.parameters.{NumericParameter, Parameter, ParameterGroup, ParameterMap, ParameterPair, ParameterType, Parameters}
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.parameters.exceptions.ParamValueNotProvidedError
@@ -257,9 +257,9 @@ object ParametersSpec extends UnitSpec {
   val nameOfParam2 = "name of param2"
 
   case class WithParameters() extends Parameters {
-    val param1 = MockParameter("name of param1", default = Some(defaultForParam1))
+    val param1 = MockParameter("name-of-param1", default = Some(defaultForParam1))
     val param2 = MockParameter(nameOfParam2)
-    val parameterGroups = List(ParameterGroup(None, param2, param1))
+    override val parameterGroups = List(ParameterGroup(None, param2, param1))
 
     def set1(v: Int) = set(param1 -> v)
     def set2(v: Int) = set(param2 -> v)
@@ -277,7 +277,7 @@ object ParametersSpec extends UnitSpec {
   case class ParametersWithChoice() extends Parameters {
     val choiceParameter = ChoiceParameter[ChoiceWithRepeatedParameter]("choice")
     def setChoice(v: ChoiceWithRepeatedParameter) = set(choiceParameter, v)
-    val parameterGroups = List(ParameterGroup(None, choiceParameter))
+    override val parameterGroups = List(ParameterGroup(None, choiceParameter))
   }
 
   sealed trait ChoiceWithRepeatedParameter extends Choice {
@@ -287,13 +287,13 @@ object ParametersSpec extends UnitSpec {
   case class ChoiceOne() extends ChoiceWithRepeatedParameter {
     val name = "one"
     val numericParameter = NumericParameter("x"))
-    val parameterGroups = List(ParameterGroup(None, numericParameter))
+    override val parameterGroups = List(ParameterGroup(None, numericParameter))
   }
 
   case class ChoiceTwo() extends ChoiceWithRepeatedParameter {
     val name = "two"
     val numericParameter = NumericParameter("x")
-    val parameterGroups = List(ParameterGroup(None, numericParameter))
+    override val parameterGroups = List(ParameterGroup(None, numericParameter))
   }
 
   object DeclareParametersFixtures {
@@ -301,25 +301,25 @@ object ParametersSpec extends UnitSpec {
 
     class ParametersFromOutside extends Parameters {
       val nameParameter = MockParameter("name")
-      val parameterGroups = List(ParameterGroup(None, outsideParameter, nameParameter))
+      override val parameterGroups = List(ParameterGroup(None, outsideParameter, nameParameter))
     }
 
     class ParametersWithNotUniqueNames extends Parameters {
       val param1 = MockParameter("some name")
       val param2 = MockParameter(param1.name)
-      val parameterGroups = List(ParameterGroup(None, param1, param2))
+      override val parameterGroups = List(ParameterGroup(None, param1, param2))
     }
 
     class NotparametersDeclared extends Parameters {
       val param1 = MockParameter("some name")
       val param2 = MockParameter("some other name")
-      val parameterGroups = List(ParameterGroup(None, param1))
+      override val parameterGroups = List(ParameterGroup(None, param1))
     }
 
     class ParametersRepeated extends Parameters {
       val param1 = MockParameter("some name")
       val param2 = MockParameter("some other name")
-      val parameterGroups = List(ParameterGroup(None, param1, param2, param1))
+      override val parameterGroups = List(ParameterGroup(None, param1, param2, param1))
     }
   }
 }

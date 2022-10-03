@@ -4,6 +4,7 @@ import com.harana.sdk.shared.models.flow.actionobjects.descriptions.HasInference
 import com.harana.sdk.shared.models.flow.exceptions.{FlowError, FlowMultiError}
 import com.harana.sdk.shared.models.flow.parameters.exceptions.ParamValueNotProvidedError
 import io.circe.Json
+import shapeless.HMap
 
 trait Parameters extends Serializable with HasInferenceResult {
 

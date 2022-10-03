@@ -9,7 +9,7 @@ import com.harana.sdk.shared.models.flow.parameters.ParameterMap
   */
 abstract class StringIndexingWrapperModelInfo(private var wrappedModel: SparkModelWrapperInfo) extends TransformerInfo {
 
-  val parameterGroups = wrappedModel.parameterGroups
+  override val parameterGroups = wrappedModel.parameterGroups
 
   override def paramMap: ParameterMap = wrappedModel.paramMap
   override def defaultParamMap: ParameterMap = wrappedModel.defaultParamMap

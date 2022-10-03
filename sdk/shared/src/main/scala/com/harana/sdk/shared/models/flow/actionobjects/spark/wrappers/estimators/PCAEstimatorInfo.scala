@@ -1,9 +1,8 @@
 package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimators
 
 import com.harana.sdk.shared.models.flow.actionobjects.EstimatorInfo
-import com.harana.sdk.shared.models.flow.parameters
-import com.harana.sdk.shared.models.flow.parameters.{IntParameter, Parameter, ParameterGroup, Parameters}
 import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
+import com.harana.sdk.shared.models.flow.parameters.{IntParameter, Parameter, ParameterGroup, Parameters}
 
 trait PCAEstimatorInfo extends EstimatorInfo with Parameters {
 
@@ -17,5 +16,5 @@ trait PCAEstimatorInfo extends EstimatorInfo with Parameters {
 }
 
 object PCAEstimatorInfo extends PCAEstimatorInfo {
-  val parameterGroups = List.empty[ParameterGroup]
+  override val parameterGroups = List.empty[ParameterGroup]
 }

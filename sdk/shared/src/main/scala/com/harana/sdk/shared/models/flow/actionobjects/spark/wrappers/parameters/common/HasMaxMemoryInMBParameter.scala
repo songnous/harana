@@ -7,6 +7,6 @@ import scala.language.reflectiveCalls
 
 trait HasMaxMemoryInMBParameter extends Parameters {
 
-  val maxMemoryInMBParameter = IntParameter("max memory", default = Some(256), validator = RangeValidator.positiveIntegers)
+  val maxMemoryInMBParameter = IntParameter("max-memory", default = Some(256), validator = RangeValidator.positiveIntegers)
 
 }

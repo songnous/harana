@@ -5,7 +5,7 @@ import org.apache.spark.sql.Row
 import org.apache.spark.sql.types._
 import com.harana.sdk.backend.models.flow.{IntegratedTestSupport, Knowledge}
 import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.evaluators.BinaryClassificationEvaluator
-import com.harana.sdk.backend.models.flow.actions.exceptions.{ColumnDoesNotExistError, WrongColumnTypeError}
+import com.harana.sdk.backend.models.flow.actiontypes.exceptions.{ColumnDoesNotExistError, WrongColumnTypeError}
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.evaluators.BinaryClassificationEvaluatorInfo._
 import com.harana.sdk.shared.models.flow.parameters.selections.NameSingleColumnSelection
 

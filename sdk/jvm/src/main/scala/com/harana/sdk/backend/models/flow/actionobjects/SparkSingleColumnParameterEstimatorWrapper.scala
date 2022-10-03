@@ -20,7 +20,7 @@ abstract class SparkSingleColumnParameterEstimatorWrapper[MD <: ml.Model[MD] { v
     with HasSingleInPlaceParameter
     with HasSpecificParameters {
 
-  val parameterGroups = {
+  override val parameterGroups = {
     val parameters =
       if (specificParameters == null) List(inputColumnParameter, singleInPlaceChoiceParameter)
       else List(inputColumnParameter, singleInPlaceChoiceParameter) ++ specificParameters

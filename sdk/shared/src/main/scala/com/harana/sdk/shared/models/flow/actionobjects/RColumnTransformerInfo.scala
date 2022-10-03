@@ -11,7 +11,7 @@ trait RColumnTransformerInfo extends CustomCodeColumnTransformerInfo {
       |  return(column)
       |}""".stripMargin
 
-  val codeParameter = CodeSnippetParameter("column action code", default = Some(default), language = CodeSnippetLanguage.R)
+  val codeParameter = CodeSnippetParameter("code", default = Some(default), language = CodeSnippetLanguage.R)
   val specificParameters = Array(codeParameter, targetTypeParameter)
 
 }

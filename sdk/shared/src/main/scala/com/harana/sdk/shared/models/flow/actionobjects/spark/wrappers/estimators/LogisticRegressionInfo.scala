@@ -1,7 +1,6 @@
 package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimators
 
-import com.harana.sdk.shared.models.flow.ActionObjectInfo
-import com.harana.sdk.shared.models.flow.actionobjects.EstimatorInfo
+import com.harana.sdk.shared.models.flow.actionobjects.{ActionObjectInfo, EstimatorInfo}
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common._
 import com.harana.sdk.shared.models.flow.parameters.ParameterGroup
 
@@ -23,7 +22,7 @@ trait LogisticRegressionInfo
 
   override val maxIterationsDefault = 100
 
-  val parameterGroups = List(ParameterGroup(None,
+  override val parameterGroups = List(ParameterGroup(None,
     elasticNetParameter,
     fitInterceptParameter,
     maxIterationsParameter,

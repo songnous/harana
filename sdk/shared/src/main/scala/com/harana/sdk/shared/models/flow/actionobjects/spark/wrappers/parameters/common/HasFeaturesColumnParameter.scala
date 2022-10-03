@@ -7,7 +7,7 @@ import scala.language.reflectiveCalls
 
 trait HasFeaturesColumnParameter extends Parameters {
 
-  val featuresColumnParameter = SingleColumnSelectorParameter("features column", default = Some(NameSingleColumnSelection("features")), portIndex = 0)
+  val featuresColumnParameter = SingleColumnSelectorParameter("features-column", default = Some(NameSingleColumnSelection("features")), portIndex = 0)
   def setFeaturesColumn(value: SingleColumnSelection): this.type = set(featuresColumnParameter, value)
 
 }

@@ -10,7 +10,7 @@ class DynamicParameterSpec extends AbstractParameterSpec[Json, DynamicParameter]
   def className = "DynamicParameter"
 
   def paramFixture: (DynamicParameter, Json) = {
-      val param       = new DynamicParameter("Dynamic parameter name", inputPort = 4)
+      val param       = new DynamicParameter("dynamic-parameter-name", inputPort = 4)
     val json        = Map(
                         "type"        -> Json.fromString("dynamic"),
                         "name"        -> Json.fromString(param.name),

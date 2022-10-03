@@ -1,8 +1,8 @@
 package com.harana.sdk.shared.models.flow.actionobjects
 
-import SortColumnParameter.{columnNameParameterName, descendingFlagParameterName}
+import com.harana.sdk.shared.models.flow.actionobjects.SortColumnParameter.{columnNameParameterName, descendingFlagParameterName}
 import com.harana.sdk.shared.models.flow.parameters.selections.{IndexSingleColumnSelection, NameSingleColumnSelection, SingleColumnSelection}
-import com.harana.sdk.shared.models.flow.parameters.{BooleanParameter, ParameterGroup, Parameters, ParametersSequence, SingleColumnSelectorParameter}
+import com.harana.sdk.shared.models.flow.parameters._
 
 trait SortTransformerInfo extends TransformerInfo {
 
@@ -11,7 +11,7 @@ trait SortTransformerInfo extends TransformerInfo {
   val columnsParameter = ParametersSequence[SortColumnParameter]("sort columns")
   def getColumns = $(columnsParameter)
   def setColumns(sortColumnParameters: Seq[SortColumnParameter]): this.type = set(columnsParameter, sortColumnParameters)
-  val parameterGroups = List(ParameterGroup(None, columnsParameter))
+  override val parameterGroups = List(ParameterGroup(None, columnsParameter))
 
 }
 
@@ -28,7 +28,7 @@ class SortColumnParameter extends Parameters {
   def isDescending: Boolean = getDescending
   def setDescending(desc: Boolean): this.type = set(descendingParameter, desc)
 
-  val parameterGroups = List(ParameterGroup(None, columnNameParameter, descendingParameter))
+  override val parameterGroups = List(ParameterGroup(None, columnNameParameter, descendingParameter))
 }
 
 object SortColumnParameter {

@@ -1,4 +1,4 @@
-package com.harana.sdk.shared.models.flow.parameters.multivalue
+package com.harana.sdk.shared.models.flow.parameters
 
 import io.circe.generic.JsonCodec
 

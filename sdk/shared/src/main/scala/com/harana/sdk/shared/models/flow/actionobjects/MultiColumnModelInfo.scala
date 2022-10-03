@@ -1,9 +1,8 @@
 package com.harana.sdk.shared.models.flow.actionobjects
 
-import com.harana.sdk.shared.models.flow.ActionObjectInfo
+import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.HasSpecificParameters
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.MultiColumnParameters.MultiColumnInPlaceChoice
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.MultiColumnParameters.SingleOrMultiColumnChoices.MultiColumnChoice
-import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.HasSpecificParameters
 import com.harana.sdk.shared.models.flow.parameters.ParameterGroup
 import com.harana.sdk.shared.models.flow.parameters.selections.MultipleColumnSelection
 

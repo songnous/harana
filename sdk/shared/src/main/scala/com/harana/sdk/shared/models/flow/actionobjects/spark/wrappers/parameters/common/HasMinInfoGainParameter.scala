@@ -7,6 +7,6 @@ import scala.language.reflectiveCalls
 
 trait HasMinInfoGainParameter extends Parameters {
 
-  val minInfoGainParameter = DoubleParameter("min information gain", default = Some(0.0), validator = RangeValidator(0.0, Double.MaxValue))
+  val minInfoGainParameter = DoubleParameter("min-information-gain", default = Some(0.0), validator = RangeValidator(0.0, Double.MaxValue))
 
 }

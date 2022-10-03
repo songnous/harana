@@ -1,8 +1,7 @@
 package com.harana.sdk.backend.models.flow.json.workflow.examples
 
 import com.harana.sdk.shared.models.designer.flow.flows.{Workflow, WorkflowWithVariables}
-import com.harana.sdk.backend.models.flow.Action
-import com.harana.sdk.backend.models.flow.Action
+import com.harana.sdk.backend.models.flow.actiontypes.ActionType
 import com.harana.sdk.shared.models.designer.flow.Variables
 import com.harana.sdk.shared.models.flow.FlowType
 import com.harana.sdk.shared.models.flow.graph.FlowGraph.FlowNode
@@ -20,7 +19,7 @@ abstract class WorkflowCreator {
   def nodes: Seq[FlowNode]
   def edges: Seq[Edge]
   def experimentName: String
-  def node(action: Action): FlowNode = Node(UUID.randomUUID(), action)
+  def node(action: ActionType): FlowNode = Node(UUID.randomUUID(), action)
 
   def buildWorkflow() = {
     val graph = FlowGraph(nodes.toSet, edges.toSet)

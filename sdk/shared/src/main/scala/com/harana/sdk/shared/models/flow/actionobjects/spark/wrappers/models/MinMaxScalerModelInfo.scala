@@ -15,5 +15,5 @@ trait MinMaxScalerModelInfo extends TransformerInfo with MinMaxParameters {
 }
 
 object MinMaxScalerModelInfo extends MinMaxScalerModelInfo {
-  val parameterGroups = List.empty[ParameterGroup]
+  override val parameterGroups = List.empty[ParameterGroup]
 }

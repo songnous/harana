@@ -2,9 +2,9 @@ package com.harana.sdk.backend.models.flow.actionobjects
 
 import com.harana.sdk.backend.models.flow.{ExecutionContext, Knowledge, TestSupport, UnitSpec}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
-import com.harana.sdk.backend.models.flow.actions.exceptions.ColumnDoesNotExistError
+import com.harana.sdk.backend.models.flow.actiontypes.exceptions.ColumnDoesNotExistError
 import com.harana.sdk.backend.models.flow.ExecutionContext
-import com.harana.sdk.backend.models.flow.actions.exceptions.ColumnDoesNotExistError
+import com.harana.sdk.backend.models.flow.actiontypes.exceptions.ColumnDoesNotExistError
 import com.harana.sdk.shared.models.flow.actionobjects.MetricValue
 import com.harana.sdk.shared.models.flow.parameters.{DoubleParameter, SingleColumnSelectorParameter}
 import com.harana.sdk.shared.models.flow.parameters.selections.{NameSingleColumnSelection, SingleColumnSelection}
@@ -70,7 +70,7 @@ object SparkEvaluatorWrapperSpec {
     val column = SingleColumnSelectorParameter(name = "column", default = Some(NameSingleColumnSelection("column")), portIndex = 0)
     def setColumnWrapper(value: SingleColumnSelection): this.type = set(column, value)
 
-    val parameterGroups = List(ParameterGroup(None, paramWrapper, column))
+    override val parameterGroups = List(ParameterGroup(None, paramWrapper, column))
 
     def getMetricName = metricName
 

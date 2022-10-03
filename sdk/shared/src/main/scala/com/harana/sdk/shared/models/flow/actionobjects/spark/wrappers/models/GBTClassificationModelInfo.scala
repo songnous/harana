@@ -8,7 +8,7 @@ trait GBTClassificationModelInfo extends TransformerInfo {
   val id = "423F9823-706B-4CEA-BD6E-45F749DD5570"
 
   val model = new VanillaDecisionTreeClassificationModelInfo {}
-  val parameterGroups = model.parameterGroups
+  override val parameterGroups = model.parameterGroups
 
   override def paramMap: ParameterMap = model.paramMap
 
@@ -17,5 +17,5 @@ trait GBTClassificationModelInfo extends TransformerInfo {
 
 trait VanillaGBTClassificationModelInfo extends SparkModelWrapperInfo with PredictorParameters {
   val id = "7C3C18A8-65D5-4D6C-98CA-EF71D510CAFA"
-  val parameterGroups = List(ParameterGroup(None, featuresColumnParameter, predictionColumnParameter))
+  override val parameterGroups = List(ParameterGroup(None, featuresColumnParameter, predictionColumnParameter))
 }

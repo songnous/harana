@@ -17,7 +17,6 @@ import io.circe.{Decoder, Encoder}
 case class DataSource(title: String,
 											description: String,
 											dataSourceType: DataSourceTypeId,
-											parameters: List[ParameterGroup],
 											path: Option[String],
 											createdBy: Option[UserId],
 											created: Instant,
@@ -39,7 +38,7 @@ case class DataSource(title: String,
 object DataSource {
 	type DataSourceId = String
 
-	def apply(title: String, description: String, dataSourceType: DataSourceTypeId, parameters: List[ParameterGroup], path: Option[String], createdBy: Option[UserId], visibility: Visibility, background: Option[Background], tags: Set[String]): DataSource = {
-		apply(title, description, dataSourceType, parameters, path, createdBy, Instant.now, createdBy, Instant.now, None, Random.long, Status.Active, visibility, 1L, background, tags, Map())
+	def apply(title: String, description: String, dataSourceType: DataSourceTypeId, path: Option[String], createdBy: Option[UserId], visibility: Visibility, background: Option[Background], tags: Set[String]): DataSource = {
+		apply(title, description, dataSourceType, path, createdBy, Instant.now, createdBy, Instant.now, None, Random.long, Status.Active, visibility, 1L, background, tags, Map())
 	}
 }

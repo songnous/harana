@@ -6,7 +6,7 @@ import scala.language.reflectiveCalls
 
 trait HasOutputColumnParameter extends Parameters {
 
-  val outputColumnParameter = SingleColumnCreatorParameter("output column")
+  val outputColumnParameter = SingleColumnCreatorParameter("output-column")
   def setOutputColumn(value: String): this.type = set(outputColumnParameter, value)
 
 }

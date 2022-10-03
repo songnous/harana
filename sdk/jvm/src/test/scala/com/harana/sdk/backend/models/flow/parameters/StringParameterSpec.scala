@@ -12,7 +12,7 @@ class StringParameterSpec extends AbstractParameterSpec[String, StringParameter]
   def className = "StringParameter"
 
   def paramFixture: (StringParameter, Json) = {
-    val param = flow.parameters.StringParameter("String parameter name", RegexValidator.AcceptAll)
+    val param = flow.parameters.StringParameter("parameter-name", RegexValidator.AcceptAll)
     val expectedJson = Map(
                           "type"        -> Json.fromString("string"),
                           "name"        -> Json.fromString(param.name),

@@ -1,7 +1,7 @@
 package com.harana.sdk.shared.models.flow.actionobjects.stringindexingwrapper
 
-import com.harana.sdk.shared.models.flow.actionobjects.{EstimatorInfo, SparkEstimatorWrapperInfo}
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.{HasLabelColumnParameter, HasPredictionColumnCreatorParameter}
+import com.harana.sdk.shared.models.flow.actionobjects.{EstimatorInfo, SparkEstimatorWrapperInfo}
 import com.harana.sdk.shared.models.flow.parameters.ParameterMap
 
 /** Some spark action assume their input was string-indexed. User-experience suffers from this requirement. We can work around it by wrapping
@@ -10,7 +10,7 @@ import com.harana.sdk.shared.models.flow.parameters.ParameterMap
   */
 abstract class StringIndexingEstimatorWrapperInfo(private var wrappedEstimator: SparkEstimatorWrapperInfo with HasLabelColumnParameter with HasPredictionColumnCreatorParameter) extends EstimatorInfo {
 
-  final val parameterGroups = wrappedEstimator.parameterGroups
+  final override val parameterGroups = wrappedEstimator.parameterGroups
 
   override def paramMap: ParameterMap = wrappedEstimator.paramMap
 

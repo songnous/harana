@@ -2,7 +2,7 @@ package com.harana.sdk.backend.models.flow.actionobjects.dataframe
 
 import com.harana.sdk.backend.models.flow.IntegratedTestSupport
 import org.apache.spark.sql.types._
-import com.harana.sdk.backend.models.flow.actions.exceptions.ColumnsDoNotExistError
+import com.harana.sdk.backend.models.flow.actiontypes.exceptions.ColumnsDoNotExistError
 import com.harana.sdk.shared.models.flow.parameters.selections.{IndexColumnSelection, MultipleColumnSelection, NameColumnSelection, TypeColumnSelection}
 import com.harana.sdk.shared.models.flow.utils.ColumnType
 

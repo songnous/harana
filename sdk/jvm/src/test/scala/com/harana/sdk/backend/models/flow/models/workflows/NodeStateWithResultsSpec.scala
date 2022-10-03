@@ -7,7 +7,7 @@ import com.harana.sdk.backend.models.flow.workflows.NodeStateWithResults
 import com.harana.sdk.backend.models.flow.inference.InferenceWarnings
 import com.harana.sdk.backend.models.flow.workflows.NodeStateWithResults
 import com.harana.sdk.shared.models.designer.flow
-import com.harana.sdk.shared.models.flow.ActionObjectInfo
+import com.harana.sdk.shared.models.flow.actionobjects.ActionObjectInfo
 import com.harana.sdk.shared.models.flow.exceptions.FlowError
 import com.harana.sdk.shared.models.flow.report.ReportContent
 import com.harana.sdk.shared.models.flow.utils.Entity

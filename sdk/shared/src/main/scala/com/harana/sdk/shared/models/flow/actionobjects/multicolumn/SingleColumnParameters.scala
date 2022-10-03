@@ -1,8 +1,8 @@
 package com.harana.sdk.shared.models.flow.actionobjects.multicolumn
 
-import SingleColumnParameters.SingleTransformInPlaceChoices.{NoInPlaceChoice, YesInPlaceChoice}
-import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup, SingleColumnCreatorParameter}
+import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.SingleColumnParameters.SingleTransformInPlaceChoices.{NoInPlaceChoice, YesInPlaceChoice}
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice
+import com.harana.sdk.shared.models.flow.parameters.{ParameterGroup, SingleColumnCreatorParameter}
 
 object SingleColumnParameters {
 
@@ -14,7 +14,7 @@ object SingleColumnParameters {
 
     case class YesInPlaceChoice() extends SingleColumnInPlaceChoice {
       val name = "replace input column"
-      val parameterGroups = List.empty[ParameterGroup]
+      override val parameterGroups = List.empty[ParameterGroup]
     }
 
     case class NoInPlaceChoice() extends SingleColumnInPlaceChoice {
@@ -24,7 +24,7 @@ object SingleColumnParameters {
       def getOutputColumn = $(outputColumnParameter)
       def setOutputColumn(columnName: String): this.type = set(outputColumnParameter, columnName)
 
-      val parameterGroups = List(ParameterGroup(None, outputColumnParameter))
+      override val parameterGroups = List(ParameterGroup(None, outputColumnParameter))
     }
   }
 }

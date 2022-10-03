@@ -4,8 +4,10 @@ import com.harana.sdk.backend.models.flow.Catalog.ActionObjectCatalog
 import com.harana.sdk.backend.models.flow.actionobjects.ActionObjectInfoMock
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
 import com.harana.sdk.backend.models.flow.actionobjects.ActionObjectInfoMock
+import com.harana.sdk.backend.models.flow.actiontypes.{ActionType, ActionTypeType0To1, ActionTypeType1To1, ActionTypeType2To1}
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
-import com.harana.sdk.shared.models.flow.{ActionInfo, ActionObjectInfo}
+import com.harana.sdk.shared.models.flow.ActionTypeInfo
+import com.harana.sdk.shared.models.flow.actionobjects.ActionObjectInfo
 import com.harana.sdk.shared.models.flow.parameters.Parameter
 import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
 import com.harana.sdk.shared.models.flow.utils.Id
@@ -26,13 +28,13 @@ object DClassesForActions {
 object ActionForPortTypes {
   import DClassesForActions._
 
-  class SimpleAction extends Action1To1[A1, A2] {
+  class SimpleActionType extends ActionTypeType1To1[A1, A2] {
 
     def execute(t0: A1)(context: ExecutionContext): A2 = ???
 
-    val id: Id = ActionInfo.Id.randomId
+    val id: Id = ActionTypeInfo.Id.randomId
     val name = ""
-      val parameterGroups = List.empty[ParameterGroup]
+      override val parameterGroups = List.empty[ParameterGroup]
 
     lazy val tTagTI_0: ru.TypeTag[A1] = ru.typeTag[A1]
     lazy val tTagTO_0: ru.TypeTag[A2] = ru.typeTag[A2]
@@ -44,8 +46,8 @@ class ActionSuite extends AnyFunSuite with TestSupport {
   test("It is possible to implement simple actions") {
     import DClassesForActions._
 
-    class PickOne extends Action2To1[A1, A2, A] {
-      val id: Id = ActionInfo.Id.randomId
+    class PickOne extends ActionTypeType2To1[A1, A2, A] {
+      val id: Id = ActionTypeInfo.Id.randomId
 
       val param = NumericParameter("param", None, RangeValidator.allInt)
       def setParam(int: Int): this.type = set(param -> int)
@@ -84,18 +86,18 @@ class ActionSuite extends AnyFunSuite with TestSupport {
 
     val mockedWarnings = mock[InferenceWarnings]
 
-    class GeneratorOfA extends Action0To1[A] {
-      val id = ActionInfo.Id.randomId
+    class GeneratorOfA extends ActionTypeType0To1[A] {
+      val id = ActionTypeInfo.Id.randomId
 
       def execute()(context: ExecutionContext): A                                             = ???
       override def inferKnowledge()(context: InferContext): (Knowledge[A], InferenceWarnings) = (Knowledge(A1(), A2()), mockedWarnings)
 
       val name = ""
-          val parameterGroups = List.empty[ParameterGroup]
+          override val parameterGroups = List.empty[ParameterGroup]
       lazy val tTagTO_0: ru.TypeTag[A] = ru.typeTag[A]
     }
 
-    val generator: Action = new GeneratorOfA
+    val generator: ActionType = new GeneratorOfA
 
     val h = new ActionObjectCatalog
     h.register[A1]()
@@ -109,13 +111,13 @@ class ActionSuite extends AnyFunSuite with TestSupport {
 
   test("Getting types required in input port") {
     import ActionForPortTypes._
-    val op = new SimpleAction
+    val op = new SimpleActionType
     assert(op.inputPorts == List(ru.typeTag[DClassesForActions.A1]))
   }
 
   test("Getting types required in output port") {
     import ActionForPortTypes._
-    val op = new SimpleAction
+    val op = new SimpleActionType
     assert(op.outputPorts == List(ru.typeTag[DClassesForActions.A2]))
   }
 }

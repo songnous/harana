@@ -1,9 +1,8 @@
 package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.transformers
 
 import com.harana.sdk.shared.models.flow.actionobjects.TransformerInfo
-import com.harana.sdk.shared.models.flow.parameters
-import com.harana.sdk.shared.models.flow.parameters.{IntParameter, Parameter, ParameterGroup, Parameters}
 import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
+import com.harana.sdk.shared.models.flow.parameters.{IntParameter, Parameter, ParameterGroup, Parameters}
 
 trait NGramTransformerInfo extends TransformerInfo with Parameters {
 
@@ -18,5 +17,5 @@ trait NGramTransformerInfo extends TransformerInfo with Parameters {
 }
 
 object NGramTransformerInfo extends NGramTransformerInfo {
-  val parameterGroups = List.empty[ParameterGroup]
+  override val parameterGroups = List.empty[ParameterGroup]
 }

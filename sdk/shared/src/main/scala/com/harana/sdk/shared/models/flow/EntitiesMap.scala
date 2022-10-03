@@ -1,5 +1,6 @@
 package com.harana.sdk.shared.models.flow
 
+import com.harana.sdk.shared.models.flow.actionobjects.ActionObjectInfo
 import com.harana.sdk.shared.models.flow.report.ReportContent
 import com.harana.sdk.shared.models.flow.utils.Id
 import io.circe.generic.JsonCodec

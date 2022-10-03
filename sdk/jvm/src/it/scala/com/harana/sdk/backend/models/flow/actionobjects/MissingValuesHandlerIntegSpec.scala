@@ -3,7 +3,7 @@ package com.harana.sdk.backend.models.flow.actionobjects
 import com.harana.sdk.backend.models.flow.IntegratedTestSupport
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.transformers.TransformerSerialization
-import com.harana.sdk.backend.models.flow.actions.exceptions.{MultipleTypesReplacementError, ValueConversionError}
+import com.harana.sdk.backend.models.flow.actiontypes.exceptions.{MultipleTypesReplacementError, ValueConversionError}
 import com.harana.sdk.shared.models.flow.actionobjects.MissingValuesHandlerInfo.{EmptyColumnsStrategy, MissingValueIndicatorChoice}
 import com.harana.sdk.shared.models.flow.parameters.exceptions.EmptyColumnPrefixNameError$
 import com.harana.sdk.shared.models.flow.parameters.selections.{IndexColumnSelection, IndexRangeColumnSelection, MultipleColumnSelection, TypeColumnSelection}

@@ -180,7 +180,7 @@ object CirceCodecs {
 	}
 
 	implicit val encodeBackground: Encoder[Background] = Encoder.instance[Background] { background =>
-		val name = background.getClass.getSimpleName 
+		val name = background.getClass.getSimpleName
 		val json = name match {
 			case "Hex" => deriveEncoder[Background.Hex].apply(background.asInstanceOf[Background.Hex])
 			case "HSL" => deriveEncoder[Background.HSL].apply(background.asInstanceOf[Background.HSL])
@@ -196,7 +196,6 @@ object CirceCodecs {
 			case "Boolean" => deriveDecoder[ParameterValue.Boolean].apply(value)
 			case "Decimal" => deriveDecoder[ParameterValue.Decimal].apply(value)
 			case "DecimalRange" => deriveDecoder[ParameterValue.DecimalRange].apply(value)
-			case "GeoAddress" => deriveDecoder[ParameterValue.GeoAddress].apply(value)
 			case "GeoCoordinate" => deriveDecoder[ParameterValue.GeoCoordinate].apply(value)
 			case "Instant" => deriveDecoder[ParameterValue.Instant].apply(value)
 			case "InstantRange" => deriveDecoder[ParameterValue.InstantRange].apply(value)
@@ -222,7 +221,6 @@ object CirceCodecs {
 			case "Boolean" => deriveEncoder[ParameterValue.Boolean].apply(parameter.asInstanceOf[ParameterValue.Boolean])
 			case "Decimal" => deriveEncoder[ParameterValue.Decimal].apply(parameter.asInstanceOf[ParameterValue.Decimal])
 			case "DecimalRange" => deriveEncoder[ParameterValue.DecimalRange].apply(parameter.asInstanceOf[ParameterValue.DecimalRange])
-			case "GeoAddress" => deriveEncoder[ParameterValue.GeoAddress].apply(parameter.asInstanceOf[ParameterValue.GeoAddress])
 			case "GeoCoordinate" => deriveEncoder[ParameterValue.GeoCoordinate].apply(parameter.asInstanceOf[ParameterValue.GeoCoordinate])
 			case "Instant" => deriveEncoder[ParameterValue.Instant].apply(parameter.asInstanceOf[ParameterValue.Instant])
 			case "InstantRange" => deriveEncoder[ParameterValue.InstantRange].apply(parameter.asInstanceOf[ParameterValue.InstantRange])
@@ -258,7 +256,6 @@ object CirceCodecs {
 			case "Email" => deriveDecoder[Parameter.Email].apply(content)
 			case "Emoji" => deriveDecoder[Parameter.Emoji].apply(content)
 			case "File" => deriveDecoder[Parameter.File].apply(content)
-			case "GeoAddress" => deriveDecoder[Parameter.GeoAddress].apply(content)
 			case "GeoCoordinate" => deriveDecoder[Parameter.GeoCoordinate].apply(content)
 			case "Html" => deriveDecoder[Parameter.Html].apply(content)
 			case "Image" => deriveDecoder[Parameter.Image].apply(content)
@@ -298,7 +295,6 @@ object CirceCodecs {
 			case "Email" => deriveEncoder[Parameter.Email].apply(parameter.asInstanceOf[Parameter.Email])
 			case "Emoji" => deriveEncoder[Parameter.Emoji].apply(parameter.asInstanceOf[Parameter.Emoji])
 			case "File" => deriveEncoder[Parameter.File].apply(parameter.asInstanceOf[Parameter.File])
-			case "GeoAddress" => deriveEncoder[Parameter.GeoAddress].apply(parameter.asInstanceOf[Parameter.GeoAddress])
 			case "GeoCoordinate" => deriveEncoder[Parameter.GeoCoordinate].apply(parameter.asInstanceOf[Parameter.GeoCoordinate])
 			case "Html" => deriveEncoder[Parameter.Html].apply(parameter.asInstanceOf[Parameter.Html])
 			case "Image" => deriveEncoder[Parameter.Image].apply(parameter.asInstanceOf[Parameter.Image])

@@ -7,6 +7,6 @@ import scala.language.reflectiveCalls
 
 trait HasNumTreesParameter extends Parameters {
 
-  val numTreesParameter = IntParameter("num trees", default = Some(20), validator = RangeValidator(begin = 1, end = Int.MaxValue, step = Some(1)))
+  val numTreesParameter = IntParameter("num-trees", default = Some(20), validator = RangeValidator(begin = 1, end = Int.MaxValue, step = Some(1)))
 
 }

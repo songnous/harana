@@ -8,7 +8,7 @@ trait LinearRegressionInfo extends EstimatorInfo with LinearRegressionParameters
 
   val id = "13B22557-FD3E-4C05-9F53-EACEE20297DD"
 
-  val parameterGroups = List(ParameterGroup(None,
+  override val parameterGroups = List(ParameterGroup(None,
     elasticNetParameter,
     fitInterceptParameter,
     maxIterationsParameter,

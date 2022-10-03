@@ -1,19 +1,23 @@
 package com.harana.sdk.backend.models.flow
 
+import com.harana.sdk.backend.models.flow.actiontypes.ActionType
 import com.harana.sdk.backend.models.flow.utils.catalog.GenericCatalog
 import com.harana.sdk.backend.models.flow.utils.catalog.exceptions.NoParameterlessConstructorInClassError
-import com.harana.sdk.shared.models.flow.{ActionInfo, ActionObjectInfo}
+import com.harana.sdk.shared.models.flow.parameters.Parameter
+import com.harana.sdk.shared.models.flow.ActionTypeInfo
+import com.harana.sdk.shared.models.flow.actionobjects.ActionObjectInfo
 import com.harana.sdk.shared.models.flow.utils.TypeUtils
+import com.harana.sdk.shared.utils.HMap
 
 import java.lang.reflect.Constructor
 import scala.reflect.ClassTag
 
 object Catalog {
 
-  class ActionCatalog extends GenericCatalog[Action]
+  class ActionCatalog extends GenericCatalog[ActionType]
   class ActionObjectCatalog extends GenericCatalog[ActionObjectInfo]
 
-  def actionForActionInfo[A <: ActionInfo](info: A)(implicit ct: ClassTag[A]): Action = {
+  def actionForActionInfo[A <: ActionTypeInfo](info: A)(implicit ct: ClassTag[A]): ActionType = {
     val className = info.getClass.getCanonicalName.replace("backend", "shared")
     val cls = Class.forName(className.substring(0, className.length - 4))
 
@@ -22,7 +26,6 @@ object Catalog {
       case None => throw NoParameterlessConstructorInClassError(cls.getSimpleName).toException
     }
 
-    TypeUtils.createInstance[Action](constructor.asInstanceOf[Constructor[Action]])
+    TypeUtils.createInstance[ActionType](constructor.asInstanceOf[Constructor[ActionType]])
   }
-
 }

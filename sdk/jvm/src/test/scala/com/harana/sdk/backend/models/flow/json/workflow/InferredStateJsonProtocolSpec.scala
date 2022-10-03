@@ -6,9 +6,10 @@ import com.harana.sdk.backend.models.flow.graph.{GraphKnowledge, NodeInferenceRe
 import com.harana.sdk.backend.models.flow.inference.{InferenceWarning, InferenceWarnings}
 import com.harana.sdk.backend.models.flow.workflows.InferredState
 import com.harana.sdk.shared.models.designer.flow.flows.Workflow
-import com.harana.sdk.shared.models.designer.flow.{graph}
+import com.harana.sdk.shared.models.designer.flow.graph
 import com.harana.sdk.shared.models.designer.flow.json.workflow.InferredStateJsonProtocol
-import com.harana.sdk.shared.models.flow.{ActionObjectInfo, ExecutionReport}
+import com.harana.sdk.shared.models.flow.ExecutionReport
+import com.harana.sdk.shared.models.flow.actionobjects.ActionObjectInfo
 import com.harana.sdk.shared.models.flow.actionobjects.descriptions.{DataFrameInferenceResult, ParametersInferenceResult}
 import com.harana.sdk.shared.models.flow.exceptions.FlowError
 import com.harana.sdk.shared.models.flow.graph.node.NodeStatus

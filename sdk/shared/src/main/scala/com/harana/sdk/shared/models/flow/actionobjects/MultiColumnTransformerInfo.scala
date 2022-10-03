@@ -1,13 +1,12 @@
 package com.harana.sdk.shared.models.flow.actionobjects
 
+import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.HasSpecificParameters
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.MultiColumnParameters.MultiColumnInPlaceChoices.MultiColumnYesInPlace
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.MultiColumnParameters.SingleOrMultiColumnChoice
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.MultiColumnParameters.SingleOrMultiColumnChoices.{MultiColumnChoice, SingleColumnChoice}
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.SingleColumnParameters.SingleTransformInPlaceChoices.NoInPlaceChoice
-import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.HasSpecificParameters
-import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.MultiColumnParameters.SingleOrMultiColumnChoice
 import com.harana.sdk.shared.models.flow.parameters.selections.{MultipleColumnSelection, NameSingleColumnSelection}
-import com.harana.sdk.shared.models.flow.parameters.{IOColumnsParameter, Parameter, ParameterGroup}
+import com.harana.sdk.shared.models.flow.parameters.{IOColumnsParameter, ParameterGroup}
 
 trait MultiColumnTransformerInfo extends TransformerInfo with HasSpecificParameters {
 

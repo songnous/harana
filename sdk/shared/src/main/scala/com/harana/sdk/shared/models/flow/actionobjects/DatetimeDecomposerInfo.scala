@@ -2,8 +2,8 @@ package com.harana.sdk.shared.models.flow.actionobjects
 
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, MultipleChoiceParameter}
-import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup, PrefixBasedColumnCreatorParameter, SingleColumnSelectorParameter}
 import com.harana.sdk.shared.models.flow.parameters.selections.SingleColumnSelection
+import com.harana.sdk.shared.models.flow.parameters.{ParameterGroup, PrefixBasedColumnCreatorParameter, SingleColumnSelectorParameter}
 
 trait DatetimeDecomposerInfo extends TransformerInfo {
 
@@ -11,7 +11,7 @@ trait DatetimeDecomposerInfo extends TransformerInfo {
 
   val id = "D9FE1921-2960-4CCF-BDAF-B73B56BD46B4"
 
-  val timestampColumnParameter = SingleColumnSelectorParameter("timestamp column", portIndex = 0)
+  val timestampColumnParameter = SingleColumnSelectorParameter("timestamp-column", portIndex = 0)
   def timestampColumn = $(timestampColumnParameter)
   def setTimestampColumn(timestampColumn: SingleColumnSelection): this.type = set(timestampColumnParameter, timestampColumn)
 
@@ -23,7 +23,7 @@ trait DatetimeDecomposerInfo extends TransformerInfo {
   def getTimestampPrefix = $(timestampPrefixParameter)
   def setTimestampPrefix(timestampPrefix: String): this.type = set(timestampPrefixParameter, timestampPrefix)
 
-  val parameterGroups = List(ParameterGroup(None,
+  override val parameterGroups = List(ParameterGroup(None,
     timestampColumnParameter,
     timestampPartsParameter,
     timestampPrefixParameter
@@ -42,32 +42,32 @@ object DatetimeDecomposerInfo extends DatetimeDecomposerInfo {
 
     case class Year() extends TimestampPart {
       val name = "year"
-      val parameterGroups = List.empty[ParameterGroup]
+      override val parameterGroups = List.empty[ParameterGroup]
     }
 
     case class Month() extends TimestampPart {
       val name = "month"
-      val parameterGroups = List.empty[ParameterGroup]
+      override val parameterGroups = List.empty[ParameterGroup]
     }
 
     case class Day() extends TimestampPart {
       val name = "day"
-      val parameterGroups = List.empty[ParameterGroup]
+      override val parameterGroups = List.empty[ParameterGroup]
     }
 
     case class Hour() extends TimestampPart {
       val name = "hour"
-      val parameterGroups = List.empty[ParameterGroup]
+      override val parameterGroups = List.empty[ParameterGroup]
     }
 
     case class Minutes() extends TimestampPart {
       val name = "minutes"
-      val parameterGroups = List.empty[ParameterGroup]
+      override val parameterGroups = List.empty[ParameterGroup]
     }
 
     case class Seconds() extends TimestampPart {
       val name = "seconds"
-      val parameterGroups = List.empty[ParameterGroup]
+      override val parameterGroups = List.empty[ParameterGroup]
     }
   }
 

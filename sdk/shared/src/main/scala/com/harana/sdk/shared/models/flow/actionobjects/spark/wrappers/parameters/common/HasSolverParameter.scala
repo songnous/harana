@@ -1,9 +1,9 @@
 package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common
 
-import SolverChoice.SolverOption
+import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.SolverChoice.SolverOption
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
-import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup, Parameters}
+import com.harana.sdk.shared.models.flow.parameters.{ParameterGroup, Parameters}
 
 import scala.language.reflectiveCalls
 
@@ -16,7 +16,7 @@ trait HasSolverParameter extends Parameters {
 object SolverChoice {
 
   sealed abstract class SolverOption(val name: String) extends Choice {
-    val parameterGroups = List.empty[ParameterGroup]
+    override val parameterGroups = List.empty[ParameterGroup]
 
     val choiceOrder: List[ChoiceOption] = List(
       classOf[Auto],

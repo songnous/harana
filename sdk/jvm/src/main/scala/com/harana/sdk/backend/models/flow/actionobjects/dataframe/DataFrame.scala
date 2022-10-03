@@ -3,10 +3,9 @@ package com.harana.sdk.backend.models.flow.actionobjects.dataframe
 import com.harana.sdk.backend.models.flow.utils.SparkTypeConverter.fromSparkStructType
 import com.harana.sdk.backend.models.flow.ExecutionContext
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.report.DataFrameReportGenerator
-import com.harana.sdk.backend.models.flow.actions.exceptions.{BacktickInColumnNameError, DuplicatedColumnsError, WrongColumnTypeError}
+import com.harana.sdk.backend.models.flow.actiontypes.exceptions.{BacktickInColumnNameError, DuplicatedColumnsError, WrongColumnTypeError}
 import com.harana.sdk.backend.models.flow.utils.{SparkConversions, SparkTypeConverter}
-import com.harana.sdk.shared.models.flow.ActionObjectInfo
-import com.harana.sdk.shared.models.flow.actionobjects.{DataFrameInfo, descriptions}
+import com.harana.sdk.shared.models.flow.actionobjects.{ActionObjectInfo, DataFrameInfo, descriptions}
 import com.harana.sdk.shared.models.flow.actionobjects.descriptions.DataFrameInferenceResult
 import com.harana.sdk.shared.models.flow.utils.ColumnType
 import org.apache.spark.sql

@@ -14,5 +14,5 @@ trait PCAModelInfo extends TransformerInfo with Parameters {
 }
 
 object PCAModelInfo extends PCAModelInfo {
-  val parameterGroups = List.empty[ParameterGroup]
+  override val parameterGroups = List.empty[ParameterGroup]
 }

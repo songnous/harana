@@ -6,6 +6,6 @@ import scala.language.reflectiveCalls
 
 trait HasCacheNodeIdsParameter extends Parameters {
 
-  val cacheNodeIdsParameter = BooleanParameter("cache node ids", default = Some(false))
+  val cacheNodeIdsParameter = BooleanParameter("cache-node-ids", default = Some(false))
 
 }

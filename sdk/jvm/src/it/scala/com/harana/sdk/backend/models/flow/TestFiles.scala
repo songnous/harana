@@ -2,9 +2,9 @@ package com.harana.sdk.backend.models.flow
 
 import org.scalatest.BeforeAndAfter
 import org.scalatest.BeforeAndAfterAll
-import com.harana.sdk.backend.models.flow.actions.readwritedataframe.{FilePath, FileScheme}
+import com.harana.sdk.backend.models.flow.actiontypes.readwritedataframe.{FilePath, FileScheme}
 import com.harana.sdk.backend.models.flow.filesystemclients.LocalFileSystemClient
-import com.harana.sdk.shared.models.flow.actions.inout.InputFileFormatChoice
+import com.harana.sdk.shared.models.flow.actiontypes.inout.InputFileFormatChoice
 
 trait TestFiles { self: BeforeAndAfter with BeforeAndAfterAll =>
 

@@ -1,11 +1,11 @@
 package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimators
 
-import GBTRegressionInfo.{LossType, Squared}
-import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.actionobjects.EstimatorInfo
+import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimators.GBTRegressionInfo.{LossType, Squared}
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.GBTParameters
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.HasRegressionImpurityParameter
-import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup}
+import com.harana.sdk.shared.models.flow.parameters.ParameterGroup
+import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
 
 import scala.language.reflectiveCalls
@@ -19,9 +19,9 @@ trait GBTRegressionInfo
 
   override val maxIterationsDefault = 20
 
-  val lossTypeParameter = ChoiceParameter[LossType]("loss function", default = Some(Squared()))
+  val lossTypeParameter = ChoiceParameter[LossType]("loss-function", default = Some(Squared()))
 
-  val parameterGroups = List(ParameterGroup(None,
+  override val parameterGroups = List(ParameterGroup(None,
     impurityParameter,
     lossTypeParameter,
     maxBinsParameter,
@@ -39,7 +39,7 @@ trait GBTRegressionInfo
 
 object GBTRegressionInfo extends GBTRegressionInfo {
   sealed abstract class LossType(val name: String) extends Choice {
-    val parameterGroups = List.empty[ParameterGroup]
+    override val parameterGroups = List.empty[ParameterGroup]
     val choiceOrder: List[ChoiceOption] = List(classOf[Squared], classOf[Absolute])
   }
 

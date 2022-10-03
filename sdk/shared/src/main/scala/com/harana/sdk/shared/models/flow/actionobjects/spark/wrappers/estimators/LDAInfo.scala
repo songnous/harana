@@ -1,7 +1,6 @@
 package com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimators
 
-import com.harana.sdk.shared.models.flow.ActionObjectInfo
-import com.harana.sdk.shared.models.flow.actionobjects.EstimatorInfo
+import com.harana.sdk.shared.models.flow.actionobjects.{ActionObjectInfo, EstimatorInfo}
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimators.LDAInfo.OnlineLDAOptimizer
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common._
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
@@ -23,10 +22,10 @@ trait LDAInfo
   override val maxIterationsDefault = 20
 
   val optimizerParameter = ChoiceParameter[OnlineLDAOptimizer]("optimizer", default = Some(OnlineLDAOptimizer()))
-  val subsamplingRateParameter = DoubleParameter("subsampling rate", default = Some(0.05), validator = RangeValidator(0.0, 1.0, beginIncluded = false))
-  val topicDistributionColumnParameter = SingleColumnCreatorParameter("topic distribution column", default = Some("topicDistribution"))
+  val subsamplingRateParameter = DoubleParameter("subsampling-rate", default = Some(0.05), validator = RangeValidator(0.0, 1.0, beginIncluded = false))
+  val topicDistributionColumnParameter = SingleColumnCreatorParameter("topic-distribution-column", default = Some("topicDistribution"))
 
-  val parameterGroups = List(ParameterGroup(None,
+  override val parameterGroups = List(ParameterGroup(None,
     checkpointIntervalParameter,
     kParameter,
     maxIterationsParameter,
@@ -61,25 +60,25 @@ object LDAInfo extends LDAInfo {
     def createTopicConcentrationParam(): TopicConcentrationParameter
 
     val choiceOrder: List[ChoiceOption] = List(classOf[OnlineLDAOptimizer], classOf[ExpectationMaximizationLDAOptimizer])
-    val parameterGroups = List(ParameterGroup(None, docConcentrationParameter, topicConcentrationParameter))
+    override val parameterGroups = List(ParameterGroup(None, docConcentrationParameter, topicConcentrationParameter))
   }
 
   case class OnlineLDAOptimizer() extends LDAOptimizer {
     val name = "online"
 
-    def createDocumentConcentrationParam() = new DocConcentrationParameter("doc concentration", default = Some(Array(0.5, 0.5)), validator = ComplexArrayValidator(
+    def createDocumentConcentrationParam() = new DocConcentrationParameter("doc-concentration", default = Some(Array(0.5, 0.5)), validator = ComplexArrayValidator(
           rangeValidator = RangeValidator(0.0, Double.MaxValue),
           lengthValidator = ArrayLengthValidator.withAtLeast(1)
         )
       )
 
-    def createTopicConcentrationParam() = new TopicConcentrationParameter("topic concentration", default = Some(0.5), validator = RangeValidator(0.0, Double.MaxValue))
+    def createTopicConcentrationParam() = new TopicConcentrationParameter("topic-concentration", default = Some(0.5), validator = RangeValidator(0.0, Double.MaxValue))
   }
 
   case class ExpectationMaximizationLDAOptimizer() extends LDAOptimizer {
     val name = "em"
 
-    def createDocumentConcentrationParam() = new DocConcentrationParameter("doc concentration",
+    def createDocumentConcentrationParam() = new DocConcentrationParameter("doc-concentration",
       default = Some(Array(26.0, 26.0)),
       validator = ComplexArrayValidator(
           rangeValidator = RangeValidator(1.0, Double.MaxValue, beginIncluded = false),
@@ -87,6 +86,6 @@ object LDAInfo extends LDAInfo {
         )
       )
 
-    def createTopicConcentrationParam() = new TopicConcentrationParameter("topic concentration", default = Some(1.1), validator = RangeValidator(1.0, Double.MaxValue, beginIncluded = false))
+    def createTopicConcentrationParam() = new TopicConcentrationParameter("topic-concentration", default = Some(1.1), validator = RangeValidator(1.0, Double.MaxValue, beginIncluded = false))
   }
 }

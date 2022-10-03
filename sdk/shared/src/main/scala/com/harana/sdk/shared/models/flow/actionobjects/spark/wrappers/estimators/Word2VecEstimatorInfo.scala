@@ -23,5 +23,5 @@ trait Word2VecEstimatorInfo extends EstimatorInfo with Word2VecParameters {
 }
 
 object Word2VecEstimatorInfo extends Word2VecEstimatorInfo {
-  val parameterGroups = List.empty[ParameterGroup]
+  override val parameterGroups = List.empty[ParameterGroup]
 }

@@ -6,7 +6,7 @@ trait PythonColumnTransformerInfo extends CustomCodeColumnTransformerInfo {
 
   override val id = "9C03A5DA-6E22-44D1-885B-204EA0B13A96"
 
-  val codeParameter = CodeSnippetParameter("column action code",
+  val codeParameter = CodeSnippetParameter("code",
     default = Some("def transform_value(value, column_name):\n    return value"),
     language = CodeSnippetLanguage.Python)
 

@@ -1,14 +1,16 @@
 package com.harana.sdk.backend.models.flow.json.workflow
 
-import com.harana.sdk.backend.models.flow.{Action, Knowledge}
-import com.harana.sdk.backend.models.flow.actions.custom.{Sink, Source}
+import com.harana.sdk.backend.models.flow.Knowledge
+import com.harana.sdk.backend.models.flow.actiontypes.ActionType
+import com.harana.sdk.backend.models.flow.actiontypes.custom.{Sink, Source}
 import com.harana.sdk.backend.models.flow.inference.InferenceWarnings
 import com.harana.sdk.backend.models.flow.json.{StandardSpec, UnitTestSupport}
 import com.harana.sdk.backend.models.flow.inference.InferenceWarnings
-import com.harana.sdk.backend.models.flow.{Action, Knowledge}
+import com.harana.sdk.backend.models.flow.Knowledge
 import com.harana.sdk.shared.models.designer.flow.graph.Endpoint
 import com.harana.sdk.shared.models.designer.flow._
-import com.harana.sdk.shared.models.flow.{ActionInfo, ActionObjectInfo}
+import com.harana.sdk.shared.models.flow.ActionTypeInfo
+import com.harana.sdk.shared.models.flow.actionobjects.ActionObjectInfo
 import com.harana.sdk.shared.models.flow.graph.{Edge, FlowGraph}
 import com.harana.sdk.shared.models.flow.graph.node.Node
 import com.harana.sdk.shared.models.flow.utils.Id
@@ -26,11 +28,11 @@ trait WorkflowTestSupport extends StandardSpec with UnitTestSupport {
   val actionObjectCatalog = mock[ActionObjectCatalog]
   when(actionObjectCatalog.concreteSubclassesInstances(any(classOf[ru.TypeTag[ActionObjectInfo]]))).thenReturn(Set(actionObject))
 
-  val action1 = mockAction(0, 1, ActionInfo.Id.randomId, "name1", "version1")
-  val action2 = mockAction(1, 1, ActionInfo.Id.randomId, "name2", "version2")
-  val action3 = mockAction(1, 1, ActionInfo.Id.randomId, "name3", "version3")
+  val action1 = mockAction(0, 1, ActionTypeInfo.Id.randomId, "name1", "version1")
+  val action2 = mockAction(1, 1, ActionTypeInfo.Id.randomId, "name2", "version2")
+  val action3 = mockAction(1, 1, ActionTypeInfo.Id.randomId, "name3", "version3")
 
-  val action4 = mockAction(2, 1, ActionInfo.Id.randomId, "name4", "version4")
+  val action4 = mockAction(2, 1, ActionTypeInfo.Id.randomId, "name4", "version4")
 
   when(catalog.createAction(action1.id)).thenReturn(action1)
   when(catalog.createAction(action2.id)).thenReturn(action2)
@@ -61,7 +63,7 @@ trait WorkflowTestSupport extends StandardSpec with UnitTestSupport {
   val innerWorkflowGraph = FlowGraph(nodes ++ Set(sourceNode, sinkNode), edges)
 
   def mockAction(inArity: Int, outArity: Int, id: Id, name: String, version: String) = {
-    val action = mock[Action]
+    val action = mock[ActionType]
     when(action.id).thenReturn(id)
     when(action.name).thenReturn(name)
     when(action.inArity).thenReturn(inArity)
@@ -74,7 +76,7 @@ trait WorkflowTestSupport extends StandardSpec with UnitTestSupport {
     when(knowledge.types).thenReturn(Seq[ActionObjectInfo](actionObjectMock))
     when(knowledge.filterTypes(any())).thenReturn(knowledge)
     when(action.inferKnowledgeUntyped(any())(any())).thenReturn((Vector.fill(outArity)(knowledge), InferenceWarnings.empty))
-    when(action.sameAs(isA(classOf[Action]))).thenReturn(true)
+    when(action.sameAs(isA(classOf[ActionType]))).thenReturn(true)
     action
   }
 

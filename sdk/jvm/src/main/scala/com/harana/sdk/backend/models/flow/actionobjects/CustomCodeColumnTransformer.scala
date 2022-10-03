@@ -4,7 +4,7 @@ import com.harana.sdk.backend.models.flow.ActionExecutionDispatcher.Result
 import com.harana.sdk.backend.models.flow.ExecutionContext
 import com.harana.sdk.backend.models.flow.utils.SparkTypeConverter.toSparkDataType
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
-import com.harana.sdk.backend.models.flow.actions.exceptions.CustomActionExecutionError
+import com.harana.sdk.backend.models.flow.actiontypes.exceptions.CustomActionExecutionError
 import com.harana.sdk.backend.models.flow.utils.SparkTypeConverter
 import com.harana.sdk.shared.models.flow.actionobjects.CustomCodeColumnTransformerInfo
 import com.harana.sdk.shared.models.flow.parameters.{CodeSnippetParameter, Parameter}

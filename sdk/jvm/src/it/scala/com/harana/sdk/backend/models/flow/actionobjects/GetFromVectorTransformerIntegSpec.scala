@@ -2,7 +2,7 @@ package com.harana.sdk.backend.models.flow.actionobjects
 
 import com.harana.sdk.backend.models.flow.IntegratedTestSupport
 import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.transformers.TransformerSerialization
-import com.harana.sdk.backend.models.flow.actions.exceptions.ColumnDoesNotExistError
+import com.harana.sdk.backend.models.flow.actiontypes.exceptions.ColumnDoesNotExistError
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.MultiColumnParameters.SingleOrMultiColumnChoices.SingleColumnChoice
 import com.harana.sdk.shared.models.flow.parameters.selections.NameSingleColumnSelection
 import com.harana.spark.Linalg.Vectors

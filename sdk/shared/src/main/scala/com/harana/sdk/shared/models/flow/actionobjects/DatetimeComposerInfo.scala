@@ -1,8 +1,8 @@
 package com.harana.sdk.shared.models.flow.actionobjects
 
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, MultipleChoiceParameter}
-import com.harana.sdk.shared.models.flow.parameters.{ParameterGroup, SingleColumnCreatorParameter, SingleColumnSelectorParameter}
 import com.harana.sdk.shared.models.flow.parameters.selections.SingleColumnSelection
+import com.harana.sdk.shared.models.flow.parameters.{ParameterGroup, SingleColumnCreatorParameter, SingleColumnSelectorParameter}
 import io.circe.generic.JsonCodec
 
 trait DatetimeComposerInfo extends TransformerInfo {
@@ -15,11 +15,11 @@ trait DatetimeComposerInfo extends TransformerInfo {
   def timestampColumns = $(timestampColumnsParameter)
   def setTimestampColumns(timestampParts: Set[TimestampPartColumnChoice]): this.type = set(timestampColumnsParameter, timestampParts)
 
-  val outputColumnParameter = SingleColumnCreatorParameter("output column", default = Some("Timestamp"))
+  val outputColumnParameter = SingleColumnCreatorParameter("output-column", default = Some("Timestamp"))
   def outputColumn = $(outputColumnParameter)
   def setOutputColumn(outputColumn: String): this.type = set(outputColumnParameter, outputColumn)
 
-  val parameterGroups = List(ParameterGroup(None, timestampColumnsParameter, outputColumnParameter))
+  override val parameterGroups = List(ParameterGroup(None, timestampColumnsParameter, outputColumnParameter))
 }
 
 object DatetimeComposerInfo extends DatetimeComposerInfo {
@@ -40,7 +40,7 @@ object DatetimeComposerInfo extends DatetimeComposerInfo {
     def setTimestampColumn(timestampColumn: SingleColumnSelection): this.type = set(timestampColumnSelectorParameter, timestampColumn)
 
     val choiceOrder = DatetimeComposerInfo.choiceOrder
-    val parameterGroups = List(ParameterGroup(None, timestampColumnSelectorParameter))
+    override val parameterGroups = List(ParameterGroup(None, timestampColumnSelectorParameter))
   }
 
   object TimestampPartColumnChoice {

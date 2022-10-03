@@ -9,7 +9,7 @@ import org.scalatest.enablers.Sortable
 import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.transformers.TransformerSerialization.TransformerSerializationOps
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.transformers.TransformerSerialization
-import com.harana.sdk.backend.models.flow.actions.exceptions.ColumnDoesNotExistError
+import com.harana.sdk.backend.models.flow.actiontypes.exceptions.ColumnDoesNotExistError
 import com.harana.sdk.shared.models.flow.actionobjects.SortColumnParameter
 
 class SortTransformationIntegSpec extends IntegratedTestSupport with TransformerSerialization {

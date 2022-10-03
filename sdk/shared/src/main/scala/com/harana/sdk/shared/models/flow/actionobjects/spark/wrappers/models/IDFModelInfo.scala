@@ -11,5 +11,5 @@ trait IDFModelInfo extends TransformerInfo with Parameters {
 }
 
 object IDFModelInfo extends IDFModelInfo {
-  val parameterGroups = List.empty[ParameterGroup]
+  override val parameterGroups = List.empty[ParameterGroup]
 }

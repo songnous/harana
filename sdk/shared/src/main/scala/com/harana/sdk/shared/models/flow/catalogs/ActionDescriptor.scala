@@ -1,6 +1,6 @@
 package com.harana.sdk.shared.models.flow.catalogs
 
-import com.harana.sdk.shared.models.flow.{ActionInfo, PortPosition}
+import com.harana.sdk.shared.models.flow.{ActionTypeInfo, PortPosition}
 import com.harana.sdk.shared.models.flow.utils.{Id, SortPriority}
 import io.circe.Json
 import io.circe.generic.JsonCodec

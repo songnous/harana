@@ -1,6 +1,7 @@
 package com.harana.sdk.backend.models.flow
 
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
+import com.harana.sdk.backend.models.flow.actiontypes.ActionType
 import com.harana.sdk.backend.models.flow.utils.DataFrameMatchers
 import com.harana.sdk.shared.models.flow.utils.Id
 import com.harana.spark.spi.SparkSessionInitializer
@@ -12,7 +13,7 @@ import scala.reflect.ClassTag
 import scala.reflect.runtime.universe.TypeTag
 
 trait IntegratedTestSupport extends UnitSpec with BeforeAndAfterAll with LocalExecutionContext {
-  def executeAction(op: Action, dfs: DataFrame*) = op.executeUntyped(dfs.toList)(executionContext).head.asInstanceOf[DataFrame]
+  def executeAction(op: ActionType, dfs: DataFrame*) = op.executeUntyped(dfs.toList)(executionContext).head.asInstanceOf[DataFrame]
   def createDir(path: String) = new java.io.File(path + "/id").getParentFile.mkdirs()
   def createDataFrame[T <: Product: TypeTag: ClassTag](seq: Seq[T]) = DataFrame.fromSparkDataFrame(sparkSQLSession.createDataFrame(sparkContext.parallelize(seq)))
 }

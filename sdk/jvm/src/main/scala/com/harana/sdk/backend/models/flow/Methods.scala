@@ -1,7 +1,7 @@
 package com.harana.sdk.backend.models.flow
 
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
-import com.harana.sdk.shared.models.flow.ActionObjectInfo
+import com.harana.sdk.shared.models.flow.actionobjects.ActionObjectInfo
 
 import scala.reflect.runtime.{universe => ru}
 

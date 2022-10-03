@@ -19,7 +19,7 @@ trait PythonEvaluatorInfo extends CustomCodeEvaluatorInfo {
       |    return rmse""".stripMargin
 
 
-  val codeParameter = CodeSnippetParameter("python evaluator code", default = Some(default), language = CodeSnippetLanguage.Python)
+  val codeParameter = CodeSnippetParameter("code", default = Some(default), language = CodeSnippetLanguage.Python)
 
   // Creating a dataframe is a workaround. Currently we can pass to jvm DataFrames only.
   // TODO DS-3695 Fix a metric value - dataframe workaround.

@@ -1,6 +1,6 @@
 package com.harana.sdk.backend.models.flow.actionobjects.dataframe
 
-import com.harana.sdk.backend.models.flow.actions.exceptions.{ColumnDoesNotExistError, ColumnsDoNotExistError}
+import com.harana.sdk.backend.models.flow.actiontypes.exceptions.{ColumnDoesNotExistError, ColumnsDoNotExistError}
 import com.harana.sdk.backend.models.flow.utils.SparkTypeConverter
 import com.harana.sdk.shared.models.flow.parameters.selections._
 import com.harana.sdk.shared.models.flow.utils.ColumnType

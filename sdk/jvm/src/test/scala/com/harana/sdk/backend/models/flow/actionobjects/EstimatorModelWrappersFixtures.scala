@@ -3,7 +3,7 @@ package com.harana.sdk.backend.models.flow.actionobjects
 import com.harana.sdk.backend.models.flow.{ExecutionContext, TestSupport}
 import com.harana.sdk.backend.models.flow.actionobjects.serialization.SerializableSparkModel
 import com.harana.sdk.backend.models.flow.ExecutionContext
-import com.harana.sdk.shared.models.flow.parameters.{DoubleParameter, Parameters}
+import com.harana.sdk.shared.models.flow.parameters.{DoubleParameter, ParameterGroup, Parameters}
 import com.harana.spark.ML
 import org.apache.spark.ml
 import org.apache.spark.ml.param.{BooleanParam, DoubleParam, ParamMap}
@@ -23,7 +23,7 @@ object EstimatorModelWrappersFixtures extends MockitoSugar with TestSupport {
     val id = "test"
     def setNumericParamWrapper(value: Double): this.type = set(numericParameter, value)
     override def report(extended: Boolean = true) = ???
-    val parameterGroups = List(ParameterGroup(None, numericParameter))
+    override val parameterGroups = List(ParameterGroup(None, numericParameter))
   }
 
   class ExampleSparkEstimator extends ML.Estimator[ExampleSparkModel] {
@@ -72,7 +72,7 @@ object EstimatorModelWrappersFixtures extends MockitoSugar with TestSupport {
     val id = "test"
     def setNumericParameter(value: Double): this.type = set(numericParameter, value)
     override def report(extended: Boolean = true) = ???
-    val parameterGroups = List(ParameterGroup(None, numericParameter))
+    override val parameterGroups = List(ParameterGroup(None, numericParameter))
     def loadModel(ctx: ExecutionContext, path: String): SerializableSparkModel[ExampleSparkModel] = ???
   }
 

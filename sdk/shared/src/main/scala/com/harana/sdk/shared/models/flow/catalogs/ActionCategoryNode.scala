@@ -1,6 +1,6 @@
 package com.harana.sdk.shared.models.flow.catalogs
 
-import com.harana.sdk.shared.models.flow.ActionInfo
+import com.harana.sdk.shared.models.flow.ActionTypeInfo
 import com.harana.sdk.shared.models.flow.utils.SortPriority
 import io.circe.generic.JsonCodec
 
@@ -24,7 +24,7 @@ case class ActionCategoryNode(category: Option[ActionCategory] = None,
   def addAction(action: ActionDescriptor, category: ActionCategory) =
     addActionAtPath(action, category.pathFromRoot)
 
-  def getActions: List[(ActionCategory, ActionInfo.Id, SortPriority)] = {
+  def getActions: List[(ActionCategory, ActionTypeInfo.Id, SortPriority)] = {
     val thisActions = actions.map(action => (action.category, action.id, action.priority))
     val successorActions = successors.collect { case successor => successor._2.getActions }.flatten
     thisActions ++ successorActions

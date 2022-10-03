@@ -10,7 +10,7 @@ class PrefixBasedColumnCreatorParameterSpec extends AbstractParameterSpec[String
   def className = "PrefixBasedColumnCreatorParameter"
 
   def paramFixture: (PrefixBasedColumnCreatorParameter, Json) = {
-    val param        = PrefixBasedColumnCreatorParameter("Prefix based column creator name",)
+    val param        = PrefixBasedColumnCreatorParameter("prefix-based-column-creator-name")
     val expectedJson = Map(
       "type"        -> Json.fromString("prefixBasedCreator"),
       "name"        -> Json.fromString(param.name),

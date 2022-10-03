@@ -1,11 +1,11 @@
 package com.harana.sdk.shared.models.flow.actionobjects
 
-import com.harana.sdk.shared.models.flow.parameters.{CodeSnippetParameter, Parameter}
+import com.harana.sdk.shared.models.flow.parameters.CodeSnippetParameter
 import com.harana.sdk.shared.models.flow.parameters.choice.ChoiceParameter
 
 trait CustomCodeColumnTransformerInfo extends MultiColumnTransformerInfo {
 
-  val targetTypeParameter = ChoiceParameter[TargetTypeChoice]("target type")
+  val targetTypeParameter = ChoiceParameter[TargetTypeChoice]("target-type")
   def getTargetType = $(targetTypeParameter)
   def setTargetType(value: TargetTypeChoice): this.type = set(targetTypeParameter, value)
 

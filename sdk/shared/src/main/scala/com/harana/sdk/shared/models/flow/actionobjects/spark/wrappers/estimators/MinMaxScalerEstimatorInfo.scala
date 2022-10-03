@@ -16,5 +16,5 @@ trait MinMaxScalerEstimatorInfo
 }
 
 object MinMaxScalerEstimatorInfo extends MinMaxScalerEstimatorInfo {
-  val parameterGroups = List.empty[ParameterGroup]
+  override val parameterGroups = List.empty[ParameterGroup]
 }

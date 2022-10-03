@@ -1,11 +1,11 @@
 package com.harana.sdk.shared.models.flow.actionobjects
 
+import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.HasSpecificParameters
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.MultiColumnParameters.MultiColumnInPlaceChoices.{MultiColumnNoInPlace, MultiColumnYesInPlace}
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.MultiColumnParameters.SingleOrMultiColumnChoices.{MultiColumnChoice, SingleColumnChoice}
 import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.SingleColumnParameters.SingleTransformInPlaceChoices.{NoInPlaceChoice, YesInPlaceChoice}
-import com.harana.sdk.shared.models.flow.actionobjects.multicolumn.HasSpecificParameters
-import com.harana.sdk.shared.models.flow.parameters.{IOColumnsParameter, Parameter, ParameterGroup}
 import com.harana.sdk.shared.models.flow.parameters.selections.NameSingleColumnSelection
+import com.harana.sdk.shared.models.flow.parameters.{IOColumnsParameter, Parameter, ParameterGroup}
 
 import scala.language.reflectiveCalls
 
@@ -15,7 +15,7 @@ trait MultiColumnEstimatorInfo extends EstimatorInfo with HasSpecificParameters 
 
   val singleOrMultiChoiceParameter = IOColumnsParameter()
 
-  lazy val parameterGroups = {
+  lazy override val parameterGroups = {
     val parameters =
       if (specificParameters == null) List(singleOrMultiChoiceParameter)
       else specificParameters.toList :+ singleOrMultiChoiceParameter

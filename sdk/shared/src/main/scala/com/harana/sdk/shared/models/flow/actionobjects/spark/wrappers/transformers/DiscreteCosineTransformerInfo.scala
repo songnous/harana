@@ -15,5 +15,5 @@ trait DiscreteCosineTransformerInfo extends TransformerInfo with Parameters {
 }
 
 object DiscreteCosineTransformerInfo extends DiscreteCosineTransformerInfo {
-  val parameterGroups = List.empty[ParameterGroup]
+  override val parameterGroups = List.empty[ParameterGroup]
 }

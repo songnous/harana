@@ -4,7 +4,7 @@ import com.harana.sdk.backend.models.flow._
 import com.harana.sdk.backend.models.flow.IntegratedTestSupport
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.transformers.TransformerSerialization
-import com.harana.sdk.backend.models.flow.actions.exceptions.ColumnsDoNotExistError
+import com.harana.sdk.backend.models.flow.actiontypes.exceptions.ColumnsDoNotExistError
 import com.harana.sdk.shared.models.flow.parameters.selections.{IndexColumnSelection, MultipleColumnSelection, NameColumnSelection, TypeColumnSelection}
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.types._
