@@ -1,7 +1,9 @@
 package com.harana.sdk.shared.models.flow.parameters
 
 import com.harana.sdk.shared.models.flow.parameters.selections.SingleColumnSelection
+import io.circe.generic.JsonCodec
 
+@JsonCodec
 case class SingleColumnSelectorParameter(name: String,
                                          required: Boolean = false,
                                          default: Option[SingleColumnSelection] = None,

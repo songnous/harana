@@ -4,9 +4,7 @@ import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.actionobjects.SortTransformerInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.SetAction
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
-import com.harana.sdk.shared.models.flow.parameters.Parameter
 import com.harana.sdk.shared.models.flow.utils.Id
-import shapeless.HMap
 
 import scala.reflect.runtime.universe.TypeTag
 

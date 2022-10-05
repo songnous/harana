@@ -2,7 +2,7 @@ package com.harana.sdk.backend.models.flow.graph
 
 import com.harana.sdk.backend.models.flow._
 import com.harana.sdk.backend.models.flow.actiontypes.{ActionTypeType0To1, ActionTypeType1To1, ActionTypeType2To2}
-import com.harana.sdk.shared.models.flow.graph.FlowGraph.FlowNode
+import com.harana.sdk.shared.models.flow.graph.FlowGraph.Node[ActionTypeInfo]
 import com.harana.sdk.shared.models.designer.flow.graph.Endpoint
 import com.harana.sdk.shared.models.flow.actionobjects.ActionObjectInfo
 import com.harana.sdk.shared.models.flow.exceptions.FailureDescription
@@ -73,7 +73,7 @@ trait GraphTestSupport { self: MockitoSugar =>
     )
   }
 
-  def generateNodes(ops: GraphAction*): Seq[(Id, FlowNode)] = {
+  def generateNodes(ops: GraphAction*): Seq[(Id, Node[ActionTypeInfo])] = {
     val nodes = ops.map(o => Node(Node.Id.randomId, o))
     nodes.map(n => n.id -> n)
   }

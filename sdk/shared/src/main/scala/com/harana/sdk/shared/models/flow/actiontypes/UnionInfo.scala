@@ -3,12 +3,10 @@ package com.harana.sdk.shared.models.flow.actiontypes
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.actionobjects.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.SetAction
-import com.harana.sdk.shared.models.flow.{Action2To1TypeInfo, PortPosition}
-import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.SetAction
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
-import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup, Parameters}
+import com.harana.sdk.shared.models.flow.parameters.{ParameterGroup, Parameters}
 import com.harana.sdk.shared.models.flow.utils.Id
-import shapeless.HMap
+import com.harana.sdk.shared.models.flow.{Action2To1TypeInfo, PortPosition}
 
 import scala.reflect.runtime.{universe => ru}
 

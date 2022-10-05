@@ -4,13 +4,12 @@ import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.actionobjects.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.SetAction
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
+import com.harana.sdk.shared.models.flow.parameters._
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
 import com.harana.sdk.shared.models.flow.parameters.selections.SingleColumnSelection
-import com.harana.sdk.shared.models.flow.parameters._
 import com.harana.sdk.shared.models.flow.utils.Id
 import com.harana.sdk.shared.models.flow.{Action2To1TypeInfo, PortPosition}
-import shapeless.HMap
 
 import scala.reflect.runtime.{universe => ru}
 

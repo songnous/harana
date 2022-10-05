@@ -1,7 +1,9 @@
 package com.harana.sdk.shared.models.flow.parameters
 
 import com.harana.sdk.shared.models.flow.parameters.validators.{ArrayValidator, RegexValidator, Validator}
+import io.circe.generic.JsonCodec
 
+@JsonCodec
 case class TagsParameter(name: String,
                          required: Boolean = false,
                          default: Option[Array[String]] = None,

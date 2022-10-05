@@ -1,15 +1,12 @@
 package com.harana.sdk.shared.models.flow.actiontypes
 
 import com.harana.sdk.shared.models.common.Version
-import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML
 import com.harana.sdk.shared.models.flow.actionobjects.REvaluatorInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.ModelEvaluation
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
-import com.harana.sdk.shared.models.flow.parameters.Parameter
 import com.harana.sdk.shared.models.flow.utils.Id
-import shapeless.HMap
 
-import scala.reflect.runtime.universe.{TypeTag, typeTag}
+import scala.reflect.runtime.universe.TypeTag
 
 trait CreateREvaluatorInfo extends EvaluatorAsFactoryInfo[REvaluatorInfo] with ActionDocumentation {
 

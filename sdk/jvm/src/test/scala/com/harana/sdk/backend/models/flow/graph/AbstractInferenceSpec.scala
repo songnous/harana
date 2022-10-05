@@ -7,7 +7,7 @@ import com.harana.sdk.backend.models.flow._
 import com.harana.sdk.backend.models.flow.actiontypes.ActionTypeType2To1
 import com.harana.sdk.shared.models.flow.actionobjects.ActionObjectInfo
 import com.harana.sdk.shared.models.flow.exceptions.{FlowError, FlowMultiError}
-import com.harana.sdk.shared.models.flow.graph.FlowGraph.FlowNode
+import com.harana.sdk.shared.models.flow.graph.FlowGraph.Node[ActionTypeInfo]
 import com.harana.sdk.shared.models.flow.graph.node.Node
 import com.harana.sdk.shared.models.flow.graph.{Edge, FlowGraph}
 import com.harana.sdk.shared.models.flow.parameters.exceptions.ValidationError
@@ -93,10 +93,10 @@ class AbstractInferenceSpec extends AnyWordSpec with TestSupport with Matchers {
     )
   )
 
-  def setParametersValid(node: FlowNode) = node.value.asInstanceOf[ActionTypeTypeA1A2ToFirst].setParametersValid()
-  def setInferenceErrorThrowing(node: FlowNode) = node.value.asInstanceOf[ActionTypeTypeA1A2ToFirst].setInferenceErrorThrowing()
-  def setInferenceErrorMultiThrowing(node: FlowNode) = node.value.asInstanceOf[ActionTypeTypeA1A2ToFirst].setInferenceErrorThrowingMultiException()
-  def setParametersInvalid(node: FlowNode) = node.value.asInstanceOf[ActionTypeTypeA1A2ToFirst].setParametersInvalid()
+  def setParametersValid(node: Node[ActionTypeInfo]) = node.value.asInstanceOf[ActionTypeTypeA1A2ToFirst].setParametersValid()
+  def setInferenceErrorThrowing(node: Node[ActionTypeInfo]) = node.value.asInstanceOf[ActionTypeTypeA1A2ToFirst].setInferenceErrorThrowing()
+  def setInferenceErrorMultiThrowing(node: Node[ActionTypeInfo]) = node.value.asInstanceOf[ActionTypeTypeA1A2ToFirst].setInferenceErrorThrowingMultiException()
+  def setParametersInvalid(node: Node[ActionTypeInfo]) = node.value.asInstanceOf[ActionTypeTypeA1A2ToFirst].setParametersInvalid()
   def setParametersValid(graph: FlowGraph) = setInGraph(graph, _.setParametersValid())
 
   def setInGraph(graph: FlowGraph, f: ActionTypeTypeA1A2ToFirst => Unit) = {

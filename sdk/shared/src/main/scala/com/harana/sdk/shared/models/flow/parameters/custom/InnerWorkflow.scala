@@ -1,9 +1,10 @@
 package com.harana.sdk.shared.models.flow.parameters.custom
 
-import com.harana.sdk.shared.models.flow.ActionTypeInfo
+import com.harana.sdk.shared.models.flow.{Action, ActionTypeInfo}
 import com.harana.sdk.shared.models.flow.actiontypes.custom.{SinkInfo, SourceInfo}
 import com.harana.sdk.shared.models.flow.graph.FlowGraph
 import com.harana.sdk.shared.models.flow.graph.node.Node
+import com.harana.sdk.shared.utils.HMap
 import io.circe.Json
 import io.circe.generic.JsonCodec
 
@@ -21,13 +22,15 @@ case class InnerWorkflow(graph: FlowGraph,
   val source = findNodeOfType(sourceId).get
   val sink = findNodeOfType(sinkId).get
 
-  private def findNodeOfType(actionId: ActionTypeInfo.Id) = graph.nodes.find(_.value.id == actionId)
-  def getDatasourcesIds = graph.getDatasourcesIds
+  // FIXME
+  private def findNodeOfType(actionId: ActionTypeInfo.Id) = graph.nodes.find(_.value.id == actionId.toString)
 
 }
 
 object InnerWorkflow {
-  val empty = InnerWorkflow(FlowGraph(Set(Node(Node.Id.randomId, new SourceInfo() {}), Node(Node.Id.randomId, new SinkInfo() {}))), Json.Null)
+  val sourceAction = Action((0,0), SourceInfo.inArity, SourceInfo.outArity, None, None, None, HMap.empty)
+  val sinkAction = Action((0,0), SinkInfo.inArity, SinkInfo.outArity, None, None, None, HMap.empty)
+  val empty = InnerWorkflow(FlowGraph(Set(Node(sourceAction.id, sourceAction), Node(sinkAction.id, sinkAction))), Json.Null)
 }
 
 @JsonCodec

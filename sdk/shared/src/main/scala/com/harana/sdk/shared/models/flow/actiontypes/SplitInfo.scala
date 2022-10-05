@@ -2,17 +2,15 @@ package com.harana.sdk.shared.models.flow.actiontypes
 
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.actionobjects.DataFrameInfo
-import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.SetAction
-import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
-import com.harana.sdk.shared.models.flow.{Action1To2TypeInfo, PortPosition, parameters}
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.HasSeedParameter
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.SetAction
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
+import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
 import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParameter}
-import com.harana.sdk.shared.models.flow.parameters.{CodeSnippetLanguage, CodeSnippetParameter, DoubleParameter, Parameter, ParameterGroup, Parameters}
 import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
+import com.harana.sdk.shared.models.flow.parameters._
 import com.harana.sdk.shared.models.flow.utils.Id
-import shapeless.HMap
+import com.harana.sdk.shared.models.flow.{Action1To2TypeInfo, PortPosition}
 
 import scala.reflect.runtime.{universe => ru}
 

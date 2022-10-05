@@ -4,7 +4,7 @@ import com.harana.sdk.backend.models.flow.actionobjects.ActionObjectInfoMock
 import com.harana.sdk.backend.models.flow._
 import com.harana.sdk.backend.models.flow.actiontypes.{ActionTypeType0To1, ActionTypeType1To0, ActionTypeType1To1, ActionTypeType1To2, ActionTypeType2To1}
 import com.harana.sdk.shared.models.flow.ActionTypeInfo
-import com.harana.sdk.shared.models.flow.graph.FlowGraph.FlowNode
+import com.harana.sdk.shared.models.flow.graph.FlowGraph.Node[ActionTypeInfo]
 import com.harana.sdk.shared.models.flow.graph.GraphAction
 import com.harana.sdk.shared.models.flow.graph.node.Node
 import com.harana.sdk.shared.models.flow.parameters.Parameter
@@ -13,7 +13,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import scala.reflect.runtime.{universe => ru}
 
 object RandomNodeFactory {
-  def randomNode(action: GraphAction): FlowNode = Node(Node.Id.randomId, action)
+  def randomNode(action: GraphAction): Node[ActionTypeInfo] = Node(Node.Id.randomId, action)
 }
 
 object DClassesForActions extends MockitoSugar {

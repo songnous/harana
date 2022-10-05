@@ -1,6 +1,7 @@
 package com.harana.sdk.shared.models.flow.actiontypes
 
 import com.harana.sdk.shared.models.common.Version
+import com.harana.sdk.shared.models.flow.Action
 import com.harana.sdk.shared.models.flow.actionobjects.CustomTransformerInfo
 import com.harana.sdk.shared.models.flow.actiontypes.custom.{SinkInfo, SourceInfo}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.Custom
@@ -10,6 +11,7 @@ import com.harana.sdk.shared.models.flow.graph.{Edge, FlowGraph}
 import com.harana.sdk.shared.models.flow.parameters.custom.InnerWorkflow
 import com.harana.sdk.shared.models.flow.parameters.{ParameterGroup, WorkflowParameter}
 import com.harana.sdk.shared.models.flow.utils.Id
+import com.harana.sdk.shared.utils.HMap
 import io.circe.Json
 
 import java.util.UUID
@@ -30,15 +32,14 @@ trait CreateCustomTransformerInfo extends TransformerAsFactoryInfo[CustomTransfo
   def setInnerWorkflow(workflow: InnerWorkflow): this.type = set(innerWorkflowParameter, workflow)
 
   override val parameterGroups = List(ParameterGroup(None, innerWorkflowParameter))
-  override def getDatasourcesIds: Set[UUID] = getInnerWorkflow.getDatasourcesIds
 }
 
 object CreateCustomTransformerInfo extends CreateCustomTransformerInfo {
-  private val sourceNodeId: Id = "2603a7b5-aaa9-40ad-9598-23f234ec5c32"
-  private val sinkNodeId: Id = "d7798d5e-b1c6-4027-873e-a6d653957418"
+  val sourceAction = Action((0, 0), SourceInfo.inArity, SourceInfo.outArity, None, None, None, HMap.empty)
+  private val sourceNode = Node(sourceAction.id, sourceAction)
 
-  private val sourceNode = Node(sourceNodeId, new SourceInfo() {})
-  private val sinkNode = Node(sinkNodeId, new SinkInfo() {})
+  val sinkAction = Action((0, 0), SinkInfo.inArity, SinkInfo.outArity, None, None, None, HMap.empty)
+  private val sinkNode = Node(sinkAction.id, sinkAction)
 
   val default = InnerWorkflow(
     FlowGraph(nodes = Set(sourceNode, sinkNode), edges = Set(Edge((sourceNode, 0), (sinkNode, 0))))

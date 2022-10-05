@@ -1,13 +1,12 @@
 package com.harana.sdk.shared.models.flow.actiontypes
 
 import com.harana.sdk.shared.models.common.Version
+import com.harana.sdk.shared.models.flow.Action2To1TypeInfo
 import com.harana.sdk.shared.models.flow.actionobjects.DataFrameInfo
-import com.harana.sdk.shared.models.flow.{Action1To1TypeInfo, Action2To1TypeInfo}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Filtering
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
-import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup}
+import com.harana.sdk.shared.models.flow.parameters.ParameterGroup
 import com.harana.sdk.shared.models.flow.utils.Id
-import shapeless.HMap
 
 import scala.reflect.runtime.universe.TypeTag
 

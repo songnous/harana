@@ -4,7 +4,7 @@ import com.harana.sdk.backend.models.flow.graph.RandomNodeFactory._
 import com.harana.sdk.backend.models.flow.utils.{Logging, Serialization}
 import com.harana.sdk.shared.models.flow
 import com.harana.sdk.shared.models.flow.graph
-import com.harana.sdk.shared.models.flow.graph.FlowGraph.FlowNode
+import com.harana.sdk.shared.models.flow.graph.FlowGraph.Node[ActionTypeInfo]
 import com.harana.sdk.shared.models.flow.graph.node.Node
 import com.harana.sdk.shared.models.flow.graph.{Edge, FlowGraph}
 import org.scalatest.funsuite.AnyFunSuite
@@ -84,7 +84,7 @@ class DirectedGraphSpec extends AnyFunSuite with Matchers with Serialization wit
   test("Complicated Graph can be sorted topologically") {
     import com.harana.sdk.backend.models.flow.graph.ActionTestClasses._
 
-    def checkIfInOrder(node1: FlowNode, node2: FlowNode, order: List[FlowNode]) =
+    def checkIfInOrder(node1: Node[ActionTypeInfo], node2: Node[ActionTypeInfo], order: List[Node[ActionTypeInfo]]) =
       assert(order.indexOf(node1) < order.indexOf(node2))
 
     val node1 = randomNode(ActionTypeTypeA1ToA())

@@ -3,7 +3,7 @@ package com.harana.sdk.backend.models.flow.json.graph
 import com.harana.models.json.graph.GraphJsonTestSupport
 import com.harana.sdk.backend.models.flow.actiontypes.ActionType
 import com.harana.sdk.shared.models.flow.ActionTypeInfo
-import com.harana.sdk.shared.models.flow.graph.FlowGraph.{FlowNode, flowNodeEncoder}
+import com.harana.sdk.shared.models.flow.graph.FlowGraph.{Node[ActionTypeInfo], Node[ActionTypeInfo]Encoder}
 import com.harana.sdk.shared.models.flow.graph.node.Node
 import io.circe.syntax.EncoderOps
 import org.mockito.Mockito._
@@ -18,7 +18,7 @@ class NodeJsonProtocolSpec extends GraphJsonTestSupport {
     when(action.id).thenReturn(expectedActionId)
     when(action.name).thenReturn(expectedActionName)
 
-    val node = mock[FlowNode]
+    val node = mock[Node[ActionTypeInfo]]
     val expectedNodeId = Node.Id.randomId
     when(node.value).thenReturn(action)
     when(node.id).thenReturn(expectedNodeId)

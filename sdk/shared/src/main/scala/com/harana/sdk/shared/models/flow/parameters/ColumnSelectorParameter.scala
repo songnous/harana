@@ -1,6 +1,7 @@
 package com.harana.sdk.shared.models.flow.parameters
 
 import com.harana.sdk.shared.models.flow.parameters.selections.MultipleColumnSelection
+import io.circe.generic.JsonCodec
 
 case class ColumnSelectorParameter(name: String,
                                    required: Boolean = false,

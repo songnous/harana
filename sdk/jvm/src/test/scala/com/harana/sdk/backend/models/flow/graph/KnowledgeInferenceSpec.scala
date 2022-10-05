@@ -1,8 +1,8 @@
 package com.harana.sdk.backend.models.flow.graph
 
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
+import com.harana.sdk.shared.models.flow.ActionTypeInfo
 import com.harana.sdk.shared.models.flow.exceptions.CyclicGraphError
-import com.harana.sdk.shared.models.flow.graph.FlowGraph.FlowNode
 import com.harana.sdk.shared.models.flow.graph.node.Node
 import com.harana.sdk.shared.models.flow.graph.{Edge, GraphAction, TopologicallySortable}
 import org.mockito.ArgumentMatchers.{any, eq => isEqualTo}
@@ -39,7 +39,7 @@ class KnowledgeInferenceSpec extends AbstractInferenceSpec with BeforeAndAfter {
         )
         when(topologicallySortedMock.topologicallySorted).thenReturn(Some(topologicallySortedNodes))
         topologicallySortedNodes.zip(nodeInferenceResultForNodes).foreach {
-          case (node: FlowNode, result: NodeInferenceResult) => nodeInferenceMockShouldInferResultForNode(node, result)
+          case (node: Node[ActionTypeInfo], result: NodeInferenceResult) => nodeInferenceMockShouldInferResultForNode(node, result)
         }
 
         val graphKnowledge = graph.inferKnowledge(mock[InferContext], GraphKnowledge())
@@ -71,8 +71,8 @@ class KnowledgeInferenceSpec extends AbstractInferenceSpec with BeforeAndAfter {
 
         when(topologicallySortedMock.topologicallySorted).thenReturn(Some(topologicallySorted))
 
-        nodesWithKnowledge.foreach((node: FlowNode) => nodeInferenceMockShouldThrowForNode(node))
-        nodesToInfer.foreach((node: FlowNode) => nodeInferenceMockShouldInferResultForNode(node, knowledgeToInfer(node.id)))
+        nodesWithKnowledge.foreach((node: Node[ActionTypeInfo]) => nodeInferenceMockShouldThrowForNode(node))
+        nodesToInfer.foreach((node: Node[ActionTypeInfo]) => nodeInferenceMockShouldInferResultForNode(node, knowledgeToInfer(node.id)))
 
         val expectedKnowledge = initialKnowledge ++ knowledgeToInfer
         val graphKnowledge = graph.inferKnowledge(mock[InferContext], GraphKnowledge(initialKnowledge))
@@ -95,10 +95,10 @@ class KnowledgeInferenceSpec extends AbstractInferenceSpec with BeforeAndAfter {
     }
   }
 
-  def nodeInferenceMockShouldInferResultForNode(nodeCreateA1: FlowNode, nodeCreateA1InferenceResult: NodeInferenceResult) =
+  def nodeInferenceMockShouldInferResultForNode(nodeCreateA1: Node[ActionTypeInfo], nodeCreateA1InferenceResult: NodeInferenceResult) =
     when(nodeInferenceMock.inferKnowledge(isEqualTo(nodeCreateA1), any[InferContext], any[NodeInferenceResult])).thenReturn(nodeCreateA1InferenceResult)
 
-  def nodeInferenceMockShouldThrowForNode(node: FlowNode) =
+  def nodeInferenceMockShouldThrowForNode(node: Node[ActionTypeInfo]) =
     when(nodeInferenceMock.inferKnowledge(isEqualTo(node), any[InferContext], any[NodeInferenceResult]))
       .thenThrow(new RuntimeException("Inference should not be called for node " + node.id))
 
@@ -106,10 +106,10 @@ class KnowledgeInferenceSpec extends AbstractInferenceSpec with BeforeAndAfter {
       with KnowledgeInference
       with NodeInference {
 
-    override def inferKnowledge(node: FlowNode, context: InferContext, inputInferenceForNode: NodeInferenceResult) =
+    override def inferKnowledge(node: Node[ActionTypeInfo], context: InferContext, inputInferenceForNode: NodeInferenceResult) =
       nodeInferenceMock.inferKnowledge(node, context, inputInferenceForNode)
 
-    def inputInferenceForNode(node: FlowNode, context: InferContext, graphKnowledge: GraphKnowledge, nodePredecessorsEndpoints: IndexedSeq[Option[Endpoint]]) = {
+    def inputInferenceForNode(node: Node[ActionTypeInfo], context: InferContext, graphKnowledge: GraphKnowledge, nodePredecessorsEndpoints: IndexedSeq[Option[Endpoint]]) = {
       nodeInferenceMock.inputInferenceForNode(
         node,
         context,
@@ -120,14 +120,14 @@ class KnowledgeInferenceSpec extends AbstractInferenceSpec with BeforeAndAfter {
 
     def topologicallySorted = topologicallySortableMock.topologicallySorted
 
-    def node(id: Node.Id): FlowNode = topologicallySortableMock.node(id)
+    def node(id: Node.Id): Node[ActionTypeInfo] = topologicallySortableMock.node(id)
 
-    def allPredecessorsOf(id: Node.Id): Set[FlowNode] = topologicallySortableMock.allPredecessorsOf(id)
+    def allPredecessorsOf(id: Node.Id): Set[Node[ActionTypeInfo]] = topologicallySortableMock.allPredecessorsOf(id)
     def predecessors(id: Node.Id) = topologicallySortableMock.predecessors(id)
     def successors(id: Node.Id) = topologicallySortableMock.successors(id)
 
     def edges: Set[Edge] = ???
-    def nodes: Set[FlowNode] = ???
+    def nodes: Set[Node[ActionTypeInfo]] = ???
 
   }
 }

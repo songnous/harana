@@ -3,14 +3,12 @@ package com.harana.sdk.shared.models.flow.actiontypes
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.Action2To1TypeInfo
 import com.harana.sdk.shared.models.flow.actionobjects.{DataFrameInfo, EstimatorInfo, TransformerInfo}
-import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Action
 import com.harana.sdk.shared.models.flow.actiontypes.layout.SmallBlockLayout2To1
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Action
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
-import com.harana.sdk.shared.models.flow.parameters.{DynamicParameter, Parameter, ParameterGroup}
+import com.harana.sdk.shared.models.flow.parameters.{DynamicParameter, ParameterGroup}
 import com.harana.sdk.shared.models.flow.utils.Id
 import io.circe.Json
-import shapeless.HMap
 
 import scala.reflect.runtime.universe.TypeTag
 

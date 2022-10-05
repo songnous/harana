@@ -6,7 +6,7 @@ import com.harana.sdk.backend.models.flow.inference.exceptions.{AllTypesNotCompi
 import com.harana.sdk.backend.models.flow.inference.warnings.SomeTypesNotCompilableWarning
 import com.harana.sdk.backend.models.flow.{Knowledge, graph}
 import com.harana.sdk.shared.models.flow.actionobjects.ActionObjectInfo
-import com.harana.sdk.shared.models.flow.graph.FlowGraph.FlowNode
+import com.harana.sdk.shared.models.flow.graph.FlowGraph.Node[ActionTypeInfo]
 import com.harana.sdk.shared.models.flow.graph.node.Node
 
 class NodeInferenceImplSpec extends AbstractInferenceSpec {
@@ -119,7 +119,7 @@ class NodeInferenceImplSpec extends AbstractInferenceSpec {
     }
   }
 
-  def testInputInferenceForNode(predecessorPortIndex: Int, node: FlowNode, predecessorKnowledge: List[Knowledge[ActionObjectInfo]]) = {
+  def testInputInferenceForNode(predecessorPortIndex: Int, node: Node[ActionTypeInfo], predecessorKnowledge: List[Knowledge[ActionObjectInfo]]) = {
     val predecessorId = Node.Id.randomId
     val nodePredecessorsEndpoints = IndexedSeq(Some(Endpoint(predecessorId, predecessorPortIndex)))
     val graphKnowledge = GraphKnowledge(Map(predecessorId -> graph.NodeInferenceResult(predecessorKnowledge)))

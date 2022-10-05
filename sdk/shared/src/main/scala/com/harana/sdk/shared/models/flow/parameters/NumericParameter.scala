@@ -1,7 +1,9 @@
 package com.harana.sdk.shared.models.flow.parameters
 
 import com.harana.sdk.shared.models.flow.parameters.validators.{RangeValidator, Validator}
+import io.circe.generic.JsonCodec
 
+@JsonCodec
 case class NumericParameter(name: String,
                             required: Boolean = false,
                             default: Option[Double] = None,

@@ -1,7 +1,7 @@
 package com.harana.sdk.shared.models.data
 
-import com.harana.sdk.shared.models.common.ParameterGroup
 import DataSourceType.DataSourceTypeId
+import com.harana.sdk.shared.models.flow.parameters.ParameterGroup
 import io.circe.generic.JsonCodec
 import com.harana.sdk.shared.utils.CirceCodecs._
 import enumeratum.values.{StringCirceEnum, StringEnum, StringEnumEntry}

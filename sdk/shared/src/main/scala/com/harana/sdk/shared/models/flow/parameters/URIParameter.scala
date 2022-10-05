@@ -1,7 +1,9 @@
 package com.harana.sdk.shared.models.flow.parameters
 
 import com.harana.sdk.shared.models.flow.parameters.validators.{RegexValidator, Validator}
+import io.circe.generic.JsonCodec
 
+@JsonCodec
 case class URIParameter(name: String,
                         required: Boolean = false,
                         default: Option[String] = None,

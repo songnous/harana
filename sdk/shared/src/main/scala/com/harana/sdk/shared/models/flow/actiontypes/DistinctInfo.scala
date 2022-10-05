@@ -2,16 +2,13 @@ package com.harana.sdk.shared.models.flow.actiontypes
 
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.Action3To1TypeInfo
-import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Filtering
-import com.harana.sdk.shared.models.flow.actionobjects.{DataFrameInfo, ProjectorInfo}
+import com.harana.sdk.shared.models.flow.actionobjects.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Filtering
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
-import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup, StringParameter}
+import com.harana.sdk.shared.models.flow.parameters.{ParameterGroup, StringParameter}
 import com.harana.sdk.shared.models.flow.utils.Id
-import io.circe.generic.JsonCodec
-import shapeless.HMap
 
-import scala.reflect.runtime.universe.{TypeTag, typeTag}
+import scala.reflect.runtime.universe.TypeTag
 
 trait DistinctInfo extends Action3To1TypeInfo[DataFrameInfo, DataFrameInfo, DataFrameInfo, DataFrameInfo] with ActionDocumentation {
 

@@ -3,14 +3,12 @@ package com.harana.sdk.shared.models.flow.actiontypes.read
 import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.Action0To1TypeInfo
 import com.harana.sdk.shared.models.flow.actionobjects.DataFrameInfo
-
 import com.harana.sdk.shared.models.flow.actiontypes.inout.InputStorageTypeChoice
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.parameters.choice.ChoiceParameter
-import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup, Parameters}
+import com.harana.sdk.shared.models.flow.parameters.{ParameterGroup, Parameters}
 import com.harana.sdk.shared.models.flow.utils.Id
-import shapeless.HMap
 
 import scala.reflect.runtime.{universe => ru}
 

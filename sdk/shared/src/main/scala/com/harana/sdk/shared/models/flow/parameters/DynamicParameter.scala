@@ -1,11 +1,13 @@
 package com.harana.sdk.shared.models.flow.parameters
 
 import io.circe.Json
+import io.circe.generic.JsonCodec
 
-class DynamicParameter(val name: String,
-                       val required: Boolean = false,
-                       val default: Option[Json] = None,
-                       val inputPort: Int) extends Parameter[Json] {
+@JsonCodec
+case class DynamicParameter(name: String,
+                            required: Boolean = false,
+                            default: Option[Json] = None,
+                            inputPort: Int) extends Parameter[Json] {
 
   val parameterType: ParameterType = ParameterType.Dynamic
 

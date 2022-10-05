@@ -1,18 +1,16 @@
 package com.harana.sdk.shared.models.flow.actiontypes
 
 import com.harana.sdk.shared.models.common.Version
-import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML
 import com.harana.sdk.shared.models.flow.Action3To1TypeInfo
-import com.harana.sdk.shared.models.flow.actionobjects.{DataFrameInfo, EstimatorInfo, EvaluatorInfo}
 import com.harana.sdk.shared.models.flow.actionobjects.report.Report
+import com.harana.sdk.shared.models.flow.actionobjects.{DataFrameInfo, EstimatorInfo, EvaluatorInfo}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.HyperOptimization
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
-import com.harana.sdk.shared.models.flow.parameters.{DynamicParameter, NumericParameter, Parameter, ParameterGroup}
 import com.harana.sdk.shared.models.flow.parameters.gridsearch.GridSearchParameter
 import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
+import com.harana.sdk.shared.models.flow.parameters.{DynamicParameter, NumericParameter, ParameterGroup}
 import com.harana.sdk.shared.models.flow.utils.Id
 import io.circe.Json
-import shapeless.HMap
 
 import scala.reflect.runtime.universe.TypeTag
 
