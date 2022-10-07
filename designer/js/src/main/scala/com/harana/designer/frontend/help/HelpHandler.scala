@@ -8,7 +8,7 @@ import com.harana.sdk.shared.models.common.HelpCategory
 import diode._
 import diode.AnyAction._
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 
 class HelpHandler extends ActionHandler(zoomTo(_.helpState)) {
 

@@ -1,31 +1,30 @@
 package com.harana.designer.backend.services
 
 import com.harana.modules.airbyte.{AirbyteOption, AirbyteProperty, AirbytePropertyType}
+import com.harana.sdk.shared.models.flow.parameters._
 
-import java.lang.Boolean
-import com.harana.sdk.shared.models.common.{Parameter, ParameterValue}
 
 package object datasources {
 
-  def toParameter(ap: AirbyteProperty): Parameter =
+  def toParameter(ap: AirbyteProperty): Parameter[_] =
     ap.`type` match {
       case AirbytePropertyType.Boolean =>
-        Parameter.Boolean(
+        BooleanParameter(
           name = ap.name,
-          default = ap.default.map(a => ParameterValue.Boolean(Boolean.valueOf(a.left.get))),
+          default = ap.default.map(a => Boolean.valueOf(a.left.get)),
           required = ap.required
         )
 
       case AirbytePropertyType.Integer =>
-        Parameter.Integer(
+        IntParameter(
           name = ap.name,
-          default = ap.default.map(p => ParameterValue.Integer(p.toOption.get)),
+          default = ap.default.map(p => p.toOption.get),
           required = ap.required,
           placeholder = ap.placeholder.map(_.toInt),
           allowNegative = ap.minimum.map(_ > 0),
           allowPositive = Some(true),
           options = ap.options.map {
-            case _ @ AirbyteOption.Integer(value) => (value.toString, ParameterValue.Integer(value))
+            case _ @ AirbyteOption.Integer(value) => (value.toString, value)
           }
         )
 
@@ -39,21 +38,21 @@ package object datasources {
         )
 
       case AirbytePropertyType.String =>
-        Parameter.String(
+        StringParameter(
           name = ap.name,
-          default = ap.default.map(a => ParameterValue.String(a.left.get)),
+          default = ap.default.map(a => a.left.get),
           required = ap.required,
           placeholder = ap.placeholder,
           options = ap.options.map {
-            case _ @ AirbyteOption.String(value) => (value, ParameterValue.String(value))
+            case _ @ AirbyteOption.String(value) => (value, value)
           }
         )
 
         // FIXME
       case _ =>
-        Parameter.Boolean(
+        BooleanParameter(
           name = ap.name,
-          default = ap.default.map(a => ParameterValue.Boolean(Boolean.valueOf(a.left.get))),
+          default = ap.default.map(a => Boolean.valueOf(a.left.get)),
           required = ap.required
         )
     }

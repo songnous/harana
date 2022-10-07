@@ -10,7 +10,7 @@ import com.harana.ui.components.LinkType
 import com.harana.ui.components.elements.{Dialog, DialogStyle, HeadingItem, Page}
 import com.harana.ui.components.sidebar.{ContentSection, Sidebar, SidebarSection, Tab}
 import com.harana.ui.external.flow._
-import com.harana.ui.external.flow.types.FlowElement
+import com.harana.ui.external.flow.types.{FlowElement, FlowNode}
 import com.harana.ui.external.shoelace.{Menu, MenuItem, MenuLabel}
 import diode.ActionBatch
 import diode.AnyAction._
@@ -22,6 +22,8 @@ import slinky.web.html._
 import typings.std.MouseEvent
 import com.harana.designer.frontend.flows.item.ui.sidebar._
 import com.harana.designer.frontend.navigation.ui.Navigation
+import com.harana.sdk.shared.models.flow.parameters.Parameter
+import com.harana.sdk.shared.utils.HMap
 import com.harana.ui.external.lazy_log.LazyLog
 
 import scala.scalajs.js.JSConverters._
@@ -78,9 +80,15 @@ import scala.scalajs.js
             snapToGrid = state.snapToGrid,
             onConnect = (connection: Connection) => Circuit.dispatch(AddConnection(connection)),
             onLoad = (instance: FlowInstance) => Circuit.dispatch(UpdateFlowInstance(instance)),
-            onNodeDragStop = (_: MouseEvent, node: Node) => Circuit.dispatch(UpdateNode(node)),
-            onElementClick = (_: MouseEvent, element: FlowElement) => if (isNode(element)) Circuit.dispatch(SelectAction(toNode(element).id)),
-            onElementsRemove = (elements: js.Array[FlowElement]) => if (!state.isEditingParameters && !state.isRunning) Circuit.dispatch(DeleteElements(elements.toList)),
+            onNodeDragStop = (_: MouseEvent, node: FlowNode) => Circuit.dispatch(UpdateNode(node)),
+            onElementClick = (_: MouseEvent, element: FlowElement) =>
+              if (isNode(element)) {
+                val flowNode = element.asInstanceOf[FlowNode]
+                Circuit.dispatch(SelectAction(toNode(flowNode).id))
+              },
+            onElementsRemove = (elements: js.Array[FlowElement]) =>
+              if (!state.isEditingParameters && !state.isRunning)
+                Circuit.dispatch(DeleteElements(elements.toList)),
             onPaneClick = (_: MouseEvent) => Circuit.dispatch(DeselectAllActions)
           )( 
             when(state.showGrid)(Background()),
@@ -129,8 +137,8 @@ import scala.scalajs.js
 
     val result = for {
       actionId          <- state.selectedActionId
-      node              <- state.nodes.find(_.id == actionId)
-      result            =  (data(node).actionType, data(node).parameterValues)
+      node              <- state.nodes.find(_.id == actionId.toString)
+      result            =  (node.data.actionType, node.data.parameterValues)
     } yield result
 
     val parametersCategory = SidebarSection(
@@ -138,7 +146,7 @@ import scala.scalajs.js
       allowCollapse = false,
       allowClear = false,
       None,
-      parameters(state.flow, result.map(_._1), state.selectedActionId, result.map(_._2).getOrElse(Map()), state.isRunning)
+      parameters(state.flow, result.map(_._1), state.selectedActionId, result.map(_._2).getOrElse(HMap.empty[Parameter.Values]), state.isRunning)
     )
 
     val runCategory = SidebarSection(

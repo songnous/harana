@@ -7,7 +7,7 @@ import com.harana.designer.frontend.State
 import com.harana.sdk.shared.models.data.{DataSource, DataSourceType}
 import diode._
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 
 class DataSourceItemHandler extends ActionHandler(zoomTo(_.dataSourceItemState)) {
   override def handle: PartialFunction[Any, ActionResult[State]] = {

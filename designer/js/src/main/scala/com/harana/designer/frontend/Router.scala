@@ -38,7 +38,7 @@ import slinky.core.{CustomAttribute, FunctionalComponent}
 import slinky.web.html._
 import com.harana.sdk.shared.utils.CirceCodecs._
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 
 @react
 object Router {

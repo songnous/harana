@@ -1,19 +1,17 @@
 package com.harana.ui
 
 import com.harana.designer.frontend.Circuit
-import com.harana.ui.components.elements.Dialog
-import com.harana.ui.components.elements.DialogStyle
-import enumeratum.values.{IntCirceEnum, IntEnum, IntEnumEntry, StringCirceEnum, StringEnum, StringEnumEntry}
+import com.harana.designer.frontend.navigation.NavigationStore.OpenRoute
+import com.harana.sdk.shared.models.common.Parameter.ParameterName
+import com.harana.sdk.shared.models.flow.parameters.Parameter
+import com.harana.sdk.shared.utils.HMap
+import com.harana.ui.components.elements.{Dialog, DialogStyle}
+import diode.{Action => DiodeAction}
+import enumeratum.values._
 import enumeratum.{CirceEnum, Enum, EnumEntry}
+import org.scalajs.dom.window
 import slinky.core.facade.{ReactElement, ReactRef}
 import slinky.core.{BuildingComponent, KeyAndRefAddingStage, StatelessComponent, WithAttrs}
-import com.harana.sdk.shared.models.common.Parameter.ParameterValues
-import diode.{Action => DiodeAction}
-import com.harana.sdk.shared.models.common.{Parameter, ParameterGroup, ParameterValue}
-import com.harana.sdk.shared.models.common.Parameter.{ParameterName, ParameterValues}
-import org.scalajs.dom.window
-import com.harana.designer.frontend.Router
-import com.harana.designer.frontend.navigation.NavigationStore.OpenRoute
 
 import scala.scalajs.js
 import scala.scalajs.reflect.Reflect
@@ -165,7 +163,7 @@ package object components {
     case class Page(name: String) extends LinkType
     case class ShowDialog(ref: ReactRef[Dialog.Def], 
                           style: DialogStyle,
-                          initialValues: Option[Map[ParameterName, ParameterValue]] = None,
+                          initialValues: Option[HMap[Parameter.Values]] = None,
                           title: Option[String],
                           width: Option[String] = scala.None) extends LinkType
     case class Url(url: String) extends LinkType

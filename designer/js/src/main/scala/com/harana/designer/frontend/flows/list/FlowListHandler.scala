@@ -1,21 +1,22 @@
 package com.harana.designer.frontend.flows.list
 
 import com.harana.designer.frontend.Circuit.zoomTo
+import com.harana.designer.frontend.Main
 import com.harana.designer.frontend.analytics.Analytics
 import com.harana.designer.frontend.common.grid.GridHandler
 import com.harana.designer.frontend.common.grid.GridStore.{EntitySubType, UpdateEditParameters}
 import com.harana.designer.frontend.common.grid.ui.GridPageItem
-import com.harana.designer.frontend.{Circuit, Main}
-import com.harana.sdk.shared.models.common.{Background, Parameter, ParameterGroup, ParameterValue, Visibility}
-import com.harana.ui.components.LinkType
-import com.harana.designer.frontend.utils.ColorUtils
 import com.harana.designer.frontend.flows.list.FlowListStore._
-import com.harana.sdk.shared.models.common.Parameter.ParameterName
+import com.harana.designer.frontend.utils.ColorUtils
+import com.harana.sdk.shared.models.common.{Background, Visibility}
 import com.harana.sdk.shared.models.flow.Flow
 import com.harana.sdk.shared.models.flow.graph.FlowGraph
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup, StringArrayParameter, StringParameter}
+import com.harana.sdk.shared.utils.HMap
+import com.harana.ui.components.LinkType
 import diode.Effect
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 
 class FlowListHandler extends GridHandler[Flow, FlowEditState]("flows", zoomTo(_.flowListState)) {
 
@@ -31,14 +32,14 @@ class FlowListHandler extends GridHandler[Flow, FlowEditState]("flows", zoomTo(_
       link = LinkType.Page(s"/flows/${flow.id}"),
       entitySubType = None,
       background = Some(flow.background),
-      parameterValues = Map(
-        "title" -> ParameterValue.String(flow.title),
-        "description" -> ParameterValue.String(flow.description),
-        "tags" -> ParameterValue.StringList(flow.tags.toList)
-      )
-  )
+      parameterValues = HMap[Parameter.Values](
+        (GridPageItem.titleParameter, flow.title),
+        (GridPageItem.descriptionParameter, flow.description),
+        (GridPageItem.tagsParameter, flow.tags)
+      ),
+    )
 
-  def toEntity(editedItem: Option[Flow], subType: Option[EntitySubType], values: Map[ParameterName, ParameterValue]) =
+  def toEntity(editedItem: Option[Flow], subType: Option[EntitySubType], values: HMap[Parameter.Values]) =
     editedItem
       .getOrElse(
         Flow(
@@ -53,20 +54,18 @@ class FlowListHandler extends GridHandler[Flow, FlowEditState]("flows", zoomTo(_
         )
       )
       .copy(
-        title = values("title").asInstanceOf[ParameterValue.String],
-        description = values("description").asInstanceOf[ParameterValue.String],
-        tags = values.get("tags").map(_.asInstanceOf[ParameterValue.StringList]).map(_.toSet).getOrElse(Set())
+        title = values.getOrElse(GridPageItem.titleParameter, ""),
+        description = values.getOrElse(GridPageItem.descriptionParameter, ""),
+        tags = values.getOrElse(GridPageItem.tagsParameter, Set.empty[String]),
       )
 
   override def onInit(preferences: Map[String, String]) =
     Some(
-      Effect.action(UpdateEditParameters("flows", List(
-      ParameterGroup("about", List(
-        Parameter.String("title", required = true),
-        Parameter.String("description", multiLine = true, required = true),
-        Parameter.StringList("tags"),
-      ))
-    ))))
+      Effect.action(UpdateEditParameters("flows", List(ParameterGroup(Some("about"),
+        StringParameter("title", required = true),
+        StringParameter("description", multiLine = true, required = true),
+        StringArrayParameter("tags")
+    )))))
 
   override def onCreate(subType: Option[EntitySubType]) = {
     Analytics.flowCreate()

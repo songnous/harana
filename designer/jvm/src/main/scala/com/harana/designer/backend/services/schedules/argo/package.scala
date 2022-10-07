@@ -2,21 +2,18 @@ package com.harana.designer.backend.services.schedules
 
 import com.harana.designer.backend.modules.projects.models.Pipeline
 import com.harana.designer.backend.services.flows.argo.models.Trigger
-import com.harana.modules.argo.{EnvironmentVariable, ObjectMetadata, Requests, Resources, VolumeMount}
 import com.harana.modules.argo.events.EventSource.EventSource
-import com.harana.modules.argo.events.{EventSource, Sensor}
 import com.harana.modules.argo.events.Sensor.{EventDependency, Http, K8SResource, Sensor, Subscription, TriggerTemplate}
 import com.harana.modules.argo.events.Trigger.{K8SSource, K8STrigger}
-import com.harana.modules.argo.{Container => ArgoContainer, Template => ArgoTemplate}
-import com.harana.modules.argo.workflows.{DAG, DAGTask, Template, Workflow}
+import com.harana.modules.argo.events.{EventSource, Sensor}
+import com.harana.modules.argo.{ObjectMetadata, Container => ArgoContainer, Template => ArgoTemplate}
 import com.harana.sdk.shared.models.flow.Flow
 import com.harana.sdk.shared.models.schedules.Schedule
 import zio.UIO
-import io.scalaland.chimney.dsl._
 
 package object argo {
 
-  def pipelineTriggers(schedule: Flow): UIO[List[(Pipeline, List[Trigger])]] =
+  def pipelineTriggers(schedule: Schedule): UIO[List[(Pipeline, List[Trigger])]] =
     UIO(flow.pipelines.map(_.map(p => (p, p.start.triggers.getOrElse(List())))).getOrElse(List()))
 
 

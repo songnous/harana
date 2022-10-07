@@ -1,13 +1,13 @@
 package com.harana.designer.backend.services.flowexecutions
 
 import com.harana.designer.backend.services.flowexecutions.FlowExecutions.Service
-import com.harana.modules.mongo.Mongo
-import com.harana.modules.vertx.models.Response
 import com.harana.modules.core.config.Config
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
+import com.harana.modules.mongo.Mongo
+import com.harana.modules.vertx.models.Response
 import com.harana.sdk.shared.models.data.DataSource
-import com.harana.sdk.shared.models.designer.flow.execution.{ExecutionLog, ExecutionStatus}
+import com.harana.sdk.shared.models.flow.execution.spark.{ExecutionLog, ExecutionStatus}
 import com.harana.sdk.shared.models.flow.{Flow, FlowExecution}
 import io.circe.parser._
 import io.circe.syntax._

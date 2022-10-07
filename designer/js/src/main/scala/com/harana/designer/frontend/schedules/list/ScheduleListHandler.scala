@@ -9,14 +9,15 @@ import com.harana.designer.frontend.schedules.list.ScheduleListStore._
 import com.harana.designer.frontend.utils.ColorUtils
 import com.harana.designer.frontend.utils.http.Http
 import com.harana.designer.frontend.{Main, State}
-import com.harana.sdk.shared.models.common.Parameter.ParameterName
-import com.harana.sdk.shared.models.common._
+import com.harana.sdk.shared.models.common.{Background, Visibility}
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup, StringParameter}
 import com.harana.sdk.shared.models.schedules.{Action, Event, EventMode, Schedule}
+import com.harana.sdk.shared.utils.HMap
 import com.harana.ui.components.LinkType
 import diode._
 
 import scala.collection.mutable.ListBuffer
-import scala.concurrent.ExecutionContext.Implicits.global
+import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 
 class ScheduleListHandler extends GridHandler[Schedule, ScheduleEditState]("schedules", zoomTo(_.scheduleListState)) {
 
@@ -67,10 +68,10 @@ class ScheduleListHandler extends GridHandler[Schedule, ScheduleEditState]("sche
       link = LinkType.Page(s"/schedules/${schedule.id}"),
       entitySubType = None,
       background = schedule.background,
-      parameterValues = Map(
-        "title" -> ParameterValue.String(schedule.title),
-        "description" -> ParameterValue.String(schedule.description),
-        "tags" -> ParameterValue.StringList(schedule.tags.toList)
+      parameterValues = HMap[Parameter.Values](
+        (GridPageItem.titleParameter, schedule.title),
+        (GridPageItem.descriptionParameter, schedule.description),
+        (GridPageItem.tagsParameter, schedule.tags)
       ),
       additionalData = Map(
         "actions" -> schedule.actions,
@@ -79,7 +80,7 @@ class ScheduleListHandler extends GridHandler[Schedule, ScheduleEditState]("sche
     )
 
 
-  def toEntity(editedItem: Option[Schedule], subType: Option[EntitySubType], values: Map[ParameterName, ParameterValue]) =
+  def toEntity(editedItem: Option[Schedule], subType: Option[EntitySubType], values: HMap[Parameter.Values]) =
     editedItem
       .getOrElse(
         Schedule(
@@ -97,9 +98,9 @@ class ScheduleListHandler extends GridHandler[Schedule, ScheduleEditState]("sche
         )
       )
       .copy(
-        title = values("title").asInstanceOf[ParameterValue.String],
-        description = values("description").asInstanceOf[ParameterValue.String],
-        tags = values.get("tags").map(_.asInstanceOf[ParameterValue.StringList]).map(_.toSet).getOrElse(Set())
+        title = values.getOrElse(GridPageItem.titleParameter, ""),
+        description = values.getOrElse(GridPageItem.descriptionParameter, ""),
+        tags = values.getOrElse(GridPageItem.tagsParameter, Set.empty[String])
       )
 
 
@@ -118,11 +119,10 @@ class ScheduleListHandler extends GridHandler[Schedule, ScheduleEditState]("sche
           UpdateEditState("schedules", state.value.editState.copy(eventTypes = et.getOrElse(List()))))
       ) +
       Effect.action(UpdateEditParameters("schedules", List(
-        ParameterGroup("about", List(
-          Parameter.String("title", required = true),
-          Parameter.String("description", multiLine = true, required = true)
-        ))
-      ))) +
+        ParameterGroup(Some("about"),
+          StringParameter("title", required = true),
+          StringParameter("description", multiLine = true, required = true)
+        )))) +
       Effect.action(UpdateEditState("schedules", state.value.editState.copy(itemActions = ListBuffer.from(actions), itemEvents = ListBuffer.from(events))))
     }
 

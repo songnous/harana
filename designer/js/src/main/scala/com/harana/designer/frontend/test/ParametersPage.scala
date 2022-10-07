@@ -78,7 +78,7 @@ import slinky.web.html._
 //          h5("SearchQuery"),
 //          ParameterItem(Parameter.SearchQuery("SearchQuery", "SearchQuery", "SearchQuery parameter")),
 //          h5("String"),
-//          ParameterItem(Parameter.String("String", "String", "String parameter")),
+//          ParameterItem(StringParameter("String", "String", "String parameter")),
 //          h5("Tags"),
 //          ParameterItem(Parameter.Tags("Tags", "Tags", "Tags parameter")),
 //          h5("Time"),

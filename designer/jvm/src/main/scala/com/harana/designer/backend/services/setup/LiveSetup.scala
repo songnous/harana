@@ -1,23 +1,17 @@
 package com.harana.designer.backend.services.setup
 
 import com.harana.designer.backend.services.setup.Setup.Service
-import com.harana.modules.mongo.Mongo
 import com.harana.modules.core.config.Config
-import com.harana.modules.kubernetes.Kubernetes
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
-import com.harana.sdk.shared.models.common.{Background, Visibility}
-import com.harana.id.jwt.shared.models.DesignerClaims
+import com.harana.modules.kubernetes.Kubernetes
+import com.harana.modules.mongo.Mongo
 import com.harana.sdk.shared.models.apps.{App => DesignerApp}
+import com.harana.sdk.shared.models.common.{Background, Visibility}
+import com.harana.sdk.shared.models.jwt.DesignerClaims
 import org.mongodb.scala.Document
-import skuber.PersistentVolume.{AccessMode, Phase}
-import skuber.PersistentVolumeClaim.Spec
-import skuber.Resource.Requirements
-import skuber._
-import skuber.json.format._
 import zio.clock.Clock
-import zio.duration._
-import zio.{Has, Schedule, Task, UIO, ZLayer}
+import zio.{Task, ZLayer}
 
 import scala.util.Random
 

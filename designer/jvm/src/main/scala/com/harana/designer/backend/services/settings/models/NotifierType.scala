@@ -1,72 +1,72 @@
 package com.harana.designer.backend.services.settings.models
 
-import com.harana.sdk.shared.models.common.{Parameter, ParameterGroup}
+import com.harana.sdk.shared.models.flow.parameters.{BooleanParameter, ParameterGroup, StringArrayParameter, StringParameter}
 
 object NotifierType {
 
-  val email = ParameterGroup("email", List(
-    Parameter.String("host", required = true),
-    Parameter.String("from", required = true),
-    Parameter.String("to", required = true),
-    Parameter.String("authUsername"),
-    Parameter.String("authPassword"),
-    Parameter.String("authIdentity"),
-    Parameter.String("authSecret"),
-    Parameter.Boolean("requireTls"),
-    Parameter.Boolean("supportsHtml"))
+  val email = ParameterGroup(Some("email"),
+    StringParameter("host", required = true),
+    StringParameter("from", required = true),
+    StringParameter("to", required = true),
+    StringParameter("authUsername"),
+    StringParameter("authPassword"),
+    StringParameter("authIdentity"),
+    StringParameter("authSecret"),
+    BooleanParameter("requireTls"),
+    BooleanParameter("supportsHtml")
   )
 
-  val opsGenie = ParameterGroup("opsGenie", List(
-    Parameter.String("apiUrl"),
-    Parameter.String("apiKey"),
-    Parameter.StringList("usernames")
-  ))
+  val opsGenie = ParameterGroup(Some("opsGenie"),
+    StringParameter("apiUrl"),
+    StringParameter("apiKey"),
+    StringArrayParameter("usernames")
+  )
 
-  val pagerDuty = ParameterGroup("pagerDuty", List(
-    Parameter.String("apiUrl"),
-    Parameter.String("routingKey"),
-    Parameter.String("serviceKey"),
-    Parameter.String("client"),
-    Parameter.String("severity")
-  ))
+  val pagerDuty = ParameterGroup(Some("pagerDuty"),
+    StringParameter("apiUrl"),
+    StringParameter("routingKey"),
+    StringParameter("serviceKey"),
+    StringParameter("client"),
+    StringParameter("severity")
+  )
 
-  val pushOver = ParameterGroup("pushOver", List(
-    Parameter.String("apiUrl"),
-    Parameter.String("userKey"),
-    Parameter.String("token"),
-    Parameter.String("priority"),
-    Parameter.String("retry"),
-    Parameter.String("expire")
-  ))
+  val pushOver = ParameterGroup(Some("pushOver"),
+    StringParameter("apiUrl"),
+    StringParameter("userKey"),
+    StringParameter("token"),
+    StringParameter("priority"),
+    StringParameter("retry"),
+    StringParameter("expire")
+  )
 
-  val slack = ParameterGroup("slack", List(
-    Parameter.String("apiUrl"),
-    Parameter.String("channel"),
-    Parameter.String("username")
-  ))
+  val slack = ParameterGroup(Some("slack"),
+    StringParameter("apiUrl"),
+    StringParameter("channel"),
+    StringParameter("username")
+  )
 
-  val splunkOnCall = ParameterGroup("splunkOnCall", List(
-    Parameter.String("apiUrl"),
-    Parameter.String("apiKey"),
-    Parameter.String("routingKey"),
-    Parameter.String("messageType"),
-    Parameter.String("entityDisplayName"),
-    Parameter.String("monitoringTool")
-  ))
+  val splunkOnCall = ParameterGroup(Some("splunkOnCall"),
+    StringParameter("apiUrl"),
+    StringParameter("apiKey"),
+    StringParameter("routingKey"),
+    StringParameter("messageType"),
+    StringParameter("entityDisplayName"),
+    StringParameter("monitoringTool")
+  )
 
-  val webHook = ParameterGroup("webHook", List(
-    Parameter.String("apiUrl"),
-    Parameter.String("authUsername"),
-    Parameter.String("authPassword")
-  ))
+  val webHook = ParameterGroup(Some("webHook"),
+    StringParameter("apiUrl"),
+    StringParameter("authUsername"),
+    StringParameter("authPassword")
+  )
 
-  val weChat = ParameterGroup("weChat", List(
-    Parameter.String("apiUrl"),
-    Parameter.String("apiSecret"),
-    Parameter.String("agentId"),
-    Parameter.String("corpId"),
-    Parameter.String("toUser"),
-    Parameter.String("toParty"),
-    Parameter.String("toTag")
-  ))
+  val weChat = ParameterGroup(Some("weChat"),
+    StringParameter("apiUrl"),
+    StringParameter("apiSecret"),
+    StringParameter("agentId"),
+    StringParameter("corpId"),
+    StringParameter("toUser"),
+    StringParameter("toParty"),
+    StringParameter("toTag")
+  )
 }

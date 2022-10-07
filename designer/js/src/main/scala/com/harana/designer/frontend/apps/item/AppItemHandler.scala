@@ -9,7 +9,7 @@ import com.harana.designer.frontend.{Circuit, State}
 import com.harana.sdk.shared.models.apps.App
 import diode._
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 
 class AppItemHandler extends ActionHandler(zoomTo(_.appItemState)) {
   override def handle: PartialFunction[Any, ActionResult[State]] = {

@@ -3,11 +3,11 @@ package com.harana.designer.frontend.files
 import com.harana.designer.frontend.common.SortOrdering
 import com.harana.designer.frontend.common.ui.FilterItem
 import com.harana.designer.shared.PreviewData
-import com.harana.sdk.shared.models.common.{ParameterValue}
-import com.harana.sdk.shared.models.common.Parameter.ParameterName
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, StringParameter}
+import com.harana.sdk.shared.utils.HMap
 import com.harana.shared.models.HaranaFile
-import diode.{Action => DiodeAction}
 import com.harana.ui.external.filepond.UploadedFile
+import diode.{Action => DiodeAction}
 
 object FilesStore {
 
@@ -42,7 +42,7 @@ object FilesStore {
   case object DeleteItem extends DiodeAction
   case object DownloadItem extends DiodeAction
   case object DuplicateItem extends DiodeAction
-  case class EditItemInfo(parameterValues: Map[ParameterName, ParameterValue]) extends DiodeAction
+  case class EditItemInfo(parameterValues: HMap[Parameter.Values]) extends DiodeAction
   case object ShareItem extends DiodeAction
   case object CompressItem extends DiodeAction
   case object DecompressItem extends DiodeAction
@@ -66,4 +66,7 @@ object FilesStore {
   case class UpdateTags(tags: Map[String, Int]) extends DiodeAction
   case class UpdateTag(tag: Option[FilterItem]) extends DiodeAction
   case class UpdateUploadedFiles(files: List[UploadedFile]) extends DiodeAction
+
+  val nameParameter = StringParameter("name", required = true)
+
 }

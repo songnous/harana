@@ -2,19 +2,18 @@ package com.harana.designer.frontend.flows.item
 
 import com.harana.designer.frontend.flows.item.ui.FlowTab
 import com.harana.designer.frontend.utils.UndoHistory
-import com.harana.sdk.shared.models.common.Parameter.ParameterName
-import com.harana.sdk.shared.models.common.ParameterValue
 import com.harana.sdk.shared.models.flow.Flow.FlowId
-import com.harana.sdk.shared.models.flow.{ActionInfo, Flow, FlowExecution}
-import com.harana.sdk.shared.utils.Random
-import com.harana.ui.external.flow.types.FlowElement
-import com.harana.ui.external.flow.{Connection, Edge, FlowInstance, Node}
+import com.harana.sdk.shared.models.flow.parameters.Parameter
+import com.harana.sdk.shared.models.flow.{ActionTypeInfo, Flow, FlowExecution}
+import com.harana.sdk.shared.utils.{HMap, Random}
+import com.harana.ui.external.flow.types.{FlowElement, FlowNode}
+import com.harana.ui.external.flow.{Connection, FlowEdge, FlowInstance}
 import diode.{Action => DiodeAction}
 import slinky.web.SyntheticMouseEvent
 
 object FlowItemStore {
 
-  type UndoState = (List[Node], List[Edge])
+  type UndoState = (List[FlowNode], List[FlowEdge])
 
   case class FlowItemState(flow: Option[Flow],
                            flowExecution: Option[FlowExecution],
@@ -23,13 +22,13 @@ object FlowItemStore {
                            isEditingParameters: Boolean,
                            flowInstance: Option[FlowInstance],
                            logsKey: String,
-                           nodes: List[Node],
-                           edges: List[Edge],
-                           actionTypes: List[ActionInfo],
-                           activeActionIds: List[ActionInfo.Id],
-                           completedActionIds: List[ActionInfo.Id],
-                           selectedActionId: Option[ActionInfo.Id],
-                           selectedActionType: Option[ActionInfo],
+                           nodes: List[FlowNode],
+                           edges: List[FlowEdge],
+                           actionTypes: List[ActionTypeInfo],
+                           activeActionIds: List[ActionTypeInfo.Id],
+                           completedActionIds: List[ActionTypeInfo.Id],
+                           selectedActionId: Option[ActionTypeInfo.Id],
+                           selectedActionType: Option[ActionTypeInfo],
                            selectedTab: FlowTab,
                            portsOrientation: Boolean,
                            showLogs: Boolean,
@@ -63,21 +62,22 @@ object FlowItemStore {
 
   case class AddAction(event: SyntheticMouseEvent[_]) extends DiodeAction
   case class AddConnection(connection: Connection) extends DiodeAction
-  case class RunAction(action: ActionInfo.Id) extends DiodeAction
-  case class SelectAction(actionId: ActionInfo.Id) extends DiodeAction
-  case class SelectActionType(actionType: ActionInfo) extends DiodeAction
+  case class RunAction(action: ActionTypeInfo.Id) extends DiodeAction
+  case class SelectAction(actionId: ActionTypeInfo.Id) extends DiodeAction
+  case class SelectActionType(actionType: ActionTypeInfo) extends DiodeAction
   case object DeselectAllActions extends DiodeAction
 
   case class DeleteElements(elements: List[FlowElement]) extends DiodeAction
 
-  case class UpdateActionTypes(actionTypes: List[ActionInfo]) extends DiodeAction
+  case class UpdateActionTypes(actionTypes: List[ActionTypeInfo]) extends DiodeAction
   case class UpdateFlow(flow: Flow) extends DiodeAction
   case class UpdateFlowExecution(flowExecution: FlowExecution) extends DiodeAction
   case class UpdateFlowInstance(instance: FlowInstance) extends DiodeAction
   case class UpdateIsEditingParameters(editing: Boolean) extends DiodeAction
-  case class UpdateNode(node: Node) extends DiodeAction
-  case class UpdateParameterValues(actionId: ActionInfo.Id, parameterValues: Map[ParameterName, ParameterValue]) extends DiodeAction
-  case class UpdatePercentage(node: Node, percentage: Int) extends DiodeAction
+  case class UpdateNode(node: FlowNode) extends DiodeAction
+  case class UpdateParameterValue(actionId: ActionTypeInfo.Id, parameter: Parameter[_], parameterValue: Any) extends DiodeAction
+  case class UpdateParameterValues(actionId: ActionTypeInfo.Id, parameterValues: HMap[Parameter.Values]) extends DiodeAction
+  case class UpdatePercentage(node: FlowNode, percentage: Int) extends DiodeAction
   case class UpdatePortsOrientation(vertical: Boolean) extends DiodeAction
 
   case object ToggleLogs extends DiodeAction

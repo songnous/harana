@@ -2,16 +2,14 @@ package com.harana.designer.backend.services.data
 
 import com.harana.designer.backend.services.Crud
 import com.harana.designer.backend.services.data.Data.Service
-import com.harana.modules.alluxiofs.AlluxioFs
 import com.harana.id.jwt.modules.jwt.JWT
-import com.harana.modules.vertx.Vertx
-import com.harana.modules.vertx.models.Response
+import com.harana.modules.alluxiofs.AlluxioFs
 import com.harana.modules.core.config.Config
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
-import com.harana.id.jwt.shared.models.DesignerClaims
+import com.harana.modules.vertx.Vertx
+import com.harana.modules.vertx.models.Response
 import io.circe.syntax._
-import com.harana.sdk.shared.utils.CirceCodecs._
 import io.vertx.ext.web.RoutingContext
 import zio.{Task, ZIO, ZLayer}
 

@@ -2,25 +2,26 @@ package com.harana.ui.components.elements
 
 import com.harana.designer.frontend.utils.i18nUtils.ops
 import com.harana.sdk.shared.models.common.Parameter.ParameterName
-import com.harana.sdk.shared.models.common.{Parameter, ParameterGroup, ParameterValue}
-import com.harana.ui.components.{ColumnSize, ParameterGroupLayout}
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup}
+import com.harana.sdk.shared.utils.HMap
+import com.harana.ui.components.ParameterGroupLayout
 import com.harana.ui.external.shoelace.{Tab, TabGroup, TabPanel, Button => ShoelaceButton, Dialog => ShoelaceDialog}
-import slinky.core.{Component, CustomAttribute}
 import slinky.core.annotations.react
 import slinky.core.facade.{Fragment, React, ReactElement, ReactRef}
-import slinky.web.html.{div, h4}
+import slinky.core.{Component, CustomAttribute}
+import slinky.web.html.h4
 
 import scala.collection.mutable.{Map => MutableMap}
 
 @react class Dialog extends Component {
 
 	var dialogRef = React.createRef[ShoelaceDialog.Def]
-	var parameterRefs = Map.empty[Parameter, ReactRef[ParameterItem.Def]]
+	var parameterRefs = Map.empty[Parameter[_], ReactRef[ParameterItem.Def]]
 
 	type Props = Unit
 
 	case class State(style: Option[DialogStyle],
-									 values: Option[Map[ParameterName, ParameterValue]],
+									 values: Option[HMap[Parameter.Values]],
 									 title: Option[String],
 									 width: Option[String])
 
@@ -28,7 +29,7 @@ import scala.collection.mutable.{Map => MutableMap}
 
 
 	def show(style: DialogStyle,
-					 values: Option[Map[ParameterName, ParameterValue]] = None,
+					 values: Option[HMap[Parameter.Values]] = None,
 					 title: Option[String],
 					 width: Option[String] = None) = {
 		update(Some(style), values, title, width)
@@ -36,21 +37,21 @@ import scala.collection.mutable.{Map => MutableMap}
 	}
 
 	def update(style: Option[DialogStyle] = None,
-						 values: Option[Map[ParameterName, ParameterValue]] = None,
+						 values: Option[HMap[Parameter.Values]] = None,
 						 title: Option[String] = None,
 						 width: Option[String] = None) =
 		style match {
 			case Some(DialogStyle.Tabbed(parametersOrTabs, _, _, _, _, _)) =>
 				parametersOrTabs match {
 					case Left(pt) =>
-						val updatedValues = MutableMap(values.getOrElse(state.values.getOrElse(Map.empty[ParameterName, ParameterValue])).toSeq: _*)
+						var updatedValues = values.getOrElse(state.values.getOrElse(HMap.empty))
 						pt.parameterGroups.flatMap(_.parameters).foreach { p =>
 							parameterRefs += (p -> React.createRef[ParameterItem.Def])
 							if (!updatedValues.contains(p.name) && p.default.isDefined) {
-								updatedValues += (p.name -> p.default.get.asInstanceOf[ParameterValue])
+								updatedValues +~= (p, p.default.get)
 							}
 						}
-						setState(State(style, Some(updatedValues.toMap), title, width))
+						setState(State(style, Some(updatedValues), title, width))
 
 					case Right(_) =>
 						setState(State(style, None, title, width))
@@ -111,14 +112,14 @@ import scala.collection.mutable.{Map => MutableMap}
 								TabGroup(placement = Some("top"), noScrollControls = Some(true))(
 									List(
 										Fragment(
-											info.parameterGroups.map { group =>
-												Tab(label = i"${info.i18nPrefix}.tab.${group.name}.title", panel = group.name).withKey(group.name)
+											info.parameterGroups.filter(_.name.isDefined).map { group =>
+												Tab(label = i"${info.i18nPrefix}.tab.${group.name.get}.title", panel = group.name.get).withKey(group.name.get)
 											} ++ info.additionalTabs.map {
 												case (name, _) => Tab(label = i"${info.i18nPrefix}.tab.$name.title", panel = name).withKey(name)
 											},
 
-											info.parameterGroups.map { group =>
-												TabPanel(name = group.name)(layoutParameterGroup(group, info, onChange, info.parameterGroups.head.parameters.head)).withKey(group.name)
+											info.parameterGroups.filter(_.name.isDefined).map { group =>
+												TabPanel(name = group.name.get)(layoutParameterGroup(group, info, onChange, info.parameterGroups.head.parameters.head)).withKey(group.name.get)
 											} ++ info.additionalTabs.map {
 												case (name, content) => TabPanel(name = name)(List(content)).withKey(name)
 											}
@@ -152,7 +153,7 @@ import scala.collection.mutable.{Map => MutableMap}
 								if (onOk.isDefined) {
 									parameterRefs.values.foreach(_.current.validate)
 									if (parameterRefs.forall(_._2.current.isValid)) {
-										onOk.get.apply(state.values.getOrElse(Map()))
+										onOk.get.apply(state.values.getOrElse(HMap.empty))
 										hide()
 									}else{
 										println(s"Validation failed for parameters: ${parameterRefs.filterNot(_._2.current.isValid).map(_._1.name)}")
@@ -164,7 +165,7 @@ import scala.collection.mutable.{Map => MutableMap}
 					else
 						List(
 							ShoelaceButton(label = Some(i"common.dialog.ok"), slot = Some("footer"), `type` = Some("success"), onClick = Some(_ => {
-								if (onOk.isDefined) onOk.get.apply(state.values.getOrElse(Map()))
+								if (onOk.isDefined) onOk.get.apply(state.values.getOrElse(HMap.empty))
 								hide()
 							}))
 						)
@@ -182,8 +183,8 @@ import scala.collection.mutable.{Map => MutableMap}
 
 	private def layoutParameterGroup(group: ParameterGroup,
 																	 info: DialogParameters,
-																	 onChange: Option[(Parameter, Map[ParameterName, ParameterValue]) => Unit],
-																	 focusParameter: Parameter): List[ReactElement] =
+																	 onChange: Option[(Parameter[_], HMap[Parameter.Values]) => Unit],
+																	 focusParameter: Parameter[_]): List[ReactElement] =
 
 		info.layout.map(l => l(group)) match {
 			case Some(ParameterGroupLayout.Grid(columns)) =>
@@ -194,16 +195,16 @@ import scala.collection.mutable.{Map => MutableMap}
 		}
 
 
-	private def parameterItem(p: Parameter,
+	private def parameterItem(p: Parameter[_],
 														i18nPrefix: String,
-														onChange: Option[(Parameter, Map[ParameterName, ParameterValue]) => Unit],
+														onChange: Option[(Parameter[_], HMap[Parameter.Values]) => Unit],
 														autoFocus: Boolean) =
 		ParameterItem(
 			parameter = p,
 			i18nPrefix = i18nPrefix,
-			value = state.values.getOrElse(Map()).get(p.name),
+			value = state.values.getOrElse(HMap.empty).underlying.get(p),
 			onChange = Some((_, value) => {
-				setState(this.state.copy(values = Some(state.values.getOrElse(Map()) + (p.name -> value))))
+				setState(this.state.copy(values = Some(state.values.getOrElse(HMap.empty) +~ (p -> value))))
 				if (onChange.isDefined) onChange.get(p, state.values.get)
 			}),
 			autoFocus = autoFocus
@@ -229,8 +230,8 @@ object DialogStyle {
 										 headerElement: Option[ReactElement] = None) extends DialogStyle
 
 	case class Tabbed(parametersOrTabs: Either[DialogParameters, List[(String, ReactElement)]],
-										onChange: Option[(Parameter, Map[ParameterName, ParameterValue]) => Unit] = None,
-										onOk: Option[Map[ParameterName, ParameterValue] => Unit] = None,
+										onChange: Option[(Parameter[_], HMap[Parameter.Values]) => Unit] = None,
+										onOk: Option[HMap[Parameter.Values] => Unit] = None,
 										onCancel: Option[() => Unit] = None,
 										showCancelButton: Boolean = true,
 										headerElement: Option[ReactElement] = None) extends DialogStyle

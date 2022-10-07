@@ -7,7 +7,7 @@ import sttp.capabilities
 import sttp.client3._
 import sttp.model.{Header, Method}
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 import scala.concurrent.Future
 
 object Http {
@@ -22,7 +22,7 @@ object Http {
   def getAsJson(url: String, headers: List[Header] = List()): Future[Option[Json]] = requestAsJson(url, Method.GET, headers)
 
   def deleteRelative(suffix: String, headers: List[Header] = List(), body: Option[String] = None): Future[Unit] =
-    if (body.isDefined) requestRelativeWithBody(suffix, Method.DELETE, headers, body.get) else requestRelative(suffix, Method.DELETE, headers).map(_ => Unit)
+    if (body.isDefined) requestRelativeWithBody(suffix, Method.DELETE, headers, body.get) else requestRelative(suffix, Method.DELETE, headers).map(_ => ())
 
   def post(url: String, headers: List[Header] = List(), body: String): Future[Unit] = requestWithBody(url, Method.POST, headers, body)
   def postRelative(suffix: String, headers: List[Header] = List(), body: String): Future[Unit] = requestRelativeWithBody(suffix, Method.POST, headers, body)

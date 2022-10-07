@@ -12,7 +12,7 @@ import scala.math.BigDecimal.RoundingMode
 
 @react class Grid extends StatelessComponent {
 
-  case class Props(items: List[ReactElement], columns: ColumnSize)
+  case class Props(items: Seq[ReactElement], columns: ColumnSize)
 
   def render() = {
     val rowCount = BigDecimal(props.items.size.toFloat / props.columns.value).setScale(0, RoundingMode.UP).toInt

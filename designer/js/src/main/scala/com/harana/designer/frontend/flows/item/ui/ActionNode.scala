@@ -1,10 +1,10 @@
 package com.harana.designer.frontend.flows.item.ui
 
 import com.harana.designer.frontend.utils.i18nUtils.ops
-import com.harana.sdk.shared.models.common.Parameter.ParameterName
-import com.harana.sdk.shared.models.common.ParameterValue
-import com.harana.sdk.shared.models.flow.ActionInfo
+import com.harana.sdk.shared.models.flow.ActionTypeInfo
 import com.harana.sdk.shared.models.flow.execution.spark.ExecutionStatus
+import com.harana.sdk.shared.models.flow.parameters.Parameter
+import com.harana.sdk.shared.utils.HMap
 import com.harana.ui.external.flow.types.Position
 import com.harana.ui.external.shoelace.ProgressBar
 import slinky.core.FunctionalComponent
@@ -53,9 +53,9 @@ import scala.scalajs.js.Dynamic.literal
 }
 
 trait ActionNodeData extends js.Object {
-  val id: ActionInfo.Id
-  val actionType: ActionInfo
-  val parameterValues: Map[ParameterName, ParameterValue]
+  val id: ActionTypeInfo.Id
+  val actionType: ActionTypeInfo
+  val parameterValues: HMap[Parameter.Values]
   val title: Option[String]
   val description: Option[String]
   val overrideColor: Option[String]

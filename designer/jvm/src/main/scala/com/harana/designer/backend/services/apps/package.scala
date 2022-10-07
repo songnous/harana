@@ -1,7 +1,7 @@
 package com.harana.designer.backend.services
 
-import com.harana.id.jwt.shared.models.DesignerClaims
 import com.harana.sdk.shared.models.apps.App
+import com.harana.sdk.shared.models.jwt.DesignerClaims
 import skuber.Service
 
 package object apps {

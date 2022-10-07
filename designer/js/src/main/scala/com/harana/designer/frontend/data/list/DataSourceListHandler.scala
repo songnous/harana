@@ -1,6 +1,7 @@
 package com.harana.designer.frontend.data.list
 
 import com.harana.designer.frontend.Circuit.zoomTo
+import com.harana.designer.frontend.Main
 import com.harana.designer.frontend.analytics.Analytics
 import com.harana.designer.frontend.common.grid.GridHandler
 import com.harana.designer.frontend.common.grid.GridStore.{EntitySubType, UpdateEditParameters, UpdateEditState, UpdateEditValue}
@@ -8,22 +9,31 @@ import com.harana.designer.frontend.common.grid.ui.GridPageItem
 import com.harana.designer.frontend.data.list.DataSourceListStore.DataSourceEditState
 import com.harana.designer.frontend.utils.ColorUtils
 import com.harana.designer.frontend.utils.http.Http
-import com.harana.designer.frontend.Main
-import com.harana.sdk.shared.models
-import com.harana.sdk.shared.models.common.Parameter.ParameterName
-import com.harana.sdk.shared.models.common._
+import com.harana.sdk.shared.models.common.{Background, Visibility}
 import com.harana.sdk.shared.models.data.{DataSource, DataSourceType, SyncDirection}
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup, StringParameter}
+import com.harana.sdk.shared.utils.HMap
 import com.harana.ui.components.LinkType
 import com.harana.ui.components.widgets.PillChartType
 import diode.AnyAction.aType
 import diode._
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 import scala.concurrent.Future
 
 class DataSourceListHandler extends GridHandler[DataSource, DataSourceEditState]("datasources", zoomTo(_.dataSourceListState)) {
 
-  def toGridPageItem(dataSource: DataSource) =
+  val directionParameter = StringParameter("direction",
+    default = Some(SyncDirection.Source.value),
+    options = List(
+      ("source", "source"),
+      ("destination", "destination")
+    ),
+    required = true)
+
+  var typeParameter: StringParameter = _
+
+  def toGridPageItem(dataSource: DataSource) = {
     GridPageItem(
       id = dataSource.id,
       title = dataSource.title,
@@ -36,18 +46,19 @@ class DataSourceListHandler extends GridHandler[DataSource, DataSourceEditState]
       entitySubType = None,
       background = dataSource.background,
       additionalData = Map("type" -> dataSource.dataSourceType),
-      parameterValues = Map(
-        "title" -> ParameterValue.String(dataSource.title),
-        "description" -> ParameterValue.String(dataSource.description),
-        "tags" -> ParameterValue.StringList(dataSource.tags.toList)
+      parameterValues = HMap[Parameter.Values](
+        (GridPageItem.titleParameter, dataSource.title),
+        (GridPageItem.descriptionParameter, dataSource.description),
+        (GridPageItem.tagsParameter, dataSource.tags)
       ) ++ dataSource.parameterValues
     )
+  }
 
 
-  def toEntity(editedItem: Option[DataSource], subType: Option[EntitySubType], values: Map[ParameterName, ParameterValue]) =
+  def toEntity(editedItem: Option[DataSource], subType: Option[EntitySubType], values: HMap[Parameter.Values]) =
     editedItem
       .getOrElse(
-        models.data.DataSource(
+        DataSource(
           title = "",
           description= "",
           dataSourceType = null,
@@ -56,34 +67,25 @@ class DataSourceListHandler extends GridHandler[DataSource, DataSourceEditState]
           visibility = Visibility.Owner,
           background = Some(Background.Image(ColorUtils.randomBackground)),
           tags = Set(),
-          parameterValues = Map()
+          parameterValues = HMap.empty[Parameter.Values]
         )
       ).copy(
-        title = values.get("title").map(_.asInstanceOf[ParameterValue.String].value).getOrElse(""),
-        description = values.get("description").map(_.asInstanceOf[ParameterValue.String].value).getOrElse(""),
-        tags = values.get("tags").map(_.asInstanceOf[ParameterValue.StringList]).map(_.toSet).getOrElse(Set()),
-        dataSourceType = values.get("type").map(_.asInstanceOf[ParameterValue.String].value).getOrElse(""),
+        title = values.getOrElse(GridPageItem.titleParameter, ""),
+        description = values.getOrElse(GridPageItem.descriptionParameter, ""),
+        tags = values.getOrElse(GridPageItem.tagsParameter, Set.empty[String]),
+        dataSourceType = values.getOrElse(typeParameter, ""),
         parameterValues = values
       )
 
 
-  def aboutGroup(dataSourceTypes: List[String]) = ParameterGroup("about", List(
-    Parameter.String("title", required = true),
-    Parameter.String("description", multiLine = true, required = true),
-    Parameter.StringList("tags"),
-    Parameter.String("direction",
-      default = Some(ParameterValue.String(SyncDirection.Source.value)),
-      options = List(
-        ("source", ParameterValue.String("source")),
-        ("destination", ParameterValue.String("destination"))
-      ),
-      required = true
-    ),
-    Parameter.String("type",
-      options = dataSourceTypes.map(s => (s, ParameterValue.String(s))),
-      required = true
-    ),
-  ))
+  def aboutGroup =
+    ParameterGroup(Some("about"),
+      GridPageItem.titleParameter,
+      GridPageItem.descriptionParameter,
+      GridPageItem.tagsParameter,
+      directionParameter,
+      typeParameter
+    )
 
 
   private def fetchDataSourceTypes(direction: String) =
@@ -104,24 +106,25 @@ class DataSourceListHandler extends GridHandler[DataSource, DataSourceEditState]
 
 
   private def direction =
-    state.value.editValues.get("direction").map(_.asInstanceOf[ParameterValue.String].value).getOrElse(SyncDirection.Source.value)
+    state.value.editValues.getOrElse(directionParameter, SyncDirection.Source.value)
 
 
   private def dataSourceType =
-    state.value.editValues.get("type").map(_.asInstanceOf[ParameterValue.String].value).getOrElse(state.value.editState.dataSourceTypes(direction).head)
+    state.value.editValues.getOrElse(typeParameter, state.value.editState.dataSourceTypes(direction).head)
 
 
   private def onDataSourceTypeChanged(direction: String, dsType: String) = {
     val dsTypes = state.value.editState.dataSourceTypes
-
     (dsType, dsTypes) match {
       case (dsType, dsTypes) =>
-        fetchDataSourceType(direction, dsType).map(ds =>
+        fetchDataSourceType(direction, dsType).map(ds => {
+          typeParameter = StringParameter("type", options = dsTypes(direction).map(s => (s, s)))
+
           ActionBatch(
-            UpdateEditParameters("datasources", List(aboutGroup(dsTypes(direction))) ++ ds.get.parameterGroups),
-            UpdateEditValue("datasources", "type", ParameterValue.String(dsType))
+            UpdateEditParameters("datasources", List(aboutGroup) ++ ds.get.parameterGroups),
+            UpdateEditValue("datasources", typeParameter, dsType)
           )
-        )
+        })
       case _ =>
         Future(NoAction)
     }
@@ -135,12 +138,12 @@ class DataSourceListHandler extends GridHandler[DataSource, DataSourceEditState]
   override def onNewOrEdit =
     Some(
       onInit(Map()).get >>
-      Effect.action(UpdateEditValue("datasources", "direction", ParameterValue.String(direction))) >>
+      Effect.action(UpdateEditValue("datasources", directionParameter, direction)) >>
       Effect(onDataSourceTypeChanged(direction, dataSourceType))
     )
 
 
-  override def onNewOrEditChange(parameter: Parameter) =
+  override def onNewOrEditChange(parameter: Parameter[_]) =
     Some(
       Effect(
         parameter.name match {

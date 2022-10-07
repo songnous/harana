@@ -1,6 +1,6 @@
 package com.harana.designer.backend.services.setup
 
-import com.harana.id.jwt.shared.models.DesignerClaims
+import com.harana.sdk.shared.models.jwt.DesignerClaims
 import zio.macros.accessible
 import zio.{Has, Task}
 

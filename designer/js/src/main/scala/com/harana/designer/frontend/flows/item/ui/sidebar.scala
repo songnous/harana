@@ -4,11 +4,11 @@ import com.harana.designer.frontend.Circuit
 import com.harana.designer.frontend.flows.item.FlowItemStore.{FlowItemState, SelectActionType, UpdateIsEditingParameters, UpdateParameterValues}
 import com.harana.designer.frontend.utils.DateUtils
 import com.harana.designer.frontend.utils.i18nUtils._
-import com.harana.sdk.shared.models.common.Parameter.ParameterName
-import com.harana.sdk.shared.models.common.ParameterValue
 import com.harana.sdk.shared.models.flow.execution.spark.AggregateMetric._
-import com.harana.sdk.shared.models.flow.execution.spark.ExecutionStatus
-import com.harana.sdk.shared.models.flow.{ActionInfo, Flow, FlowExecution}
+import com.harana.sdk.shared.models.flow.execution.spark.{AggregateMetric, ExecutionStatus}
+import com.harana.sdk.shared.models.flow.parameters.Parameter
+import com.harana.sdk.shared.models.flow.{ActionTypeInfo, Flow, FlowExecution}
+import com.harana.sdk.shared.utils.HMap
 import com.harana.ui.components.elements.{Color, Label}
 import com.harana.ui.components.sidebar.ParametersSection
 import com.harana.ui.external.shoelace.ProgressBar
@@ -32,7 +32,11 @@ package object sidebar {
     )
 
 
-  def parameters(flow: Option[Flow], action: Option[ActionInfo], actionId: Option[ActionInfo.Id], parameterValues: Map[ParameterName, ParameterValue], isRunning: Boolean): ReactElement =
+  def parameters(flow: Option[Flow],
+                 action: Option[ActionTypeInfo],
+                 actionId: Option[ActionTypeInfo.Id],
+                 parameterValues: HMap[Parameter.Values],
+                 isRunning: Boolean): ReactElement =
     div(className := "flow-sidebar-components")(
       action match {
         case Some(a) =>
@@ -41,11 +45,11 @@ package object sidebar {
               h6(i"actiontypes.${a.name}")
             ),
             ParametersSection(
-              parameterGroups = a.pa
+              groups = a.parameterGroups,
               i18nPrefix = "flows",
               values = parameterValues,
               onChange = Some((parameter, value) =>
-                if (actionId.isDefined) Circuit.dispatch(UpdateParameterValues(actionId.get, parameterValues + (parameter.name -> value)))
+                if (actionId.isDefined) Circuit.dispatch(UpdateParameterValues(actionId.get, parameterValues +~ (parameter, value)))
               ),
               isEditable = !isRunning,
               onEditing = Some(isEditing => Circuit.dispatch(UpdateIsEditingParameters(isEditing)))
@@ -95,13 +99,15 @@ package object sidebar {
 
 
   def runTime(flowExecution: Option[FlowExecution]): ReactElement = {
-    val info = flowExecution.flatMap(_.info)
+    val startTime = flowExecution.flatMap(_.startTime)
+    val endTime = flowExecution.flatMap(_.endTime)
+
     Fragment(
       div(h6(i"flows.sidebar.statistics.timing")),
       ul(className := "media-list media-list-linked pb-15")(
-        row(i"flows.sidebar.statistics.timing.start", Try(DateUtils.format(info.get.startTime, includeTime = true)).toOption),
-        row(i"flows.sidebar.statistics.timing.finish", Try(DateUtils.format(info.get.endTime, includeTime = true)).toOption),
-        row(i"flows.sidebar.statistics.timing.duration", Try(s"${DateUtils.pretty(info.get.startTime, info.get.endTime)}").toOption)
+        row(i"flows.sidebar.statistics.timing.start", startTime.map(DateUtils.format(_, includeTime = true))),
+        row(i"flows.sidebar.statistics.timing.finish", endTime.map(DateUtils.format(_, includeTime = true))),
+        row(i"flows.sidebar.statistics.timing.duration", for { st <- startTime ; et <- endTime } yield DateUtils.pretty(st, et))
       )
     )
   }
@@ -121,7 +127,7 @@ package object sidebar {
 
 
   def runShuffle(flowExecution: Option[FlowExecution]): ReactElement = {
-    val metrics = flowExecution.flatMap(_.metrics.map(_.metrics))
+    val metrics = flowExecution.flatMap(_.sparkMetrics).flatMap(_.metrics).map(_.metrics)
     Fragment(
       div(h6(i"flows.sidebar.statistics.shuffle")),
       ul(className := "media-list media-list-linked pb-15")(
@@ -133,14 +139,20 @@ package object sidebar {
 
 
   def runResources(flowExecution: Option[FlowExecution]): ReactElement =
-    Fragment(
-      div(h6(i"flows.sidebar.statistics.resources")),
-      ul(className := "media-list media-list-linked pb-15")(
-        row(i"flows.sidebar.statistics.resources.executors", Try(s"${flowExecution.get.executorCount.get} / 30").toOption),
-        row(i"flows.sidebar.statistics.resources.cores", Try(s"${flowExecution.get.coresPerExecutor.get} ${i"flows.sidebar.statistics.resources.per-executor"} / ${flowExecution.get.coresPerExecutor.get * flowExecution.get.executorCount.get } ${i"flows.sidebar.statistics.resources.total"}").toOption),
-        row(i"flows.sidebar.statistics.resources.memory", Try(s"${flowExecution.get.metrics.get.metrics(AggregateMetric.PeakExecutionMemory).mean.toString} MB").toOption)
-      )
-    )
+    flowExecution.flatMap(_.sparkMetrics) match {
+      case Some(metrics) =>
+        Fragment(
+          div(h6(i"flows.sidebar.statistics.resources")),
+          ul(className := "media-list media-list-linked pb-15")(
+            row(i"flows.sidebar.statistics.resources.executors", Try(s"${metrics.executorCount.get} / 30").toOption),
+            row(i"flows.sidebar.statistics.resources.cores", Try(s"${metrics.coresPerExecutor.get} ${i"flows.sidebar.statistics.resources.per-executor"} / ${metrics.coresPerExecutor.get * metrics.executorCount.get} ${i"flows.sidebar.statistics.resources.total"}").toOption),
+            row(i"flows.sidebar.statistics.resources.memory", Try(s"${metrics.metrics.get.metrics(AggregateMetric.PeakExecutionMemory).mean.toString} MB").toOption)
+          )
+        )
+
+      case None =>
+        Fragment()
+    }
 
 
   private def row(title: String, value: Option[String]) = {

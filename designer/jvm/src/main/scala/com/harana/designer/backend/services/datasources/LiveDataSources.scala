@@ -1,18 +1,19 @@
 package com.harana.designer.backend.services.datasources
 
 import com.harana.designer.backend.services.Crud
-import com.harana.designer.backend.services.Crud.{creatorOrPublic, userId}
+import com.harana.designer.backend.services.Crud.userId
 import com.harana.designer.backend.services.datasources.DataSources.Service
+import com.harana.id.jwt.modules.jwt.JWT
 import com.harana.modules.airbyte.{Airbyte, AirbyteSyncDirection}
 import com.harana.modules.core.config.Config
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
-import com.harana.id.jwt.modules.jwt.JWT
 import com.harana.modules.mongo.Mongo
 import com.harana.modules.vertx.models.Response
 import com.harana.sdk.shared.models.common.User.UserId
-import com.harana.sdk.shared.models.common.{ParameterGroup, Visibility}
+import com.harana.sdk.shared.models.common.Visibility
 import com.harana.sdk.shared.models.data.{DataSource, DataSourceType, SyncDirection}
+import com.harana.sdk.shared.models.flow.parameters.ParameterGroup
 import io.circe.syntax._
 import io.vertx.ext.web.RoutingContext
 import org.mongodb.scala.bson.Document
@@ -49,7 +50,7 @@ object LiveDataSources {
                                     case AirbyteSyncDirection.Source => SyncDirection.Source
                                     case AirbyteSyncDirection.Destination => SyncDirection.Destination
                                   },
-                                  parameterGroups = List(ParameterGroup(s"${ai.syncDirection}-${ai.name}".toLowerCase, ai.properties.map(toParameter)))
+                                  parameterGroups = List(ParameterGroup(Some(s"${ai.syncDirection}-${ai.name}".toLowerCase), ai.properties.map(toParameter): _*))
                                 )
                               }
         sorted             = dataSourceTypes.sortBy(_.name)

@@ -3,11 +3,10 @@ package com.harana.designer.frontend.schedules.item
 import com.harana.designer.frontend.Circuit.zoomTo
 import com.harana.designer.frontend.schedules.item.ScheduleItemStore._
 import com.harana.designer.frontend.utils.http.Http
-import com.harana.designer.frontend.{Circuit, State}
 import com.harana.sdk.shared.models.schedules.Schedule
 import diode._
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 
 class ScheduleItemHandler extends ActionHandler(zoomTo(_.scheduleItemState)) {
   def handle = {

@@ -6,7 +6,6 @@ import com.harana.designer.frontend.common.SortOrdering.{CreatedAscending, Creat
 import com.harana.designer.frontend.common.grid.GridStore.{DeleteSelectedItem, EditSelectedItem, EntitySubType, NewItem, UpdateEntitySubType, UpdateSelectedItem, UpdateSortOrdering, UpdateViewMode}
 import com.harana.designer.frontend.common.ui.ViewMode
 import com.harana.designer.frontend.utils.i18nUtils.ops
-import com.harana.sdk.shared.models.common.ParameterGroup
 import com.harana.ui.components.{LinkType, openLink}
 import com.harana.ui.components.elements.HeadingItem.IconButton
 import com.harana.ui.components.elements.{Dialog, DialogStyle, HeadingItem}

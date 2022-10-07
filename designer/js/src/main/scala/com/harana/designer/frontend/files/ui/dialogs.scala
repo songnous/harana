@@ -4,7 +4,8 @@ import com.harana.designer.frontend.Circuit
 import com.harana.designer.frontend.files.FilesStore._
 import com.harana.designer.frontend.files.ui.FilesPage.dialogRef
 import com.harana.designer.frontend.utils.i18nUtils.ops
-import com.harana.sdk.shared.models.common.{Parameter, ParameterGroup, ParameterValue}
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup, StringParameter}
+import com.harana.sdk.shared.utils.HMap
 import com.harana.ui.components.elements.{Dialog, DialogParameters, DialogStyle, Toolbar}
 import com.harana.ui.components.table.{GroupedTable, RowGroup}
 import com.harana.ui.external.filepond.{File, FilePond}
@@ -47,16 +48,19 @@ object dialogs {
   def updateSelect(dialogRef: ReactRef[Dialog.Def], state: FilesState, onOk: () => Unit, width: Option[String] = None) =
     dialogRef.current.update(style = Some(selectStyle(state, onOk)), width = width)
 
-  def newFolder(ref: ReactRef[Dialog.Def]) = ref.current.show(
-    title = Some(i"files.menu.new.new-folder"),
-    style = DialogStyle.Tabbed(
-      parametersOrTabs = Left(DialogParameters(
-        parameterGroups = List(ParameterGroup("new", List(Parameter.String("name", required = true)))),
-        i18nPrefix = "files.new-folder"
-      )),
-      onOk = Some(values => Circuit.dispatch(NewFolder(values("name").asInstanceOf[ParameterValue.String])))
+  def newFolder(ref: ReactRef[Dialog.Def]) = {
+
+    ref.current.show(
+      title = Some(i"files.menu.new.new-folder"),
+      style = DialogStyle.Tabbed(
+        parametersOrTabs = Left(DialogParameters(
+          parameterGroups = List(ParameterGroup(Some("new"), nameParameter)),
+          i18nPrefix = "files.new-folder"
+        )),
+        onOk = Some(values => Circuit.dispatch(NewFolder(values.getOrElse(nameParameter, ""))))
+      )
     )
-  )
+  }
 
   def uploadFiles(ref: ReactRef[Dialog.Def], state: FilesState) = ref.current.show(
     title = Some(i"files.menu.new.upload-files"),
@@ -78,18 +82,21 @@ object dialogs {
     width = Some("500px")
   )
 
-  def editInfo(ref: ReactRef[Dialog.Def], state: FilesState) =
+  def editInfo(ref: ReactRef[Dialog.Def], state: FilesState) = {
+    val nameParameter = StringParameter("name", required = true)
+
     ref.current.show(
       title = Some(i"files.menu.edit.edit-info"),
       style = DialogStyle.Tabbed(
         parametersOrTabs = Left(DialogParameters(
-          parameterGroups = List(ParameterGroup("", List(Parameter.String("name", required = true)))),
+          parameterGroups = List(ParameterGroup(None, nameParameter)),
           i18nPrefix = "files.edit-info",
         )),
         onOk = Some(values => Circuit.dispatch(EditItemInfo(values)))
       ),
-      values = Some(Map("name" -> ParameterValue.String(state.selectedFile.map(_.name).getOrElse(""))))
+      values = Some(HMap[Parameter.Values]((nameParameter, state.selectedFile.map(_.name).getOrElse(""))))
     )
+  }
 
   def deleteFiles(ref: ReactRef[Dialog.Def]) =
     ref.current.show(
@@ -115,7 +122,7 @@ object dialogs {
       title = Some(i"files.connect-via-sftp.title"),
       style = DialogStyle.Tabbed(
         parametersOrTabs = Left(DialogParameters(
-          parameterGroups = List(ParameterGroup("", List())),
+          parameterGroups = List(ParameterGroup(None)),
           i18nPrefix = "files.connect-via-sftp",
         )),
         showCancelButton = false

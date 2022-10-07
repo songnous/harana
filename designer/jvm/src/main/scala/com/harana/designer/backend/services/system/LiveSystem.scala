@@ -1,34 +1,29 @@
 package com.harana.designer.backend.services.system
 
 import com.google.common.base.Charsets
-import com.google.common.io.BaseEncoding
 import com.harana.designer.backend.services.Crud
-import com.harana.designer.backend.services.Crud.creatorOrPublic
 import com.harana.designer.backend.services.system.System.Service
 import com.harana.designer.shared.JavaScriptError
 import com.harana.id.jwt.modules.jwt.JWT
-import com.harana.id.jwt.shared.models.DesignerClaims
 import com.harana.modules.core.config.Config
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
 import com.harana.modules.mongo.Mongo
 import com.harana.modules.vertx.Vertx
 import com.harana.modules.vertx.models.Response
-import com.harana.sdk.shared.models.common.{PendingEvent, User}
 import com.harana.sdk.shared.models.apps.{App => DesignerApp}
+import com.harana.sdk.shared.models.common.{PendingEvent, User}
 import com.harana.sdk.shared.models.data.{DataSet, DataSource}
 import com.harana.sdk.shared.models.flow.{Flow, FlowExecution}
 import io.circe.parser._
 import io.vertx.ext.web.RoutingContext
-import org.apache.commons.io.IOUtils
-import org.apache.commons.lang3.StringUtils
-import zio.clock.Clock
-import zio.{Task, ZLayer}
-import upickle.default._
-
-import scala.io.Source
 import org.jsoup.Jsoup
 import org.jsoup.safety.Safelist
+import upickle.default._
+import zio.clock.Clock
+import zio.{Task, ZLayer}
+
+import scala.io.Source
 
 object LiveSystem {
   val layer = ZLayer.fromServices { (clock: Clock.Service,

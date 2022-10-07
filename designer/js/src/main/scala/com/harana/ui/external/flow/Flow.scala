@@ -1,6 +1,7 @@
 package com.harana.ui.external.flow
 
-import com.harana.ui.external.flow.types.FlowElement
+import com.harana.designer.frontend.flows.item.ui.ActionNodeData
+import com.harana.ui.external.flow.types.{FlowElement, FlowNode}
 import slinky.core.ExternalComponent
 import slinky.core.annotations.react
 import slinky.core.facade.ReactElement
@@ -9,7 +10,6 @@ import typings.std.{MouseEvent, WheelEvent}
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
 import scala.scalajs.js.|
-
 
 @JSImport("react-flow-renderer", JSImport.Default)
 @js.native
@@ -20,12 +20,12 @@ object ReactFlow extends js.Object
   case class Props(elements: List[js.Object],
                    onElementClick: js.UndefOr[(MouseEvent, FlowElement) => Any] = js.undefined,
                    onElementsRemove: js.UndefOr[js.Array[FlowElement] => Any] = js.undefined,
-                   onNodeMouseEnter: js.UndefOr[(MouseEvent, Node) => Any] = js.undefined,
-                   onNodeMouseMove: js.UndefOr[(MouseEvent, Node) => Any] = js.undefined,
-                   onNodeMouseLeave: js.UndefOr[(MouseEvent, Node) => Any] = js.undefined,
-                   onNodeContextMenu: js.UndefOr[(MouseEvent, Node) => Any] = js.undefined,
-                   onNodeDragStart: js.UndefOr[(MouseEvent, Node) => Any] = js.undefined,
-                   onNodeDragStop: js.UndefOr[(MouseEvent, Node) => Any] = js.undefined,
+                   onNodeMouseEnter: js.UndefOr[(MouseEvent, FlowNode) => Any] = js.undefined,
+                   onNodeMouseMove: js.UndefOr[(MouseEvent, FlowNode) => Any] = js.undefined,
+                   onNodeMouseLeave: js.UndefOr[(MouseEvent, FlowNode) => Any] = js.undefined,
+                   onNodeContextMenu: js.UndefOr[(MouseEvent, FlowNode) => Any] = js.undefined,
+                   onNodeDragStart: js.UndefOr[(MouseEvent, FlowNode) => Any] = js.undefined,
+                   onNodeDragStop: js.UndefOr[(MouseEvent, FlowNode) => Any] = js.undefined,
                    onConnect: js.UndefOr[Connection => Any] = js.undefined,
                    onConnectStart: js.UndefOr[(MouseEvent, OnConnectStartParams) => Any] = js.undefined,
                    onConnectStop: js.UndefOr[MouseEvent => Any] = js.undefined,
@@ -35,10 +35,10 @@ object ReactFlow extends js.Object
                    onMoveStart: js.UndefOr[FlowTransform => Any] = js.undefined,
                    onMoveEnd: js.UndefOr[FlowTransform => Any] = js.undefined,
                    onSelectionChange: js.UndefOr[js.Array[FlowElement] => Any] = js.undefined,
-                   onSelectionDragStart: js.UndefOr[(MouseEvent, js.Array[Node]) => Any] = js.undefined,
-                   onSelectionDrag: js.UndefOr[(MouseEvent, js.Array[Node]) => Any] = js.undefined,
-                   onSelectionDragStop: js.UndefOr[(MouseEvent, js.Array[Node]) => Any] = js.undefined,
-                   onSelectionContextMenu: js.UndefOr[(MouseEvent, js.Array[Node]) => Any] = js.undefined,
+                   onSelectionDragStart: js.UndefOr[(MouseEvent, js.Array[FlowNode]) => Any] = js.undefined,
+                   onSelectionDrag: js.UndefOr[(MouseEvent, js.Array[FlowNode]) => Any] = js.undefined,
+                   onSelectionDragStop: js.UndefOr[(MouseEvent, js.Array[FlowNode]) => Any] = js.undefined,
+                   onSelectionContextMenu: js.UndefOr[(MouseEvent, js.Array[FlowNode]) => Any] = js.undefined,
                    onPaneScroll: js.UndefOr[WheelEvent => Any] = js.undefined,
                    onPaneClick: js.UndefOr[MouseEvent => Any] = js.undefined,
                    onPaneContextMenu: js.UndefOr[MouseEvent => Any] = js.undefined,

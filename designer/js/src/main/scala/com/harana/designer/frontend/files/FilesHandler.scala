@@ -13,14 +13,13 @@ import com.harana.designer.frontend.user.UserStore.SetPreference
 import com.harana.designer.frontend.utils.FileUtils
 import com.harana.designer.frontend.utils.http.Http
 import com.harana.designer.shared.PreviewData
-import com.harana.sdk.shared.models.common.ParameterValue
 import com.harana.shared.models.HaranaFile
 import com.harana.ui.components.{LinkType, openLink}
 import diode.AnyAction.aType
 import diode.{Effect, _}
 import io.circe.syntax._
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 import scala.concurrent.Future
 
 class FilesHandler extends ActionHandler(zoomTo(_.filesState)) {
@@ -132,7 +131,7 @@ class FilesHandler extends ActionHandler(zoomTo(_.filesState)) {
 
 
     case EditItemInfo(values) =>
-      val newFile = value.item.get.copy(name = values("name").asInstanceOf[ParameterValue.String])
+      val newFile = value.item.get.copy(name = values.getOrElse(nameParameter, ""))
 
       effectOnly(
         Effect(Http.postRelative(s"/api/files/info?path=${value.pathStr}/${value.selectedFile.get.name}", List(), newFile.asJson.noSpaces).map(_ => NoAction)) >>

@@ -9,6 +9,7 @@ import org.scalajs.dom
 import org.scalajs.dom.HashChangeEvent
 import slinky.hot
 import slinky.web.ReactDOM
+import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 
 import java.util.Timer
 import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel, JSGlobalScope}
@@ -20,8 +21,6 @@ object Main {
 
   @JSExport
   def main(args: Array[String]): Unit = {
-    implicit val ec: scala.concurrent.ExecutionContext = scala.concurrent.ExecutionContext.global
-
     val decodedJwt = AuthUtils.decode(Globals.initialJwt)
     if (decodedJwt.isEmpty) println("Failed to decode JWT")
     else claims = decodedJwt.get

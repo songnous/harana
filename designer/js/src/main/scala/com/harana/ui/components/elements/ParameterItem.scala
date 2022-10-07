@@ -1,7 +1,7 @@
 package com.harana.ui.components.elements
 
 import com.harana.designer.frontend.utils.i18nUtils.ops
-import com.harana.sdk.shared.models.common.{Parameter, ParameterValidator, ParameterValue}
+import com.harana.sdk.shared.models.flow.parameters._
 import com.harana.ui.external.shoelace._
 import slinky.core.{Component, StatelessComponent}
 import slinky.core.annotations.react
@@ -18,22 +18,22 @@ import scala.scalajs._
 	val switchRef = React.createRef[Switch.Def]
 	val textAreaRef = React.createRef[TextArea.Def]
 
-	case class Props(parameter: Parameter,
+	case class Props(parameter: Parameter[_],
 									 i18nPrefix: String,
-									 value: Option[ParameterValue] = None,
-									 onChange: Option[(Parameter, ParameterValue) => Unit] = None,
+									 value: Option[Any] = None,
+									 onChange: Option[(Parameter[_], Any) => Unit] = None,
 									 autoFocus: Boolean = false,
 									 isEditable: Boolean = true,
 									 onEditing: Option[Boolean => Unit] = None)
 
-	case class State(isValid: Boolean, value: Option[ParameterValue])
+	case class State(isValid: Boolean, value: Option[Any])
 	override def initialState = State(true, None)
 
 	def isValid = state.isValid
 
-	private def title(p: Parameter) = i"${props.i18nPrefix}.${p.name}.title"
-	private def description(p: Parameter) = io"${props.i18nPrefix}.${p.name}.description"
-	private def optionTitle(p: Parameter, o: String) = i"${props.i18nPrefix}.${p.name}.option.$o.title"
+	private def title(p: Parameter[_]) = i"${props.i18nPrefix}.${p.name}.title"
+	private def description(p: Parameter[_]) = io"${props.i18nPrefix}.${p.name}.description"
+	private def optionTitle(p: Parameter[_], o: String) = i"${props.i18nPrefix}.${p.name}.option.$o.title"
 
 	override def shouldComponentUpdate(nextProps: Props, nextState: State) =
 		nextState.isValid != state.isValid
@@ -61,24 +61,16 @@ import scala.scalajs._
 		state.value match {
 			case Some(v) =>
 				v match {
-					case x @ ParameterValue.Boolean(_) =>
-						if (props.parameter.required) setState(State(true, state.value))
-
-					case x @ ParameterValue.Integer(_) =>
-						if (props.parameter.required) setState(State(x.value.toString.nonEmpty, state.value))
-
-					case x @ ParameterValue.Long(_) =>
-						if (props.parameter.required) setState(State(x.value.toString.nonEmpty, state.value))
-
-					case x @ ParameterValue.String(_) =>
-						if (props.parameter.required) setState(State(x.value.nonEmpty, state.value))
-
-					case _ =>
+					case x @ Boolean => if (props.parameter.required) setState(State(isValid = true, state.value))
+					case x @ Int => if (props.parameter.required) setState(State(isValid = x.toString.nonEmpty, state.value))
+					case x @ Long => if (props.parameter.required) setState(State(isValid = x.toString.nonEmpty, state.value))
+					case x: String => if (props.parameter.required) setState(State(isValid = x.nonEmpty, state.value))
+					case _ => if (props.parameter.required) setState(State(isValid = true, state.value))
 				}
 
 			case None =>
 				props.parameter match {
-					case Parameter.Boolean(_, _, _, _) => setState(State(true, state.value))
+					case BooleanParameter(_, _, _) => setState(State(true, state.value))
 					case _ => if (props.parameter.required) setState(State(false, state.value))
 				}
 		}
@@ -89,7 +81,7 @@ import scala.scalajs._
 	})
 
 
-	private def onChange(parameter: Parameter, value: ParameterValue) = {
+	private def onChange(parameter: Parameter[_], value: Any) = {
 		setState(State(state.isValid, Some(value)))
 		if (props.onChange.isDefined) props.onChange.get(parameter, value)
 	}
@@ -104,7 +96,7 @@ import scala.scalajs._
 
 
 	override def componentWillMount() = {
-		val value: Option[ParameterValue] = if (props.value.isDefined) Some(props.value.get) else props.parameter.default
+		val value = if (props.value.isDefined) Some(props.value.get) else props.parameter.default
 		setState(State(true, value))
 	}
 
@@ -114,64 +106,32 @@ import scala.scalajs._
 			p(s"${title(props.parameter)} ${if (props.parameter.required) "*" else ""}"),
 			props.parameter match {
 
-				case p @ Parameter.Boolean(name, _, required, validators) =>
+				case p @ BooleanParameter(name, required, default) =>
 					Switch(
-						checked = state.value.map(_.asInstanceOf[ParameterValue.Boolean]),
+						checked = state.value.map(_.asInstanceOf[Boolean]),
 						disabled = Some(!props.isEditable),
 						invalid = Some(true),
 						name = name,
 						onBlur = onBlur,
-						onChange = Some((value: Boolean) => onChange(p, ParameterValue.Boolean(value))),
+						onChange = Some((value: Boolean) => onChange(p, value)),
 						onFocus = onFocus,
 						required = Some(required)
 					).withRef(switchRef)
 
 
-				case p @ Parameter.Code(name, _, required, validators) =>
+				case p @ CodeSnippetParameter(name, required, _, validators) =>
 					div()
 
 
-				case p @ Parameter.Color(name, _, required, validators) =>
+				case p @ ColorParameter(name, required, _) =>
 					ColorPicker(name = name, format = Some("hex"))
 
 
-				case p @ Parameter.Country(name, _, required, validators) =>
+				case p @ CountryParameter(name, required, _, validators) =>
 					div()
 
 
-				case p @ Parameter.DataTable(name, _, required, validators) =>
-					div()
-
-
-				case p @ Parameter.Date(name, _, required, validators) =>
-					div()
-//					Input(
-//						clearable = Some(true),
-//						disabled = Some(!props.isEditable),
-//						name = name,
-//						onBlur = props.onEditing.map(fn => (_: Any) => fn(false)),
-//						onChange = Some((value: String) => if (props.onChange.isDefined) props.onChange.get(p, ParameterValue.String(value))),
-//						onFocus = props.onEditing.map(fn => (_: Any) => fn(true)),
-//						placeholder = None,
-//					required = Some(required),
-//						`type` = Some("date"),
-//						value = valueOrDefault[ParameterValue.Instant](default)
-//					)
-
-
-				case p @ Parameter.DateRange(name, _, required, validators) =>
-					div()
-
-
-				case p @ Parameter.Decimal(name, default, required, options, maxLength, placeholder, decimalSeparator, thousandSeparator, allowNegative, allowPositive, pattern, validators) =>
-					div()
-
-
-				case p @ Parameter.DecimalRange(name, default, required, minValue, maxValue, validators) =>
-					div()
-
-
-				case p @ Parameter.Email(name, default, required, pattern, validators) =>
+				case p @ EmailParameter(name, required, default, pattern, validators) =>
 					Input(
 						autoFocus = Some(props.autoFocus),
 						borderColor = borderColor,
@@ -179,40 +139,25 @@ import scala.scalajs._
 						disabled = Some(!props.isEditable),
 						helpText = description(p),
 						name = name,
-						onChange = Some((value: String) => onChange(p, ParameterValue.String(value))),
+						onChange = Some((value: String) => onChange(p, value)),
 						pattern = pattern,
 						required = Some(required),
 						size = Some("large"),
 						`type` = Some("email"),
-						value = state.value.map(_.asInstanceOf[ParameterValue.String])
+						value = state.value.map(_.asInstanceOf[String])
 					).withKey(name).withRef(inputRef)
 
 
-				case p @ Parameter.Emoji(name, _, required, validators) =>
+				case p @ EmojiParameter(name, required, _) =>
 					div()
 
 
-				case p @ Parameter.File(name, _, required, validators) =>
+
+				case p @ HTMLParameter(name, required, _, validators) =>
 					div()
 
 
-				case p @ Parameter.GeoAddress(name, _, required, validators) =>
-					div()
-
-
-				case p @ Parameter.GeoCoordinate(name, _, required, validators) =>
-					div()
-
-
-				case p @ Parameter.Html(name, _, required, validators) =>
-					div()
-
-
-				case p @ Parameter.Image(name, _, required, validators) =>
-					div()
-
-
-				case p @ Parameter.Integer(name, default, required, options, maxLength, placeholder, thousandSeparator, allowNegative, allowPositive, pattern, validators) =>
+				case p @ IntParameter(name, required, default, options, maxLength, placeholder, thousandSeparator, allowNegative, allowPositive, pattern, validators) =>
 					Input(
 						autoFocus = Some(props.autoFocus),
 						disabled = Some(!props.isEditable),
@@ -222,7 +167,7 @@ import scala.scalajs._
 						name = name,
 						numbersOnly = Some(true),
 						onBlur = onBlur,
-						onChange = Some((value: String) => onChange(p, ParameterValue.Integer(value.toInt))),
+						onChange = Some((value: String) => onChange(p, value)),
 						onFocus = onFocus,
 						pattern = pattern,
 						placeholder = placeholder.map(_.toString),
@@ -230,63 +175,56 @@ import scala.scalajs._
 						size = Some("large"),
 						step = Some(1),
 						`type` = Some("number"),
-						value = state.value.map(_.asInstanceOf[ParameterValue.Integer].value.toString)
+						value = state.value.map(_.asInstanceOf[String])
 					).withKey(name).withRef(inputRef)
 
 
-				case p @ Parameter.IntegerRange(name, default, required, minValue, maxValue, validators) =>
-					div()
 
-
-				case p @ Parameter.IPAddress(name, default, required, port, portDefault, options, validators) =>
+				case p @ IPAddressParameter(name, required, default, portDefault, options, validators) =>
 					Fragment(
 						Input(
 							autoFocus = Some(props.autoFocus),
 							borderColor = borderColor,
-							className = if (port) Some("parameter-host") else None,
+							className = Some("parameter-host"),
 							clearable = Some(true),
 							disabled = Some(!props.isEditable),
 							helpText = description(p),
 							name = name,
 							onBlur = onBlur,
-							onChange = Some((value: String) => onChange(p, ParameterValue.String(value))),
+							onChange = Some((value: String) => onChange(p, value)),
 							onFocus = onFocus,
 							placeholder = Some(i"common.parameters.host.domain"),
 							required = Some(required),
 							size = Some("large"),
-							value = state.value.map(_.asInstanceOf[ParameterValue.IPAddress].value._1)
+							value = state.value.map(_.asInstanceOf[String])
 						).withKey(name).withRef(inputRef),
 						Input(
 							autoFocus = Some(props.autoFocus),
 							borderColor = borderColor,
 							className = Some("parameter-port"),
-							disabled = Some(!props.isEditable || !port),
+							disabled = Some(!props.isEditable),
 							helpText = description(p),
 							inputMode = Some("decimal"),
 							maxLength = Some(5),
 							name = name,
 							numbersOnly = Some(true),
 							onBlur = onBlur,
-							onChange = Some((value: String) => onChange(p, ParameterValue.Long(value.toLong))),
+							onChange = Some((value: String) => onChange(p, value)),
 							onFocus = onFocus,
 							placeholder = Some(i"common.parameters.host.port"),
 							required = Some(required),
 							size = Some("large"),
 							`type` = Some("number"),
-							value = state.value.map(_.asInstanceOf[ParameterValue.IPAddress].value._2.toString)
+							value = state.value.map(_.asInstanceOf[String])
 						).withKey(name)
 					)
 
 
-				case p @ Parameter.IPAddressList(name, default, required, options, port, portDefault, validators) =>
+				case p @ JSONParameter(name, required, _, validators) =>
 					div()
 
 
-				case p @ Parameter.Json(name, _, required, validators) =>
-					div()
-
-
-				case p @ Parameter.Long(name, default, required, options, maxLength, placeholder, thousandSeparator, allowNegative, allowPositive, pattern, validators) =>
+				case p @ LongParameter(name, required, _, maxLength, placeholder, pattern, _) =>
 					Input(
 						autoFocus = Some(props.autoFocus),
 						borderColor = borderColor,
@@ -297,7 +235,7 @@ import scala.scalajs._
 						name = name,
 						numbersOnly = Some(true),
 						onBlur = onBlur,
-						onChange = Some((value: String) => onChange(p, ParameterValue.Long(value.toLong))),
+						onChange = Some((value: String) => onChange(p, value)),
 						onFocus = onFocus,
 						pattern = pattern,
 						placeholder = placeholder.map(_.toString),
@@ -305,23 +243,15 @@ import scala.scalajs._
 						size = Some("large"),
 						step = Some(1),
 						`type` = Some("number"),
-						value = state.value.map(_.asInstanceOf[ParameterValue.Long].value.toString)
+						value = state.value.map(_.asInstanceOf[Long].toString)
 					).withKey(name).withRef(inputRef)
 
 
-				case p @ Parameter.Markdown(name, _, required, validators) =>
+				case p @ MarkdownParameter(name, required, _, validators) =>
 					div()
 
 
-				case p @ Parameter.Money(name, default, required, options, validators) =>
-					div()
-
-
-				case p @ Parameter.Page(name, _, required, validators) =>
-					div()
-
-
-				case p @ Parameter.Password(name, _, required, validators) =>
+				case p @ PasswordParameter(name, required, default, validators) =>
 					Input(
 						autoFocus = Some(props.autoFocus),
 						borderColor = borderColor,
@@ -329,20 +259,20 @@ import scala.scalajs._
 						helpText = description(p),
 						name = name,
 						onBlur = onBlur,
-						onChange = Some((value: String) => onChange(p, ParameterValue.String(value))),
+						onChange = Some((value: String) => onChange(p, value)),
 						onFocus = onFocus,
 						required = Some(required),
 						size = Some("large"),
 						togglePassword = Some(true),
 						`type` = Some("password"),
-						value = state.value.map(_.asInstanceOf[ParameterValue.String].value)
+						value = state.value.map(_.asInstanceOf[String])
 					).withKey(name).withRef(inputRef)
 
-				case p @ Parameter.SearchQuery(name, _, required, validators) =>
+				case p @ SearchQueryParameter(name, required, default, validators) =>
 					div()
 
 
-				case p @ Parameter.String(name, default, required, options, placeholder, maxLength, multiLine, inputFormat, pattern, validators) =>
+				case p @ StringParameter(name, required, default, options, placeholder, maxLength, multiLine, inputFormat, pattern, validators) =>
 					if (options.isEmpty) {
 						if (multiLine) {
 							TextArea(
@@ -353,14 +283,14 @@ import scala.scalajs._
 								maxLength = maxLength,
 								name = name,
 								onBlur = onBlur,
-								onChange = Some((value: String) => onChange(p, ParameterValue.String(value))),
+								onChange = Some((value: String) => onChange(p, value)),
 								onFocus = onFocus,
 								pattern = pattern,
 								placeholder = placeholder,
 								required = Some(required),
 								rows = Some(3),
 								size = Some("large"),
-								value = state.value.map(_.asInstanceOf[ParameterValue.String])
+								value = state.value.map(_.asInstanceOf[String])
 							).withKey(name).withRef(textAreaRef)
 						}else{
 							Input(
@@ -372,13 +302,13 @@ import scala.scalajs._
 								maxLength = maxLength,
 								name = name,
 								onBlur = onBlur,
-								onChange = Some((value: String) => onChange(p, ParameterValue.String(value))),
+								onChange = Some((value: String) => onChange(p, value)),
 								onFocus = onFocus,
 								pattern = pattern,
 								placeholder = placeholder,
 								required = Some(required),
 								size = Some("large"),
-								value = state.value.map(_.asInstanceOf[ParameterValue.String])
+								value = state.value.map(_.asInstanceOf[String])
 							).withKey(name).withRef(inputRef)
 						}
 					}else{
@@ -389,7 +319,7 @@ import scala.scalajs._
 							hoist = Some(true),
 							name = name,
 							onBlur = onBlur,
-							onChange = Some((value: String) => onChange(p, ParameterValue.String(value))),
+							onChange = Some((value: String) => onChange(p, value)),
 							onFocus = onFocus,
 							options = options.map { opt =>
 								MenuItem(optionTitle(props.parameter, opt._1), value = Some(opt._2))
@@ -397,39 +327,20 @@ import scala.scalajs._
 							placeholder = Some("Select .."),
 							required = Some(required),
 							size = Some("large"),
-							value = state.value.map(_.asInstanceOf[ParameterValue.String])
+							value = state.value.map(_.asInstanceOf[String])
 						).withKey(name).withRef(selectRef)
 					}
 
 
-				case p @ Parameter.StringList(name, default, required, options, maxLength, multiLine, inputFormat, pattern, validators) =>
-					div()
-//					Input(
-//						clearable = Some(true),
-//						disabled = Some(!props.isEditable),
-//						maxLength = maxLength,
-//						name = name,
-//						onBlur = props.onEditing.map(fn => (_: Any) => fn(false)),
-//						onChange = Some((value: String) => props.onChange(props.values + (name -> ParameterValue.StringList(value.split(",").toList.map(_.trim()))))),
-//						onFocus = props.onEditing.map(fn => (_: Any) => fn(true)),
-//						placeholder = None,
-//						value = (if (existingValue.isDefined) existingValue else default.map(_.value)).map(_.mkString(", "))
-//					)
-
-
-				case p @ Parameter.Tags(name, default, required, limit, allowDuplicates, validators) =>
+				case p @ TagsParameter(name, required, default, validators) =>
 					div()
 
 
-				case p @ Parameter.Time(name, _, required, validators) =>
+				case p @ TimeZoneParameter(name, required, _, validators) =>
 					div()
 
 
-				case p @ Parameter.TimeZone(name, _, required, validators) =>
-					div()
-
-
-				case p @ Parameter.Uri(name, default, required, pattern, validators) =>
+				case p @ URIParameter(name, required, default, options, pattern, validators) =>
 					Input(
 						autoFocus = Some(props.autoFocus),
 						borderColor = borderColor,
@@ -444,16 +355,8 @@ import scala.scalajs._
 						required = Some(required),
 						size = Some("large"),
 						`type` = Some("url"),
-						value = state.value.map(_.asInstanceOf[ParameterValue.URI].value.toString)
+						value = state.value.map(_.asInstanceOf[String])
 					).withKey(name).withRef(inputRef)
-
-
-				case p @ Parameter.User(name, _, required, validators) =>
-					div()
-
-
-				case p @ Parameter.Video(name, _, required, validators) =>
-					div()
 
 
 				case (_: Any) =>

@@ -1,22 +1,23 @@
 package com.harana.designer.frontend.common.grid
 
 import com.harana.designer.frontend.State
-import com.harana.designer.frontend.common.{CaseInsensitiveOrdering, SortOrdering}
 import com.harana.designer.frontend.common.SortOrdering._
 import com.harana.designer.frontend.common.grid.GridStore._
 import com.harana.designer.frontend.common.grid.ui.GridPageItem
 import com.harana.designer.frontend.common.ui.{FilterItem, ViewMode}
+import com.harana.designer.frontend.common.{CaseInsensitiveOrdering, SortOrdering}
 import com.harana.designer.frontend.user.UserStore.SetPreference
 import com.harana.designer.frontend.utils.http.Http
-import com.harana.sdk.shared.models.common.Parameter.ParameterName
-import com.harana.sdk.shared.models.common.{Id, Parameter, ParameterValue}
+import com.harana.sdk.shared.models.common.Id
+import com.harana.sdk.shared.models.flow.parameters.Parameter
+import com.harana.sdk.shared.utils.HMap
 import diode.AnyAction.aType
 import diode._
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 
 import java.time.Instant
-import scala.concurrent.ExecutionContext.Implicits.global
+import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 
 abstract case class GridHandler[Entity <: Id, EditState](entityType: EntityType, state: ModelRW[State, GridState[Entity, EditState]])(implicit decoder: Decoder[Entity], encoder: Encoder[Entity]) extends ActionHandler(state) {
 
@@ -26,11 +27,11 @@ abstract case class GridHandler[Entity <: Id, EditState](entityType: EntityType,
   private val viewModePreferenceId = s"designer.$entityType.viewMode"
 
   def toGridPageItem(entity: Entity): GridPageItem
-  def toEntity(editedItem: Option[Entity], subType: Option[EntitySubType], values: Map[ParameterName, ParameterValue]): Entity
+  def toEntity(editedItem: Option[Entity], subType: Option[EntitySubType], values: HMap[Parameter.Values]): Entity
 
   def onInit(userPreferences: Map[String, String]): Option[Effect] = None
   def onNewOrEdit: Option[Effect] = None
-  def onNewOrEditChange(parameter: Parameter): Option[Effect] = None
+  def onNewOrEditChange(parameter: Parameter[_]): Option[Effect] = None
   def onCreate(subType: Option[EntitySubType]): Option[Effect] = None
   def onDelete(subType: Option[EntitySubType]): Option[Effect] = None
 
@@ -196,11 +197,11 @@ abstract case class GridHandler[Entity <: Id, EditState](entityType: EntityType,
 
 
     case UpdateEditParameters(e, parameters) =>
-      if (e.equals(entityType)) updated(value.copy(editParameters = parameters), Effect.action(UpdateNewOrEditDialog(e))) else noChange
+      if (e.equals(entityType)) updated(value.copy(editParameterGroups = parameters), Effect.action(UpdateNewOrEditDialog(e))) else noChange
 
 
     case UpdateEditValue(e, k, v) =>
-      if (e.equals(entityType)) updated(value.copy(editValues = state.value.editValues + (k -> v))) else noChange
+      if (e.equals(entityType)) updated(value.copy(editValues = state.value.editValues +~ (k -> v))) else noChange
 
 
     case UpdateEditValues(e, values) =>
@@ -241,7 +242,7 @@ abstract case class GridHandler[Entity <: Id, EditState](entityType: EntityType,
 
     case UpdateSelectedItem(e, item) =>
       if (e.equals(entityType))
-        updated(value.copy(selectedItem = item, editValues = item.map(_.parameterValues).getOrElse(Map())))
+        updated(value.copy(selectedItem = item, editValues = item.map(_.parameterValues).getOrElse(HMap.empty)))
       else noChange
 
 

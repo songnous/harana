@@ -10,7 +10,7 @@ import diode._
 import io.circe.syntax._
 import com.harana.sdk.shared.utils.CirceCodecs._
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 
 class UserHandler extends ActionHandler(zoomTo(_.userState)) {
   override def handle: PartialFunction[Any, ActionResult[State]] = {

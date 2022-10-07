@@ -5,16 +5,12 @@ import com.harana.designer.frontend.files.FilesStore._
 import com.harana.designer.frontend.files.ui.FilesPage.dialogRef
 import com.harana.designer.frontend.user.UserStore.{SaveSettings, UpdateSettings, UserState}
 import com.harana.sdk.shared.utils.Random
-import com.harana.ui.components.elements.{Dialog, DialogParameters, DialogStyle, Toolbar}
-import com.harana.ui.components.sidebar.{SearchSection, Sidebar, SidebarSection, Switch, SwitchSection}
+import com.harana.ui.components.elements.Dialog
+import com.harana.ui.components.sidebar._
 import com.harana.ui.external.shoelace.IconButton
-import diode.{Action, ActionBatch, Effect}
+import diode.ActionBatch
 import slinky.core.facade.ReactRef
 import slinky.web.html.{className, div}
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.scalajs.js
-import scala.scalajs.js.JSConverters._
 
 object sidebar {
 

@@ -2,7 +2,8 @@ package com.harana.ui.components.elements
 
 import com.harana.designer.frontend.utils.i18nUtils.ops
 import com.harana.sdk.shared.models.common.Parameter.ParameterName
-import com.harana.sdk.shared.models.common.{HelpCategory, Parameter, ParameterGroup, ParameterValue}
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup}
+import com.harana.sdk.shared.utils.HMap
 import com.harana.ui.components.ParameterGroupLayout
 import com.harana.ui.external.shoelace.{Button => ShoelaceButton, Drawer => ShoelaceDrawer}
 import slinky.core.Component
@@ -10,55 +11,54 @@ import slinky.core.annotations.react
 import slinky.core.facade.{Fragment, React, ReactElement, ReactRef}
 import slinky.web.html.{className, div, h4}
 
-import java.util.concurrent.atomic.AtomicReference
 import scala.collection.mutable
 import scala.collection.mutable.{Map => MutableMap}
 
 @react class Drawer extends Component {
 
 	val drawerRef = React.createRef[ShoelaceDrawer.Def]
-	val parameterRefs = mutable.Map.empty[Parameter, ReactRef[ParameterItem.Def]]
+	val parameterRefs = mutable.Map.empty[Parameter[_], ReactRef[ParameterItem.Def]]
 
 	type Props = Unit
 
 	case class State(style: Option[DrawerStyle],
-									 values: Option[Map[ParameterName, ParameterValue]],
+									 values: Option[HMap[Parameter.Values]],
 									 title: Option[String],
 									 width: Option[String])
 
 	def initialState = State(None, None, None, None)
 
 	def show(style: DrawerStyle,
-					 values: Option[Map[ParameterName, ParameterValue]],
+					 values: Option[HMap[Parameter.Values]],
 					 title: Option[String],
 					 width: Option[String] = None) = {
-		update(style, values.getOrElse(Map()), title, width)
+		update(style, values.getOrElse(HMap.empty), title, width)
 		drawerRef.current.show()
 	}
 
 
 	def update(style: DrawerStyle,
-						 values: Map[ParameterName, ParameterValue]): Unit =
+						 values: HMap[Parameter.Values]): Unit =
 		update(style, values, state.title, state.width)
 
 
 	def update(style: DrawerStyle,
-						 values: Map[ParameterName, ParameterValue],
+						 values: HMap[Parameter.Values],
 						 title: Option[String],
 						 width: Option[String] = None): Unit =
 		style match {
 			case DrawerStyle.Sectioned(parametersOrSections, _, _, _, _, _, _) =>
 				parametersOrSections match {
 					case Left(pt) =>
-						val updatedValues = MutableMap(values.toSeq: _*)
+						var updatedValues = values
 						parameterRefs.clear()
-						pt.parameterGroups.flatMap(_.parameters).foreach { p => {
+
+						pt.groups.flatMap(_.parameters).foreach { p => {
 							parameterRefs += (p -> React.createRef[ParameterItem.Def])
 							if (!updatedValues.contains(p.name) && p.default.isDefined)
-								updatedValues += (p.name -> p.default.get.asInstanceOf[ParameterValue])
-							}
-						}
-						setState(State(Some(style), Some(updatedValues.toMap), title, width))
+								updatedValues +~= (p, p.default.get)
+						}}
+						setState(State(Some(style), Some(updatedValues), title, width))
 
 					case Right(_) =>
 						setState(State(Some(style), None, title, width))
@@ -66,6 +66,7 @@ import scala.collection.mutable.{Map => MutableMap}
 			case _ =>
 				setState(State(Some(style), Some(values), title, width))
 		}
+
 
 	def hide() = {
 		drawerRef.current.hide()
@@ -90,8 +91,8 @@ import scala.collection.mutable.{Map => MutableMap}
 					val content: ReactElement = parametersOrSections match {
 
 						case Left(info) =>
-							if ((info.parameterGroups.size + info.additionalSections.size) == 1) {
-								val group = info.parameterGroups.head
+							if (info.groups.size + info.additionalSections.size == 1) {
+								val group = info.groups.head
 
 								if (alwaysShowTitle)
 									div(className := "drawer-section")(
@@ -103,11 +104,11 @@ import scala.collection.mutable.{Map => MutableMap}
 							} else
 								List(
 									Fragment(
-										info.parameterGroups.zipWithIndex.map {
+										info.groups.zipWithIndex.map {
 											case (group, _) =>
 												div(className := "drawer-section")(
 													h4(className := "drawer-header")(i"${info.i18nPrefix}.section.${group.name}.title"),
-													layoutParameterGroup(group, info, onChange, info.parameterGroups.head.parameters.head)
+													layoutParameterGroup(group, info, onChange, info.groups.head.parameters.head)
 												)
 										} ++ info.additionalSections.map {
 											case (name, content) =>
@@ -142,7 +143,7 @@ import scala.collection.mutable.{Map => MutableMap}
 								if (onOk.isDefined) {
 									parameterRefs.values.foreach(_.current.validate)
 									if (parameterRefs.forall(_._2.current.isValid)) {
-										onOk.get.apply(state.values.getOrElse(Map()))
+										onOk.get.apply(state.values.getOrElse(HMap.empty))
 										hide()
 									}else{
 										println(s"Validation failed for parameters: ${parameterRefs.filterNot(_._2.current.isValid).map(_._1.name)}")
@@ -154,7 +155,7 @@ import scala.collection.mutable.{Map => MutableMap}
 					else
 						List(
 							ShoelaceButton(label = Some(i"common.dialog.ok"), slot = Some("footer"), `type` = Some("success"), onClick = Some(_ => {
-								if (onOk.isDefined) onOk.get.apply(state.values.getOrElse(Map()))
+								if (onOk.isDefined) onOk.get.apply(state.values.getOrElse(HMap.empty))
 								hide()
 							}))
 						)
@@ -166,8 +167,8 @@ import scala.collection.mutable.{Map => MutableMap}
 
 	private def layoutParameterGroup(group: ParameterGroup,
 																	 info: DrawerParameters,
-																	 onChange: Option[(Parameter, Map[ParameterName, ParameterValue]) => Unit],
-																	 focusParameter: Parameter): List[ReactElement] =
+																	 onChange: Option[(Parameter[_], HMap[Parameter.Values]) => Unit],
+																	 focusParameter: Parameter[_]): List[ReactElement] =
 		info.layout.map(l => l(group)) match {
 			case Some(ParameterGroupLayout.Grid(columns)) =>
 				List(com.harana.ui.components.structure.Grid(group.parameters.map(p => parameterItem(p, group, s"${info.i18nPrefix}.section.${group.name}", onChange, p == focusParameter)), columns))
@@ -177,24 +178,27 @@ import scala.collection.mutable.{Map => MutableMap}
 		}
 
 
-	private def parameterItem(p: Parameter,
+	private def parameterItem(p: Parameter[_],
 														group: ParameterGroup,
 														i18nPrefix: String,
-														onChange: Option[(Parameter, Map[ParameterName, ParameterValue]) => Unit],
-														autoFocus: Boolean) =
+														onChange: Option[(Parameter[_], HMap[Parameter.Values]) => Unit],
+														autoFocus: Boolean) = {
+		val values = state.values.getOrElse(HMap.empty)
+
 		ParameterItem(
 			parameter = p,
 			i18nPrefix = i18nPrefix,
-			value = state.values.getOrElse(Map()).get(p.name),
+			value = values.underlying.get(p),
 			onChange = Some((_, value) => {
-				setState(this.state.copy(values = Some(state.values.getOrElse(Map()) + (p.name -> value))))
-				if (onChange.isDefined) onChange.get(p, state.values.get)
+				setState(this.state.copy(values = Some(values +~ (p, value))))
+				if (onChange.isDefined) onChange.get(p, values)
 			}),
 			autoFocus = autoFocus
 		).withKey(s"${group.name}-${p.name}").withRef(parameterRefs(p))
+	}
 }
 
-case class DrawerParameters(parameterGroups: List[ParameterGroup],
+case class DrawerParameters(groups: List[ParameterGroup],
 														i18nPrefix: String,
 														layout: Option[ParameterGroup => ParameterGroupLayout] = None,
 														additionalSections: List[(String, ReactElement)] = List())
@@ -208,8 +212,8 @@ object DrawerStyle {
 										 showHeader: Boolean = false) extends DrawerStyle
 
 	case class Sectioned(parametersOrSections: Either[DrawerParameters, List[(String, ReactElement)]],
-											 onChange: Option[(Parameter, Map[ParameterName, ParameterValue]) => Unit] = None,
-											 onOk: Option[Map[ParameterName, ParameterValue] => Unit] = None,
+											 onChange: Option[(Parameter[_], HMap[Parameter.Values]) => Unit] = None,
+											 onOk: Option[HMap[Parameter.Values] => Unit] = None,
 											 onCancel: Option[() => Unit] = None,
 											 showCancelButton: Boolean = true,
 											 alwaysShowTitle: Boolean = true,

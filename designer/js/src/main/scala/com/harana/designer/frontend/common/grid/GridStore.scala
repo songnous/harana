@@ -1,11 +1,11 @@
 package com.harana.designer.frontend.common.grid
 
-import com.harana.sdk.shared.models.common.Entity.EntityId
-import com.harana.sdk.shared.models.common.Parameter.ParameterName
-import com.harana.sdk.shared.models.common.{Parameter, ParameterGroup, ParameterValue}
 import com.harana.designer.frontend.common.SortOrdering
 import com.harana.designer.frontend.common.grid.ui.GridPageItem
 import com.harana.designer.frontend.common.ui.{FilterItem, ViewMode}
+import com.harana.sdk.shared.models.common.Entity.EntityId
+import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup}
+import com.harana.sdk.shared.utils.HMap
 import diode.{Action => DiodeAction}
 
 object GridStore {
@@ -24,12 +24,12 @@ object GridStore {
                                           tag: Option[FilterItem],
                                           owners: List[FilterItem],
                                           owner: Option[FilterItem],
-                                          editParameters: List[ParameterGroup],
-                                          editValues: Map[ParameterName, ParameterValue],
+                                          editParameterGroups: List[ParameterGroup],
+                                          editValues: HMap[Parameter.Values],
                                           editState: EditState)
 
   def initialState[Entity, EditState](editState: EditState) =
-    GridState[Entity, EditState](false, List(), List(), None, None, ViewMode.Grid, None, SortOrdering.NameAscending, List(), None, List(), None, List(), Map(), editState)
+    GridState[Entity, EditState](false, List(), List(), None, None, ViewMode.Grid, None, SortOrdering.NameAscending, List(), None, List(), None, List.empty[ParameterGroup], HMap.empty, editState)
 
   case class Init(userPreferences: Map[String, String]) extends DiodeAction
   case class ReceiveEvent(entityType: EntityType, eventType: String, eventParameters: Map[String, String]) extends DiodeAction
@@ -43,16 +43,16 @@ object GridStore {
 
   case class NewItem(entityType: EntityType, dialogTitle: Option[String]) extends DiodeAction
   case class EditSelectedItem(entityType: EntityType, dialogTitle: Option[String]) extends DiodeAction
-  case class ChangeEditParameter(entityType: EntityType, parameter: Parameter, values: Map[ParameterName, ParameterValue]) extends DiodeAction
+  case class ChangeEditParameter(entityType: EntityType, parameter: Parameter[_], values: HMap[Parameter.Values]) extends DiodeAction
   case class DeleteSelectedItem(entityType: EntityType) extends DiodeAction
 
-  case class SaveNewItem(entityType: EntityType, parameterValues: Map[ParameterName, ParameterValue]) extends DiodeAction
-  case class SaveExistingItem(entityType: EntityType, entityId: EntityId, parameterValues: Map[ParameterName, ParameterValue]) extends DiodeAction
+  case class SaveNewItem(entityType: EntityType, parameterValues: HMap[Parameter.Values]) extends DiodeAction
+  case class SaveExistingItem(entityType: EntityType, entityId: EntityId, parameterValues: HMap[Parameter.Values]) extends DiodeAction
 
   case class UpdateEditParameters(entityType: EntityType, parameters: List[ParameterGroup]) extends DiodeAction
   case class UpdateEditState[E](entityType: EntityType, editState: E) extends DiodeAction
-  case class UpdateEditValue(entityType: EntityType, name: ParameterName, value: ParameterValue) extends DiodeAction
-  case class UpdateEditValues(entityType: EntityType, values: Map[ParameterName, ParameterValue]) extends DiodeAction
+  case class UpdateEditValue(entityType: EntityType, name: Parameter[_], value: Any) extends DiodeAction
+  case class UpdateEditValues(entityType: EntityType, values: HMap[Parameter.Values]) extends DiodeAction
   case class UpdateEntitySubType(entityType: EntityType, subType: Option[EntitySubType]) extends DiodeAction
   case class UpdateEntities[E](entityType: EntityType, entities: List[E]) extends DiodeAction
   case class UpdateItems(entityType: EntityType, gridItems: List[GridPageItem]) extends DiodeAction

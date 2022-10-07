@@ -1,36 +1,30 @@
 package com.harana.designer.backend.services.apps
 
-import java.net.{HttpCookie, URI}
 import com.harana.designer.backend.services.Crud
 import com.harana.id.jwt.modules.jwt.JWT
+import com.harana.modules.core.config.Config
+import com.harana.modules.core.logger.Logger
+import com.harana.modules.core.micrometer.Micrometer
 import com.harana.modules.kubernetes.Kubernetes
 import com.harana.modules.mongo.Mongo
 import com.harana.modules.vertx.Vertx
 import com.harana.modules.vertx.Vertx.WebSocketHeaders
 import com.harana.modules.vertx.models.Response
 import com.harana.modules.vertx.proxy.WSURI
-import com.harana.modules.core.config.Config
-import com.harana.modules.core.logger.Logger
-import com.harana.modules.core.micrometer.Micrometer
+import com.harana.sdk.shared.models.apps.{App => DesignerApp}
+import com.harana.sdk.shared.models.jwt.DesignerClaims
 import io.circe.syntax._
 import io.vertx.core.http.{Cookie, CookieSameSite}
 import io.vertx.ext.web.RoutingContext
 import skuber.LabelSelector.IsEqualRequirement
 import skuber.apps.v1.Deployment
 import skuber.json.format._
-import skuber.LabelSelector
-import LabelSelector.dsl._
-import com.harana.id.jwt.shared.models.DesignerClaims
-import com.harana.sdk.shared.models.apps.{App => DesignerApp}
-import skuber.PersistentVolume.AccessMode
-import skuber.PersistentVolumeClaim.Spec
-import skuber.Resource.Requirements
-import skuber.{Service, _}
+import skuber.{LabelSelector, Service, _}
 import zio.clock.Clock
 import zio.duration._
 import zio.{Task, _}
 
-import scala.jdk.CollectionConverters._
+import java.net.URI
 
 object LiveApps {
   val layer = ZLayer.fromServices { (clock: Clock.Service,

@@ -3,7 +3,7 @@ package com.harana.designer.frontend.utils.http
 import sttp.capabilities.Effect
 import sttp.client3._
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 import scala.util._
 
 trait MetricsServer {

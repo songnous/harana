@@ -1,12 +1,14 @@
 package com.harana.ui.external.flow
 
+import com.harana.designer.frontend.flows.item.ui.ActionNodeData
 import com.harana.ui.external.flow.types._
 
 import scala.scalajs.js
 import scala.scalajs.js.|
 
 object types {
-  type FlowElement = Node | Edge
+  type FlowNode = Node[ActionNodeData]
+  type FlowElement = FlowNode | FlowEdge
   type FlowElementId = String
   type HandleType = String
   type Position = String
@@ -90,7 +92,7 @@ trait OnConnectStartParams extends js.Object {
   val handleType: js.UndefOr[HandleType] = js.undefined
 }
 
-trait Edge extends js.Object {
+trait FlowEdge extends js.Object {
   val id: FlowElementId
   val source: FlowElementId
   val target: FlowElementId
@@ -112,11 +114,11 @@ trait Edge extends js.Object {
   val removable: js.UndefOr[Boolean] = js.undefined
 }
 
-trait Node extends js.Object {
+trait Node[T <: js.Object] extends js.Object {
   val id: FlowElementId
   val position: XYPosition
   val `type`: String
-  val data: js.UndefOr[js.Object] = js.undefined
+  val data: T
   val __rf: js.UndefOr[js.Any] = js.undefined
   val style: js.UndefOr[js.Dynamic] = js.undefined
   val className: js.UndefOr[String] = js.undefined

@@ -5,7 +5,7 @@ import com.harana.designer.frontend.common.ui.{ViewMode, filterSection, searchSe
 import com.harana.designer.frontend.navigation.ui.Navigation
 import com.harana.designer.frontend.utils.i18nUtils.ops
 import com.harana.designer.frontend.{Circuit, State => AppState}
-import com.harana.sdk.shared.models.common.{Parameter, ParameterGroup}
+import com.harana.sdk.shared.models.flow.parameters.ParameterGroup
 import com.harana.sdk.shared.utils.Random
 import com.harana.ui.components._
 import com.harana.ui.components.elements._
@@ -73,7 +73,7 @@ import scala.collection.mutable.ListBuffer
     DrawerStyle.Sectioned(
       parametersOrSections = Left(
         DrawerParameters(
-          parameterGroups = props.state.editParameters,
+          groups = props.state.editParameterGroups,
           i18nPrefix = props.itemType,
           layout = props.editParameterGroupLayout,
           additionalSections = props.editAdditionalSections

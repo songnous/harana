@@ -27,7 +27,7 @@ case class JavaScriptError(message: String,
 case class JavaScriptCause(message: String,
                            trace: List[JavaScriptTrace],
                            cause: Option[JavaScriptCause]) {
-  def toString: String =
+  override def toString: String =
     s"""
        |  {
        |    message: $message

@@ -14,7 +14,7 @@ import sttp.model.Header
 import typings.stripeV3.global.{Stripe_ => Stripe}
 import typings.stripeV3.stripe.StripeServerCheckoutOptions
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 
 class NavigationHandler extends ActionHandler(zoomTo(_.navigationState)) {
 

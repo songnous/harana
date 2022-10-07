@@ -23,7 +23,7 @@ import com.harana.sdk.shared.models.common.Event
 import diode.AnyAction.aType
 import diode._
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 import scala.concurrent.Future
 
 class SystemHandler extends ActionHandler(zoomTo(_.systemState)) {
