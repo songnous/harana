@@ -35,7 +35,7 @@ object LiveSchedules {
         for {
           schedule        <- Crud.create[Schedule]("Schedules", rc, config, jwt, logger, micrometer, mongo)
           userId          <- Crud.userId(rc, config, jwt)
-          _               <- scheduler.deploy(schedule, userId)
+//          _               <- scheduler.deploy(schedule, userId)
           response        =  Response.Empty()
         } yield response
 
@@ -44,7 +44,7 @@ object LiveSchedules {
         for {
           schedule        <- Crud.update[Schedule] ("Schedules", rc, config, jwt, logger, micrometer, mongo)
           userId          <- Crud.userId(rc, config, jwt)
-          _               <- scheduler.deploy(schedule, userId)
+//          _               <- scheduler.deploy(schedule, userId)
           response        =  Response.Empty()
         } yield response
 
@@ -53,7 +53,7 @@ object LiveSchedules {
         for {
           schedule        <- Crud.get[Schedule]("Schedules", rc, config, jwt, logger, micrometer, mongo).map(_.get)
           userId          <- Crud.userId(rc, config, jwt)
-          _               <- scheduler.undeploy(schedule, userId)
+//          _               <- scheduler.undeploy(schedule, userId)
           _               <- Crud.delete[Schedule]("Schedules", rc, config, jwt, logger, micrometer, mongo)
           response        =  Response.Empty()
         } yield response

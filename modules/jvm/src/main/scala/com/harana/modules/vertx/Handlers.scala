@@ -29,7 +29,7 @@ object Handlers {
 
   def jwks(jwks: JsonWebKeySet): Handler[RoutingContext] = {
     rc: RoutingContext => {
-      rc.response()
+      rc.response
         .putHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
         .end(jwks.toJson(JsonWebKey.OutputControlLevel.PUBLIC_ONLY))
     }
@@ -71,7 +71,7 @@ object Handlers {
     parameters.foreach { p => json.put(p._1, p._2) }
     engine.render(json, templateFileName, new Handler[AsyncResult[Buffer]] {
       override def handle(result: AsyncResult[Buffer]): Unit = {
-        if (result.succeeded()) rc.response().end(result.result()) else rc.fail(result.cause())
+        if (result.succeeded()) rc.response.end(result.result()) else rc.fail(result.cause())
       }
     })
   }

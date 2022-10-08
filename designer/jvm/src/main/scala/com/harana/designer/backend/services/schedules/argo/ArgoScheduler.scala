@@ -7,10 +7,10 @@ import zio.{Has, Task}
 
 @accessible
 object ArgoScheduler {
-  type ArgoExecutor = Has[ArgoScheduler.Service]
+  type ArgoScheduler = Has[ArgoScheduler.Service]
 
   trait Service {
-    def deploy(schedule: Schedule, userId: UserId): Task[Unit]
-    def undeploy(schedule: Schedule, userId: UserId): Task[Unit]
+//    def deploy(schedule: Schedule, userId: UserId): Task[Unit]
+//    def undeploy(schedule: Schedule, userId: UserId): Task[Unit]
   }
 }

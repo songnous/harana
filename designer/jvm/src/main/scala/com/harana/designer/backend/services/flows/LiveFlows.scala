@@ -68,11 +68,5 @@ object LiveFlows {
       null
     }
 
-    def actionTypes(rc: RoutingContext): Task[Response] =
-      for {
-        flowType            <- Task(rc.pathParam("flowType"))
-        response            =  Response.Empty()
-      } yield response
-
   }}
 }

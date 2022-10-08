@@ -1,8 +1,8 @@
 package com.harana.id.jwt.modules.jwt
 
-import java.time.Instant
+import com.harana.sdk.shared.models.jwt.JWTClaims
 
-import com.harana.id.jwt.shared.models.JWTClaims
+import java.time.Instant
 import io.circe.{Decoder, Encoder}
 import io.vertx.core.http.Cookie
 import io.vertx.ext.web.RoutingContext

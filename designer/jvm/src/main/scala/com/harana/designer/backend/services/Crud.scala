@@ -1,6 +1,5 @@
 package com.harana.designer.backend.services
 
-import com.harana.id.jwt.shared.models.DesignerClaims
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
 import com.harana.id.jwt.modules.jwt.JWT
@@ -9,6 +8,7 @@ import com.harana.modules.mongo.Mongo
 import com.harana.modules.vertx.models.Response
 import com.harana.sdk.shared.models.common.User.UserId
 import com.harana.sdk.shared.models.common.{Entity, Visibility}
+import com.harana.sdk.shared.models.jwt.DesignerClaims
 import io.circe.parser._
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
@@ -25,12 +25,12 @@ object Crud {
 
   def userId(rc: RoutingContext, config: Config.Service, jwt: JWT.Service): Task[String] =
     for {
-      authToken <- UIO(Option(rc.request().headers().get("auth-token")))
+      authToken <- UIO(Option(rc.request.headers().get("auth-token")))
       userId    <- if (authToken.isDefined)
                       for {
                         secretToken  <- config.secret("harana-token")
                         _            <- Task.fail(new Exception("Auth token != Secret")).unless(authToken.get == secretToken)
-                        headerUserId <- Task.getOrFail(Option(rc.request().headers().get("user-id")))
+                        headerUserId <- Task.getOrFail(Option(rc.request.headers().get("user-id")))
                       } yield headerUserId
                     else
                       jwt.claims[DesignerClaims](rc).map(_.userId)
@@ -217,10 +217,10 @@ object Crud {
     for {
       userId            <- userId(rc, config, jwt)
       entityName        =  ct.runtimeClass.getSimpleName
-      entityJson        <- Task(rc.getBodyAsJson)
+      entityJson        <- Task(rc.body().asJsonObject())
       isValid           <- Task(entityJson.getValue("createdBy").equals(userId))
 
-      entity            <- Task.fromEither(decode[E](rc.getBodyAsString))
+      entity            <- Task.fromEither(decode[E](rc.body().asString))
       _                 <- mongo.insert[E](collection, entity).when(isValid)
       _                 <- logger.debug(s"Insert $entityName")
     } yield entity
@@ -246,7 +246,7 @@ object Crud {
     for {
       userId            <- userId(rc, config, jwt)
       entityName        =  ct.runtimeClass.getSimpleName
-      entityJson        <- Task(rc.getBodyAsJson)
+      entityJson        <- Task(rc.body().asJsonObject())
       isValid           <- Task(entityJson.getValue("createdBy").equals(userId))
       _                 =  entityJson.put("updated", Instant.now)
       entity            <- Task.fromEither(decode[E](entityJson.toString))

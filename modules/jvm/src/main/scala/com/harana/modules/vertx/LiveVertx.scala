@@ -365,14 +365,14 @@ object LiveVertx {
                                   router.get("/public/*").handler(setContentType(ContentType.HTML.value))
                                   router.get("/public/*").handler(StaticHandler.create("public"))
                                   router.get("/health").handler(rc => {
-                                    val response = rc.response().putHeader("content-type", "text/plain")
+                                    val response = rc.response.putHeader("content-type", "text/plain")
                                     if (GCHealthCheck.current.isHealthy)
                                       response.setStatusCode(200).end("HEALTHY")
                                     else
                                       response.setStatusCode(503).end("UNHEALTHY")
                                   })
                                   router.get("/ready").handler(rc => {
-                                    rc.response().putHeader("content-type", "text/plain").setStatusCode(200).end("READY")
+                                    rc.response.putHeader("content-type", "text/plain").setStatusCode(200).end("READY")
                                   })
 
                                   // CORS
@@ -426,9 +426,9 @@ object LiveVertx {
                                     else {
                                       val customRoute =
                                         if (route.isBlocking)
-                                          router.route(route.method, route.path).virtualHost(domain).blockingHandler(handler).useNormalisedPath(route.isNormalisedPath)
+                                          router.route(route.method, route.path).virtualHost(domain).blockingHandler(handler).useNormalizedPath(route.isNormalisedPath)
                                         else
-                                          router.route(route.method, route.path).virtualHost(domain).handler(handler).useNormalisedPath(route.isNormalisedPath)
+                                          router.route(route.method, route.path).virtualHost(domain).handler(handler).useNormalizedPath(route.isNormalisedPath)
 
                                       if (route.consumes.isDefined) customRoute.consumes(route.consumes.get.value)
                                       if (route.produces.isDefined) customRoute.produces(route.produces.get.value)
@@ -441,7 +441,7 @@ object LiveVertx {
                                     val client = new WebProxyClient(webClient, WebProxyClientOptions(iFrameAncestors = List(domain, proxyDomain.get)))
                                     println(s"Creating virtual host for: ${proxyDomain.get}")
                                     router.route().virtualHost(proxyDomain.get).blockingHandler(rc => {
-                                      println(s"Proxing for: ${rc.request().uri()}")
+                                      println(s"Proxing for: ${rc.request.uri()}")
                                       run(proxyMapping.get(rc)) match {
                                         case Some(uri) => client.execute(rc, "/*", uri)
                                         case None => rc.response.end()
@@ -451,7 +451,7 @@ object LiveVertx {
 
                                   // Errors
                                   router.route.failureHandler((rc: RoutingContext) => {
-                                    val response = rc.response()
+                                    val response = rc.response
                                     errorHandlers.get(response.getStatusCode) match {
                                       case Some(r) => generateResponse(vx, micrometer, templateEngine, rc, r, auth = false)
                                       case None => if (!response.closed() && !response.ended()) response.end()

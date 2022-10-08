@@ -26,6 +26,9 @@ import com.harana.modules.core.{Layers => CoreLayers}
 import com.harana.sdk.shared.models.common.{User => DesignerUser}
 import com.harana.sdk.shared.models.flow.FlowExecution
 import com.harana.modules.argo.LiveArgo
+import com.harana.designer.backend.services.schedules.argo.LiveArgoScheduler
+import com.harana.sdk.shared.models.flow.execution.spark.ExecutionStatus
+import com.harana.sdk.shared.models.jwt.DesignerClaims
 import io.vertx.core.http.HttpMethod._
 import io.vertx.ext.web.RoutingContext
 import zio.blocking.Blocking
@@ -51,18 +54,10 @@ object App extends CoreApp {
   val apps = (CoreLayers.standard ++ Clock.live ++ JWTLayers.jwt ++ Layers.kubernetes ++ Layers.mongo ++ vertx) >>> LiveApps.layer
   val data = (CoreLayers.standard ++ Layers.alluxioFs ++ JWTLayers.jwt ++ vertx) >>> LiveData.layer
   val files = (CoreLayers.standard ++ JWTLayers.jwt ++ Layers.kubernetes ++ vertx ++ LiveVfs.layer) >>> LiveFiles.layer
-  val schedules = (CoreLayers.standard ++ JWTLayers.jwt ++ Layers.argo ++ Layers.kubernetes ++ Layers.mongo ++ vertx) >>> LiveSchedules.layer
+
+  val argoScheduler = (CoreLayers.standard ++ Layers.argo ++ Layers.kubernetes) >>> LiveArgoScheduler.layer
+  val schedules = (CoreLayers.standard ++ JWTLayers.jwt ++ argoScheduler ++ Layers.mongo ++ vertx) >>> LiveSchedules.layer
   val help = (CoreLayers.standard ++ JWTLayers.jwt ++ Layers.mongo) >>> LiveHelp.layer
-
-  //  val layer = ZLayer.fromServices { (clock: Clock.Service,
-  //                                     config: Config.Service,
-  //                                     jwt: JWT.Service,
-  //                                     kubernetes: Kubernetes.Service,
-  //                                     logger: Logger.Service,
-  //                                     micrometer: Micrometer.Service,
-  //                                     mongo: Mongo.Service,
-  //                                     vertx: Vertx.Service) => new Apps.Service {
-
 
   private def routes = List(
     Route("/", GET, rc => homePage(rc), isBlocking = false),
@@ -147,7 +142,6 @@ object App extends CoreApp {
     Route("/api/flows", PUT, rc => Flows.update(rc).provideLayer(flows)),
     Route("/api/flows/:id", GET, rc => Flows.get(rc).provideLayer(flows)),
     Route("/api/flows/:id", DELETE, rc => Flows.delete(rc).provideLayer(flows)),
-    Route("/api/flows/actionTypes/:flowType", GET, rc => Flows.actionTypes(rc).provideLayer(flows)),
 
     // Flow Executions
     Route("/api/flows/executions/flows/variables/:flowId", GET, rc => FlowExecutions.outputVariables(rc).provideLayer(execution)),
@@ -229,8 +223,8 @@ object App extends CoreApp {
                                                               "authDomain"        -> s"id.$domain",
                                                               "debug"             -> "false",
                                                               "domain"            -> domain,
-                                                              "gaMeasurementId"    -> gaMeasurementId,
-                                                              "initialJwt"        -> rc.getCookie("jwt").getValue,
+                                                              "gaMeasurementId"   -> gaMeasurementId,
+                                                              "initialJwt"        -> rc.request.getCookie("jwt").getValue,
                                                               "i18nProperties"    -> i18nProperties,
                                                               "proxyDomain"       -> s"designer-proxy.$domain",
                                                               "userId"            -> claims.userId)

@@ -10,7 +10,7 @@ object ArgoExecutor {
   type ArgoExecutor = Has[ArgoExecutor.Service]
 
   trait Service {
-    def deploy(flow: Flow, userId: UserId): Task[Unit]
-    def undeploy(flow: Flow, userId: UserId): Task[Unit]
+//    def deploy(flow: Flow, userId: UserId): Task[Unit]
+//    def undeploy(flow: Flow, userId: UserId): Task[Unit]
   }
 }

@@ -11,7 +11,7 @@ package object datasources {
       case AirbytePropertyType.Boolean =>
         BooleanParameter(
           name = ap.name,
-          default = ap.default.map(a => Boolean.valueOf(a.left.get)),
+          default = ap.default.map(_.left.get.toBoolean),
           required = ap.required
         )
 
@@ -21,21 +21,21 @@ package object datasources {
           default = ap.default.map(p => p.toOption.get),
           required = ap.required,
           placeholder = ap.placeholder.map(_.toInt),
-          allowNegative = ap.minimum.map(_ > 0),
-          allowPositive = Some(true),
+          allowNegative = ap.minimum.exists(_ > 0),
           options = ap.options.map {
             case _ @ AirbyteOption.Integer(value) => (value.toString, value)
           }
         )
 
-      case AirbytePropertyType.Object =>
-        Parameter.Object(
-          name = ap.name,
-          required = ap.required,
-          options = ap.options.map {
-            case _ @ AirbyteOption.Object(title, _, properties) => (title, properties.map(toParameter))
-          }
-        )
+// FIXME
+//      case AirbytePropertyType.Object =>
+//        Parameter.Object(
+//          name = ap.name,
+//          required = ap.required,
+//          options = ap.options.map {
+//            case _ @ AirbyteOption.Object(title, _, properties) => (title, properties.map(toParameter))
+//          }
+//        )
 
       case AirbytePropertyType.String =>
         StringParameter(
@@ -52,7 +52,7 @@ package object datasources {
       case _ =>
         BooleanParameter(
           name = ap.name,
-          default = ap.default.map(a => Boolean.valueOf(a.left.get)),
+          default = ap.default.map(_.left.get.toBoolean),
           required = ap.required
         )
     }

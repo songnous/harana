@@ -111,6 +111,10 @@ val idJwt = crossProject("id-jwt")
       Library.scaffeine.value
   )
 val idJwtVM = idJwt.jvm dependsOn (modulesCore)
+  .settings(
+    libraryDependencies +=
+      Library.scalaHashing.value
+  )
 
 val modules = crossProject("modules")
   .settings(
@@ -204,8 +208,13 @@ val designer = crossProject("designer")
   )
   .jvmSettings(
     libraryDependencies ++=
+      Library.hadoop.value ++
       Library.parquet.value :+
       Library.opencsv.value
+  )
+  .jsSettings(
+    libraryDependencies ++=
+      Library.scalajs.value
   )
 
 val designerJVM = designer.jvm dependsOn (idJwtVM, modulesJVM, modulesCore, sdkJVM)

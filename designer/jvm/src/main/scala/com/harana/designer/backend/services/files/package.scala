@@ -1,22 +1,23 @@
 package com.harana.designer.backend.services
 
 import java.io.{File, FileReader}
-
 import com.harana.designer.shared.PreviewData
 import com.opencsv.CSVReader
 import org.apache.avro.Schema
 import org.apache.avro.file.DataFileReader
 import org.apache.avro.generic.{GenericDatumReader, GenericRecord}
+import org.apache.hadoop.conf.Configuration
+import org.apache.hadoop.fs.Path
 import org.apache.parquet.example.data.simple.SimpleGroup
 import org.apache.parquet.example.data.simple.convert.GroupRecordConverter
 import org.apache.parquet.hadoop.ParquetFileReader
 import org.apache.parquet.hadoop.util.HadoopInputFile
 import org.apache.parquet.io.ColumnIOFactory
 import zio.Task
+
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.temporal.JulianFields
-
 import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName
 
 import scala.jdk.CollectionConverters._
@@ -25,10 +26,13 @@ import scala.util.Try
 
 package object files {
 
+  val hadoopConfiguration = new Configuration()
+  val avroDatumReader = new GenericDatumReader[GenericRecord]()
+  val parquetColumnFactory = new ColumnIOFactory()
+
   def previewAvro(file: File, maximumRows: Int): Task[PreviewData] =
     for {
-      datumReader       <- Task(new GenericDatumReader[GenericRecord]())
-      fileReader        <- Task(DataFileReader.openReader(file, datumReader))
+      fileReader        <- Task(DataFileReader.openReader(file, avroDatumReader))
       records           <- Task(fileReader.iterator().asScala.take(maximumRows).toList)
       schema            =  records.head.getSchema
       data              =  toPreviewData(schema, records)
@@ -44,14 +48,14 @@ package object files {
 
 
   def previewParquet(file: File, maximumRows: Int): Task[PreviewData] = Task {
-    val reader = ParquetFileReader.open(HadoopInputFile.fromPath(new Path(file.getAbsolutePath), new Configuration()))
+    val reader = ParquetFileReader.open(HadoopInputFile.fromPath(new Path(file.getAbsolutePath), hadoopConfiguration))
     val schema = reader.getFooter.getFileMetaData.getSchema
     val groups = new ListBuffer[SimpleGroup]()
     var totalRows = 0
 
     val pages = Iterator.continually(reader.readNextRowGroup).takeWhile(_ != null)
     pages.foreach { page =>
-      val columnIO = new ColumnIOFactory().getColumnIO(schema)
+      val columnIO = parquetColumnFactory.getColumnIO(schema)
       val recordReader = columnIO.getRecordReader(page, new GroupRecordConverter(schema))
       val count = Math.min(page.getRowCount, maximumRows).toInt
       for (_ <- 0 until count) groups += recordReader.read().asInstanceOf[SimpleGroup]

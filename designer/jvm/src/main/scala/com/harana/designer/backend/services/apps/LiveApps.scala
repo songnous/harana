@@ -88,9 +88,9 @@ object LiveApps {
 
     def proxyHttp(rc: RoutingContext): Task[URI] =
       for {
-        currentApp        <- Task(rc.getCookie("app-active").getValue)
-        containerIp       <- Task(rc.getCookie(s"app-$currentApp").getValue)
-        _                 <- logger.info(s"$currentApp proxy: ${rc.request().uri()} -> $containerIp")
+        currentApp        <- Task(rc.request.getCookie("app-active").getValue)
+        containerIp       <- Task(rc.request.getCookie(s"app-$currentApp").getValue)
+        _                 <- logger.info(s"$currentApp proxy: ${rc.request.uri()} -> $containerIp")
         uri               =  new URI(s"http://$containerIp")
       } yield uri
 

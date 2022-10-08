@@ -70,7 +70,7 @@ object LiveFiles {
     def updateInfo(rc: RoutingContext): Task[Response] =
       for {
         userId          <- Crud.userId(rc, config, jwt)
-        file            <- Task.fromEither(decode[HaranaFile](rc.getBodyAsString))
+        file            <- Task.fromEither(decode[HaranaFile](rc.body().asString))
         uri             <- uri(userId, rc.queryParam("path").asScala.head)
         _               <- vfs.rename(uri, file.name)
         response        =  Response.Empty()

@@ -51,7 +51,7 @@ object LiveUser {
 
     def logout(rc: RoutingContext): Task[Response] =
       for {
-        _                   <- Task(rc.removeCookie("jwt"))
+        _                   <- Task(rc.response.removeCookie("jwt"))
         loginUrl            <- config.string("web.auth.loginUrl")
         response            =  Response.Redirect(loginUrl)
       } yield response
@@ -75,7 +75,7 @@ object LiveUser {
     def savePreferences(rc: RoutingContext): Task[Response] =
       for {
         userId              <- Crud.userId(rc, config, jwt)
-        preferences         <- Task.fromEither(decode[Map[String, String]](rc.getBodyAsString))
+        preferences         <- Task.fromEither(decode[Map[String, String]](rc.body().asString))
         _                   <- mongo.updateFields("Users", userId, Map("preferences" -> preferences))
         response            =  Response.Empty()
       } yield response
@@ -92,7 +92,7 @@ object LiveUser {
     def saveSettings(rc: RoutingContext): Task[Response] =
       for {
         userId              <- Crud.userId(rc, config, jwt)
-        settings            <- Task.fromEither(decode[UserSettings](rc.getBodyAsString))
+        settings            <- Task.fromEither(decode[UserSettings](rc.body().asString()))
         bson                <- convertToBson(settings)
         _                   <- mongo.updateFields("Users", userId, Map("settings" -> bson))
         response            =  Response.Empty()

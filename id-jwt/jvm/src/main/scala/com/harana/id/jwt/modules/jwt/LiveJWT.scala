@@ -14,7 +14,7 @@ import com.harana.modules.core.cache.Cache
 import com.harana.modules.core.config.Config
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
-import com.harana.id.jwt.shared.models.JWTClaims
+import com.harana.sdk.shared.models.jwt.JWTClaims
 import com.nimbusds.jose.crypto.{RSASSASigner, RSASSAVerifier}
 import com.nimbusds.jose.jwk.JWKSet
 import com.nimbusds.jose.shaded.json.JSONObject

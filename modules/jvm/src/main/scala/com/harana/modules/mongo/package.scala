@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicLong
 import java.util.{Calendar, Date}
 
 import com.harana.sdk.shared.models.common.Entity.EntityId
-import com.harana.sdk.shared.models.common.{Id, ParameterGroup}
+import com.harana.sdk.shared.models.common.Id
 import org.bson.{BsonDocument, BsonValue}
 import org.bson.conversions.Bson
 import org.mongodb.scala.bson.Document
@@ -100,8 +100,7 @@ package object mongo {
         def onNext(result: UpdateResult): Unit = cb(
           if (!result.wasAcknowledged()) Task.fail(new Exception("Result was not acknowledged"))
           else if (result.getMatchedCount == 0) Task.fail(new Exception("Entity not found"))
-          else if (result.getModifiedCount == 0) Task.fail(new Exception("Entity not modified"))
-          else Task.unit
+          else Task.fail(new Exception("Entity not modified")).when(result.getModifiedCount == 0)
         )
 
         def onError(t: Throwable): Unit = cb(Task.fail(t))
@@ -117,8 +116,7 @@ package object mongo {
         def onNext(result: UpdateResult): Unit = cb(
           if (!result.wasAcknowledged()) Task.fail(new Exception("Result was not acknowledged"))
           else if (result.getMatchedCount == 0) Task.fail(new Exception("Entity not found"))
-          else if (result.getModifiedCount == 0) Task.fail(new Exception("Entity not modified"))
-          else Task.unit
+          else Task.fail(new Exception("Entity not modified")).when(result.getModifiedCount == 0)
         )
 
         def onError(t: Throwable): Unit = cb(Task.fail(t))

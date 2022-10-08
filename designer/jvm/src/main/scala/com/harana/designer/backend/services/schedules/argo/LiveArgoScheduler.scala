@@ -1,8 +1,7 @@
 package com.harana.designer.backend.services.schedules.argo
 
 import com.harana.designer.backend.App.env
-import com.harana.designer.backend.services.flows.argo.ArgoExecutor.Service
-import com.harana.id.jwt.modules.jwt.JWT
+import com.harana.designer.backend.services.schedules.argo.ArgoScheduler.Service
 import com.harana.modules.argo.{Argo, SecretKeySelector, SecureHeader, ValueFromSource}
 import com.harana.modules.argo.events.{EventSource, Sensor}
 import com.harana.modules.argo.events.EventSource.{EventSource, WatchPathConfig}
@@ -21,42 +20,41 @@ import zio.{Task, ZIO, ZLayer}
 object LiveArgoScheduler {
   val layer = ZLayer.fromServices { (argo: Argo.Service,
                                      config: Config.Service,
-                                     jwt: JWT.Service,
                                      kubernetes: Kubernetes.Service,
                                      logger: Logger.Service,
                                      micrometer: Micrometer.Service) => new Service {
 
-    def deploy(schedule: Schedule, userId: UserId): Task[Unit] =
-      for {
-        namespace       <- config.string("designer.flows.namespace")
-        client          <- kubernetes.newClient
-        eventBusName    = ""
-        project         = ""
+//    def deploy(schedule: Schedule, userId: UserId): Task[Unit] =
+//      for {
+//        namespace       <- config.string("designer.flows.namespace")
+//        client          <- kubernetes.newClient
+//        eventBusName    = ""
+//        project         = ""
 
-        eventSources    <- argoEventSources(eventBusName, null)
-        sensors         <- argoSensors(null)
-        _               <- ZIO.foreachPar_(eventSources)(e => argo.createOrUpdateEventSource(namespace, e, Some(client)))
-        _               <- ZIO.foreachPar_(sensors)(s => argo.createOrUpdateSensor(namespace, s, Some(client)))
+//        eventSources    <- argoEventSources(eventBusName, null)
+//        sensors         <- argoSensors(null)
+//        _               <- ZIO.foreachPar_(eventSources)(e => argo.createOrUpdateEventSource(namespace, e, Some(client)))
+//        _               <- ZIO.foreachPar_(sensors)(s => argo.createOrUpdateSensor(namespace, s, Some(client)))
 
-        _               <- kubernetes.close(client)
-      } yield ()
+//        _               <- kubernetes.close(client)
+//      } yield ()
 
 
-    def undeploy(schedule: Schedule, userId: UserId): Task[Unit] =
-      for {
-        namespace       <- config.string("designer.flows.namespace")
-        client          <- kubernetes.newClient
-        eventBusName    = ""
-        project         = ""
+//    def undeploy(schedule: Schedule, userId: UserId): Task[Unit] =
+//      for {
+//        namespace       <- config.string("designer.flows.namespace")
+//        client          <- kubernetes.newClient
+//        eventBusName    = ""
+//        project         = ""
 
-        eventSources    <- argoEventSources(eventBusName, null)
-        sensors         <- argoSensors(null)
-        _               <- ZIO.foreachPar_(eventSources.map(_.metadata.name))(e => argo.deleteEventSource(namespace, e, Some(client)))
-        _               <- ZIO.foreachPar_(sensors.map(_.metadata.name))(s => argo.deleteSensor(namespace, s, Some(client)))
+//        eventSources    <- argoEventSources(eventBusName, null)
+//        sensors         <- argoSensors(null)
+//        _               <- ZIO.foreachPar_(eventSources.map(_.metadata.name))(e => argo.deleteEventSource(namespace, e, Some(client)))
+//        _               <- ZIO.foreachPar_(sensors.map(_.metadata.name))(s => argo.deleteSensor(namespace, s, Some(client)))
 
-        _               <- kubernetes.close(client)
-      } yield ()
-
+//        _               <- kubernetes.close(client)
+//      } yield ()
+//
 
     private def _createArgo(userId: String, schedule: Schedule): Task[Unit] =
       for {

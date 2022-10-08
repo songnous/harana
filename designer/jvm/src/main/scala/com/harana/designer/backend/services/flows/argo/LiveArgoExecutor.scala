@@ -20,20 +20,20 @@ object LiveArgoExecutor {
                                      micrometer: Micrometer.Service) =>
     new Service {
 
-      def deploy(flow: Flow, userId: UserId): Task[Unit] =
-        for {
-          namespace <- config.string("designer.flows.namespace")
+//      def deploy(flow: Flow, userId: UserId): Task[Unit] =
+//        for {
+//          namespace <- config.string("designer.flows.namespace")
+////          workflow <- argoWorkflow(flow)
+////          _ <- argo.createOrUpdateWorkflow(namespace, workflow)
+//        } yield ()
+
+
+//      def undeploy(flow: Flow, userId: UserId): Task[Unit] =
+//        for {
+//          namespace <- config.string("designer.flows.namespace")
 //          workflow <- argoWorkflow(flow)
-//          _ <- argo.createOrUpdateWorkflow(namespace, workflow)
-        } yield ()
-
-
-      def undeploy(flow: Flow, userId: UserId): Task[Unit] =
-        for {
-          namespace <- config.string("designer.flows.namespace")
-          workflow <- argoWorkflow(flow)
-          _ <- argo.deleteWorkflow(namespace, workflow.metadata.name)
-        } yield ()
+//          _ <- argo.deleteWorkflow(namespace, workflow.metadata.name)
+//        } yield ()
 
 
       //    private def dependencies(flow: Flow, action: Action): List[String] = {

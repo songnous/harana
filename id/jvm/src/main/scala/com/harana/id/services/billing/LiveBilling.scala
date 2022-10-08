@@ -39,9 +39,9 @@ object LiveBilling {
     def checkout(rc: RoutingContext): Task[Response] =
       for {
         domain                  <- config.env("harana_domain")
-        refererUrl              <- Task(rc.request().getHeader(HttpHeaders.REFERER))
+        refererUrl              <- Task(rc.request.getHeader(HttpHeaders.REFERER))
         successUrl              =  s"https://id.$domain/billing/checkout/success/{CHECKOUT_SESSION_ID}"
-        jwtJson                 <- Task(rc.request().getHeader("jwt"))
+        jwtJson                 <- Task(rc.request.getHeader("jwt"))
         claims                  <- jwt.claims[DesignerClaims](jwtJson)
         key                     <- config.secret("stripe-publishable-key")
         priceId                 <- config.string("stripe.standardPriceId")
@@ -62,7 +62,7 @@ object LiveBilling {
 
     def portal(rc: RoutingContext): Task[Response] =
       for {
-        returnUrl               <- Task(rc.request().getHeader(HttpHeaders.REFERER))
+        returnUrl               <- Task(rc.request.getHeader(HttpHeaders.REFERER))
         claims                  <- jwt.claims[DesignerClaims](rc)
         url                     <- stripeUI.billingPortalUrl(claims.subscriptionCustomerId.get, returnUrl)
         response                =  Response.Redirect(url)
@@ -72,8 +72,8 @@ object LiveBilling {
     def subscriptionWebhook(rc: RoutingContext): Task[Response] =
       for {
         secretKey               <- config.secret("stripe-webhook-key")
-        signature               <- Task(rc.request().getHeader("Stripe-Signature"))
-        payload                 <- Task(rc.getBodyAsString)
+        signature               <- Task(rc.request.getHeader("Stripe-Signature"))
+        payload                 <- Task(rc.body().asString)
         event                   <- Task(Webhook.constructEvent(payload, signature, secretKey))
         subscription            <- Task(event.getDataObjectDeserializer.deserializeUnsafe().asInstanceOf[Subscription])
 

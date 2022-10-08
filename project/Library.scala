@@ -264,7 +264,7 @@ object Library {
   ))
 
   val scalajs = Def.setting(Seq(
-    "org.scala-js" % "sbt-scalajs" % "1.10.1",
+    "org.scala-js" %%% "scala-js-macrotask-executor" % "1.0.0",
     "com.vmunier" %% "scalajs-scripts" % "1.2.0"
   ))
 
@@ -418,7 +418,7 @@ object Library {
   val plexusUtils = Def.setting("org.codehaus.plexus" % "plexus-utils" % "3.4.2")
   val pureCsv = Def.setting("io.kontainers" %% "purecsv" % "1.3.10")
   val rabbitmq = Def.setting("com.newmotion" %% "akka-rabbitmq" % "6.0.0" excludeAkkaActor)
-  val redisson = Def.setting("org.redisson" % "redisson" % "3.17.6")
+  val redisson = Def.setting("org.redisson" % "redisson" % "3.17.7")
   val reflections = Def.setting("org.reflections" % "reflections" % "0.10.2")
   val scaffeine = Def.setting("com.github.blemale" %% "scaffeine" % "5.2.1")
   val scalaHashing = Def.setting("com.desmondyeung.hashing"%% "scala-hashing" % "0.1.0")
@@ -429,34 +429,34 @@ object Library {
   val scalazCore = Def.setting("org.scalaz" %%% "scalaz-core" % "7.3.3")
   val scopt = Def.setting("com.github.scopt" %% "scopt" % "4.1.0")
   val segment = Def.setting("com.segment.analytics.java" % "analytics" % "3.3.1")
-  val sentry = Def.setting("io.sentry" % "sentry" % "6.4.1")
-  val shapeless = Def.setting("com.chuusai" %% "shapeless" % "2.3.9")
+  val sentry = Def.setting("io.sentry" % "sentry" % "6.4.2")
+  val shapeless = Def.setting("com.chuusai" %% "shapeless" % "2.3.10")
   val shopify = Def.setting("com.channelape" % "shopify-sdk" % "2.5.0" excludeAll(ExclusionRule(organization = "com.sun.xml.bind")))
   val siteCrawler = Def.setting("io.github.jasperroel" % "SiteCrawler" % "1.0.0")
-  val skuber = Def.setting("io.skuber" %% "skuber" % "2.6.4")
+  val skuber = Def.setting("io.skuber" %% "skuber" % "2.6.5")
   val slack = Def.setting("com.hubspot.slack" % "slack-java-client" % "1.12")
   val snappy = Def.setting("org.xerial.snappy" % "snappy-java" % "1.1.8.4")
   val sourcecode = Def.setting("com.lihaoyi" %% "sourcecode" % "0.3.0")
   val sprayJson = Def.setting("io.spray" %%% "spray-json" % "1.4.0")
   val squants = Def.setting("org.typelevel"  %%% "squants" % "1.8.3")
   val sshj = Def.setting("com.hierynomus" % "sshj" % "0.34.0")
-  val stripe = Def.setting("com.stripe" % "stripe-java" % "21.7.0")
+  val stripe = Def.setting("com.stripe" % "stripe-java" % "21.10.0")
   val sttpQuicklens = Def.setting("com.softwaremill.quicklens" %%% "quicklens" % "1.6.0")
   val sundial = Def.setting("org.knowm" % "sundial" % "2.2.2")
   val ulid = Def.setting("net.petitviolet" %% "ulid4s" % "0.5.0")
   val unboundid = Def.setting("com.unboundid" % "unboundid-ldapsdk" % "6.0.6")
   val univocity = Def.setting("com.univocity" % "univocity-parsers" % "2.9.1")
   val upickle = Def.setting("com.lihaoyi" %%% "upickle" % "1.4.3")
-  val webjarsLocator = Def.setting("org.webjars" % "webjars-locator-core" % "0.52")
+  val webjarsLocator = Def.setting("org.webjars" % "webjars-locator-core" % "0.52c")
   val xmlApis = Def.setting("xml-apis" % "xml-apis" % "2.0.2")
   val zendeskClient = Def.setting("com.cloudbees.thirdparty" % "zendesk-java-client" % "0.18.0")
-  val zip4j = Def.setting("net.lingala.zip4j" % "zip4j" % "2.11.1")
+  val zip4j = Def.setting("net.lingala.zip4j" % "zip4j" % "2.11.2")
   val ztZip = Def.setting("org.zeroturnaround" % "zt-zip" % "1.15")
 
   // Dependencies for swagger-client generated code
   val oauth2Client = Def.setting("org.apache.oltu.oauth2" % "org.apache.oltu.oauth2.client" % "1.0.2")
-  val swaggerAnnotations = Def.setting("io.swagger" % "swagger-annotations" % "1.6.6")
-  val jodaTime = Def.setting("joda-time" % "joda-time" % "2.11.1")
+  val swaggerAnnotations = Def.setting("io.swagger" % "swagger-annotations" % "1.6.7")
+  val jodaTime = Def.setting("joda-time" % "joda-time" % "2.11.2")
 
   // Scala.js
   val scalablyTyped = Def.setting("com.olvind" %%% "scalablytyped-runtime" % "2.1.0")

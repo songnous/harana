@@ -37,8 +37,8 @@ object LiveSystem {
     private val properties = Task {
       val airbyte = Source.fromURL(getClass.getResource("/messages_airbyte_en")).bufferedReader()
       val harana = Source.fromURL(getClass.getResource("/messages_harana_en")).bufferedReader()
-      val airByteLines = Stream.continually(airbyte.readLine()).takeWhile(_ != null).map(Jsoup.clean(_, Safelist.simpleText))
-      val haranaLines = Stream.continually(harana.readLine()).takeWhile(_ != null).map(Jsoup.clean(_, Safelist.simpleText))
+      val airByteLines = LazyList.continually(airbyte.readLine()).takeWhile(_ != null).map(Jsoup.clean(_, Safelist.simpleText))
+      val haranaLines = LazyList.continually(harana.readLine()).takeWhile(_ != null).map(Jsoup.clean(_, Safelist.simpleText))
       new String(java.util.Base64.getEncoder.encode(write(airByteLines.toList ++ haranaLines.toList).getBytes(Charsets.UTF_8)))
     }
 
@@ -105,7 +105,7 @@ object LiveSystem {
 
     def error(rc: RoutingContext): Task[Response] =
       for {
-        errorJson     <-  Task(rc.getBodyAsString)
+        errorJson     <-  Task(rc.body().asString)
         error         <-  Task(decode[JavaScriptError](errorJson))
         _             <-  logger.info(error.toOption.get.toString)
         response      =   Response.Empty()

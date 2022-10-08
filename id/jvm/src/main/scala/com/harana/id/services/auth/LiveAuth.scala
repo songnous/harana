@@ -78,11 +78,11 @@ object LiveAuth {
 
     def signup(rc: RoutingContext): Task[Response] =
       for {
-        firstName             <- IO(rc.request().getParam("firstName")).orElseFail(new IllegalArgumentException("First name not provided"))
-        lastName              <- IO(rc.request().getParam("lastName")).orElseFail(new IllegalArgumentException("Last name not provided"))
-        emailAddress          <- IO(rc.request().getParam("emailAddress")).orElseFail(new IllegalArgumentException("Email address not provided"))
-        password              <- IO(rc.request().getParam("password")).orElseFail(new IllegalArgumentException("Password not provided"))
-        ipAddress             <- IO(rc.request().remoteAddress().toString)
+        firstName             <- IO(rc.request.getParam("firstName")).orElseFail(new IllegalArgumentException("First name not provided"))
+        lastName              <- IO(rc.request.getParam("lastName")).orElseFail(new IllegalArgumentException("Last name not provided"))
+        emailAddress          <- IO(rc.request.getParam("emailAddress")).orElseFail(new IllegalArgumentException("Email address not provided"))
+        password              <- IO(rc.request.getParam("password")).orElseFail(new IllegalArgumentException("Password not provided"))
+        ipAddress             <- IO(rc.request.remoteAddress().toString)
 
         risk                  <- clearbitRisk(clearbit, firstName, lastName, emailAddress, ipAddress)
         _                     <- createAirtableRecord(airtable, config, firstName, lastName, emailAddress, ipAddress, risk._1)
@@ -138,7 +138,7 @@ object LiveAuth {
 
     def resendConfirmation(rc: RoutingContext): Task[Response] =
       for {
-        id                    <- IO(rc.request().getParam("id")).orElseFail(new IllegalArgumentException("Id not provided"))
+        id                    <- IO(rc.request.getParam("id")).orElseFail(new IllegalArgumentException("Id not provided"))
         foundUser             <- mongo.findOne[User]("Users", Map("id" -> id)).mapError(e => new Exception(e.toString))
         highRiskUrl           <- config.string("signup.url.high")
 
