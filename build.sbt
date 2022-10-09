@@ -269,7 +269,8 @@ val sparkExecutor = jvmProject("spark-executor")
 val id = crossProject("id")
   .settings(
     libraryDependencies ++=
-      Library.akka.value
+      Library.akka.value :+
+      Library.scalaHashing.value
   )
 val idJVM = id.jvm dependsOn(idJwtVM, modulesJVM, modulesCore, sdkJVM)
 val idJS = id.js dependsOn (idJwt.js, modulesJS, sdkJS)
