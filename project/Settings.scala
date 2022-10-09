@@ -52,6 +52,7 @@ object Settings {
     }
 
   val common = Seq(
+    javaOptions                               := javaLaunchOptions,
     scalaVersion                              := "2.13.8",
     scalacOptions                             := Seq(
                                                       "-deprecation",
@@ -73,6 +74,7 @@ object Settings {
     packageSrc / publishArtifact              := false,
     Compile / packageSrc / publishArtifact    := false,
     maxErrors                                 := 1000,
+    fork                                      := true,
     githubOwner                               := "harana",
     organization                              := "com.harana",
     githubTokenSource                         := TokenSource.Environment("GITHUB_TOKEN"),

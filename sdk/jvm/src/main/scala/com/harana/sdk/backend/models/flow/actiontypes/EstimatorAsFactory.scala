@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.utils.TypeUtils
 
 import izumi.reflect.Tag
 
-abstract class EstimatorAsFactory[E <: Estimator[Transformer]](implicit typeTagE: TypeTag[E]) extends ActionTypeType0To1[E] {
+abstract class EstimatorAsFactory[E <: Estimator[Transformer]](implicit typeTagE: Tag[E]) extends ActionTypeType0To1[E] {
 
   lazy val tTagTO_0: Tag[E] = typeTag[E]
 

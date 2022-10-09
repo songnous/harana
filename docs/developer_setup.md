@@ -42,6 +42,15 @@ sudo mkdir -v /etc/resolver
 sudo bash -c 'echo "nameserver 127.0.0.1" > /etc/resolver/harana.build'
 ```
 
+## Set Environment Variables
+```bash
+echo "export HARANA_CLUSTER=$(id -un)" >> ~/.zprofile
+echo "export HARANA_DOMAIN=harana.build" >> ~/.zprofile
+echo "export HARANA_ENVIRONMENT=build" >> ~/.zprofile
+echo "export SBT_OPTS=\"-Xms1G -Xmx4G -Xss2M -XX:MaxInlineLevel=18\"" >> ~/.zprofile
+source ~/.zprofile
+```
+
 ## Setup Docker
 ```bash
 sudo mkdir -p /opt/harana
@@ -60,7 +69,7 @@ wget https://harana-dependencies.s3.ap-southeast-2.amazonaws.com/cloudflare_hara
 wget https://harana-dependencies.s3.ap-southeast-2.amazonaws.com/cloudflare_harana_build.pem -O /tmp/harana.pem
 cat /tmp/harana.crt /tmp/harana.pem >> /opt/homebrew/etc/haproxy.crt
 
-wget https://developers.cloudflare.com/ssl/e2b9968022bf23b071d95229b5678452/origin_ca_rsa_root.pem -O /tmp/origin.pem
+wget https://developers.cloudflare.com/ssl/static/origin_ca_rsa_root.pem -O /tmp/origin.pem
 sudo security add-trusted-cert -d -r trustRoot -k "$HOME/Library/Keychains/login.keychain" /tmp/origin.pem
 ```
 

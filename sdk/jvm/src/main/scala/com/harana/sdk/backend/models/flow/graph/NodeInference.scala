@@ -75,7 +75,9 @@ object NodeInference {
   }
 
   private def inputKnowledgeAndAccordanceForInputPort(catalog: ActionObjectCatalog, predecessorKnowledge: Knowledge[ActionObjectInfo], portIndex: Int, inPortType: Tag[ActionObjectInfo]): (Knowledge[ActionObjectInfo], TypesAccordance) = {
-    val filteredTypes = predecessorKnowledge.filterTypes(inPortType.tpe)
+    // FIXME
+        val filteredTypes = predecessorKnowledge.filterTypes(null)
+//    val filteredTypes = predecessorKnowledge.filterTypes(inPortType.tpe)
     val filteredSize = filteredTypes.size
     if (filteredSize == predecessorKnowledge.size) (filteredTypes, TypesAccordance.All())
     else if (filteredSize == 0) (KnowledgeService.defaultKnowledge(catalog, inPortType), TypesAccordance.None(portIndex))

@@ -752,7 +752,7 @@ null
     def restartContainer(id: ContainerId, timeout: Option[Int] = None): IO[DockerException, Unit] =
       client.map { c =>
         val cmd = c.restartContainerCmd(id)
-        if (timeout.isDefined) cmd.withtTimeout(timeout.get)
+        if (timeout.isDefined) cmd.withTimeout(timeout.get)
         cmd.exec()
       }
 
@@ -815,7 +815,7 @@ null
       for {
         _ <- logger.info("Stopping Zookeeper")
         containers <- listContainers(nameFilter = List("zookeeper"))
-        _ <- IO.foreach(containers.map(_.getId))(id => stopContainer(id))
+        _ <- IO.foreach_(containers.map(_.getId))(id => stopContainer(id))
       } yield ()
 
     def tagImage(id: ImageId, imageNameWithRepository: String, tag: String, force: Boolean = false): UIO[Unit] =

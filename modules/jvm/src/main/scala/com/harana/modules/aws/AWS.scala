@@ -3,7 +3,6 @@ package com.harana.modules.aws
 import java.io.InputStream
 import awscala.iam.AccessKey
 import awscala.s3.S3ObjectSummary
-import com.amazonaws.services.s3.model.GetObjectTaggingRequest
 import com.amazonaws.services.simpleemail.model.{Message, Template}
 import zio.macros.accessible
 import zio.{Has, Task}

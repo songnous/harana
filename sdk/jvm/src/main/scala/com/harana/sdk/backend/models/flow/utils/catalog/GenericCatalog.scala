@@ -8,13 +8,14 @@ import scala.reflect.runtime.{universe => ru}
 import izumi.reflect.Tag
 
 class GenericCatalog[O](implicit t: Tag[O]) {
-
-  private val baseType = ru.typeOf[O]
+//FIXME
+//  private val baseType = ru.typeOf[O]
 
   /** All registered nodes. Keys are type nodes fullNames. */
   private val nodes: mutable.Map[String, TypeNode[O]] = mutable.Map()
 
-  this.registerType(baseType)
+  //FIXME
+//  this.registerType(baseType)
 
   private def addNode(node: TypeNode[O]) = nodes(node.fullName) = node
 
@@ -24,28 +25,31 @@ class GenericCatalog[O](implicit t: Tag[O]) {
     * @return Some(node) if succeed and None otherwise
     */
   private def register(t: ru.Type, javaType: Class[_]): Option[TypeNode[O]] = {
-    if (!(t <:< baseType)) return None
+    None
 
-    val node = TypeNode[O](javaType)
-
-    val registeredNode = nodes.get(node.fullName)
-    if (registeredNode.isDefined) return registeredNode
-
-    val superTraits = javaType.getInterfaces.filter(_ != null).flatMap(register)
-    superTraits.foreach(_.addSuccessor(node))
-    superTraits.foreach(node.addSupertrait)
-
-    val parentJavaType = node.getParentJavaType(baseType)
-    if (parentJavaType.isDefined) {
-      val parentClass = register(parentJavaType.get)
-      if (parentClass.isDefined) {
-        parentClass.get.addSuccessor(node)
-        node.setParent(parentClass.get)
-      }
-    }
-
-    addNode(node)
-    Some(node)
+    //FIXME
+//    if (!(t <:< baseType)) return None
+//
+//    val node = TypeNode[O](javaType)
+//
+//    val registeredNode = nodes.get(node.fullName)
+//    if (registeredNode.isDefined) return registeredNode
+//
+//    val superTraits = javaType.getInterfaces.filter(_ != null).flatMap(register)
+//    superTraits.foreach(_.addSuccessor(node))
+//    superTraits.foreach(node.addSupertrait)
+//
+//    val parentJavaType = node.getParentJavaType(baseType)
+//    if (parentJavaType.isDefined) {
+//      val parentClass = register(parentJavaType.get)
+//      if (parentClass.isDefined) {
+//        parentClass.get.addSuccessor(node)
+//        node.setParent(parentClass.get)
+//      }
+//    }
+//
+//    addNode(node)
+//    Some(node)
   }
 
   /** Tries to register type in hierarchy.
@@ -68,8 +72,9 @@ class GenericCatalog[O](implicit t: Tag[O]) {
    * traits cannot inherit from classes. All registered classes that are not abstract have to expose parameterless
    * constructor (either primary or auxiliary). Registered types cannot be parametrized.
    */
-  def register[C <: O : Tag]: Option[TypeNode[O]] =
-    this.registerType(ru.typeOf[C])
+  def register[C <: O : Tag]: Option[TypeNode[O]] = None
+//FIXME
+  //    this.registerType(ru.typeOf[C])
 
   /** Returns nodes that correspond given type signature. For example, for type "A with T1 with T2", it returns three
     * nodes corresponding to A, T1 and T2. All classes and traits in given type that are not registered in catalog will
@@ -78,26 +83,28 @@ class GenericCatalog[O](implicit t: Tag[O]) {
     * @return sequence of all nodes corresponding to given type
     */
   private def nodesForType[T <: O: Tag]: Iterable[TypeNode[O]] = {
-    val allBases: List[ru.Symbol] = ru.typeOf[T].baseClasses
-
-    // List 'allBases' contains symbols of all (direct and indirect) supertypes of T,
-    // including T itself. If T is not complete type, but type signature
-    // (e.g. "T with T1 with T2"), this list contains <refinement> object in the first place,
-    // which we need to discard somehow.
-    // TODO: find some better way to do it
-    val baseClasses = allBases.filter(!_.fullName.endsWith("<refinement>"))
-
-    // Now we discard all redundant types from list.
-    var uniqueBaseClasses = Set[ru.Symbol]()
-    for (b <- baseClasses) {
-      val t: ru.Type  = TypeUtils.symbolToType(b)
-      val uniqueTypes = uniqueBaseClasses.map(TypeUtils.symbolToType)
-      if (!uniqueTypes.exists(_ <:< t))
-        uniqueBaseClasses += b
-    }
-
-    val baseClassesNames: Set[String] = uniqueBaseClasses.map(_.fullName)
-    nodes.view.filterKeys(baseClassesNames.contains).values
+    List()
+// FIXME
+//    val allBases: List[ru.Symbol] = ru.typeOf[T].baseClasses
+//
+//    // List 'allBases' contains symbols of all (direct and indirect) supertypes of T,
+//    // including T itself. If T is not complete type, but type signature
+//    // (e.g. "T with T1 with T2"), this list contains <refinement> object in the first place,
+//    // which we need to discard somehow.
+//    // TODO: find some better way to do it
+//    val baseClasses = allBases.filter(!_.fullName.endsWith("<refinement>"))
+//
+//    // Now we discard all redundant types from list.
+//    var uniqueBaseClasses = Set[ru.Symbol]()
+//    for (b <- baseClasses) {
+//      val t: ru.Type  = TypeUtils.symbolToType(b)
+//      val uniqueTypes = uniqueBaseClasses.map(TypeUtils.symbolToType)
+//      if (!uniqueTypes.exists(_ <:< t))
+//        uniqueBaseClasses += b
+//    }
+//
+//    val baseClassesNames: Set[String] = uniqueBaseClasses.map(_.fullName)
+//    nodes.view.filterKeys(baseClassesNames.contains).values
   }
 
   /** Instances of all concrete classes that fulfil type signature T. Type signature can have complex form, for example
@@ -128,7 +135,7 @@ class GenericCatalog[O](implicit t: Tag[O]) {
 
 object GenericCatalog {
 
-  def apply() = new GenericCatalog()
+  def apply[T]()(implicit t: Tag[T]) = new GenericCatalog[T]()
 
   /** Intersection of collection of sets. */
   private def intersectSets[T](sets: Iterable[Set[T]]) =

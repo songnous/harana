@@ -5,6 +5,7 @@ import com.harana.sdk.backend.models.flow.actionobjects.Transformer
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
 import com.harana.sdk.shared.models.flow.utils.TypeUtils
+import izumi.reflect.Tag
 
 abstract class TransformerAsActionType[T <: Transformer]()(implicit tag: Tag[T]) extends ActionTypeType1To2[DataFrame, DataFrame, T] {
 
