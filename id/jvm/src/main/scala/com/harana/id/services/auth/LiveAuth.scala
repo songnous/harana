@@ -14,18 +14,19 @@ import com.harana.modules.vertx.models.Response
 import com.harana.modules.core.config.Config
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
-import com.harana.modules.stripe.{ StripePrices, StripeProducts, StripeSubscriptions}
+import com.harana.modules.stripe.{StripePrices, StripeProducts, StripeSubscriptions}
 import com.harana.sdk.shared.models.common.{MarketingChannel, User}
-import com.harana.id.jwt.shared.models.DesignerClaims
+import com.harana.sdk.shared.models.jwt.DesignerClaims
 import io.vertx.core.http.CookieSameSite
 import io.vertx.ext.web.RoutingContext
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import org.pac4j.core.profile.CommonProfile
 import org.pac4j.oauth.profile.google2.Google2ProfileDefinition
+
 import scala.jdk.CollectionConverters._
 import zio._
 
-import java.time.Instant
-import java.time.temporal.ChronoUnit
 import scala.util.Try
 
 object LiveAuth {
@@ -94,8 +95,8 @@ object LiveAuth {
                                   emailAddress = emailAddress,
                                   firstName = firstName,
                                   lastName = lastName,
-                                  marketingChannel = rc.cookieMap.asScala.get("marketing_channel").map(c => MarketingChannel.withName(c.getValue)),
-                                  marketingChannelId = rc.cookieMap.asScala.get("marketing_channel_id").map(_.getValue()),
+                                  marketingChannel = Option(MarketingChannel.withName(rc.request.getCookie("marketing_channel").getValue)),
+                                  marketingChannelId = Option(rc.request.getCookie("marketing_channel_id").getValue()),
                                   password = Some(passwordHash.toString),
                                   trialStarted = Some(Instant.now),
                                   trialEnded = Some(Instant.now.plus(trialLength, ChronoUnit.DAYS)))
@@ -126,8 +127,8 @@ object LiveAuth {
                                   firstName = profile.getFirstName,
                                   lastName = profile.getFamilyName,
                                   displayName = Some(profile.getDisplayName),
-                                  marketingChannel = rc.cookieMap.asScala.get("marketing_channel").map(c => MarketingChannel.withName(c.getValue)),
-                                  marketingChannelId = rc.cookieMap.asScala.get("marketing_channel_id").map(_.getValue()),
+                                  marketingChannel = Option(MarketingChannel.withName(rc.request.getCookie("marketing_channel").getValue)),
+                                  marketingChannelId = Option(rc.request.getCookie("marketing_channel_id").getValue()),
                                   trialStarted = Some(Instant.now),
                                   trialEnded = Some(Instant.now.plus(trialLength, ChronoUnit.DAYS)))
         _                     <- Task.when(foundUser.isEmpty)(createUser(newUser))

@@ -1,29 +1,24 @@
 package com.harana.id.services.billing
 
 import com.harana.id.jwt.modules.jwt.JWT
-import com.harana.id.jwt.shared.models.DesignerClaims
 import com.harana.id.services.auth.Auth
 import com.harana.id.services.billing.Billing.Service
-import com.harana.sdk.shared.models.common.{Event, User}
-import com.harana.modules.stripe.{StripeCustomers, StripeUI}
 import com.harana.modules.core.config.Config
-import com.harana.modules.mongo.Mongo
-import com.harana.modules.vertx.models.Response
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
+import com.harana.modules.mongo.Mongo
+import com.harana.modules.stripe.{StripeCustomers, StripeUI}
+import com.harana.modules.vertx.Vertx
+import com.harana.modules.vertx.models.Response
+import com.harana.sdk.shared.models.common.{Event, User}
+import com.harana.sdk.shared.models.jwt.DesignerClaims
+import com.stripe.model.Subscription
 import com.stripe.net.Webhook
 import io.circe.syntax._
 import io.vertx.core.http.HttpHeaders
 import io.vertx.ext.web.RoutingContext
-import zio.{Task, ZLayer}
-
-import scala.jdk.CollectionConverters._
-import com.harana.id.utils.Cookie
-import com.harana.modules.vertx.Vertx
-import com.mongodb.BasicDBObject
-import com.stripe.model.Subscription
-
 import java.time.Instant
+import zio.{Task, ZLayer}
 
 object LiveBilling {
   val layer = ZLayer.fromServices { (auth: Auth.Service,
