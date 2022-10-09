@@ -6,7 +6,7 @@ import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarn
 import com.harana.sdk.backend.models.flow.{ExecutionContext, Knowledge}
 import com.harana.sdk.shared.models.flow.actiontypes.custom.SinkInfo
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 class Sink extends ActionTypeType1To1[DataFrame, DataFrame] with SinkInfo {
 
@@ -14,7 +14,7 @@ class Sink extends ActionTypeType1To1[DataFrame, DataFrame] with SinkInfo {
 
   override def inferKnowledge(inputKnowledge: Knowledge[DataFrame])(context: InferContext) = (inputKnowledge, InferenceWarnings.empty)
 
-  lazy val tTagTO_0: TypeTag[DataFrame] = typeTag
-  lazy val tTagTO_1: TypeTag[DataFrame] = typeTag
+  lazy val tTagTO_0: Tag[DataFrame] = typeTag
+  lazy val tTagTO_1: Tag[DataFrame] = typeTag
 
 }

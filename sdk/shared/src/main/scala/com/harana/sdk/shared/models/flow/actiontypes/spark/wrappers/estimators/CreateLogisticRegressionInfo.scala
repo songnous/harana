@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.Classificati
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait CreateLogisticRegressionInfo extends EstimatorAsFactoryInfo[LogisticRegressionInfo] with SparkActionDocumentation {
 
@@ -17,7 +17,7 @@ trait CreateLogisticRegressionInfo extends EstimatorAsFactoryInfo[LogisticRegres
   val docsGuideLocation = Some("ml-classification-regression.html#logistic-regression")
   val category = Classification
 
-  lazy val portO_0: TypeTag[LogisticRegressionInfo] = typeTag
+  lazy val portO_0: Tag[LogisticRegressionInfo] = typeTag
 
 }
 

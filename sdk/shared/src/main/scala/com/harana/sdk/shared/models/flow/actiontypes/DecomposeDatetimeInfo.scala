@@ -6,7 +6,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait DecomposeDatetimeInfo extends TransformerAsActionInfo[DatetimeDecomposerInfo] with ActionDocumentation {
 
@@ -15,7 +15,7 @@ trait DecomposeDatetimeInfo extends TransformerAsActionInfo[DatetimeDecomposerIn
   val since = Version(0, 4, 0)
   val category = FeatureConversion
 
-  lazy val portO_1: TypeTag[DatetimeDecomposerInfo] = typeTag
+  lazy val portO_1: Tag[DatetimeDecomposerInfo] = typeTag
 
 }
 

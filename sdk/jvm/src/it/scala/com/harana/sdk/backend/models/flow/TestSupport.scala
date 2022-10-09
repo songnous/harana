@@ -10,7 +10,7 @@ import org.scalatest.BeforeAndAfterAll
 
 import scala.concurrent.Future
 import scala.reflect.ClassTag
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait IntegratedTestSupport extends UnitSpec with BeforeAndAfterAll with LocalExecutionContext {
   def executeAction(op: ActionType, dfs: DataFrame*) = op.executeUntyped(dfs.toList)(executionContext).head.asInstanceOf[DataFrame]

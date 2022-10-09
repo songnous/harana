@@ -7,6 +7,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.parameters.ParameterGroup
 import com.harana.sdk.shared.models.flow.utils.Id
+import izumi.reflect.Tag
 
 import java.util.UUID
 import scala.reflect.runtime.{universe => ru}
@@ -16,7 +17,7 @@ trait WriteDatasourceInfo extends Action1To0TypeInfo[DataFrameInfo]
   with ActionDocumentation {
 
   @transient
-  lazy val portI_0: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]
+  lazy val portI_0: Tag[DataFrameInfo] = Tag[DataFrameInfo]
 
   val id: Id = "bf082da2-a0d9-4335-a62f-9804217a1436"
   val name = "write-dataframe"

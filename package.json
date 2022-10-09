@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@nivo/waffle": "^0.80.0",
+    "ml-matrix": "^6.10.2",
+    "webpack-merge": "^5.8.0"
+  }
+}

@@ -6,7 +6,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait SqlTransformationInfo extends TransformerAsActionInfo[SqlTransformerInfo] with ActionDocumentation {
 
@@ -15,7 +15,7 @@ trait SqlTransformationInfo extends TransformerAsActionInfo[SqlTransformerInfo] 
   val since = Version(0, 4, 0)
   val category = Custom
 
-  lazy val portO_1: TypeTag[SqlTransformerInfo] = typeTag
+  lazy val portO_1: Tag[SqlTransformerInfo] = typeTag
 }
 
 object SqlTransformationInfo extends SqlTransformationInfo

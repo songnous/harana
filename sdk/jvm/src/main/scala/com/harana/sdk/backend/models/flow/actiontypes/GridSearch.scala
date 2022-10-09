@@ -15,7 +15,7 @@ import org.apache.spark.ml
 import org.apache.spark.ml.param._
 import org.apache.spark.ml.tuning.{CrossValidator, ParamGridBuilder}
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 class GridSearch()
   extends ActionTypeType3To1[Estimator[Transformer], DataFrame, Evaluator, Report]
@@ -116,5 +116,5 @@ class GridSearch()
     def this(pair: (ParamMap, Double)) = this(pair._1, pair._2)
   }
 
-  lazy val tTagTO_0: TypeTag[Report] = typeTag
+  lazy val tTagTO_0: Tag[Report] = typeTag
 }

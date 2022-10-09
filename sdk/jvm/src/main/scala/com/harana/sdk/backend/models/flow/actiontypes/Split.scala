@@ -11,7 +11,7 @@ import org.apache.spark.sql.Row
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 class Split extends ActionTypeType1To2[DataFrame, DataFrame, DataFrame]
   with SplitInfo
@@ -69,7 +69,7 @@ class Split extends ActionTypeType1To2[DataFrame, DataFrame, DataFrame]
     Await.result(results, Duration.Inf)
   }
 
-  lazy val tTagTO_0: TypeTag[DataFrame] = typeTag
-  lazy val tTagTO_1: TypeTag[DataFrame] = typeTag
+  lazy val tTagTO_0: Tag[DataFrame] = typeTag
+  lazy val tTagTO_1: Tag[DataFrame] = typeTag
 
 }

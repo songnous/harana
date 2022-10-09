@@ -8,7 +8,7 @@ import com.harana.spark.{SQL, SparkSQLSession}
 import org.apache.spark.sql
 import org.apache.spark.sql.types.StructType
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 class SqlCombine extends ActionTypeType2To1[DataFrame, DataFrame, DataFrame]
   with SqlCombineInfo
@@ -34,6 +34,6 @@ class SqlCombine extends ActionTypeType2To1[DataFrame, DataFrame, DataFrame]
   def moveToSparkSQLSession(df: sql.DataFrame, destinationCtx: SparkSQLSession) =
     destinationCtx.createDataFrame(df.rdd, df.schema)
 
-  lazy val tTagTO_0: TypeTag[DataFrame] = typeTag
+  lazy val tTagTO_0: Tag[DataFrame] = typeTag
 
 }

@@ -66,7 +66,7 @@ object MixinInheritance {
 
 class ActionTypeObjectCatalogSuite extends AnyFunSuite with Matchers {
 
-  def testGettingSubclasses[T <: ActionObjectInfo: ru.TypeTag](h: ActionObjectCatalog, expected: ActionObjectInfo*) =
+  def testGettingSubclasses[T <: ActionObjectInfo: Tag](h: ActionObjectCatalog, expected: ActionObjectInfo*) =
     h.concreteSubclassesInstances[T] should contain theSameElementsAs expected
 
   test("Getting concrete subclasses instances") {
@@ -79,7 +79,7 @@ class ActionTypeObjectCatalogSuite extends AnyFunSuite with Matchers {
     val b = new B
     val c = new C
 
-    def check[T <: ActionObjectInfo: ru.TypeTag](expected: ActionObjectInfo*) =
+    def check[T <: ActionObjectInfo: Tag](expected: ActionObjectInfo*) =
       testGettingSubclasses[T](h, expected: _*)
 
     check[T with T1](b)
@@ -93,11 +93,11 @@ class ActionTypeObjectCatalogSuite extends AnyFunSuite with Matchers {
     check[T with T2]()
   }
 
-  test("Getting concrete subclasses instances using ru.TypeTag") {
+  test("Getting concrete subclasses instances using Tag") {
     import SampleInheritance._
     val h = new ActionObjectCatalog
     h.register[B]
-    val t = ru.typeTag[T]
+    val t = Tag[T]
     h.concreteSubclassesInstances(t) should contain theSameElementsAs List(new B)
   }
 
@@ -107,7 +107,7 @@ class ActionTypeObjectCatalogSuite extends AnyFunSuite with Matchers {
     h.register[B]
     h.register[C]
 
-    def name[T: ru.TypeTag] = ru.typeOf[T].typeSymbol.fullName
+    def name[T: Tag] = ru.typeOf[T].typeSymbol.fullName
 
     val traits = (TraitDescriptor(name[ActionObjectInfo], Nil) ::
       TraitDescriptor(name[T2], List(name[T1])) ::

@@ -2,5 +2,9 @@
   "dependencies": {
     "@visx/gradient": "^2.1.0",
     "mini-css-extract-plugin": "^2.5.2"
+  },
+  "devDependencies": {
+    "ml-matrix": "^6.10.2",
+    "webpack-merge": "^5.8.0"
   }
 }

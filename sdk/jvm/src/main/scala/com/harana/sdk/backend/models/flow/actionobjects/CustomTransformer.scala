@@ -24,7 +24,6 @@ class CustomTransformer(innerWorkflow: InnerWorkflow = InnerWorkflow.empty,
 
   def this() = this(InnerWorkflow.empty, Seq.empty)
 
-  def getDatasourcesId: Set[UUID] = innerWorkflow.getDatasourcesIds
   def applyTransform(ctx: ExecutionContext, df: DataFrame) = ctx.innerWorkflowExecutor.execute(CommonExecutionContext(ctx), workflowWithParameters(), df)
 
   override def applyTransformSchema(schema: StructType, inferCtx: InferContext): Option[StructType] = {
@@ -52,8 +51,9 @@ class CustomTransformer(innerWorkflow: InnerWorkflow = InnerWorkflow.empty,
     innerWorkflow.publicParameters.foreach { case PublicParameter(nodeId, parameterName, publicName) =>
       val node = innerWorkflow.graph.node(nodeId)
       val action = node.value
-      val innerParameter = getParameter(action.allParameters, parameterName).asInstanceOf[Parameter[Any]]
-      action.set(innerParameter -> $(getParameter(allParameters, publicName)))
+// FIXME
+//      val innerParameter = getParameter(action.allParameters, parameterName).asInstanceOf[Parameter[Any]]
+//      action.set(innerParameter -> $(getParameter(allParameters, publicName)))
     }
     innerWorkflow
   }

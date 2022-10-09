@@ -5,6 +5,7 @@ import com.harana.sdk.shared.models.flow.Action0To1TypeInfo
 import com.harana.sdk.shared.models.flow.actionobjects.DataFrameInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
 import com.harana.sdk.shared.models.flow.parameters.ParameterGroup
+import izumi.reflect.Tag
 
 import scala.reflect.runtime.{universe => ru}
 
@@ -17,7 +18,7 @@ trait SourceInfo extends Action0To1TypeInfo[DataFrameInfo] {
   val category = IO
 
   @transient
-  lazy val portO_0: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]
+  lazy val portO_0: Tag[DataFrameInfo] = Tag[DataFrameInfo]
 
 }
 

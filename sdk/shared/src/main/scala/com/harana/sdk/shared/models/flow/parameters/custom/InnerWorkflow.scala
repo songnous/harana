@@ -22,14 +22,13 @@ case class InnerWorkflow(graph: FlowGraph,
   val source = findNodeOfType(sourceId).get
   val sink = findNodeOfType(sinkId).get
 
-  // FIXME
   private def findNodeOfType(actionId: ActionTypeInfo.Id) = graph.nodes.find(_.value.id == actionId.toString)
 
 }
 
 object InnerWorkflow {
-  val sourceAction = Action((0,0), SourceInfo.inArity, SourceInfo.outArity, None, None, None, HMap.empty)
-  val sinkAction = Action((0,0), SinkInfo.inArity, SinkInfo.outArity, None, None, None, HMap.empty)
+  val sourceAction = Action(SourceInfo, (0,0), None, None, None, HMap.empty)
+  val sinkAction = Action(SinkInfo, (0,0), None, None, None, HMap.empty)
   val empty = InnerWorkflow(FlowGraph(Set(Node(sourceAction.id, sourceAction), Node(sinkAction.id, sinkAction))), Json.Null)
 }
 

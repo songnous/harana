@@ -6,7 +6,7 @@ import com.harana.sdk.backend.models.flow.actiontypes.ActionTypeType0To1
 import com.harana.sdk.backend.models.flow.actiontypes.exceptions.HaranaIOError
 import com.harana.sdk.shared.models.flow.actiontypes.read.ReadTransformerInfo
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 import java.io._
 
 class ReadTransformer extends ActionTypeType0To1[Transformer] with ReadTransformerInfo {
@@ -20,5 +20,5 @@ class ReadTransformer extends ActionTypeType0To1[Transformer] with ReadTransform
     }
   }
 
-  lazy val tTagTO_0: TypeTag[Transformer] = typeTag
+  lazy val tTagTO_0: Tag[Transformer] = typeTag
 }

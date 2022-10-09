@@ -19,7 +19,7 @@ class SpiLoadedActionType extends ActionTypeType0To1[A1] {
   def execute()(context: ExecutionContext): A1 = ???
 
   @transient
-  lazy val tTagTO_0: ru.TypeTag[A1] = ru.typeTag[A1]
+  lazy val tTagTO_0: Tag[A1] = Tag[A1]
 
   val id: Id = SpiLoadedActionType.spiLoadedActionUuid
   val name = "SpiLoadedAction"

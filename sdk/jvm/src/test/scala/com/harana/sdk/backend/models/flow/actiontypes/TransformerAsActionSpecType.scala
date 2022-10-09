@@ -9,7 +9,7 @@ import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
 import com.harana.sdk.shared.models.flow.parameters.{NumericParameter, ParameterMap}
 import org.apache.spark.sql.types.StructType
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 object MockTransformers extends UnitSpec with TestSupport {
 
@@ -57,7 +57,7 @@ class TransformerAsActionSpecType extends UnitSpec {
   class MockTransformerAsActionType extends TransformerAsActionType[MockTransformer] {
     val name = ""
     val id: Id = "6d924962-9456-11e5-8994-feff819cdc9f"
-      override lazy val tTagTO_1: TypeTag[MockTransformer] = typeTag[MockTransformer]
+      override lazy val tTagTO_1: Tag[MockTransformer] = typeTag[MockTransformer]
   }
 
   "TransformerAsAction" should {

@@ -87,16 +87,16 @@ object Library {
   ))
 
   val circe = Def.setting(Seq(
-    "io.circe" %% "circe-core" % "0.14.2",
-    "io.circe" %% "circe-derivation" % "0.13.0-M5" exclude("io.circe", "circe-core"),
-    "io.circe" %% "circe-generic-extras" % "0.14.2",
-    "io.circe" %% "circe-generic" % "0.14.2",
-    "io.circe" %% "circe-optics" % "0.14.1",
-    "io.circe" %% "circe-parser" % "0.14.2",
-    "io.circe" %% "circe-shapes" % "0.14.2",
+    "io.circe" %%% "circe-core" % "0.14.2",
+    "io.circe" %%% "circe-derivation" % "0.13.0-M5" exclude("io.circe", "circe-core"),
+    "io.circe" %%% "circe-generic-extras" % "0.14.2",
+    "io.circe" %%% "circe-generic" % "0.14.2",
+    "io.circe" %%% "circe-optics" % "0.14.1",
+    "io.circe" %%% "circe-parser" % "0.14.2",
+    "io.circe" %%% "circe-shapes" % "0.14.2",
     "io.circe" %% "circe-yaml" % "0.14.1",
     "org.latestbit" %%% "circe-tagged-adt-codec" % "0.10.0",
-    "com.beachape" %% "enumeratum-circe" % "1.7.0"
+    "com.beachape" %%% "enumeratum-circe" % "1.7.0"
   ))
 
   val compilerPlugins = Seq(
@@ -182,7 +182,7 @@ object Library {
   ))
 
   val npmDependencies = Def.setting(Seq(
-    "@data-ui/sparkline" -> "0.0.75",
+    "@data-ui/sparkline" -> "0.0.84",
     "@nivo/bar" -> "0.79.1",
     "@nivo/calendar" -> "0.79.1",
     "@nivo/core" -> "0.79.0",
@@ -199,9 +199,9 @@ object Library {
     "hard-source-webpack-plugin" -> "0.13.1",
     "history" -> "4.10.1",
     "prop-types" -> "15.7.2",
-    "react" -> "17.0.1",
+    "react" -> "16.14.0",
     "react-color" -> "2.17.0",
-    "react-dom" -> "17.0.1",
+    "react-dom" -> "16.14.0",
     "react-filepond" -> "7.1.0",
     "react-flow-renderer" -> "8.0.0",
     "react-helmet" -> "6.1.0",
@@ -265,6 +265,7 @@ object Library {
 
   val scalajs = Def.setting(Seq(
     "org.scala-js" %%% "scala-js-macrotask-executor" % "1.0.0",
+    "org.scala-js" %%% "scalajs-java-securerandom" % "1.0.0",
     "com.vmunier" %% "scalajs-scripts" % "1.2.0"
   ))
 
@@ -394,6 +395,7 @@ object Library {
   val guice = Def.setting("com.google.inject" % "guice" % "5.1.0")
   val handlebars = Def.setting("com.github.jknack" % "handlebars" % "4.3.0")
   val httpCore = Def.setting("org.apache.httpcomponents" % "httpcore" % "4.4.15")
+  val izumiReflect = Def.setting("dev.zio" %%% "izumi-reflect" % "2.2.0")
   val javaMail = Def.setting("com.sun.mail" % "jakarta.mail" % "2.0.1")
   val javassist = Def.setting("org.javassist" % "javassist" % "3.23.0-GA")
   val javaWebsocket = Def.setting("org.java-websocket" % "Java-WebSocket" % "1.5.3")

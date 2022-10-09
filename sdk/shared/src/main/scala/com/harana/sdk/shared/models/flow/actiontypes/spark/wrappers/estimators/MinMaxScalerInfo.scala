@@ -8,7 +8,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait MinMaxScalerInfo extends EstimatorAsActionInfo[MinMaxScalerEstimatorInfo, MinMaxScalerModelInfo] with SparkActionDocumentation {
 
@@ -18,8 +18,8 @@ trait MinMaxScalerInfo extends EstimatorAsActionInfo[MinMaxScalerEstimatorInfo, 
   val docsGuideLocation = Some("ml-features.html#minmaxscaler")
   val category = FeatureScaling
 
-  lazy val tTagInfoE: TypeTag[MinMaxScalerEstimatorInfo] = typeTag
-  lazy val portO_1: TypeTag[MinMaxScalerModelInfo] = typeTag
+  lazy val tTagInfoE: Tag[MinMaxScalerEstimatorInfo] = typeTag
+  lazy val portO_1: Tag[MinMaxScalerModelInfo] = typeTag
 
 }
 

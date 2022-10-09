@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.Recommendati
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait CreateALSInfo extends EstimatorAsFactoryInfo[ALSInfo] with SparkActionDocumentation {
 
@@ -17,7 +17,7 @@ trait CreateALSInfo extends EstimatorAsFactoryInfo[ALSInfo] with SparkActionDocu
   val docsGuideLocation = Some("mllib-collaborative-filtering.html#collaborative-filtering")
   val category = Recommendation
 
-  lazy val portO_0: TypeTag[ALSInfo] = typeTag
+  lazy val portO_0: Tag[ALSInfo] = typeTag
 
 }
 

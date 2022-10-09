@@ -7,6 +7,7 @@ import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.parameters.{ParameterGroup, Parameters}
 import com.harana.sdk.shared.models.flow.utils.Id
 import com.harana.sdk.shared.models.flow.{Action2To1TypeInfo, PortPosition}
+import izumi.reflect.Tag
 
 import scala.reflect.runtime.{universe => ru}
 
@@ -23,13 +24,13 @@ trait UnionInfo extends Action2To1TypeInfo[DataFrameInfo, DataFrameInfo, DataFra
   override val inputPortsLayout = List(PortPosition.Left, PortPosition.Right)
 
   @transient
-  lazy val portI_0: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]
+  lazy val portI_0: Tag[DataFrameInfo] = Tag[DataFrameInfo]
 
   @transient
-  lazy val portI_1: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]
+  lazy val portI_1: Tag[DataFrameInfo] = Tag[DataFrameInfo]
 
   @transient
-  lazy val portO_0: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]
+  lazy val portO_0: Tag[DataFrameInfo] = Tag[DataFrameInfo]
 
 }
 

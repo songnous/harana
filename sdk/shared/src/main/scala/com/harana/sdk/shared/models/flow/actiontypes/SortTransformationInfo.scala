@@ -6,7 +6,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.SetAction
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait SortTransformationInfo extends TransformerAsActionInfo[SortTransformerInfo] with ActionDocumentation {
 
@@ -15,7 +15,7 @@ trait SortTransformationInfo extends TransformerAsActionInfo[SortTransformerInfo
   val since = Version(1, 4, 0)
   val category = SetAction
 
-  lazy val portO_1: TypeTag[SortTransformerInfo] = typeTag
+  lazy val portO_1: Tag[SortTransformerInfo] = typeTag
 
 }
 

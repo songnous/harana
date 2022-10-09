@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.Clustering
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait CreateKMeansInfo extends EstimatorAsFactoryInfo[KMeansInfo] with SparkActionDocumentation {
 
@@ -17,7 +17,7 @@ trait CreateKMeansInfo extends EstimatorAsFactoryInfo[KMeansInfo] with SparkActi
   val docsGuideLocation = Some("ml-clustering.html#k-means")
   val category = Clustering
 
-  lazy val portO_0: TypeTag[KMeansInfo] = typeTag
+  lazy val portO_0: Tag[KMeansInfo] = typeTag
 
 }
 

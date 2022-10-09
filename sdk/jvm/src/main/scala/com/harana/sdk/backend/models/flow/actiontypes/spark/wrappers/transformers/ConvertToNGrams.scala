@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.actiontypes.spark.wrappers.transformers
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 class ConvertToNGrams extends TransformerAsActionType[NGramTransformer]
   with ConvertToNGramsInfo

@@ -12,7 +12,7 @@ import org.apache.spark.ml
 import org.apache.spark.sql.types.StructType
 
 import scala.reflect.ClassTag
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 /** Some spark action assume their input was string-indexed. User-experience suffers from this requirement. We can work around it by wrapping
   * estimation in `StringIndexerEstimatorWrapper`. `StringIndexerEstimatorWrapper` plugs in StringIndexer before action. It also makes it
@@ -25,10 +25,10 @@ abstract class StringIndexingEstimatorWrapper[M <: ml.Model[M], E <: ml.Estimato
     private var wrappedEstimator: SparkEstimatorWrapper[M, E, MW] with HasLabelColumnParameter with HasPredictionColumnCreatorParameter
 )(implicit
     val sparkModelClassTag: ClassTag[M],
-    val modelWrapperTag: TypeTag[MW],
-    val estimatorTag: TypeTag[E],
-    val sparkModelTag: TypeTag[M],
-    val stringIndexingWrapperModelTag: TypeTag[SIWP]
+    val modelWrapperTag: Tag[MW],
+    val estimatorTag: Tag[E],
+    val sparkModelTag: Tag[M],
+    val stringIndexingWrapperModelTag: Tag[SIWP]
 ) extends Estimator[SIWP] with ParametersWithSparkWrappers {
 
   // FIXME

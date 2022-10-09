@@ -10,7 +10,7 @@ import com.harana.sdk.shared.models.flow.actiontypes.inout.InputStorageTypeChoic
 import com.harana.sdk.shared.models.flow.actiontypes.read.ReadDataFrameInfo
 import org.apache.spark.sql
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 import java.io._
 import java.net.UnknownHostException
 
@@ -40,6 +40,6 @@ class ReadDataFrame extends ActionTypeType0To1[DataFrame] with ReadDataFrameInfo
       .option("dbtable", jdbcChoice.getJdbcTableName)
       .load()
 
-  lazy val tTagTO_0: TypeTag[DataFrame] = typeTag
+  lazy val tTagTO_0: Tag[DataFrame] = typeTag
 
 }

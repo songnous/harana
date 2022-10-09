@@ -7,7 +7,7 @@ import scala.reflect.runtime.{universe => ru}
 
 // code below is generated automatically
 // scalastyle:off
-abstract class Method0To1[P, +TO_0 <: ActionObjectInfo: ru.TypeTag] extends Method {
+abstract class Method0To1[P, +TO_0 <: ActionObjectInfo: Tag] extends Method {
 
   def apply(context: ExecutionContext)(parameters: P)(): TO_0
 
@@ -16,7 +16,7 @@ abstract class Method0To1[P, +TO_0 <: ActionObjectInfo: ru.TypeTag] extends Meth
 
 }
 
-abstract class Method0To2[P, +TO_0 <: ActionObjectInfo: ru.TypeTag, +TO_1 <: ActionObjectInfo: ru.TypeTag] extends Method {
+abstract class Method0To2[P, +TO_0 <: ActionObjectInfo: Tag, +TO_1 <: ActionObjectInfo: Tag] extends Method {
 
   def apply(context: ExecutionContext)(parameters: P)(): (TO_0, TO_1)
 
@@ -33,9 +33,9 @@ abstract class Method0To2[P, +TO_0 <: ActionObjectInfo: ru.TypeTag, +TO_1 <: Act
 
 abstract class Method0To3[
     P,
-    +TO_0 <: ActionObjectInfo: ru.TypeTag,
-    +TO_1 <: ActionObjectInfo: ru.TypeTag,
-    +TO_2 <: ActionObjectInfo: ru.TypeTag
+    +TO_0 <: ActionObjectInfo: Tag,
+    +TO_1 <: ActionObjectInfo: Tag,
+    +TO_2 <: ActionObjectInfo: Tag
 ] extends Method {
 
   def apply(context: ExecutionContext)(parameters: P)(): (TO_0, TO_1, TO_2)
@@ -54,7 +54,7 @@ abstract class Method0To3[
   }
 }
 
-abstract class Method1To0[P, TI_0 <: ActionObjectInfo: ru.TypeTag] extends Method {
+abstract class Method1To0[P, TI_0 <: ActionObjectInfo: Tag] extends Method {
 
   def apply(context: ExecutionContext)(parameters: P)(t0: TI_0): Unit
 
@@ -63,7 +63,7 @@ abstract class Method1To0[P, TI_0 <: ActionObjectInfo: ru.TypeTag] extends Metho
 
 }
 
-abstract class Method1To1[P, TI_0 <: ActionObjectInfo: ru.TypeTag, +TO_0 <: ActionObjectInfo: ru.TypeTag] extends Method {
+abstract class Method1To1[P, TI_0 <: ActionObjectInfo: Tag, +TO_0 <: ActionObjectInfo: Tag] extends Method {
 
   def apply(context: ExecutionContext)(parameters: P)(t0: TI_0): TO_0
 
@@ -74,9 +74,9 @@ abstract class Method1To1[P, TI_0 <: ActionObjectInfo: ru.TypeTag, +TO_0 <: Acti
 
 abstract class Method1To2[
     P,
-    TI_0 <: ActionObjectInfo: ru.TypeTag,
-    +TO_0 <: ActionObjectInfo: ru.TypeTag,
-    +TO_1 <: ActionObjectInfo: ru.TypeTag
+    TI_0 <: ActionObjectInfo: Tag,
+    +TO_0 <: ActionObjectInfo: Tag,
+    +TO_1 <: ActionObjectInfo: Tag
 ] extends Method {
 
   def apply(context: ExecutionContext)(parameters: P)(t0: TI_0): (TO_0, TO_1)
@@ -96,10 +96,10 @@ abstract class Method1To2[
 
 abstract class Method1To3[
     P,
-    TI_0 <: ActionObjectInfo: ru.TypeTag,
-    +TO_0 <: ActionObjectInfo: ru.TypeTag,
-    +TO_1 <: ActionObjectInfo: ru.TypeTag,
-    +TO_2 <: ActionObjectInfo: ru.TypeTag
+    TI_0 <: ActionObjectInfo: Tag,
+    +TO_0 <: ActionObjectInfo: Tag,
+    +TO_1 <: ActionObjectInfo: Tag,
+    +TO_2 <: ActionObjectInfo: Tag
 ] extends Method {
 
   def apply(context: ExecutionContext)(parameters: P)(t0: TI_0): (TO_0, TO_1, TO_2)
@@ -118,7 +118,7 @@ abstract class Method1To3[
   }
 }
 
-abstract class Method2To0[P, TI_0 <: ActionObjectInfo: ru.TypeTag, TI_1 <: ActionObjectInfo: ru.TypeTag] extends Method {
+abstract class Method2To0[P, TI_0 <: ActionObjectInfo: Tag, TI_1 <: ActionObjectInfo: Tag] extends Method {
 
   def apply(context: ExecutionContext)(parameters: P)(t0: TI_0, t1: TI_1): Unit
 
@@ -130,9 +130,9 @@ abstract class Method2To0[P, TI_0 <: ActionObjectInfo: ru.TypeTag, TI_1 <: Actio
 
 abstract class Method2To1[
     P,
-    TI_0 <: ActionObjectInfo: ru.TypeTag,
-    TI_1 <: ActionObjectInfo: ru.TypeTag,
-    +TO_0 <: ActionObjectInfo: ru.TypeTag
+    TI_0 <: ActionObjectInfo: Tag,
+    TI_1 <: ActionObjectInfo: Tag,
+    +TO_0 <: ActionObjectInfo: Tag
 ] extends Method {
 
   def apply(context: ExecutionContext)(parameters: P)(t0: TI_0, t1: TI_1): TO_0
@@ -146,10 +146,10 @@ abstract class Method2To1[
 
 abstract class Method2To2[
     P,
-    TI_0 <: ActionObjectInfo: ru.TypeTag,
-    TI_1 <: ActionObjectInfo: ru.TypeTag,
-    +TO_0 <: ActionObjectInfo: ru.TypeTag,
-    +TO_1 <: ActionObjectInfo: ru.TypeTag
+    TI_0 <: ActionObjectInfo: Tag,
+    TI_1 <: ActionObjectInfo: Tag,
+    +TO_0 <: ActionObjectInfo: Tag,
+    +TO_1 <: ActionObjectInfo: Tag
 ] extends Method {
 
   def apply(context: ExecutionContext)(parameters: P)(t0: TI_0, t1: TI_1): (TO_0, TO_1)
@@ -169,11 +169,11 @@ abstract class Method2To2[
 
 abstract class Method2To3[
     P,
-    TI_0 <: ActionObjectInfo: ru.TypeTag,
-    TI_1 <: ActionObjectInfo: ru.TypeTag,
-    +TO_0 <: ActionObjectInfo: ru.TypeTag,
-    +TO_1 <: ActionObjectInfo: ru.TypeTag,
-    +TO_2 <: ActionObjectInfo: ru.TypeTag
+    TI_0 <: ActionObjectInfo: Tag,
+    TI_1 <: ActionObjectInfo: Tag,
+    +TO_0 <: ActionObjectInfo: Tag,
+    +TO_1 <: ActionObjectInfo: Tag,
+    +TO_2 <: ActionObjectInfo: Tag
 ] extends Method {
 
   def apply(context: ExecutionContext)(parameters: P)(t0: TI_0, t1: TI_1): (TO_0, TO_1, TO_2)
@@ -195,9 +195,9 @@ abstract class Method2To3[
 
 abstract class Method3To0[
     P,
-    TI_0 <: ActionObjectInfo: ru.TypeTag,
-    TI_1 <: ActionObjectInfo: ru.TypeTag,
-    TI_2 <: ActionObjectInfo: ru.TypeTag
+    TI_0 <: ActionObjectInfo: Tag,
+    TI_1 <: ActionObjectInfo: Tag,
+    TI_2 <: ActionObjectInfo: Tag
 ] extends Method {
 
   def apply(context: ExecutionContext)(parameters: P)(t0: TI_0, t1: TI_1, t2: TI_2): Unit
@@ -209,10 +209,10 @@ abstract class Method3To0[
 
 abstract class Method3To1[
     P,
-    TI_0 <: ActionObjectInfo: ru.TypeTag,
-    TI_1 <: ActionObjectInfo: ru.TypeTag,
-    TI_2 <: ActionObjectInfo: ru.TypeTag,
-    +TO_0 <: ActionObjectInfo: ru.TypeTag
+    TI_0 <: ActionObjectInfo: Tag,
+    TI_1 <: ActionObjectInfo: Tag,
+    TI_2 <: ActionObjectInfo: Tag,
+    +TO_0 <: ActionObjectInfo: Tag
 ] extends Method {
 
   def apply(context: ExecutionContext)(parameters: P)(t0: TI_0, t1: TI_1, t2: TI_2): TO_0
@@ -224,11 +224,11 @@ abstract class Method3To1[
 
 abstract class Method3To2[
     P,
-    TI_0 <: ActionObjectInfo: ru.TypeTag,
-    TI_1 <: ActionObjectInfo: ru.TypeTag,
-    TI_2 <: ActionObjectInfo: ru.TypeTag,
-    +TO_0 <: ActionObjectInfo: ru.TypeTag,
-    +TO_1 <: ActionObjectInfo: ru.TypeTag
+    TI_0 <: ActionObjectInfo: Tag,
+    TI_1 <: ActionObjectInfo: Tag,
+    TI_2 <: ActionObjectInfo: Tag,
+    +TO_0 <: ActionObjectInfo: Tag,
+    +TO_1 <: ActionObjectInfo: Tag
 ] extends Method {
 
   def apply(context: ExecutionContext)(parameters: P)(t0: TI_0, t1: TI_1, t2: TI_2): (TO_0, TO_1)
@@ -250,12 +250,12 @@ abstract class Method3To2[
 
 abstract class Method3To3[
     P,
-    TI_0 <: ActionObjectInfo: ru.TypeTag,
-    TI_1 <: ActionObjectInfo: ru.TypeTag,
-    TI_2 <: ActionObjectInfo: ru.TypeTag,
-    +TO_0 <: ActionObjectInfo: ru.TypeTag,
-    +TO_1 <: ActionObjectInfo: ru.TypeTag,
-    +TO_2 <: ActionObjectInfo: ru.TypeTag
+    TI_0 <: ActionObjectInfo: Tag,
+    TI_1 <: ActionObjectInfo: Tag,
+    TI_2 <: ActionObjectInfo: Tag,
+    +TO_0 <: ActionObjectInfo: Tag,
+    +TO_1 <: ActionObjectInfo: Tag,
+    +TO_2 <: ActionObjectInfo: Tag
 ] extends Method {
 
   def apply(context: ExecutionContext)(parameters: P)(t0: TI_0, t1: TI_1, t2: TI_2): (TO_0, TO_1, TO_2)

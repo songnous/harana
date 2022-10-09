@@ -44,6 +44,7 @@ val sdk = crossProject("sdk")
     libraryDependencies ++=
       Library.circe.value ++
       Library.testing.value :+
+      Library.izumiReflect.value :+
       Library.shapeless.value :+
       Library.squants.value
   )

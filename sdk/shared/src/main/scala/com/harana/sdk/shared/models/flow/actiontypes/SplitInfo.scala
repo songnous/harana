@@ -11,6 +11,7 @@ import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
 import com.harana.sdk.shared.models.flow.parameters._
 import com.harana.sdk.shared.models.flow.utils.Id
 import com.harana.sdk.shared.models.flow.{Action1To2TypeInfo, PortPosition}
+import izumi.reflect.Tag
 
 import scala.reflect.runtime.{universe => ru}
 
@@ -32,13 +33,13 @@ trait SplitInfo extends Action1To2TypeInfo[DataFrameInfo, DataFrameInfo, DataFra
   override val parameterGroups = List(ParameterGroup(None, splitModeParameter))
 
   @transient
-  lazy val portI_0: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]
+  lazy val portI_0: Tag[DataFrameInfo] = Tag[DataFrameInfo]
 
   @transient
-  lazy val portO_0: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]
+  lazy val portO_0: Tag[DataFrameInfo] = Tag[DataFrameInfo]
 
   @transient
-  lazy val portO_1: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]
+  lazy val portO_1: Tag[DataFrameInfo] = Tag[DataFrameInfo]
 
 }
 

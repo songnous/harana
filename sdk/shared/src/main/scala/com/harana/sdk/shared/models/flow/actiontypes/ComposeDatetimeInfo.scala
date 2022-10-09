@@ -5,8 +5,9 @@ import com.harana.sdk.shared.models.flow.actionobjects.DatetimeComposerInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.FeatureConversion
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
+import izumi.reflect.Tag
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait ComposeDatetimeInfo extends TransformerAsActionInfo[DatetimeComposerInfo] with ActionDocumentation {
 
@@ -15,7 +16,7 @@ trait ComposeDatetimeInfo extends TransformerAsActionInfo[DatetimeComposerInfo] 
   val since = Version(1, 3, 0)
   val category = FeatureConversion
 
-  lazy val portO_1: TypeTag[DatetimeComposerInfo] = typeTag
+  lazy val portO_1: Tag[DatetimeComposerInfo] = typeTag
 
 }
 

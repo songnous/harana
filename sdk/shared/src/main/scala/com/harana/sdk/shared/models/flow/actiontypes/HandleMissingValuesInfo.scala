@@ -6,7 +6,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Filtering
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait HandleMissingValuesInfo extends TransformerAsActionInfo[MissingValuesHandlerInfo] with ActionDocumentation {
 
@@ -15,7 +15,7 @@ trait HandleMissingValuesInfo extends TransformerAsActionInfo[MissingValuesHandl
   val since = Version(0, 4, 0)
   val category = Filtering
 
-  lazy val portO_1: TypeTag[MissingValuesHandlerInfo] = typeTag
+  lazy val portO_1: Tag[MissingValuesHandlerInfo] = typeTag
 
 }
 

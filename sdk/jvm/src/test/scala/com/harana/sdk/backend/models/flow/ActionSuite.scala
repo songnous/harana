@@ -36,8 +36,8 @@ object ActionForPortTypes {
     val name = ""
       override val parameterGroups = List.empty[ParameterGroup]
 
-    lazy val tTagTI_0: ru.TypeTag[A1] = ru.typeTag[A1]
-    lazy val tTagTO_0: ru.TypeTag[A2] = ru.typeTag[A2]
+    lazy val tTagTI_0: Tag[A1] = Tag[A1]
+    lazy val tTagTO_0: Tag[A2] = Tag[A2]
   }
 }
 
@@ -56,9 +56,9 @@ class ActionSuite extends AnyFunSuite with TestSupport {
       def execute(t1: A1, t2: A2)(context: ExecutionContext): A = if ($(param) % 2 == 1) t1 else t2
       val name = "Some name"
 
-      lazy val tTagTI_0: ru.TypeTag[A1] = ru.typeTag[A1]
-      lazy val tTagTO_0: ru.TypeTag[A]  = ru.typeTag[A]
-      lazy val tTagTI_1: ru.TypeTag[A2] = ru.typeTag[A2]
+      lazy val tTagTI_0: Tag[A1] = Tag[A1]
+      lazy val tTagTO_0: Tag[A]  = Tag[A]
+      lazy val tTagTI_1: Tag[A2] = Tag[A2]
     }
 
     val firstPicker  = new PickOne
@@ -94,7 +94,7 @@ class ActionSuite extends AnyFunSuite with TestSupport {
 
       val name = ""
           override val parameterGroups = List.empty[ParameterGroup]
-      lazy val tTagTO_0: ru.TypeTag[A] = ru.typeTag[A]
+      lazy val tTagTO_0: Tag[A] = Tag[A]
     }
 
     val generator: ActionType = new GeneratorOfA
@@ -112,12 +112,12 @@ class ActionSuite extends AnyFunSuite with TestSupport {
   test("Getting types required in input port") {
     import ActionForPortTypes._
     val op = new SimpleActionType
-    assert(op.inputPorts == List(ru.typeTag[DClassesForActions.A1]))
+    assert(op.inputPorts == List(Tag[DClassesForActions.A1]))
   }
 
   test("Getting types required in output port") {
     import ActionForPortTypes._
     val op = new SimpleActionType
-    assert(op.outputPorts == List(ru.typeTag[DClassesForActions.A2]))
+    assert(op.outputPorts == List(Tag[DClassesForActions.A2]))
   }
 }

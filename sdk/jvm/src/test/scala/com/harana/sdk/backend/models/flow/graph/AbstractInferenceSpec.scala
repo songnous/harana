@@ -57,9 +57,9 @@ class AbstractInferenceSpec extends AnyWordSpec with TestSupport with Matchers {
       (k0, InferenceWarnings(warning))
     }
 
-    lazy val tTagTI_0: ru.TypeTag[A1] = ru.typeTag[A1]
-    lazy val tTagTO_0: ru.TypeTag[A] = ru.typeTag[A]
-    lazy val tTagTI_1: ru.TypeTag[A2] = ru.typeTag[A2]
+    lazy val tTagTI_0: Tag[A1] = Tag[A1]
+    lazy val tTagTO_0: Tag[A] = Tag[A]
+    lazy val tTagTI_1: Tag[A2] = Tag[A2]
   }
 
   object ActionTypeTypeA1A2ToFirst {

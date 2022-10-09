@@ -8,7 +8,7 @@ import com.harana.sdk.backend.models.flow.inference.InferContext
 import com.harana.sdk.shared.models.flow.actionobjects.MetricValue
 import com.harana.sdk.shared.models.flow.actiontypes.EvaluateInfo
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 class Evaluate extends ActionTypeType2To1[Evaluator, DataFrame, MetricValue] with EvaluateInfo {
 
@@ -27,6 +27,6 @@ class Evaluate extends ActionTypeType2To1[Evaluator, DataFrame, MetricValue] wit
     evaluatorWithParameters
   }
 
-  lazy val tTagTO_0: TypeTag[MetricValue] = typeTag
+  lazy val tTagTO_0: Tag[MetricValue] = typeTag
 
 }

@@ -1,7 +1,7 @@
 package com.harana.sdk.backend.models.flow
 
 import com.harana.sdk.shared.models.flow.utils.TypeUtils
-import scala.reflect.runtime.universe.typeTag
+import izumi.reflect.Tag
 
 class TypeUtilsSpec extends UnitSpec {
 

@@ -10,6 +10,7 @@ import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParame
 import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup, Parameters}
 import com.harana.sdk.shared.models.flow.utils.CollectionExtensions._
 import io.circe.{Decoder, Encoder}
+import izumi.reflect.Tag
 
 import java.util.UUID
 import scala.reflect.runtime.{universe => ru}
@@ -28,14 +29,14 @@ trait ActionTypeInfo extends GraphAction with Serializable with Parameters {
 
   def hasDocumentation: Boolean = false
 
-  def inputPorts: List[ru.TypeTag[_]]
+  def inputPorts: List[Tag[_]]
   def inputPortsLayout: List[PortPosition] = defaultPortLayout(inputPorts, GravitateLeft)
-  def outputPorts: List[ru.TypeTag[_]]
+  def outputPorts: List[Tag[_]]
   def outputPortsLayout: List[PortPosition] = defaultPortLayout(outputPorts, GravitateRight)
 
   def getDatasourcesIds: Set[UUID] = Set[UUID]()
 
-  private def defaultPortLayout(portTypes: List[ru.TypeTag[_]], gravity: Gravity): List[PortPosition] = {
+  private def defaultPortLayout(portTypes: List[Tag[_]], gravity: Gravity): List[PortPosition] = {
     portTypes.size match {
       case 0 => List.empty[PortPosition]
       case 1 => List(PortPosition.Center)
@@ -58,7 +59,7 @@ trait ActionTypeInfo extends GraphAction with Serializable with Parameters {
     require(outputPortsLayout.isSorted, "Output ports must be laid out from left to right")
   }
 
-  def typeTag[T: ru.TypeTag]: ru.TypeTag[T] = ru.typeTag[T]
+  def typeTag[T: Tag]: Tag[T] = Tag[T]
 
   val reportTypeParameter: ChoiceParameter[ReportType] = ChoiceParameter[ReportType]("report-type", default = Some(ReportParameter.Extended()))
   def getReportType = $(reportTypeParameter)

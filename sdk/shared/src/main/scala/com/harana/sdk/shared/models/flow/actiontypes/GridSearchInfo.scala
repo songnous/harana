@@ -12,7 +12,7 @@ import com.harana.sdk.shared.models.flow.parameters.{DynamicParameter, NumericPa
 import com.harana.sdk.shared.models.flow.utils.Id
 import io.circe.Json
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait GridSearchInfo
   extends Action3To1TypeInfo[EstimatorInfo, DataFrameInfo, EvaluatorInfo, Report]
@@ -37,10 +37,10 @@ trait GridSearchInfo
 
   override val parameterGroups = List(ParameterGroup(None, estimatorParameters, evaluatorParameters, numberOfFoldsParameter))
 
-  lazy val portI_0: TypeTag[EstimatorInfo] = typeTag
-  lazy val portI_1: TypeTag[DataFrameInfo] = typeTag
-  lazy val portI_2: TypeTag[EvaluatorInfo] = typeTag
-  lazy val portO_0: TypeTag[Report] = typeTag
+  lazy val portI_0: Tag[EstimatorInfo] = typeTag
+  lazy val portI_1: Tag[DataFrameInfo] = typeTag
+  lazy val portI_2: Tag[EvaluatorInfo] = typeTag
+  lazy val portO_0: Tag[Report] = typeTag
 
 }
 

@@ -4,12 +4,12 @@ import com.harana.sdk.shared.models.flow.Action1To2TypeInfo
 import com.harana.sdk.shared.models.flow.actionobjects.{DataFrameInfo, EstimatorInfo, TransformerInfo}
 import com.harana.sdk.shared.models.flow.utils.TypeUtils
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait EstimatorAsActionInfo[E <: EstimatorInfo, T <: TransformerInfo]
   extends Action1To2TypeInfo[DataFrameInfo, DataFrameInfo, T] {
 
-  val tTagInfoE: TypeTag[E]
+  val tTagInfoE: Tag[E]
 
   lazy val estimatorInfo: E = TypeUtils.instanceOfType(tTagInfoE)
 
@@ -23,7 +23,7 @@ trait EstimatorAsActionInfo[E <: EstimatorInfo, T <: TransformerInfo]
     estimatorWithParameters
   }
 
-  lazy val portI_0: TypeTag[DataFrameInfo] = typeTag[DataFrameInfo]
-  lazy val portO_0: TypeTag[DataFrameInfo] = typeTag[DataFrameInfo]
+  lazy val portI_0: Tag[DataFrameInfo] = Tag[DataFrameInfo]
+  lazy val portO_0: Tag[DataFrameInfo] = Tag[DataFrameInfo]
 
 }

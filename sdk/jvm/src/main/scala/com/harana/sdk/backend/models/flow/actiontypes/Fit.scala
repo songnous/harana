@@ -7,7 +7,7 @@ import com.harana.sdk.backend.models.flow.actiontypes.exceptions.TooManyPossible
 import com.harana.sdk.backend.models.flow.inference.InferContext
 import com.harana.sdk.shared.models.flow.actiontypes.FitInfo
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 class Fit extends ActionTypeType2To1[Estimator[Transformer], DataFrame, Transformer]
   with FitInfo {
@@ -27,6 +27,6 @@ class Fit extends ActionTypeType2To1[Estimator[Transformer], DataFrame, Transfor
     estimatorWithParameters
   }
 
-  lazy val tTagTO_0: TypeTag[Transformer] = typeTag
+  lazy val tTagTO_0: Tag[Transformer] = typeTag
 
 }

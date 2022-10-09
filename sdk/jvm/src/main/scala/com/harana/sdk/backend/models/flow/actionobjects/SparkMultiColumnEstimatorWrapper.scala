@@ -11,15 +11,15 @@ import com.harana.sdk.shared.models.flow.utils.TypeUtils
 import org.apache.spark.ml
 import org.apache.spark.sql.types.StructType
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 abstract class SparkMultiColumnEstimatorWrapper[MD <: ml.Model[MD] { val outputCol: ml.param.Param[String] }, E <: ml.Estimator[MD] { val outputCol: ml.param.Param[String] }, MP <: Transformer, SMW <: SparkSingleColumnParameterModelWrapper[MD, E]
   with MP, EW <: SparkSingleColumnParameterEstimatorWrapper[MD, E, SMW], MMW <: MultiColumnModel[MD, E, SMW] with MP](
-    implicit val modelWrapperTag: TypeTag[SMW],
-    implicit val estimatorTag: TypeTag[E],
-    implicit val modelsParentTag: TypeTag[MP],
-    implicit val estimatorWrapperTag: TypeTag[EW],
-    implicit val multiColumnModelTag: TypeTag[MMW],
+    implicit val modelWrapperTag: Tag[SMW],
+    implicit val estimatorTag: Tag[E],
+    implicit val modelsParentTag: Tag[MP],
+    implicit val estimatorWrapperTag: Tag[EW],
+    implicit val multiColumnModelTag: Tag[MMW],
     implicit val ev1: SMW <:< MP,
     implicit val ev2: MMW <:< MP
 ) extends MultiColumnEstimator[MP, MMW, SMW] {

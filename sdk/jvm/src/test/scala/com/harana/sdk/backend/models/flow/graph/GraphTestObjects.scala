@@ -36,14 +36,14 @@ object ActionTestClasses {
     def execute()(context: ExecutionContext): A1 = ???
 
     @transient
-    lazy val tTagTO_0: ru.TypeTag[A1] = ru.typeTag[A1]
+    lazy val tTagTO_0: Tag[A1] = Tag[A1]
   }
 
   case class ActionTypeReceiveA1() extends ActionTypeType1To0[A1] with ActionBaseFields {
     def execute(t0: A1)(context: ExecutionContext) = ???
 
     @transient
-    lazy val tTagTI_0: ru.TypeTag[A1] = ru.typeTag[A1]
+    lazy val tTagTI_0: Tag[A1] = Tag[A1]
 
   }
 
@@ -51,10 +51,10 @@ object ActionTestClasses {
     def execute(t1: A1)(context: ExecutionContext): A = ???
 
     @transient
-    lazy val tTagTI_0: ru.TypeTag[A1] = ru.typeTag[A1]
+    lazy val tTagTI_0: Tag[A1] = Tag[A1]
 
     @transient
-    lazy val tTagTO_0: ru.TypeTag[A] = ru.typeTag[A]
+    lazy val tTagTO_0: Tag[A] = Tag[A]
 
   }
 
@@ -62,13 +62,13 @@ object ActionTestClasses {
     def execute(in: A)(context: ExecutionContext): (A1, A2) = ???
 
     @transient
-    lazy val tTagTI_0: ru.TypeTag[A] = ru.typeTag[A]
+    lazy val tTagTI_0: Tag[A] = Tag[A]
 
     @transient
-    lazy val tTagTO_0: ru.TypeTag[A1] = ru.typeTag[A1]
+    lazy val tTagTO_0: Tag[A1] = Tag[A1]
 
     @transient
-    lazy val tTagTO_1: ru.TypeTag[A2] = ru.typeTag[A2]
+    lazy val tTagTO_1: Tag[A2] = Tag[A2]
 
   }
 
@@ -76,13 +76,13 @@ object ActionTestClasses {
     def execute(t1: A1, t2: A2)(context: ExecutionContext): A = ???
 
     @transient
-    lazy val tTagTI_0: ru.TypeTag[A1] = ru.typeTag[A1]
+    lazy val tTagTI_0: Tag[A1] = Tag[A1]
 
     @transient
-    lazy val tTagTO_0: ru.TypeTag[A] = ru.typeTag[A]
+    lazy val tTagTO_0: Tag[A] = Tag[A]
 
     @transient
-    lazy val tTagTI_1: ru.TypeTag[A2] = ru.typeTag[A2]
+    lazy val tTagTI_1: Tag[A2] = Tag[A2]
 
   }
 
@@ -91,10 +91,10 @@ object ActionTestClasses {
     def trace(message: String) = println(message)
 
     @transient
-    lazy val tTagTI_0: ru.TypeTag[A] = ru.typeTag[A]
+    lazy val tTagTI_0: Tag[A] = Tag[A]
 
     @transient
-    lazy val tTagTO_0: ru.TypeTag[A] = ru.typeTag[A]
+    lazy val tTagTO_0: Tag[A] = Tag[A]
 
   }
 }

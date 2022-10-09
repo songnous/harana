@@ -8,7 +8,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.FeatureSelec
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait UnivariateFeatureSelectorInfo extends EstimatorAsActionInfo[UnivariateFeatureEstimatorInfo, UnivariateFeatureModelInfo] with SparkActionDocumentation {
 
@@ -18,8 +18,8 @@ trait UnivariateFeatureSelectorInfo extends EstimatorAsActionInfo[UnivariateFeat
   val docsGuideLocation = Some("ml-features.html#chisqselector")
   val category = FeatureSelection
 
-  lazy val tTagInfoE: TypeTag[UnivariateFeatureEstimatorInfo] = typeTag
-  lazy val portO_1: TypeTag[UnivariateFeatureModelInfo] = typeTag
+  lazy val tTagInfoE: Tag[UnivariateFeatureEstimatorInfo] = typeTag
+  lazy val portO_1: Tag[UnivariateFeatureModelInfo] = typeTag
 
 }
 

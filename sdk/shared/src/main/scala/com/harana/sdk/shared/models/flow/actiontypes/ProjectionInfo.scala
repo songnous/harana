@@ -6,7 +6,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Filtering
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait ProjectionInfo extends TransformerAsActionInfo[ProjectorInfo] with ActionDocumentation {
 
@@ -15,7 +15,7 @@ trait ProjectionInfo extends TransformerAsActionInfo[ProjectorInfo] with ActionD
   val since = Version(1, 2, 0)
   val category = Filtering
 
-  lazy val portO_1: TypeTag[ProjectorInfo] = typeTag
+  lazy val portO_1: Tag[ProjectorInfo] = typeTag
 
 }
 

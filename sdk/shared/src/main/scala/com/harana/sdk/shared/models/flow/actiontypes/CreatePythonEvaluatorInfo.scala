@@ -6,7 +6,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.ModelEvaluat
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait CreatePythonEvaluatorInfo extends EvaluatorAsFactoryInfo[PythonEvaluatorInfo] with ActionDocumentation {
 
@@ -15,7 +15,7 @@ trait CreatePythonEvaluatorInfo extends EvaluatorAsFactoryInfo[PythonEvaluatorIn
   val since = Version(1, 2, 0)
   val category = ModelEvaluation
 
-  lazy val portO_0: TypeTag[PythonEvaluatorInfo] = typeTag
+  lazy val portO_0: Tag[PythonEvaluatorInfo] = typeTag
 
 }
 

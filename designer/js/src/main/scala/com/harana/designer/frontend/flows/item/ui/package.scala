@@ -15,7 +15,7 @@ import slinky.core.facade.ReactElement
 
 import scala.reflect.ClassTag
 import scala.reflect.runtime.{universe => ru}
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 import scala.scalajs.js
 import scala.scalajs.js.Dynamic.literal
 
@@ -133,7 +133,7 @@ package object ui {
 
 
   @inline
-  def handles(ports: List[ru.TypeTag[_]], handleType: HandleType, left: Boolean, vertical: Boolean): List[ReactElement] =
+  def handles(ports: List[Tag[_]], handleType: HandleType, left: Boolean, vertical: Boolean): List[ReactElement] =
     ports.zipWithIndex.map { case (port, index) =>
       val style = handleStyle(ports.size, vertical)(index)
       Handle(

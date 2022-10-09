@@ -11,7 +11,7 @@ import org.apache.spark.sql
 import org.apache.spark.sql.Column
 import org.apache.spark.sql.types.StructType
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 class Join extends ActionTypeType2To1[DataFrame, DataFrame, DataFrame]
   with DataFrame2To1Action
@@ -89,5 +89,5 @@ class Join extends ActionTypeType2To1[DataFrame, DataFrame, DataFrame]
   private def getColumns(sdf: sql.DataFrame) =
     sdf.columns.map(sdf(_)).toIndexedSeq
 
-  lazy val tTagTO_0: TypeTag[DataFrame] = typeTag
+  lazy val tTagTO_0: Tag[DataFrame] = typeTag
 }

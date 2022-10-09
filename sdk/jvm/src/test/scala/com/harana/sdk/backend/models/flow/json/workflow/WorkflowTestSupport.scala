@@ -26,7 +26,7 @@ trait WorkflowTestSupport extends StandardSpec with UnitTestSupport {
   val actionObject = mockActionObject()
 
   val actionObjectCatalog = mock[ActionObjectCatalog]
-  when(actionObjectCatalog.concreteSubclassesInstances(any(classOf[ru.TypeTag[ActionObjectInfo]]))).thenReturn(Set(actionObject))
+  when(actionObjectCatalog.concreteSubclassesInstances(any(classOf[Tag[ActionObjectInfo]]))).thenReturn(Set(actionObject))
 
   val action1 = mockAction(0, 1, ActionTypeInfo.Id.randomId, "name1", "version1")
   val action2 = mockAction(1, 1, ActionTypeInfo.Id.randomId, "name2", "version2")
@@ -68,8 +68,8 @@ trait WorkflowTestSupport extends StandardSpec with UnitTestSupport {
     when(action.name).thenReturn(name)
     when(action.inArity).thenReturn(inArity)
     when(action.outArity).thenReturn(outArity)
-    when(action.inputPorts).thenReturn(Vector.fill(inArity)(implicitly[ru.TypeTag[ActionObjectInfo]]))
-    when(action.outputPorts).thenReturn(Vector.fill(outArity)(implicitly[ru.TypeTag[ActionObjectInfo]]))
+    when(action.inputPorts).thenReturn(Vector.fill(inArity)(implicitly[Tag[ActionObjectInfo]]))
+    when(action.outputPorts).thenReturn(Vector.fill(outArity)(implicitly[Tag[ActionObjectInfo]]))
 
     val actionObjectMock = mockActionObject()
     val knowledge = mock[Knowledge[ActionObjectInfo]]

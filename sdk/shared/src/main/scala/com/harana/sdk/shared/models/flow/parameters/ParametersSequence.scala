@@ -1,21 +1,17 @@
 package com.harana.sdk.shared.models.flow.parameters
 
-import com.harana.sdk.shared.models.flow.parameters.exceptions.NoArgumentConstructorRequiredError
-import com.harana.sdk.shared.models.flow.utils.TypeUtils
-
-import scala.reflect.runtime.universe._
+import izumi.reflect.Tag
 
 case class ParametersSequence[T <: Parameters](name: String,
                                                required: Boolean = false,
-                                               default: Option[Seq[T]] = None)(implicit tag: TypeTag[T]) extends Parameter[Seq[T]] {
+                                               default: Option[Seq[T]] = None)(implicit tag: Tag[T]) extends Parameter[Seq[T]] {
 
   val parameterType = ParameterType.Multiplier
 
-  private val constructor = TypeUtils.constructorForTypeTag(tag).getOrElse {
-    throw NoArgumentConstructorRequiredError(tag.tpe.typeSymbol.asClass.name.decodedName.toString).toException
-  }
-
-  private def innerParametersInstance: T = constructor.newInstance()
+  // FIXME
+//  private def innerParametersInstance: T = TypeUtils.constructorForTypeTag(tag).getOrElse {
+//    throw NoArgumentConstructorRequiredError(tag.closestClass.getName).toException
+//  }.newInstance()
 
   override def replicate(name: String) = copy(name = name)
 

@@ -15,7 +15,7 @@ import com.harana.sdk.shared.utils.HMap
 import io.circe.Json
 
 import java.util.UUID
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait CreateCustomTransformerInfo extends TransformerAsFactoryInfo[CustomTransformerInfo] with ActionDocumentation {
 
@@ -24,7 +24,7 @@ trait CreateCustomTransformerInfo extends TransformerAsFactoryInfo[CustomTransfo
   val since = Version(1, 0, 0)
   val category = Custom
 
-  lazy val portO_0: TypeTag[CustomTransformerInfo] = typeTag
+  lazy val portO_0: Tag[CustomTransformerInfo] = typeTag
 
   val innerWorkflowParameter = WorkflowParameter("inner-workflow", default = Some(CreateCustomTransformerInfo.default))
   def getInnerWorkflow = $(innerWorkflowParameter)
@@ -35,10 +35,10 @@ trait CreateCustomTransformerInfo extends TransformerAsFactoryInfo[CustomTransfo
 }
 
 object CreateCustomTransformerInfo extends CreateCustomTransformerInfo {
-  val sourceAction = Action((0, 0), SourceInfo.inArity, SourceInfo.outArity, None, None, None, HMap.empty)
+  val sourceAction = Action(SourceInfo, (0, 0), None, None, None, HMap.empty)
   private val sourceNode = Node(sourceAction.id, sourceAction)
 
-  val sinkAction = Action((0, 0), SinkInfo.inArity, SinkInfo.outArity, None, None, None, HMap.empty)
+  val sinkAction = Action(SinkInfo, (0, 0), None, None, None, HMap.empty)
   private val sinkNode = Node(sinkAction.id, sinkAction)
 
   val default = InnerWorkflow(

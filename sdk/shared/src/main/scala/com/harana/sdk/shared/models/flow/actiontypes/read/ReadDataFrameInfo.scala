@@ -9,6 +9,7 @@ import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.parameters.choice.ChoiceParameter
 import com.harana.sdk.shared.models.flow.parameters.{ParameterGroup, Parameters}
 import com.harana.sdk.shared.models.flow.utils.Id
+import izumi.reflect.Tag
 
 import scala.reflect.runtime.{universe => ru}
 
@@ -30,7 +31,7 @@ trait ReadDataFrameInfo
   override val parameterGroups = List(ParameterGroup(None, storageTypeParameter))
 
   @transient
-  lazy val portO_0: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]
+  lazy val portO_0: Tag[DataFrameInfo] = Tag[DataFrameInfo]
 }
 
 object ReadDataFrameInfo extends ReadDataFrameInfo

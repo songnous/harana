@@ -10,6 +10,7 @@ import com.harana.sdk.shared.models.flow.parameters.choice.{Choice, ChoiceParame
 import com.harana.sdk.shared.models.flow.parameters.selections.SingleColumnSelection
 import com.harana.sdk.shared.models.flow.utils.Id
 import com.harana.sdk.shared.models.flow.{Action2To1TypeInfo, PortPosition}
+import izumi.reflect.Tag
 
 import scala.reflect.runtime.{universe => ru}
 
@@ -46,13 +47,13 @@ trait JoinInfo extends Action2To1TypeInfo[DataFrameInfo, DataFrameInfo, DataFram
   override val parameterGroups = List(ParameterGroup(None, joinTypeParameter, leftPrefixParameter, rightPrefixParameter, joinColumnsParameter))
 
   @transient
-  lazy val portI_0: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]
+  lazy val portI_0: Tag[DataFrameInfo] = Tag[DataFrameInfo]
 
   @transient
-  lazy val portO_0: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]
+  lazy val portO_0: Tag[DataFrameInfo] = Tag[DataFrameInfo]
 
   @transient
-  lazy val portI_1: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]
+  lazy val portI_1: Tag[DataFrameInfo] = Tag[DataFrameInfo]
 
   case class RenamedColumnNames(originalLeftColumns: Array[String], originalRightColumns: Array[String]) {
 

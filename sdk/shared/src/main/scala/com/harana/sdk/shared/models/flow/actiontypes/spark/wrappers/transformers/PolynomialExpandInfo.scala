@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait PolynomialExpandInfo extends TransformerAsActionInfo[PolynomialExpanderInfo] with SparkActionDocumentation {
 
@@ -17,7 +17,7 @@ trait PolynomialExpandInfo extends TransformerAsActionInfo[PolynomialExpanderInf
   val docsGuideLocation = Some("ml-features.html#polynomialexpansion")
   val category = FeatureConversion
 
-  lazy val portO_1: TypeTag[PolynomialExpanderInfo] = typeTag
+  lazy val portO_1: Tag[PolynomialExpanderInfo] = typeTag
 
 }
 

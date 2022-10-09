@@ -8,7 +8,7 @@ import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.parameters.ParameterGroup
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait SubtractInfo extends Action1To1TypeInfo[DataFrameInfo, DataFrameInfo] with ActionDocumentation {
 
@@ -18,8 +18,8 @@ trait SubtractInfo extends Action1To1TypeInfo[DataFrameInfo, DataFrameInfo] with
   override val parameterGroups = List.empty[ParameterGroup]
   val category = Filtering
 
-  lazy val portI_0: TypeTag[DataFrameInfo] = typeTag
-  lazy val portO_0: TypeTag[DataFrameInfo] = typeTag
+  lazy val portI_0: Tag[DataFrameInfo] = typeTag
+  lazy val portO_0: Tag[DataFrameInfo] = typeTag
 
 }
 

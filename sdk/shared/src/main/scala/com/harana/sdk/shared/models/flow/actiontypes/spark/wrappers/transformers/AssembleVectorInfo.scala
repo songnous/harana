@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait AssembleVectorInfo extends TransformerAsActionInfo[VectorAssemblerInfo] with SparkActionDocumentation {
 
@@ -18,7 +18,7 @@ trait AssembleVectorInfo extends TransformerAsActionInfo[VectorAssemblerInfo] wi
   val category = FeatureConversion
 
 
-  lazy val portO_1: TypeTag[VectorAssemblerInfo] = typeTag
+  lazy val portO_1: Tag[VectorAssemblerInfo] = typeTag
 
 }
 

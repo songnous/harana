@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.Regression
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait CreateLinearRegressionInfo extends EstimatorAsFactoryInfo[LinearRegressionInfo] with SparkActionDocumentation {
 
@@ -17,7 +17,7 @@ trait CreateLinearRegressionInfo extends EstimatorAsFactoryInfo[LinearRegression
   val docsGuideLocation = Some("ml-classification-regression.html#linear-regression")
   val category = Regression
 
-  lazy val portO_0: TypeTag[LinearRegressionInfo] = typeTag
+  lazy val portO_0: Tag[LinearRegressionInfo] = typeTag
 
 }
 

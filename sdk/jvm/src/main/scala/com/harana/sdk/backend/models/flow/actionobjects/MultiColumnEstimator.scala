@@ -16,10 +16,10 @@ import com.harana.sdk.shared.models.flow.parameters.selections.NameSingleColumnS
 import org.apache.spark.sql.types.StructType
 
 import scala.language.reflectiveCalls
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
-abstract class MultiColumnEstimator[T <: Transformer, MC <: T, SC <: T with HasInputColumnParameter](implicit val transformerTypeTag: TypeTag[T]
-) extends Estimator[T] with MultiColumnEstimatorInfo {
+abstract class MultiColumnEstimator[T <: Transformer, MC <: T, SC <: T with HasInputColumnParameter](implicit val transformerTypeTag: Tag[T])
+  extends Estimator[T] with MultiColumnEstimatorInfo {
 
   def handleSingleColumnChoice(ctx: ExecutionContext, df: DataFrame, single: SingleColumnChoice): SC
   def handleMultiColumnChoice(ctx: ExecutionContext, df: DataFrame, multi: MultiColumnChoice): MC

@@ -7,7 +7,7 @@ import com.harana.sdk.backend.models.flow.actiontypes.exceptions.TooManyPossible
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
 import com.harana.sdk.shared.models.flow.actiontypes.FitPlusTransformInfo
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 class FitPlusTransform extends ActionTypeType2To2[Estimator[Transformer], DataFrame, DataFrame, Transformer] with FitPlusTransformInfo {
 
@@ -59,7 +59,7 @@ class FitPlusTransform extends ActionTypeType2To2[Estimator[Transformer], DataFr
       throw TooManyPossibleTypesError().toException
     }
 
-  lazy val tTagTO_0: TypeTag[DataFrame] = typeTag
-  lazy val tTagTO_1: TypeTag[Transformer] = typeTag
+  lazy val tTagTO_0: Tag[DataFrame] = typeTag
+  lazy val tTagTO_1: Tag[Transformer] = typeTag
 
 }

@@ -6,7 +6,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Filtering
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait FilterRowsInfo
   extends TransformerAsActionInfo[RowsFiltererInfo]
@@ -17,7 +17,7 @@ trait FilterRowsInfo
   val since = Version(1, 0, 0)
   val category = Filtering
 
-  lazy val portO_1: TypeTag[RowsFiltererInfo] = typeTag
+  lazy val portO_1: Tag[RowsFiltererInfo] = typeTag
 
 }
 

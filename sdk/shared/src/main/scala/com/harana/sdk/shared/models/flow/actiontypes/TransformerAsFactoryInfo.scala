@@ -4,7 +4,7 @@ import com.harana.sdk.shared.models.flow.Action0To1TypeInfo
 import com.harana.sdk.shared.models.flow.actionobjects.TransformerInfo
 import com.harana.sdk.shared.models.flow.utils.TypeUtils
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait TransformerAsFactoryInfo[T <: TransformerInfo] extends Action0To1TypeInfo[T] {
 

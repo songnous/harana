@@ -4,6 +4,7 @@ import com.harana.sdk.shared.models.flow.ActionTypeInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Other
 import com.harana.sdk.shared.models.flow.parameters.ParameterGroup
 import com.harana.sdk.shared.models.flow.utils.Id
+import izumi.reflect.Tag
 
 import scala.reflect.runtime.{universe => ru}
 
@@ -18,10 +19,10 @@ trait UnknownActionInfo extends ActionTypeInfo {
   val outArity = 0
 
   @transient
-  override lazy val inputPorts: List[ru.TypeTag[_]] = List.empty
+  override lazy val inputPorts: List[Tag[_]] = List.empty
 
   @transient
-  override lazy val outputPorts: List[ru.TypeTag[_]] = List.empty
+  override lazy val outputPorts: List[Tag[_]] = List.empty
 
 }
 

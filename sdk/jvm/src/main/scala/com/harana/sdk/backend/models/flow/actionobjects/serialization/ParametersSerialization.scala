@@ -42,14 +42,19 @@ object ParametersSerialization {
   val metadataFileName = "metadata"
 
   def load(ctx: ExecutionContext, path: String): Loadable = {
-    val metadataPath = metadataFilePath(path)
-    val metadataJson = JsonObjectPersistence.loadJsonFromFile(ctx, metadataPath)
-    val className = metadataJson.hcursor.downField(classNameKey).as[String].toOption.get
-    val clazz = Class.forName(className)
-    val instance = TypeUtils.constructorForClass(clazz).getOrElse(throw NoParameterlessConstructorInClassError(clazz.getCanonicalName).toException)
-    val loadable = TypeUtils.createInstance(instance).asInstanceOf[Loadable]
-    loadable.load(ctx, path)
+    null
   }
+
+  //FIXME
+//  def load(ctx: ExecutionContext, path: String): Loadable = {
+//    val metadataPath = metadataFilePath(path)
+//    val metadataJson = JsonObjectPersistence.loadJsonFromFile(ctx, metadataPath)
+//    val className = metadataJson.hcursor.downField(classNameKey).as[String].toOption.get
+//    val clazz = Class.forName(className)
+//    val instance = TypeUtils.constructorForClass(clazz).getOrElse(throw NoParameterlessConstructorInClassError(clazz.getCanonicalName).toException)
+//    val loadable = TypeUtils.createInstance(instance).asInstanceOf[Loadable]
+//    loadable.load(ctx, path)
+//  }
 
   def metadataFilePath(path: String) = new Path(path, metadataFileName).toString
   def parametersFilePath(path: String) = new Path(path, parametersFileName).toString

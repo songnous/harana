@@ -5,13 +5,13 @@ import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarn
 import com.harana.sdk.backend.models.flow.{ExecutionContext, Knowledge}
 import com.harana.sdk.shared.models.flow.utils.TypeUtils
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
-abstract class EvaluatorAsFactory[T <: Evaluator](implicit typeTag: TypeTag[T]) extends ActionTypeType0To1[T] {
+abstract class EvaluatorAsFactory[T <: Evaluator](implicit typeTag: Tag[T]) extends ActionTypeType0To1[T] {
 
   val evaluator: T = TypeUtils.instanceOfType(typeTag)
 
-  lazy val tTagTO_0: TypeTag[T] = typeTag[T]
+  lazy val tTagTO_0: Tag[T] = typeTag[T]
 
   override val parameterGroups = evaluator.parameterGroups
 

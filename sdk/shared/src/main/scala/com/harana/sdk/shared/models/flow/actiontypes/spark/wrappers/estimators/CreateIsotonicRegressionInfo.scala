@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.Regression
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait CreateIsotonicRegressionInfo extends EstimatorAsFactoryInfo[IsotonicRegressionInfo] with SparkActionDocumentation {
 
@@ -17,7 +17,7 @@ trait CreateIsotonicRegressionInfo extends EstimatorAsFactoryInfo[IsotonicRegres
   val docsGuideLocation = Some("mllib-isotonic-regression.html")
   val category = Regression
 
-  lazy val portO_0: TypeTag[IsotonicRegressionInfo] = typeTag
+  lazy val portO_0: Tag[IsotonicRegressionInfo] = typeTag
 
 }
 

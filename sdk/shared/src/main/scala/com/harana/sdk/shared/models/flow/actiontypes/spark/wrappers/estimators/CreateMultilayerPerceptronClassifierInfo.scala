@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.Classificati
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait CreateMultilayerPerceptronClassifierInfo extends EstimatorAsFactoryInfo[MultilayerPerceptronClassifierInfo] with SparkActionDocumentation {
 
@@ -17,7 +17,7 @@ trait CreateMultilayerPerceptronClassifierInfo extends EstimatorAsFactoryInfo[Mu
   val docsGuideLocation = Some("ml-classification-regression.html#multilayer-perceptron-classifier")
   val category = Classification
 
-  lazy val portO_0: TypeTag[MultilayerPerceptronClassifierInfo] = typeTag
+  lazy val portO_0: Tag[MultilayerPerceptronClassifierInfo] = typeTag
 
 }
 

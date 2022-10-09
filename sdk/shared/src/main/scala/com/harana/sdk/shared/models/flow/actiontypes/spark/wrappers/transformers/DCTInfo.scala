@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait DCTInfo extends TransformerAsActionInfo[DiscreteCosineTransformerInfo] with SparkActionDocumentation {
 
@@ -17,7 +17,7 @@ trait DCTInfo extends TransformerAsActionInfo[DiscreteCosineTransformerInfo] wit
   val docsGuideLocation = Some("ml-features.html#discrete-cosine-transform-dct")
   val category = FeatureConversion
 
-  lazy val portO_1: TypeTag[DiscreteCosineTransformerInfo] = typeTag
+  lazy val portO_1: Tag[DiscreteCosineTransformerInfo] = typeTag
 
 }
 

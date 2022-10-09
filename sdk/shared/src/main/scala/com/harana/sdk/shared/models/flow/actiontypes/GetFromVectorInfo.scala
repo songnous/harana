@@ -6,7 +6,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait GetFromVectorInfo extends TransformerAsActionInfo[GetFromVectorTransformerInfo] with ActionDocumentation {
 
@@ -15,7 +15,7 @@ trait GetFromVectorInfo extends TransformerAsActionInfo[GetFromVectorTransformer
   val since = Version(1, 2, 0)
   val category = FeatureConversion
 
-  lazy val portO_1: TypeTag[GetFromVectorTransformerInfo] = typeTag
+  lazy val portO_1: Tag[GetFromVectorTransformerInfo] = typeTag
 
 }
 

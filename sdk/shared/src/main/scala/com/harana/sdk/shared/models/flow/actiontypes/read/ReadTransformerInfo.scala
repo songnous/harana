@@ -4,11 +4,11 @@ import com.harana.sdk.shared.models.common.Version
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
 import com.harana.sdk.shared.models.flow.Action0To1TypeInfo
 import com.harana.sdk.shared.models.flow.actionobjects.TransformerInfo
-
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterGroup, Parameters, StringParameter}
 import com.harana.sdk.shared.models.flow.utils.Id
+import izumi.reflect.Tag
 import shapeless.HMap
 
 import scala.reflect.runtime.{universe => ru}
@@ -30,7 +30,7 @@ trait ReadTransformerInfo
   override val parameterGroups = List(ParameterGroup(None, sourcePathParameter))
 
   @transient
-  lazy val portO_0: ru.TypeTag[TransformerInfo] = ru.typeTag[TransformerInfo]
+  lazy val portO_0: Tag[TransformerInfo] = Tag[TransformerInfo]
 }
 
 object ReadTransformerInfo extends ReadTransformerInfo

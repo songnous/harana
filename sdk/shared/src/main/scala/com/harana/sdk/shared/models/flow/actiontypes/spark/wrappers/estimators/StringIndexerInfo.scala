@@ -8,7 +8,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait StringIndexerInfo
     extends EstimatorAsActionInfo[StringIndexerEstimatorInfo, StringIndexerModelInfo]
@@ -20,8 +20,8 @@ trait StringIndexerInfo
   val docsGuideLocation = Some("ml-features.html#stringindexer")
   val category = FeatureConversion
 
-  lazy val tTagInfoE: TypeTag[StringIndexerEstimatorInfo] = typeTag
-  lazy val portO_1: TypeTag[StringIndexerModelInfo] = typeTag
+  lazy val tTagInfoE: Tag[StringIndexerEstimatorInfo] = typeTag
+  lazy val portO_1: Tag[StringIndexerModelInfo] = typeTag
 
 }
 

@@ -1,12 +1,13 @@
 package com.harana.sdk.backend.models.flow.utils.catalog
 
 import com.harana.sdk.shared.models.flow.utils.{Identifiable, TypeUtils}
+import izumi.reflect.Tag
 
 import scala.collection.mutable
 import scala.reflect.runtime.{universe => ru}
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
-class GenericCatalog[O](implicit t: TypeTag[O]) {
+class GenericCatalog[O](implicit t: Tag[O]) {
 
   private val baseType = ru.typeOf[O]
 
@@ -67,7 +68,7 @@ class GenericCatalog[O](implicit t: TypeTag[O]) {
    * traits cannot inherit from classes. All registered classes that are not abstract have to expose parameterless
    * constructor (either primary or auxiliary). Registered types cannot be parametrized.
    */
-  def register[C <: O : ru.TypeTag]: Option[TypeNode[O]] =
+  def register[C <: O : Tag]: Option[TypeNode[O]] =
     this.registerType(ru.typeOf[C])
 
   /** Returns nodes that correspond given type signature. For example, for type "A with T1 with T2", it returns three
@@ -76,7 +77,7 @@ class GenericCatalog[O](implicit t: TypeTag[O]) {
     * @tparam T type for which nodes are desired
     * @return sequence of all nodes corresponding to given type
     */
-  private def nodesForType[T <: O: ru.TypeTag]: Iterable[TypeNode[O]] = {
+  private def nodesForType[T <: O: Tag]: Iterable[TypeNode[O]] = {
     val allBases: List[ru.Symbol] = ru.typeOf[T].baseClasses
 
     // List 'allBases' contains symbols of all (direct and indirect) supertypes of T,
@@ -102,7 +103,7 @@ class GenericCatalog[O](implicit t: TypeTag[O]) {
   /** Instances of all concrete classes that fulfil type signature T. Type signature can have complex form, for example
     * "A with T1 with T2".
     */
-  def concreteSubclassesInstances[T <: O: ru.TypeTag]: Set[T] = {
+  def concreteSubclassesInstances[T <: O: Tag]: Set[T] = {
     val typeNodes = nodesForType[T]
     val concreteClassNodes = typeNodes.map(_.subclassesInstances)
     val intersect = GenericCatalog.intersectSets[ConcreteClassNode[O]](concreteClassNodes)

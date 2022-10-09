@@ -6,9 +6,7 @@ import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
 import com.harana.sdk.shared.models.flow.utils.TypeUtils
 
-import scala.reflect.runtime.universe.{TypeTag, typeTag}
-
-abstract class TransformerAsActionType[T <: Transformer]()(implicit tag: TypeTag[T]) extends ActionTypeType1To2[DataFrame, DataFrame, T] {
+abstract class TransformerAsActionType[T <: Transformer]()(implicit tag: Tag[T]) extends ActionTypeType1To2[DataFrame, DataFrame, T] {
 
   lazy val transformer: T = TypeUtils.instanceOfType(tag)
 
@@ -23,6 +21,6 @@ abstract class TransformerAsActionType[T <: Transformer]()(implicit tag: TypeTag
     ((outputDfKnowledge, Knowledge(transformer)), warnings)
   }
 
-  lazy val tTagTO_0: TypeTag[DataFrame] = typeTag
+  lazy val tTagTO_0: Tag[DataFrame] = typeTag
   lazy val tTagTO_1 = tag
 }

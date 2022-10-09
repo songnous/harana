@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait BinarizeInfo extends TransformerAsActionInfo[BinarizerInfo] with SparkActionDocumentation {
 
@@ -18,7 +18,7 @@ trait BinarizeInfo extends TransformerAsActionInfo[BinarizerInfo] with SparkActi
   val category = FeatureConversion
 
 
-  lazy val portO_1: TypeTag[BinarizerInfo] = typeTag
+  lazy val portO_1: Tag[BinarizerInfo] = typeTag
 
 }
 

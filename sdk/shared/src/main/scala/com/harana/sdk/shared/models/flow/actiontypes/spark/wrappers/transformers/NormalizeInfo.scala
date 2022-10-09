@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait NormalizeInfo extends TransformerAsActionInfo[NormalizerInfo] with SparkActionDocumentation {
 
@@ -17,7 +17,7 @@ trait NormalizeInfo extends TransformerAsActionInfo[NormalizerInfo] with SparkAc
   val docsGuideLocation = Some("ml-features.html#normalizer")
   val category = FeatureConversion
 
-  lazy val portO_1: TypeTag[NormalizerInfo] = typeTag
+  lazy val portO_1: Tag[NormalizerInfo] = typeTag
 
 }
 

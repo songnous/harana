@@ -6,7 +6,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait RTransformationInfo extends TransformerAsActionInfo[RTransformerInfo] with ActionDocumentation {
 
@@ -15,7 +15,7 @@ trait RTransformationInfo extends TransformerAsActionInfo[RTransformerInfo] with
   val since = Version(1, 3, 0)
   val category = Custom
 
-  lazy val portO_1: TypeTag[RTransformerInfo] = typeTag
+  lazy val portO_1: Tag[RTransformerInfo] = typeTag
 
 }
 

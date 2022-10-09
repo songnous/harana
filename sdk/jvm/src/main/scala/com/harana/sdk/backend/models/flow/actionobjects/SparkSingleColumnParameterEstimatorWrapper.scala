@@ -10,11 +10,11 @@ import com.harana.sdk.shared.models.flow.parameters.ParameterGroup
 import org.apache.spark.ml
 import org.apache.spark.sql.types.StructType
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 abstract class SparkSingleColumnParameterEstimatorWrapper[MD <: ml.Model[MD] { val outputCol: ml.param.Param[String] }, E <: ml.Estimator[MD] { val outputCol: ml.param.Param[String] }, MW <: SparkSingleColumnParameterModelWrapper[MD, E]](
-    implicit override val modelWrapperTag: TypeTag[MW],
-    implicit override val estimatorTag: TypeTag[E]
+    implicit override val modelWrapperTag: Tag[MW],
+    implicit override val estimatorTag: Tag[E]
 ) extends SparkEstimatorWrapper[MD, E, MW]
     with HasInputColumnParameter
     with HasSingleInPlaceParameter

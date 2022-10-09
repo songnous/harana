@@ -4,6 +4,7 @@ import com.harana.sdk.backend.models.flow.ExecutionContext
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.inference.exceptions.TransformSchemaError
 import com.harana.sdk.shared.models.flow.utils.TypeUtils
+import izumi.reflect.Tag
 import org.apache.spark.ml.{Transformer => SparkTransformer}
 import org.apache.spark.sql.types._
 
@@ -13,7 +14,7 @@ import scala.reflect.runtime.universe._
 abstract class SparkTransformerAsMultiColumnTransformer[T <: SparkTransformer {
       def setInputCol(value: String): T
       def setOutputCol(value: String): T
-    }](implicit tag: TypeTag[T])
+    }](implicit tag: Tag[T])
     extends MultiColumnTransformer
     with ParametersWithSparkWrappers {
 

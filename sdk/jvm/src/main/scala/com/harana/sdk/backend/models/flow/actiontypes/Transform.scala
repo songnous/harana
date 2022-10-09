@@ -6,7 +6,7 @@ import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
 import com.harana.sdk.shared.models.flow.actiontypes.TransformInfo
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 class Transform extends ActionTypeType2To1[Transformer, DataFrame, DataFrame] with TransformInfo {
 
@@ -27,6 +27,6 @@ class Transform extends ActionTypeType2To1[Transformer, DataFrame, DataFrame] wi
     transformerWithParameters
   }
 
-  lazy val tTagTO_0: TypeTag[DataFrame] = typeTag
+  lazy val tTagTO_0: Tag[DataFrame] = typeTag
 
 }

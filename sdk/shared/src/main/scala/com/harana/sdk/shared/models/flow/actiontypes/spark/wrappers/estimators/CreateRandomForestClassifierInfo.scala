@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.Classificati
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait CreateRandomForestClassifierInfo extends EstimatorAsFactoryInfo[RandomForestClassifierInfo] with SparkActionDocumentation {
 
@@ -17,7 +17,7 @@ trait CreateRandomForestClassifierInfo extends EstimatorAsFactoryInfo[RandomFore
   val docsGuideLocation = Some("ml-classification-regression.html#random-forest-classifier")
   val category = Classification
 
-  lazy val portO_0: TypeTag[RandomForestClassifierInfo] = typeTag
+  lazy val portO_0: Tag[RandomForestClassifierInfo] = typeTag
 
 }
 

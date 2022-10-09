@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait RemoveStopWordsInfo extends TransformerAsActionInfo[StopWordsRemoverInfo] with SparkActionDocumentation {
 
@@ -17,8 +17,8 @@ trait RemoveStopWordsInfo extends TransformerAsActionInfo[StopWordsRemoverInfo] 
   val docsGuideLocation = Some("ml-features.html#stopwordsremover")
   val category = TextProcessing
 
-  lazy val tTagT: TypeTag[StopWordsRemoverInfo] = typeTag
-  lazy val portO_1: TypeTag[StopWordsRemoverInfo] = typeTag
+  lazy val tTagT: Tag[StopWordsRemoverInfo] = typeTag
+  lazy val portO_1: Tag[StopWordsRemoverInfo] = typeTag
 
 }
 

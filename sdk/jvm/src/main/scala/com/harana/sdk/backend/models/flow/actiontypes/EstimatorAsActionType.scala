@@ -8,10 +8,11 @@ import com.harana.sdk.shared.models.flow.actionobjects.{EstimatorInfo, Transform
 import com.harana.sdk.shared.models.flow.actiontypes.EstimatorAsActionInfo
 import com.harana.sdk.shared.models.flow.actiontypes.FitInfo.{extractParameterMap, validateDynamicParameters}
 import com.harana.sdk.shared.models.flow.utils.TypeUtils
+import izumi.reflect.Tag
 
 import scala.reflect.runtime.universe.{TypeTag, typeTag}
 
-abstract class EstimatorAsActionType[E <: Estimator[T], T <: Transformer]()(implicit typeTagE: TypeTag[E], typeTagT: TypeTag[T])
+abstract class EstimatorAsActionType[E <: Estimator[T], T <: Transformer]()(implicit typeTagE: Tag[E], typeTagT: Tag[T])
   extends ActionTypeType1To2[DataFrame, DataFrame, T] {
 
   val estimator: E = TypeUtils.instanceOfType(typeTagE)
@@ -39,7 +40,7 @@ abstract class EstimatorAsActionType[E <: Estimator[T], T <: Transformer]()(impl
     estimatorWithParameters
   }
 
-  lazy val tTagTO_0: TypeTag[DataFrame] = typeTag[DataFrame]
-  lazy val tTagTO_1: TypeTag[T] = typeTag[T]
+  lazy val tTagTO_0: Tag[DataFrame] = typeTag[DataFrame]
+  lazy val tTagTO_1: Tag[T] = typeTag[T]
 
 }

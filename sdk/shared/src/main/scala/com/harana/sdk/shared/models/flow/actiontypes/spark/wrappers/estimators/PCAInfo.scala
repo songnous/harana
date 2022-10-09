@@ -8,7 +8,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.Dimensionali
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait PCAInfo extends EstimatorAsActionInfo[PCAEstimatorInfo, PCAModelInfo] with SparkActionDocumentation {
 
@@ -18,8 +18,8 @@ trait PCAInfo extends EstimatorAsActionInfo[PCAEstimatorInfo, PCAModelInfo] with
   val docsGuideLocation = Some("mllib-dimensionality-reduction.html#principal-component-analysis-pca")
   val category = DimensionalityReduction
 
-  lazy val tTagInfoE: TypeTag[PCAEstimatorInfo] = typeTag
-  lazy val portO_1: TypeTag[PCAModelInfo] = typeTag
+  lazy val tTagInfoE: Tag[PCAEstimatorInfo] = typeTag
+  lazy val portO_1: Tag[PCAModelInfo] = typeTag
 
 }
 

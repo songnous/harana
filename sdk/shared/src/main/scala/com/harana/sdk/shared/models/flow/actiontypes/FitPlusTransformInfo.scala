@@ -9,6 +9,7 @@ import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.parameters.{DynamicParameter, ParameterGroup}
 import com.harana.sdk.shared.models.flow.utils.Id
 import io.circe.Json
+import izumi.reflect.Tag
 
 import scala.reflect.runtime.universe._
 
@@ -22,10 +23,10 @@ trait FitPlusTransformInfo
   val since = Version(1, 2, 0)
   val category = Action
 
-  lazy val portI_0: TypeTag[EstimatorInfo] = typeTag[EstimatorInfo]
-  lazy val portI_1: TypeTag[DataFrameInfo] = typeTag[DataFrameInfo]
-  lazy val portO_0: TypeTag[DataFrameInfo] = typeTag[DataFrameInfo]
-  lazy val portO_1: TypeTag[TransformerInfo] = typeTag[TransformerInfo]
+  lazy val portI_0: Tag[EstimatorInfo] = typeTag[EstimatorInfo]
+  lazy val portI_1: Tag[DataFrameInfo] = Tag[DataFrameInfo]
+  lazy val portO_0: Tag[DataFrameInfo] = Tag[DataFrameInfo]
+  lazy val portO_1: Tag[TransformerInfo] = typeTag[TransformerInfo]
 
   val estimatorParameters = new DynamicParameter("input-estimator-parameters", default = Some(Json.Null), inputPort = 0)
   def setEstimatorParameters(jsValue: Json): this.type = set(estimatorParameters -> jsValue)

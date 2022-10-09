@@ -10,7 +10,7 @@ import com.harana.sdk.shared.models.flow.parameters.{DynamicParameter, Parameter
 import com.harana.sdk.shared.models.flow.utils.Id
 import io.circe.Json
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait EvaluateInfo extends Action2To1TypeInfo[EvaluatorInfo, DataFrameInfo, MetricValue] with SmallBlockLayout2To1 with ActionDocumentation {
 
@@ -25,9 +25,9 @@ trait EvaluateInfo extends Action2To1TypeInfo[EvaluatorInfo, DataFrameInfo, Metr
 
   override val parameterGroups = List(ParameterGroup(None, evaluatorParameters))
 
-  lazy val portI_0: TypeTag[EvaluatorInfo] = typeTag
-  lazy val portI_1: TypeTag[DataFrameInfo] = typeTag
-  lazy val portO_0: TypeTag[MetricValue] = typeTag
+  lazy val portI_0: Tag[EvaluatorInfo] = typeTag
+  lazy val portI_1: Tag[DataFrameInfo] = typeTag
+  lazy val portO_0: Tag[MetricValue] = typeTag
 
 }
 

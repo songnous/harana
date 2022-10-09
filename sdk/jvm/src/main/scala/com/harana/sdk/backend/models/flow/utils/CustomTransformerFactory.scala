@@ -12,13 +12,13 @@ object CustomTransformerFactory {
         innerWorkflow.graph.nodes
           .find(_.id == nodeId)
           .flatMap(node =>
-            node.value.allParameters
+            node.value.typeInfo.allParameters
               .find(_.name == parameterName)
               .map(p => {
                 ParameterWithValues(
                   param = p.replicate(publicName),
-                  defaultValue = node.value.getDefault(p),
-                  setValue = node.value.get(p)
+                  defaultValue = node.value.typeInfo.getDefault(p),
+                  setValue = node.value.typeInfo.get(p)
                 )
               })
           )

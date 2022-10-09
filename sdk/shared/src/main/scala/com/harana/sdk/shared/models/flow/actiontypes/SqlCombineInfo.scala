@@ -9,6 +9,7 @@ import com.harana.sdk.shared.models.flow.parameters.exceptions.ParametersEqualEr
 import com.harana.sdk.shared.models.flow.parameters.{CodeSnippetLanguage, CodeSnippetParameter, ParameterGroup, StringParameter}
 import com.harana.sdk.shared.models.flow.utils.Id
 import com.harana.sdk.shared.models.flow.{Action2To1TypeInfo, PortPosition}
+import izumi.reflect.Tag
 
 import scala.reflect.runtime.{universe => ru}
 
@@ -43,13 +44,13 @@ trait SqlCombineInfo extends Action2To1TypeInfo[DataFrameInfo, DataFrameInfo, Da
   override val parameterGroups = List(ParameterGroup(None, leftTableNameParameter, rightTableNameParameter, sqlCombineExpressionParameter))
 
   @transient
-  lazy val portI_0: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]
+  lazy val portI_0: Tag[DataFrameInfo] = Tag[DataFrameInfo]
 
   @transient
-  lazy val portI_1: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]
+  lazy val portI_1: Tag[DataFrameInfo] = Tag[DataFrameInfo]
 
   @transient
-  lazy val portO_0: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]
+  lazy val portO_0: Tag[DataFrameInfo] = Tag[DataFrameInfo]
 
 }
 

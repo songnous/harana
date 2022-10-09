@@ -8,7 +8,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait IDFInfo extends EstimatorAsActionInfo[IDFEstimatorInfo, IDFModelInfo] with SparkActionDocumentation {
 
@@ -18,8 +18,8 @@ trait IDFInfo extends EstimatorAsActionInfo[IDFEstimatorInfo, IDFModelInfo] with
   val docsGuideLocation = Some("ml-features.html#tf-idf")
   val category = TextProcessing
 
-  lazy val tTagInfoE: TypeTag[IDFEstimatorInfo] = typeTag
-  lazy val portO_1: TypeTag[IDFModelInfo] = typeTag
+  lazy val tTagInfoE: Tag[IDFEstimatorInfo] = typeTag
+  lazy val portO_1: Tag[IDFModelInfo] = typeTag
 
 }
 

@@ -4,14 +4,15 @@ import com.harana.sdk.backend.models.flow.ExecutionContext
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.serialization.{Loadable, ParametersSerialization, SerializableSparkEstimator}
 import com.harana.sdk.shared.models.flow.utils.TypeUtils
+import izumi.reflect.Tag
 import org.apache.spark.ml
 import org.apache.spark.sql.types.StructType
 
 import scala.reflect.runtime.universe._
 
 abstract class SparkEstimatorWrapper[M <: ml.Model[M], E <: ml.Estimator[M], MW <: SparkModelWrapper[M, E]](
-    implicit val modelWrapperTag: TypeTag[MW],
-    implicit val estimatorTag: TypeTag[E]
+    implicit val modelWrapperTag: Tag[MW],
+    implicit val estimatorTag: Tag[E]
 ) extends Estimator[MW]
     with ParametersWithSparkWrappers
     with ParametersSerialization

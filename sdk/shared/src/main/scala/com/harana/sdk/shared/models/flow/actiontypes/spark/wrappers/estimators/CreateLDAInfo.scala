@@ -6,7 +6,7 @@ import com.harana.sdk.shared.models.flow.actiontypes.EstimatorAsFactoryInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.Clustering
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait CreateLDAInfo extends EstimatorAsFactoryInfo[LDAInfo] {
 
@@ -16,7 +16,7 @@ trait CreateLDAInfo extends EstimatorAsFactoryInfo[LDAInfo] {
   val docsGuideLocation = Some("ml-clustering.html#lda")
   val category = Clustering
 
-  lazy val portO_0: TypeTag[LDAInfo] = typeTag
+  lazy val portO_0: Tag[LDAInfo] = typeTag
 
 }
 

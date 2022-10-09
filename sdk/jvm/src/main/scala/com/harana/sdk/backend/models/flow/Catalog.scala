@@ -17,7 +17,7 @@ object Catalog {
   class ActionCatalog extends GenericCatalog[ActionType]
   class ActionObjectCatalog extends GenericCatalog[ActionObjectInfo]
 
-  def actionForActionInfo[A <: ActionTypeInfo](info: A)(implicit ct: ClassTag[A]): ActionType = {
+  def actionTypeForActionTypeInfo[A <: ActionTypeInfo](info: A)(implicit ct: ClassTag[A]): ActionType = {
     val className = info.getClass.getCanonicalName.replace("backend", "shared")
     val cls = Class.forName(className.substring(0, className.length - 4))
 

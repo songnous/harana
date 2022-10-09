@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.Classificati
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait CreateNaiveBayesInfo extends EstimatorAsFactoryInfo[NaiveBayesInfo] with SparkActionDocumentation {
 
@@ -17,7 +17,7 @@ trait CreateNaiveBayesInfo extends EstimatorAsFactoryInfo[NaiveBayesInfo] with S
   val docsGuideLocation = Some("mllib-naive-bayes.html")
   val category = Classification
 
-  lazy val portO_0: TypeTag[NaiveBayesInfo] = typeTag
+  lazy val portO_0: Tag[NaiveBayesInfo] = typeTag
 
 }
 

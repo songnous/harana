@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.Regression
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait CreateDecisionTreeRegressionInfo extends EstimatorAsFactoryInfo[DecisionTreeRegressionInfo] with SparkActionDocumentation {
 
@@ -17,7 +17,7 @@ trait CreateDecisionTreeRegressionInfo extends EstimatorAsFactoryInfo[DecisionTr
   val docsGuideLocation = Some("ml-classification-regression.html#decision-tree-regression")
   val category = Regression
 
-  lazy val portO_0: TypeTag[DecisionTreeRegressionInfo] = typeTag
+  lazy val portO_0: Tag[DecisionTreeRegressionInfo] = typeTag
 
 }
 

@@ -5,7 +5,7 @@ import com.harana.sdk.shared.models.flow.actionobjects.TypeConverterInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.FeatureConversion
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait ConvertTypeInfo extends TransformerAsActionInfo[TypeConverterInfo] with ActionDocumentation {
 
@@ -14,7 +14,7 @@ trait ConvertTypeInfo extends TransformerAsActionInfo[TypeConverterInfo] with Ac
   val since = Version(0, 4, 0)
   val category = FeatureConversion
 
-  lazy val portO_1: TypeTag[TypeConverterInfo] = typeTag
+  lazy val portO_1: Tag[TypeConverterInfo] = typeTag
 }
 
 object ConvertTypeInfo extends ConvertTypeInfo

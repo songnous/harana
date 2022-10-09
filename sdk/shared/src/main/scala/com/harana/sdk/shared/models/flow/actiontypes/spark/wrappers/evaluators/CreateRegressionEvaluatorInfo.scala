@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.ModelEvaluat
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait CreateRegressionEvaluatorInfo extends EvaluatorAsFactoryInfo[RegressionEvaluatorInfo]
   with SparkActionDocumentation {
@@ -18,7 +18,7 @@ trait CreateRegressionEvaluatorInfo extends EvaluatorAsFactoryInfo[RegressionEva
   val docsGuideLocation = Some("mllib-evaluation-metrics.html#regression-model-evaluation")
   val category = ModelEvaluation
 
-  lazy val portO_0: TypeTag[RegressionEvaluatorInfo] = typeTag
+  lazy val portO_0: Tag[RegressionEvaluatorInfo] = typeTag
 
 }
 

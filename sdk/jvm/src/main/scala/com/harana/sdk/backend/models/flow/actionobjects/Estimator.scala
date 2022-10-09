@@ -10,9 +10,9 @@ import com.harana.sdk.shared.models.flow.parameters.Parameters
 import com.harana.sdk.shared.models.flow.report.ReportType
 import org.apache.spark.sql.types.StructType
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
-abstract class Estimator[+T <: Transformer]()(implicit typeTag: TypeTag[T]) extends ActionObjectInfo with Parameters {
+abstract class Estimator[+T <: Transformer]()(implicit typeTag: Tag[T]) extends ActionObjectInfo with Parameters {
 
   def convertInputNumericToVector: Boolean = false
   def convertOutputVectorToDouble: Boolean = false

@@ -5,11 +5,11 @@ import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarn
 import com.harana.sdk.backend.models.flow.{ExecutionContext, Knowledge}
 import com.harana.sdk.shared.models.flow.utils.TypeUtils
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 abstract class EstimatorAsFactory[E <: Estimator[Transformer]](implicit typeTagE: TypeTag[E]) extends ActionTypeType0To1[E] {
 
-  lazy val tTagTO_0: TypeTag[E] = typeTag[E]
+  lazy val tTagTO_0: Tag[E] = typeTag[E]
 
    val estimator: E = TypeUtils.instanceOfType(typeTagE)
 

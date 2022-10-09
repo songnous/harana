@@ -10,6 +10,7 @@ import io.circe.generic.JsonCodec
 
 @JsonCodec
 case class Action[T <: ActionTypeInfo](id: ActionId,
+                                       typeInfo: T,
                                        position: (Int, Int),
                                        inArity: Int,
                                        outArity: Int,
@@ -21,14 +22,13 @@ case class Action[T <: ActionTypeInfo](id: ActionId,
 object Action {
   type ActionId = String
 
-  def apply[T <: ActionTypeInfo](position: (Int, Int),
-                                 inArity: Int,
-                                 outArity: Int,
+  def apply[T <: ActionTypeInfo](typeInfo: T,
+                                 position: (Int, Int),
                                  title: Option[String],
                                  description: Option[String],
                                  overrideColor: Option[String],
                                  parameterValues: HMap[Parameter.Values]): Action[T] =
-    Action(Random.long, position, inArity, outArity, title, description, overrideColor, parameterValues)
+    Action(Random.long, typeInfo, position, typeInfo.inArity, typeInfo.outArity, title, description, overrideColor, parameterValues)
 
   implicit val encoder: Encoder[Action[_ <: ActionTypeInfo]] = Encoder.instance[Action[_ <: ActionTypeInfo]] { action =>
     Json.obj()

@@ -9,6 +9,7 @@ import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.parameters.choice.ChoiceParameter
 import com.harana.sdk.shared.models.flow.parameters.{ParameterGroup, Parameters}
 import com.harana.sdk.shared.models.flow.utils.Id
+import izumi.reflect.Tag
 
 import scala.reflect.runtime.{universe => ru}
 
@@ -23,7 +24,7 @@ trait WriteDataFrameInfo
   val category = IO
 
   @transient
-  lazy val portI_0: ru.TypeTag[DataFrameInfo] = ru.typeTag[DataFrameInfo]
+  lazy val portI_0: Tag[DataFrameInfo] = Tag[DataFrameInfo]
 
   val storageTypeParameter = ChoiceParameter[OutputStorageTypeChoice]("data-storage-type", default = Some(new OutputStorageTypeChoice.File()))
   def getStorageType = $(storageTypeParameter)

@@ -8,7 +8,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait CountVectorizerInfo extends EstimatorAsActionInfo[CountVectorizerEstimatorInfo, CountVectorizerModelInfo] with SparkActionDocumentation {
 
@@ -18,8 +18,8 @@ trait CountVectorizerInfo extends EstimatorAsActionInfo[CountVectorizerEstimator
   val docsGuideLocation = Some("ml-features.html#countvectorizer")
   val category = TextProcessing
 
-  lazy val tTagInfoE: TypeTag[CountVectorizerEstimatorInfo] = typeTag
-  lazy val portO_1: TypeTag[CountVectorizerModelInfo] = typeTag
+  lazy val tTagInfoE: Tag[CountVectorizerEstimatorInfo] = typeTag
+  lazy val portO_1: Tag[CountVectorizerModelInfo] = typeTag
 
 }
 

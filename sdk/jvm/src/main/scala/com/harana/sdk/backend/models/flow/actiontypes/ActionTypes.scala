@@ -5,6 +5,7 @@ import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarn
 import com.harana.sdk.backend.models.flow.{ExecutionContext, Knowledge}
 import com.harana.sdk.shared.models.flow.ActionTypeConversions._
 import com.harana.sdk.shared.models.flow.actionobjects.ActionObjectInfo
+import izumi.reflect.Tag
 
 import scala.reflect.runtime.{universe => ru}
 
@@ -35,7 +36,7 @@ trait ActionTypeType0To1[TO_0 <: ActionObjectInfo] extends ActionType {
   def inferKnowledge()(context: InferContext): (Knowledge[TO_0], InferenceWarnings) =
     (Knowledge(context.actionObjectCatalog.concreteSubclassesInstances[TO_0](tTagTO_0)), InferenceWarnings.empty)
 
-  val tTagTO_0: ru.TypeTag[TO_0]
+  val tTagTO_0: Tag[TO_0]
 }
 
 trait ActionTypeType0To2[TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo] extends ActionType {
@@ -57,8 +58,8 @@ trait ActionTypeType0To2[TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo] ext
     )
   }
 
-  val tTagTO_0: ru.TypeTag[TO_0]
-  val tTagTO_1: ru.TypeTag[TO_1]
+  val tTagTO_0: Tag[TO_0]
+  val tTagTO_1: Tag[TO_1]
 }
 
 trait ActionTypeType0To3[TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo, TO_2 <: ActionObjectInfo] extends ActionType {
@@ -83,9 +84,9 @@ trait ActionTypeType0To3[TO_0 <: ActionObjectInfo, TO_1 <: ActionObjectInfo, TO_
     )
   }
 
-  val tTagTO_0: ru.TypeTag[TO_0]
-  val tTagTO_1: ru.TypeTag[TO_1]
-  val tTagTO_2: ru.TypeTag[TO_2]
+  val tTagTO_0: Tag[TO_0]
+  val tTagTO_1: Tag[TO_1]
+  val tTagTO_2: Tag[TO_2]
 }
 
 trait ActionTypeType1To0[TI_0 <: ActionObjectInfo] extends ActionType {
@@ -118,7 +119,7 @@ trait ActionTypeType1To1[TI_0 <: ActionObjectInfo, TO_0 <: ActionObjectInfo] ext
   def inferKnowledge(k0: Knowledge[TI_0])(context: InferContext): (Knowledge[TO_0], InferenceWarnings) =
     (Knowledge(context.actionObjectCatalog.concreteSubclassesInstances[TO_0](tTagTO_0)), InferenceWarnings.empty)
 
-  val tTagTO_0: ru.TypeTag[TO_0]
+  val tTagTO_0: izumi.reflect.Tag[TO_0]
 }
 
 trait ActionTypeType1To2[
@@ -144,8 +145,8 @@ trait ActionTypeType1To2[
     )
   }
 
-  val tTagTO_0: ru.TypeTag[TO_0]
-  val tTagTO_1: ru.TypeTag[TO_1]
+  val tTagTO_0: Tag[TO_0]
+  val tTagTO_1: Tag[TO_1]
 }
 
 trait ActionTypeType1To3[
@@ -173,9 +174,9 @@ trait ActionTypeType1To3[
     )
   }
 
-  val tTagTO_0: ru.TypeTag[TO_0]
-  val tTagTO_1: ru.TypeTag[TO_1]
-  val tTagTO_2: ru.TypeTag[TO_2]
+  val tTagTO_0: Tag[TO_0]
+  val tTagTO_1: Tag[TO_1]
+  val tTagTO_2: Tag[TO_2]
 }
 
 trait ActionTypeType2To0[TI_0 <: ActionObjectInfo, TI_1 <: ActionObjectInfo] extends ActionType {
@@ -212,7 +213,7 @@ trait ActionTypeType2To1[
   def inferKnowledge(k0: Knowledge[TI_0], k1: Knowledge[TI_1])(context: InferContext): (Knowledge[TO_0], InferenceWarnings) =
     (Knowledge(context.actionObjectCatalog.concreteSubclassesInstances[TO_0](tTagTO_0)), InferenceWarnings.empty)
 
-  val tTagTO_0: ru.TypeTag[TO_0]
+  val tTagTO_0: Tag[TO_0]
 }
 
 trait ActionTypeType2To2[
@@ -240,8 +241,8 @@ trait ActionTypeType2To2[
     )
   }
 
-  val tTagTO_0: ru.TypeTag[TO_0]
-  val tTagTO_1: ru.TypeTag[TO_1]
+  val tTagTO_0: Tag[TO_0]
+  val tTagTO_1: Tag[TO_1]
 }
 
 trait ActionTypeType2To3[
@@ -271,9 +272,9 @@ trait ActionTypeType2To3[
     )
   }
 
-  val tTagTO_0: ru.TypeTag[TO_0]
-  val tTagTO_1: ru.TypeTag[TO_1]
-  val tTagTO_2: ru.TypeTag[TO_2]
+  val tTagTO_0: Tag[TO_0]
+  val tTagTO_1: Tag[TO_1]
+  val tTagTO_2: Tag[TO_2]
 }
 
 trait ActionTypeType3To0[
@@ -322,7 +323,7 @@ trait ActionTypeType3To1[
   def inferKnowledge(k0: Knowledge[TI_0], k1: Knowledge[TI_1], k2: Knowledge[TI_2])(context: InferContext): (Knowledge[TO_0], InferenceWarnings) =
     (Knowledge(context.actionObjectCatalog.concreteSubclassesInstances[TO_0](tTagTO_0)), InferenceWarnings.empty)
 
-  val tTagTO_0: ru.TypeTag[TO_0]
+  val tTagTO_0: Tag[TO_0]
 }
 
 trait ActionTypeType3To2[
@@ -355,8 +356,8 @@ trait ActionTypeType3To2[
     )
   }
 
-  val tTagTO_0: ru.TypeTag[TO_0]
-  val tTagTO_1: ru.TypeTag[TO_1]
+  val tTagTO_0: Tag[TO_0]
+  val tTagTO_1: Tag[TO_1]
 }
 
 trait ActionTypeType3To3[
@@ -391,7 +392,7 @@ trait ActionTypeType3To3[
     )
   }
 
-  val tTagTO_0: ru.TypeTag[TO_0]
-  val tTagTO_1: ru.TypeTag[TO_1]
-  val tTagTO_2: ru.TypeTag[TO_2]
+  val tTagTO_0: Tag[TO_0]
+  val tTagTO_1: Tag[TO_1]
+  val tTagTO_2: Tag[TO_2]
 }

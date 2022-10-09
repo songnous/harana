@@ -90,12 +90,12 @@ object ProjectsPlugin extends AutoPlugin {
 
     def compileJS(baseDirectory: SettingKey[File]) = {
       baseDirectory.map { base =>
-
-        val nodeModules = new File(base, "target/scala-2.12/scalajs-bundler/main/node_modules").list().toList
+        val main = "target/scala-2.13/scalajs-bundler/main"
+        val nodeModules = new File(base, s"$main/node_modules").list().toList
         if (!nodeModules.contains("webpack-merge"))
-          s"yarn add ml-matrix @nivo/waffle webpack-merge ${base.absolutePath}/target/scala-2.12/scalajs-bundler/main/node_modules" !
+          s"yarn add ml-matrix @nivo/waffle webpack-merge --modules-folder ${base.absolutePath}/$main/node_modules" !
 
-        new File(base, "target/scala-2.12/scalajs-bundler/main").listFiles((dir, name) => name.toLowerCase.contains("opt"))
+        new File(base, main).listFiles((dir, name) => name.toLowerCase.contains("opt"))
           .foreach(
             file => Files.copy(file.toPath, new File(base, s"../jvm/src/main/resources/public/js/${file.getName}").toPath, StandardCopyOption.REPLACE_EXISTING)
           )

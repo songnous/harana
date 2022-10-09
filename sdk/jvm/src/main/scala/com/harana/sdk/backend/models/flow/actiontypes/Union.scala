@@ -10,7 +10,7 @@ import com.harana.sdk.shared.models.flow.parameters.Parameters
 import com.harana.spark.SQL
 import org.apache.spark.sql.types.StructType
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 class Union extends ActionTypeType2To1[DataFrame, DataFrame, DataFrame]
   with UnionInfo
@@ -28,6 +28,6 @@ class Union extends ActionTypeType2To1[DataFrame, DataFrame, DataFrame]
     (leftSchema, InferenceWarnings.empty)
   }
 
-  lazy val tTagTO_0: TypeTag[DataFrame] = typeTag
+  lazy val tTagTO_0: Tag[DataFrame] = typeTag
 
 }

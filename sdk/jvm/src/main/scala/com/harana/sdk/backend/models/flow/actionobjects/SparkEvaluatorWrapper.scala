@@ -4,11 +4,12 @@ import com.harana.sdk.backend.models.flow.{ExecutionContext, Knowledge}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.shared.models.flow.actionobjects.MetricValue
 import com.harana.sdk.shared.models.flow.utils.TypeUtils
+import izumi.reflect.Tag
 import org.apache.spark.ml
 
 import scala.reflect.runtime.universe._
 
-abstract class SparkEvaluatorWrapper[E <: ml.evaluation.Evaluator](implicit val evaluatorTag: TypeTag[E])
+abstract class SparkEvaluatorWrapper[E <: ml.evaluation.Evaluator](implicit val evaluatorTag: Tag[E])
   extends Evaluator
   with ParametersWithSparkWrappers {
 

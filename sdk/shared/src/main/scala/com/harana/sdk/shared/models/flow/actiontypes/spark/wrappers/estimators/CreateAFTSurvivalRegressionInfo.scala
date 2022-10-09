@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.Regression
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait CreateAFTSurvivalRegressionInfo extends EstimatorAsFactoryInfo[AFTSurvivalRegressionInfo] with SparkActionDocumentation {
 
@@ -17,7 +17,7 @@ trait CreateAFTSurvivalRegressionInfo extends EstimatorAsFactoryInfo[AFTSurvival
   val docsGuideLocation = Some("ml-classification-regression.html#survival-regression")
   val category = Regression
 
-  lazy val portO_0: TypeTag[AFTSurvivalRegressionInfo] = typeTag
+  lazy val portO_0: Tag[AFTSurvivalRegressionInfo] = typeTag
 
 }
 

@@ -6,9 +6,9 @@ import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarn
 import com.harana.sdk.shared.models.flow.actiontypes.FitInfo.extractParameterMap
 import com.harana.sdk.shared.models.flow.utils.TypeUtils
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
-abstract class TransformerAsFactory[T <: Transformer](implicit typeTag: TypeTag[T]) extends ActionTypeType0To1[T] {
+abstract class TransformerAsFactory[T <: Transformer](implicit typeTag: Tag[T]) extends ActionTypeType0To1[T] {
 
   val transformer: T = TypeUtils.instanceOfType(typeTag)
 

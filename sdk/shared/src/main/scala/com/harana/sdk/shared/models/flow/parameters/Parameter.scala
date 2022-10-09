@@ -11,6 +11,7 @@ import com.harana.sdk.shared.utils.HMap
 import io.circe.derivation.{deriveDecoder, deriveEncoder}
 import io.circe.syntax.EncoderOps
 import io.circe.{Decoder, Encoder, Json}
+import izumi.reflect.Tag
 
 import scala.reflect.runtime.universe._
 import java.util.Objects
@@ -41,7 +42,7 @@ trait Parameter[T] {
 object Parameter {
   class Values[K, V]
 
-  implicit def decoder[T <: ActionTypeInfo](implicit tt: TypeTag[T]): Decoder[HMap[Parameter.Values]] = Decoder.instance[HMap[Parameter.Values]] { c =>
+  implicit def decoder[T <: ActionTypeInfo]: Decoder[HMap[Parameter.Values]] = Decoder.instance[HMap[Parameter.Values]] { c =>
     var map = HMap.empty[Parameter.Values]
 
     c.downArray.values.getOrElse(List.empty[Json]).foreach { item =>
@@ -60,7 +61,7 @@ object Parameter {
     Right(map)
   }
 
-  implicit def encoder[T <: ActionTypeInfo](implicit tt: TypeTag[T]): Encoder[HMap[Parameter.Values]] = Encoder.instance[HMap[Parameter.Values]] { map =>
+  implicit def encoder[T <: ActionTypeInfo]: Encoder[HMap[Parameter.Values]] = Encoder.instance[HMap[Parameter.Values]] { map =>
     map.underlying.map { case (key, value) =>
       val parameter = key.asInstanceOf[Parameter[_]]
       val valueJson = value match {
@@ -157,7 +158,7 @@ object Parameter {
       case p: LongParameter                     => ("long", deriveEncoder[LongParameter].apply(p))
       case p: MarkdownParameter                 => ("markdown", deriveEncoder[MarkdownParameter].apply(p))
       case p: MultipleColumnCreatorParameter    => ("multiple-column-creator", deriveEncoder[MultipleColumnCreatorParameter].apply(p))
-      case p: MultipleNumericParameter          => ("multipe-numeric", deriveEncoder[MultipleNumericParameter].apply(p))
+      case p: MultipleNumericParameter          => ("multiple-numeric", deriveEncoder[MultipleNumericParameter].apply(p))
       case p: NumericParameter                  => ("numeric", deriveEncoder[NumericParameter].apply(p))
       case p: PasswordParameter                 => ("password", deriveEncoder[PasswordParameter].apply(p))
       case p: PrefixBasedColumnCreatorParameter => ("prefix-based-column-creator", deriveEncoder[PrefixBasedColumnCreatorParameter].apply(p))

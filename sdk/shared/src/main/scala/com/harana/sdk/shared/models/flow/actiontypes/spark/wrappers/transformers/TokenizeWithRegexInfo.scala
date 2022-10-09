@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.Transformation.
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
 
-import scala.reflect.runtime.universe.TypeTag
+import izumi.reflect.Tag
 
 trait TokenizeWithRegexInfo extends TransformerAsActionInfo[RegexTokenizerInfo] with SparkActionDocumentation {
 
@@ -17,7 +17,7 @@ trait TokenizeWithRegexInfo extends TransformerAsActionInfo[RegexTokenizerInfo] 
   val docsGuideLocation = Some("ml-features.html#tokenizer")
   val category = TextProcessing
 
-  lazy val portO_1: TypeTag[RegexTokenizerInfo] = typeTag
+  lazy val portO_1: Tag[RegexTokenizerInfo] = typeTag
 
 }
 

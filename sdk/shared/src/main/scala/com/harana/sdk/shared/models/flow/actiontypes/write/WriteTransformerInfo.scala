@@ -7,6 +7,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.IO
 import com.harana.sdk.shared.models.flow.documentation.ActionDocumentation
 import com.harana.sdk.shared.models.flow.parameters.{BooleanParameter, ParameterGroup, Parameters, StringParameter}
 import com.harana.sdk.shared.models.flow.utils.Id
+import izumi.reflect.Tag
 
 import scala.reflect.runtime.{universe => ru}
 
@@ -28,7 +29,7 @@ trait WriteTransformerInfo extends Action1To0TypeInfo[TransformerInfo] with Para
   override val parameterGroups = List(ParameterGroup(None, outputPathParameter, shouldOverwriteParameter))
 
   @transient
-  lazy val portI_0: ru.TypeTag[TransformerInfo] = ru.typeTag[TransformerInfo]
+  lazy val portI_0: Tag[TransformerInfo] = Tag[TransformerInfo]
 
 }
 
