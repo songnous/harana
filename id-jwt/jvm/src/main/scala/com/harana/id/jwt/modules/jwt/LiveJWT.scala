@@ -17,7 +17,6 @@ import com.harana.modules.core.micrometer.Micrometer
 import com.harana.sdk.shared.models.jwt.JWTClaims
 import com.nimbusds.jose.crypto.{RSASSASigner, RSASSAVerifier}
 import com.nimbusds.jose.jwk.JWKSet
-import com.nimbusds.jose.shaded.json.JSONObject
 import com.nimbusds.jose.{JWSAlgorithm, JWSHeader}
 import com.nimbusds.jwt.{JWTClaimsSet, SignedJWT}
 import io.circe.{Decoder, Encoder}
@@ -103,13 +102,13 @@ object LiveJWT {
     def claims[C <: JWTClaims](jwt: String)(implicit d: Decoder[C]): Task[C] =
       for {
         claimSet          <- Task(SignedJWT.parse(jwt).getJWTClaimsSet)
-        claims            <- Task.fromEither(decode[C](JSONObject.toJSONString(claimSet.toJSONObject)))
+        claims            <- Task.fromEither(decode[C](claimSet.toString))
       } yield claims
 
 
     def claims[C <: JWTClaims](rc: RoutingContext)(implicit d: Decoder[C]): Task[C] =
       for {
-        jwt               <- Task(rc.getCookie("jwt").getValue)
+        jwt               <- Task(rc.request.getCookie("jwt").getValue)
         claims            <- claims(jwt)
       } yield claims
 

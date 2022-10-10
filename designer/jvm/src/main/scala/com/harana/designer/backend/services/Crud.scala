@@ -13,7 +13,7 @@ import io.circe.parser._
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 import io.vertx.ext.web.RoutingContext
-import org.mongodb.scala.bson.Document
+import org.mongodb.scala.bson.{BsonDocument, BsonString, Document}
 import zio.{Task, UIO}
 
 import java.time.Instant
@@ -220,6 +220,7 @@ object Crud {
       entityJson        <- Task(rc.body().asJsonObject())
       isValid           <- Task(entityJson.getValue("createdBy").equals(userId))
 
+      _                 <- logger.error(s"Creating: ${rc.body().asString}")
       entity            <- Task.fromEither(decode[E](rc.body().asString))
       _                 <- mongo.insert[E](collection, entity).when(isValid)
       _                 <- logger.debug(s"Insert $entityName")
@@ -267,8 +268,8 @@ object Crud {
 
 
   private def creatorOrPublic(userId: UserId) = {
-    val isPublic = Document("visibility" -> Visibility.Public.toString)
-    val isCreator = Document("createdBy" -> userId)
+    val isPublic = BsonDocument("visibility" -> Visibility.Public.toString)
+    val isCreator = BsonDocument("createdBy" -> userId)
     List(isPublic, isCreator)
   }
 }

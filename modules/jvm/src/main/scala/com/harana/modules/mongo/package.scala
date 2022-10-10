@@ -1,22 +1,18 @@
 package com.harana.modules
 
-import java.util.concurrent.atomic.AtomicLong
-import java.util.{Calendar, Date}
-
 import com.harana.sdk.shared.models.common.Entity.EntityId
 import com.harana.sdk.shared.models.common.Id
-import org.bson.{BsonDocument, BsonValue}
+import com.harana.modules.mongo.bson.convert.ConvertImplicits._
+import io.circe.{Decoder, Encoder, HCursor, Json}
+import org.bson.BsonDocument
 import org.bson.conversions.Bson
 import org.mongodb.scala.bson.Document
 import org.mongodb.scala.result.UpdateResult
 import org.mongodb.scala.{FindObservable, MongoCollection, MongoDatabase, Observable, Observer}
 import zio.{IO, Task}
-import com.harana.utils.bson.convert.ConvertImplicits._
-import com.harana.utils.bson.convert.JsonError
-import io.circe.generic.JsonCodec
-import io.circe.generic.semiauto.deriveEncoder
-import io.circe.{Decoder, Encoder, HCursor, Json}
 
+import java.util.concurrent.atomic.AtomicLong
+import java.util.{Calendar, Date}
 import scala.collection.mutable.ListBuffer
 import scala.reflect.runtime.universe._
 
@@ -167,8 +163,8 @@ package object mongo {
       Message(
         idField,
         Option(ackField),
-        if (visibleField.equals(-1)) None else Some(new Date(visibleField)),
-        if (deletedField.equals(-1)) None else Some(new Date(deletedField)),
+        if (visibleField.equals(-1L)) None else Some(new Date(visibleField)),
+        if (deletedField.equals(-1L)) None else Some(new Date(deletedField)),
         triesField,
         payloadField
       )

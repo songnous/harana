@@ -188,6 +188,7 @@ val modules = crossProject("modules")
       Library.sundial.value :+
       Library.ulid.value :+
       Library.unboundid.value :+
+      Library.youiClient.value :+
       Library.zendeskClient.value :+
       Library.zip4j.value :+
       Library.ztZip.value

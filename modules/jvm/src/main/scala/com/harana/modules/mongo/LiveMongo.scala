@@ -11,7 +11,7 @@ import com.harana.modules.mongo.Mongo.Service
 import com.harana.sdk.shared.models.common.Entity.EntityId
 import com.harana.sdk.shared.models.common.Id
 import com.harana.sdk.shared.utils.Random
-import com.harana.utils.bson.codec.OptionCodec
+import com.harana.modules.mongo.bson.codec.{OptionCodec, SomeCodec, Tuple2Codec}
 import com.mongodb.BasicDBObject
 import com.mongodb.MongoCredential._
 import com.mongodb.connection.ClusterConnectionMode
@@ -26,7 +26,7 @@ import zio.{Task, UIO, ZLayer}
 
 import scala.jdk.CollectionConverters._
 import scala.reflect.runtime.universe._
-import com.harana.utils.bson.convert.ConvertImplicits._
+import com.harana.modules.mongo.bson.convert.ConvertImplicits._
 import io.circe.{Decoder, Encoder}
 import org.bson.codecs.configuration.CodecRegistries.{fromCodecs, fromRegistries}
 import org.mongodb.scala.MongoClient.DEFAULT_CODEC_REGISTRY
@@ -46,7 +46,7 @@ object LiveMongo {
         client            <- getClient
         uri               <- config.optSecret("mongodb-uri")
         name              <- config.optString("mongodb.database").map(_.getOrElse(uri.map(ConnectionString(_).getDatabase).getOrElse("admin")))
-        codecRegistry     <- Task(fromRegistries(fromCodecs(new OptionCodec()), DEFAULT_CODEC_REGISTRY))
+        codecRegistry     <- Task(fromRegistries(fromCodecs(new OptionCodec(), new SomeCodec()), DEFAULT_CODEC_REGISTRY))
         db                <- Task(client.getDatabase(name).withCodecRegistry(codecRegistry)).onError(e => logger.error(e.prettyPrint))
       } yield db
 
@@ -85,6 +85,7 @@ object LiveMongo {
                                 _                 <- logger.info(s"Connecting to MongoDB: ${client.getClusterDescription.toString}")
                                 db                <- Task(client.getDatabase("admin")).onError(e => logger.error(e.prettyPrint))
                                 _                 <- execute(db.runCommand(Document("ping" -> 1)))
+                                _                 <- logger.info(s"Connected to MongoDB and successfully pinged.")
                               } yield client
         _                 =  clientRef.set(Some(client))
       } yield client
@@ -175,8 +176,7 @@ object LiveMongo {
                                   def onNext(result: UpdateResult): Unit = cb(
                                     if (!result.wasAcknowledged()) Task.fail(new Exception("Result was not acknowledged"))
                                     else if (result.getMatchedCount == 0 && !upsert) Task.fail(new Exception("Entity not found"))
-                                    else if (result.getModifiedCount == 0 && !upsert) Task.fail(new Exception("Modification failure"))
-                                    else Task.unit
+                                    else Task.fail(new Exception("Modification failure")).when(result.getModifiedCount == 0 && !upsert)
                                   )
                                   def onError(t: Throwable): Unit = cb(Task.fail(t))
                                   def onComplete(): Unit = cb(Task.unit)
@@ -193,8 +193,7 @@ object LiveMongo {
           collection.deleteOne(bson).subscribe(new Observer[DeleteResult] {
             def onNext(result: DeleteResult): Unit = cb(
               if (!result.wasAcknowledged()) Task.fail(new Exception("Result was not acknowledged"))
-              else if (result.getDeletedCount == 0) Task.fail(new Exception("Entity not found"))
-              else Task.unit
+              else Task.fail(new Exception("Entity not found")).when(result.getDeletedCount == 0)
             )
             def onError(t: Throwable): Unit = cb(Task.fail(t))
             def onComplete(): Unit = {}

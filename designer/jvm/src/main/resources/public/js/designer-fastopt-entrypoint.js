@@ -1,5 +1,5 @@
 module.exports = {
-  "require": (function(x0) {
+  "require": (function(x1) {
     return {
       "source-map": require("source-map"),
       "react-dom": require("react-dom"),
@@ -34,6 +34,6 @@ module.exports = {
       "react-syntax-highlighter/dist/esm/languages/hljs/bash": require("react-syntax-highlighter/dist/esm/languages/hljs/bash"),
       "react-syntax-highlighter/dist/esm/languages/hljs/python": require("react-syntax-highlighter/dist/esm/languages/hljs/python"),
       "react-markdown": require("react-markdown")
-    }[x0]
+    }[x1]
   })
 }

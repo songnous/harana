@@ -436,12 +436,9 @@ object LiveVertx {
                                   }
 
                                   // Proxy
-                                  println(s"Proxy domain = ${proxyDomain.isDefined}, Proxy mapping = ${proxyMapping.isDefined}")
                                   if (proxyDomain.isDefined && proxyMapping.isDefined) {
                                     val client = new WebProxyClient(webClient, WebProxyClientOptions(iFrameAncestors = List(domain, proxyDomain.get)))
-                                    println(s"Creating virtual host for: ${proxyDomain.get}")
                                     router.route().virtualHost(proxyDomain.get).blockingHandler(rc => {
-                                      println(s"Proxing for: ${rc.request.uri()}")
                                       run(proxyMapping.get(rc)) match {
                                         case Some(uri) => client.execute(rc, "/*", uri)
                                         case None => rc.response.end()

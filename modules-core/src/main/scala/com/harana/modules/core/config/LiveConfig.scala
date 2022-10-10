@@ -64,8 +64,8 @@ object LiveConfig {
       for {
         path          <- string("secrets.path", "/var/run/secrets")
         secret        <- if (Files.exists(Paths.get(s"$path/$key/value"))) {
-                          var fileHandle = fromFile(s"$path/$key/value", "utf-8") 
-                          var secret = fileHandle.getLines.mkString
+                          val fileHandle = fromFile(s"$path/$key/value", "utf-8")
+                          val secret = fileHandle.getLines.mkString
                           fileHandle.close()
                           UIO.some(secret)
                         }
@@ -76,7 +76,7 @@ object LiveConfig {
     def secret(key: String): UIO[String] = {
       for {
         path      <- string("secrets.path", "/var/run/secrets")
-        secret    <- optSecret(key).map(_.get).onError(_ => logger.error(s"Missing secret: $key at path: $path"))
+        secret    <- optSecret(key).map(_.get).onError(_ => logger.error(s"Missing secret: $path/$key/value"))
       } yield secret
     }
 

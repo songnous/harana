@@ -106,3 +106,4 @@ hs_err_pid*
 .DS_Store
 *fastopt.js
 *fastopt.js.map
+designer/node_modules/

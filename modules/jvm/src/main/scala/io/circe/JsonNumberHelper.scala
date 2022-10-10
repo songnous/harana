@@ -1,6 +1,6 @@
 package io.circe
 
-import com.harana.utils.bson.convert.{JsonError, JsonNumberError}
+import com.harana.modules.mongo.bson.convert.{JsonError, JsonNumberError}
 import org.mongodb.scala.bson._
 import cats.syntax.either._
 

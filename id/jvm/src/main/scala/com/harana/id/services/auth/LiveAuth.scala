@@ -52,10 +52,11 @@ object LiveAuth {
 
     def redirectToApp(user: User, profile: Option[CommonProfile]): Task[Response] =
       for {
-        user            <- updateUser(user, profile)
+        _               <- logger.info(s"Redirecting to app for user: ${user.id}")
+        updatedUser     <- updateUser(user, profile)
         timeout         <- config.int("web.jwt.sessionTimeout", 900)
         expires         =  Instant.now().plus(timeout, ChronoUnit.SECONDS)
-        claims          =  claimsForUser(user, expires, profile.isDefined)
+        claims          =  claimsForUser(updatedUser, expires, profile.isDefined)
         jwtJson         <- jwt.generate(claims)
         domain          <- config.env("harana_domain")
         jwtCookie       <- jwt.cookie(jwtJson, domain).map(_.setPath("/").setSameSite(CookieSameSite.LAX))
@@ -95,8 +96,8 @@ object LiveAuth {
                                   emailAddress = emailAddress,
                                   firstName = firstName,
                                   lastName = lastName,
-                                  marketingChannel = Option(MarketingChannel.withName(rc.request.getCookie("marketing_channel").getValue)),
-                                  marketingChannelId = Option(rc.request.getCookie("marketing_channel_id").getValue()),
+                                  marketingChannel = Option(rc.request.getCookie("marketing_channel")).map(c => MarketingChannel.withName(c.getValue)),
+                                  marketingChannelId = Option(rc.request.getCookie("marketing_channel_id")).map(_.getValue()),
                                   password = Some(passwordHash.toString),
                                   trialStarted = Some(Instant.now),
                                   trialEnded = Some(Instant.now.plus(trialLength, ChronoUnit.DAYS)))
@@ -127,8 +128,8 @@ object LiveAuth {
                                   firstName = profile.getFirstName,
                                   lastName = profile.getFamilyName,
                                   displayName = Some(profile.getDisplayName),
-                                  marketingChannel = Option(MarketingChannel.withName(rc.request.getCookie("marketing_channel").getValue)),
-                                  marketingChannelId = Option(rc.request.getCookie("marketing_channel_id").getValue()),
+                                  marketingChannel = Option(rc.request.getCookie("marketing_channel")).map(c => MarketingChannel.withName(c.getValue)),
+                                  marketingChannelId = Option(rc.request.getCookie("marketing_channel_id")).map(_.getValue()),
                                   trialStarted = Some(Instant.now),
                                   trialEnded = Some(Instant.now.plus(trialLength, ChronoUnit.DAYS)))
         _                     <- Task.when(foundUser.isEmpty)(createUser(newUser))

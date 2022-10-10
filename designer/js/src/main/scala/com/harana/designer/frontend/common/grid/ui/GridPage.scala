@@ -45,7 +45,7 @@ import scala.collection.mutable.ListBuffer
   val deleteDialogRef = React.createRef[Dialog.Def]
 
 
-  override def componentDidMount() =
+  override def componentDidMount() = {
     Circuit.addProcessor((_: Dispatcher, action: Any, next: Any => ActionResult[AppState], _: AppState) => {
       action match {
         case ShowNewOrEditDialog(entityType, title) =>
@@ -67,6 +67,7 @@ import scala.collection.mutable.ListBuffer
       }
       next(action)
     })
+  }
 
 
   def editStyle = {

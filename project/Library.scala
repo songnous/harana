@@ -265,7 +265,7 @@ object Library {
 
   val scalajs = Def.setting(Seq(
     "org.scala-js" %%% "scala-js-macrotask-executor" % "1.0.0",
-    "org.scala-js" %%% "scalajs-java-securerandom" % "1.0.0",
+    "org.scala-js" %%% "scalajs-fake-insecure-java-securerandom" % "1.0.0",
     "com.vmunier" %% "scalajs-scripts" % "1.2.0"
   ))
 
@@ -411,7 +411,7 @@ object Library {
   val jsr305 = Def.setting("com.google.code.findbugs" % "jsr305" % "3.0.2")
   val kubernetesClient = Def.setting("io.kubernetes" % "client-java" % "16.0.0")
   val mixpanel = Def.setting("com.mixpanel" % "mixpanel-java" % "1.5.1")
-  val mongodbScala = Def.setting("org.mongodb.scala" %% "mongo-scala-driver" % "4.7.1")
+  val mongodbScala = Def.setting("org.mongodb.scala" %% "mongo-scala-driver" % "4.7.2")
   val nscalaTime = Def.setting("com.github.nscala-time" %% "nscala-time" % "2.32.0")
   val ognl = Def.setting("ognl" % "ognl" % "3.3.3")
   val opencsv = Def.setting("com.opencsv" % "opencsv"% "5.7.0")
@@ -424,7 +424,6 @@ object Library {
   val reflections = Def.setting("org.reflections" % "reflections" % "0.10.2")
   val scaffeine = Def.setting("com.github.blemale" %% "scaffeine" % "5.2.1")
   val scalaHashing = Def.setting("com.desmondyeung.hashing"%% "scala-hashing" % "0.1.0")
-  val scalaStripe = Def.setting("com.outr" %% "scala-stripe" % "1.1.11")
   val scalajsDom = Def.setting("org.scala-js" %%% "scalajs-dom" % "2.0.0")
   val scalajsStubs = Def.setting("org.scala-js" %% "scalajs-stubs" % "1.1.0")
   val scalate = Def.setting("org.scalatra.scalate" %% "scalate-core" % "1.9.8")
@@ -451,6 +450,7 @@ object Library {
   val upickle = Def.setting("com.lihaoyi" %%% "upickle" % "1.4.3")
   val webjarsLocator = Def.setting("org.webjars" % "webjars-locator-core" % "0.52c")
   val xmlApis = Def.setting("xml-apis" % "xml-apis" % "2.0.2")
+  val youiClient = Def.setting("io.youi" %% "youi-client" % "0.14.4")
   val zendeskClient = Def.setting("com.cloudbees.thirdparty" % "zendesk-java-client" % "0.18.0")
   val zip4j = Def.setting("net.lingala.zip4j" % "zip4j" % "2.11.2")
   val ztZip = Def.setting("org.zeroturnaround" % "zt-zip" % "1.15")

@@ -38,10 +38,6 @@ case class Flow(title: String,
 object Flow {
   type FlowId = String
 
-
-  implicit val decodeParameter: Decoder[Parameter[_]] = Decoder.decodeString.emap { str => Left("") }
-  implicit val encodeParameter: Encoder[Parameter[_]] = Encoder.encodeString.contramap[Parameter[_]](_.toString)
-
   def apply(title: String,
             description: String,
             connections: List[DataSource],
