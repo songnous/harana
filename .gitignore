@@ -107,3 +107,6 @@ hs_err_pid*
 *fastopt.js
 *fastopt.js.map
 designer/node_modules/
+
+package.json
+yarn.lock

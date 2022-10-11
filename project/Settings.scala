@@ -1,6 +1,7 @@
 import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 import sbt.Keys._
-import sbt._
+import sbt.nio.Keys.ReloadOnSourceChanges
+import sbt.{nio, _}
 import sbtassembly.AssemblyPlugin.autoImport._
 import sbtghpackages.GitHubPackagesPlugin.autoImport._
 import scalajsbundler.sbtplugin.ScalaJSBundlerPlugin.autoImport._
@@ -80,6 +81,7 @@ object Settings {
     githubTokenSource                         := TokenSource.Environment("GITHUB_TOKEN"),
     dependencyOverrides                       ++= Library.globalDependencyOverrides.value,
     updateOptions                             := updateOptions.value.withCachedResolution(true),
+    Global / nio.Keys.onChangedBuildSource    := ReloadOnSourceChanges,
 //    testFrameworks                            := Seq(new TestFramework("zio.test.sbt.ZTestFramework"))
   )
 

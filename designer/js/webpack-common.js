@@ -13,7 +13,14 @@ module.exports = {
         rules: [
             {
                 test: /\.tsx?$/,
-                loader: "awesome-typescript-loader?{configFileName: '../../../../../tsconfig.json'}",
+                use: [
+                    {
+                        loader: 'awesome-typescript-loader',
+                        options: {
+                            configFileName: '../../../../../tsconfig.json',
+                        }
+                    }
+                ]
             },
             {
                 test: /\.css$/,
@@ -21,16 +28,20 @@ module.exports = {
             },
             {
                 test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
-                loader: "url-loader",
-                options: {
-                    limit: 10000
-                }
+                use: [
+                    {
+                        loader: "url-loader",
+                        options: {
+                            limit: 10000
+                        }
+                    }
+                ]
             }
         ]
     },
-    node: {
-        fs: "empty"
-    },
+    // node: {
+    //     fs: "empty"
+    // },
     output: {
         pathinfo: false
     },
