@@ -118,6 +118,12 @@ flows.common.description = Description
 flows.common.history = History
 flows.common.tags = Tags
 
+flows.section.about.title = About
+flows.section.about.title.title = Title
+flows.section.about.description.title = Description
+flows.section.about.tags.title = Tags
+
+
 flows.title.description = Description
 
 flows.status.none = None

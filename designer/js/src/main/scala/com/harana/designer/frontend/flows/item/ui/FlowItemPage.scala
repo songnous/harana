@@ -132,8 +132,8 @@ import scala.scalajs.js
 
 
   def sidebarTabs(state: FlowItemState) = {
-    val actionTypesCategory = SidebarSection(None, allowCollapse = false, allowClear = false, None, ContentSection(actions(state), padding = false))
-    val dataSourcesCategory = SidebarSection(None, allowCollapse = false, allowClear = false, None, ContentSection(actions(state), padding = false))
+    val actionTypesCategory = SidebarSection(None, allowCollapse = false, allowClear = false, None, ContentSection(actionTypes(state), padding = false))
+    val dataSourcesCategory = SidebarSection(None, allowCollapse = false, allowClear = false, None, ContentSection(actionTypes(state), padding = false))
 
     val result = for {
       actionId          <- state.selectedActionId

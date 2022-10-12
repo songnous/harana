@@ -54,7 +54,7 @@ object dialogs {
       title = Some(i"files.menu.new.new-folder"),
       style = DialogStyle.Tabbed(
         parametersOrTabs = Left(DialogParameters(
-          parameterGroups = List(ParameterGroup(Some("new"), nameParameter)),
+          parameterGroups = List(ParameterGroup("new", nameParameter)),
           i18nPrefix = "files.new-folder"
         )),
         onOk = Some(values => Circuit.dispatch(NewFolder(values.getOrElse(nameParameter, ""))))
@@ -89,7 +89,7 @@ object dialogs {
       title = Some(i"files.menu.edit.edit-info"),
       style = DialogStyle.Tabbed(
         parametersOrTabs = Left(DialogParameters(
-          parameterGroups = List(ParameterGroup(None, nameParameter)),
+          parameterGroups = List(ParameterGroup("", nameParameter)),
           i18nPrefix = "files.edit-info",
         )),
         onOk = Some(values => Circuit.dispatch(EditItemInfo(values)))
@@ -122,7 +122,7 @@ object dialogs {
       title = Some(i"files.connect-via-sftp.title"),
       style = DialogStyle.Tabbed(
         parametersOrTabs = Left(DialogParameters(
-          parameterGroups = List(ParameterGroup(None)),
+          parameterGroups = List(ParameterGroup("")),
           i18nPrefix = "files.connect-via-sftp",
         )),
         showCancelButton = false

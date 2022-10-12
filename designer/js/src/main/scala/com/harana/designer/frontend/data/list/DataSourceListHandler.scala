@@ -79,7 +79,7 @@ class DataSourceListHandler extends GridHandler[DataSource, DataSourceEditState]
 
 
   def aboutGroup =
-    ParameterGroup(Some("about"),
+    ParameterGroup("about",
       GridPageItem.titleParameter,
       GridPageItem.descriptionParameter,
       GridPageItem.tagsParameter,

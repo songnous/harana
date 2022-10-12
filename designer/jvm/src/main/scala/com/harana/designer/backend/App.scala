@@ -1,5 +1,6 @@
 package com.harana.designer.backend
 
+import com.harana.sdk.shared.models.flow.catalog.Catalog
 import com.harana.Layers
 import com.harana.designer.backend.services.apps.{Apps, LiveApps}
 import com.harana.designer.backend.services.data.LiveData
@@ -179,6 +180,9 @@ object App extends CoreApp {
   def startup =
     for {
       _                     <- exposePendingExecutionsMetric.repeat(Schedule.spaced(10.second).forever).provideLayer(Clock.live).fork
+
+      actions               =  Catalog.actionsMap.values.toList
+      _                     =  println(s"NUmber of actions = ${actions.size}")
 
       domain                <- env("harana_domain")
 

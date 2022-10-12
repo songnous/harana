@@ -119,7 +119,7 @@ class ScheduleListHandler extends GridHandler[Schedule, ScheduleEditState]("sche
           UpdateEditState("schedules", state.value.editState.copy(eventTypes = et.getOrElse(List()))))
       ) +
       Effect.action(UpdateEditParameters("schedules", List(
-        ParameterGroup(Some("about"),
+        ParameterGroup("about",
           StringParameter("title", required = true),
           StringParameter("description", multiLine = true, required = true)
         )))) +

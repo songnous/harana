@@ -1,7 +1,8 @@
 package com.harana.designer.frontend.flows.item
 
 import com.harana.designer.frontend.utils.i18nUtils.ops
-import com.harana.sdk.shared.models.flow.{Action, ActionTypeInfo, Catalog}
+import com.harana.sdk.shared.models.flow.catalog.Catalog
+import com.harana.sdk.shared.models.flow.{Action, ActionTypeInfo}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory
 import com.harana.sdk.shared.models.flow.execution.spark.ExecutionStatus
 import com.harana.sdk.shared.models.flow.graph.node.Node

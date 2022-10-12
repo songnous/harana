@@ -61,7 +61,7 @@ class FlowListHandler extends GridHandler[Flow, FlowEditState]("flows", zoomTo(_
 
   override def onInit(preferences: Map[String, String]) =
     Some(
-      Effect.action(UpdateEditParameters("flows", List(ParameterGroup(Some("about"),
+      Effect.action(UpdateEditParameters("flows", List(ParameterGroup("about",
         StringParameter("title", required = true),
         StringParameter("description", multiLine = true, required = true),
         StringArrayParameter("tags")

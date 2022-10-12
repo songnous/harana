@@ -6,6 +6,7 @@ import com.harana.designer.frontend.flows.item.FlowItemStore._
 import com.harana.designer.frontend.flows.item.ui._
 import com.harana.designer.frontend.utils.http.Http
 import com.harana.designer.frontend.{Circuit, State}
+import com.harana.sdk.shared.models.flow.catalog.Catalog
 import com.harana.sdk.shared.models.flow.execution.spark.ExecutionStatus
 import com.harana.sdk.shared.models.flow.graph.FlowGraph
 import com.harana.sdk.shared.models.flow.{ActionTypeInfo, Flow, FlowExecution}
@@ -17,6 +18,7 @@ import io.circe.syntax.EncoderOps
 
 import java.util.Timer
 import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
+
 import scala.scalajs.js
 
 class FlowItemHandler extends ActionHandler(zoomTo(_.flowItemState)) {
@@ -27,14 +29,19 @@ class FlowItemHandler extends ActionHandler(zoomTo(_.flowItemState)) {
 
 
     case Init(preferences) =>
-      effectOnly(
-       Effect(Http.getRelativeAs[List[ActionTypeInfo]](s"/api/flows/basic/actionTypes").map(f => if (f.isDefined) UpdateActionTypes(f.get) else NoAction))
-      )
-
       new Timer().scheduleAtFixedRate(new java.util.TimerTask {
         def run(): Unit = Circuit.dispatch(SaveFlow)
       }, 0L, 2000L)
-      noChange
+
+      println("A")
+      try {
+        val actions = Catalog.actionsMap.values.toList
+        println(s"Actions size = ${actions.size}")
+      } catch {
+        case e: Exception => e.printStackTrace()
+      }
+      println("B")
+      effectOnly(Effect.action(UpdateActionTypes(List())))
 
 
     case ReceiveEvent(eventType, eventParameters) =>
@@ -201,7 +208,15 @@ class FlowItemHandler extends ActionHandler(zoomTo(_.flowItemState)) {
         .filterNot(edge => edgeIds.map(_._1).contains(edge.source) && edgeIds.map(_._2).contains(edge.target))
 
       value.undoHistory.push((nodes, edges))
-      updated(value.copy(isDirty = true, selectedActionId = selectedActionId, completedActionIds = completedActionIds, activeActionIds = activeActionIds, nodes = nodes, edges = edges, selectedTab = FlowTab.ActionTypes))
+      updated(value.copy(
+        isDirty = true,
+        selectedActionId = selectedActionId,
+        completedActionIds = completedActionIds,
+        activeActionIds = activeActionIds,
+        nodes = nodes,
+        edges = edges,
+        selectedTab = FlowTab.ActionTypes)
+      )
 
 
     case ToggleLogs =>

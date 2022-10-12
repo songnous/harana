@@ -112,14 +112,14 @@ import scala.collection.mutable.{Map => MutableMap}
 								TabGroup(placement = Some("top"), noScrollControls = Some(true))(
 									List(
 										Fragment(
-											info.parameterGroups.filter(_.name.isDefined).map { group =>
-												Tab(label = i"${info.i18nPrefix}.tab.${group.name.get}.title", panel = group.name.get).withKey(group.name.get)
+											info.parameterGroups.map { group =>
+												Tab(label = i"${info.i18nPrefix}.tab.${group.name}.title", panel = group.name).withKey(group.name)
 											} ++ info.additionalTabs.map {
 												case (name, _) => Tab(label = i"${info.i18nPrefix}.tab.$name.title", panel = name).withKey(name)
 											},
 
-											info.parameterGroups.filter(_.name.isDefined).map { group =>
-												TabPanel(name = group.name.get)(layoutParameterGroup(group, info, onChange, info.parameterGroups.head.parameters.head)).withKey(group.name.get)
+											info.parameterGroups.map { group =>
+												TabPanel(name = group.name)(layoutParameterGroup(group, info, onChange, info.parameterGroups.head.parameters.head)).withKey(group.name)
 											} ++ info.additionalTabs.map {
 												case (name, content) => TabPanel(name = name)(List(content)).withKey(name)
 											}

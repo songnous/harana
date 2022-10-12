@@ -1,0 +1,215 @@
+package com.harana.sdk.frontend.models.flow
+
+import com.harana.sdk.shared.models.flow.actiontypes._
+import com.harana.sdk.shared.models.flow.actiontypes.custom._
+import com.harana.sdk.shared.models.flow.actiontypes.read._
+import com.harana.sdk.shared.models.flow.actiontypes.spark.wrappers.estimators._
+import com.harana.sdk.shared.models.flow.actiontypes.spark.wrappers.evaluators._
+import com.harana.sdk.shared.models.flow.actiontypes.spark.wrappers.transformers._
+import com.harana.sdk.shared.models.flow.actiontypes.write._
+
+import scala.scalajs.reflect.annotation.EnableReflectiveInstantiation
+
+@EnableReflectiveInstantiation
+class ReadDatasource extends ReadDatasourceInfo
+
+@EnableReflectiveInstantiation
+class ReadTransformer extends ReadTransformerInfo
+
+@EnableReflectiveInstantiation
+class WriteDatasource extends WriteDatasourceInfo
+
+@EnableReflectiveInstantiation
+class WriteTransformer extends WriteTransformerInfo
+
+@EnableReflectiveInstantiation
+class Source extends SourceInfo
+
+@EnableReflectiveInstantiation
+class Sink extends SinkInfo
+
+@EnableReflectiveInstantiation
+class Evaluate extends EvaluateInfo
+
+@EnableReflectiveInstantiation
+class Fit extends FitInfo
+
+@EnableReflectiveInstantiation
+class FitPlusTransform extends FitPlusTransformInfo
+
+@EnableReflectiveInstantiation
+class Transform extends TransformInfo
+
+@EnableReflectiveInstantiation
+class Join extends JoinInfo
+
+@EnableReflectiveInstantiation
+class Split extends SplitInfo
+
+@EnableReflectiveInstantiation
+class Union extends UnionInfo
+
+@EnableReflectiveInstantiation
+class SqlCombine extends SqlCombineInfo
+
+@EnableReflectiveInstantiation
+class SortTransformation extends SortTransformationInfo
+
+@EnableReflectiveInstantiation
+class FilterColumns extends FilterColumnsInfo
+
+@EnableReflectiveInstantiation
+class FilterRows extends FilterRowsInfo
+
+@EnableReflectiveInstantiation
+class HandleMissingValues extends HandleMissingValuesInfo
+
+@EnableReflectiveInstantiation
+class Projection extends ProjectionInfo
+
+@EnableReflectiveInstantiation
+class CreateCustomTransformer extends CreateCustomTransformerInfo
+
+@EnableReflectiveInstantiation
+class SqlColumnTransformation extends SqlColumnTransformationInfo
+
+@EnableReflectiveInstantiation
+class SqlTransformation extends SqlTransformationInfo
+
+@EnableReflectiveInstantiation
+class PythonColumnTransformation extends PythonColumnTransformationInfo
+
+@EnableReflectiveInstantiation
+class PythonTransformation extends PythonTransformationInfo
+
+@EnableReflectiveInstantiation
+class RColumnTransformation extends RColumnTransformationInfo
+
+@EnableReflectiveInstantiation
+class RTransformation extends RTransformationInfo
+
+@EnableReflectiveInstantiation
+class AssembleVector extends AssembleVectorInfo
+
+@EnableReflectiveInstantiation
+class Binarize extends BinarizeInfo
+
+@EnableReflectiveInstantiation
+class ComposeDatetime extends ComposeDatetimeInfo
+
+@EnableReflectiveInstantiation
+class ConvertType extends ConvertTypeInfo
+
+@EnableReflectiveInstantiation
+class DCT extends DCTInfo
+@EnableReflectiveInstantiation
+class DecomposeDatetime extends DecomposeDatetimeInfo
+@EnableReflectiveInstantiation
+class GetFromVector extends GetFromVectorInfo
+@EnableReflectiveInstantiation
+class Normalize extends NormalizeInfo
+@EnableReflectiveInstantiation
+class PolynomialExpand extends PolynomialExpandInfo
+@EnableReflectiveInstantiation
+class QuantileDiscretizer extends QuantileDiscretizerInfo
+@EnableReflectiveInstantiation
+class StringIndexer extends StringIndexerInfo
+@EnableReflectiveInstantiation
+class VectorIndexer extends VectorIndexerInfo
+@EnableReflectiveInstantiation
+class MinMaxScaler extends MinMaxScalerInfo
+@EnableReflectiveInstantiation
+class StandardScaler extends StandardScalerInfo
+
+@EnableReflectiveInstantiation
+class ConvertToNGrams extends ConvertToNGramsInfo
+
+@EnableReflectiveInstantiation
+class CountVectorizer extends CountVectorizerInfo
+
+@EnableReflectiveInstantiation
+class HashingTF extends HashingTFInfo
+
+@EnableReflectiveInstantiation
+class IDF extends IDFInfo
+
+@EnableReflectiveInstantiation
+class RemoveStopWords extends RemoveStopWordsInfo
+
+@EnableReflectiveInstantiation
+class Tokenize extends TokenizeInfo
+
+@EnableReflectiveInstantiation
+class TokenizeWithRegex extends TokenizeWithRegexInfo
+
+@EnableReflectiveInstantiation
+class Word2Vec extends Word2VecInfo
+
+@EnableReflectiveInstantiation
+class GridSearch extends GridSearchInfo
+
+@EnableReflectiveInstantiation
+class CreateAFTSurvivalRegression extends CreateAFTSurvivalRegressionInfo
+
+@EnableReflectiveInstantiation
+class CreateDecisionTreeRegression extends CreateDecisionTreeRegressionInfo
+
+@EnableReflectiveInstantiation
+class CreateGBTRegression extends CreateGBTRegressionInfo
+
+@EnableReflectiveInstantiation
+class CreateIsotonicRegression extends CreateIsotonicRegressionInfo
+
+@EnableReflectiveInstantiation
+class CreateLinearRegression extends CreateLinearRegressionInfo
+
+@EnableReflectiveInstantiation
+class CreateRandomForestRegression extends CreateRandomForestRegressionInfo
+
+@EnableReflectiveInstantiation
+class CreateDecisionTreeClassifier extends CreateDecisionTreeClassifierInfo
+
+@EnableReflectiveInstantiation
+class CreateGBTClassifier extends CreateGBTClassifierInfo
+
+@EnableReflectiveInstantiation
+class CreateLogisticRegression extends CreateLogisticRegressionInfo
+
+@EnableReflectiveInstantiation
+class CreateMultilayerPerceptronClassifier extends CreateMultilayerPerceptronClassifierInfo
+
+@EnableReflectiveInstantiation
+class CreateNaiveBayes extends CreateNaiveBayesInfo
+
+@EnableReflectiveInstantiation
+class CreateRandomForestClassifier extends CreateRandomForestClassifierInfo
+
+@EnableReflectiveInstantiation
+class CreateKMeans extends CreateKMeansInfo
+
+@EnableReflectiveInstantiation
+class CreateLDA extends CreateLDAInfo
+
+@EnableReflectiveInstantiation
+class UnivariateFeatureSelector extends UnivariateFeatureSelectorInfo
+
+@EnableReflectiveInstantiation
+class CreateALS extends CreateALSInfo
+
+@EnableReflectiveInstantiation
+class PCA extends PCAInfo
+
+@EnableReflectiveInstantiation
+class CreatePythonEvaluator extends CreatePythonEvaluatorInfo
+
+@EnableReflectiveInstantiation
+class CreateREvaluator extends CreateREvaluatorInfo
+
+@EnableReflectiveInstantiation
+class CreateBinaryClassificationEvaluator extends CreateBinaryClassificationEvaluatorInfo
+
+@EnableReflectiveInstantiation
+class CreateMulticlassClassificationEvaluator extends CreateMulticlassClassificationEvaluatorInfo
+
+@EnableReflectiveInstantiation
+class CreateRegressionEvaluator extends CreateRegressionEvaluatorInfo

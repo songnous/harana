@@ -4,7 +4,7 @@ import com.harana.sdk.shared.models.flow.parameters.{BooleanParameter, Parameter
 
 object NotifierType {
 
-  val email = ParameterGroup(Some("email"),
+  val email = ParameterGroup("email",
     StringParameter("host", required = true),
     StringParameter("from", required = true),
     StringParameter("to", required = true),
@@ -16,13 +16,13 @@ object NotifierType {
     BooleanParameter("supportsHtml")
   )
 
-  val opsGenie = ParameterGroup(Some("opsGenie"),
+  val opsGenie = ParameterGroup("opsGenie",
     StringParameter("apiUrl"),
     StringParameter("apiKey"),
     StringArrayParameter("usernames")
   )
 
-  val pagerDuty = ParameterGroup(Some("pagerDuty"),
+  val pagerDuty = ParameterGroup("pagerDuty",
     StringParameter("apiUrl"),
     StringParameter("routingKey"),
     StringParameter("serviceKey"),
@@ -30,7 +30,7 @@ object NotifierType {
     StringParameter("severity")
   )
 
-  val pushOver = ParameterGroup(Some("pushOver"),
+  val pushOver = ParameterGroup("pushOver",
     StringParameter("apiUrl"),
     StringParameter("userKey"),
     StringParameter("token"),
@@ -39,13 +39,13 @@ object NotifierType {
     StringParameter("expire")
   )
 
-  val slack = ParameterGroup(Some("slack"),
+  val slack = ParameterGroup("slack",
     StringParameter("apiUrl"),
     StringParameter("channel"),
     StringParameter("username")
   )
 
-  val splunkOnCall = ParameterGroup(Some("splunkOnCall"),
+  val splunkOnCall = ParameterGroup("splunkOnCall",
     StringParameter("apiUrl"),
     StringParameter("apiKey"),
     StringParameter("routingKey"),
@@ -54,13 +54,13 @@ object NotifierType {
     StringParameter("monitoringTool")
   )
 
-  val webHook = ParameterGroup(Some("webHook"),
+  val webHook = ParameterGroup("webHook",
     StringParameter("apiUrl"),
     StringParameter("authUsername"),
     StringParameter("authPassword")
   )
 
-  val weChat = ParameterGroup(Some("weChat"),
+  val weChat = ParameterGroup("weChat",
     StringParameter("apiUrl"),
     StringParameter("apiSecret"),
     StringParameter("agentId"),

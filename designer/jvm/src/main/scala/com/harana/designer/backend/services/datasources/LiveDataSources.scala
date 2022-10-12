@@ -50,7 +50,7 @@ object LiveDataSources {
                                     case AirbyteSyncDirection.Source => SyncDirection.Source
                                     case AirbyteSyncDirection.Destination => SyncDirection.Destination
                                   },
-                                  parameterGroups = List(ParameterGroup(Some(s"${ai.syncDirection}-${ai.name}".toLowerCase), ai.properties.map(toParameter): _*))
+                                  parameterGroups = List(ParameterGroup(s"${ai.syncDirection}-${ai.name}".toLowerCase, ai.properties.map(toParameter): _*))
                                 )
                               }
         sorted             = dataSourceTypes.sortBy(_.name)
