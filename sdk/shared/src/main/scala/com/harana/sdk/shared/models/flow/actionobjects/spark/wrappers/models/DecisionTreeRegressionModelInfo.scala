@@ -11,7 +11,7 @@ trait DecisionTreeRegressionModelInfo
 
   val id = "324FFAB6-4EB0-4B14-8106-99C294400C3C"
 
-  override val parameterGroups = List(ParameterGroup(None, featuresColumnParameter, predictionColumnParameter))
+  override val parameterGroups = List(ParameterGroup("", featuresColumnParameter, predictionColumnParameter))
 
 }
 

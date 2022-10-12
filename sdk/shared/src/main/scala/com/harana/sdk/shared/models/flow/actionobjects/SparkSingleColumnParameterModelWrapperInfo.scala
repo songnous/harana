@@ -24,6 +24,6 @@ trait SparkSingleColumnParameterModelWrapperInfo extends SparkModelWrapperInfo
       else
         List(inputColumnParameter, singleInPlaceChoiceParameter) ++ specificParameters
 
-    List(ParameterGroup(None, parameters: _*))
+    List(ParameterGroup("", parameters: _*))
   }
 }

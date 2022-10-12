@@ -5,17 +5,18 @@ import com.harana.sdk.shared.models.flow.parameters.selections.{IndexSingleColum
 import com.harana.sdk.shared.models.flow.parameters._
 
 trait SortTransformerInfo extends TransformerInfo {
-
   val id = "C40584ED-56CB-4A8C-92E8-56105C76FF92"
 
   val columnsParameter = ParametersSequence[SortColumnParameter]("sort columns")
   def getColumns = $(columnsParameter)
   def setColumns(sortColumnParameters: Seq[SortColumnParameter]): this.type = set(columnsParameter, sortColumnParameters)
-  override val parameterGroups = List(ParameterGroup(None, columnsParameter))
+  override val parameterGroups = List(ParameterGroup("", columnsParameter))
 
 }
 
-object SortTransformerInfo extends SortTransformerInfo
+object SortTransformerInfo extends SortTransformerInfo {
+  def apply() = new SortTransformerInfo {}
+}
 
 class SortColumnParameter extends Parameters {
 
@@ -28,7 +29,7 @@ class SortColumnParameter extends Parameters {
   def isDescending: Boolean = getDescending
   def setDescending(desc: Boolean): this.type = set(descendingParameter, desc)
 
-  override val parameterGroups = List(ParameterGroup(None, columnNameParameter, descendingParameter))
+  override val parameterGroups = List(ParameterGroup("", columnNameParameter, descendingParameter))
 }
 
 object SortColumnParameter {

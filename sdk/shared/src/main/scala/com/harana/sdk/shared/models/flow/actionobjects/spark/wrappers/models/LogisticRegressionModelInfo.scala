@@ -8,7 +8,7 @@ trait LogisticRegressionModelInfo extends ActionObjectInfo with ProbabilisticCla
 
   val id = "FC963E60-2DBA-4504-B6C7-27B53F7825F0"
 
-  override val parameterGroups = List(ParameterGroup(None,
+  override val parameterGroups = List(ParameterGroup("",
     featuresColumnParameter,
     probabilityColumnParameter,
     rawPredictionColumnParameter,

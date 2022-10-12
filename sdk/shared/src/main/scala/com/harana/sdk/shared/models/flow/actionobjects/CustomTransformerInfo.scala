@@ -6,7 +6,7 @@ case class CustomTransformerInfo(publicParametersWithValues: Seq[ParameterWithVa
 
   val id = "A7D6EF00-5B5F-44AA-8F49-ECA974703E8E"
 
-  override val parameterGroups = List(ParameterGroup(None, publicParametersWithValues.map(_.param): _*))
+  override val parameterGroups = List(ParameterGroup("", publicParametersWithValues.map(_.param): _*))
 
   publicParametersWithValues.foreach {
     case ParameterWithValues(param, defaultValue, setValue) =>

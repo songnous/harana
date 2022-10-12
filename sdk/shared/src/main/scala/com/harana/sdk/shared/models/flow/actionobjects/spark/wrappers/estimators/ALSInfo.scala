@@ -28,7 +28,7 @@ trait ALSInfo
   val ratingColumnParameter = SingleColumnSelectorParameter("rating-column", default = Some(NameSingleColumnSelection("rating")), portIndex = 0)
   def getRatingColumn = $(ratingColumnParameter)
 
-  override val parameterGroups = List(ParameterGroup(None,
+  override val parameterGroups = List(ParameterGroup("",
     alphaParameter,
     checkpointIntervalParameter,
     implicitPrefsParameter,

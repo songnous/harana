@@ -10,6 +10,6 @@ trait CustomCodeTransformerInfo extends TransformerInfo {
   val codeParameter: CodeSnippetParameter
   def getCodeParameter = $(codeParameter)
   def setCodeParameter(value: String): this.type = set(codeParameter, value)
-  override val parameterGroups = List(ParameterGroup(None, codeParameter))
+  override val parameterGroups = List(ParameterGroup("", codeParameter))
 
 }

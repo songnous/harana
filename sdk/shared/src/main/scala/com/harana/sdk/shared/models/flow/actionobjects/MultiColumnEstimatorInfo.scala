@@ -20,7 +20,7 @@ trait MultiColumnEstimatorInfo extends EstimatorInfo with HasSpecificParameters 
       if (specificParameters == null) List(singleOrMultiChoiceParameter)
       else specificParameters.toList :+ singleOrMultiChoiceParameter
 
-    List(ParameterGroup(None, parameters: _*))
+    List(ParameterGroup("", parameters: _*))
   }
 
   def setSingleColumn(inputColumnName: String, outputColumnName: String) = {

@@ -26,7 +26,7 @@ object OptionalWeightColumnChoice {
     def getWeightColumn = $(weightColumnParameter)
     def setWeightColumn(value: SingleColumnSelection): this.type = set(weightColumnParameter -> value)
 
-    override val parameterGroups = List(ParameterGroup(None, weightColumnParameter))
+    override val parameterGroups = List(ParameterGroup("", weightColumnParameter))
   }
 
   case class WeightColumnNoOption() extends WeightColumnOption {

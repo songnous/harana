@@ -25,7 +25,7 @@ trait KMeansInfo
   val initModeParameter = ChoiceParameter[KMeansInitMode]("init-mode", default = Some(ParallelInitMode()))
   val initStepsParameter = IntParameter("init-steps", default = Some(5), validator = RangeValidator(begin = 1, end = Int.MaxValue, step = Some(1)))
 
-  override val parameterGroups = List(ParameterGroup(None,
+  override val parameterGroups = List(ParameterGroup("",
     kParameter,
     maxIterationsParameter,
     seedParameter,

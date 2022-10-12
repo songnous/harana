@@ -2,7 +2,8 @@ package com.harana.sdk.shared.models.flow.actionobjects
 
 import com.harana.sdk.shared.models.flow.actionobjects.descriptions.HasInferenceResult
 import com.harana.sdk.shared.models.flow.actionobjects.report.Report
-import com.harana.sdk.shared.models.flow.{Catalog, utils}
+import com.harana.sdk.shared.models.flow.catalog.Catalog
+import com.harana.sdk.shared.models.flow.utils
 import io.circe.{Decoder, Encoder, HCursor, Json}
 
 trait ActionObjectInfo extends HasInferenceResult {

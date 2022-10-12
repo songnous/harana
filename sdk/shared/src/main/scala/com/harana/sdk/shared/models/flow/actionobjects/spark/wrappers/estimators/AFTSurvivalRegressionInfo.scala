@@ -21,7 +21,7 @@ trait AFTSurvivalRegressionInfo
 
   val censorColumnParameter = SingleColumnSelectorParameter("censor-column", default = Some(NameSingleColumnSelection("censor")), portIndex = 0)
 
-  override val parameterGroups = List(ParameterGroup(None,
+  override val parameterGroups = List(ParameterGroup("",
     fitInterceptParameter,
     maxIterationsParameter,
     toleranceParameter,

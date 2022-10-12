@@ -16,7 +16,7 @@ trait GBTClassifierInfo extends EstimatorInfo with GBTParameters with HasClassif
 
   val lossTypeParameter = ChoiceParameter[LossType]("loss-function", default = Some(Logistic()))
 
-  override val parameterGroups = List(ParameterGroup(None,
+  override val parameterGroups = List(ParameterGroup("",
     impurityParameter,
     lossTypeParameter,
     maxBinsParameter,

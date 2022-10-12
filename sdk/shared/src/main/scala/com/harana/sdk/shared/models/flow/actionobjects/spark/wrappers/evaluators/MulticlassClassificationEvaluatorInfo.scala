@@ -18,7 +18,7 @@ trait MulticlassClassificationEvaluatorInfo
   val metricNameParameter = ChoiceParameter[Metric]("multiclass-metric", default = Some(F1()))
   def getMetricName = $(metricNameParameter).name
 
-  override val parameterGroups = List(ParameterGroup(None, metricNameParameter, predictionColumnParameter, labelColumnParameter))
+  override val parameterGroups = List(ParameterGroup("", metricNameParameter, predictionColumnParameter, labelColumnParameter))
 }
 
 object MulticlassClassificationEvaluatorInfo extends MulticlassClassificationEvaluatorInfo {

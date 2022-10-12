@@ -15,7 +15,7 @@ trait IsotonicRegressionInfo
 
   val isotonicParameter = BooleanParameter("isotonic", default = Some(true))
 
-  override val parameterGroups = List(ParameterGroup(None,
+  override val parameterGroups = List(ParameterGroup("",
     isotonicParameter,
     optionalWeightColumnParameter,
     featureIndexParameter,

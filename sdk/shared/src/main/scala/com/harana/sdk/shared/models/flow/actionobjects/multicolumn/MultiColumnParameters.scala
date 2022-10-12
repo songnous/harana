@@ -28,7 +28,7 @@ object MultiColumnParameters {
       def getColumnsPrefix = $(outputColumnsPrefixParameter)
       def setColumnsPrefix(prefix: String): this.type = set(outputColumnsPrefixParameter, prefix)
 
-      override val parameterGroups = List(ParameterGroup(None, outputColumnsPrefixParameter))
+      override val parameterGroups = List(ParameterGroup("", outputColumnsPrefixParameter))
     }
   }
 
@@ -49,7 +49,7 @@ object MultiColumnParameters {
       def getInPlaceChoice = $(singleInPlaceChoiceParameter)
       def setInPlaceChoice(value: SingleColumnInPlaceChoice): this.type = set(singleInPlaceChoiceParameter, value)
 
-      override val parameterGroups = List(ParameterGroup(None, inputColumnParameter, singleInPlaceChoiceParameter))
+      override val parameterGroups = List(ParameterGroup("", inputColumnParameter, singleInPlaceChoiceParameter))
     }
 
     case class MultiColumnChoice() extends SingleOrMultiColumnChoice {
@@ -64,7 +64,7 @@ object MultiColumnParameters {
       def getInPlaceChoice = $(inPlaceChoiceParameter)
       def setInPlaceChoice(value: MultiColumnInPlaceChoice): this.type = set(inPlaceChoiceParameter, value)
 
-      override val parameterGroups = List(ParameterGroup(None, inputColumnsParameter, inPlaceChoiceParameter))
+      override val parameterGroups = List(ParameterGroup("", inputColumnsParameter, inPlaceChoiceParameter))
     }
 
     object MultiColumnChoice {

@@ -8,7 +8,7 @@ trait MultilayerPerceptronClassifierModelInfo extends ActionObjectInfo with Pred
 
   val id = "FE2E65C3-CF0A-411C-926C-9A58A86B058E"
 
-  override val parameterGroups = List(ParameterGroup(None,
+  override val parameterGroups = List(ParameterGroup("",
     featuresColumnParameter,
     predictionColumnParameter
   ))

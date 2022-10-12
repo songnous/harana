@@ -12,7 +12,7 @@ trait AFTSurvivalRegressionModelInfo
 
   val id = "E8112371-B8BB-4EF1-A4A5-E02073B00531"
 
-  override val parameterGroups = List(ParameterGroup(None,
+  override val parameterGroups = List(ParameterGroup("",
     featuresColumnParameter,
     predictionColumnParameter,
     quantileProbabilitiesParameter,

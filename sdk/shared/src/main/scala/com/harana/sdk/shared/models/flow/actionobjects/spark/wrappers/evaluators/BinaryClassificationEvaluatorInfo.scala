@@ -16,7 +16,7 @@ trait BinaryClassificationEvaluatorInfo extends EvaluatorInfo with HasLabelColum
   def getMetricName = $(metricNameParameter)
   def setMetricName(value: Metric): this.type = set(metricNameParameter, value)
 
-  override val parameterGroups = List(ParameterGroup(None, metricNameParameter, labelColumnParameter))
+  override val parameterGroups = List(ParameterGroup("", metricNameParameter, labelColumnParameter))
 
   def isLargerBetter: Boolean = true
 }
@@ -52,26 +52,26 @@ object BinaryClassificationEvaluatorInfo extends BinaryClassificationEvaluatorIn
 
   case class AreaUnderROC() extends Metric(areaUnderROC) with RawPredictionMetric {
     val name = areaUnderROC
-    override val parameterGroups = List(ParameterGroup(None, rawPredictionColumnParameter))
+    override val parameterGroups = List(ParameterGroup("", rawPredictionColumnParameter))
   }
 
   case class AreaUnderPR() extends Metric(areaUnderPR) with RawPredictionMetric {
     val name = areaUnderPR
-    override val parameterGroups = List(ParameterGroup(None, rawPredictionColumnParameter))
+    override val parameterGroups = List(ParameterGroup("", rawPredictionColumnParameter))
   }
 
   case class Precision() extends Metric(precision) with PredictionMetric {
     val name = precision
-    override val parameterGroups = List(ParameterGroup(None, predictionColumnParameter))
+    override val parameterGroups = List(ParameterGroup("", predictionColumnParameter))
   }
 
   case class Recall() extends Metric(recall) with PredictionMetric {
     val name = recall
-    override val parameterGroups = List(ParameterGroup(None, predictionColumnParameter))
+    override val parameterGroups = List(ParameterGroup("", predictionColumnParameter))
   }
 
   case class F1Score() extends Metric(f1Score) with PredictionMetric {
     val name = f1Score
-    override val parameterGroups = List(ParameterGroup(None, predictionColumnParameter))
+    override val parameterGroups = List(ParameterGroup("", predictionColumnParameter))
   }
 }

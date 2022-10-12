@@ -20,7 +20,7 @@ trait MultilayerPerceptronClassifierInfo
 
   val layersParameter = IntArrayParameter("layers", default = Some(Array(1, 1)), validator = ComplexArrayValidator(RangeValidator.positiveIntegers, ArrayLengthValidator.withAtLeast(2)))
 
-  override val parameterGroups = List(ParameterGroup(None,
+  override val parameterGroups = List(ParameterGroup("",
     layersParameter,
     maxIterationsParameter,
     seedParameter,

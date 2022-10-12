@@ -23,7 +23,7 @@ trait DatetimeDecomposerInfo extends TransformerInfo {
   def getTimestampPrefix = $(timestampPrefixParameter)
   def setTimestampPrefix(timestampPrefix: String): this.type = set(timestampPrefixParameter, timestampPrefix)
 
-  override val parameterGroups = List(ParameterGroup(None,
+  override val parameterGroups = List(ParameterGroup("",
     timestampColumnParameter,
     timestampPartsParameter,
     timestampPrefixParameter

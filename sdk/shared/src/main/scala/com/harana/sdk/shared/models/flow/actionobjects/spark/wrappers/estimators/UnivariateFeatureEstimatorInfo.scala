@@ -18,7 +18,7 @@ trait UnivariateFeatureEstimatorInfo
   val numTopFeaturesParameter = IntParameter("num-top-features", default = Some(50), validator = RangeValidator(begin = 1, end = Int.MaxValue, step = Some(1)))
   def setNumTopFeatures(value: Int): this.type = set(numTopFeaturesParameter -> value)
 
-  override val parameterGroups = List(ParameterGroup(None,
+  override val parameterGroups = List(ParameterGroup("",
     numTopFeaturesParameter,
     featuresColumnParameter,
     outputColumnParameter,

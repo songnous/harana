@@ -21,7 +21,7 @@ trait GBTRegressionInfo
 
   val lossTypeParameter = ChoiceParameter[LossType]("loss-function", default = Some(Squared()))
 
-  override val parameterGroups = List(ParameterGroup(None,
+  override val parameterGroups = List(ParameterGroup("",
     impurityParameter,
     lossTypeParameter,
     maxBinsParameter,

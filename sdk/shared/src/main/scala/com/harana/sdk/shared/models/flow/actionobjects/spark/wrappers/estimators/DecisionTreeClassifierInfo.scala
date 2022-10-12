@@ -14,7 +14,7 @@ trait DecisionTreeClassifierInfo
 
   val id = "2F39BEFD-FC2B-4034-B13F-D308BB0C8078"
 
-  override val parameterGroups = List(ParameterGroup(None,
+  override val parameterGroups = List(ParameterGroup("",
     maxDepthParameter,
     maxBinsParameter,
     minInstancesPerNodeParameter,

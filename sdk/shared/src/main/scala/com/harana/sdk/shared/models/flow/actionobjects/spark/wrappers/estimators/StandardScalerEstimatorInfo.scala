@@ -15,5 +15,5 @@ trait StandardScalerEstimatorInfo extends EstimatorInfo with Parameters {
 }
 
 object StandardScalerEstimatorInfo extends StandardScalerEstimatorInfo {
-  override val parameterGroups = List(ParameterGroup(None, specificParameters.toList: _*))
+  override val parameterGroups = List(ParameterGroup("", specificParameters.toList: _*))
 }

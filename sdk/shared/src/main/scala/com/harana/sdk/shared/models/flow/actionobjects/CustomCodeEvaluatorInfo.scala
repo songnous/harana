@@ -15,6 +15,6 @@ trait CustomCodeEvaluatorInfo extends EvaluatorInfo with HasIsLargerBetterParame
 
   def isLargerBetter = $(isLargerBetterParameter)
 
-  lazy override val parameterGroups = List(ParameterGroup(None, metricNameParameter, codeParameter, isLargerBetterParameter))
+  lazy override val parameterGroups = List(ParameterGroup("", metricNameParameter, codeParameter, isLargerBetterParameter))
   
 }

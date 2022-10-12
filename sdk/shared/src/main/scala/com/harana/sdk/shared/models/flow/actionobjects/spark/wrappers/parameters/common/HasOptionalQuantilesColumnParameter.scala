@@ -26,7 +26,7 @@ object OptionalQuantilesColumnChoice {
   case class QuantilesColumnYesOption() extends QuantilesColumnOption {
     val name = "yes"
     val quantilesColumnParameter = SingleColumnCreatorParameter("quantiles-column", default = Some("quantiles"))
-    override val parameterGroups = List(ParameterGroup(None, quantilesColumnParameter))
+    override val parameterGroups = List(ParameterGroup("", quantilesColumnParameter))
   }
 
   case class QuantilesColumnNoOption() extends QuantilesColumnOption {

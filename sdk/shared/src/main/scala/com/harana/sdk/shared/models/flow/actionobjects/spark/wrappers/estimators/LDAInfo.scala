@@ -25,7 +25,7 @@ trait LDAInfo
   val subsamplingRateParameter = DoubleParameter("subsampling-rate", default = Some(0.05), validator = RangeValidator(0.0, 1.0, beginIncluded = false))
   val topicDistributionColumnParameter = SingleColumnCreatorParameter("topic-distribution-column", default = Some("topicDistribution"))
 
-  override val parameterGroups = List(ParameterGroup(None,
+  override val parameterGroups = List(ParameterGroup("",
     checkpointIntervalParameter,
     kParameter,
     maxIterationsParameter,
@@ -60,7 +60,7 @@ object LDAInfo extends LDAInfo {
     def createTopicConcentrationParam(): TopicConcentrationParameter
 
     val choiceOrder: List[ChoiceOption] = List(classOf[OnlineLDAOptimizer], classOf[ExpectationMaximizationLDAOptimizer])
-    override val parameterGroups = List(ParameterGroup(None, docConcentrationParameter, topicConcentrationParameter))
+    override val parameterGroups = List(ParameterGroup("", docConcentrationParameter, topicConcentrationParameter))
   }
 
   case class OnlineLDAOptimizer() extends LDAOptimizer {

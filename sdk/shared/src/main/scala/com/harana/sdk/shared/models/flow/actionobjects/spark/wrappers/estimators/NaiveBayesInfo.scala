@@ -20,7 +20,7 @@ trait NaiveBayesInfo
   val smoothingParameter = DoubleParameter("smoothing", default = Some(1.0), validator = RangeValidator(begin = 0.0, end = Double.MaxValue))
   val modelTypeParameter = ChoiceParameter[ModelType]("model-type", default = Some(Multinomial()))
 
-  override val parameterGroups = List(ParameterGroup(None,
+  override val parameterGroups = List(ParameterGroup("",
     smoothingParameter,
     modelTypeParameter,
     labelColumnParameter,

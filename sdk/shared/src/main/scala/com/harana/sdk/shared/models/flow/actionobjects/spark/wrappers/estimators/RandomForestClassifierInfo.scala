@@ -24,7 +24,7 @@ trait RandomForestClassifierInfo
 
   val id = "F237228D-0C36-454B-A562-04939D65B1FB"
 
-  override val parameterGroups = List(ParameterGroup(None,
+  override val parameterGroups = List(ParameterGroup("",
     maxDepthParameter,
     maxBinsParameter,
     minInstancesPerNodeParameter,

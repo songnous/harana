@@ -15,7 +15,7 @@ abstract class SparkSingleColumnParameterEstimatorWrapperInfo
       if (specificParameters == null) List(inputColumnParameter, singleInPlaceChoiceParameter)
       else List(inputColumnParameter, singleInPlaceChoiceParameter) ++ specificParameters
 
-    List(ParameterGroup(None, parameters: _*))
+    List(ParameterGroup("", parameters: _*))
   }
 
   def setNoInPlace(outputColumn: String): this.type = setSingleInPlaceChoice(NoInPlaceChoice().setOutputColumn(outputColumn))

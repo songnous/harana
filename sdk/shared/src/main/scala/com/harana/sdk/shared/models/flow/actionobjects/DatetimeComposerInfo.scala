@@ -19,7 +19,7 @@ trait DatetimeComposerInfo extends TransformerInfo {
   def outputColumn = $(outputColumnParameter)
   def setOutputColumn(outputColumn: String): this.type = set(outputColumnParameter, outputColumn)
 
-  override val parameterGroups = List(ParameterGroup(None, timestampColumnsParameter, outputColumnParameter))
+  override val parameterGroups = List(ParameterGroup("", timestampColumnsParameter, outputColumnParameter))
 }
 
 object DatetimeComposerInfo extends DatetimeComposerInfo {
@@ -40,7 +40,7 @@ object DatetimeComposerInfo extends DatetimeComposerInfo {
     def setTimestampColumn(timestampColumn: SingleColumnSelection): this.type = set(timestampColumnSelectorParameter, timestampColumn)
 
     val choiceOrder = DatetimeComposerInfo.choiceOrder
-    override val parameterGroups = List(ParameterGroup(None, timestampColumnSelectorParameter))
+    override val parameterGroups = List(ParameterGroup("", timestampColumnSelectorParameter))
   }
 
   object TimestampPartColumnChoice {

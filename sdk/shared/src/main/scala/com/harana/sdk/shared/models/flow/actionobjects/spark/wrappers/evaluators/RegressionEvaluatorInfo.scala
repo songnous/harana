@@ -17,7 +17,7 @@ trait RegressionEvaluatorInfo
   val metricNameParameter = ChoiceParameter[Metric]("regression-metric", default = Some(Rmse()))
   def getMetricName = $(metricNameParameter).name
 
-  override val parameterGroups = List(ParameterGroup(None, metricNameParameter, predictionColumnParameter, labelColumnParameter))
+  override val parameterGroups = List(ParameterGroup("", metricNameParameter, predictionColumnParameter, labelColumnParameter))
 }
 
 object RegressionEvaluatorInfo extends RegressionEvaluatorInfo {

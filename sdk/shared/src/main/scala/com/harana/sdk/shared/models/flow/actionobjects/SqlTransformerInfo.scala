@@ -14,7 +14,7 @@ trait SqlTransformerInfo extends TransformerInfo {
   def getExpression = $(expressionParameter)
   def setExpression(value: String): this.type = set(expressionParameter, value)
 
-  override val parameterGroups = List(ParameterGroup(None, dataFrameIdParameter, expressionParameter))
+  override val parameterGroups = List(ParameterGroup("", dataFrameIdParameter, expressionParameter))
 
 }
 

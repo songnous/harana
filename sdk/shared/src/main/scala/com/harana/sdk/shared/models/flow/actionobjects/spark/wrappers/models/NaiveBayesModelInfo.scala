@@ -8,7 +8,7 @@ trait NaiveBayesModelInfo extends ActionObjectInfo with ProbabilisticClassifierP
 
   val id = "3ACD4481-B305-45BD-9A63-5111D6CC457D"
 
-  override val parameterGroups = List(ParameterGroup(None,
+  override val parameterGroups = List(ParameterGroup("",
     featuresColumnParameter,
     probabilityColumnParameter,
     rawPredictionColumnParameter,

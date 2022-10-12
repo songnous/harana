@@ -24,7 +24,7 @@ object SingleColumnParameters {
       def getOutputColumn = $(outputColumnParameter)
       def setOutputColumn(columnName: String): this.type = set(outputColumnParameter, columnName)
 
-      override val parameterGroups = List(ParameterGroup(None, outputColumnParameter))
+      override val parameterGroups = List(ParameterGroup("", outputColumnParameter))
     }
   }
 }

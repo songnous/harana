@@ -19,7 +19,7 @@ trait MultiColumnTransformerInfo extends TransformerInfo with HasSpecificParamet
       if (specificParameters == null) List(singleOrMultiChoiceParameter)
       else specificParameters.toList :+ singleOrMultiChoiceParameter
 
-    List(ParameterGroup(None, parameters: _*))
+    List(ParameterGroup("", parameters: _*))
   }
 
   def setSingleColumn(inputColumnName: String, outputColumnName: String): this.type = {

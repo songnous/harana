@@ -12,7 +12,7 @@ trait ALSModelInfo
 
   val id = "F098E949-BAE3-4C97-985F-A7B76A3C480E"
 
-  override val parameterGroups = List(ParameterGroup(None,
+  override val parameterGroups = List(ParameterGroup("",
     itemColumnParameter,
     predictionColumnParameter,
     userColumnParameter
