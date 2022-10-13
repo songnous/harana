@@ -124,14 +124,13 @@ object Settings {
     scalaJSUseMainModuleInitializer           := true,
     scalaJSLinkerConfig                       ~= { _.withModuleKind(ModuleKind.CommonJSModule) },
     useYarn                                   := true,
-    webpack / version                         := "4.46.0",
+    webpack / version                         := "5.74.0",
     startWebpackDevServer / version           := "3.1.4",
     fastOptJS / webpackDevServerExtraArgs     := Seq("--inline", "--hot"),
     webpackEmitSourceMaps                     := false,
-    fastOptJS / webpackBundlingMode           := BundlingMode.LibraryOnly(),
-    fullOptJS / webpackBundlingMode           := BundlingMode.Application,
+    fastOptJS / webpackBundlingMode           := BundlingMode.LibraryAndApplication(),
     fastOptJS / webpackConfigFile             := Some(baseDirectory.value / "webpack-dev.js"),
-    fullOptJS / webpackConfigFile             := Some(baseDirectory.value / "webpack-prod.js"),
+    fullOptJS / webpackConfigFile             := Some(baseDirectory.value / "webpack-prod.js")
   )
 
   val jvm = Seq(

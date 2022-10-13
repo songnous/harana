@@ -167,21 +167,25 @@ object Library {
     "io.netty.incubator" % "netty-incubator-transport-native-io_uring" % "0.0.14.Final" classifier "linux-x86_64"
   ))
 
-  val npmDev = Def.setting(Map(
+  val npmResolutions = Def.setting(Map(
+    "source-map" -> "0.7.3"
+  ))
+
+  val npmDevDependencies = Def.setting(Seq(
     "awesome-typescript-loader" -> "5.2.1",
     "electron-builder" -> "22.10.5",
     "hard-source-webpack-plugin" -> "0.13.1",
     "html-webpack-plugin" -> "4.5.2",
     "static-site-generator-webpack-plugin" -> "3.4.2",
     "typescript" -> "4.2.3",
-    "webpack-merge" -> "5.7.3"
-  ))
-
-  val npmResolutions = Def.setting(Map(
-    "source-map" -> "0.7.3"
+    "webpack" -> "5.74.0",
+    "webpack-merge" -> "5.8.0"
   ))
 
   val npmDependencies = Def.setting(Seq(
+    "react" -> "16.14.0",
+    "react-color" -> "2.17.0",
+    "react-dom" -> "16.14.0",
     "@data-ui/sparkline" -> "0.0.84",
     "@nivo/bar" -> "0.79.1",
     "@nivo/calendar" -> "0.79.1",
@@ -193,17 +197,14 @@ object Library {
     "@visx/shape" -> "2.4.0",
     "closest" -> "0.0.1",
     "copy-webpack-plugin" -> "5.1.0",
-    "css-loader" -> "3.3.0",
-    "file-loader" -> "5.0.2",
-    "filepond" -> "4.21.1",
+    "css-loader" -> "6.7.1",
+    "file-loader" -> "6.2.0",
+    "filepond" -> "4.30.4",
     "hard-source-webpack-plugin" -> "0.13.1",
     "history" -> "4.10.1",
     "prop-types" -> "15.7.2",
-    "react" -> "16.14.0",
-    "react-color" -> "2.17.0",
-    "react-dom" -> "16.14.0",
     "react-filepond" -> "7.1.0",
-    "react-flow-renderer" -> "8.0.0",
+    "react-flow-renderer" -> "10.3.17",
     "react-helmet" -> "6.1.0",
     "react-intl" -> "2.9.0",
     "react-lazylog" -> "4.5.3",
@@ -216,9 +217,9 @@ object Library {
     "react-split-pane" -> "0.1.89",
     "react-syntax-highlighter" -> "15.2.1",
     "sockjs-client" -> "1.4.0",
-    "style-loader" -> "1.0.1",
-    "throttle-debounce" -> "2.2.1",
-    "url-loader" -> "3.0.0"
+    "style-loader" -> "3.3.1",
+    "throttle-debounce" -> "5.0.0",
+    "url-loader" -> "4.1.1"
   ))
 
   val okhttp = Def.setting(Seq(

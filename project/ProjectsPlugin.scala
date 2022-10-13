@@ -44,17 +44,18 @@ object ProjectsPlugin extends AutoPlugin {
           githubRepository := id,
           Library.compilerPlugins,
           Settings.common,
-          resolvers := Settings.resolvers,
+          resolvers := Settings.resolvers
         )
         .jsSettings(
           name := id,
           Library.compilerPlugins,
-          fastCompile := { postCompileJS(baseDirectory).dependsOn(Compile / fastOptJS / webpack).dependsOn(preCompileJS(baseDirectory)) }.value,
+          //fastCompile := { postCompileJS(baseDirectory).dependsOn(Compile / fastOptJS / webpack).dependsOn(preCompileJS(baseDirectory)) }.value,
+          fastCompile := { postCompileJS(baseDirectory).dependsOn(Compile / fastOptJS / webpack) }.value,
           fullCompile := { postCompileJS(baseDirectory).dependsOn(Compile / fullOptJS / webpack).dependsOn(preCompileJS(baseDirectory)) }.value,
           scalaJSUseMainModuleInitializer := false,
           Settings.common,
           Settings.js,
-          resolvers := Settings.resolvers,
+          resolvers := Settings.resolvers
         )
         .jvmSettings(
           name := id,
@@ -94,17 +95,16 @@ object ProjectsPlugin extends AutoPlugin {
       baseDirectory.map { base =>
         println("Checking if Webpack etc needs to be installed.")
         val nodeModulesPath = s"${base.absolutePath}/target/scala-2.13/scalajs-bundler/main/node_modules"
-        new File(nodeModulesPath).mkdir()
-
+        if (!new File(nodeModulesPath).exists() && !new File(nodeModulesPath).mkdirs())
+          println(s"Failed to create node modules directory: $nodeModulesPath")
         val nodeModules = new File(nodeModulesPath).list().toList
-        if (!nodeModules.contains("webpack")) s"npm i -D ml-matrix webpack webpack-cli webpack-merge --prefix $nodeModulesPath/.." !
+        if (!nodeModules.contains("webpack")) s"npm i -D webpack webpack-cli webpack-merge --prefix $nodeModulesPath/.." !
       }
     }
 
     def postCompileJS(baseDirectory: SettingKey[File]) =
       baseDirectory.map { base =>
         println("Copying compiled Javascript to src directory.")
-
         val buildPath = s"${base.absolutePath}/target/scala-2.13/scalajs-bundler/main"
         new File(buildPath).listFiles((dir, name) => name.toLowerCase.contains("opt"))
           .foreach(file => Files.copy(file.toPath, new File(base, s"../jvm/src/main/resources/public/js/${file.getName}").toPath, StandardCopyOption.REPLACE_EXISTING))

@@ -1,7 +1,7 @@
 // scalastyle:off
 
 import ProjectsPlugin.autoImport.crossProject
-import scalajsbundler.sbtplugin.ScalaJSBundlerPlugin.autoImport.{npmDependencies, npmResolutions}
+import scalajsbundler.sbtplugin.ScalaJSBundlerPlugin.autoImport.npmDependencies
 
 /****************************************************************************************************************
  * Spark Patching                                                                                               *
@@ -215,8 +215,10 @@ val designer = crossProject("designer")
       Library.opencsv.value
   )
   .jsSettings(
-    libraryDependencies ++=
-      Library.scalajs.value
+    Compile / npmDevDependencies ++= Library.npmDevDependencies.value,
+    Compile / npmDependencies ++= Library.npmDependencies.value,
+    Compile / npmResolutions ++= Library.npmResolutions.value,
+    libraryDependencies ++= Library.scalajs.value
   )
 
 val designerJVM = designer.jvm dependsOn (idJwtVM, modulesJVM, modulesCore, sdkJVM)
