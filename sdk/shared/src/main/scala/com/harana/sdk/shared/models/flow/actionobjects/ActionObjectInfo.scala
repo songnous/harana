@@ -19,7 +19,7 @@ object ActionObjectInfo {
   implicit val decoder: Decoder[ActionObjectInfo] = (c: HCursor) => for {
     id <- c.as[String]
   } yield {
-    Catalog.objectsMap(id)
+    Catalog.objectsByIdMap(id)()
   }
 
 }

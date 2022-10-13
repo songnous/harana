@@ -14,11 +14,19 @@ package object shoelace {
   val partAttr = CustomAttribute[String]("part")
   val slotAttr = CustomAttribute[String]("slot")
   val srcAttr = CustomAttribute[String]("src")
+  val keyAttr = CustomAttribute[String]("key")
 
   type Ref[T <: js.Any] = KeyAndRefAddingStage[T]
 
   def icon(slot: String, parentClass: Option[String], name: (String, String)) =
-    CustomTag("sl-icon")(partAttr := "icon", className := s"${parentClass.getOrElse("default")}-$slot-icon", libraryAttr := name._1, nameAttr := name._2, slotAttr := slot)
+    CustomTag("sl-icon")(
+      partAttr := "icon",
+      className := s"${parentClass.getOrElse("default")}-$slot-icon",
+      libraryAttr := name._1,
+      nameAttr := name._2,
+      slotAttr := slot,
+      keyAttr := s"${name._1}-${name._2}"
+    )
 
   def add[A](listBuffer: ListBuffer[TagMod[_]], opt: Option[A], name: String) =
     if (opt.isDefined)

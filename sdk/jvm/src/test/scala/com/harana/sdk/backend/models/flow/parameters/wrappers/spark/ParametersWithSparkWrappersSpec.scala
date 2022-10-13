@@ -66,7 +66,7 @@ object ParametersWithSparkWrappersSpec {
     val choiceWithParametersInValues = new ChoiceParameter[ChoiceWithWrappers]("choice")
     val notWrappedParameter = BooleanParameter("boolean-parameter-name")
 
-    override val parameterGroups = List(ParameterGroup(None, paramA, paramB, choiceWithParametersInValues, notWrappedParameter))
+    override val parameterGroups = List(ParameterGroup("", paramA, paramB, choiceWithParametersInValues, notWrappedParameter))
 
     def setParamA(v: String): this.type = set(paramA, v)
     def setParamB(v: Double) = set(paramB, v)
@@ -81,7 +81,7 @@ object ParametersWithSparkWrappersSpec {
     val name = "one param"
     val paramC = StringParameter("paramC")
     def setParamC(v: String): this.type = set(paramC, v)
-    override val parameterGroups = List(ParameterGroup(None, paramC))
+    override val parameterGroups = List(ParameterGroup("", paramC))
   }
 
   case class EmptyChoiceWithWrappers() extends ChoiceWithWrappers {

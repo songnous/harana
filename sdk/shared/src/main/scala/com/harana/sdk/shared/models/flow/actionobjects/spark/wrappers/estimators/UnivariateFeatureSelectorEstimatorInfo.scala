@@ -7,7 +7,7 @@ import com.harana.sdk.shared.models.flow.parameters.{IntParameter, ParameterGrou
 
 import scala.language.reflectiveCalls
 
-trait UnivariateFeatureEstimatorInfo
+trait UnivariateFeatureSelectorEstimatorInfo
   extends EstimatorInfo
     with HasFeaturesColumnParameter
     with HasOutputColumnParameter
@@ -25,5 +25,3 @@ trait UnivariateFeatureEstimatorInfo
     labelColumnParameter
   ))
 }
-
-object UnivariateFeatureEstimatorInfo extends UnivariateFeatureEstimatorInfo

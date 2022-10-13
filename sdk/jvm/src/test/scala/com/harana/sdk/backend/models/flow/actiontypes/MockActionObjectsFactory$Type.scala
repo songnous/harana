@@ -61,7 +61,7 @@ object MockActionObjectsFactory$Type extends UnitSpec with TestSupport {
     val id = "test"
 
     val paramA = NumericParameter("b", default = Some(DefaultForA), validator = RangeValidator(0.0, Double.MaxValue))
-    override val parameterGroups = List(ParameterGroup(None, paramA))
+    override val parameterGroups = List(ParameterGroup("", paramA))
 
     override def report(extended: Boolean = true) = ???
 
@@ -94,7 +94,7 @@ object MockActionObjectsFactory$Type extends UnitSpec with TestSupport {
     val id = "test"
 
     val paramA = NumericParameter("b", default = Some(DefaultForA), validator = RangeValidator(0.0, Double.MaxValue))
-    override val parameterGroups = List(ParameterGroup(None, paramA))
+    override val parameterGroups = List(ParameterGroup("", paramA))
 
     override def report(extended: Boolean = true) = ???
 

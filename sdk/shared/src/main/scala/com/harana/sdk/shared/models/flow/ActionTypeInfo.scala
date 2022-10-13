@@ -3,6 +3,7 @@ package com.harana.sdk.shared.models.flow
 import com.harana.sdk.shared.models.flow.ActionTypeInfo.ReportParameter.{Extended, Metadata}
 import com.harana.sdk.shared.models.flow.ActionTypeInfo.{ReportParameter, ReportType}
 import com.harana.sdk.shared.models.flow.Gravity.{GravitateLeft, GravitateRight}
+import com.harana.sdk.shared.models.flow.catalog.Catalog
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory
 import com.harana.sdk.shared.models.flow.graph.GraphAction
 import com.harana.sdk.shared.models.flow.parameters.choice.Choice.ChoiceOption
@@ -73,7 +74,7 @@ object ActionTypeInfo {
   val Id = utils.Id
 
   implicit def decoder[T <: ActionTypeInfo]: Decoder[T] =
-    Decoder.decodeString.emap { id => Catalog.actionsMap.get(id).toRight("No ActionTypeInfo found with id").map(_.asInstanceOf[T]) }
+    Decoder.decodeString.emap { id => Catalog.actionsByIdMap.get(id).toRight("No ActionTypeInfo found with id").map(_.asInstanceOf[T]) }
 
   implicit def encoder[T <: ActionTypeInfo]: Encoder[T] =
     Encoder.encodeString.contramap[T](_.id.toString)

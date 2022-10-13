@@ -62,10 +62,8 @@ import slinky.web.html._
       div(className := "panel panel-flat")(
         div(className := "table-responsive")(
           table(className := "table text-nowrap preview-table")(
-            preview.headers.map(th(_)),
-            preview.rows.map(r =>
-              tr(r.map(td(_)))
-            )
+            thead(preview.headers.map(th(_))),
+            tbody(preview.rows.map(r => tr(r.map(td(_)))))
           )
         )
       )

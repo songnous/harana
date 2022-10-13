@@ -8,4 +8,5 @@ class RTransformer extends CustomCodeTransformer with RTransformerInfo {
 
   def isValid(context: ExecutionContext, code: String) = context.customCodeExecutor.isRValid(code)
   def runCode(context: ExecutionContext, code: String) = context.customCodeExecutor.runR(code)
+
 }

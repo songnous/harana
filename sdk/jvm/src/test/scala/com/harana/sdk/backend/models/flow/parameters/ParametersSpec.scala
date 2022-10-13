@@ -259,7 +259,7 @@ object ParametersSpec extends UnitSpec {
   case class WithParameters() extends Parameters {
     val param1 = MockParameter("name-of-param1", default = Some(defaultForParam1))
     val param2 = MockParameter(nameOfParam2)
-    override val parameterGroups = List(ParameterGroup(None, param2, param1))
+    override val parameterGroups = List(ParameterGroup("", param2, param1))
 
     def set1(v: Int) = set(param1 -> v)
     def set2(v: Int) = set(param2 -> v)
@@ -277,7 +277,7 @@ object ParametersSpec extends UnitSpec {
   case class ParametersWithChoice() extends Parameters {
     val choiceParameter = ChoiceParameter[ChoiceWithRepeatedParameter]("choice")
     def setChoice(v: ChoiceWithRepeatedParameter) = set(choiceParameter, v)
-    override val parameterGroups = List(ParameterGroup(None, choiceParameter))
+    override val parameterGroups = List(ParameterGroup("", choiceParameter))
   }
 
   sealed trait ChoiceWithRepeatedParameter extends Choice {
@@ -287,13 +287,13 @@ object ParametersSpec extends UnitSpec {
   case class ChoiceOne() extends ChoiceWithRepeatedParameter {
     val name = "one"
     val numericParameter = NumericParameter("x"))
-    override val parameterGroups = List(ParameterGroup(None, numericParameter))
+    override val parameterGroups = List(ParameterGroup("", numericParameter))
   }
 
   case class ChoiceTwo() extends ChoiceWithRepeatedParameter {
     val name = "two"
     val numericParameter = NumericParameter("x")
-    override val parameterGroups = List(ParameterGroup(None, numericParameter))
+    override val parameterGroups = List(ParameterGroup("", numericParameter))
   }
 
   object DeclareParametersFixtures {
@@ -301,25 +301,25 @@ object ParametersSpec extends UnitSpec {
 
     class ParametersFromOutside extends Parameters {
       val nameParameter = MockParameter("name")
-      override val parameterGroups = List(ParameterGroup(None, outsideParameter, nameParameter))
+      override val parameterGroups = List(ParameterGroup("", outsideParameter, nameParameter))
     }
 
     class ParametersWithNotUniqueNames extends Parameters {
       val param1 = MockParameter("some name")
       val param2 = MockParameter(param1.name)
-      override val parameterGroups = List(ParameterGroup(None, param1, param2))
+      override val parameterGroups = List(ParameterGroup("", param1, param2))
     }
 
     class NotparametersDeclared extends Parameters {
       val param1 = MockParameter("some name")
       val param2 = MockParameter("some other name")
-      override val parameterGroups = List(ParameterGroup(None, param1))
+      override val parameterGroups = List(ParameterGroup("", param1))
     }
 
     class ParametersRepeated extends Parameters {
       val param1 = MockParameter("some name")
       val param2 = MockParameter("some other name")
-      override val parameterGroups = List(ParameterGroup(None, param1, param2, param1))
+      override val parameterGroups = List(ParameterGroup("", param1, param2, param1))
     }
   }
 }

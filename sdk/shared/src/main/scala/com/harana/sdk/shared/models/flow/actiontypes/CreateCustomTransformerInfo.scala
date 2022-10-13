@@ -26,12 +26,14 @@ trait CreateCustomTransformerInfo extends TransformerAsFactoryInfo[CustomTransfo
 
   lazy val portO_0: Tag[CustomTransformerInfo] = typeTag
 
-  val innerWorkflowParameter = WorkflowParameter("inner-workflow", default = Some(CreateCustomTransformerInfo.default))
+// FIXME
+  val innerWorkflowParameter = WorkflowParameter("inner-workflow", default = None)
+  //  val innerWorkflowParameter = WorkflowParameter("inner-workflow", default = Some(CreateCustomTransformerInfo.default))
   def getInnerWorkflow = $(innerWorkflowParameter)
   def setInnerWorkflow(workflow: Json): this.type = set(innerWorkflowParameter, workflow.as[InnerWorkflow].toOption.get)
   def setInnerWorkflow(workflow: InnerWorkflow): this.type = set(innerWorkflowParameter, workflow)
 
-  override val parameterGroups = List(ParameterGroup(None, innerWorkflowParameter))
+  override val parameterGroups = List(ParameterGroup("", innerWorkflowParameter))
 }
 
 object CreateCustomTransformerInfo extends CreateCustomTransformerInfo {
@@ -41,7 +43,8 @@ object CreateCustomTransformerInfo extends CreateCustomTransformerInfo {
   val sinkAction = Action(SinkInfo, (0, 0), None, None, None, HMap.empty)
   private val sinkNode = Node(sinkAction.id, sinkAction)
 
-  val default = InnerWorkflow(
+  // FIXME: This is broken
+  lazy val default = InnerWorkflow(
     FlowGraph(nodes = Set(sourceNode, sinkNode), edges = Set(Edge((sourceNode, 0), (sinkNode, 0))))
   )
 }

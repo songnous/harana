@@ -72,7 +72,7 @@ object EvaluatorAsFactorySpec {
   class MockEvaluator extends Evaluator {
     val id = "test"
     val param = NumericParameter("b", default = Some(5))
-    override val parameterGroups = List(ParameterGroup(None, param))
+    override val parameterGroups = List(ParameterGroup("", param))
 
     override def _evaluate(ctx: ExecutionContext, df: DataFrame): MetricValue = ???
     override def _infer(k: Knowledge[DataFrame]): MetricValue = ???

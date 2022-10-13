@@ -1,4 +1,4 @@
-package com.harana.sdk.frontend.models.flow
+package com.harana.sdk.shared.models.flow.catalog
 
 import com.harana.sdk.shared.models.flow.actiontypes._
 import com.harana.sdk.shared.models.flow.actiontypes.custom._
@@ -11,205 +11,214 @@ import com.harana.sdk.shared.models.flow.actiontypes.write._
 import scala.scalajs.reflect.annotation.EnableReflectiveInstantiation
 
 @EnableReflectiveInstantiation
-class ReadDatasource extends ReadDatasourceInfo
+class ReadDatasource extends ActionType with ReadDatasourceInfo
 
 @EnableReflectiveInstantiation
-class ReadTransformer extends ReadTransformerInfo
+class ReadTransformer extends ActionType with ReadTransformerInfo
 
 @EnableReflectiveInstantiation
-class WriteDatasource extends WriteDatasourceInfo
+class WriteDatasource extends ActionType with WriteDatasourceInfo
 
 @EnableReflectiveInstantiation
-class WriteTransformer extends WriteTransformerInfo
+class WriteTransformer extends ActionType with WriteTransformerInfo
 
 @EnableReflectiveInstantiation
-class Source extends SourceInfo
+class Source extends ActionType with SourceInfo
 
 @EnableReflectiveInstantiation
-class Sink extends SinkInfo
+class Sink extends ActionType with SinkInfo
 
 @EnableReflectiveInstantiation
-class Evaluate extends EvaluateInfo
+class Evaluate extends ActionType with EvaluateInfo
 
 @EnableReflectiveInstantiation
-class Fit extends FitInfo
+class Fit extends ActionType with FitInfo
 
 @EnableReflectiveInstantiation
-class FitPlusTransform extends FitPlusTransformInfo
+class FitPlusTransform extends ActionType with FitPlusTransformInfo
 
 @EnableReflectiveInstantiation
-class Transform extends TransformInfo
+class Transform extends ActionType with TransformInfo
 
 @EnableReflectiveInstantiation
-class Join extends JoinInfo
+class Join extends ActionType with JoinInfo
 
 @EnableReflectiveInstantiation
-class Split extends SplitInfo
+class Split extends ActionType with SplitInfo
 
 @EnableReflectiveInstantiation
-class Union extends UnionInfo
+class Union extends ActionType with UnionInfo
 
 @EnableReflectiveInstantiation
-class SqlCombine extends SqlCombineInfo
+class SqlCombine extends ActionType with SqlCombineInfo
 
 @EnableReflectiveInstantiation
-class SortTransformation extends SortTransformationInfo
+class SortTransformation extends ActionType with SortTransformationInfo
 
 @EnableReflectiveInstantiation
-class FilterColumns extends FilterColumnsInfo
+class FilterColumns extends ActionType with FilterColumnsInfo
 
 @EnableReflectiveInstantiation
-class FilterRows extends FilterRowsInfo
+class FilterRows extends ActionType with FilterRowsInfo
 
 @EnableReflectiveInstantiation
-class HandleMissingValues extends HandleMissingValuesInfo
+class HandleMissingValues extends ActionType with HandleMissingValuesInfo
 
 @EnableReflectiveInstantiation
-class Projection extends ProjectionInfo
+class Projection extends ActionType with ProjectionInfo
 
 @EnableReflectiveInstantiation
-class CreateCustomTransformer extends CreateCustomTransformerInfo
+class CreateCustomTransformer extends ActionType with CreateCustomTransformerInfo
 
 @EnableReflectiveInstantiation
-class SqlColumnTransformation extends SqlColumnTransformationInfo
+class SqlColumnTransformation extends ActionType with SqlColumnTransformationInfo
 
 @EnableReflectiveInstantiation
-class SqlTransformation extends SqlTransformationInfo
+class SqlTransformation extends ActionType with SqlTransformationInfo
 
 @EnableReflectiveInstantiation
-class PythonColumnTransformation extends PythonColumnTransformationInfo
+class PythonColumnTransformation extends ActionType with PythonColumnTransformationInfo
 
 @EnableReflectiveInstantiation
-class PythonTransformation extends PythonTransformationInfo
+class PythonTransformation extends ActionType with PythonTransformationInfo
 
 @EnableReflectiveInstantiation
-class RColumnTransformation extends RColumnTransformationInfo
+class RColumnTransformation extends ActionType with RColumnTransformationInfo
 
 @EnableReflectiveInstantiation
-class RTransformation extends RTransformationInfo
+class RTransformation extends ActionType with RTransformationInfo
 
 @EnableReflectiveInstantiation
-class AssembleVector extends AssembleVectorInfo
+class AssembleVector extends ActionType with AssembleVectorInfo
 
 @EnableReflectiveInstantiation
-class Binarize extends BinarizeInfo
+class Binarize extends ActionType with BinarizeInfo
 
 @EnableReflectiveInstantiation
-class ComposeDatetime extends ComposeDatetimeInfo
+class ComposeDatetime extends ActionType with ComposeDatetimeInfo
 
 @EnableReflectiveInstantiation
-class ConvertType extends ConvertTypeInfo
+class ConvertType extends ActionType with ConvertTypeInfo
 
 @EnableReflectiveInstantiation
-class DCT extends DCTInfo
-@EnableReflectiveInstantiation
-class DecomposeDatetime extends DecomposeDatetimeInfo
-@EnableReflectiveInstantiation
-class GetFromVector extends GetFromVectorInfo
-@EnableReflectiveInstantiation
-class Normalize extends NormalizeInfo
-@EnableReflectiveInstantiation
-class PolynomialExpand extends PolynomialExpandInfo
-@EnableReflectiveInstantiation
-class QuantileDiscretizer extends QuantileDiscretizerInfo
-@EnableReflectiveInstantiation
-class StringIndexer extends StringIndexerInfo
-@EnableReflectiveInstantiation
-class VectorIndexer extends VectorIndexerInfo
-@EnableReflectiveInstantiation
-class MinMaxScaler extends MinMaxScalerInfo
-@EnableReflectiveInstantiation
-class StandardScaler extends StandardScalerInfo
+class DCT extends ActionType with DCTInfo
 
 @EnableReflectiveInstantiation
-class ConvertToNGrams extends ConvertToNGramsInfo
+class DecomposeDatetime extends ActionType with DecomposeDatetimeInfo
 
 @EnableReflectiveInstantiation
-class CountVectorizer extends CountVectorizerInfo
+class GetFromVector extends ActionType with GetFromVectorInfo
 
 @EnableReflectiveInstantiation
-class HashingTF extends HashingTFInfo
+class Normalize extends ActionType with NormalizeInfo
 
 @EnableReflectiveInstantiation
-class IDF extends IDFInfo
+class PolynomialExpand extends ActionType with PolynomialExpandInfo
 
 @EnableReflectiveInstantiation
-class RemoveStopWords extends RemoveStopWordsInfo
+class QuantileDiscretizer extends ActionType with QuantileDiscretizerInfo
 
 @EnableReflectiveInstantiation
-class Tokenize extends TokenizeInfo
+class StringIndexer extends ActionType with StringIndexerInfo
 
 @EnableReflectiveInstantiation
-class TokenizeWithRegex extends TokenizeWithRegexInfo
+class VectorIndexer extends ActionType with VectorIndexerInfo
 
 @EnableReflectiveInstantiation
-class Word2Vec extends Word2VecInfo
+class MinMaxScaler extends ActionType with MinMaxScalerInfo
 
 @EnableReflectiveInstantiation
-class GridSearch extends GridSearchInfo
+class StandardScaler extends ActionType with StandardScalerInfo
 
 @EnableReflectiveInstantiation
-class CreateAFTSurvivalRegression extends CreateAFTSurvivalRegressionInfo
+class ConvertToNGrams extends ActionType with ConvertToNGramsInfo
 
 @EnableReflectiveInstantiation
-class CreateDecisionTreeRegression extends CreateDecisionTreeRegressionInfo
+class CountVectorizer extends ActionType with CountVectorizerInfo
 
 @EnableReflectiveInstantiation
-class CreateGBTRegression extends CreateGBTRegressionInfo
+class HashingTF extends ActionType with HashingTFInfo
 
 @EnableReflectiveInstantiation
-class CreateIsotonicRegression extends CreateIsotonicRegressionInfo
+class IDF extends ActionType with IDFInfo
 
 @EnableReflectiveInstantiation
-class CreateLinearRegression extends CreateLinearRegressionInfo
+class RemoveStopWords extends ActionType with RemoveStopWordsInfo
 
 @EnableReflectiveInstantiation
-class CreateRandomForestRegression extends CreateRandomForestRegressionInfo
+class Tokenize extends ActionType with TokenizeInfo
 
 @EnableReflectiveInstantiation
-class CreateDecisionTreeClassifier extends CreateDecisionTreeClassifierInfo
+class TokenizeWithRegex extends ActionType with TokenizeWithRegexInfo
 
 @EnableReflectiveInstantiation
-class CreateGBTClassifier extends CreateGBTClassifierInfo
+class Word2Vec extends ActionType with Word2VecInfo
 
 @EnableReflectiveInstantiation
-class CreateLogisticRegression extends CreateLogisticRegressionInfo
+class GridSearch extends ActionType with GridSearchInfo
 
 @EnableReflectiveInstantiation
-class CreateMultilayerPerceptronClassifier extends CreateMultilayerPerceptronClassifierInfo
+class CreateAFTSurvivalRegression extends ActionType with CreateAFTSurvivalRegressionInfo
 
 @EnableReflectiveInstantiation
-class CreateNaiveBayes extends CreateNaiveBayesInfo
+class CreateDecisionTreeRegression extends ActionType with CreateDecisionTreeRegressionInfo
 
 @EnableReflectiveInstantiation
-class CreateRandomForestClassifier extends CreateRandomForestClassifierInfo
+class CreateGBTRegression extends ActionType with CreateGBTRegressionInfo
 
 @EnableReflectiveInstantiation
-class CreateKMeans extends CreateKMeansInfo
+class CreateIsotonicRegression extends ActionType with CreateIsotonicRegressionInfo
 
 @EnableReflectiveInstantiation
-class CreateLDA extends CreateLDAInfo
+class CreateLinearRegression extends ActionType with CreateLinearRegressionInfo
 
 @EnableReflectiveInstantiation
-class UnivariateFeatureSelector extends UnivariateFeatureSelectorInfo
+class CreateRandomForestRegression extends ActionType with CreateRandomForestRegressionInfo
 
 @EnableReflectiveInstantiation
-class CreateALS extends CreateALSInfo
+class CreateDecisionTreeClassifier extends ActionType with CreateDecisionTreeClassifierInfo
 
 @EnableReflectiveInstantiation
-class PCA extends PCAInfo
+class CreateGBTClassifier extends ActionType with CreateGBTClassifierInfo
 
 @EnableReflectiveInstantiation
-class CreatePythonEvaluator extends CreatePythonEvaluatorInfo
+class CreateLogisticRegression extends ActionType with CreateLogisticRegressionInfo
 
 @EnableReflectiveInstantiation
-class CreateREvaluator extends CreateREvaluatorInfo
+class CreateMultilayerPerceptronClassifier extends ActionType with CreateMultilayerPerceptronClassifierInfo
 
 @EnableReflectiveInstantiation
-class CreateBinaryClassificationEvaluator extends CreateBinaryClassificationEvaluatorInfo
+class CreateNaiveBayes extends ActionType with CreateNaiveBayesInfo
 
 @EnableReflectiveInstantiation
-class CreateMulticlassClassificationEvaluator extends CreateMulticlassClassificationEvaluatorInfo
+class CreateRandomForestClassifier extends ActionType with CreateRandomForestClassifierInfo
 
 @EnableReflectiveInstantiation
-class CreateRegressionEvaluator extends CreateRegressionEvaluatorInfo
+class CreateKMeans extends ActionType with CreateKMeansInfo
+
+@EnableReflectiveInstantiation
+class CreateLDA extends ActionType with CreateLDAInfo
+
+@EnableReflectiveInstantiation
+class UnivariateFeatureSelector extends ActionType with UnivariateFeatureSelectorInfo
+
+@EnableReflectiveInstantiation
+class CreateALS extends ActionType with CreateALSInfo
+
+@EnableReflectiveInstantiation
+class PCA extends ActionType with PCAInfo
+
+@EnableReflectiveInstantiation
+class CreatePythonEvaluator extends ActionType with CreatePythonEvaluatorInfo
+
+@EnableReflectiveInstantiation
+class CreateREvaluator extends ActionType with CreateREvaluatorInfo
+
+@EnableReflectiveInstantiation
+class CreateBinaryClassificationEvaluator extends ActionType with CreateBinaryClassificationEvaluatorInfo
+
+@EnableReflectiveInstantiation
+class CreateMulticlassClassificationEvaluator extends ActionType with CreateMulticlassClassificationEvaluatorInfo
+
+@EnableReflectiveInstantiation
+class CreateRegressionEvaluator extends ActionType with CreateRegressionEvaluatorInfo

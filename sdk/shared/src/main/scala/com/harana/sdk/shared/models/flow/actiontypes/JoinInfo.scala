@@ -44,7 +44,7 @@ trait JoinInfo extends Action2To1TypeInfo[DataFrameInfo, DataFrameInfo, DataFram
   def getJoinColumns = $(joinColumnsParameter)
   def setJoinColumns(value: Seq[ColumnPair]): this.type = set(joinColumnsParameter, value)
 
-  override val parameterGroups = List(ParameterGroup(None, joinTypeParameter, leftPrefixParameter, rightPrefixParameter, joinColumnsParameter))
+  override val parameterGroups = List(ParameterGroup("", joinTypeParameter, leftPrefixParameter, rightPrefixParameter, joinColumnsParameter))
 
   @transient
   lazy val portI_0: Tag[DataFrameInfo] = Tag[DataFrameInfo]
@@ -89,7 +89,7 @@ object JoinInfo extends JoinInfo {
     def getRightColumn = $(rightColumnParameter)
     def setRightColumn(value: SingleColumnSelection): this.type = set(rightColumnParameter, value)
 
-    override val parameterGroups = List(ParameterGroup(None, leftColumnParameter, rightColumnParameter))
+    override val parameterGroups = List(ParameterGroup("", leftColumnParameter, rightColumnParameter))
 
   }
 }

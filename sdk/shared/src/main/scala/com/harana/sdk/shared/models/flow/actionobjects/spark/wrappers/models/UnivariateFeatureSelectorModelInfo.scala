@@ -4,7 +4,7 @@ import com.harana.sdk.shared.models.flow.actionobjects.TransformerInfo
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.{HasFeaturesColumnParameter, HasLabelColumnParameter, HasOutputColumnParameter}
 import com.harana.sdk.shared.models.flow.parameters.ParameterGroup
 
-trait UnivariateFeatureModelInfo
+trait UnivariateFeatureSelectorModelInfo
   extends TransformerInfo
     with HasFeaturesColumnParameter
     with HasOutputColumnParameter
@@ -19,4 +19,4 @@ trait UnivariateFeatureModelInfo
   ))
 }
 
-object UnivariateFeatureModelInfo extends UnivariateFeatureModelInfo
+object UnivariateFeatureSelectorModelInfo extends UnivariateFeatureSelectorModelInfo

@@ -1,5 +1,18 @@
-package com.harana.sdk.shared.models.flow.catalog
+package com.harana.sdk.backend.models.flow.catalog
 
+import com.harana.sdk.backend.models.flow.actionobjects._
+import com.harana.sdk.backend.models.flow.actionobjects.dataframe._
+import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.estimators._
+import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.evaluators._
+import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.models._
+import com.harana.sdk.backend.models.flow.actionobjects.spark.wrappers.transformers._
+import com.harana.sdk.backend.models.flow.actiontypes._
+import com.harana.sdk.backend.models.flow.actiontypes.custom._
+import com.harana.sdk.backend.models.flow.actiontypes.read._
+import com.harana.sdk.backend.models.flow.actiontypes.spark.wrappers.estimators._
+import com.harana.sdk.backend.models.flow.actiontypes.spark.wrappers.evaluators._
+import com.harana.sdk.backend.models.flow.actiontypes.spark.wrappers.transformers._
+import com.harana.sdk.backend.models.flow.actiontypes.write._
 import com.harana.sdk.shared.models.flow.ActionTypeInfo
 import com.harana.sdk.shared.models.flow.actionobjects._
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimators._
@@ -13,11 +26,37 @@ import com.harana.sdk.shared.models.flow.actiontypes.spark.wrappers.estimators._
 import com.harana.sdk.shared.models.flow.actiontypes.spark.wrappers.evaluators._
 import com.harana.sdk.shared.models.flow.actiontypes.spark.wrappers.transformers._
 import com.harana.sdk.shared.models.flow.actiontypes.write._
+import com.harana.sdk.shared.utils.HMap
 import izumi.reflect.Tag
+
+import scala.collection.mutable
 
 object Catalog {
 
-  val actions = List(
+  val actionsByInfoMap = mutable.Map.empty[ActionTypeInfo, () => ActionType]
+  val actionsByNameMap = mutable.Map.empty[String, () => ActionTypeInfo]
+
+  def actionType[T <: ActionTypeInfo](actionTypeInfo: T) =
+    actionsByInfoMap(actionTypeInfo)
+
+  def actionType[T <: ActionType](tag: Tag[T]) =
+    actionsByNameMap(tag.closestClass.getSimpleName)().asInstanceOf[T]
+
+  def registerActions(actions: (ActionTypeInfo, () => ActionType)*) = actions.foreach { a =>
+    actionsByInfoMap += a._1 -> a._2
+    actionsByNameMap += a._2().getClass.getSimpleName -> a._2
+  }
+
+  val objectsByNameMap = mutable.Map.empty[String, () => ActionObjectInfo]
+
+  def actionObject[T <: ActionObjectInfo](tag: Tag[T]) =
+    objectsByNameMap(tag.closestClass.getSimpleName)().asInstanceOf[T]
+
+  def registerObjects(objects: (ActionObjectInfo, () => ActionObjectInfo)*) = objects.foreach { a =>
+    objectsByNameMap += a._2().getClass.getSimpleName -> a._2
+  }
+
+  registerActions(
     (ReadDatasourceInfo, () => new ReadDatasource),
     (ReadTransformerInfo, () => new ReadTransformer),
     (WriteDatasourceInfo, () => new WriteDatasource),
@@ -91,7 +130,7 @@ object Catalog {
     (CreateRegressionEvaluatorInfo, () => new CreateRegressionEvaluator)
   )
 
-  val objects = List(
+  registerObjects(
     (DataFrameInfo, () => new DataFrame),
     (ColumnsFiltererInfo, () => new ColumnsFilterer),
     (RowsFiltererInfo, () => new RowsFilterer),
@@ -106,7 +145,7 @@ object Catalog {
     (RTransformerInfo, () => new RTransformer),
     (RColumnTransformerInfo, () => new RColumnTransformer),
     (TypeConverterInfo, () => new TypeConverter),
-    //    (CustomTransformerInfo, () => new CustomTransformer),
+//    (CustomTransformerInfo, () => new CustomTransformer),
     (GetFromVectorTransformerInfo, () => new GetFromVectorTransformer),
     (SortTransformerInfo, () => new SortTransformer),
     (LogisticRegressionInfo, () => new LogisticRegression),
@@ -149,17 +188,17 @@ object Catalog {
     (IDFEstimatorInfo, () => new IDFEstimator),
     (IDFModelInfo, () => new IDFModel),
     (GBTClassifierInfo, () => new GBTClassifier),
-    //    (GBTClassificationModelInfo, () => new GBTClassificationModel),
+//    (GBTClassificationModelInfo, () => new GBTClassificationModel),
     (RandomForestClassifierInfo, () => new RandomForestClassifier),
-    //    (RandomForestClassificationModelInfo, () => new RandomForestClassificationModel),
+//    (RandomForestClassificationModelInfo, () => new RandomForestClassificationModel),
     (DecisionTreeClassifierInfo, () => new DecisionTreeClassifier),
-    //    (DecisionTreeClassificationModelInfo, () => new DecisionTreeClassificationModel),
+//    (DecisionTreeClassificationModelInfo, () => new DecisionTreeClassificationModel),
     (MultilayerPerceptronClassifierInfo, () => new MultilayerPerceptronClassifier),
     (MultilayerPerceptronClassifierModelInfo, () => new MultilayerPerceptronClassifierModel),
     (QuantileDiscretizerEstimatorInfo, () => new QuantileDiscretizerEstimator),
     (QuantileDiscretizerModelInfo, () => new QuantileDiscretizerModel),
-    //    (UnivariateFeatureSelectorEstimatorInfo, () => new UnivariateFeatureSelectorEstimator),
-    //    (UnivariateFeatureSelectorModelInfo, () => new UnivariateFeatureSelectorModel),
+//    (UnivariateFeatureSelectorEstimatorInfo, () => new UnivariateFeatureSelectorEstimator),
+    (UnivariateFeatureSelectorModelInfo, () => new UnivariateFeatureSelectorModel),
     (BinarizerInfo, () => new Binarizer),
     (DiscreteCosineTransformerInfo, () => new DiscreteCosineTransformer),
     (NGramTransformerInfo, () => new NGramTransformer),
@@ -176,21 +215,4 @@ object Catalog {
     (MulticlassClassificationEvaluatorInfo, () => new MulticlassClassificationEvaluator),
     (RegressionEvaluatorInfo, () => new RegressionEvaluator)
   )
-
-  val actionsByIdMap = actions.map(a => a._1.id -> a._2).toMap
-  val actionsByInfoMap = actions.map(a => a._1 -> a._2).toMap
-  val actionsByNameMap = actions.map(a => a._2().getClass.getSimpleName -> a._2).toMap
-  val objectsByIdMap = objects.map(o => o._1.id -> o._2).toMap
-  val objectsByNameMap = objects.map(o => o._2().getClass.getSimpleName -> o._2).toMap
-
-  def actionType[T <: ActionTypeInfo](actionTypeInfo: T) =
-    actionsByInfoMap(actionTypeInfo)
-
-  def actionType[T <: ActionTypeInfo](tag: Tag[T]) =
-    actionsByNameMap(tag.closestClass.getSimpleName)().asInstanceOf[T]
-
-  def actionObject[T <: ActionObjectInfo](tag: Tag[T]) = {
-    println(objectsByNameMap.size)
-    objectsByNameMap(tag.closestClass.getSimpleName)().asInstanceOf[T]
-  }
 }

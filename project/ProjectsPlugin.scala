@@ -49,8 +49,8 @@ object ProjectsPlugin extends AutoPlugin {
         .jsSettings(
           name := id,
           Library.compilerPlugins,
-          fastCompile := { (Compile / fastOptJS / webpack).dependsOn(compileJS(baseDirectory)) }.value,
-          fullCompile := { (Compile / fullOptJS / webpack).dependsOn(compileJS(baseDirectory)) }.value,
+          fastCompile := { postCompileJS(baseDirectory).dependsOn(Compile / fastOptJS / webpack).dependsOn(preCompileJS(baseDirectory)) }.value,
+          fullCompile := { postCompileJS(baseDirectory).dependsOn(Compile / fullOptJS / webpack).dependsOn(preCompileJS(baseDirectory)) }.value,
           scalaJSUseMainModuleInitializer := false,
           Settings.common,
           Settings.js,
@@ -90,17 +90,24 @@ object ProjectsPlugin extends AutoPlugin {
         )
 
 
-    def compileJS(baseDirectory: SettingKey[File]) = {
+    def preCompileJS(baseDirectory: SettingKey[File]) = {
       baseDirectory.map { base =>
+        println("Checking if Webpack etc needs to be installed.")
         val nodeModulesPath = s"${base.absolutePath}/target/scala-2.13/scalajs-bundler/main/node_modules"
         new File(nodeModulesPath).mkdir()
 
         val nodeModules = new File(nodeModulesPath).list().toList
         if (!nodeModules.contains("webpack")) s"npm i -D ml-matrix webpack webpack-cli webpack-merge --prefix $nodeModulesPath/.." !
-
-        new File(nodeModulesPath).listFiles((dir, name) => name.toLowerCase.contains("opt"))
-          .foreach(file => Files.copy(file.toPath, new File(base, s"../jvm/src/main/resources/public/js/${file.getName}").toPath, StandardCopyOption.REPLACE_EXISTING))
       }
     }
+
+    def postCompileJS(baseDirectory: SettingKey[File]) =
+      baseDirectory.map { base =>
+        println("Copying compiled Javascript to src directory.")
+
+        val buildPath = s"${base.absolutePath}/target/scala-2.13/scalajs-bundler/main"
+        new File(buildPath).listFiles((dir, name) => name.toLowerCase.contains("opt"))
+          .foreach(file => Files.copy(file.toPath, new File(base, s"../jvm/src/main/resources/public/js/${file.getName}").toPath, StandardCopyOption.REPLACE_EXISTING))
+      }
   }
 }

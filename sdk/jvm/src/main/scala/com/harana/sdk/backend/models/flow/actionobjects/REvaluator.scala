@@ -14,7 +14,6 @@ class REvaluator extends CustomCodeEvaluator with REvaluatorInfo {
     context.customCodeExecutor.isRValid(code)
 
   // Creating a dataframe is a workaround. Currently we can pass to jvm DataFrames only.
-  // TODO DS-3695 Fix a metric value - dataframe workaround.
   def getComposedCode(userCode: String) = {
     s"""
        |$userCode

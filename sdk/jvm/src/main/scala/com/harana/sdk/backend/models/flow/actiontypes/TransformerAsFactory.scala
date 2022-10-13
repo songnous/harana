@@ -1,11 +1,9 @@
 package com.harana.sdk.backend.models.flow.actiontypes
 
-import com.harana.sdk.backend.models.flow.{ExecutionContext, Knowledge}
 import com.harana.sdk.backend.models.flow.actionobjects.Transformer
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
-import com.harana.sdk.shared.models.flow.actiontypes.FitInfo.extractParameterMap
-import com.harana.sdk.shared.models.flow.utils.TypeUtils
-
+import com.harana.sdk.backend.models.flow.utils.TypeUtils
+import com.harana.sdk.backend.models.flow.{ExecutionContext, Knowledge}
 import izumi.reflect.Tag
 
 abstract class TransformerAsFactory[T <: Transformer](implicit typeTag: Tag[T]) extends ActionTypeType0To1[T] {

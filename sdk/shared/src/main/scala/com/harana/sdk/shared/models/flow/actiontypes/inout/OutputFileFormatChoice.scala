@@ -13,7 +13,7 @@ object OutputFileFormatChoice {
 
   class Csv() extends OutputFileFormatChoice with CsvParameters {
     val name = FileFormat.CSV.toString.toLowerCase
-    override val parameterGroups = List(ParameterGroup(None, csvColumnSeparatorParameter, namesIncludedParameter))
+    override val parameterGroups = List(ParameterGroup("", csvColumnSeparatorParameter, namesIncludedParameter))
   }
 
   class Parquet() extends OutputFileFormatChoice {

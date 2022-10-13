@@ -12,7 +12,7 @@ object InputFileFormatChoice {
 
   class Csv() extends InputFileFormatChoice with CsvParameters with HasShouldConvertToBooleanParameter {
     val name = FileFormat.CSV.toString.toLowerCase
-    override val parameterGroups = List(ParameterGroup(None, csvColumnSeparatorParameter, namesIncludedParameter, shouldConvertToBooleanParameter))
+    override val parameterGroups = List(ParameterGroup("", csvColumnSeparatorParameter, namesIncludedParameter, shouldConvertToBooleanParameter))
   }
 
   class Parquet() extends InputFileFormatChoice {

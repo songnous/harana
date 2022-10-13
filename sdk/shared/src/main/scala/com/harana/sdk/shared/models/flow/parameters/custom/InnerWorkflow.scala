@@ -13,8 +13,8 @@ case class InnerWorkflow(graph: FlowGraph,
                          thirdPartyData: Json = Json.Null,
                          publicParameters: List[PublicParameter] = List.empty) {
 
-  val sourceId = SourceInfo.id
-  val sinkId = SinkInfo.id
+  val sourceId = new SourceInfo {}.id
+  val sinkId = new SinkInfo {}.id
 
   require(findNodeOfType(sourceId).isDefined, "Inner workflow must have source node")
   require(findNodeOfType(sinkId).isDefined, "Inner workflow must have sink node")
@@ -22,13 +22,14 @@ case class InnerWorkflow(graph: FlowGraph,
   val source = findNodeOfType(sourceId).get
   val sink = findNodeOfType(sinkId).get
 
-  private def findNodeOfType(actionId: ActionTypeInfo.Id) = graph.nodes.find(_.value.id == actionId.toString)
+  private def findNodeOfType(actionId: ActionTypeInfo.Id) =
+    graph.nodes.find(_.value.id == actionId)
 
 }
 
 object InnerWorkflow {
-  val sourceAction = Action(SourceInfo, (0,0), None, None, None, HMap.empty)
-  val sinkAction = Action(SinkInfo, (0,0), None, None, None, HMap.empty)
+  val sourceAction = Action(new SourceInfo {}, (0,0), None, None, None, HMap.empty)
+  val sinkAction = Action(new SinkInfo {}, (0,0), None, None, None, HMap.empty)
   val empty = InnerWorkflow(FlowGraph(Set(Node(sourceAction.id, sourceAction), Node(sinkAction.id, sinkAction))), Json.Null)
 }
 

@@ -19,23 +19,26 @@ case class Switch(label: ReactElement,
 		div(className := "category-content")(
 			div(className := "switch-category-content")(
 				props.switches.zipWithIndex.map { case (switch, index) =>
-					table(
-						tr(
-							td(className := "switch-section-switch")(
-								ShoelaceSwitch(
-									className = Some("switch"),
-									name = index.toString,
-									label = Some(switch.label),
-									checked = Some(switch.checked),
-									thumbSize = Some("20px"),
-									height = Some("16px"),
-									width = Some("32px"),
-									onChange = Some(switch.onClick))
-							),
-							td(
-								switch.rightElement
+					table(key := index.toString,
+						tbody(
+							tr(
+								td(className := "switch-section-switch")(
+									ShoelaceSwitch(
+										className = Some("switch"),
+										name = index.toString,
+										label = Some(switch.label),
+										checked = Some(switch.checked),
+										thumbSize = Some("20px"),
+										height = Some("16px"),
+										width = Some("32px"),
+										onChange = Some(switch.onClick))
+								),
+								td(
+									switch.rightElement
+								)
 							)
-						))
+						)
+					)
 				}
 			)
 		)

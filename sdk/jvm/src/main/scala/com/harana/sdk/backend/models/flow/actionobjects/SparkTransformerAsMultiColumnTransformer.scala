@@ -3,7 +3,7 @@ package com.harana.sdk.backend.models.flow.actionobjects
 import com.harana.sdk.backend.models.flow.ExecutionContext
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.inference.exceptions.TransformSchemaError
-import com.harana.sdk.shared.models.flow.utils.TypeUtils
+import com.harana.sdk.backend.models.flow.utils.TypeUtils
 import izumi.reflect.Tag
 import org.apache.spark.ml.{Transformer => SparkTransformer}
 import org.apache.spark.sql.types._

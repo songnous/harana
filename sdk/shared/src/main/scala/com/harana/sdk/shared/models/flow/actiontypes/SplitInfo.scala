@@ -30,7 +30,7 @@ trait SplitInfo extends Action1To2TypeInfo[DataFrameInfo, DataFrameInfo, DataFra
   def getSplitMode = $(splitModeParameter)
   def setSplitMode(value: SplitModeChoice): this.type = set(splitModeParameter, value)
 
-  override val parameterGroups = List(ParameterGroup(None, splitModeParameter))
+  override val parameterGroups = List(ParameterGroup("", splitModeParameter))
 
   @transient
   lazy val portI_0: Tag[DataFrameInfo] = Tag[DataFrameInfo]
@@ -62,7 +62,7 @@ object SplitModeChoice {
     def getSeed = $(seedParameter)
     def setSeed(value: Long): this.type = set(seedParameter, value)
 
-    override val parameterGroups = List(ParameterGroup(None, splitRatioParameter, seedParameter))
+    override val parameterGroups = List(ParameterGroup("", splitRatioParameter, seedParameter))
 
   }
 
@@ -73,6 +73,6 @@ object SplitModeChoice {
     def getCondition = $(conditionParameter)
     def setCondition(value: String): this.type = set(conditionParameter, value)
 
-    override val parameterGroups = List(ParameterGroup(None, conditionParameter))
+    override val parameterGroups = List(ParameterGroup("", conditionParameter))
   }
 }

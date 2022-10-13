@@ -24,19 +24,19 @@ object InputStorageTypeChoice {
     def getFileFormat = $(fileFormatParameter)
     def setFileFormat(value: InputFileFormatChoice): this.type = set(fileFormatParameter, value)
 
-    override val parameterGroups = List(ParameterGroup(None, sourceFileParameter, fileFormatParameter))
+    override val parameterGroups = List(ParameterGroup("", sourceFileParameter, fileFormatParameter))
   }
 
   class Jdbc extends InputStorageTypeChoice with JdbcParameters {
     val name = StorageType.Jdbc.toString.toLowerCase
 
-    override val parameterGroups = List(ParameterGroup(None, jdbcUrlParameter, jdbcDriverClassNameParameter, jdbcTableNameParameter))
+    override val parameterGroups = List(ParameterGroup("", jdbcUrlParameter, jdbcDriverClassNameParameter, jdbcTableNameParameter))
   }
 
   class GoogleSheet extends InputStorageTypeChoice with GoogleSheetParameters with NamesIncludedParameter with HasShouldConvertToBooleanParameter {
     val name = "google-sheet"
 
-    override val parameterGroups = List(ParameterGroup(None,
+    override val parameterGroups = List(ParameterGroup("",
       googleSheetIdParameter,
       serviceAccountCredentialsParameter,
       namesIncludedParameter,

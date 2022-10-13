@@ -19,15 +19,15 @@ trait EvaluateInfo extends Action2To1TypeInfo[EvaluatorInfo, DataFrameInfo, Metr
   val since = Version(1, 0, 0)
   val category = Action
 
-  val evaluatorParameters = new DynamicParameter("input-evaluator-parameters", default = Some(Json.Null), inputPort = 0)
-  def getEvaluatorParameters = $(evaluatorParameters)
-  def setEvaluatorParameters(jsValue: Json): this.type = set(evaluatorParameters, jsValue)
-
-  override val parameterGroups = List(ParameterGroup(None, evaluatorParameters))
-
   lazy val portI_0: Tag[EvaluatorInfo] = typeTag
   lazy val portI_1: Tag[DataFrameInfo] = typeTag
   lazy val portO_0: Tag[MetricValue] = typeTag
+
+  val evaluatorParameters = DynamicParameter("input-evaluator-parameters", default = Some(Json.Null), inputPort = 0)
+  def getEvaluatorParameters = $(evaluatorParameters)
+  def setEvaluatorParameters(jsValue: Json): this.type = set(evaluatorParameters, jsValue)
+
+  override val parameterGroups = List(ParameterGroup("", evaluatorParameters))
 
 }
 

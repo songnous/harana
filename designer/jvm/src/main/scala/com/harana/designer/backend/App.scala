@@ -181,8 +181,10 @@ object App extends CoreApp {
     for {
       _                     <- exposePendingExecutionsMetric.repeat(Schedule.spaced(10.second).forever).provideLayer(Clock.live).fork
 
-      actions               =  Catalog.actionsMap.values.toList
-      _                     =  println(s"NUmber of actions = ${actions.size}")
+      _                     =  println("A")
+      _                     =  println("B")
+      actions               =  Catalog.actionsByIdMap.size
+      _                     =  println(s"Number of actions = ${actions}")
 
       domain                <- env("harana_domain")
 

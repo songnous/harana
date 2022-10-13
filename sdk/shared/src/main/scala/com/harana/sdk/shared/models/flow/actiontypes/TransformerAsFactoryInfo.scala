@@ -4,11 +4,9 @@ import com.harana.sdk.shared.models.flow.Action0To1TypeInfo
 import com.harana.sdk.shared.models.flow.actionobjects.TransformerInfo
 import com.harana.sdk.shared.models.flow.utils.TypeUtils
 
-import izumi.reflect.Tag
-
 trait TransformerAsFactoryInfo[T <: TransformerInfo] extends Action0To1TypeInfo[T] {
 
-  val transformerInfo: T = TypeUtils.instanceOfType(portO_0)
+  val transformerInfo: T = TypeUtils.actionObject(portO_0)
 
   override val parameterGroups = transformerInfo.parameterGroups
 

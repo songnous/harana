@@ -45,7 +45,7 @@ object ActionCategory {
     object TextProcessing extends ActionCategory("abfc2e76-e2b7-46ad-8fc2-4f80af421432", "Text processing", FeatureScaling.priority.nextCore, Some(Transformation))
   }
 
-  object ML extends ActionCategory("c730c11-9708-4a84-9dbd-3845903f32ac", "Machine learning", Transformation.priority.nextCore) {
+  object ML extends ActionCategory("3eb26bfa-4abf-11ed-b878-0242ac120002", "Machine learning", Transformation.priority.nextCore) {
     object HyperOptimization extends ActionCategory("5a26f196-4805-4d8e-9a8b-b4c5c4538b0b", "Hyper Optimization", SortPriority.coreDefault, Some(ML))
     object Regression extends ActionCategory("c80397a8-7840-4bdb-83b3-dc12f1f5bc3c", "Regression", HyperOptimization.priority.nextCore, Some(ML))
     object Classification extends ActionCategory("ff13cbbd-f4ec-4df3-b0c3-f6fd4b019edf", "Classification", Regression.priority.nextCore, Some(ML))

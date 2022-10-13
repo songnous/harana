@@ -2,8 +2,8 @@ package com.harana.sdk.shared.models.flow.actiontypes
 
 import com.harana.sdk.shared.models.flow.Action1To2TypeInfo
 import com.harana.sdk.shared.models.flow.actionobjects.{DataFrameInfo, EstimatorInfo, TransformerInfo}
+import com.harana.sdk.shared.models.flow.catalog.Catalog
 import com.harana.sdk.shared.models.flow.utils.TypeUtils
-
 import izumi.reflect.Tag
 
 trait EstimatorAsActionInfo[E <: EstimatorInfo, T <: TransformerInfo]
@@ -11,7 +11,7 @@ trait EstimatorAsActionInfo[E <: EstimatorInfo, T <: TransformerInfo]
 
   val tTagInfoE: Tag[E]
 
-  lazy val estimatorInfo: E = TypeUtils.instanceOfType(tTagInfoE)
+  lazy val estimatorInfo: E = TypeUtils.actionObject(tTagInfoE)
 
   override val parameterGroups = estimatorInfo.parameterGroups
 

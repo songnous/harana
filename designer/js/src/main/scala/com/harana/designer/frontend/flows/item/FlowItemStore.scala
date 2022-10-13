@@ -3,6 +3,7 @@ package com.harana.designer.frontend.flows.item
 import com.harana.designer.frontend.flows.item.ui.FlowTab
 import com.harana.designer.frontend.utils.UndoHistory
 import com.harana.sdk.shared.models.flow.Flow.FlowId
+import com.harana.sdk.shared.models.flow.catalog.Catalog
 import com.harana.sdk.shared.models.flow.parameters.Parameter
 import com.harana.sdk.shared.models.flow.{ActionTypeInfo, Flow, FlowExecution}
 import com.harana.sdk.shared.utils.{HMap, Random}
@@ -37,7 +38,7 @@ object FlowItemStore {
                            snapToGrid: Boolean,
                            undoHistory: UndoHistory[UndoState])
 
-  val initialState = FlowItemState(None, None, false, false, false, None, Random.short, List(), List(), List(), List(), List(), None, None, FlowTab.ActionTypes, false, false, true, true, true, new UndoHistory[UndoState])
+  val initialState = FlowItemState(None, None, false, false, false, None, Random.short, List(), List(), Catalog.actionsByInfoMap.keys.toList, List(), List(), None, None, FlowTab.ActionTypes, false, false, true, true, true, new UndoHistory[UndoState])
 
 
   case object Reset extends DiodeAction

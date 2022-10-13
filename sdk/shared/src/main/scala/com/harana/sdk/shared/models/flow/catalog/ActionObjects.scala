@@ -1,4 +1,4 @@
-package com.harana.sdk.frontend.models.flow
+package com.harana.sdk.shared.models.flow.catalog
 
 import com.harana.sdk.shared.models.flow.actionobjects._
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.estimators._
@@ -239,10 +239,10 @@ class QuantileDiscretizerModel extends QuantileDiscretizerModelInfo {
 }
 
 @EnableReflectiveInstantiation
-class UnivariateFeatureEstimator extends UnivariateFeatureEstimatorInfo
+class UnivariateFeatureSelectorEstimator extends UnivariateFeatureSelectorEstimatorInfo
 
 @EnableReflectiveInstantiation
-class UnivariateFeatureModel extends UnivariateFeatureModelInfo
+class UnivariateFeatureModel extends UnivariateFeatureSelectorModelInfo
 
 @EnableReflectiveInstantiation
 class Binarizer extends BinarizerInfo {

@@ -12,17 +12,15 @@ import izumi.reflect.Tag
 import java.util.UUID
 import scala.reflect.runtime.{universe => ru}
 
-trait WriteDatasourceInfo extends Action1To0TypeInfo[DataFrameInfo]
-  with WriteDatasourceParameters
-  with ActionDocumentation {
-
-  @transient
-  lazy val portI_0: Tag[DataFrameInfo] = Tag[DataFrameInfo]
+trait WriteDatasourceInfo extends Action1To0TypeInfo[DataFrameInfo] with WriteDatasourceParameters with ActionDocumentation {
 
   val id: Id = "bf082da2-a0d9-4335-a62f-9804217a1436"
   val name = "write-dataframe"
   val since = Version(1, 4, 0)
   val category = IO
+
+  @transient
+  lazy val portI_0: Tag[DataFrameInfo] = Tag[DataFrameInfo]
 
   override def getDatasourcesIds = get(datasourceIdParameter).toSet
   def setDatasourceId(value: UUID): this.type = set(datasourceIdParameter, value)
@@ -31,7 +29,7 @@ trait WriteDatasourceInfo extends Action1To0TypeInfo[DataFrameInfo]
 
   private def getShouldOverwrite = $(shouldOverwriteParameter)
 
-  override val parameterGroups = List(ParameterGroup(None, datasourceIdParameter, shouldOverwriteParameter))
+  override val parameterGroups = List(ParameterGroup("", datasourceIdParameter, shouldOverwriteParameter))
 }
 
 object WriteDatasourceInfo extends WriteDatasourceInfo

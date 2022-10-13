@@ -19,17 +19,18 @@ import scala.util.Try
 
 package object sidebar {
 
-  def actionTypes(state: FlowItemState): ReactElement =
+  def actionTypes(state: FlowItemState): ReactElement = {
     div(className := "flow-sidebar-components")(
       state.actionTypes.map { at =>
         li(className := "flow-component-item", draggable := (!state.isRunning).toString, onDrag := (_ => Circuit.dispatch(SelectActionType(at))))(
-          Fragment(
-            pill(actionTypeColour(at)),
-            i"actiontypes.${at.getClass.getSimpleName}"
-          )
+            Fragment(
+              pill(actionTypeColour(at)), at.name
+//              i"actiontypes.${at.name}"
+            )
         )
       }
     )
+  }
 
 
   def parameters(flow: Option[Flow],

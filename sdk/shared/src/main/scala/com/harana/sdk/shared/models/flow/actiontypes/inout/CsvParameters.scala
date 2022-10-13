@@ -73,7 +73,7 @@ object CsvParameters {
       def getCustomColumnSeparator = $(customColumnSeparator)
       def setCustomColumnSeparator(value: String): this.type = set(customColumnSeparator, value)
 
-      override val parameterGroups = List(ParameterGroup(None, customColumnSeparator))
+      override val parameterGroups = List(ParameterGroup("", customColumnSeparator))
     }
   }
 }

@@ -2,7 +2,6 @@ package com.harana.sdk.shared.models.flow.parameters.choice
 
 import com.harana.sdk.shared.models.flow.parameters.Parameter
 import com.harana.sdk.shared.models.flow.parameters.exceptions.NoArgumentConstructorRequiredError
-import com.harana.sdk.shared.models.flow.utils.TypeUtils
 import izumi.reflect.Tag
 
 import scala.reflect.runtime.universe._

@@ -4,10 +4,10 @@ import com.harana.sdk.backend.models.flow.ExecutionContext
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.serialization.{SerializableSparkEstimator, SerializableSparkModel}
 import com.harana.sdk.backend.models.flow.actionobjects.{Estimator, ParametersWithSparkWrappers, SparkEstimatorWrapper, SparkModelWrapper}
+import com.harana.sdk.backend.models.flow.utils.TypeUtils
 import com.harana.sdk.shared.models.flow.actionobjects.report.Report
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.{HasLabelColumnParameter, HasPredictionColumnCreatorParameter}
 import com.harana.sdk.shared.models.flow.parameters.{Parameter, ParameterMap}
-import com.harana.sdk.shared.models.flow.utils.TypeUtils
 import org.apache.spark.ml
 import org.apache.spark.sql.types.StructType
 

@@ -5,7 +5,7 @@ import com.harana.modules.vertx.models.streams.{BufferReadStream, GzipReadStream
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
 import io.vertx.core.buffer.Buffer
-import io.vertx.core.http.{Cookie, HttpHeaders, HttpMethod, ServerWebSocket, WebSocket, WebSocketBase, WebSocketFrame}
+import io.vertx.core.http.{Cookie, HttpHeaders, HttpMethod, HttpServerResponse, ServerWebSocket, WebSocket, WebSocketBase, WebSocketFrame}
 import io.vertx.core.http.HttpHeaders.CONTENT_TYPE
 import io.vertx.core.streams.Pump
 import io.vertx.core.{AsyncResult, Handler, Promise, Vertx => VX}
@@ -20,6 +20,7 @@ import org.pac4j.vertx.handler.impl.{SecurityHandler, SecurityHandlerOptions}
 import zio.internal.Platform
 import zio.{Exit, Runtime, Task, ZIO}
 
+import java.io.{File, FileInputStream}
 import scala.jdk.CollectionConverters._
 
 package object vertx {
@@ -122,6 +123,22 @@ package object vertx {
 
     val options = new SecurityHandlerOptions().setClients("AnonymousClient")
     router.get(url).handler(new SecurityHandler(vx, sessionStore, config, authProvider, options))
+  }
+
+
+  def sendFile(file: File, vx: VX, rc: RoutingContext) = {
+    val r = rc.response()
+    r.putHeader("Content-Disposition", s"attachment; filename=${file.getName};")
+    r.setChunked(true)
+    r.putHeader(HttpHeaders.CONTENT_LENGTH, file.length().toString)
+    val rs = new InputStreamReadStream(new FileInputStream(file), vx)
+    val pump = Pump.pump(rs, r)
+    rs.endHandler(_ => {
+      r.end()
+      r.close()
+    })
+    pump.start()
+    rs.resume()
   }
 
 

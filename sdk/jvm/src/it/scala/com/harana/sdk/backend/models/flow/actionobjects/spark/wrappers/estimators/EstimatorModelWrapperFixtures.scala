@@ -59,7 +59,7 @@ object EstimatorModelWrapperFixtures {
   }
 
   class SimpleSparkModelWrapper extends SparkModelWrapper[SimpleSparkModel, SimpleSparkEstimator] with HasPredictionColumn {
-    override val parameterGroups = List(ParameterGroup(None, predictionColumnParameter))
+    override val parameterGroups = List(ParameterGroup("", predictionColumnParameter))
 
     override def report(extended: Boolean = true) = ???
     def loadModel(ctx: ExecutionContext, path: String): SerializableSparkModel[SimpleSparkModel] = ???
@@ -69,7 +69,7 @@ object EstimatorModelWrapperFixtures {
       extends SparkEstimatorWrapper[SimpleSparkModel, SimpleSparkEstimator, SimpleSparkModelWrapper]
       with HasPredictionColumn {
 
-    override val parameterGroups = List(ParameterGroup(None, predictionColumnParameter))
+    override val parameterGroups = List(ParameterGroup("", predictionColumnParameter))
 
     override def report(extended: Boolean = true) = ???
 

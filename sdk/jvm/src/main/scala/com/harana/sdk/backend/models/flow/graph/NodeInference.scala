@@ -1,16 +1,16 @@
 package com.harana.sdk.backend.models.flow.graph
 
 import com.harana.sdk.backend.models.flow.Catalog.ActionObjectCatalog
+import com.harana.sdk.backend.models.flow.Knowledge
 import com.harana.sdk.backend.models.flow.actiontypes.ActionType
+import com.harana.sdk.backend.models.flow.catalog.Catalog
 import com.harana.sdk.backend.models.flow.graph.TypesAccordance.TypesAccordance
 import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
-import com.harana.sdk.backend.models.flow.{Catalog, Knowledge}
-import com.harana.sdk.shared.models.flow.{Action, ActionTypeInfo}
 import com.harana.sdk.shared.models.flow.actionobjects.ActionObjectInfo
 import com.harana.sdk.shared.models.flow.exceptions.FlowError
 import com.harana.sdk.shared.models.flow.graph.Endpoint
 import com.harana.sdk.shared.models.flow.graph.node.Node
-
+import com.harana.sdk.shared.models.flow.{Action, ActionTypeInfo}
 import izumi.reflect.Tag
 
 object NodeInference {
@@ -21,7 +21,8 @@ object NodeInference {
 
     val parametersValidationErrors = node.value.typeInfo.validateParameters
 
-    val actionType = Catalog.actionTypeForActionTypeInfo(node.value.typeInfo)
+    // FIXME: Do we need to instantiate new type ?
+    val actionType = Catalog.actionType(node.value.typeInfo)()
 
     def defaultInferenceResult(additionalErrors: List[FlowError] = List.empty) =
       createDefaultKnowledge(

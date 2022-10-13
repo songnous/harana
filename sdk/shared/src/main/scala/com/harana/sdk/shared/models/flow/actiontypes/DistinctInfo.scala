@@ -25,7 +25,7 @@ trait DistinctInfo extends Action3To1TypeInfo[DataFrameInfo, DataFrameInfo, Data
 
   val sParameter = StringParameter("test")
 
-  override val parameterGroups = List(ParameterGroup(None, sParameter))
+  override val parameterGroups = List(ParameterGroup("", sParameter))
 
   //override val parameterGroups = List.empty[ParameterGroup]
 

@@ -1,9 +1,9 @@
 package com.harana.sdk.backend.models.flow.actionobjects.serialization
 
 import com.harana.sdk.backend.models.flow.ExecutionContext
+import com.harana.sdk.backend.models.flow.utils.TypeUtils
 import com.harana.sdk.backend.models.flow.utils.catalog.exceptions.NoParameterlessConstructorInClassError
 import com.harana.sdk.shared.models.flow.parameters.Parameters
-import com.harana.sdk.shared.models.flow.utils.TypeUtils
 import io.circe.Json
 import io.circe.syntax.EncoderOps
 import org.apache.hadoop.fs.Path

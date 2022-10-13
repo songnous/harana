@@ -7,6 +7,7 @@ import com.harana.sdk.shared.models.flow.catalogs.ActionCategory
 import com.harana.sdk.shared.models.flow.execution.spark.ExecutionStatus
 import com.harana.sdk.shared.models.flow.graph.node.Node
 import com.harana.sdk.shared.models.flow.graph.{Edge, Endpoint}
+import com.harana.sdk.shared.models.flow.utils.TypeUtils
 import com.harana.sdk.shared.utils.Random
 import com.harana.ui.external.flow.types.{FlowElement, FlowNode, HandleType}
 import com.harana.ui.external.flow.{Connection, FlowEdge, Handle, XYPosition}
@@ -17,6 +18,7 @@ import slinky.core.facade.ReactElement
 import scala.reflect.ClassTag
 import scala.reflect.runtime.{universe => ru}
 import izumi.reflect.Tag
+
 import scala.scalajs.js
 import scala.scalajs.js.Dynamic.literal
 
@@ -44,6 +46,7 @@ package object ui {
       case ActionCategory.IO => "#cac4ab"
       case ActionCategory.ML => "#caabb9"
       case ActionCategory.Transformation => "#abcabc"
+      case _ => "#000000"
     }
 
 
@@ -84,9 +87,9 @@ package object ui {
 
 
   @inline
-  def toFlowNode[T <: ActionTypeInfo](action: Action[T], i18nPrefix: String)(implicit ct: ClassTag[T]) = {
+  def toFlowNode[T <: ActionTypeInfo : Tag](action: Action[T], i18nPrefix: String) = {
     new FlowNode {
-      val id = action.id
+      val id = action.id.toString
       val position = new XYPosition {
         val x = action.position._1
         val y = action.position._2
@@ -100,7 +103,7 @@ package object ui {
         val percentage = 0
         val executionStatus = ExecutionStatus.None
         val vertical = false
-        val actionType = Catalog.actionsMap(ct.runtimeClass.asInstanceOf[ActionTypeInfo].id)
+        val actionType = TypeUtils.actionType[T](Tag[T])
         val parameterValues = action.parameterValues
       }
     }

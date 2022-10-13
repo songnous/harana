@@ -25,6 +25,7 @@ import io.vertx.ext.bridge.{BridgeOptions, PermittedOptions}
 import io.vertx.ext.eventbus.bridge.tcp.TcpEventBusBridge
 import io.vertx.ext.web.client.{WebClient, WebClientOptions}
 import com.harana.modules.vertx.proxy.WebProxyClient
+import io.vertx.core.file.FileSystemOptions
 import io.vertx.ext.web.handler.{BodyHandler, CorsHandler, SessionHandler, StaticHandler}
 import io.vertx.ext.web.sstore.ClusteredSessionStore
 import io.vertx.ext.web.templ.handlebars.HandlebarsTemplateEngine
@@ -44,10 +45,12 @@ import zio.blocking._
 import zio.{IO, Task, UIO, ZLayer}
 import io.vertx.ext.web.sstore.cookie.CookieSessionStore
 
+import java.io.File
 import scala.jdk.CollectionConverters._
 import scala.collection.concurrent.{TrieMap, Map => ConcurrentMap}
 import scala.compat.java8.FunctionConverters.asJavaFunction
 import scala.compat.java8.OptionConverters._
+import scala.io.Source
 
 object LiveVertx {
 
@@ -82,6 +85,8 @@ object LiveVertx {
                                     .setClusterPublicPort(eventBusPort)
                                     .setLogActivity(true)
 
+        fileSystemOptions       = new FileSystemOptions().setFileCachingEnabled(false)
+
         registry                <- micrometer.registry
 
         clusterManager          <- UIO {
@@ -98,6 +103,7 @@ object LiveVertx {
                                           .setBlockedThreadCheckInterval(vertxBlockedThreads)
                                           .setClusterManager(clusterManager)
                                           .setEventBusOptions(eventBusOptions)
+                                          .setFileSystemOptions(fileSystemOptions)
                                           .setMetricsOptions(new MicrometerMetricsOptions().setMicrometerRegistry(registry).setPrometheusOptions(new VertxPrometheusOptions().setEnabled(true)).setEnabled(true)),
                                         (result: AsyncResult[VX]) => if (result.succeeded()) cb(Task.succeed(result.result)) else cb(Task.fail(result.cause()))
                                       )
@@ -362,8 +368,6 @@ object LiveVertx {
                                   // Common
                                   router.mountSubRouter("/eventbus", Handlers.sock(vx, eventBusInbound, eventBusOutbound))
                                   router.get("/metrics").handler(PrometheusScrapingHandler.create())
-                                  router.get("/public/*").handler(setContentType(ContentType.HTML.value))
-                                  router.get("/public/*").handler(StaticHandler.create("public"))
                                   router.get("/health").handler(rc => {
                                     val response = rc.response.putHeader("content-type", "text/plain")
                                     if (GCHealthCheck.current.isHealthy)
@@ -371,8 +375,13 @@ object LiveVertx {
                                     else
                                       response.setStatusCode(503).end("UNHEALTHY")
                                   })
-                                  router.get("/ready").handler(rc => {
-                                    rc.response.putHeader("content-type", "text/plain").setStatusCode(200).end("READY")
+                                  router.get("/ready").handler(rc => rc.response.putHeader("content-type", "text/plain").setStatusCode(200).end("READY"))
+
+                                  // Public
+                                  // FIXME - Use StaticHandler in Production
+                                  router.get("/public/*").handler((rc: RoutingContext) => {
+                                    val path = s"${System.getProperty("user.dir")}/src/main/resources${rc.request().uri}"
+                                    sendFile(new File(path), vx, rc)
                                   })
 
                                   // CORS

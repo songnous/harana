@@ -95,7 +95,8 @@ import scala.scalajs._
 		if (state.isValid) None else Some("red")
 
 
-	override def componentWillMount() = {
+	// FIXME: Review as this was previously componentWillMount
+	override def componentDidMount() = {
 		val value = if (props.value.isDefined) Some(props.value.get) else props.parameter.default
 		setState(State(true, value))
 	}

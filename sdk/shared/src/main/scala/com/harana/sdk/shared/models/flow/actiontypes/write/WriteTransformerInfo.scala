@@ -18,6 +18,9 @@ trait WriteTransformerInfo extends Action1To0TypeInfo[TransformerInfo] with Para
   val since = Version(1, 1, 0)
   val category = IO
 
+  @transient
+  lazy val portI_0: Tag[TransformerInfo] = Tag[TransformerInfo]
+
   val shouldOverwriteParameter = BooleanParameter("overwrite", default = Some(true))
   def getShouldOverwrite = $(shouldOverwriteParameter)
   def setShouldOverwrite(value: Boolean): this.type = set(shouldOverwriteParameter, value)
@@ -26,10 +29,7 @@ trait WriteTransformerInfo extends Action1To0TypeInfo[TransformerInfo] with Para
   def getOutputPath = $(outputPathParameter)
   def setOutputPath(value: String): this.type = set(outputPathParameter, value)
 
-  override val parameterGroups = List(ParameterGroup(None, outputPathParameter, shouldOverwriteParameter))
-
-  @transient
-  lazy val portI_0: Tag[TransformerInfo] = Tag[TransformerInfo]
+  override val parameterGroups = List(ParameterGroup("", outputPathParameter, shouldOverwriteParameter))
 
 }
 

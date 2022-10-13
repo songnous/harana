@@ -27,4 +27,5 @@ class RColumnTransformer() extends CustomCodeColumnTransformer with RColumnTrans
 
   def isValid(context: ExecutionContext, code: String): Boolean =
     context.customCodeExecutor.isRValid(code)
+
 }

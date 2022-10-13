@@ -27,7 +27,8 @@ trait Parameters extends Serializable with HasInferenceResult {
         param.asInstanceOf[Parameter[Any]].validate($(param))
       else
         List(ParamValueNotProvidedError(param.name))
-    }.toList
+    }
+
     val customValidationErrors = customValidateParameters
     singleParameterErrors ++ customValidationErrors
   }

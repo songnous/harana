@@ -6,7 +6,6 @@ import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actiontypes.exceptions.CustomActionExecutionError
 import com.harana.sdk.shared.models.flow.actionobjects.{CustomCodeEvaluatorInfo, MetricValue}
 import com.harana.sdk.shared.models.flow.actionobjects.spark.wrappers.parameters.common.HasIsLargerBetterParameter
-import com.harana.sdk.shared.models.flow.parameters.{CodeSnippetParameter, StringParameter}
 
 abstract class CustomCodeEvaluator() extends Evaluator
   with CustomCodeEvaluatorInfo

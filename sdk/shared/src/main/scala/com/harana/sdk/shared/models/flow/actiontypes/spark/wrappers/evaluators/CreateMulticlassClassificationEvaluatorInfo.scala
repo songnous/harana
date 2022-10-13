@@ -6,6 +6,7 @@ import com.harana.sdk.shared.models.flow.actiontypes.EvaluatorAsFactoryInfo
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory.ML.ModelEvaluation
 import com.harana.sdk.shared.models.flow.documentation.SparkActionDocumentation
 import com.harana.sdk.shared.models.flow.utils.Id
+import izumi.reflect.Tag
 
 trait CreateMulticlassClassificationEvaluatorInfo extends EvaluatorAsFactoryInfo[MulticlassClassificationEvaluatorInfo]
   with SparkActionDocumentation {
@@ -16,7 +17,7 @@ trait CreateMulticlassClassificationEvaluatorInfo extends EvaluatorAsFactoryInfo
   val docsGuideLocation = Some("mllib-evaluation-metrics.html#multiclass-classification")
   val category = ModelEvaluation
 
-  val portO_0 = typeTag[MulticlassClassificationEvaluatorInfo]
+  lazy val portO_0: Tag[MulticlassClassificationEvaluatorInfo] = typeTag
 
 }
 

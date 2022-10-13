@@ -1,16 +1,11 @@
 package com.harana.sdk.backend.models.flow.actiontypes
 
-import com.harana.sdk.backend.models.flow.{ExecutionContext, Knowledge}
 import com.harana.sdk.backend.models.flow.actionobjects.dataframe.DataFrame
 import com.harana.sdk.backend.models.flow.actionobjects.{Estimator, Transformer}
-import com.harana.sdk.backend.models.flow.inference.{InferContext, InferenceWarnings}
-import com.harana.sdk.shared.models.flow.actionobjects.{EstimatorInfo, TransformerInfo}
-import com.harana.sdk.shared.models.flow.actiontypes.EstimatorAsActionInfo
-import com.harana.sdk.shared.models.flow.actiontypes.FitInfo.{extractParameterMap, validateDynamicParameters}
-import com.harana.sdk.shared.models.flow.utils.TypeUtils
+import com.harana.sdk.backend.models.flow.inference.InferContext
+import com.harana.sdk.backend.models.flow.utils.TypeUtils
+import com.harana.sdk.backend.models.flow.{ExecutionContext, Knowledge}
 import izumi.reflect.Tag
-
-import scala.reflect.runtime.universe.{TypeTag, typeTag}
 
 abstract class EstimatorAsActionType[E <: Estimator[T], T <: Transformer]()(implicit typeTagE: Tag[E], typeTagT: Tag[T])
   extends ActionTypeType1To2[DataFrame, DataFrame, T] {

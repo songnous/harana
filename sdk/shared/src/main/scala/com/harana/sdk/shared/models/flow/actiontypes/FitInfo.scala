@@ -24,7 +24,7 @@ trait FitInfo
 
   val estimatorParameters = new DynamicParameter("input-estimator-parameters", default = Some(Json.Null), inputPort = 0)
   def setEstimatorParameters(jsValue: Json): this.type = set(estimatorParameters -> jsValue)
-  override val parameterGroups = List(ParameterGroup(None, estimatorParameters))
+  override val parameterGroups = List(ParameterGroup("", estimatorParameters))
 
   lazy val portI_0: Tag[EstimatorInfo] = typeTag
   lazy val portI_1: Tag[DataFrameInfo] = typeTag

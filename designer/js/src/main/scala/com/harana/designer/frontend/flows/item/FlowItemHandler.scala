@@ -32,16 +32,7 @@ class FlowItemHandler extends ActionHandler(zoomTo(_.flowItemState)) {
       new Timer().scheduleAtFixedRate(new java.util.TimerTask {
         def run(): Unit = Circuit.dispatch(SaveFlow)
       }, 0L, 2000L)
-
-      println("A")
-      try {
-        val actions = Catalog.actionsMap.values.toList
-        println(s"Actions size = ${actions.size}")
-      } catch {
-        case e: Exception => e.printStackTrace()
-      }
-      println("B")
-      effectOnly(Effect.action(UpdateActionTypes(List())))
+      noChange
 
 
     case ReceiveEvent(eventType, eventParameters) =>
@@ -51,8 +42,9 @@ class FlowItemHandler extends ActionHandler(zoomTo(_.flowItemState)) {
     case OpenFlow(id) =>
       effectOnly(
         Effect.action(Reset) +
-        Effect(Http.getRelativeAs[Flow](s"/api/flows/$id").map(f => if (f.isDefined) UpdateFlow(f.get) else NoAction)) >>
-        Effect(Http.getRelativeAs[FlowExecution](s"/api/execution/flows/progress/$id").map(fe => if (fe.isDefined) UpdateFlowExecution(fe.get) else NoAction))
+        Effect(Http.getRelativeAs[Flow](s"/api/flows/$id").map(f => if (f.isDefined) UpdateFlow(f.get) else NoAction))
+//FIXME
+//        Effect(Http.getRelativeAs[FlowExecution](s"/api/execution/flows/progress/$id").map(fe => if (fe.isDefined) UpdateFlowExecution(fe.get) else NoAction))
       )
 
 

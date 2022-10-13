@@ -10,7 +10,7 @@ case class ClassWithParameters() extends Parameters {
   val string = StringParameter("string")
   val bool = BooleanParameter("bool")
 
-  override val parameterGroups = List(ParameterGroup(None, string, bool))
+  override val parameterGroups = List(ParameterGroup("", string, bool))
 
   def setBool(b: Boolean) = set(bool, b)
   def setString(s: String): this.type = set(string, s)

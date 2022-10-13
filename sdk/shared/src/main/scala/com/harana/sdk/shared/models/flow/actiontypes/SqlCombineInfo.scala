@@ -41,7 +41,7 @@ trait SqlCombineInfo extends Action2To1TypeInfo[DataFrameInfo, DataFrameInfo, Da
     else
       List.empty[FlowError]
 
-  override val parameterGroups = List(ParameterGroup(None, leftTableNameParameter, rightTableNameParameter, sqlCombineExpressionParameter))
+  override val parameterGroups = List(ParameterGroup("", leftTableNameParameter, rightTableNameParameter, sqlCombineExpressionParameter))
 
   @transient
   lazy val portI_0: Tag[DataFrameInfo] = Tag[DataFrameInfo]

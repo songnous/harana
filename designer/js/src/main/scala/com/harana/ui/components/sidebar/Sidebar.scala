@@ -1,13 +1,13 @@
 package com.harana.ui.components.sidebar
 
-import com.harana.designer.frontend.utils.i18nUtils.ops
+import com.harana.sdk.shared.utils.Random
 import com.harana.ui.components.{cssSet, emptyElement, when}
-import com.harana.ui.external.shoelace.{IconButton, Icon, Menu}
+import com.harana.ui.external.shoelace.{Icon, IconButton, Menu}
 import slinky.core.StatelessComponent
 import slinky.core.annotations.react
 import slinky.core.facade.{Fragment, ReactElement}
 import slinky.web.html._
-import com.harana.sdk.shared.utils.Random
+
 import scala.scalajs.js
 
 @react class Sidebar extends StatelessComponent {
@@ -37,7 +37,7 @@ import scala.scalajs.js
 				div(className := "tabbable sortable ui-sortable")(
 					ul(className := cssSet("nav nav-lg nav-tabs nav-justified"-> true, "no-margin" -> !props.padding))(
 						props.tabs.map { tab =>
-							li(className := cssSet("active" -> isTabActive(tab), "dropdown" -> tab.menu.isDefined))(
+							li(className := cssSet("active" -> isTabActive(tab), "dropdown" -> tab.menu.isDefined), key := tab.name)(
 								a(onClick := (() => if (props.onChangeTab.isDefined) props.onChangeTab.get(tab)), className := "dropdown-toggle")(
 									when(tab.icon, Icon(Some(tab.icon.get._1), Some(tab.icon.get._2), name = tab.icon.get._1)),
 									span(className := "visible-xs-inline-block position-right")(tab.name),

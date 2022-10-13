@@ -1,12 +1,12 @@
 package com.harana.sdk.backend.models.flow
 
 import com.harana.sdk.backend.models.flow.actiontypes.ActionType
+import com.harana.sdk.backend.models.flow.utils.TypeUtils
 import com.harana.sdk.backend.models.flow.utils.catalog.GenericCatalog
 import com.harana.sdk.backend.models.flow.utils.catalog.exceptions.NoParameterlessConstructorInClassError
 import com.harana.sdk.shared.models.flow.parameters.Parameter
 import com.harana.sdk.shared.models.flow.ActionTypeInfo
 import com.harana.sdk.shared.models.flow.actionobjects.ActionObjectInfo
-import com.harana.sdk.shared.models.flow.utils.TypeUtils
 import com.harana.sdk.shared.utils.HMap
 
 import java.lang.reflect.Constructor
