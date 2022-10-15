@@ -69,11 +69,8 @@ object LiveDataSources {
     def typeWithId(rc: RoutingContext): Task[Response] =
       for {
         id                <- Task(rc.pathParam("id"))
-        _                 <- logger.info(s"Looking for: ${id}")
         dataSourceTypes   <- cachedDataSourceTypes
-        _                 <- logger.info(s"Number of data source types = ${dataSourceTypes.size}")
         dataSourceType    =  dataSourceTypes.find(_.id == id)
-        _                 <- logger.info(s"Data source type = ${dataSourceType.map(_.name).getOrElse("Unknown")}")
         response          =  if (dataSourceType.isDefined) Response.JSON(dataSourceType.get.asJson) else Response.Empty(statusCode = Some(404))
       } yield response
 

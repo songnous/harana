@@ -31,7 +31,7 @@ abstract case class GridHandler[Entity <: Id, EditState](entityType: EntityType,
 
   def onInit(userPreferences: Map[String, String]): Option[Effect] = None
   def onNewOrEdit: Option[Effect] = None
-  def onNewOrEditChange(parameter: Parameter[_]): Option[Effect] = None
+  def onNewOrEditParameterChange(parameter: Parameter[_]): Option[Effect] = None
   def onCreate(subType: Option[EntitySubType]): Option[Effect] = None
   def onDelete(subType: Option[EntitySubType]): Option[Effect] = None
 
@@ -92,8 +92,8 @@ abstract case class GridHandler[Entity <: Id, EditState](entityType: EntityType,
     case ChangeEditParameter(e, parameter, values) =>
       if (e.equals(entityType) && state.value.editValues != values)
         effectOnly(
-          Effect.action(UpdateEditValues(e, values)) >>
-          onNewOrEditChange(parameter).getOrElse(Effect.action(NoAction)) >>
+          Effect.action(UpdateEditParameterValues(e, values)) >>
+          onNewOrEditParameterChange(parameter).getOrElse(Effect.action(NoAction)) >>
           Effect.action(UpdateNewOrEditDialog(e))
         )
       else
@@ -200,11 +200,11 @@ abstract case class GridHandler[Entity <: Id, EditState](entityType: EntityType,
       if (e.equals(entityType)) updated(value.copy(editParameterGroups = parameters), Effect.action(UpdateNewOrEditDialog(e))) else noChange
 
 
-    case UpdateEditValue(e, k, v) =>
+    case UpdateEditParameterValue(e, k, v) =>
       if (e.equals(entityType)) updated(value.copy(editValues = state.value.editValues +~ (k -> v))) else noChange
 
 
-    case UpdateEditValues(e, values) =>
+    case UpdateEditParameterValues(e, values) =>
       if (e.equals(entityType)) updated(value.copy(editValues = values)) else noChange
 
 
@@ -241,9 +241,9 @@ abstract case class GridHandler[Entity <: Id, EditState](entityType: EntityType,
 
 
     case UpdateSelectedItem(e, item) =>
-      if (e.equals(entityType))
+      if (e.equals(entityType)) {
         updated(value.copy(selectedItem = item, editValues = item.map(_.parameterValues).getOrElse(HMap.empty)))
-      else noChange
+      } else noChange
 
 
     case UpdateSortOrdering(e, sortOrdering) =>

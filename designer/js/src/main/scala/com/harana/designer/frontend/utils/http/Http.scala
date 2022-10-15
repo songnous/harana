@@ -90,18 +90,16 @@ object Http {
   }
 
   private def decodeResponse[T](url: String, response: Response[Either[String, String]])(implicit decoder: Decoder[T]): Option[T] = {
-    if (response.isSuccess) {
-      val json = response.body.toOption.get
-      println(json)
-      decode[T](json) match {
-        case Left(e) => {
+    if (response.isSuccess)
+      decode[T](response.body.toOption.get) match {
+        case Left(e) =>
           println(s"Failed decoding JSON: $url - ${e.getMessage}")
           throw new Exception(e)
-        }
-        case Right(result) => Some(result)
+
+        case Right(result) =>
+          Some(result)
       }
-    }else{
+    else
       None
-    }
   }
 }

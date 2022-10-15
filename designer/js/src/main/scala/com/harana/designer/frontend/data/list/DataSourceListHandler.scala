@@ -4,7 +4,7 @@ import com.harana.designer.frontend.Circuit.zoomTo
 import com.harana.designer.frontend.Main
 import com.harana.designer.frontend.analytics.Analytics
 import com.harana.designer.frontend.common.grid.GridHandler
-import com.harana.designer.frontend.common.grid.GridStore.{EntitySubType, UpdateEditParameters, UpdateEditState, UpdateEditValue}
+import com.harana.designer.frontend.common.grid.GridStore.{EntitySubType, UpdateEditParameters, UpdateEditState, UpdateEditParameterValue}
 import com.harana.designer.frontend.common.grid.ui.GridPageItem
 import com.harana.designer.frontend.data.list.DataSourceListStore.DataSourceEditState
 import com.harana.designer.frontend.utils.ColorUtils
@@ -19,7 +19,6 @@ import diode.AnyAction.aType
 import diode._
 
 import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
-import scala.concurrent.Future
 
 class DataSourceListHandler extends GridHandler[DataSource, DataSourceEditState]("datasources", zoomTo(_.dataSourceListState)) {
 
@@ -87,10 +86,8 @@ class DataSourceListHandler extends GridHandler[DataSource, DataSourceEditState]
     )
 
 
-  private def fetchDataSourceTypes(direction: String) = {
-    println(s"Fetching: /api/datasources/types/$direction")
+  private def fetchDataSourceTypes(direction: String) =
     Http.getRelativeAs[List[String]](s"/api/datasources/types/direction/$direction").map(_.getOrElse(List()))
-  }
 
 
   private def updateDataSourceTypes(direction: SyncDirection) =
@@ -102,7 +99,7 @@ class DataSourceListHandler extends GridHandler[DataSource, DataSourceEditState]
       })
 
 
-  private def fetchDataSourceType(direction: String, dsType: String) =
+  private def fetchDataSourceType(dsType: String) =
     Http.getRelativeAs[DataSourceType](s"/api/datasources/types/$dsType")
 
 
@@ -122,42 +119,35 @@ class DataSourceListHandler extends GridHandler[DataSource, DataSourceEditState]
     val dsTypes = state.value.editState.dataSourceTypes
     (dsType, dsTypes) match {
       case (dsType, dsTypes) =>
-        fetchDataSourceType(direction, dsType).map(ds => {
-          typeParameter = StringParameter("type", options = dsTypes(direction).map(s => (s, s)))
-
-          ActionBatch(
-            UpdateEditParameters("datasources", List(aboutGroup) ++ ds.get.parameterGroups),
-            UpdateEditValue("datasources", typeParameter, dsType)
-          )
-        })
+        typeParameter = StringParameter("type", options = dsTypes(direction).map(s => (s, s)))
+        Effect(fetchDataSourceType(dsType).map(ds => UpdateEditParameters("datasources", List(aboutGroup) ++ ds.get.parameterGroups))) +
+        Effect.action(UpdateEditParameterValue("datasources", typeParameter, dsType))
       case _ =>
-        Future(NoAction)
+        Effect.action(NoAction)
     }
   }
 
 
   override def onInit(userPreferences: Map[String, String]) =
-    Some(updateAllDataSourceTypes())
-
+    Some(
+      Effect.action(UpdateEditParameters("datasources", List(aboutGroup))) >> updateAllDataSourceTypes()
+    )
 
 
   override def onNewOrEdit =
     Some(
-      updateAllDataSourceTypes() >>
-      Effect.action(UpdateEditValue("datasources", directionParameter, direction)) >>
-      Effect(onDataSourceTypeChanged(direction, dataSourceType))
+      Effect.action(UpdateEditParameterValue("datasources", directionParameter, direction)) >>
+      onDataSourceTypeChanged(direction, dataSourceType)
     )
 
 
-  override def onNewOrEditChange(parameter: Parameter[_]) =
+  override def onNewOrEditParameterChange(parameter: Parameter[_]) =
     Some(
-      Effect(
         parameter.name match {
-          case "direction" => onDataSourceTypeChanged(direction, state.value.editState.dataSourceTypes(direction).head)
-          case "type" => onDataSourceTypeChanged(direction, dataSourceType)
-          case _ => Future(NoAction)
+          case "direction"  => onDataSourceTypeChanged(direction, state.value.editState.dataSourceTypes(direction).head)
+          case "type"       => onDataSourceTypeChanged(direction, dataSourceType)
+          case _            => Effect.action(NoAction)
         }
-      )
     )
 
 

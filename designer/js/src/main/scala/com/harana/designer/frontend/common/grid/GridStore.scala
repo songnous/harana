@@ -51,8 +51,8 @@ object GridStore {
 
   case class UpdateEditParameters(entityType: EntityType, parameters: List[ParameterGroup]) extends DiodeAction
   case class UpdateEditState[E](entityType: EntityType, editState: E) extends DiodeAction
-  case class UpdateEditValue(entityType: EntityType, name: Parameter[_], value: Any) extends DiodeAction
-  case class UpdateEditValues(entityType: EntityType, values: HMap[Parameter.Values]) extends DiodeAction
+  case class UpdateEditParameterValue(entityType: EntityType, name: Parameter[_], value: Any) extends DiodeAction
+  case class UpdateEditParameterValues(entityType: EntityType, values: HMap[Parameter.Values]) extends DiodeAction
   case class UpdateEntitySubType(entityType: EntityType, subType: Option[EntitySubType]) extends DiodeAction
   case class UpdateEntities[E](entityType: EntityType, entities: List[E]) extends DiodeAction
   case class UpdateItems(entityType: EntityType, gridItems: List[GridPageItem]) extends DiodeAction
