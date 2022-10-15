@@ -43,7 +43,6 @@ class DataSourceListHandler extends GridHandler[DataSource, DataSourceEditState]
       updated = dataSource.updated,
       chartType = Some(PillChartType.Bar),
       link = LinkType.Page(s"/data/${dataSource.id}"),
-      entitySubType = None,
       background = dataSource.background,
       additionalData = Map("type" -> dataSource.dataSourceType),
       parameterValues = HMap[Parameter.Values](
@@ -88,8 +87,10 @@ class DataSourceListHandler extends GridHandler[DataSource, DataSourceEditState]
     )
 
 
-  private def fetchDataSourceTypes(direction: String) =
-    Http.getRelativeAs[List[String]](s"/api/datasources/types/$direction").map(_.getOrElse(List()))
+  private def fetchDataSourceTypes(direction: String) = {
+    println(s"Fetching: /api/datasources/types/$direction")
+    Http.getRelativeAs[List[String]](s"/api/datasources/types/direction/$direction").map(_.getOrElse(List()))
+  }
 
 
   private def updateDataSourceTypes(direction: SyncDirection) =
@@ -102,7 +103,7 @@ class DataSourceListHandler extends GridHandler[DataSource, DataSourceEditState]
 
 
   private def fetchDataSourceType(direction: String, dsType: String) =
-    Http.getRelativeAs[DataSourceType](s"/api/datasources/type/$dsType")
+    Http.getRelativeAs[DataSourceType](s"/api/datasources/types/$dsType")
 
 
   private def direction =
@@ -111,6 +112,10 @@ class DataSourceListHandler extends GridHandler[DataSource, DataSourceEditState]
 
   private def dataSourceType =
     state.value.editValues.getOrElse(typeParameter, state.value.editState.dataSourceTypes(direction).head)
+
+
+  private def updateAllDataSourceTypes() =
+    updateDataSourceTypes(SyncDirection.Source) + updateDataSourceTypes(SyncDirection.Destination)
 
 
   private def onDataSourceTypeChanged(direction: String, dsType: String) = {
@@ -132,12 +137,13 @@ class DataSourceListHandler extends GridHandler[DataSource, DataSourceEditState]
 
 
   override def onInit(userPreferences: Map[String, String]) =
-    Some(updateDataSourceTypes(SyncDirection.Source) + updateDataSourceTypes(SyncDirection.Destination))
+    Some(updateAllDataSourceTypes())
+
 
 
   override def onNewOrEdit =
     Some(
-      onInit(Map()).get >>
+      updateAllDataSourceTypes() >>
       Effect.action(UpdateEditValue("datasources", directionParameter, direction)) >>
       Effect(onDataSourceTypeChanged(direction, dataSourceType))
     )

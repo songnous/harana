@@ -7,8 +7,8 @@ import com.harana.sdk.shared.models.flow.catalog.Catalog
 import com.harana.sdk.shared.models.flow.parameters.Parameter
 import com.harana.sdk.shared.models.flow.{ActionTypeInfo, Flow, FlowExecution}
 import com.harana.sdk.shared.utils.{HMap, Random}
-import com.harana.ui.external.flow.types.{FlowElement, FlowNode}
-import com.harana.ui.external.flow.{Connection, FlowEdge, FlowInstance}
+import com.harana.ui.external.flow.types.{FlowEdge, FlowElement, FlowNode}
+import com.harana.ui.external.flow.{Connection, FlowInstance}
 import diode.{Action => DiodeAction}
 import slinky.web.SyntheticMouseEvent
 

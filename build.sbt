@@ -38,7 +38,6 @@ val sparkPatchesPatch2_x = project settings(sparkSettings) in file(s"spark-patch
  ****************************************************************************************************************/
 
 val sdk = crossProject("sdk")
-  .enablePlugins(HaranaBuildInfoPlugin)
   .settings(
     buildInfoPackage := "com.harana.sdk.shared",
     libraryDependencies ++=
@@ -202,6 +201,7 @@ val modulesJS = modules.js dependsOn (sdkJS)
  ****************************************************************************************************************/
 
 val designer = crossProject("designer")
+  .jvmConfigure(_.enablePlugins(HaranaBuildInfoPlugin))
   .settings(
     libraryDependencies ++=
       Library.sttp.value :+

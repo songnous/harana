@@ -15,10 +15,10 @@ case class GridPageItem(id: String,
                         tags: Set[String],
                         created: Instant,
                         updated: Instant,
-                        chartType: Option[PillChartType],
                         link: LinkType,
-                        entitySubType: Option[String],
-                        background: Option[Background],
+                        chartType: Option[PillChartType] = None,
+                        entitySubType: Option[String] = None,
+                        background: Option[Background] = None,
                         parameterValues: HMap[Parameter.Values] = HMap.empty,
                         additionalData: Map[String, AnyRef] = Map.empty)
 

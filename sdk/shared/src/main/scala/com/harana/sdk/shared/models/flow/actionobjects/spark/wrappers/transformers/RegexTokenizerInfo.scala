@@ -10,9 +10,7 @@ trait RegexTokenizerInfo extends TransformerInfo with Parameters {
 
   val gapsParameter = BooleanParameter("gaps", default = Some(true))
   val minTokenLengthParameter = IntParameter("min-token-length", default = Some(1), validator = RangeValidator.positiveIntegers)
-
   val patternParameter = StringParameter("pattern", default = Some("\\s+"))
-
   val specificParameters = Array[Parameter[_]](gapsParameter, minTokenLengthParameter, patternParameter)
 
 }

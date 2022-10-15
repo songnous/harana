@@ -3,9 +3,6 @@ package com.harana.sdk.shared.models.flow.graph
 import com.harana.sdk.shared.models.flow.graph.node.Node
 import com.harana.sdk.shared.models.flow.{Action, ActionTypeInfo, graph}
 import io.circe.generic.JsonCodec
-import io.circe.{Decoder, Encoder, HCursor, Json}
-
-import java.util.UUID
 
 @JsonCodec
 case class FlowGraph(override val nodes: Set[Node[Action[_ <: ActionTypeInfo]]] = Set.empty,

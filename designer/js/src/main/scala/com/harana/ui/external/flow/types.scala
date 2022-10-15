@@ -7,7 +7,8 @@ import scala.scalajs.js
 import scala.scalajs.js.|
 
 object types {
-  type FlowNode = Node[ActionNodeData]
+  type FlowNode = ReactFlowNode[ActionNodeData]
+  type FlowEdge = ReactFlowEdge
   type FlowElement = FlowNode | FlowEdge
   type FlowElementId = String
   type HandleType = String
@@ -92,41 +93,54 @@ trait OnConnectStartParams extends js.Object {
   val handleType: js.UndefOr[HandleType] = js.undefined
 }
 
-trait FlowEdge extends js.Object {
+trait ReactFlowEdge extends js.Object {
   val id: FlowElementId
   val source: FlowElementId
   val target: FlowElementId
   val sourceHandle: FlowElementId
   val targetHandle: FlowElementId
   val `type`: js.UndefOr[String] = js.undefined
-  val data: js.UndefOr[js.Object] = js.undefined
   val label: js.UndefOr[String] = js.undefined
   val labelStyle: js.UndefOr[js.Dynamic] = js.undefined
   val labelShowBg: js.UndefOr[Boolean] = js.undefined
   val labelBgStyle: js.UndefOr[js.Dynamic] = js.undefined
   val labelBgPadding: js.UndefOr[(Int, Int)] = js.undefined
   val labelBgBorderRadius: js.UndefOr[Int] = js.undefined
+  val arrowHeadType: js.UndefOr[String] = js.undefined
   val style: js.UndefOr[js.Dynamic] = js.undefined
   val animated: js.UndefOr[Boolean] = js.undefined
-  val arrowHeadType: js.UndefOr[String] = js.undefined
-  val isHidden: js.UndefOr[Boolean] = js.undefined
+  val hidden: js.UndefOr[Boolean] = js.undefined
+  val deletable: js.UndefOr[Boolean] = js.undefined
+  val focusable: js.UndefOr[Boolean] = js.undefined
+  val data: js.UndefOr[js.Object] = js.undefined
   val className: js.UndefOr[String] = js.undefined
-  val removable: js.UndefOr[Boolean] = js.undefined
+  val selected: js.UndefOr[Boolean] = js.undefined
 }
 
-trait Node[T <: js.Object] extends js.Object {
+trait ReactFlowNode[T <: js.Object] extends js.Object {
   val id: FlowElementId
   val position: XYPosition
-  val `type`: String
   val data: T
+  val `type`: String
   val __rf: js.UndefOr[js.Any] = js.undefined
   val style: js.UndefOr[js.Dynamic] = js.undefined
   val className: js.UndefOr[String] = js.undefined
   val targetPosition: js.UndefOr[Position] = js.undefined
   val sourcePosition: js.UndefOr[Position] = js.undefined
-  val isHidden: js.UndefOr[Boolean] = js.undefined
+  val hidden: js.UndefOr[Boolean] = js.undefined
+  val selected: js.UndefOr[Boolean] = js.undefined
+  val dragging: js.UndefOr[Boolean] = js.undefined
   val draggable: js.UndefOr[Boolean] = js.undefined
-  val removable: js.UndefOr[Boolean] = js.undefined
   val selectable: js.UndefOr[Boolean] = js.undefined
   val connectable: js.UndefOr[Boolean] = js.undefined
+  val deletable: js.UndefOr[Boolean] = js.undefined
+  val focusable: js.UndefOr[Boolean] = js.undefined
+  val dragHandle: js.UndefOr[String] = js.undefined
+  val width: js.UndefOr[Int] = js.undefined
+  val height: js.UndefOr[Int] = js.undefined
+  val parentNode: js.UndefOr[String] = js.undefined
+  val zIndex: js.UndefOr[Int] = js.undefined
+  val expandParent: js.UndefOr[Boolean] = js.undefined
+  val positionAbsolute: js.UndefOr[Position] = js.undefined
+  val ariaLabel: js.UndefOr[String] = js.undefined
 }

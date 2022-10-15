@@ -64,9 +64,7 @@ class ScheduleListHandler extends GridHandler[Schedule, ScheduleEditState]("sche
       tags = schedule.tags,
       created = schedule.created,
       updated = schedule.updated,
-      chartType = None,
       link = LinkType.Page(s"/schedules/${schedule.id}"),
-      entitySubType = None,
       background = schedule.background,
       parameterValues = HMap[Parameter.Values](
         (GridPageItem.titleParameter, schedule.title),

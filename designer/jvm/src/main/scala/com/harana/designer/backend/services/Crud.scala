@@ -47,10 +47,10 @@ object Crud {
     for {
       userId            <- userId(rc, config, jwt)
 
-      filterStage       =  Document("$match" -> Document("$or" -> creatorOrPublic(userId)))
-      projectStage      =  Document("$project" -> Document("tags" -> 1))
-      unwindStage       =  Document("$unwind" -> Document("path" -> "$tags"))
-      groupStage        =  Document("$group" -> Document("_id" -> "$tags", "count" -> Document("$sum" -> 1)))
+      filterStage       =  BsonDocument("$match" -> BsonDocument("$or" -> creatorOrPublic(userId)))
+      projectStage      =  BsonDocument("$project" -> BsonDocument("tags" -> 1))
+      unwindStage       =  BsonDocument("$unwind" -> BsonDocument("path" -> "$tags"))
+      groupStage        =  BsonDocument("$group" -> BsonDocument("_id" -> "$tags", "count" -> BsonDocument("$sum" -> 1)))
 
       entities          <- mongo.aggregate(collection, List(filterStage, projectStage, unwindStage, groupStage))
       tags              =  entities.map(e => e.get("_id").asString().getValue -> e.get("count").asNumber().intValue).toMap
@@ -75,10 +75,10 @@ object Crud {
     for {
       userId            <- userId(rc, config, jwt)
 
-      filterStage       =  Document("$match" -> Document("$or" -> creatorOrPublic(userId)))
-      projectStage      =  Document("$project" -> Document("tags" -> 1))
-      unwindStage       =  Document("$unwind" -> Document("path" -> "$tags"))
-      groupStage        =  Document("$group" -> Document("_id" -> "$tags", "count" -> Document("$sum" -> 1)))
+      filterStage       =  BsonDocument("$match" -> BsonDocument("$or" -> creatorOrPublic(userId)))
+      projectStage      =  BsonDocument("$project" -> BsonDocument("tags" -> 1))
+      unwindStage       =  BsonDocument("$unwind" -> BsonDocument("path" -> "$tags"))
+      groupStage        =  BsonDocument("$group" -> BsonDocument("_id" -> "$tags", "count" -> BsonDocument("$sum" -> 1)))
 
       entities          <- mongo.aggregate(collection, List(filterStage, projectStage, unwindStage, groupStage))
       tags              =  entities.map(e => e.get("_id").asString().getValue -> e.get("count").asNumber().intValue).toMap

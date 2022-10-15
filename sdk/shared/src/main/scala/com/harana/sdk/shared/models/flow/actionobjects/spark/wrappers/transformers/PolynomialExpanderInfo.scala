@@ -4,9 +4,7 @@ import com.harana.sdk.shared.models.flow.actionobjects.{ActionObjectInfo, Transf
 import com.harana.sdk.shared.models.flow.parameters.validators.RangeValidator
 import com.harana.sdk.shared.models.flow.parameters.{IntParameter, Parameter, ParameterGroup, Parameters}
 
-trait PolynomialExpanderInfo extends ActionObjectInfo
-  with TransformerInfo
-  with Parameters {
+trait PolynomialExpanderInfo extends ActionObjectInfo with TransformerInfo with Parameters {
 
   val id = "AA63DE9C-B825-4E5A-AB54-1244BD3E3AEA"
 

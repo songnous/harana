@@ -1,25 +1,22 @@
 package com.harana.sdk.shared.models.flow.utils
 
-import io.circe.{KeyDecoder, KeyEncoder}
+import com.harana.sdk.shared.utils.Random
 import io.circe.generic.JsonCodec
+import io.circe.{KeyDecoder, KeyEncoder}
 
-import java.util.UUID
-import scala.language.implicitConversions
 import scala.util.Try
 
 @JsonCodec
-case class Id(value: UUID) extends AnyVal {
-  override def toString = value.toString
+case class Id(value: String) extends AnyVal {
+  override def toString = value
 }
 
 object Id {
-  implicit def fromUuid(uuid: UUID): Id = new Id(uuid)
-  implicit def fromString(uuid: String): Id = new Id(UUID.fromString(uuid))
+  def randomId: Id = Id(Random.long)
+  implicit def fromString(id: String): Id = new Id(id)
 
-  def randomId: Id = fromUuid(UUID.randomUUID())
-
-  implicit val encoder = new KeyEncoder[Id] { override def apply(key: Id) = key.toString}
-  implicit val decoder = new KeyDecoder[Id] { override def apply(key: String) = Try(Id.fromString(key)).toOption }
+  implicit val encoder = new KeyEncoder[Id] { override def apply(key: Id) = key.toString }
+  implicit val decoder = new KeyDecoder[Id] { override def apply(key: String) = Try(Id(key)).toOption }
 }
 
 trait Identifiable {

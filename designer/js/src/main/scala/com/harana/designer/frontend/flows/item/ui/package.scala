@@ -1,23 +1,19 @@
 package com.harana.designer.frontend.flows.item
 
 import com.harana.designer.frontend.utils.i18nUtils.ops
-import com.harana.sdk.shared.models.flow.catalog.Catalog
-import com.harana.sdk.shared.models.flow.{Action, ActionTypeInfo}
 import com.harana.sdk.shared.models.flow.catalogs.ActionCategory
 import com.harana.sdk.shared.models.flow.execution.spark.ExecutionStatus
 import com.harana.sdk.shared.models.flow.graph.node.Node
 import com.harana.sdk.shared.models.flow.graph.{Edge, Endpoint}
 import com.harana.sdk.shared.models.flow.utils.TypeUtils
+import com.harana.sdk.shared.models.flow.{Action, ActionTypeInfo}
 import com.harana.sdk.shared.utils.Random
-import com.harana.ui.external.flow.types.{FlowElement, FlowNode, HandleType}
-import com.harana.ui.external.flow.{Connection, FlowEdge, Handle, XYPosition}
+import com.harana.ui.external.flow.types.{FlowEdge, FlowElement, FlowNode, HandleType}
+import com.harana.ui.external.flow.{Connection, Handle, XYPosition}
 import enumeratum._
+import izumi.reflect.Tag
 import slinky.core.ReactComponentClass
 import slinky.core.facade.ReactElement
-
-import scala.reflect.ClassTag
-import scala.reflect.runtime.{universe => ru}
-import izumi.reflect.Tag
 
 import scala.scalajs.js
 import scala.scalajs.js.Dynamic.literal
@@ -144,7 +140,7 @@ package object ui {
         handleType, 
         handlePosition(left, vertical),
         id = s"$index",
-        style = style, 
+        style = style,
         className = "newflow-item-handle", 
         isValidConnection = (connection: Connection) => true
       )

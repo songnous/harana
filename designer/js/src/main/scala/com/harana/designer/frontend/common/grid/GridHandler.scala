@@ -65,13 +65,13 @@ abstract case class GridHandler[Entity <: Id, EditState](entityType: EntityType,
 
 
     case NewItem(e, title) =>
-      if (e.equals(entityType))
+      if (e.equals(entityType)) {
         effectOnly(
           Effect.action(UpdateSelectedItem(e, None)) >>
           onNewOrEdit.getOrElse(Effect.action(NoAction)) >>
           Effect.action(ShowNewOrEditDialog(e, title))
         )
-      else
+      } else
         noChange
 
 

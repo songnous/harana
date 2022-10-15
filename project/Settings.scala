@@ -127,7 +127,7 @@ object Settings {
     webpack / version                         := "5.74.0",
     startWebpackDevServer / version           := "3.1.4",
     fastOptJS / webpackDevServerExtraArgs     := Seq("--inline", "--hot"),
-    webpackEmitSourceMaps                     := false,
+    webpackEmitSourceMaps                     := true,
     fastOptJS / webpackBundlingMode           := BundlingMode.LibraryAndApplication(),
     fastOptJS / webpackConfigFile             := Some(baseDirectory.value / "webpack-dev.js"),
     fullOptJS / webpackConfigFile             := Some(baseDirectory.value / "webpack-prod.js")

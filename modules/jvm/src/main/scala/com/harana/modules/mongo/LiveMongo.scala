@@ -1,37 +1,36 @@
 package com.harana.modules.mongo
 
-import io.micrometer.core.instrument.binder.mongodb._
-
-import java.util.Date
-import java.util.concurrent.atomic.AtomicReference
+import org.mongodb.scala.bson.BsonDocument
 import com.harana.modules.core.config.Config
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
 import com.harana.modules.mongo.Mongo.Service
+import com.harana.modules.mongo.bson.codec.{OptionCodec, SomeCodec}
 import com.harana.sdk.shared.models.common.Entity.EntityId
 import com.harana.sdk.shared.models.common.Id
 import com.harana.sdk.shared.utils.Random
-import com.harana.modules.mongo.bson.codec.{OptionCodec, SomeCodec, Tuple2Codec}
 import com.mongodb.BasicDBObject
 import com.mongodb.MongoCredential._
 import com.mongodb.connection.ClusterConnectionMode
+import io.circe.{Decoder, Encoder}
+import io.micrometer.core.instrument.binder.mongodb._
 import net.petitviolet.ulid4s.ULID
-import org.bson.{BsonDocument, BsonInt32}
+import org.bson.codecs.configuration.CodecRegistries.{fromCodecs, fromRegistries}
+import org.bson.BsonInt32
+import org.mongodb.scala.MongoClient.DEFAULT_CODEC_REGISTRY
+import org.mongodb.scala.MongoCredential.createScramSha256Credential
 import org.mongodb.scala.bson._
 import org.mongodb.scala.bson.conversions._
+import org.mongodb.scala.model.Sorts.{ascending, descending}
 import org.mongodb.scala.model._
 import org.mongodb.scala.result.{DeleteResult, UpdateResult}
 import org.mongodb.scala.{ConnectionString, MongoClient, MongoClientSettings, MongoDatabase, Observer, ServerAddress}
-import zio.{Task, UIO, ZLayer}
+import zio.{Task, ZLayer}
 
+import java.util.Date
+import java.util.concurrent.atomic.AtomicReference
 import scala.jdk.CollectionConverters._
 import scala.reflect.runtime.universe._
-import com.harana.modules.mongo.bson.convert.ConvertImplicits._
-import io.circe.{Decoder, Encoder}
-import org.bson.codecs.configuration.CodecRegistries.{fromCodecs, fromRegistries}
-import org.mongodb.scala.MongoClient.DEFAULT_CODEC_REGISTRY
-import org.mongodb.scala.MongoCredential.createScramSha256Credential
-import org.mongodb.scala.model.Sorts.{ascending, descending}
 
 object LiveMongo {
 
@@ -84,7 +83,7 @@ object LiveMongo {
                                 client            =  MongoClient(builder.build())
                                 _                 <- logger.info(s"Connecting to MongoDB: ${client.getClusterDescription.toString}")
                                 db                <- Task(client.getDatabase("admin")).onError(e => logger.error(e.prettyPrint))
-                                _                 <- execute(db.runCommand(Document("ping" -> 1)))
+                                _                 <- execute(db.runCommand(BsonDocument("ping" -> 1)))
                                 _                 <- logger.info(s"Connected to MongoDB and successfully pinged.")
                               } yield client
         _                 =  clientRef.set(Some(client))
@@ -107,7 +106,7 @@ object LiveMongo {
       for {
         client              <- getClient
         db                  <- Task(client.getDatabase("admin")).onError(e => logger.error(e.prettyPrint))
-        _                   <- execute(db.runCommand(Document("ping" -> 1)))
+        _                   <- execute(db.runCommand(BsonDocument("ping" -> 1)))
       } yield ()
 
 
@@ -325,7 +324,7 @@ object LiveMongo {
       for {
         db                  <- mongoDatabase
         collection          <- getCollection(db, collectionName)
-        index               =  Document(fields.map(f => (f, "text")))
+        index               =  BsonDocument(fields.map(f => (f, BsonString("text"))))
         _                   <- execute(collection.createIndex(index))
       } yield ()
 
@@ -343,12 +342,11 @@ object LiveMongo {
       for {
         db                  <- mongoDatabase
         queue               <- getCollection(db, queueName)
-        query               =  Document(
+        query               =  BsonDocument(
                                 "ack"     -> id,
                                 "deleted" -> -1,
-                                "visible" -> Document("$gt" -> new Date().getTime))
-        update              =  Document(
-                                "$set" -> Document("deleted" -> new Date().getTime))
+                                "visible" -> BsonDocument("$gt" -> new Date().getTime))
+        update              =  BsonDocument("$set" -> BsonDocument("deleted" -> new Date().getTime))
         results             <- executeGet[E](queue.findOneAndUpdate(query, update, FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER)))
       } yield results.map(_.id)
 
@@ -358,12 +356,12 @@ object LiveMongo {
         db                  <- mongoDatabase
         queue               <- getCollection(db, queueName)
         defaultVisibility   <- config.int("mongo.queueDefaultVisibility", 60)
-        query               =  Document(
+        query               =  BsonDocument(
                                 "ack" -> id,
-                                "visible" -> Document("$gt" -> new Date().getTime),
+                                "visible" -> BsonDocument("$gt" -> new Date().getTime),
                                 "deleted" -> -1)
-        update              =  Document(
-                                "$set" -> Document("visible" -> nowWithSeconds(visibility.getOrElse(defaultVisibility))))
+        update              =  BsonDocument(
+                                "$set" -> BsonDocument("visible" -> nowWithSeconds(visibility.getOrElse(defaultVisibility))))
         results             <- executeGet[E](queue.findOneAndUpdate(query, update, FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER)))
       } yield results.map(_.id)
 
@@ -390,18 +388,18 @@ object LiveMongo {
         db                  <- mongoDatabase
         queue               <- getCollection(db, queueName)
         defaultVisibility   <- config.int("mongo.queueDefaultVisibility", 60)
-        query               = Document(
-                                "visible" -> Document("$lte" -> new Date().getTime),
+        query               = BsonDocument(
+                                "visible" -> BsonDocument("$lte" -> new Date().getTime),
                                 "deleted" -> -1
                               )
-        update              = Document(
-                                "$inc" -> Document("tries" -> 1),
-                                "$set" -> Document(
+        update              = BsonDocument(
+                                "$inc" -> BsonDocument("tries" -> 1),
+                                "$set" -> BsonDocument(
                                   "ack" -> ULID.generate,
                                   "visible" -> nowWithSeconds(visibility.getOrElse(defaultVisibility)).getTime
                                 )
                               )
-        options             =  FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER).sort(Document("id" -> 1))
+        options             =  FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER).sort(BsonDocument("id" -> 1))
         results             <- executeGet(queue.findOneAndUpdate(query, update, options))
       } yield results
 
@@ -415,35 +413,35 @@ object LiveMongo {
 
 
     def waitingCountForQueue[E <: Id](queueName: String)(implicit tt: TypeTag[E]): Task[Long] = {
-      val query = Document(
+      val query = BsonDocument(
         "deleted" -> -1,
-        "visible" -> Document("$lte" -> new Date().getTime)
+        "visible" -> BsonDocument("$lte" -> new Date().getTime)
       )
       countQueue(queueName, query)
     }
 
 
     def inFlightCountForQueue[E <: Id](queueName: String)(implicit tt: TypeTag[E]): Task[Long] = {
-      val query = Document(
-        "ack"     -> Document("$exists" -> true),
+      val query = BsonDocument(
+        "ack"     -> BsonDocument("$exists" -> true),
         "deleted" -> -1,
-        "visible" -> Document("$gt" -> new Date().getTime)
+        "visible" -> BsonDocument("$gt" -> new Date().getTime)
       )
       countQueue(queueName, query)
     }
 
 
     def completedCountForQueue[E <: Id](queueName: String)(implicit tt: TypeTag[E]): Task[Long] = {
-      val query = Document(
-        "deleted" -> Document("$exists" -> true)
+      val query = BsonDocument(
+        "deleted" -> BsonDocument("$exists" -> true)
       )
       countQueue(queueName, query)
     }
 
 
     def purgeQueue[E <: Id](queueName: String)(implicit tt: TypeTag[E]): Task[Unit] = {
-      val query = Document(
-        "deleted" -> Document("$exists" -> true)
+      val query = BsonDocument(
+        "deleted" -> BsonDocument("$exists" -> true)
       )
       for {
         db          <- mongoDatabase

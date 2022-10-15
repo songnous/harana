@@ -16,7 +16,7 @@ import com.harana.sdk.shared.models.data.{DataSource, DataSourceType, SyncDirect
 import com.harana.sdk.shared.models.flow.parameters.ParameterGroup
 import io.circe.syntax._
 import io.vertx.ext.web.RoutingContext
-import org.mongodb.scala.bson.Document
+import org.mongodb.scala.bson.{BsonDocument, Document}
 import zio.{Task, ZLayer}
 
 object LiveDataSources {
@@ -69,8 +69,11 @@ object LiveDataSources {
     def typeWithId(rc: RoutingContext): Task[Response] =
       for {
         id                <- Task(rc.pathParam("id"))
+        _                 <- logger.info(s"Looking for: ${id}")
         dataSourceTypes   <- cachedDataSourceTypes
+        _                 <- logger.info(s"Number of data source types = ${dataSourceTypes.size}")
         dataSourceType    =  dataSourceTypes.find(_.id == id)
+        _                 <- logger.info(s"Data source type = ${dataSourceType.map(_.name).getOrElse("Unknown")}")
         response          =  if (dataSourceType.isDefined) Response.JSON(dataSourceType.get.asJson) else Response.Empty(statusCode = Some(404))
       } yield response
 
@@ -89,8 +92,8 @@ object LiveDataSources {
 
 
     private def creatorOrPublic(userId: UserId) = {
-      val isPublic = Document("visibility" -> Visibility.Public.toString)
-      val isCreator = Document("createdBy" -> userId)
+      val isPublic = BsonDocument("visibility" -> Visibility.Public.toString)
+      val isCreator = BsonDocument("createdBy" -> userId)
       List(isPublic, isCreator)
     }
   }}

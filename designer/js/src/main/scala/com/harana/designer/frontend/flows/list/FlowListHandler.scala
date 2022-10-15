@@ -28,9 +28,7 @@ class FlowListHandler extends GridHandler[Flow, FlowEditState]("flows", zoomTo(_
       tags = flow.tags,
       created = flow.created,
       updated = flow.updated,
-      chartType = None,
       link = LinkType.Page(s"/flows/${flow.id}"),
-      entitySubType = None,
       background = Some(flow.background),
       parameterValues = HMap[Parameter.Values](
         (GridPageItem.titleParameter, flow.title),

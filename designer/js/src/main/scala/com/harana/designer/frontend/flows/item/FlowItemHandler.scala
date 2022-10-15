@@ -6,19 +6,17 @@ import com.harana.designer.frontend.flows.item.FlowItemStore._
 import com.harana.designer.frontend.flows.item.ui._
 import com.harana.designer.frontend.utils.http.Http
 import com.harana.designer.frontend.{Circuit, State}
-import com.harana.sdk.shared.models.flow.catalog.Catalog
 import com.harana.sdk.shared.models.flow.execution.spark.ExecutionStatus
 import com.harana.sdk.shared.models.flow.graph.FlowGraph
-import com.harana.sdk.shared.models.flow.{ActionTypeInfo, Flow, FlowExecution}
+import com.harana.sdk.shared.models.flow.{Flow, FlowExecution}
 import com.harana.sdk.shared.utils.{HMap, Random}
-import com.harana.ui.external.flow.types.FlowNode
-import com.harana.ui.external.flow.{Connection, FlowEdge, XYPosition}
+import com.harana.ui.external.flow.types.{FlowEdge, FlowNode}
+import com.harana.ui.external.flow.{Connection, XYPosition}
 import diode.{ActionHandler, ActionResult, Effect, NoAction}
 import io.circe.syntax.EncoderOps
-
-import java.util.Timer
 import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 
+import java.util.Timer
 import scala.scalajs.js
 
 class FlowItemHandler extends ActionHandler(zoomTo(_.flowItemState)) {
@@ -107,7 +105,6 @@ class FlowItemHandler extends ActionHandler(zoomTo(_.flowItemState)) {
         case Some(at) =>
           val actionId = Random.long
           val color = actionTypeColour(at)
-
           val nodeData = new ActionNodeData {
             val id = actionId
             val actionType = at
@@ -123,6 +120,10 @@ class FlowItemHandler extends ActionHandler(zoomTo(_.flowItemState)) {
           val node = new FlowNode {
             val id = actionId
             val `type` = "actionNode"
+
+            //------------
+            require(value.flowInstance.isDefined)
+
             val position = value.flowInstance.get.project(
               new XYPosition {
                 val x = event.clientX.toInt

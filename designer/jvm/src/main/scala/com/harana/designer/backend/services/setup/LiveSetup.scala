@@ -10,6 +10,7 @@ import com.harana.sdk.shared.models.apps.{App => DesignerApp}
 import com.harana.sdk.shared.models.common.{Background, Visibility}
 import com.harana.sdk.shared.models.jwt.DesignerClaims
 import org.mongodb.scala.Document
+import org.mongodb.scala.bson.BsonDocument
 import zio.clock.Clock
 import zio.{Task, ZLayer}
 
@@ -24,7 +25,7 @@ object LiveSetup {
                                      mongo: Mongo.Service) => new Service {
 
     def createApps(claims: DesignerClaims): Task[Unit] =
-      Task.whenM(mongo.count("Apps", Document("createdBy" -> claims.userId)).map(_ == 0))(
+      Task.whenM(mongo.count("Apps", BsonDocument("createdBy" -> claims.userId)).map(_ == 0))(
         for {
           _                   <- mongo.insert[DesignerApp]("Apps", DesignerApp("Jupyter", "", "Notebook", "467100553131.dkr.ecr.ap-southeast-2.amazonaws.com/apps-jupyter:1.0.0", 8888, Some(8888), Some(claims.userId), Visibility.Owner, Some(Background.Image(randomBackground)), Set("Notebook")))
           _                   <- mongo.insert[DesignerApp]("Apps", DesignerApp("RStudio", "", "Notebook", "467100553131.dkr.ecr.ap-southeast-2.amazonaws.com/apps-rstudio:1.0.0", 8787, Some(8787), Some(claims.userId), Visibility.Owner, Some(Background.Image(randomBackground)), Set("IDE")))

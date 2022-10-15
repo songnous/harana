@@ -1,6 +1,5 @@
 package com.harana.ui.external.flow
 
-import com.harana.designer.frontend.flows.item.ui.ActionNodeData
 import com.harana.ui.external.flow.types.{FlowElement, FlowNode}
 import slinky.core.ExternalComponent
 import slinky.core.annotations.react
@@ -9,7 +8,6 @@ import typings.std.{MouseEvent, WheelEvent}
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
-import scala.scalajs.js.|
 
 @JSImport("react-flow-renderer", JSImport.Default)
 @js.native
@@ -17,7 +15,8 @@ object ReactFlow extends js.Object
 
 @react object Flow extends ExternalComponent {
 
-  case class Props(elements: List[js.Object],
+  case class Props(nodes: List[ReactFlowNode[_]],
+                   edges: List[ReactFlowEdge],
                    onElementClick: js.UndefOr[(MouseEvent, FlowElement) => Any] = js.undefined,
                    onElementsRemove: js.UndefOr[js.Array[FlowElement] => Any] = js.undefined,
                    onNodeMouseEnter: js.UndefOr[(MouseEvent, FlowNode) => Any] = js.undefined,
@@ -30,7 +29,7 @@ object ReactFlow extends js.Object
                    onConnectStart: js.UndefOr[(MouseEvent, OnConnectStartParams) => Any] = js.undefined,
                    onConnectStop: js.UndefOr[MouseEvent => Any] = js.undefined,
                    onConnectEnd: js.UndefOr[MouseEvent => Any] = js.undefined,
-                   onLoad: js.UndefOr[FlowInstance => Any] = js.undefined,
+                   onInit: js.UndefOr[FlowInstance => Any] = js.undefined,
                    onMove: js.UndefOr[FlowTransform => Any] = js.undefined,
                    onMoveStart: js.UndefOr[FlowTransform => Any] = js.undefined,
                    onMoveEnd: js.UndefOr[FlowTransform => Any] = js.undefined,

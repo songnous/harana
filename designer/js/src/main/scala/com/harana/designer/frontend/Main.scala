@@ -32,7 +32,7 @@ object Main {
 //    val eventBus = EventBus.eventBus
 
     Circuit.addProcessor((dispatch: Dispatcher, action: Any, next: Any => ActionResult[State], currentModel: State) => {
-      //println(s"Action: ${action.getClass.getName.replaceFirst("\\$", " -> ").replace("$", "")}")
+      println(s"Action: ${action.getClass.getName.replaceFirst("\\$", " -> ").replace("$", "")}")
       next(action)
     })
 

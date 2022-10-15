@@ -4,9 +4,8 @@ import com.harana.sdk.shared.models.common.Entity.EntityId
 import com.harana.sdk.shared.models.common.Id
 import com.harana.modules.mongo.bson.convert.ConvertImplicits._
 import io.circe.{Decoder, Encoder, HCursor, Json}
-import org.bson.BsonDocument
 import org.bson.conversions.Bson
-import org.mongodb.scala.bson.Document
+import org.mongodb.scala.bson.{BsonDocument, Document}
 import org.mongodb.scala.result.UpdateResult
 import org.mongodb.scala.{FindObservable, MongoCollection, MongoDatabase, Observable, Observer}
 import zio.{IO, Task}
@@ -18,8 +17,8 @@ import scala.reflect.runtime.universe._
 
 package object mongo {
 
-  def byIdSelector(id: EntityId): Document =
-    Document("id" -> id)
+  def byIdSelector(id: EntityId) =
+    BsonDocument("id" -> id)
 
 
   def getCollection(db: MongoDatabase, collectionName: String): Task[MongoCollection[BsonDocument]] =

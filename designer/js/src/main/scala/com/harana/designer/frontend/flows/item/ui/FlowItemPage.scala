@@ -74,12 +74,13 @@ import scala.scalajs.js
           )
         else
           Flow(
-            elements = state.nodes ++ state.edges,
+            nodes = state.nodes,
+            edges = state.edges,
             nodeTypes = new NodeTypes { val actionNode = ActionNode.component },
             nodesConnectable = !state.isRunning,
             snapToGrid = state.snapToGrid,
             onConnect = (connection: Connection) => Circuit.dispatch(AddConnection(connection)),
-            onLoad = (instance: FlowInstance) => Circuit.dispatch(UpdateFlowInstance(instance)),
+            onInit = (instance: FlowInstance) => Circuit.dispatch(UpdateFlowInstance(instance)),
             onNodeDragStop = (_: MouseEvent, node: FlowNode) => Circuit.dispatch(UpdateNode(node)),
             onElementClick = (_: MouseEvent, element: FlowElement) =>
               if (isNode(element)) {
