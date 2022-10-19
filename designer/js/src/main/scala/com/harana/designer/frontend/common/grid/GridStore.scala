@@ -41,10 +41,10 @@ object GridStore {
   case class Filter(entityType: EntityType, query: Option[String], owner: Option[FilterItem], tag: Option[FilterItem]) extends DiodeAction
   case class Sort(entityType: EntityType) extends DiodeAction
 
-  case class NewItem(entityType: EntityType, dialogTitle: Option[String]) extends DiodeAction
-  case class EditSelectedItem(entityType: EntityType, dialogTitle: Option[String]) extends DiodeAction
-  case class ChangeEditParameter(entityType: EntityType, parameter: Parameter[_], values: HMap[Parameter.Values]) extends DiodeAction
-  case class DeleteSelectedItem(entityType: EntityType) extends DiodeAction
+  case class OnNewItem(entityType: EntityType, dialogTitle: Option[String]) extends DiodeAction
+  case class OnEditSelectedItem(entityType: EntityType, dialogTitle: Option[String]) extends DiodeAction
+  case class OnEditParameterChange(entityType: EntityType, parameter: Parameter[_], value: Any) extends DiodeAction
+  case class OnDeleteItem(entityType: EntityType) extends DiodeAction
 
   case class SaveNewItem(entityType: EntityType, parameterValues: HMap[Parameter.Values]) extends DiodeAction
   case class SaveExistingItem(entityType: EntityType, entityId: EntityId, parameterValues: HMap[Parameter.Values]) extends DiodeAction
@@ -65,6 +65,6 @@ object GridStore {
   case class UpdateTags(entityType: EntityType, tags: Map[String, Int]) extends DiodeAction
   case class UpdateViewMode(entityType: EntityType, mode: ViewMode) extends DiodeAction
 
-  case class ShowNewOrEditDialog(entityType: EntityType, title: Option[String]) extends DiodeAction
-  case class UpdateNewOrEditDialog(entityType: EntityType) extends DiodeAction
+  case class ShowEditDialog(entityType: EntityType, title: Option[String]) extends DiodeAction
+  case class RefreshEditDialog(entityType: EntityType, values: HMap[Parameter.Values]) extends DiodeAction
 }

@@ -1,8 +1,7 @@
 package com.harana.designer.frontend.test
 
 import com.harana.designer.frontend.navigation.ui.Navigation
-import com.harana.sdk.shared.models.common.Parameter
-import com.harana.ui.components.elements.{Page, ParameterItem}
+import com.harana.ui.components.elements.Page
 import slinky.core.FunctionalComponent
 import slinky.core.annotations.react
 import slinky.core.facade.ReactElement

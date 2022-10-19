@@ -27,9 +27,9 @@ class FlowItemHandler extends ActionHandler(zoomTo(_.flowItemState)) {
 
 
     case Init(preferences) =>
-      new Timer().scheduleAtFixedRate(new java.util.TimerTask {
-        def run(): Unit = Circuit.dispatch(SaveFlow)
-      }, 0L, 2000L)
+//      new Timer().scheduleAtFixedRate(new java.util.TimerTask {
+//        def run(): Unit = Circuit.dispatch(SaveFlow)
+//      }, 0L, 2000L)
       noChange
 
 

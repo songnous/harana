@@ -44,11 +44,10 @@ import scala.collection.mutable.ListBuffer
   val drawerRef = React.createRef[Drawer.Def]
   val deleteDialogRef = React.createRef[Dialog.Def]
 
-
   override def componentDidMount() = {
     Circuit.addProcessor((_: Dispatcher, action: Any, next: Any => ActionResult[AppState], _: AppState) => {
       action match {
-        case ShowNewOrEditDialog(entityType, title) =>
+        case ShowEditDialog(entityType, title) =>
           if (entityType == props.itemType)
             drawerRef.current.show(
               style = editStyle,
@@ -57,11 +56,11 @@ import scala.collection.mutable.ListBuffer
               width = props.editWidth
             )
 
-        case UpdateNewOrEditDialog(entityType) =>
+        case RefreshEditDialog(entityType, values) =>
           if (entityType == props.itemType)
             drawerRef.current.update(
               style = editStyle,
-              values = props.state.editValues
+              values = values
             )
         case _ =>
       }
@@ -80,7 +79,9 @@ import scala.collection.mutable.ListBuffer
           additionalSections = props.editAdditionalSections
         )
       ),
-      onChange = Some((parameter, values) => Circuit.dispatch(ChangeEditParameter(props.itemType, parameter, values))),
+      onChange = Some((parameter, value) =>
+        Circuit.dispatch(OnEditParameterChange(props.itemType, parameter, value))
+      ),
       onOk = Some(values => {
         val item = props.state.selectedItem
         Circuit.dispatch(if (item.isEmpty) SaveNewItem(props.itemType, values) else SaveExistingItem(props.itemType, item.get.id, values))
@@ -137,7 +138,7 @@ import scala.collection.mutable.ListBuffer
     }
 
 
-  def render() =
+  def render() = {
     Fragment(
       Drawer().withRef(drawerRef),
       Dialog().withRef(deleteDialogRef),
@@ -153,4 +154,5 @@ import scala.collection.mutable.ListBuffer
         content = Some(content)
       )
     )
+  }
 }

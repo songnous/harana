@@ -151,7 +151,7 @@ import scala.collection.mutable.{Map => MutableMap}
 							})),
 							ShoelaceButton(label = Some(i"common.dialog.save"), slot = Some("footer"), `type` = Some("success"), onClick = Some(_ => {
 								if (onOk.isDefined) {
-									parameterRefs.values.foreach(_.current.validate)
+//									parameterRefs.values.foreach(_.current.validate)
 									if (parameterRefs.forall(_._2.current.isValid)) {
 										onOk.get.apply(state.values.getOrElse(HMap.empty))
 										hide()

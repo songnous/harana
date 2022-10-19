@@ -4,9 +4,9 @@ import com.harana.designer.frontend.Circuit
 import com.harana.designer.frontend.Circuit.zoomTo
 import com.harana.designer.frontend.common.grid.ui.{GridPage, GridPageItem}
 import com.harana.designer.frontend.utils.i18nUtils.ops
+import com.harana.ui.components.ColumnSize
 import com.harana.ui.components.Device.Desktop
 import com.harana.ui.components.table.{Column, HistoryColumn, TagsColumn}
-import com.harana.ui.components.ColumnSize
 import slinky.core.FunctionalComponent
 import slinky.core.annotations.react
 import slinky.web.html.div

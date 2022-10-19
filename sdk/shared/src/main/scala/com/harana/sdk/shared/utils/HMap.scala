@@ -27,6 +27,12 @@ case class HMap[R[_, _]](underlying : Map[Any, Any] = Map.empty) extends Poly1 {
   def ++(hmap: HMap[R]) : HMap[R] = new HMap[R](underlying ++ hmap.underlying)
 
   implicit def caseRel[K, V](implicit ev : R[K, V]) = Case1[this.type, K, V](get(_).get)
+
+  override def equals(obj: Any) =
+    obj match {
+      case map: HMap[R] => map.underlying.equals(this.underlying)
+      case _ => false
+    }
 }
 
 object HMap {

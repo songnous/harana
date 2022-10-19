@@ -2,6 +2,7 @@ package com.harana.ui.components.elements
 
 import com.harana.designer.frontend.utils.i18nUtils.ops
 import com.harana.sdk.shared.models.flow.parameters._
+import com.harana.sdk.shared.utils.Random
 import com.harana.ui.external.shoelace._
 import slinky.core.{Component, StatelessComponent}
 import slinky.core.annotations.react
@@ -24,7 +25,12 @@ import scala.scalajs._
 									 onChange: Option[(Parameter[_], Any) => Unit] = None,
 									 autoFocus: Boolean = false,
 									 isEditable: Boolean = true,
-									 onEditing: Option[Boolean => Unit] = None)
+									 onEditing: Option[Boolean => Unit] = None) {
+		override def equals(obj: Any) = obj match {
+			case p: Props => this.parameter == p.parameter && this.value == p.value
+			case _ => false
+		}
+	}
 
 	case class State(isValid: Boolean, value: Option[Any])
 	override def initialState = State(true, None)
@@ -35,12 +41,19 @@ import scala.scalajs._
 	private def description(p: Parameter[_]) = io"${props.i18nPrefix}.${p.name}.description"
 	private def optionTitle(p: Parameter[_], o: String) = i"${props.i18nPrefix}.${p.name}.option.$o.title"
 
+
+	override def componentWillReceiveProps(nextProps: Props) = {
+		val value = if (nextProps.value.isDefined) Some(nextProps.value.get) else nextProps.parameter.default
+		setState(State(true, value))
+	}
+
+
 	override def shouldComponentUpdate(nextProps: Props, nextState: State) =
-		nextState.isValid != state.isValid
+		props != nextProps || state != nextState || nextProps.value != nextState.value
 
 
 	def resetValidation = {
-		setState(State(true, state.value))
+		setState(State(true, props.value))
 	}
 
 	def blur = {
@@ -58,20 +71,20 @@ import scala.scalajs._
 	}
 
 	def validate =
-		state.value match {
+		props.value match {
 			case Some(v) =>
 				v match {
-					case x @ Boolean => if (props.parameter.required) setState(State(isValid = true, state.value))
-					case x @ Int => if (props.parameter.required) setState(State(isValid = x.toString.nonEmpty, state.value))
-					case x @ Long => if (props.parameter.required) setState(State(isValid = x.toString.nonEmpty, state.value))
-					case x: String => if (props.parameter.required) setState(State(isValid = x.nonEmpty, state.value))
-					case _ => if (props.parameter.required) setState(State(isValid = true, state.value))
+					case x @ Boolean => if (props.parameter.required) setState(State(isValid = true, props.value))
+					case x @ Int => if (props.parameter.required) setState(State(isValid = x.toString.nonEmpty, props.value))
+					case x @ Long => if (props.parameter.required) setState(State(isValid = x.toString.nonEmpty, props.value))
+					case x: String => if (props.parameter.required) setState(State(isValid = x.nonEmpty, props.value))
+					case _ => if (props.parameter.required) setState(State(isValid = true, props.value))
 				}
 
 			case None =>
 				props.parameter match {
-					case BooleanParameter(_, _, _) => setState(State(true, state.value))
-					case _ => if (props.parameter.required) setState(State(false, state.value))
+					case BooleanParameter(_, _, _) => setState(State(true, props.value))
+					case _ => if (props.parameter.required) setState(State(false, props.value))
 				}
 		}
 
@@ -95,13 +108,6 @@ import scala.scalajs._
 		if (state.isValid) None else Some("red")
 
 
-	// FIXME: Review as this was previously componentWillMount
-	override def componentDidMount() = {
-		val value = if (props.value.isDefined) Some(props.value.get) else props.parameter.default
-		setState(State(true, value))
-	}
-
-	
 	def render() =
 		div(className := "parameter-item")(
 			p(s"${title(props.parameter)} ${if (props.parameter.required) "*" else ""}"),
@@ -109,7 +115,7 @@ import scala.scalajs._
 
 				case p @ BooleanParameter(name, required, default) =>
 					Switch(
-						checked = state.value.map(_.asInstanceOf[Boolean]),
+						checked = props.value.map(_.asInstanceOf[Boolean]),
 						disabled = Some(!props.isEditable),
 						invalid = Some(true),
 						name = name,
@@ -145,7 +151,7 @@ import scala.scalajs._
 						required = Some(required),
 						size = Some("large"),
 						`type` = Some("email"),
-						value = state.value.map(_.asInstanceOf[String])
+						value = props.value.map(_.asInstanceOf[String])
 					).withKey(name).withRef(inputRef)
 
 
@@ -176,7 +182,7 @@ import scala.scalajs._
 						size = Some("large"),
 						step = Some(1),
 						`type` = Some("number"),
-						value = state.value.map(_.asInstanceOf[String])
+						value = props.value.map(_.asInstanceOf[String])
 					).withKey(name).withRef(inputRef)
 
 
@@ -197,7 +203,7 @@ import scala.scalajs._
 							placeholder = Some(i"common.parameters.host.domain"),
 							required = Some(required),
 							size = Some("large"),
-							value = state.value.map(_.asInstanceOf[String])
+							value = props.value.map(_.asInstanceOf[String])
 						).withKey(name).withRef(inputRef),
 						Input(
 							autoFocus = Some(props.autoFocus),
@@ -216,7 +222,7 @@ import scala.scalajs._
 							required = Some(required),
 							size = Some("large"),
 							`type` = Some("number"),
-							value = state.value.map(_.asInstanceOf[String])
+							value = props.value.map(_.asInstanceOf[String])
 						).withKey(name)
 					)
 
@@ -244,7 +250,7 @@ import scala.scalajs._
 						size = Some("large"),
 						step = Some(1),
 						`type` = Some("number"),
-						value = state.value.map(_.asInstanceOf[Long].toString)
+						value = props.value.map(_.asInstanceOf[Long].toString)
 					).withKey(name).withRef(inputRef)
 
 
@@ -266,7 +272,7 @@ import scala.scalajs._
 						size = Some("large"),
 						togglePassword = Some(true),
 						`type` = Some("password"),
-						value = state.value.map(_.asInstanceOf[String])
+						value = props.value.map(_.asInstanceOf[String])
 					).withKey(name).withRef(inputRef)
 
 				case p @ SearchQueryParameter(name, required, default, validators) =>
@@ -291,7 +297,7 @@ import scala.scalajs._
 								required = Some(required),
 								rows = Some(3),
 								size = Some("large"),
-								value = state.value.map(_.asInstanceOf[String])
+								value = props.value.map(_.asInstanceOf[String])
 							).withKey(name).withRef(textAreaRef)
 						}else{
 							Input(
@@ -309,7 +315,7 @@ import scala.scalajs._
 								placeholder = placeholder,
 								required = Some(required),
 								size = Some("large"),
-								value = state.value.map(_.asInstanceOf[String])
+								value = props.value.map(_.asInstanceOf[String])
 							).withKey(name).withRef(inputRef)
 						}
 					}else{
@@ -322,13 +328,11 @@ import scala.scalajs._
 							onBlur = onBlur,
 							onChange = Some((value: String) => onChange(p, value)),
 							onFocus = onFocus,
-							options = options.map { opt =>
-								MenuItem(optionTitle(props.parameter, opt._1), value = Some(opt._2))
-							},
+							options = options.map(o => MenuItem(optionTitle(props.parameter, o._1), value = Some(o._2))),
 							placeholder = Some("Select .."),
 							required = Some(required),
 							size = Some("large"),
-							value = state.value.map(_.asInstanceOf[String])
+							value = props.value.map(_.asInstanceOf[String])
 						).withKey(name).withRef(selectRef)
 					}
 
@@ -356,7 +360,7 @@ import scala.scalajs._
 						required = Some(required),
 						size = Some("large"),
 						`type` = Some("url"),
-						value = state.value.map(_.asInstanceOf[String])
+						value = props.value.map(_.asInstanceOf[String])
 					).withKey(name).withRef(inputRef)
 
 

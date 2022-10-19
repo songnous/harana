@@ -3,7 +3,7 @@ package com.harana.designer.frontend.common.grid.ui
 import com.harana.designer.frontend.Circuit
 import com.harana.designer.frontend.common.SortOrdering
 import com.harana.designer.frontend.common.SortOrdering.{CreatedAscending, CreatedDescending, NameAscending, NameDescending, UpdatedAscending, UpdatedDescending}
-import com.harana.designer.frontend.common.grid.GridStore.{DeleteSelectedItem, EditSelectedItem, EntitySubType, NewItem, UpdateEntitySubType, UpdateSelectedItem, UpdateSortOrdering, UpdateViewMode}
+import com.harana.designer.frontend.common.grid.GridStore.{OnDeleteItem, OnEditSelectedItem, EntitySubType, OnNewItem, UpdateEntitySubType, UpdateSelectedItem, UpdateSortOrdering, UpdateViewMode}
 import com.harana.designer.frontend.common.ui.ViewMode
 import com.harana.designer.frontend.utils.i18nUtils.ops
 import com.harana.ui.components.{LinkType, openLink}
@@ -55,7 +55,7 @@ object menus {
     if (allowEdit) List(
       if (itemSubTypes.isEmpty)
         HeadingItem.IconButton(("icomoon", "plus3"), i"common.grid.menu.new", LinkType.OnClick(() =>
-          Circuit.dispatch(NewItem(itemType, Some(i"common.grid.menu.new")))
+          Circuit.dispatch(OnNewItem(itemType, Some(i"common.grid.menu.new")))
         ))
       else
         HeadingItem.IconMenu(("icomoon", "plus3"), i"common.grid.menu.new",
@@ -65,7 +65,7 @@ object menus {
               iconPrefix = None,
               onClick = Some(_ => {
                 Circuit.dispatch(UpdateEntitySubType(itemType, Some(se._2)))
-                Circuit.dispatch(NewItem(itemType, Some(i"common.grid.menu.new")))
+                Circuit.dispatch(OnNewItem(itemType, Some(i"common.grid.menu.new")))
               }),
               value = Some(se._2)
             )
@@ -89,7 +89,7 @@ object menus {
         Circuit.dispatch(
           ActionBatch(
             UpdateSelectedItem(itemType, Some(item)),
-            EditSelectedItem(itemType, Some(i"common.grid.item.menu.edit"))
+            OnEditSelectedItem(itemType, Some(i"common.grid.item.menu.edit"))
           )
         )
       )
@@ -107,7 +107,7 @@ object menus {
           onOk = Some(() => Circuit.dispatch(
             ActionBatch(
               UpdateSelectedItem(itemType, Some(item)),
-              DeleteSelectedItem(itemType))
+              OnDeleteItem(itemType))
             )
           )
         )

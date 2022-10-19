@@ -1,6 +1,6 @@
 package com.harana.designer.frontend.common.grid
 
-import com.harana.designer.frontend.State
+import com.harana.designer.frontend.{Circuit, State}
 import com.harana.designer.frontend.common.SortOrdering._
 import com.harana.designer.frontend.common.grid.GridStore._
 import com.harana.designer.frontend.common.grid.ui.GridPageItem
@@ -11,6 +11,7 @@ import com.harana.designer.frontend.utils.http.Http
 import com.harana.sdk.shared.models.common.Id
 import com.harana.sdk.shared.models.flow.parameters.Parameter
 import com.harana.sdk.shared.utils.HMap
+import diode.ActionResult.ModelUpdate
 import diode.AnyAction.aType
 import diode._
 import io.circe.syntax._
@@ -30,8 +31,8 @@ abstract case class GridHandler[Entity <: Id, EditState](entityType: EntityType,
   def toEntity(editedItem: Option[Entity], subType: Option[EntitySubType], values: HMap[Parameter.Values]): Entity
 
   def onInit(userPreferences: Map[String, String]): Option[Effect] = None
-  def onNewOrEdit: Option[Effect] = None
-  def onNewOrEditParameterChange(parameter: Parameter[_]): Option[Effect] = None
+  def onEdit: Option[Effect] = None
+  def onEditParameterWillChange(parameter: Parameter[_], value: Any): Option[Effect] = None
   def onCreate(subType: Option[EntitySubType]): Option[Effect] = None
   def onDelete(subType: Option[EntitySubType]): Option[Effect] = None
 
@@ -64,22 +65,22 @@ abstract case class GridHandler[Entity <: Id, EditState](entityType: EntityType,
       )
 
 
-    case NewItem(e, title) =>
+    case OnNewItem(e, title) =>
       if (e.equals(entityType)) {
         effectOnly(
           Effect.action(UpdateSelectedItem(e, None)) >>
-          onNewOrEdit.getOrElse(Effect.action(NoAction)) >>
-          Effect.action(ShowNewOrEditDialog(e, title))
+          onEdit.getOrElse(Effect.action(NoAction)) >>
+          Effect.action(ShowEditDialog(e, title))
         )
       } else
         noChange
 
 
-    case EditSelectedItem(e, title) =>
+    case OnEditSelectedItem(e, title) =>
       if (e.equals(entityType))
         effectOnly(
-          onNewOrEdit.getOrElse(Effect.action(NoAction)) >>
-          Effect.action(ShowNewOrEditDialog(e, title))
+          onEdit.getOrElse(Effect.action(NoAction)) >>
+          Effect.action(ShowEditDialog(e, title))
         )
       else
         noChange
@@ -89,16 +90,15 @@ abstract case class GridHandler[Entity <: Id, EditState](entityType: EntityType,
       noChange
 
 
-    case ChangeEditParameter(e, parameter, values) =>
-      if (e.equals(entityType) && state.value.editValues != values)
+    case OnEditParameterChange(e, parameter, value) =>
+      val existing = state.value.editValues.underlying
+      val changed = !existing.contains(parameter) || existing(parameter) != value
+      if (e.equals(entityType) && changed)
         effectOnly(
-          Effect.action(UpdateEditParameterValues(e, values)) >>
-          onNewOrEditParameterChange(parameter).getOrElse(Effect.action(NoAction)) >>
-          Effect.action(UpdateNewOrEditDialog(e))
+          Effect.action(UpdateEditParameterValue(e, parameter, value)) >>
+          onEditParameterWillChange(parameter, value).get
         )
-      else
-        noChange
-
+      else noChange
 
     case RefreshSidebar(e) =>
       if (e.equals(entityType))
@@ -165,7 +165,7 @@ abstract case class GridHandler[Entity <: Id, EditState](entityType: EntityType,
       else noChange
 
 
-    case DeleteSelectedItem(e) =>
+    case OnDeleteItem(e) =>
       if (e.equals(entityType)) {
         onDelete(value.entitySubType)
 
@@ -193,11 +193,11 @@ abstract case class GridHandler[Entity <: Id, EditState](entityType: EntityType,
 
 
     case UpdateEditState(e, editState) =>
-      if (e.equals(entityType)) updated(value.copy(editState = editState.asInstanceOf[EditState]), Effect.action(UpdateNewOrEditDialog(e))) else noChange
+      if (e.equals(entityType)) updated(value.copy(editState = editState.asInstanceOf[EditState])) else noChange
 
 
     case UpdateEditParameters(e, parameters) =>
-      if (e.equals(entityType)) updated(value.copy(editParameterGroups = parameters), Effect.action(UpdateNewOrEditDialog(e))) else noChange
+      if (e.equals(entityType)) updated(value.copy(editParameterGroups = parameters), Effect.action(RefreshEditDialog(e, value.editValues))) else noChange
 
 
     case UpdateEditParameterValue(e, k, v) =>

@@ -4,7 +4,7 @@ import com.harana.designer.frontend.Circuit.zoomTo
 import com.harana.designer.frontend.Main
 import com.harana.designer.frontend.analytics.Analytics
 import com.harana.designer.frontend.common.grid.GridHandler
-import com.harana.designer.frontend.common.grid.GridStore.{EntitySubType, UpdateEditParameters, UpdateEditState, UpdateEditParameterValue}
+import com.harana.designer.frontend.common.grid.GridStore.{EntitySubType, UpdateEditParameterValue, UpdateEditParameters, UpdateEditState}
 import com.harana.designer.frontend.common.grid.ui.GridPageItem
 import com.harana.designer.frontend.data.list.DataSourceListStore.DataSourceEditState
 import com.harana.designer.frontend.utils.ColorUtils
@@ -17,7 +17,6 @@ import com.harana.ui.components.LinkType
 import com.harana.ui.components.widgets.PillChartType
 import diode.AnyAction.aType
 import diode._
-
 import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 
 class DataSourceListHandler extends GridHandler[DataSource, DataSourceEditState]("datasources", zoomTo(_.dataSourceListState)) {
@@ -30,7 +29,7 @@ class DataSourceListHandler extends GridHandler[DataSource, DataSourceEditState]
     ),
     required = true)
 
-  var typeParameter: StringParameter = _
+  var typeParameter = StringParameter("type", options = List())
 
   def toGridPageItem(dataSource: DataSource) = {
     GridPageItem(
@@ -76,79 +75,69 @@ class DataSourceListHandler extends GridHandler[DataSource, DataSourceEditState]
       )
 
 
-  def aboutGroup =
-    ParameterGroup("about",
-      GridPageItem.titleParameter,
-      GridPageItem.descriptionParameter,
-      GridPageItem.tagsParameter,
-      directionParameter,
-      typeParameter
-    )
-
-
   private def fetchDataSourceTypes(direction: String) =
     Http.getRelativeAs[List[String]](s"/api/datasources/types/direction/$direction").map(_.getOrElse(List()))
-
-
-  private def updateDataSourceTypes(direction: SyncDirection) =
-    if (state.value.editState.dataSourceTypes.contains(direction.value))
-      Effect.action(NoAction)
-    else
-      Effect(fetchDataSourceTypes(direction.value.toLowerCase).map { dsTypes =>
-        UpdateEditState("datasources", state.value.editState.copy(dataSourceTypes = state.value.editState.dataSourceTypes + (direction.value.toLowerCase -> dsTypes)))
-      })
 
 
   private def fetchDataSourceType(dsType: String) =
     Http.getRelativeAs[DataSourceType](s"/api/datasources/types/$dsType")
 
 
-  private def direction =
-    state.value.editValues.getOrElse(directionParameter, SyncDirection.Source.value)
-
-
-  private def dataSourceType =
-    state.value.editValues.getOrElse(typeParameter, state.value.editState.dataSourceTypes(direction).head)
-
-
-  private def updateAllDataSourceTypes() =
-    updateDataSourceTypes(SyncDirection.Source) + updateDataSourceTypes(SyncDirection.Destination)
-
-
-  private def onDataSourceTypeChanged(direction: String, dsType: String) = {
+  // 1. Update the type dropdown with new data sources
+  // 2. Add the additional data source parameters
+  private def updateDataSourceType(direction: String, dsType: String) = {
     val dsTypes = state.value.editState.dataSourceTypes
-    (dsType, dsTypes) match {
-      case (dsType, dsTypes) =>
-        typeParameter = StringParameter("type", options = dsTypes(direction).map(s => (s, s)))
-        Effect(fetchDataSourceType(dsType).map(ds => UpdateEditParameters("datasources", List(aboutGroup) ++ ds.get.parameterGroups))) +
-        Effect.action(UpdateEditParameterValue("datasources", typeParameter, dsType))
-      case _ =>
-        Effect.action(NoAction)
-    }
+    typeParameter = StringParameter("type", options = dsTypes(direction).map(s => (s, s)))
+
+    Effect.action(UpdateEditParameterValue("datasources", typeParameter, dsType)) >>
+    Effect(fetchDataSourceType(dsType).map(ds => UpdateEditParameters("datasources",
+      List(ParameterGroup("about",
+        GridPageItem.titleParameter,
+        GridPageItem.descriptionParameter,
+        GridPageItem.tagsParameter,
+        directionParameter,
+        typeParameter
+      )) ++ ds.get.parameterGroups))
+    )
   }
 
-
+  // Cache the data source types in both directions
   override def onInit(userPreferences: Map[String, String]) =
     Some(
-      Effect.action(UpdateEditParameters("datasources", List(aboutGroup))) >> updateAllDataSourceTypes()
+      Effect(
+        for {
+          sourceTypes         <- fetchDataSourceTypes("source")
+          destinationTypes    <- fetchDataSourceTypes("destination")
+        } yield
+          UpdateEditState("datasources", state.value.editState.copy(
+            dataSourceTypes = Map(
+             "source"       -> sourceTypes,
+             "destination"  -> destinationTypes
+            )
+          ))
+      )
     )
 
 
-  override def onNewOrEdit =
+  override def onEdit =
     Some(
-      Effect.action(UpdateEditParameterValue("datasources", directionParameter, direction)) >>
-      onDataSourceTypeChanged(direction, dataSourceType)
+      updateDataSourceType(SyncDirection.Source.value, state.value.editState.dataSourceTypes(SyncDirection.Source.value).head)
     )
 
 
-  override def onNewOrEditParameterChange(parameter: Parameter[_]) =
-    Some(
-        parameter.name match {
-          case "direction"  => onDataSourceTypeChanged(direction, state.value.editState.dataSourceTypes(direction).head)
-          case "type"       => onDataSourceTypeChanged(direction, dataSourceType)
-          case _            => Effect.action(NoAction)
-        }
-    )
+  override def onEditParameterWillChange(parameter: Parameter[_], value: Any) = {
+    parameter.name match {
+      case "direction"  =>
+        val direction = value.asInstanceOf[String]
+        Some(updateDataSourceType(direction, state.value.editState.dataSourceTypes(direction).head))
+
+      case "type"       =>
+        val direction = state.value.editValues.getOrElse(directionParameter, SyncDirection.Source.value)
+        Some(updateDataSourceType(direction, value.asInstanceOf[String]))
+
+      case _            => None
+    }
+  }
 
 
   override def onCreate(subType: Option[EntitySubType]) = {

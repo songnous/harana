@@ -12,7 +12,7 @@ object i18nUtils {
 
     def i(subs: Any*): String = getProperty(subs: _*) match {
       case Left(x) =>
-        println(s"Failed to get i18n for key: $x")
+        //println(s"Failed to get i18n for key: $x")
         ""
       case Right(x) => x
     }
