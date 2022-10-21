@@ -3,7 +3,6 @@ package com.harana.ui.components.table
 import com.harana.designer.frontend.utils.i18nUtils.ops
 import com.harana.ui.components.{ColumnSize, Device, when}
 import com.harana.ui.external.shoelace.{Button, Dropdown, Menu, Radio}
-import com.harana.ui.external.lazy_load.LazyLoad
 import slinky.core.Component
 import slinky.core.annotations.react
 import slinky.core.facade.{Fragment, React, ReactElement, ReactRef}
@@ -86,17 +85,18 @@ import scala.util.Random
                     },
                     when(props.includeMenus)(
                       td(key := s"$rowId-menu", className := s"col-md-2")(
-                        when(row.menu.isDefined)(
-                          LazyLoad(height = 40, offset = 100, unmountIfInvisible = true, scrollContainer = s"#$tableId", scroll = true, children =
-                            Dropdown(
-                              button = Some(Button.Props(className = Some("list-dropdown"), icon = Some("icomoon","menu7"), slot = Some("trigger"), caret = Some(true))),
-                              buttonKey = Some(s"$rowId-menu-btn"),
-                              className = Some("inline"),
-                              menu = row.menu,
-                              hoist = Some(true)
-                            ).withKey(s"$rowId-menu")
-                          )
-                        )
+// FIXME: LazyLoad is abandoned
+//                        when(row.menu.isDefined)(
+//                          LazyLoad(height = 40, offset = 100, unmountIfInvisible = true, scrollContainer = s"#$tableId", scroll = true, children =
+//                            Dropdown(
+//                              button = Some(Button.Props(className = Some("list-dropdown"), icon = Some("icomoon","menu7"), slot = Some("trigger"), caret = Some(true))),
+//                              buttonKey = Some(s"$rowId-menu-btn"),
+//                              className = Some("inline"),
+//                              menu = row.menu,
+//                              hoist = Some(true)
+//                            ).withKey(s"$rowId-menu")
+//                          )
+//                        )
                       )
                     )
                   )

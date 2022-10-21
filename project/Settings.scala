@@ -123,9 +123,9 @@ object Settings {
   val js = Seq(
     scalaJSUseMainModuleInitializer           := true,
     scalaJSLinkerConfig                       ~= { _.withModuleKind(ModuleKind.CommonJSModule) },
-    useYarn                                   := true,
+    useYarn                                   := false,
     webpack / version                         := "5.74.0",
-    startWebpackDevServer / version           := "3.1.4",
+    startWebpackDevServer / version           := "4.11.1",
     fastOptJS / webpackDevServerExtraArgs     := Seq("--inline", "--hot"),
     webpackEmitSourceMaps                     := false,
     fastOptJS / webpackBundlingMode           := BundlingMode.LibraryAndApplication(),

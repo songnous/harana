@@ -27,9 +27,9 @@ import scala.scalajs.js.annotation.JSExportTopLevel
 				}},
 				columns = props.columns,
 				rows = 1,
-				height = 20,
+				height = 40,
 				fillDirection = "left",
-				width = 20 * props.values.size
+				width = 10 * props.values.size
 			)
 		)
 }

@@ -1,6 +1,5 @@
 package com.harana.modules.alertmanager
 
-import com.harana.modules.alertmanager.AlertManager.Service
 import com.harana.modules.core.config.Config
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer

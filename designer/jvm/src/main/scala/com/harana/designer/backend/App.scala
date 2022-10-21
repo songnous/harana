@@ -70,6 +70,7 @@ object App extends CoreApp {
     Route("/help*", GET, rc => homePage(rc), isBlocking = false),
     Route("/schedules*", GET, rc => homePage(rc), isBlocking = false),
     Route("/settings*", GET, rc => homePage(rc), isBlocking = false),
+    Route("/terminal*", GET, rc => homePage(rc), isBlocking = false),
     Route("/test*", GET, rc => homePage(rc), isBlocking = false),
 
     Route("/health", GET, rc => System.health(rc).provideLayer(system)),

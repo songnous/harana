@@ -70,7 +70,8 @@ import scala.scalajs.js
       div(className := "flow-grid", onDrop := (e => Circuit.dispatch(AddAction(e))), onDragOver := (e => e.preventDefault()))(
         if (state.showLogs)
           div(className := "newflow-logs")(
-            when(state.flow, LazyLog(url = s"/api/execution/flows/logs/${state.flow.get.id}", lineClassName = "newflow-logs-line", enableSearch = true, caseInsensitive = true, stream = true).withKey(state.logsKey))
+            // FIXME: LazyLog is abandoned
+            //            when(state.flow, LazyLog(url = s"/api/execution/flows/logs/${state.flow.get.id}", lineClassName = "newflow-logs-line", enableSearch = true, caseInsensitive = true, stream = true).withKey(state.logsKey))
           )
         else
           Flow(

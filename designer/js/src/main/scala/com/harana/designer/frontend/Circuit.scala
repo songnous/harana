@@ -27,6 +27,8 @@ import com.harana.designer.frontend.schedules.list.ScheduleListHandler
 import com.harana.designer.frontend.schedules.list.ScheduleListStore.ScheduleEditState
 import com.harana.designer.frontend.system.SystemStore.SystemState
 import com.harana.designer.frontend.system.{SystemHandler, SystemStore}
+import com.harana.designer.frontend.terminal.{TerminalHandler, TerminalStore}
+import com.harana.designer.frontend.terminal.TerminalStore.TerminalState
 import com.harana.designer.frontend.user.{UserHandler, UserStore}
 import com.harana.designer.frontend.user.UserStore.UserState
 import com.harana.designer.frontend.utils.DiodeUtils
@@ -52,6 +54,7 @@ case class State(appItemState: AppItemState,
                  scheduleItemState: ScheduleItemState,
                  scheduleListState: GridState[Schedule, ScheduleEditState],
                  systemState: SystemState,
+                 terminalState: TerminalState,
                  userState: UserState,
                  welcomeState: WelcomeState)
 
@@ -73,6 +76,7 @@ object Circuit extends diode.Circuit[State] {
     ScheduleItemStore.initialState,
     GridStore.initialState(ScheduleEditState(List(), List(), None, ListBuffer.empty, ListBuffer.empty)),
     SystemStore.initialState,
+    TerminalStore.initialState,
     UserStore.initialState,
     WelcomeStore.initialState
   )
@@ -90,6 +94,7 @@ object Circuit extends diode.Circuit[State] {
     new ScheduleItemHandler,
     new ScheduleListHandler,
     new SystemHandler,
+    new TerminalHandler,
     new UserHandler,
     new WelcomeHandler
   )

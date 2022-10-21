@@ -4,6 +4,7 @@ import com.harana.designer.frontend.analytics.Analytics
 import com.harana.designer.frontend.utils.AuthUtils
 import com.harana.designer.frontend.utils.error.Error
 import com.harana.sdk.shared.models.jwt.DesignerClaims
+import com.harana.ui.external.terminal.TerminalContextProvider
 import diode._
 import org.scalajs.dom
 import org.scalajs.dom.HashChangeEvent

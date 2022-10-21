@@ -23,6 +23,8 @@ import com.harana.designer.frontend.schedules.item.ui.ScheduleItemPage
 import com.harana.designer.frontend.schedules.list.ui.ScheduleListPage
 import com.harana.designer.frontend.system.SystemStore
 import com.harana.designer.frontend.welcome.ui.WelcomePage
+import com.harana.designer.frontend.terminal.TerminalStore
+import com.harana.designer.frontend.terminal.ui.TerminalPage
 import com.harana.designer.frontend.test._
 import com.harana.designer.frontend.user.UserStore
 import com.harana.designer.frontend.utils.http.Http
@@ -37,7 +39,6 @@ import slinky.core.facade.React
 import slinky.core.{CustomAttribute, FunctionalComponent}
 import slinky.web.html._
 import com.harana.sdk.shared.utils.CirceCodecs._
-
 import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 
 @react
@@ -69,6 +70,7 @@ object Router {
             Circuit.dispatch(NavigationStore.Init(p))
             Circuit.dispatch(ScheduleItemStore.Init(p))
             Circuit.dispatch(SystemStore.Init(p))
+            Circuit.dispatch(TerminalStore.Init(p))
             Circuit.dispatch(UserStore.Init(p))
             Circuit.dispatch(WelcomeStore.Init(p))
 
@@ -100,6 +102,7 @@ object Router {
              Route("/help/:id", HelpPage.component, exact = true),
              Route("/schedules", ScheduleListPage.component, exact = true),
              Route("/schedules/:id", ScheduleItemPage.component, exact = true),
+             Route("/terminal", TerminalPage.component, exact = true),
              Route("/test/parameters", ParametersPage.component, exact = true),
              Route("/test/shoelace", ShoelacePage.component, exact = true),
              Route("/welcome", WelcomePage.component, exact = true),

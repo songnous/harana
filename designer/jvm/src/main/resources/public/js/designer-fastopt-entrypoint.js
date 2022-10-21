@@ -1,5 +1,5 @@
 module.exports = {
-  "require": (function(x1) {
+  "require": (function(x0) {
     return {
       "source-map": require("source-map"),
       "react-dom": require("react-dom"),
@@ -22,18 +22,17 @@ module.exports = {
       "react-syntax-highlighter/dist/esm/languages/hljs/r": require("react-syntax-highlighter/dist/esm/languages/hljs/r"),
       "react-syntax-highlighter/dist/esm/light": require("react-syntax-highlighter/dist/esm/light"),
       "react-router-dom": require("react-router-dom"),
+      "react-terminal": require("react-terminal"),
       "react-syntax-highlighter/dist/esm/languages/hljs/yaml": require("react-syntax-highlighter/dist/esm/languages/hljs/yaml"),
       "react-syntax-highlighter/dist/esm/languages/hljs/xml": require("react-syntax-highlighter/dist/esm/languages/hljs/xml"),
       "react-helmet": require("react-helmet"),
       "react-filepond": require("react-filepond"),
-      "react-lazylog": require("react-lazylog"),
       "react-syntax-highlighter": require("react-syntax-highlighter"),
       "react-flow-renderer": require("react-flow-renderer"),
       "react-syntax-highlighter/dist/esm/languages/hljs/json": require("react-syntax-highlighter/dist/esm/languages/hljs/json"),
-      "react-lazyload": require("react-lazyload"),
       "react-syntax-highlighter/dist/esm/languages/hljs/bash": require("react-syntax-highlighter/dist/esm/languages/hljs/bash"),
       "react-syntax-highlighter/dist/esm/languages/hljs/python": require("react-syntax-highlighter/dist/esm/languages/hljs/python"),
       "react-markdown": require("react-markdown")
-    }[x1]
+    }[x0]
   })
 }

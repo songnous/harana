@@ -54,8 +54,8 @@ import slinky.core.annotations.react
       dataItem -> Some(LinkType.Page("/data")),
       flowsItem -> Some(LinkType.Page("/flows")),
       appsItem -> Some(LinkType.Page("/apps")),
-      alertsItem -> Some(LinkType.Page("/schedules")),
-      terminalItem -> Some(LinkType.Page("/schedules")))
+      schedulesItem -> Some(LinkType.Page("/schedules")),
+      terminalItem -> Some(LinkType.Page("/terminal")))
 
     NavigationBar(
       leftItems = navigationItems,
