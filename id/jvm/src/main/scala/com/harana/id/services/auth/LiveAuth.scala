@@ -15,10 +15,11 @@ import com.harana.modules.core.config.Config
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
 import com.harana.modules.stripe.{StripePrices, StripeProducts, StripeSubscriptions}
-import com.harana.sdk.shared.models.common.{MarketingChannel, User}
+import com.harana.sdk.shared.models.common.{MarketingChannel, User, UserBilling, UserResources, UserSettings}
 import com.harana.sdk.shared.models.jwt.DesignerClaims
 import io.vertx.core.http.CookieSameSite
 import io.vertx.ext.web.RoutingContext
+
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import org.pac4j.core.profile.CommonProfile
@@ -92,15 +93,31 @@ object LiveAuth {
         passwordHash          =  HashUtils.hash(password, emailAddress.reverse)
 
         trialLength           <- config.int("signup.trial.length")
+        billing               =  UserBilling(
+                                  trialStarted = Some(Instant.now),
+                                  trialEnded = Some(Instant.now.plus(trialLength, ChronoUnit.DAYS)))
+
+        resources             =  UserResources(
+                                  diskSpace = 0,
+                                  flowsCPU = 0,
+                                  flowsExecutorCount = ???,
+                                  flowsExecutorMemory = ???,
+                                  terminalAllowRoot = ???,
+                                  terminalCPU = ???,
+                                  terminalMemory = ???
+                                )
+
         user                  =  User(
+                                  billing = billing,
                                   emailAddress = emailAddress,
                                   firstName = firstName,
                                   lastName = lastName,
                                   marketingChannel = Option(rc.request.getCookie("marketing_channel")).map(c => MarketingChannel.withName(c.getValue)),
                                   marketingChannelId = Option(rc.request.getCookie("marketing_channel_id")).map(_.getValue()),
                                   password = Some(passwordHash.toString),
-                                  trialStarted = Some(Instant.now),
-                                  trialEnded = Some(Instant.now.plus(trialLength, ChronoUnit.DAYS)))
+                                  resources = resources,
+                                  settings = UserSettings())
+
         _                     <- createUser(user)
 
         _                     <- Task.when(risk._2.equals("medium"))(sendEmail(config, email, handlebars, logger, "confirm.email", firstName, lastName, emailAddress))
@@ -123,6 +140,7 @@ object LiveAuth {
         foundUser             <- mongo.findOne[User]("Users", Map("emailAddress" -> profile.getEmail))
         trialLength           <- config.int("signup.trial.length")
         newUser               =  User(
+                                  billing = UserBilling(trialStarted = Some(Instant.now), trialEnded = Some(Instant.now.plus(trialLength, ChronoUnit.DAYS))) ,
                                   emailAddress = profile.getEmail,
                                   external = true,
                                   firstName = profile.getFirstName,
@@ -130,8 +148,8 @@ object LiveAuth {
                                   displayName = Some(profile.getDisplayName),
                                   marketingChannel = Option(rc.request.getCookie("marketing_channel")).map(c => MarketingChannel.withName(c.getValue)),
                                   marketingChannelId = Option(rc.request.getCookie("marketing_channel_id")).map(_.getValue()),
-                                  trialStarted = Some(Instant.now),
-                                  trialEnded = Some(Instant.now.plus(trialLength, ChronoUnit.DAYS)))
+                                  resources = UserResources(0, 0, 0, 0, false, 0, 0),
+                                  settings = UserSettings())
         _                     <- Task.when(foundUser.isEmpty)(createUser(newUser))
         user                  =  if (foundUser.isEmpty) newUser else foundUser.get
         response              <- redirectToApp(user, Some(profile))
@@ -162,15 +180,12 @@ object LiveAuth {
       DesignerClaims(
         audiences = List(),
         beta = user.beta,
+        billing = user.billing,
         cluster = user.cluster,
-        diskSpace = user.diskSpace,
         emailAddress = user.emailAddress,
-        executorCount = user.executorCount,
-        executorMemory = user.executorMemory,
         expires = expires,
         external = external,
         firstName = user.firstName,
-        fsxSpeed = user.fsxSpeed,
         imageUrl = user.imageUrl,
         issued = Instant.now,
         lastName = user.lastName,
@@ -178,15 +193,7 @@ object LiveAuth {
         marketingChannelId = user.marketingChannelId,
         notBefore = Instant.now,
         onboarded = user.onboarded,
-        subscriptionEnded = user.subscriptionEnded,
-        subscriptionCustomerId = user.subscriptionCustomerId,
-        subscriptionId = user.subscriptionId,
-        subscriptionPrice = user.subscriptionPrice,
-        subscriptionPriceId = user.subscriptionPriceId,
-        subscriptionProduct = user.subscriptionProduct,
-        subscriptionStarted = user.subscriptionStarted,
-        trialStarted = user.trialStarted,
-        trialEnded = user.trialEnded,
+        resources = user.resources,
         userId = user.id)
 
     private def createUser(user: User): Task[Unit] =
@@ -208,22 +215,28 @@ object LiveAuth {
         productId                 <- IO.foreach(price.map(_.id))(id => stripePrices.byId(id).map(_.product)).mapError(e => new Exception(e.error.message))
         product                   <- IO.foreach(productId)(id => stripeProducts.byId(id)).mapError(e => new Exception(e.error.message))
 
+        billing                   =  user.billing.copy(
+                                        subscriptionEnded = subscription.flatMap(_.canceledAt.map(Instant.ofEpochSecond)),
+                                        subscriptionCustomerId = customerId,
+                                        subscriptionId = subscription.map(_.id),
+                                        subscriptionPrice = price.map(_.unitAmountDecimal.get),
+                                        subscriptionPriceId = price.map(_.id),
+                                        subscriptionProduct = product.map(_.name),
+                                        subscriptionStarted = subscription.map(s => Instant.ofEpochSecond(s.start)),
+                                      )
+
+        resources                 = user.resources.copy(
+                                      flowsExecutorCount = product.map(_.metadata("Flows Executor Count").toInt).get,
+                                      flowsExecutorMemory = product.map(_.metadata("Flows Executor Memory").toInt).get,
+                                    )
+
         updatedUser               =  user.copy(
                                       beta = product.exists(_.metadata("Beta").toBoolean),
+                                      billing = billing,
                                       cluster = product.map(_.metadata("Cluster")),
-                                      diskSpace = product.map(_.metadata("Disk Space").toInt),
-                                      executorCount = product.map(_.metadata("Executor Count").toInt),
-                                      executorMemory = product.map(_.metadata("Executor Count").toInt),
-                                      fsxSpeed = product.map(_.metadata("FSX Speed").toInt),
                                       imageUrl = profile.flatMap(p => Try(p.getAttribute(Google2ProfileDefinition.PICTURE).toString).toOption),
                                       lastLogin = Some(Instant.now),
-                                      subscriptionEnded = subscription.flatMap(_.canceledAt.map(Instant.ofEpochSecond)),
-                                      subscriptionCustomerId = customerId,
-                                      subscriptionId = subscription.map(_.id),
-                                      subscriptionPrice = price.map(_.unitAmountDecimal.get),
-                                      subscriptionPriceId = price.map(_.id),
-                                      subscriptionProduct = product.map(_.name),
-                                      subscriptionStarted = subscription.map(s => Instant.ofEpochSecond(s.start)),
+                                      resources = resources,
                                       updated = Instant.now)
 
         _                         <- mongo.update[User]("Users", updatedUser)

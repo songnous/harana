@@ -4,8 +4,9 @@ import java.util.Optional
 import com.harana.Layers
 import com.harana.id.jwt.modules.jwt.JWT
 import com.harana.id.jwt.{Layers => JWTLayers}
-import com.harana.id.services.auth.{LiveAuth, Auth}
+import com.harana.id.services.auth.{Auth, LiveAuth}
 import com.harana.id.services.billing.{Billing, LiveBilling}
+import com.harana.id.services.ssh.{LiveSSH, SSH}
 import com.harana.id.utils.HashUtils
 import com.harana.modules.mongo.Mongo
 import com.harana.modules.vertx.Vertx
@@ -15,6 +16,7 @@ import com.harana.modules.core.app.{App => CoreApp}
 import com.harana.modules.core.config.Config
 import com.harana.modules.core.{Layers => CoreLayers}
 import io.vertx.core.http.HttpMethod
+import io.vertx.core.http.HttpMethod._
 import org.apache.logging.log4j.LogManager
 import org.jose4j.jwk.JsonWebKeySet
 import org.pac4j.core.context.WebContext
@@ -35,22 +37,27 @@ object App extends CoreApp {
   val billing = (CoreLayers.standard ++ JWTLayers.jwt ++ auth ++ Layers.mongo ++ Layers.stripeCustomers ++ Layers.stripeUI ++ Layers.vertx) >>> LiveBilling.layer
   val logger = LogManager.getLogger("App")
   val runtime = Runtime[Unit]((), Platform.default.withReportFailure(cause => if (!cause.interrupted) logger.error(cause.prettyPrint)))
-  
+  val ssh = (CoreLayers.standard ++ Layers.mongo) >>> LiveSSH.layer
+
   private def routes = List(
-    Route("/", HttpMethod.GET, _ => Task(Response.Template("public/index.hbs")), isSecured = true),
-    Route("/logout", HttpMethod.GET, rc => Auth.logout(rc).provideLayer(auth)),
-    Route("/token/renew", HttpMethod.GET, rc => Auth.renewToken(rc).provideLayer(auth)),
+    Route("/",                                      GET,    rc => Task(Response.Template("public/index.hbs")), isSecured = true),
+    Route("/logout",                                GET,    rc => Auth.logout(rc).provideLayer(auth)),
+    Route("/token/renew",                           GET,    rc => Auth.renewToken(rc).provideLayer(auth)),
 
-    Route("/account/signup", HttpMethod.POST, rc => Auth.signup(rc).provideLayer(auth)),
-    Route("/account/pause", HttpMethod.GET, rc => Task(Response.Template("public/templates/index.html"))),
-    Route("/account/cancel", HttpMethod.GET, rc => Task(Response.Template("public/templates/index.html"))),
-    Route("/account/resetPassword", HttpMethod.GET, rc => Task(Response.Template("public/templates/index.html"))),
+    Route("/account/signup",                        POST,   rc => Auth.signup(rc).provideLayer(auth)),
+    Route("/account/pause",                         GET,    rc => Task(Response.Template("public/templates/index.html"))),
+    Route("/account/cancel",                        GET,    rc => Task(Response.Template("public/templates/index.html"))),
+    Route("/account/resetPassword",                 GET,    rc => Task(Response.Template("public/templates/index.html"))),
 
-    Route("/billing/checkout", HttpMethod.GET, rc => Billing.checkout(rc).provideLayer(billing)),
-    Route("/billing/checkout/success/:sessionId", HttpMethod.GET, rc => Billing.checkoutSuccess(rc).provideLayer(billing)),
-    Route("/billing/portal", HttpMethod.GET, rc => Billing.portal(rc).provideLayer(billing)),
+    Route("/billing/checkout",                      GET,    rc => Billing.checkout(rc).provideLayer(billing)),
+    Route("/billing/checkout/success/:sessionId",   GET,    rc => Billing.checkoutSuccess(rc).provideLayer(billing)),
+    Route("/billing/portal",                        GET,    rc => Billing.portal(rc).provideLayer(billing)),
 
-    Route("/billing/subscription/webhook", HttpMethod.POST, rc => Billing.subscriptionWebhook(rc).provideLayer(billing)),
+    Route("/billing/subscription/webhook",          POST,   rc => Billing.subscriptionWebhook(rc).provideLayer(billing)),
+
+    Route("/ssh/configuration",                     POST,   rc => SSH.configuration(rc).provideLayer(ssh)),
+    Route("/ssh/password",                          POST,   rc => SSH.authenticatePassword(rc).provideLayer(ssh)),
+    Route("/ssh/pubkey",                            POST,   rc => SSH.authenticatePublicKey(rc).provideLayer(ssh))
   )
 
 

@@ -17,5 +17,6 @@ object Terminal {
 
     def isTerminalRunning(rc: RoutingContext): Task[Response]
 
+    def configuration(rc: RoutingContext): Task[Response]
   }
 }

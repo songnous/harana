@@ -63,6 +63,14 @@ mv settings.tmp settings.json
 osascript -e 'quit app "Docker"'; open -a Docker ; while [ -z "$(docker info 2> /dev/null )" ]; do printf "."; sleep 1; done; echo ""
 ```
 
+## Setup Kubernetes Cluster
+```bash
+k3d cluster create harana --api-port 6550
+k3d node create core --cluster harana
+k3d node create task --cluster harana
+k3d node create terminal --cluster harana
+```
+
 ## Setup HAProxy Certificates
 ```bash
 wget https://harana-dependencies.s3.ap-southeast-2.amazonaws.com/cloudflare_harana_build.crt -O /tmp/harana.crt

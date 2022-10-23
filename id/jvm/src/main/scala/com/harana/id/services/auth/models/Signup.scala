@@ -1,4 +1,4 @@
-package com.harana.id.services.signup.models
+package com.harana.id.services.auth.models
 
 import java.time.Instant
 

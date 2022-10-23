@@ -40,7 +40,7 @@ object LiveBilling {
         claims                  <- jwt.claims[DesignerClaims](jwtJson)
         key                     <- config.secret("stripe-publishable-key")
         priceId                 <- config.string("stripe.standardPriceId")
-        sessionId               <- stripeUI.createCheckoutSession(claims.subscriptionCustomerId.get, priceId, successUrl, refererUrl)
+        sessionId               <- stripeUI.createCheckoutSession(claims.billing.subscriptionCustomerId.get, priceId, successUrl, refererUrl)
         json                    =  Map("publishableKey" -> key, "sessionId" -> sessionId).asJson
         _                       <- vertx.sendMessage(claims.userId, "analytics", "subscription.checkout")
         response                =  Response.JSON(json)
@@ -59,7 +59,7 @@ object LiveBilling {
       for {
         returnUrl               <- Task(rc.request.getHeader(HttpHeaders.REFERER))
         claims                  <- jwt.claims[DesignerClaims](rc)
-        url                     <- stripeUI.billingPortalUrl(claims.subscriptionCustomerId.get, returnUrl)
+        url                     <- stripeUI.billingPortalUrl(claims.billing.subscriptionCustomerId.get, returnUrl)
         response                =  Response.Redirect(url)
       } yield response
 
@@ -78,17 +78,17 @@ object LiveBilling {
 
         user                    <- mongo.findOne[User]("Users", Map("id" -> userId)).map(_.get)
         _                       <- Task.when(event.getType.equals("customer.subscription.created"))(
-                                      mongo.replace[User]("Users", userId, user.copy(subscriptionCustomerId = Some(subscription.getCustomer), updated = Instant.now), true) *>
+                                      mongo.replace[User]("Users", userId, user.copy(billing = user.billing.copy(subscriptionCustomerId = Some(subscription.getCustomer)), updated = Instant.now), true) *>
                                       mongo.insert[Event]("Events", Event("subscribe", Map(), userId))
                                     )
 
         user                    <- mongo.findOne[User]("Users", Map("id" -> userId)).map(_.get)
         _                       <- Task.when(event.getType.equals("customer.subscription.updated"))(
                                       if (subscription.getCancelAtPeriodEnd) {
-                                        mongo.replace[User]("Users", userId, user.copy(subscriptionEnded = Some(Instant.now), updated = Instant.now), true) *>
+                                        mongo.replace[User]("Users", userId, user.copy(billing = user.billing.copy(subscriptionEnded = Some(Instant.now)), updated = Instant.now), true) *>
                                         mongo.insert[Event]("Events", Event("unsubscribe", Map(), userId))
                                       }else{
-                                        mongo.replace[User]("Users", userId, user.copy(subscriptionEnded = None, updated = Instant.now), true) *>
+                                        mongo.replace[User]("Users", userId, user.copy(billing = user.billing.copy(subscriptionEnded = None), updated = Instant.now), true) *>
                                         mongo.insert[Event]("Events", Event("subscribe", Map(), userId))
                                       }
                                     )
