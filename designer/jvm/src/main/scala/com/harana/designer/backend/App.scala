@@ -14,6 +14,7 @@ import com.harana.designer.backend.services.help.{Help, LiveHelp}
 import com.harana.designer.backend.services.schedules.{LiveSchedules, Schedules}
 import com.harana.designer.backend.services.setup.{LiveSetup, Setup}
 import com.harana.designer.backend.services.system.{LiveSystem, System}
+import com.harana.designer.backend.services.terminals.{LiveTerminals, Terminals}
 import com.harana.designer.backend.services.user.{LiveUser, User}
 import com.harana.id.jwt.modules.jwt.JWT
 import com.harana.id.jwt.{Layers => JWTLayers}
@@ -59,6 +60,7 @@ object App extends CoreApp {
 
   val argoScheduler = (CoreLayers.standard ++ Layers.argo ++ Layers.kubernetes) >>> LiveArgoScheduler.layer
   val schedules = (CoreLayers.standard ++ JWTLayers.jwt ++ argoScheduler ++ Layers.mongo ++ vertx) >>> LiveSchedules.layer
+  val terminals = (CoreLayers.standard ++ JWTLayers.jwt ++ Layers.kubernetes ++ Layers.mongo ++ vertx) >>> LiveTerminals.layer
   val help = (CoreLayers.standard ++ JWTLayers.jwt ++ Layers.mongo) >>> LiveHelp.layer
 
   private def routes = List(
@@ -77,8 +79,9 @@ object App extends CoreApp {
     Route("/health",                                          GET,      rc => System.health(rc).provideLayer(system)),
 
     Route("/system/error",                                    POST,     rc => System.error(rc).provideLayer(system)),
+    Route("/system/events",                                   GET,      rc => Events.stream(rc).provideLayer(system)),
 
-    // Apps
+  // Apps
     Route("/api/apps/start/:id",                              GET,      rc => Apps.start(rc).provideLayer(apps)),
     Route("/api/apps/restart/:id",                            GET,      rc => Apps.restart(rc).provideLayer(apps)),
     Route("/api/apps/stop/:id",                               GET,      rc => Apps.stop(rc).provideLayer(apps)),
@@ -170,12 +173,23 @@ object App extends CoreApp {
 
     Route("/api/content/:id",                                 GET,      rc => System.content(rc).provideLayer(system)),
 
-      // User
+    Route("/api/terminals/:id/history",                       GET,      rc => Terminals.history(rc).provideLayer(terminals)),
+    Route("/api/terminals",                                   GET,      rc => Terminals.list(rc).provideLayer(terminals)),
+    Route("/api/terminals",                                   POST,     rc => Terminals.create(rc).provideLayer(terminals)),
+    Route("/api/terminals",                                   PUT,      rc => Terminals.update(rc).provideLayer(terminals)),
+    Route("/api/terminals/:id",                               GET,      rc => Terminals.get(rc).provideLayer(terminals)),
+    Route("/api/terminals/:id",                               DELETE,   rc => Terminals.delete(rc).provideLayer(terminals)),
+    Route("/api/terminals/:id/start",                         GET,      rc => Terminals.start(rc).provideLayer(terminals)),
+    Route("/api/terminals/:id/stop",                          GET,      rc => Terminals.stop(rc).provideLayer(terminals)),
+    Route("/api/terminals/:id/restart",                       GET,      rc => Terminals.restart(rc).provideLayer(terminals)),
+    Route("/api/terminals/:id/clear",                         GET,      rc => Terminals.clear(rc).provideLayer(terminals)),
+
+    // User
     Route("/api/user/onboard",                                GET,      rc => User.onboard(rc).provideLayer(user)),
     Route("/api/user/preferences",                            GET,      rc => User.preferences(rc).provideLayer(user)),
     Route("/api/user/preferences",                            POST,     rc => User.savePreferences(rc).provideLayer(user)),
     Route("/api/user/settings",                               GET,      rc => User.settings(rc).provideLayer(user)),
-    Route("/api/user/settings",                               POST,     rc => User.saveSettings(rc).provideLayer(user)),
+    Route("/api/user/settings",                               POST,     rc => User.saveSettings(rc).provideLayer(user))
   )
 
 
@@ -186,6 +200,8 @@ object App extends CoreApp {
       actions               =  Catalog.actionsByIdMap.size
 
       domain                <- env("harana_domain")
+
+      _                     <- Mongo.createQueue[Event]("EventsGlobal").provideLayer(Layers.mongo)
 
       _                     <- System.createIndexes.provideLayer(system)
       _                     <- Vertx.startHttpServer(
@@ -212,6 +228,7 @@ object App extends CoreApp {
       _                     <- Vertx.close.provideLayer(vertx)
     } yield ()
   }
+
 
   def homePage(rc: RoutingContext, onboard: Boolean = false): Task[Response] =
     for {

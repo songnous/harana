@@ -1,6 +1,7 @@
 package com.harana.modules.kubernetes
 
 import akka.actor.ActorSystem
+import akka.stream.Materializer
 import akka.stream.scaladsl.{Sink, Source}
 import akka.util.ByteString
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -16,14 +17,18 @@ import skuber.apiextensions.CustomResourceDefinition
 import skuber.json.format.namespaceFormat
 import skuber.{K8SException, k8sInit, _}
 import zio._
+import zio.interop.reactivestreams._
+import zio.stream.{ZSink, ZStream}
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Promise
+import scala.concurrent.{Future, Promise}
 
 object LiveKubernetes { 
 
   private val yamlReader = new ObjectMapper(new YAMLFactory)
   private val jsonWriter = new ObjectMapper()
+  private val actorSystem: Layer[Throwable, Has[ActorSystem]] = ZLayer.fromManaged(Managed.make(Task(ActorSystem("Test")))(sys => Task.fromFuture(_ => sys.terminate()).either))
+  private val materializerLayer: Layer[Throwable, Has[Materializer]] = actorSystem >>> ZLayer.fromFunction(as => Materializer(as.get))
 
   val layer = ZLayer.fromServices { (config: Config.Service,
                                      logger: Logger.Service,
@@ -165,13 +170,28 @@ object LiveKubernetes {
              podName: String,
              command: Seq[String],
              maybeContainerName: Option[String] = None,
-             maybeStdin: Option[Source[String, _]] = None,
-             maybeStdout: Option[Sink[String, _]] = None,
-             maybeStderr: Option[Sink[String, _]] = None,
+             maybeStdin: Option[ZStream[Any, Nothing, String]] = None,
+             maybeStdout: Option[String => UIO[Unit]] = None,
+             maybeStderr: Option[String => UIO[Unit]] = None,
              tty: Boolean = false,
-             maybeClose: Option[Promise[Unit]] = None)(implicit lc: LoggingContext): IO[K8SException, Unit] =
-      ZIO.fromFuture { _ =>  client.usingNamespace(namespace).exec(podName, command, maybeContainerName, maybeStdin, maybeStdout, maybeStderr, tty, maybeClose)(lc) }.refineToOrDie[K8SException]
-      
+             maybeClose: Option[Promise[Unit]] = None)(implicit lc: LoggingContext): IO[K8SException, Unit] = {
+      for {
+        source    <- if (maybeStdin.isDefined)
+                      for {
+                        publisher <- maybeStdin.get.toPublisher
+                        source    =  Some(Source.fromPublisher(publisher))
+                      } yield source
+                     else ZIO.none
+
+        sinkOut   =  if (maybeStdout.isDefined) Some(Sink.foreach[String](s => maybeStdout.get(s).toFuture)) else None
+        sinkErr   =  if (maybeStderr.isDefined) Some(Sink.foreach[String](s => maybeStderr.get(s).toFuture)) else None
+
+        _         <- ZIO.fromFuture { _ =>
+                       client.usingNamespace(namespace).exec(podName, command, maybeContainerName, source, sinkOut, sinkErr, tty, maybeClose)(lc)
+                     }.refineToOrDie[K8SException]
+      } yield ()
+    }
+
 
     def getServerAPIVersions(client: KubernetesClient)(implicit lc: LoggingContext): IO[K8SException, List[String]] =
       ZIO.fromFuture { _ =>  client.getServerAPIVersions(lc) }.refineToOrDie[K8SException]

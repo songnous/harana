@@ -162,6 +162,7 @@ val modules = crossProject("modules")
       Library.commonsEmail.value :+
       Library.deepstream.value :+
       Library.facebook.value :+
+      Library.fst.value :+
       Library.handlebars.value :+
       Library.javaWebsocket.value :+
       Library.jbrowserDriver.value :+

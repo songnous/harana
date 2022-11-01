@@ -165,6 +165,15 @@ object LiveMongo {
       } yield results
 
 
+    def appendToListField(collectionName: String, id: EntityId, field: String, value: Object): Task[Unit] =
+      for {
+        db                  <- mongoDatabase
+        collection          <- getCollection(db, collectionName)
+        setDocument         =  new BasicDBObject(field, new BasicDBObject("$concat", List("$" + field, value)))
+        results             <- executeUpdate(collection, id, new BasicDBObject("$set", setDocument))
+      } yield results
+
+
     def replace[E <: Id](collectionName: String, id: EntityId, entity: E, upsert: Boolean)(implicit tt: TypeTag[E], e: Encoder[E]): Task[Unit] =
       for {
         db                  <- mongoDatabase

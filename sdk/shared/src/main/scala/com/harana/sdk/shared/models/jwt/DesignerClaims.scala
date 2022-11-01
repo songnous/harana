@@ -1,23 +1,20 @@
 package com.harana.sdk.shared.models.jwt
 
-import com.harana.sdk.shared.models.common.MarketingChannel
-import java.time.Instant
+import com.harana.sdk.shared.models.common.{MarketingChannel, UserBilling, UserResources}
 
+import java.time.Instant
 import io.circe.generic.JsonCodec
 
 @JsonCodec
 case class DesignerClaims(
   audiences: List[String],
   beta: Boolean,
+  billing: UserBilling,
   cluster: Option[String],
-  diskSpace: Option[Int],
   emailAddress: String,
-  executorCount: Option[Int],
-  executorMemory: Option[Int],
   expires: Instant,
   external: Boolean,
   firstName: String,
-  fsxSpeed: Option[Int],
   imageUrl: Option[String],
   issued: Instant,
   lastName: String,
@@ -25,15 +22,7 @@ case class DesignerClaims(
   marketingChannelId: Option[String],
   notBefore: Instant,
   onboarded: Boolean,
-  subscriptionEnded: Option[Instant],
-  subscriptionCustomerId: Option[String],
-  subscriptionId: Option[String],
-  subscriptionPrice: Option[BigDecimal],
-  subscriptionPriceId: Option[String],
-  subscriptionProduct: Option[String],
-  subscriptionStarted: Option[Instant],
-  trialEnded: Option[Instant],
-  trialStarted: Option[Instant],
+  resources: UserResources,
   userId: String) extends JWTClaims {
 
     type JWTClaimsType = DesignerClaims
@@ -44,15 +33,15 @@ case class DesignerClaims(
 
     def isTrialing: Boolean = {
       val now = Instant.now()
-      if (subscriptionId.isDefined)
+      if (billing.subscriptionId.isDefined)
         true
       else
-        if (trialStarted.isDefined && trialEnded.isDefined)
-          trialStarted.get.isBefore(now) && trialEnded.get.isAfter(now)
+        if (billing.trialStarted.isDefined && billing.trialEnded.isDefined)
+          billing.trialStarted.get.isBefore(now) && billing.trialEnded.get.isAfter(now)
         else
           false
     }
 
     def hasTrialEnded: Boolean =
-      trialEnded.map(_.isBefore(Instant.now)).isDefined
+      billing.trialEnded.map(_.isBefore(Instant.now)).isDefined
 }

@@ -11,7 +11,7 @@ import com.harana.sdk.shared.utils.Random
 
 @JsonCodec
 case class Event(eventType: String,
-                 eventParameters: Map[String, String],
+								 parameters: Map[String, String],
                  createdBy: Option[UserId],
                  created: Instant,
                  updatedBy: Option[UserId],
@@ -30,7 +30,7 @@ case class Event(eventType: String,
 object Event {
 	type EventId = String
 
-	def apply(eventType: String, eventParameters: Map[String, String], createdBy: UserId): Event = {
-		apply(eventType, eventParameters, Some(createdBy), Instant.now, Some(createdBy), Instant.now, Random.long, Status.Active, Visibility.Owner, 1L, Set(), Map())
+	def apply(eventType: String, parameters: Map[String, String], createdBy: UserId): Event = {
+		apply(eventType, parameters, Some(createdBy), Instant.now, Some(createdBy), Instant.now, Random.long, Status.Active, Visibility.Owner, 1L, Set(), Map())
 	}
 }

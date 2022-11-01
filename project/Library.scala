@@ -351,6 +351,7 @@ object Library {
   val zio1 = Def.setting(Seq(
     "dev.zio" %% "zio" % "1.0.15",
     "dev.zio" %% "zio-interop-cats" % "3.2.9.1",
+    "dev.zio" %% "zio-interop-reactivestreams" % "1.3.12",
     "dev.zio" %% "zio-macros" % "1.0.15",
     "dev.zio" %% "zio-process" % "0.6.1",
     "dev.zio" %% "zio-streams" % "1.0.14",

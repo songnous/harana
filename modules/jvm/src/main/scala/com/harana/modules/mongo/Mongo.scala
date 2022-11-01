@@ -33,6 +33,8 @@ object Mongo {
 
     def updateFields(collectionName: String, id: EntityId, keyValues: Map[String, Object]): Task[Unit]
 
+    def appendToListField(collectionName: String, id: EntityId, field: String, value: Object): Task[Unit]
+
     def replace[E <: Id](collectionName: String, id: EntityId, entity: E, upsert: Boolean)(implicit tt: TypeTag[E], e: Encoder[E]): Task[Unit]
 
     def delete[E <: Id](collectionName: String, bson: Bson)(implicit tt: TypeTag[E]): Task[Unit]

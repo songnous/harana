@@ -8,7 +8,8 @@ import skuber.api.client._
 import skuber.api.patch.Patch
 import skuber.apiextensions.CustomResourceDefinition
 import zio.macros.accessible
-import zio.{Has, IO, Task}
+import zio.stream.ZStream
+import zio.{Has, IO, Task, UIO}
 
 import scala.concurrent.Promise
 
@@ -86,9 +87,9 @@ object Kubernetes {
              podName: String,
              command: Seq[String],
              maybeContainerName: Option[String] = None,
-             maybeStdin: Option[Source[String, _]] = None,
-             maybeStdout: Option[Sink[String, _]] = None,
-             maybeStderr: Option[Sink[String, _]] = None,
+             maybeStdin: Option[ZStream[Any, Nothing, String]] = None,
+             maybeStdout: Option[String => UIO[Unit]] = None,
+             maybeStderr: Option[String => UIO[Unit]] = None,
              tty: Boolean = false,
              maybeClose: Option[Promise[Unit]] = None)(implicit lc: LoggingContext): IO[K8SException, Unit]
 

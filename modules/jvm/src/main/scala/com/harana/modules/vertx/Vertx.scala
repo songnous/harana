@@ -25,12 +25,12 @@ object Vertx {
 
   trait Service {
     def subscribe[T](address: Address, onMessage: (String, Option[T]) => Task[Unit])(implicit d: Decoder[T]): Task[MessageConsumer[T]]
-    def subscribe(address: Address, onMessage: (String, String) => Task[Unit]): Task[MessageConsumer[String]]
-    def unsubscribe(consumer: Task[MessageConsumer[_]]): Task[Unit]
-    def publishMessage[T](address: Address, group: String, messageType: String, payload: T)(implicit e: Encoder[T]): Task[Unit]
-    def publishMessage(address: Address, group: String, `type`: String): Task[Unit]
-    def sendMessage[T](address: Address, group: String, `type`: String, payload: T)(implicit e: Encoder[T]): Task[Unit]
-    def sendMessage(address: Address, group: String, `type`: String): Task[Unit]
+    def unsubscribe(address: Address): Task[Unit]
+    def unsubscribe(consumer: MessageConsumer[_]): Task[Unit]
+    def publishMessage[T](address: Address, messageType: String, payload: T)(implicit e: Encoder[T]): Task[Unit]
+    def publishMessage(address: Address, `type`: String): Task[Unit]
+    def sendMessage[T](address: Address, `type`: String, message: T)(implicit e: Encoder[T]): Task[Unit]
+    def sendMessage(address: Address, `type`: String): Task[Unit]
 
     def service(name: String): Task[Option[Record]]
     def services(filters: Map[String, String]): Task[List[Record]]

@@ -44,8 +44,10 @@ import org.pac4j.vertx.{VertxProfileManager, VertxWebContext}
 import zio.blocking._
 import zio.{IO, Task, UIO, ZLayer}
 import io.vertx.ext.web.sstore.cookie.CookieSessionStore
+import org.nustaq.serialization.FSTConfiguration
 
 import java.io.File
+import java.util.Base64
 import scala.jdk.CollectionConverters._
 import scala.collection.concurrent.{TrieMap, Map => ConcurrentMap}
 import scala.compat.java8.FunctionConverters.asJavaFunction
@@ -62,7 +64,7 @@ object LiveVertx {
   private val vertxRef = new AtomicReference[Option[VX]](None)
   private val serviceDiscoveryRef = new AtomicReference[Option[ServiceDiscovery]](None)
   private val serviceDiscoveryListeners: ConcurrentMap[String, Record => Unit] = TrieMap.empty
-
+  private val fstConf = FSTConfiguration.createDefaultConfiguration
 
   val layer = ZLayer.fromServices { (blocking: Blocking.Service,
                                      config: Config.Service,
@@ -131,69 +133,70 @@ object LiveVertx {
                     })
 
                     consumer.completionHandler((result: AsyncResult[Void]) =>
-                      if (result.succeeded()) cb(logger.debug(s"Subscribed to address: $address").as(consumer))
+                      if (result.succeeded()) {
+                        putMapValue("vertx.consumers", address, Base64.getEncoder.encodeToString(fstConf.asByteArray(consumer)))
+                        cb(logger.debug(s"Subscribed to address: $address").as(consumer))
+                      }
                       else cb(logger.error(s"Failed to subscribe to address: $address") *> Task.fail(result.cause()))
                     )
                   }
       } yield result
 
 
-    def subscribe(address: Address, onMessage: (String, String) => Task[Unit]): Task[MessageConsumer[String]] =
+    def unsubscribe(consumer: MessageConsumer[_]): Task[Unit] =
       for {
-        eb      <- vertx.map(_.eventBus)
-        result  <- IO.effectAsync[Throwable, MessageConsumer[String]] { cb =>
-                  val consumer = eb.consumer(address, (message: Message[String]) => {
-                    runAsync(onMessage(message.headers().get("type"), message.body()))
-                  })
-
-                  consumer.completionHandler((result: AsyncResult[Void]) =>
-                    if (result.succeeded()) cb(logger.debug(s"Subscribed to address: $address").as(consumer))
-                    else cb(logger.error(s"Failed to subscribe to address: $address") *> Task.fail(result.cause()))
-                  )
-                }
-      } yield result
-
-
-    def unsubscribe(consumer: Task[MessageConsumer[_]]): Task[Unit] =
-      for {
-        c       <- consumer
         result  <- IO.effectAsync[Throwable, Unit] { cb =>
-                    c.unregister((result: AsyncResult[Void]) =>
-                      if (result.succeeded()) cb(logger.debug(s"Unsubscribed from address: ${c.address()}").unit)
-                      else cb(logger.error(s"Failed to unsubscribe from address: ${c.address()}") *> Task.fail(result.cause()))
+                    consumer.unregister((result: AsyncResult[Void]) =>
+                      if (result.succeeded()) cb(logger.debug(s"Unsubscribed from address: ${consumer.address()}").unit)
+                      else cb(logger.error(s"Failed to unsubscribe from address: ${consumer.address()}") *> Task.fail(result.cause()))
                     )
                   }
       } yield result
 
 
-    def publishMessage[T](address: Address, group: String, `type`: String, payload: T)(implicit e: Encoder[T]): Task[Unit] =
+    def unsubscribe(address: Address): Task[Unit] =
+      for {
+        encoded  <- getMapValue[String, String]("vertx.consumers", address)
+        result   <- IO.effectAsync[Throwable, Unit] { cb =>
+                      if (encoded.isDefined) {
+                        val consumer = fstConf.asObject(Base64.getDecoder.decode(encoded.get)).asInstanceOf[MessageConsumer[_]]
+                        consumer.unregister((result: AsyncResult[Void]) =>
+                          if (result.succeeded()) cb(logger.debug(s"Unsubscribed from address: ${consumer.address()}").unit)
+                          else cb(logger.error(s"Failed to unsubscribe from address: ${consumer.address()}") *> Task.fail(result.cause()))
+                        )
+                      }
+                    }
+      } yield result
+
+
+    def publishMessage[T](address: Address, `type`: String, message: T)(implicit e: Encoder[T]): Task[Unit] =
       for {
         eb  <- vertx.map(_.eventBus)
-        _   <- Task(eb.publish(address, payload.asJson.noSpaces, new DeliveryOptions().addHeader("type", `type`).addHeader("group", group)))
+        _   <- Task(eb.publish(address, message.asJson.noSpaces, new DeliveryOptions().addHeader("type", `type`)))
         _   <- logger.debug(s"Event bus message: ${`type`} published to address: $address")
       } yield ()
 
 
-    def publishMessage(address: Address, group: String, `type`: String): Task[Unit] =
+    def publishMessage(address: Address, `type`: String): Task[Unit] =
       for {
         eb  <- vertx.map(_.eventBus)
-        _   <- Task(eb.send(address, null, new DeliveryOptions().addHeader("type", `type`).addHeader("group", group)))
+        _   <- Task(eb.send(address, null, new DeliveryOptions().addHeader("type", `type`)))
         _   <- logger.debug(s"Event bus message: ${`type`} sent to address: $address")
       } yield ()
 
 
-    def sendMessage[T](address: Address, group: String, `type`: String, payload: T)(implicit e: Encoder[T]): Task[Unit] =
+    def sendMessage[T](address: Address, `type`: String, payload: T)(implicit e: Encoder[T]): Task[Unit] =
       for {
         eb  <- vertx.map(_.eventBus)
-        _   <- Task(eb.send(address, payload.asJson.noSpaces, new DeliveryOptions().addHeader("type", `type`).addHeader("group", group)))
+        _   <- Task(eb.send(address, payload.asJson.noSpaces, new DeliveryOptions().addHeader("type", `type`)))
         _   <- logger.debug(s"Event bus message: ${`type`} sent to address: $address")
       } yield ()
 
 
-    def sendMessage(address: Address, group: String, `type`: String): Task[Unit] =
+    def sendMessage(address: Address, `type`: String): Task[Unit] =
       for {
         eb  <- vertx.map(_.eventBus)
-        _   <- Task(eb.send(address, null, new DeliveryOptions().addHeader("type", `type`).addHeader("group", group)))
+        _   <- Task(eb.send(address, null, new DeliveryOptions().addHeader("type", `type`)))
         _   <- logger.debug(s"Event bus message: ${`type`} sent to address: $address")
       } yield ()
 
