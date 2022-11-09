@@ -42,7 +42,7 @@ object LiveBilling {
         priceId                 <- config.string("stripe.standardPriceId")
         sessionId               <- stripeUI.createCheckoutSession(claims.billing.subscriptionCustomerId.get, priceId, successUrl, refererUrl)
         json                    =  Map("publishableKey" -> key, "sessionId" -> sessionId).asJson
-        _                       <- vertx.sendMessage(claims.userId, "analytics", "subscription.checkout")
+        _                       <- vertx.sendMessage(claims.userId, "analytics-subscription-checkout")
         response                =  Response.JSON(json)
       } yield response
 

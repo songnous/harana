@@ -24,12 +24,11 @@ object Vertx {
   type WebSocketHeaders = MultiMap
 
   trait Service {
-    def subscribe[T](address: Address, onMessage: (String, Option[T]) => Task[Unit])(implicit d: Decoder[T]): Task[MessageConsumer[T]]
-    def unsubscribe(address: Address): Task[Unit]
-    def unsubscribe(consumer: MessageConsumer[_]): Task[Unit]
-    def publishMessage[T](address: Address, messageType: String, payload: T)(implicit e: Encoder[T]): Task[Unit]
+    def subscribe(address: Address, `type`: String, onMessage: String => Task[Unit]): Task[MessageConsumer[String]]
+    def unsubscribe(consumer: MessageConsumer[String]): Task[Unit]
+    def publishMessage(address: Address, messageType: String, payload: String): Task[Unit]
     def publishMessage(address: Address, `type`: String): Task[Unit]
-    def sendMessage[T](address: Address, `type`: String, message: T)(implicit e: Encoder[T]): Task[Unit]
+    def sendMessage(address: Address, `type`: String, message: String): Task[Unit]
     def sendMessage(address: Address, `type`: String): Task[Unit]
 
     def service(name: String): Task[Option[Record]]
@@ -48,6 +47,7 @@ object Vertx {
     def getMapValues[K, V](name: String): Task[List[V]]
     def getMapValue[K, V](name: String, key: K): Task[Option[V]]
     def putMapValue[K, V](name: String, key: K, value: V, ttl: Option[Long] = None): Task[Unit]
+    def removeMapValue[K, V](name: String, key: K): Task[Unit]
     def putMapValueIfAbsent[K, V](name: String, key: K, value: V, ttl: Option[Long] = None): Task[V]
 
     def getUploadedFile(filename: String): Task[Buffer]

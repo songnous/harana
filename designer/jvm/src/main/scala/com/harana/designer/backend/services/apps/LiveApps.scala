@@ -116,7 +116,7 @@ object LiveApps {
         podFiber          <- Task.when(pod.isEmpty)(
                               for {
                                 volumeMount       <- UIO(Volume.Mount(name = "user-home", mountPath = "/home/harana", subPath = claims.userId))
-                                containerSpec     <- UIO(Container(name = name, image = app.image, imagePullPolicy = Container.PullPolicy.Always, volumeMounts = List(volumeMount)).exposePort(app.httpPort))
+                                containerSpec     <- UIO(Container(name = name, image = app.image, imagePullPolicy = Some(Container.PullPolicy.Always), volumeMounts = List(volumeMount)).exposePort(app.httpPort))
                                 volume            <- UIO(Volume(name = "user-home", Volume.PersistentVolumeClaimRef("user-home")))
 
                                 podSpec           <- UIO(Pod.Spec(imagePullSecrets = List(LocalObjectReference("aws-registry"))))

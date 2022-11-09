@@ -29,6 +29,7 @@ import com.harana.sdk.shared.models.common.{User => DesignerUser}
 import com.harana.sdk.shared.models.flow.FlowExecution
 import com.harana.modules.argo.LiveArgo
 import com.harana.designer.backend.services.schedules.argo.LiveArgoScheduler
+import com.harana.modules.core.logger.Logger
 import com.harana.sdk.shared.models.flow.execution.spark.ExecutionStatus
 import com.harana.sdk.shared.models.jwt.DesignerClaims
 import io.vertx.core.http.HttpMethod._
@@ -56,7 +57,6 @@ object App extends CoreApp {
   val apps = (CoreLayers.standard ++ Clock.live ++ JWTLayers.jwt ++ Layers.kubernetes ++ Layers.mongo ++ vertx) >>> LiveApps.layer
   val data = (CoreLayers.standard ++ Layers.alluxioFs ++ JWTLayers.jwt ++ vertx) >>> LiveData.layer
   val files = (CoreLayers.standard ++ JWTLayers.jwt ++ Layers.kubernetes ++ vertx ++ LiveVfs.layer) >>> LiveFiles.layer
-  val ssh = (CoreLayers.standard ++ CoreLayers.mongo) >>> LiveSSH.layer
 
   val argoScheduler = (CoreLayers.standard ++ Layers.argo ++ Layers.kubernetes) >>> LiveArgoScheduler.layer
   val schedules = (CoreLayers.standard ++ JWTLayers.jwt ++ argoScheduler ++ Layers.mongo ++ vertx) >>> LiveSchedules.layer
@@ -79,7 +79,7 @@ object App extends CoreApp {
     Route("/health",                                          GET,      rc => System.health(rc).provideLayer(system)),
 
     Route("/system/error",                                    POST,     rc => System.error(rc).provideLayer(system)),
-    Route("/system/events",                                   GET,      rc => Events.stream(rc).provideLayer(system)),
+//    Route("/system/events",                                   GET,      rc => Events.stream(rc).provideLayer(system)),
 
   // Apps
     Route("/api/apps/start/:id",                              GET,      rc => Apps.start(rc).provideLayer(apps)),
@@ -179,8 +179,8 @@ object App extends CoreApp {
     Route("/api/terminals",                                   PUT,      rc => Terminals.update(rc).provideLayer(terminals)),
     Route("/api/terminals/:id",                               GET,      rc => Terminals.get(rc).provideLayer(terminals)),
     Route("/api/terminals/:id",                               DELETE,   rc => Terminals.delete(rc).provideLayer(terminals)),
-    Route("/api/terminals/:id/start",                         GET,      rc => Terminals.start(rc).provideLayer(terminals)),
-    Route("/api/terminals/:id/stop",                          GET,      rc => Terminals.stop(rc).provideLayer(terminals)),
+    Route("/api/terminals/:id/connect",                       GET,      rc => Terminals.connect(rc).provideLayer(terminals)),
+    Route("/api/terminals/:id/disconnect",                    GET,      rc => Terminals.disconnect(rc).provideLayer(terminals)),
     Route("/api/terminals/:id/restart",                       GET,      rc => Terminals.restart(rc).provideLayer(terminals)),
     Route("/api/terminals/:id/clear",                         GET,      rc => Terminals.clear(rc).provideLayer(terminals)),
 
@@ -201,7 +201,7 @@ object App extends CoreApp {
 
       domain                <- env("harana_domain")
 
-      _                     <- Mongo.createQueue[Event]("EventsGlobal").provideLayer(Layers.mongo)
+//      _                     <- Mongo.createQueue[Event]("EventsGlobal").provideLayer(Layers.mongo)
 
       _                     <- System.createIndexes.provideLayer(system)
       _                     <- Vertx.startHttpServer(

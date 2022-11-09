@@ -1,33 +1,28 @@
 package com.harana.modules.vertx
 
-
-import java.net.URI
-import java.util.concurrent.atomic.AtomicReference
-import com.harana.modules.vertx.Vertx.{Address, Service, WebSocketHeaders}
-import com.harana.modules.vertx.models._
-import com.harana.modules.vertx.proxy.{WSURI, WebProxyClientOptions}
 import com.harana.modules.core.config.Config
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
+import com.harana.modules.vertx.Vertx.{Address, Service, WebSocketHeaders}
 import com.harana.modules.vertx.gc.GCHealthCheck
-import io.circe.{Decoder, Encoder}
+import com.harana.modules.vertx.models._
+import com.harana.modules.vertx.proxy.{WSURI, WebProxyClient, WebProxyClientOptions}
 import io.circe.parser._
 import io.circe.syntax._
+import io.circe.{Decoder, Encoder}
 import io.vertx.core.buffer.Buffer
-import io.vertx.core.eventbus.{DeliveryOptions, EventBus, EventBusOptions, Message, MessageConsumer}
+import io.vertx.core.eventbus._
+import io.vertx.core.file.FileSystemOptions
 import io.vertx.core.http.{HttpServer, HttpServerOptions, WebSocket}
 import io.vertx.core.json.JsonObject
-import io.vertx.core.logging.LoggerFactory
 import io.vertx.core.net.{JksOptions, NetServer, NetServerOptions}
 import io.vertx.core.shareddata.{AsyncMap, Counter, Lock}
 import io.vertx.core.{AsyncResult, Context, Handler, VertxOptions, Vertx => VX}
 import io.vertx.ext.bridge.{BridgeOptions, PermittedOptions}
 import io.vertx.ext.eventbus.bridge.tcp.TcpEventBusBridge
 import io.vertx.ext.web.client.{WebClient, WebClientOptions}
-import com.harana.modules.vertx.proxy.WebProxyClient
-import io.vertx.core.file.FileSystemOptions
-import io.vertx.ext.web.handler.{BodyHandler, CorsHandler, SessionHandler, StaticHandler}
-import io.vertx.ext.web.sstore.ClusteredSessionStore
+import io.vertx.ext.web.handler.{BodyHandler, CorsHandler, SessionHandler}
+import io.vertx.ext.web.sstore.cookie.CookieSessionStore
 import io.vertx.ext.web.templ.handlebars.HandlebarsTemplateEngine
 import io.vertx.ext.web.{Router, RoutingContext}
 import io.vertx.micrometer.{MicrometerMetricsOptions, PrometheusScrapingHandler, VertxPrometheusOptions}
@@ -36,35 +31,31 @@ import io.vertx.spi.cluster.zookeeper.ZookeeperClusterManager
 import org.jose4j.jwk.JsonWebKeySet
 import org.pac4j.core.client.Clients
 import org.pac4j.core.config.{Config => Pac4jConfig}
-import org.pac4j.core.profile.{CommonProfile, ProfileManager, UserProfile}
+import org.pac4j.core.profile.UserProfile
 import org.pac4j.vertx.context.session.VertxSessionStore
 import org.pac4j.vertx.handler.impl._
 import org.pac4j.vertx.http.VertxHttpActionAdapter
 import org.pac4j.vertx.{VertxProfileManager, VertxWebContext}
 import zio.blocking._
 import zio.{IO, Task, UIO, ZLayer}
-import io.vertx.ext.web.sstore.cookie.CookieSessionStore
-import org.nustaq.serialization.FSTConfiguration
 
 import java.io.File
+import java.net.URI
 import java.util.Base64
-import scala.jdk.CollectionConverters._
+import java.util.concurrent.atomic.AtomicReference
 import scala.collection.concurrent.{TrieMap, Map => ConcurrentMap}
 import scala.compat.java8.FunctionConverters.asJavaFunction
 import scala.compat.java8.OptionConverters._
-import scala.io.Source
+import scala.jdk.CollectionConverters._
 
 object LiveVertx {
 
   System.setProperty("org.jboss.logging.provider", "log4j2")
   System.setProperty("vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.Log4j2LogDelegateFactory")
 
-  LoggerFactory.initialise()
-
   private val vertxRef = new AtomicReference[Option[VX]](None)
   private val serviceDiscoveryRef = new AtomicReference[Option[ServiceDiscovery]](None)
   private val serviceDiscoveryListeners: ConcurrentMap[String, Record => Unit] = TrieMap.empty
-  private val fstConf = FSTConfiguration.createDefaultConfiguration
 
   val layer = ZLayer.fromServices { (blocking: Blocking.Service,
                                      config: Config.Service,
@@ -122,28 +113,26 @@ object LiveVertx {
       } yield serviceDiscovery
 
 
-    def subscribe[T](address: Address, onMessage: (String, Option[T]) => Task[Unit])(implicit d: Decoder[T]): Task[MessageConsumer[T]] =
+    def subscribe(address: Address, `type`: String, onMessage: String => Task[Unit]): Task[MessageConsumer[String]] =
       for {
         eb      <- vertx.map(_.eventBus)
-        result  <- IO.effectAsync[Throwable, MessageConsumer[T]] { cb =>
-                    val consumer = eb.consumer(address, (message: Message[T]) => {
-                      val `type` = message.headers().get("type")
-                      val payload = Option(message.body()).flatMap(body => decode[T](body.asInstanceOf[String]).toOption)
-                      runAsync(onMessage(`type`, payload))
-                    })
+        result  <- IO.effectAsync[Throwable, MessageConsumer[String]] { cb =>
+                      val consumer = eb.consumer(address, (message: Message[String]) => {
+                        if (message.headers().get("type").equals(`type`)) {
+                          val body = new String(Base64.getDecoder.decode(message.body().getBytes("UTF-8")))
+                          runAsync(onMessage(body))
+                        }}
+                      )
 
-                    consumer.completionHandler((result: AsyncResult[Void]) =>
-                      if (result.succeeded()) {
-                        putMapValue("vertx.consumers", address, Base64.getEncoder.encodeToString(fstConf.asByteArray(consumer)))
-                        cb(logger.debug(s"Subscribed to address: $address").as(consumer))
-                      }
-                      else cb(logger.error(s"Failed to subscribe to address: $address") *> Task.fail(result.cause()))
-                    )
+                      consumer.completionHandler((result: AsyncResult[Void]) =>
+                        if (result.succeeded()) cb(logger.debug(s"Subscribed to address: $address").as(consumer))
+                        else cb(logger.error(s"Failed to subscribe to address: $address") *> Task.fail(result.cause()))
+                      )
                   }
       } yield result
 
 
-    def unsubscribe(consumer: MessageConsumer[_]): Task[Unit] =
+    def unsubscribe(consumer: MessageConsumer[String]): Task[Unit] =
       for {
         result  <- IO.effectAsync[Throwable, Unit] { cb =>
                     consumer.unregister((result: AsyncResult[Void]) =>
@@ -154,26 +143,12 @@ object LiveVertx {
       } yield result
 
 
-    def unsubscribe(address: Address): Task[Unit] =
-      for {
-        encoded  <- getMapValue[String, String]("vertx.consumers", address)
-        result   <- IO.effectAsync[Throwable, Unit] { cb =>
-                      if (encoded.isDefined) {
-                        val consumer = fstConf.asObject(Base64.getDecoder.decode(encoded.get)).asInstanceOf[MessageConsumer[_]]
-                        consumer.unregister((result: AsyncResult[Void]) =>
-                          if (result.succeeded()) cb(logger.debug(s"Unsubscribed from address: ${consumer.address()}").unit)
-                          else cb(logger.error(s"Failed to unsubscribe from address: ${consumer.address()}") *> Task.fail(result.cause()))
-                        )
-                      }
-                    }
-      } yield result
-
-
-    def publishMessage[T](address: Address, `type`: String, message: T)(implicit e: Encoder[T]): Task[Unit] =
+    def publishMessage(address: Address, `type`: String, message: String): Task[Unit] =
       for {
         eb  <- vertx.map(_.eventBus)
-        _   <- Task(eb.publish(address, message.asJson.noSpaces, new DeliveryOptions().addHeader("type", `type`)))
-        _   <- logger.debug(s"Event bus message: ${`type`} published to address: $address")
+        m   <- Task(Base64.getEncoder.encode(message.getBytes("UTF-8")))
+        _   <- Task(eb.publish(address, m, new DeliveryOptions().addHeader("type", `type`)))
+        _   <- logger.error(s"Event bus message: ${`type`} published to address: $address with message: $message")
       } yield ()
 
 
@@ -181,15 +156,16 @@ object LiveVertx {
       for {
         eb  <- vertx.map(_.eventBus)
         _   <- Task(eb.send(address, null, new DeliveryOptions().addHeader("type", `type`)))
-        _   <- logger.debug(s"Event bus message: ${`type`} sent to address: $address")
+        _   <- logger.error(s"Event bus message: ${`type`} sent to address: $address")
       } yield ()
 
 
-    def sendMessage[T](address: Address, `type`: String, payload: T)(implicit e: Encoder[T]): Task[Unit] =
+    def sendMessage(address: Address, `type`: String, message: String): Task[Unit] =
       for {
         eb  <- vertx.map(_.eventBus)
-        _   <- Task(eb.send(address, payload.asJson.noSpaces, new DeliveryOptions().addHeader("type", `type`)))
-        _   <- logger.debug(s"Event bus message: ${`type`} sent to address: $address")
+        m   <- Task(Base64.getEncoder.encode(message.getBytes("UTF-8")))
+        _   <- Task(eb.send(address, m, new DeliveryOptions().addHeader("type", `type`)))
+        _   <- logger.error(s"Event bus message: ${`type`} sent to address: $address with message: $message")
       } yield ()
 
 
@@ -197,7 +173,7 @@ object LiveVertx {
       for {
         eb  <- vertx.map(_.eventBus)
         _   <- Task(eb.send(address, null, new DeliveryOptions().addHeader("type", `type`)))
-        _   <- logger.debug(s"Event bus message: ${`type`} sent to address: $address")
+        _   <- logger.error(s"Event bus message: ${`type`} sent to address: $address")
       } yield ()
 
 
@@ -307,6 +283,10 @@ object LiveVertx {
       withMap[K, V, Void](name, (map, handler) => if (ttl.isDefined) map.put(key, value, ttl.get, handler) else map.put(key, value, handler)).unit
 
 
+    def removeMapValue[K, V](name: String, key: K): Task[Unit] =
+      withMap[K, V, Void](name, (map, _) => map.remove(key)).unit
+
+
     def putMapValueIfAbsent[K, V](name: String, key: K, value: V, ttl: Option[Long] = None): Task[V] =
       withMap[K, V, V](name, (map, handler) => if (ttl.isDefined) map.putIfAbsent(key, value, ttl.get, handler) else map.putIfAbsent(key, value, handler))
 
@@ -368,6 +348,9 @@ object LiveVertx {
         router                <- Task {
                                   val router = Router.router(vx)
 
+                                  // Body
+                                  router.route.handler(BodyHandler.create())
+
                                   // Common
                                   router.mountSubRouter("/eventbus", Handlers.sock(vx, eventBusInbound, eventBusOutbound))
                                   router.get("/metrics").handler(PrometheusScrapingHandler.create())
@@ -392,9 +375,6 @@ object LiveVertx {
                                     .allowCredentials(true)
                                     .allowedHeaders((defaultAllowedHeaders ++ additionalAllowedHeaders).asJava)
                                     .allowedMethods(defaultAllowedMethods.asJava))
-
-                                  // Body
-                                  router.route.handler(BodyHandler.create())
 
                                   // Auth
                                   if (authTypes.nonEmpty) {

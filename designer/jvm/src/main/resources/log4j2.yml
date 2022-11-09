@@ -39,6 +39,8 @@ Configutation:
           - ref: ConsoleAppender
           - ref: SyslogAppender
       Logger:
+        - name: akka.event.slf4j.Slf4jLogger
+          level: error
         - name: alluxio.client
           level: error
         - name: alluxio.conf.AlluxioProperties
@@ -53,6 +55,8 @@ Configutation:
           level: error
         - name: com.github.jknack.handlebars
           level: error
+        - name: com.harana.modules.vertx.LiveVertx
+          level: debug
         - name: io.netty
           level: info
         - name: io.vertx

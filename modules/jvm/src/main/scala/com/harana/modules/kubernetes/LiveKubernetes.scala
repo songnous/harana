@@ -169,28 +169,27 @@ object LiveKubernetes {
              namespace: String,
              podName: String,
              command: Seq[String],
-             maybeContainerName: Option[String] = None,
-             maybeStdin: Option[ZStream[Any, Nothing, String]] = None,
-             maybeStdout: Option[String => UIO[Unit]] = None,
-             maybeStderr: Option[String => UIO[Unit]] = None,
+             containerName: Option[String] = None,
+             stdin: Option[ZStream[Any, Nothing, String]] = None,
+             stdout: Option[String => Task[Unit]] = None,
+             stderr: Option[String => Task[Unit]] = None,
              tty: Boolean = false,
-             maybeClose: Option[Promise[Unit]] = None)(implicit lc: LoggingContext): IO[K8SException, Unit] = {
+             close: Option[Promise[Unit]] = None)(implicit lc: LoggingContext): IO[K8SException, Unit] =
       for {
-        source    <- if (maybeStdin.isDefined)
+        source    <- if (stdin.isDefined)
                       for {
-                        publisher <- maybeStdin.get.toPublisher
+                        publisher <- stdin.get.toPublisher
                         source    =  Some(Source.fromPublisher(publisher))
                       } yield source
                      else ZIO.none
 
-        sinkOut   =  if (maybeStdout.isDefined) Some(Sink.foreach[String](s => maybeStdout.get(s).toFuture)) else None
-        sinkErr   =  if (maybeStderr.isDefined) Some(Sink.foreach[String](s => maybeStderr.get(s).toFuture)) else None
+        sinkOut   =  if (stdout.isDefined) Some(Sink.foreach[String](s => Runtime.default.unsafeRun(stdout.get(s)))) else None
+        sinkErr   =  if (stderr.isDefined) Some(Sink.foreach[String](s => Runtime.default.unsafeRun(stderr.get(s)))) else None
 
         _         <- ZIO.fromFuture { _ =>
-                       client.usingNamespace(namespace).exec(podName, command, maybeContainerName, source, sinkOut, sinkErr, tty, maybeClose)(lc)
+                       client.usingNamespace(namespace).exec(podName, command, containerName, source, sinkOut, sinkErr, tty, close)(lc)
                      }.refineToOrDie[K8SException]
       } yield ()
-    }
 
 
     def getServerAPIVersions(client: KubernetesClient)(implicit lc: LoggingContext): IO[K8SException, List[String]] =

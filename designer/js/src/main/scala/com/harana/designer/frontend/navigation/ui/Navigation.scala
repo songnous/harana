@@ -59,7 +59,7 @@ import slinky.core.annotations.react
 
     NavigationBar(
       leftItems = navigationItems,
-      rightItems = if (Main.claims.subscriptionEnded.isEmpty) List(userProfileItem -> None) else List(billingCheckoutItem -> None, userProfileItem -> None),
+      rightItems = if (Main.claims.billing.subscriptionEnded.isEmpty) List(userProfileItem -> None) else List(billingCheckoutItem -> None, userProfileItem -> None),
       activeItem = navigationItems.find(item => item._2.isDefined && s"${window.location.pathname}".startsWith(item._2.get.name)).map(_._1),
       position = None,
       size = None,

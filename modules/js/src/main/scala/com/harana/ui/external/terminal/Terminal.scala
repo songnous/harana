@@ -23,7 +23,7 @@ object ReactTerminal extends js.Object {
                    showControlBar: Option[Boolean] = None,
                    showControlButtons: Option[Boolean] = None,
                    theme: Option[String] = None,
-                   defaultHandler: Option[String] = None)
+                   defaultHandler: Option[String => Unit] = None)
 
   override val component = ReactTerminal
 }

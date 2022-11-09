@@ -226,8 +226,8 @@ object LiveAuth {
                                       )
 
         resources                 = user.resources.copy(
-                                      flowsExecutorCount = product.map(_.metadata("Flows Executor Count").toInt).get,
-                                      flowsExecutorMemory = product.map(_.metadata("Flows Executor Memory").toInt).get,
+                                      flowsExecutorCount = product.map(_.metadata("Flows Executor Count").toInt).getOrElse(0),
+                                      flowsExecutorMemory = product.map(_.metadata("Flows Executor Memory").toInt).getOrElse(0),
                                     )
 
         updatedUser               =  user.copy(

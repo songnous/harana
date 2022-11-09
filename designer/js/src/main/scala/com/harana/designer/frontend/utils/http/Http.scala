@@ -1,13 +1,14 @@
 package com.harana.designer.frontend.utils.http
 
 import io.circe.parser._
-import io.circe.{Decoder, Json}
+import io.circe.syntax.EncoderOps
+import io.circe.{Decoder, Encoder, Json}
 import org.scalajs.dom.window
 import sttp.capabilities
 import sttp.client3._
 import sttp.model.{Header, Method}
-
 import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
+
 import scala.concurrent.Future
 
 object Http {
@@ -25,7 +26,9 @@ object Http {
     if (body.isDefined) requestRelativeWithBody(suffix, Method.DELETE, headers, body.get) else requestRelative(suffix, Method.DELETE, headers).map(_ => ())
 
   def post(url: String, headers: List[Header] = List(), body: String): Future[Unit] = requestWithBody(url, Method.POST, headers, body)
+  def postAs[T](suffix: String, headers: List[Header] = List(), body: T)(implicit encoder: Encoder[T]): Future[Unit] = requestWithBody(suffix, Method.POST, headers, body.asJson.noSpaces)
   def postRelative(suffix: String, headers: List[Header] = List(), body: String): Future[Unit] = requestRelativeWithBody(suffix, Method.POST, headers, body)
+  def postRelativeAs[T](suffix: String, headers: List[Header] = List(), body: T)(implicit encoder: Encoder[T]): Future[Unit] = requestRelativeWithBody(suffix, Method.POST, headers, body.asJson.noSpaces)
   def put(url: String, headers: List[Header] = List(), body: String): Future[Unit] = requestWithBody(url, Method.PUT, headers, body)
   def putRelative(suffix: String, headers: List[Header] = List(), body: String): Future[Unit] = requestRelativeWithBody(suffix, Method.PUT, headers, body)
   def putRelativeAs[T](suffix: String, headers: List[Header] = List(), body: String)(implicit decoder: Decoder[T]): Future[Option[T]] = requestRelativeWithBodyAs[T](suffix, Method.PUT, headers, body)(decoder)

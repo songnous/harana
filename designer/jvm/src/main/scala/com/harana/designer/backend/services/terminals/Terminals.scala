@@ -11,8 +11,6 @@ object Terminals {
 
   trait Service {
 
-    def history(rc: RoutingContext): Task[Response]
-
     def list(rc: RoutingContext): Task[Response]
 
     def get(rc: RoutingContext): Task[Response]
@@ -23,13 +21,14 @@ object Terminals {
 
     def update(rc: RoutingContext): Task[Response]
 
-    def start(rc: RoutingContext): Task[Response]
+    def connect(rc: RoutingContext): Task[Response]
 
-    def stop(rc: RoutingContext): Task[Response]
+    def disconnect(rc: RoutingContext): Task[Response]
 
     def restart(rc: RoutingContext): Task[Response]
 
     def clear(rc: RoutingContext): Task[Response]
 
+    def history(rc: RoutingContext): Task[Response]
   }
 }

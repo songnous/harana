@@ -17,6 +17,8 @@ case class Terminal(title: String,
                     updatedBy: Option[UserId],
                     updated: Instant,
                     id: TerminalId,
+                    image: String,
+                    shell: String,
                     history: List[TerminalHistory],
                     paused: Boolean,
                     status: Status,
@@ -36,9 +38,8 @@ object Terminal {
   def apply(title: String,
             description: String,
             createdBy: UserId,
-            visibility: Visibility,
-            background: Option[Background],
-            tags: Set[String]): Terminal = {
-    apply(title, description, Some(createdBy), Instant.now, Some(createdBy), Instant.now, Random.long, List(), false, Status.Active, visibility, 1L, background, tags, Map())
+            image: String,
+            shell: String): Terminal = {
+    apply(title, description, Some(createdBy), Instant.now, Some(createdBy), Instant.now, Random.long, image, shell, List(), false, Status.Active, Visibility.Owner, 1L, None, Set(), Map())
   }
 }

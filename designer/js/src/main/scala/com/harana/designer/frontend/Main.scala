@@ -1,16 +1,17 @@
 package com.harana.designer.frontend
 
 import com.harana.designer.frontend.analytics.Analytics
+import com.harana.designer.frontend.navigation.NavigationStore.SaveRoute
+import com.harana.designer.frontend.system.SystemStore.RefreshEvents
+import com.harana.designer.frontend.user.UserStore.SavePreferences
 import com.harana.designer.frontend.utils.AuthUtils
 import com.harana.designer.frontend.utils.error.Error
 import com.harana.sdk.shared.models.jwt.DesignerClaims
-import com.harana.ui.external.terminal.TerminalContextProvider
 import diode._
 import org.scalajs.dom
 import org.scalajs.dom.HashChangeEvent
 import slinky.hot
 import slinky.web.ReactDOM
-import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 
 import java.util.Timer
 import scala.scalajs.js.annotation.{JSExport, JSExportTopLevel, JSGlobalScope}
@@ -22,18 +23,23 @@ object Main {
 
   @JSExport
   def main(args: Array[String]): Unit = {
+
+    Analytics.init();
+    Analytics.session();
+    EventBus.init();
+
     val decodedJwt = AuthUtils.decode(Globals.initialJwt)
     if (decodedJwt.isEmpty) println("Failed to decode JWT")
     else claims = decodedJwt.get
 
-    Analytics.init();
-    Analytics.session();
-
     js.Dynamic.global.window.onerror = Error.fromJS
-//    val eventBus = EventBus.eventBus
 
     Circuit.addProcessor((dispatch: Dispatcher, action: Any, next: Any => ActionResult[State], currentModel: State) => {
-      println(s"Action: ${action.getClass.getName.replaceFirst("\\$", " -> ").replace("$", "")}")
+      val actions = action match {
+        case a: ActionBatch => a.actions
+        case x => List(x)
+      }
+      //actions.foreach(a => println(s"Action: ${a.getClass.getName.replaceFirst("\\$", " -> ").replace("$", "")}"))
       next(action)
     })
 

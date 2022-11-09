@@ -1,40 +1,71 @@
 package com.harana.designer.frontend
 
-import com.harana.designer.frontend.analytics.Analytics
+import com.harana.designer.frontend.system.SystemStore.EventBusConnected
 import typings.std
-import typings.vertx3EventbusClient.mod.{^ => VertxEventBus}
+import typings.vertx3EventbusClient.mod.{EventBus, ^ => VertxEventBus}
 
+import java.util.Base64
 import scala.scalajs.js
 import scala.scalajs.js.Dynamic.global
+import scala.scalajs.js.timers._
 
 object EventBus {
 
   type Address = String
+  var eventBus: EventBus = _
+  var ready: Boolean = false
 
-  def unsubscribe(address: Address) =
-    eventBus.unregisterHandler(address)
+  def sendMessage(messageType: String, message: String): Unit =
+    if (ready) {
+      println(s"Sending message: $message / $messageType on the EventBus")
+      val body = new String(Base64.getEncoder.encode(message.getBytes("UTF-8")))
+      eventBus.publish(Main.claims.userId, body, new EventBusHeaders { val `type` = messageType })
+    } else
+      setTimeout(100) { sendMessage(messageType, message) }
 
-  val eventBus: VertxEventBus = new VertxEventBus("/eventbus") {
-    override def onopen() = {
-      //println("Connecting to EventBus ..")
-      enablePing(false)
-      enableReconnect(true)
-
-      eventBus.send("connectx", Main.claims.userId, new EventBusHeaders {
-        val `type` = "connection"
-        val group = "connection"
-      })
-
-      eventBus.registerHandler("connect2", js.undefined, (error: std.Error, result: js.Any) => {
-        println("CONNECT2 MESSAGE")
-      })
-
-      eventBus.registerHandler(Main.claims.userId, js.undefined, (error: std.Error, result: js.Any) => {
+  def subscribe(messageType: String, fn: String => Unit): Unit =
+    if (ready) {
+      println(s"Subscribing to $messageType on the EventBus")
+      eventBus.registerHandler(Main.claims.userId, new EventBusHeaders { val `type` = messageType }, (error: std.Error, result: js.Any) => {
         val message = result.asInstanceOf[EventBusMessage]
-        global.console.dir(message)
+        if (message.headers.`type`.equals(messageType)) {
+          val body = new String(Base64.getDecoder.decode(message.body), "UTF-8")
+          val body2 = new String(Base64.getDecoder.decode(body), "UTF-8")
+          fn(body2)
+        }
       })
+    } else
+      setTimeout(100) { subscribe(messageType, fn) }
+
+  def unsubscribe(address: Address): Unit =
+    if (ready)
+      eventBus.unregisterHandler(address)
+    else
+      setTimeout(100) { unsubscribe(address) }
+
+  def init(): Unit = {
+    eventBus = new VertxEventBus("/eventbus") {
+      override def onopen() = {
+        println("EventBus: CONNECTED")
+        Circuit.dispatch(EventBusConnected)
+        enablePing(true)
+        enableReconnect(true)
+        ready = true
+      }
+
+      override def onclose() = {
+        println("EventBus: DISCONNECTED")
+        ready = false
+        setTimeout(2000)(init())
+      }
+
+      override def onerror(error: std.Error) = {
+        println("EventBus: ERROR")
+        global.console.dir(error)
+        ready = false
+        setTimeout(2000)(init())
+      }
     }
-    override def onerror(error: std.Error) = global.console.dir(error)
   }
 }
 
@@ -45,6 +76,5 @@ trait EventBusMessage extends js.Object {
 }
 
 trait EventBusHeaders extends js.Object {
-  val group: String
   val `type`: String
 }

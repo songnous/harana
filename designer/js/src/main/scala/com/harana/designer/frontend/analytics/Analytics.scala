@@ -141,9 +141,9 @@ object Analytics {
         val ecommerceItems = js.Array(
           new Item {
             override val index = 1
-            override val item_name = claims.subscriptionProduct
-            override val item_id = claims.subscriptionPriceId
-            override val price = claims.subscriptionPrice.map(_.toString)
+            override val item_name = claims.billing.subscriptionProduct
+            override val item_id = claims.billing.subscriptionPriceId
+            override val price = claims.billing.subscriptionPrice.map(_.toString)
             override val quantity = "1"
           }
         )
@@ -153,8 +153,8 @@ object Analytics {
           override val items = ecommerceItems
 
           override val purchase = new Purchase {
-            override val transaction_id = claims.subscriptionId
-            override val value = claims.subscriptionPrice.map(_.toString)
+            override val transaction_id = claims.billing.subscriptionId
+            override val value = claims.billing.subscriptionPrice.map(_.toString)
             override val currency = "USD"
             override val items = ecommerceItems
           }
@@ -191,17 +191,17 @@ object Analytics {
         override val marketing_channel = claims.marketingChannel.map(_.entryName).orUndefined
         override val marketing_channel_id = claims.marketingChannelId
         override val schedule_count = Circuit.state(zoomTo(_.scheduleListState), false).items.size.toString
-        override val subscription_id = claims.subscriptionId
-        override val subscription_ended = date(claims.subscriptionEnded)
-        override val subscription_customer_id = claims.subscriptionCustomerId
-        override val subscription_duration = duration(claims.subscriptionStarted, claims.subscriptionEnded)
-        override val subscription_price = claims.subscriptionPrice.map(p => (p / 100).toString)
-        override val subscription_price_id = claims.subscriptionPriceId
-        override val subscription_product = claims.subscriptionProduct
-        override val subscription_started = date(claims.subscriptionStarted)
-        override val trial_duration = duration(claims.trialStarted, claims.trialEnded)
-        override val trial_ended = date(claims.trialEnded)
-        override val trial_started = date(claims.trialStarted)
+        override val subscription_id = claims.billing.subscriptionId
+        override val subscription_ended = date(claims.billing.subscriptionEnded)
+        override val subscription_customer_id = claims.billing.subscriptionCustomerId
+        override val subscription_duration = duration(claims.billing.subscriptionStarted, claims.billing.subscriptionEnded)
+        override val subscription_price = claims.billing.subscriptionPrice.map(p => (p / 100).toString)
+        override val subscription_price_id = claims.billing.subscriptionPriceId
+        override val subscription_product = claims.billing.subscriptionProduct
+        override val subscription_started = date(claims.billing.subscriptionStarted)
+        override val trial_duration = duration(claims.billing.trialStarted, claims.billing.trialEnded)
+        override val trial_ended = date(claims.billing.trialEnded)
+        override val trial_started = date(claims.billing.trialStarted)
       }
       dataLayer.push(event)
     } catch {

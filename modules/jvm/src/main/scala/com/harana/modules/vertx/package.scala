@@ -109,7 +109,7 @@ package object vertx {
                                 }
                             })
                         }
-        _           <-  micrometer.stopTimer(sample, s"route_${context.normalisedPath().substring(1).replaceAll("/", "_")}")
+        _           <-  micrometer.stopTimer(sample, s"route_${context.normalizedPath().substring(1).replaceAll("/", "_")}")
       } yield ()
     )                         
 

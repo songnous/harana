@@ -86,10 +86,10 @@ object Kubernetes {
              namespace: String,
              podName: String,
              command: Seq[String],
-             maybeContainerName: Option[String] = None,
-             maybeStdin: Option[ZStream[Any, Nothing, String]] = None,
-             maybeStdout: Option[String => UIO[Unit]] = None,
-             maybeStderr: Option[String => UIO[Unit]] = None,
+             containerName: Option[String] = None,
+             stdin: Option[ZStream[Any, Nothing, String]] = None,
+             stdout: Option[String => Task[Unit]] = None,
+             stderr: Option[String => Task[Unit]] = None,
              tty: Boolean = false,
              maybeClose: Option[Promise[Unit]] = None)(implicit lc: LoggingContext): IO[K8SException, Unit]
 

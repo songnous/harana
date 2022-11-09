@@ -13,13 +13,22 @@ object ReactTerminalUI extends js.Object {
   def clear(): Unit = js.native
 }
 
+@js.native
+@JSImport("react-terminal-ui", "TerminalInput")
+class TerminalInput(children: String) extends js.Object
+
+@js.native
+@JSImport("react-terminal-ui", "TerminalOutput")
+class TerminalOutput(children: String) extends js.Object
+
 @react object TerminalUI extends ExternalComponent {
 
   case class Props(name: Option[String] = None,
                    colorMode: Option[String] = None,
-                   onInput: Option[(js.Object) => Unit] = None,
-                   startingInputValue: Option[String] = None,
-                   prompt: Option[String] = None)
+                   onInput: Option[TerminalInput => Unit] = None,
+                   startingInputValue: String = "",
+                   prompt: String = "$",
+                   children: List[TerminalOutput] = List())
 
   override val component = ReactTerminalUI
 }

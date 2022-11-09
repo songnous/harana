@@ -20,5 +20,7 @@ object SystemStore {
   case class DeleteEvent(events: Event) extends DiodeAction
   case class UpdateEvents(events: List[Event]) extends DiodeAction
 
+  case object EventBusConnected extends DiodeAction
+
   case object ToggleDebug extends DiodeAction
 }

@@ -50,11 +50,11 @@ class SystemHandler extends ActionHandler(zoomTo(_.systemState)) {
       updated(value.copy(events = events), Effect(
         Future {
           events.foreach { e =>
-            Analytics.receiveEvent(e.eventType, e.eventParameters)
-            Circuit.dispatch(FilesReceiveEvent(e.eventType, e.eventParameters))
-            Circuit.dispatch(GridReceiveEvent("apps", e.eventType, e.eventParameters))
-            Circuit.dispatch(GridReceiveEvent("datasources", e.eventType, e.eventParameters))
-            Circuit.dispatch(GridReceiveEvent("flows", e.eventType, e.eventParameters))
+            Analytics.receiveEvent(e.eventType, e.parameters)
+            Circuit.dispatch(FilesReceiveEvent(e.eventType, e.parameters))
+            Circuit.dispatch(GridReceiveEvent("apps", e.eventType, e.parameters))
+            Circuit.dispatch(GridReceiveEvent("datasources", e.eventType, e.parameters))
+            Circuit.dispatch(GridReceiveEvent("flows", e.eventType, e.parameters))
             Circuit.dispatch(DeleteEvent(e))
           }
         }).map(_ => NoAction)

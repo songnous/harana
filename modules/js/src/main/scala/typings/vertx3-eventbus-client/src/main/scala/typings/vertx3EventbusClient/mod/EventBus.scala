@@ -56,4 +56,3 @@ trait EventBus extends js.Object {
     callback: js.Function2[/* error */ Error, /* message */ js.Any, _]
   ): js.Any = js.native
 }
-
