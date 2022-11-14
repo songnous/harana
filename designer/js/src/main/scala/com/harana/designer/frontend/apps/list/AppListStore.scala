@@ -4,7 +4,7 @@ import diode.{Action => DiodeAction}
 
 object AppListStore {
 
-  case class AppListEditState()
+  case class State()
 
   case class StopApp(appId: String) extends DiodeAction
 }

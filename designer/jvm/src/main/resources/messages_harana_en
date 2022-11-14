@@ -1300,4 +1300,5 @@ schedules.status.succeeded = Succeeded
 schedules.status.timedout = Timed Out
 
 schedules.sidebar.about = About
+schedules.sidebar.history = History
 schedules.sidebar.updated = Updated

@@ -1,16 +1,16 @@
 package com.harana.designer.backend
 
-import com.harana.sdk.shared.models.flow.catalog.Catalog
 import com.harana.Layers
 import com.harana.designer.backend.services.apps.{Apps, LiveApps}
 import com.harana.designer.backend.services.data.LiveData
 import com.harana.designer.backend.services.datasets.{DataSets, LiveDataSets}
 import com.harana.designer.backend.services.datasources.{DataSources, LiveDataSources}
 import com.harana.designer.backend.services.events.{Events, LiveEvents}
-import com.harana.designer.backend.services.flowexecutions.{FlowExecutions, LiveFlowExecutions}
 import com.harana.designer.backend.services.files.{Files, LiveFiles}
+import com.harana.designer.backend.services.flowexecutions.{FlowExecutions, LiveFlowExecutions}
 import com.harana.designer.backend.services.flows.{Flows, LiveFlows}
 import com.harana.designer.backend.services.help.{Help, LiveHelp}
+import com.harana.designer.backend.services.schedules.argo.LiveArgoScheduler
 import com.harana.designer.backend.services.schedules.{LiveSchedules, Schedules}
 import com.harana.designer.backend.services.setup.{LiveSetup, Setup}
 import com.harana.designer.backend.services.system.{LiveSystem, System}
@@ -18,26 +18,24 @@ import com.harana.designer.backend.services.terminals.{LiveTerminals, Terminals}
 import com.harana.designer.backend.services.user.{LiveUser, User}
 import com.harana.id.jwt.modules.jwt.JWT
 import com.harana.id.jwt.{Layers => JWTLayers}
+import com.harana.modules.core.app.{App => CoreApp}
+import com.harana.modules.core.micrometer.{LiveMicrometer, Micrometer}
+import com.harana.modules.core.{Layers => CoreLayers}
 import com.harana.modules.mongo.Mongo
 import com.harana.modules.vertx.models._
 import com.harana.modules.vertx.{LiveVertx, Vertx}
 import com.harana.modules.vfs.LiveVfs
-import com.harana.modules.core.app.{App => CoreApp}
-import com.harana.modules.core.micrometer.{LiveMicrometer, Micrometer}
-import com.harana.modules.core.{Layers => CoreLayers}
 import com.harana.sdk.shared.models.common.{User => DesignerUser}
 import com.harana.sdk.shared.models.flow.FlowExecution
-import com.harana.modules.argo.LiveArgo
-import com.harana.designer.backend.services.schedules.argo.LiveArgoScheduler
-import com.harana.modules.core.logger.Logger
+import com.harana.sdk.shared.models.flow.catalog.Catalog
 import com.harana.sdk.shared.models.flow.execution.spark.ExecutionStatus
 import com.harana.sdk.shared.models.jwt.DesignerClaims
 import io.vertx.core.http.HttpMethod._
 import io.vertx.ext.web.RoutingContext
 import zio.blocking.Blocking
 import zio.clock.Clock
-import zio.{Schedule, Task}
 import zio.duration.durationInt
+import zio.{Schedule, Task}
 
 import java.time.Instant
 import scala.util.Try
@@ -223,11 +221,11 @@ object App extends CoreApp {
     } yield ()
 
 
-  def shutdown = {
+  def shutdown =
     for {
+      _                     <- Terminals.shutdown.provideLayer(terminals)
       _                     <- Vertx.close.provideLayer(vertx)
     } yield ()
-  }
 
 
   def homePage(rc: RoutingContext, onboard: Boolean = false): Task[Response] =

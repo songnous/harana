@@ -11,21 +11,21 @@ import diode.{Action => DiodeAction}
 
 object FilesStore {
 
-  case class FilesState(blocked: Boolean,
-                        files: List[HaranaFile],
-                        item: Option[HaranaFile],
-                        itemPreview: Option[Either[String, PreviewData]],
-                        path: List[String],
-                        pathStr: String,
-                        searchQuery: Option[String],
-                        selectedFile: Option[HaranaFile],
-                        sortOrdering: SortOrdering,
-                        tags: List[FilterItem],
-                        tag: Option[FilterItem],
-                        uploadedFiles: List[UploadedFile],
-                        content: Map[String, String])
+  case class State(blocked: Boolean,
+                   files: List[HaranaFile],
+                   item: Option[HaranaFile],
+                   itemPreview: Option[Either[String, PreviewData]],
+                   path: List[String],
+                   pathStr: String,
+                   searchQuery: Option[String],
+                   selectedFile: Option[HaranaFile],
+                   sortOrdering: SortOrdering,
+                   tags: List[FilterItem],
+                   tag: Option[FilterItem],
+                   uploadedFiles: List[UploadedFile],
+                   content: Map[String, String])
 
-  val initialState = FilesState(blocked = false, List(), None, None, List(), "/", None, None, SortOrdering.NameAscending, List(), None, List(), Map())
+  val initialState = State(blocked = false, List(), None, None, List(), "/", None, None, SortOrdering.NameAscending, List(), None, List(), Map())
 
 
   case class Init(userPreferences: Map[String, String]) extends DiodeAction

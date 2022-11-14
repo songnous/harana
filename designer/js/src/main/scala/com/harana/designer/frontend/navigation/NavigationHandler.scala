@@ -20,7 +20,7 @@ class NavigationHandler extends ActionHandler(zoomTo(_.navigationState)) {
 
   private val routePreferenceId = "designer.route"
 
-  override def handle: PartialFunction[Any, ActionResult[State]] = {
+  override def handle = {
 
     case Init(preferences) =>
       effectOnly(Effect.action(

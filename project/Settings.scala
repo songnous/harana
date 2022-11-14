@@ -76,6 +76,7 @@ object Settings {
     Compile / packageSrc / publishArtifact    := false,
     maxErrors                                 := 1000,
     fork                                      := true,
+    Global / cancelable                       := true,
     githubOwner                               := "harana",
     organization                              := "com.harana",
     githubTokenSource                         := TokenSource.Environment("GITHUB_TOKEN"),

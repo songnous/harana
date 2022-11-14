@@ -6,11 +6,11 @@ import diode.{Action => DiodeAction}
 
 object ScheduleItemStore {
 
-  case class ScheduleItemState(schedule: Option[Schedule],
-                               actionTypes: List[String],
-                               eventTypes: List[String])
+  case class State(schedule: Option[Schedule],
+                   actionTypes: List[String],
+                   eventTypes: List[String])
 
-  val initialState = ScheduleItemState(None, List(), List())
+  val initialState = State(None, List(), List())
 
 
   case class Init(userPreferences: Map[String, String]) extends DiodeAction

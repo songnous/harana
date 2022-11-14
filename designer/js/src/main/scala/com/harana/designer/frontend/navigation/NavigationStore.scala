@@ -4,9 +4,9 @@ import diode.{Action => DiodeAction}
 
 object NavigationStore {
 
-  case class NavigationState(openingCheckout: Boolean)
+  case class State(openingCheckout: Boolean)
 
-  val initialState = NavigationState(false)
+  val initialState = State(false)
 
   case class Init(userPreferences: Map[String, String]) extends DiodeAction
   case class ReceiveEvent(eventType: String, eventParameters: Map[String, String]) extends DiodeAction

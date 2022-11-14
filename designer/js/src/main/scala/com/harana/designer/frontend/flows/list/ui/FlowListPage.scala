@@ -20,7 +20,7 @@ import slinky.web.html.{div, i}
 
   val component = FunctionalComponent[Unit] { _ =>
     GridPage(
-      itemType = "flows",
+      entityType = "flows",
       state = Circuit.state(zoomTo(_.flowListState)),
       title = i"heading.section.flows",
       tableColumns = List(titleColumn, tagsColumn, historyColumn),

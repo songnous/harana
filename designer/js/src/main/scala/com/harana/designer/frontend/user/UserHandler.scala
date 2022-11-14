@@ -13,7 +13,7 @@ import com.harana.sdk.shared.utils.CirceCodecs._
 import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 
 class UserHandler extends ActionHandler(zoomTo(_.userState)) {
-  override def handle: PartialFunction[Any, ActionResult[State]] = {
+  override def handle = {
 
     case Init(preferences) =>
       effectOnly(

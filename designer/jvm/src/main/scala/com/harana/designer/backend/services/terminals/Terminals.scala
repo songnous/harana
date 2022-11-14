@@ -3,7 +3,7 @@ package com.harana.designer.backend.services.terminals
 import com.harana.modules.vertx.models.Response
 import io.vertx.ext.web.RoutingContext
 import zio.macros.accessible
-import zio.{Has, Task}
+import zio.{Has, Task, UIO}
 
 @accessible
 object Terminals {
@@ -30,5 +30,7 @@ object Terminals {
     def clear(rc: RoutingContext): Task[Response]
 
     def history(rc: RoutingContext): Task[Response]
+
+    def shutdown: UIO[Unit]
   }
 }

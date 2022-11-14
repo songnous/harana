@@ -6,7 +6,7 @@ import diode._
 
 class WelcomeHandler extends ActionHandler(zoomTo(_.welcomeState)) {
 
-  override def handle: PartialFunction[Any, ActionResult[State]] = {
+  override def handle = {
 
     case _ =>
       noChange

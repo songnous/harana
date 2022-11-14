@@ -12,7 +12,7 @@ import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 
 class HelpHandler extends ActionHandler(zoomTo(_.helpState)) {
 
-  override def handle: PartialFunction[Any, ActionResult[State]] = {
+  override def handle = {
 
     case Init(preferences) =>
       effectOnly(

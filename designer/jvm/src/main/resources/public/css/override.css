@@ -968,3 +968,12 @@ pre code {
     -ms-user-select: all;      /* IE 10+ */
     user-select: all;          /* Likely future */
 }
+
+.xterm {
+    height: calc(100vh - 170px);
+    padding: 5px;
+}
+
+.schedules-history {
+    height: calc(100vh - 308px);
+}

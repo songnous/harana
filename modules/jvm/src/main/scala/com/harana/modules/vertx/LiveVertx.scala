@@ -299,8 +299,8 @@ object LiveVertx {
       vertx.map(_.fileSystem().readFileBlocking(filename))
 
 
-    def close: Task[Unit] =
-      vertx.map(_.close())
+    def close: UIO[Unit] =
+      vertx.map(_.close()).ignore
 
 
     def eventBus: Task[EventBus] =

@@ -1,7 +1,5 @@
 package com.harana.designer.frontend.schedules.list
 
-import com.harana.sdk.shared.models.flow.Flow
-import com.harana.sdk.shared.models.data.DataSource
 import com.harana.sdk.shared.models.schedules.{Action, Event, Schedule}
 import diode.{Action => DiodeAction}
 
@@ -9,12 +7,11 @@ import scala.collection.mutable.ListBuffer
 
 object ScheduleListStore {
 
-  case class ScheduleEditState(actionTypes: List[String],
-                               eventTypes: List[String],
-                               item: Option[Schedule],
-                               itemActions: ListBuffer[Action],
-                               itemEvents: ListBuffer[Event])
-
+  case class State(actionTypes: List[String],
+                   eventTypes: List[String],
+                   item: Option[Schedule],
+                   itemActions: ListBuffer[Action],
+                   itemEvents: ListBuffer[Event])
 
   case class AddAction(action: Action) extends DiodeAction
   case class DeleteAction(index: Int) extends DiodeAction

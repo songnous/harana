@@ -20,7 +20,7 @@ import io.circe.{Decoder, Encoder}
 import java.time.Instant
 import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 
-abstract case class GridHandler[Entity <: Id, EditState](entityType: EntityType, state: ModelRW[State, GridState[Entity, EditState]])(implicit decoder: Decoder[Entity], encoder: Encoder[Entity]) extends ActionHandler(state) {
+abstract case class GridHandler[Entity <: Id, S](entityType: EntityType, state: ModelRW[State, GridState[Entity, S]])(implicit decoder: Decoder[Entity], encoder: Encoder[Entity]) extends ActionHandler(state) {
 
   private val sortOrderingPreferenceId = s"designer.$entityType.sortOrdering"
   private val searchQueryPreferenceId = s"designer.$entityType.filter.searchQuery"
@@ -192,8 +192,8 @@ abstract case class GridHandler[Entity <: Id, EditState](entityType: EntityType,
       else noChange
 
 
-    case UpdateEditState(e, editState) =>
-      if (e.equals(entityType)) updated(value.copy(editState = editState.asInstanceOf[EditState])) else noChange
+    case UpdateAdditionalState(e, additionalState) =>
+      if (e.equals(entityType)) updated(value.copy(additionalState = additionalState.asInstanceOf[S])) else noChange
 
 
     case UpdateEditParameters(e, parameters) =>

@@ -10,7 +10,7 @@ import diode._
 import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 
 class DataSourceItemHandler extends ActionHandler(zoomTo(_.dataSourceItemState)) {
-  override def handle: PartialFunction[Any, ActionResult[State]] = {
+  override def handle = {
 
     case Init(preferences) =>
       noChange

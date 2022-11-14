@@ -9,6 +9,7 @@ import diode._
 import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 
 class ScheduleItemHandler extends ActionHandler(zoomTo(_.scheduleItemState)) {
+
   def handle = {
 
     case Init(preferences) =>

@@ -5,9 +5,10 @@ import diode.{Action => DiodeAction}
 
 object HelpStore {
 
-  case class HelpState(categories: List[HelpCategory])
+  case class State(categories: List[HelpCategory])
 
-  val initialState = HelpState(List())
+  val initialState = State(List())
 
   case class Init(userPreferences: Map[String, String]) extends DiodeAction
+
 }

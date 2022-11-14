@@ -18,7 +18,7 @@ import diode.Effect
 
 import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 
-class FlowListHandler extends GridHandler[Flow, FlowEditState]("flows", zoomTo(_.flowListState)) {
+class FlowListHandler extends GridHandler[Flow, FlowListStore.State]("flows", zoomTo(_.flowListState)) {
 
   def toGridPageItem(flow: Flow) =
     GridPageItem(

@@ -4,9 +4,10 @@ import diode.{Action => DiodeAction}
 
 object WelcomeStore {
 
-  case class WelcomeState()
+  case class State()
 
-  val initialState = WelcomeState()
+  val initialState = State()
 
   case class Init(userPreferences: Map[String, String]) extends DiodeAction
+
 }

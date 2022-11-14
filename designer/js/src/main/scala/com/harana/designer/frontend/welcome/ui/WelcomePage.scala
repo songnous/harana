@@ -3,7 +3,7 @@ package com.harana.designer.frontend.welcome.ui
 import com.harana.designer.frontend.Circuit
 import com.harana.designer.frontend.Circuit.zoomTo
 import com.harana.designer.frontend.navigation.ui.Navigation
-import com.harana.designer.frontend.welcome.WelcomeStore.WelcomeState
+import com.harana.designer.frontend.welcome.WelcomeStore.State
 import com.harana.ui.components.elements.Page
 import com.harana.ui.external.shoelace.Icon
 import slinky.core.FunctionalComponent
@@ -26,7 +26,7 @@ import scala.scalajs.js
   }
 
 
-  def pageContent(state: WelcomeState) = {
+  def pageContent(state: State) = {
     div(className := "flow-container")(
       div(className := "panel panel-flat")(
         div(className := "table-responsive")(

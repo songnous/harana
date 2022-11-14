@@ -21,7 +21,7 @@ import slinky.web.html.div
 
   val component = FunctionalComponent[Unit] { _ =>
     GridPage(
-      itemType = "datasources",
+      entityType = "datasources",
       state = Circuit.state(zoomTo(_.dataSourceListState)),
       title = i"heading.section.data",
       tableColumns = List(titleColumn, tagsColumn, typeColumn, historyColumn),

@@ -1,6 +1,6 @@
 package com.harana.designer.frontend
 
-import com.harana.designer.frontend.system.SystemStore.EventBusConnected
+import com.harana.designer.frontend.system.SystemStore.{EventBusConnected, EventBusDisconnected}
 import typings.std
 import typings.vertx3EventbusClient.mod.{EventBus, ^ => VertxEventBus}
 
@@ -17,7 +17,7 @@ object EventBus {
 
   def sendMessage(messageType: String, message: String): Unit =
     if (ready) {
-      println(s"Sending message: $message / $messageType on the EventBus")
+      //println(s"Sending message: $message / $messageType on the EventBus")
       val body = new String(Base64.getEncoder.encode(message.getBytes("UTF-8")))
       eventBus.publish(Main.claims.userId, body, new EventBusHeaders { val `type` = messageType })
     } else
@@ -25,7 +25,7 @@ object EventBus {
 
   def subscribe(messageType: String, fn: String => Unit): Unit =
     if (ready) {
-      println(s"Subscribing to $messageType on the EventBus")
+      //println(s"Subscribing to $messageType on the EventBus")
       eventBus.registerHandler(Main.claims.userId, new EventBusHeaders { val `type` = messageType }, (error: std.Error, result: js.Any) => {
         val message = result.asInstanceOf[EventBusMessage]
         if (message.headers.`type`.equals(messageType)) {
@@ -46,21 +46,15 @@ object EventBus {
   def init(): Unit = {
     eventBus = new VertxEventBus("/eventbus") {
       override def onopen() = {
-        println("EventBus: CONNECTED")
-        Circuit.dispatch(EventBusConnected)
-        enablePing(true)
-        enableReconnect(true)
         ready = true
       }
 
       override def onclose() = {
-        println("EventBus: DISCONNECTED")
         ready = false
-        setTimeout(2000)(init())
+        setTimeout(500)(init())
       }
 
       override def onerror(error: std.Error) = {
-        println("EventBus: ERROR")
         global.console.dir(error)
         ready = false
         setTimeout(2000)(init())

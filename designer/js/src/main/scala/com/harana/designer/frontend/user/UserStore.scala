@@ -5,12 +5,12 @@ import diode.{Action => DiodeAction}
 
 object UserStore {
 
-  case class UserState(preferences: Map[String, String],
-                       preferencesDirty: Boolean,
-                       settings: Option[UserSettings] = None,
-                       settingsDirty: Boolean)
+  case class State(preferences: Map[String, String],
+                   preferencesDirty: Boolean,
+                   settings: Option[UserSettings] = None,
+                   settingsDirty: Boolean)
 
-  val initialState = UserState(Map(), false, None, false)
+  val initialState = State(Map(), false, None, false)
 
   case class Init(userPreferences: Map[String, String]) extends DiodeAction
 

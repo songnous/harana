@@ -53,7 +53,7 @@ object Vertx {
     def getUploadedFile(filename: String): Task[Buffer]
 
     def getOrCreateContext: Task[Context]
-    def close: Task[Unit]
+    def close: UIO[Unit]
 
     def eventBus: Task[EventBus]
     def startHttpServer(domain: String,

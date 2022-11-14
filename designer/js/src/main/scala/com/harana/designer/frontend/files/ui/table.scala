@@ -1,7 +1,7 @@
 package com.harana.designer.frontend.files.ui
 
 import com.harana.designer.frontend.Circuit
-import com.harana.designer.frontend.files.FilesStore.{FilesState, PushPath, UpdateSelectedFile}
+import com.harana.designer.frontend.files.FilesStore.{PushPath, State, UpdateSelectedFile}
 import com.harana.designer.frontend.utils.SizeUtils
 import com.harana.designer.frontend.utils.i18nUtils.ops
 import com.harana.ui.components.ColumnSize
@@ -10,7 +10,7 @@ import com.harana.ui.components.elements.{DataFileName, Date}
 import com.harana.ui.components.table.{Column, Row}
 import com.harana.ui.external.shoelace.Radio
 import slinky.core.facade.ReactElement
-import slinky.web.html.{p, s}
+import slinky.web.html.p
 
 object table {
 
@@ -27,7 +27,7 @@ object table {
     Column(Some(i"files.table.column.updated"), Map(Desktop -> ColumnSize.Three))
   )
 
-  def rows(state: FilesState): List[Row] =
+  def rows(state: State): List[Row] =
     state.files.zipWithIndex.map { case (file, index) =>
       val selected = state.selectedFile.isDefined && state.selectedFile.get.equals(file)
 
@@ -43,7 +43,7 @@ object table {
       )
     }
 
-  def selectRows(state: FilesState): List[Row] =
+  def selectRows(state: State): List[Row] =
     state.files.zipWithIndex.map { case (file, index) =>
       val selected = state.selectedFile.isDefined && state.selectedFile.get.equals(file)
 

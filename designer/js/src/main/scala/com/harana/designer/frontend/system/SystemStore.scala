@@ -6,10 +6,10 @@ import diode.{Action => DiodeAction}
 
 object SystemStore {
 
-  case class SystemState(debug: Boolean,
-                         events: List[Event])
+  case class State(debug: Boolean,
+                   events: List[Event])
 
-  val initialState = SystemState(Globals.debug, List())
+  val initialState = State(Globals.debug, List())
 
   case class Init(userPreferences: Map[String, String]) extends DiodeAction
 
@@ -21,6 +21,7 @@ object SystemStore {
   case class UpdateEvents(events: List[Event]) extends DiodeAction
 
   case object EventBusConnected extends DiodeAction
+  case object EventBusDisconnected extends DiodeAction
 
   case object ToggleDebug extends DiodeAction
 }

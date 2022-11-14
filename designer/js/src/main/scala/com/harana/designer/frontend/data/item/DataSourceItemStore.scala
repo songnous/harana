@@ -6,10 +6,10 @@ import diode.{Action => DiodeAction}
 
 object DataSourceItemStore {
 
-  case class DataSourceItemState(dataSource: Option[DataSource],
-                                 dataSourceType: Option[DataSourceType])
+  case class State(dataSource: Option[DataSource],
+                   dataSourceType: Option[DataSourceType])
 
-  val initialState = DataSourceItemState(None, None)
+  val initialState = State(None, None)
 
 
   case class Init(userPreferences: Map[String, String]) extends DiodeAction

@@ -6,9 +6,9 @@ import diode.{Action => DiodeAction}
 
 object AppItemStore {
 
-  case class AppItemState(app: Option[App], appLaunching: Boolean)
+  case class State(app: Option[App], appLaunching: Boolean)
 
-  val initialState = AppItemState(None, false)
+  val initialState = State(None, false)
 
 
   case class Init(userPreferences: Map[String, String]) extends DiodeAction

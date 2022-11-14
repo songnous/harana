@@ -3,7 +3,8 @@ package com.harana.designer.frontend.files.ui
 import com.harana.designer.frontend.Circuit
 import com.harana.designer.frontend.files.FilesStore._
 import com.harana.designer.frontend.files.ui.FilesPage.dialogRef
-import com.harana.designer.frontend.user.UserStore.{SaveSettings, UpdateSettings, UserState}
+import com.harana.designer.frontend.user.UserStore
+import com.harana.designer.frontend.user.UserStore.{SaveSettings, UpdateSettings}
 import com.harana.sdk.shared.utils.Random
 import com.harana.ui.components.elements.Dialog
 import com.harana.ui.components.sidebar._
@@ -14,7 +15,7 @@ import slinky.web.html.{className, div}
 
 object sidebar {
 
-  def home(filesState: FilesState, userState: UserState, ref: ReactRef[Dialog.Def]) = Sidebar(List(
+  def home(filesState: State, userState: UserStore.State, ref: ReactRef[Dialog.Def]) = Sidebar(List(
     SidebarSection(title = Some("Search"), content = SearchSection(onSearch = (search: Option[String]) => ())),
     SidebarSection(title = Some("Sharing"), content = SwitchSection(List(
       Switch(

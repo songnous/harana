@@ -17,13 +17,14 @@ import com.harana.ui.external.shoelace.Radio
 import diode.{ActionResult, Dispatcher}
 import slinky.core.StatelessComponent
 import slinky.core.annotations.react
+import slinky.core.facade.Hooks.useEffect
 import slinky.core.facade.{Fragment, React, ReactElement}
 
 import scala.collection.mutable.ListBuffer
 
 @react class GridPage extends StatelessComponent {
 
-  case class Props(itemType: String,
+  case class Props(entityType: String,
                    state: GridState[_, _],
                    title: String,
                    tableColumns: List[Column],
@@ -33,8 +34,10 @@ import scala.collection.mutable.ListBuffer
                    itemMenuItems: Option[GridPageItem => List[ReactElement]] = None,
                    fixedNavigationBar: Boolean = true,
                    footerNavigationBar: Option[ReactElement] = None,
+                   sidebarSections: List[SidebarSection] = List(),
                    showOwners: Boolean = true,
                    showTags: Boolean = true,
+                   allowViewChange: Boolean = false,
                    allowDelete: Boolean = true,
                    allowEdit: Boolean = true,
                    editParameterGroupLayout: Option[ParameterGroup => ParameterGroupLayout] = None,
@@ -44,11 +47,11 @@ import scala.collection.mutable.ListBuffer
   val drawerRef = React.createRef[Drawer.Def]
   val deleteDialogRef = React.createRef[Dialog.Def]
 
-  override def componentDidMount() = {
+  override def componentDidMount() =
     Circuit.addProcessor((_: Dispatcher, action: Any, next: Any => ActionResult[AppState], _: AppState) => {
       action match {
         case ShowEditDialog(entityType, title) =>
-          if (entityType == props.itemType)
+          if (entityType == props.entityType)
             drawerRef.current.show(
               style = editStyle,
               title = title,
@@ -57,7 +60,7 @@ import scala.collection.mutable.ListBuffer
             )
 
         case RefreshEditDialog(entityType, values) =>
-          if (entityType == props.itemType)
+          if (entityType == props.entityType)
             drawerRef.current.update(
               style = editStyle,
               values = values
@@ -66,7 +69,6 @@ import scala.collection.mutable.ListBuffer
       }
       next(action)
     })
-  }
 
 
   def editStyle = {
@@ -74,17 +76,17 @@ import scala.collection.mutable.ListBuffer
       parametersOrSections = Left(
         DrawerParameters(
           groups = props.state.editParameterGroups,
-          i18nPrefix = props.itemType,
+          i18nPrefix = props.entityType,
           layout = props.editParameterGroupLayout,
           additionalSections = props.editAdditionalSections
         )
       ),
       onChange = Some((parameter, value) =>
-        Circuit.dispatch(OnEditParameterChange(props.itemType, parameter, value))
+        Circuit.dispatch(OnEditParameterChange(props.entityType, parameter, value))
       ),
       onOk = Some(values => {
         val item = props.state.selectedItem
-        Circuit.dispatch(if (item.isEmpty) SaveNewItem(props.itemType, values) else SaveExistingItem(props.itemType, item.get.id, values))
+        Circuit.dispatch(if (item.isEmpty) SaveNewItem(props.entityType, values) else SaveExistingItem(props.entityType, item.get.id, values))
       })
     )
   }
@@ -92,21 +94,35 @@ import scala.collection.mutable.ListBuffer
 
   def headingItems = {
     val headingMenu = if (props.state.viewMode == ViewMode.List)
-      List(menus.headingMenu(props.state.viewMode, props.itemType, props.state.selectedItem, props.allowEdit, props.allowDelete, deleteDialogRef, props.itemMenuItems))
+      List(menus.headingMenu(
+        props.state.viewMode,
+        props.entityType,
+        props.state.selectedItem,
+        props.allowEdit,
+        props.allowDelete,
+        deleteDialogRef,
+        props.itemMenuItems)
+      )
     else
       List()
 
-    headingMenu ++ menus.newItem(props.itemType, props.itemSubTypes, props.allowEdit) ++
-      List(menus.viewMode(props.itemType, props.state.viewMode), menus.sort(props.itemType, props.state.sortOrdering))
+    val viewMode =
+      if (props.allowViewChange)
+        List(menus.viewMode(props.entityType, props.state.viewMode))
+      else
+        List()
+
+    headingMenu ++ menus.newItem(props.entityType, props.itemSubTypes, props.allowEdit) ++
+      viewMode ++ List(menus.sort(props.entityType, props.state.sortOrdering))
   }
 
 
   def sidebar = {
     val sections = new ListBuffer[SidebarSection]()
-    sections += searchSection(props.state.searchQuery, query => Circuit.dispatch(UpdateSearchQuery(props.itemType, query)))
-    if (props.showOwners && props.state.owners.nonEmpty) sections += filterSection("Owner", props.state.owners, props.state.owner, owner => Circuit.dispatch(UpdateOwner(props.itemType, owner)))
-    if (props.showTags && props.state.tags.nonEmpty) sections += filterSection(i"common.sidebar.tags", props.state.tags, props.state.tag, tag => Circuit.dispatch(UpdateTag(props.itemType, tag)))
-
+    sections += searchSection(props.state.searchQuery, query => Circuit.dispatch(UpdateSearchQuery(props.entityType, query)))
+    if (props.showOwners && props.state.owners.nonEmpty) sections += filterSection("Owner", props.state.owners, props.state.owner, owner => Circuit.dispatch(UpdateOwner(props.entityType, owner)))
+    if (props.showTags && props.state.tags.nonEmpty) sections += filterSection(i"common.sidebar.tags", props.state.tags, props.state.tag, tag => Circuit.dispatch(UpdateTag(props.entityType, tag)))
+    sections ++= props.sidebarSections
     Sidebar(sections.toList)
   }
 
@@ -116,7 +132,7 @@ import scala.collection.mutable.ListBuffer
       case ViewMode.List =>
         val rows = props.state.items.map { item =>
           val checked = props.state.selectedItem.isDefined && props.state.selectedItem.get == item
-          val radio = Some(Radio.Props(name = "s", checked = Some(checked), onChange = Some(checked => if (checked) Circuit.dispatch(UpdateSelectedItem(props.itemType, Some(item))))))
+          val radio = Some(Radio.Props(name = "s", checked = Some(checked), onChange = Some(checked => if (checked) Circuit.dispatch(UpdateSelectedItem(props.entityType, Some(item))))))
           Row(props.tableColumns.map(column => column -> props.tableContent(column, item)).toMap, radio, None, onDoubleClick = Some(() => openLink(item.link)))
         }
         GroupedTable(props.tableColumns, List(RowGroup(None, rows))).withKey(Random.short)
@@ -130,7 +146,7 @@ import scala.collection.mutable.ListBuffer
               chartType = None,
               link = item.link,
               background = item.background.get,
-              menuItems = menus.itemMenu(props.state.viewMode, props.itemType, item, props.allowEdit, props.allowDelete, deleteDialogRef, props.itemMenuItems)
+              menuItems = menus.itemMenu(props.state.viewMode, props.entityType, item, props.allowEdit, props.allowDelete, deleteDialogRef, props.itemMenuItems)
             ).withKey(item.id)
           },
           ColumnSize.Three

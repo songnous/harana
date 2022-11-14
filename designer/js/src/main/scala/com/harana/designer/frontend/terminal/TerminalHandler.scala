@@ -1,7 +1,7 @@
 package com.harana.designer.frontend.terminal
 
 import com.harana.designer.frontend.Circuit.zoomTo
-import com.harana.designer.frontend.system.SystemStore.EventBusConnected
+import com.harana.designer.frontend.system.SystemStore.{EventBusConnected, EventBusDisconnected}
 import com.harana.designer.frontend.terminal.TerminalStore._
 import com.harana.designer.frontend.utils.http.Http
 import com.harana.designer.frontend.{Circuit, EventBus, Main, State}
@@ -10,13 +10,14 @@ import diode.AnyAction._
 import diode._
 import io.circe.parser.decode
 import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
+import typings.std.global.navigator
 
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.Future
 
 class TerminalHandler extends ActionHandler(zoomTo(_.terminalState)) {
 
-  override def handle: PartialFunction[Any, ActionResult[State]] = {
+  override def handle = {
 
     case Init(preferences) =>
       effectOnly(
@@ -48,17 +49,34 @@ class TerminalHandler extends ActionHandler(zoomTo(_.terminalState)) {
 
 
     case ConnectTerminal =>
-      val id = value.selectedTerminal.get.id
+      if (value.terminalConnected)
+        effectOnly(Effect.action(Nothing))
+      else {
+        val id = value.selectedTerminal.get.id
 
-      effectOnly(
-        Effect(Http.getRelative(s"/api/terminals/$id/connect"))
-      )
+        EventBus.subscribe(s"terminal-$id-stdout", message =>
+          value.selectedTerminalRef.current.terminal.write(message)
+        )
+
+        EventBus.subscribe(s"terminal-$id-stderr", message =>
+          value.selectedTerminalRef.current.terminal.write(message)
+        )
+
+        effectOnly(
+          Effect(Http.getRelative(s"/api/terminals/$id/connect")) >>
+            Effect.action(UpdateTerminalConnected(true))
+        )
+      }
 
 
     case DisconnectTerminal =>
-      effectOnly(
-        Effect(Http.getRelative(s"/api/terminals/${value.selectedTerminal.get.id}/disconnect"))
-      )
+      if (!value.terminalConnected)
+        effectOnly(Effect.action(Nothing))
+      else
+        effectOnly(
+          Effect(Http.getRelative(s"/api/terminals/${value.selectedTerminal.get.id}/disconnect")) >>
+          Effect.action(UpdateTerminalConnected(false))
+        )
 
 
     case RestartTerminal =>
@@ -73,29 +91,65 @@ class TerminalHandler extends ActionHandler(zoomTo(_.terminalState)) {
       )
 
 
+    case ClearTerminal =>
+      effectOnly(
+        Effect(Future(value.selectedTerminalRef.current.terminal.clear()))
+      )
+
+
+    case RefreshTerminal =>
+      effectOnly(
+        Effect.action(Nothing)
+      )
+
+
+    case ScrollTerminalToTop =>
+      effectOnly(
+        Effect(Future(value.selectedTerminalRef.current.terminal.scrollToTop()))
+      )
+
+
+    case ScrollTerminalToBottom =>
+      effectOnly(
+        Effect(Future(value.selectedTerminalRef.current.terminal.scrollToBottom()))
+      )
+
+
+    case CopyFromTerminal =>
+      effectOnly(
+        Effect {
+          val selection = value.selectedTerminalRef.current.terminal.getSelection()
+          println(s"Selection = $selection")
+          navigator.clipboard.writeText(selection).toFuture
+        }
+      )
+
+
+    case PasteToTerminal =>
+      effectOnly(
+        Effect {
+          navigator.clipboard.readText.toFuture.map { text =>
+            println("FOUND TEXT: " + text)
+            EventBus.sendMessage(s"terminal-${value.selectedTerminal.get.id}-stdin", text)
+          }
+        }
+      )
+
+
     case UpdateSelectedTerminal(terminal) =>
-      updated(value.copy(
-        selectedTerminal = terminal,
-        selectedTerminalHistory = if (terminal.isDefined) ListBuffer.from(terminal.get.history) else ListBuffer.empty
-      ))
+      updated(value.copy(selectedTerminal = terminal))
 
 
     case UpdateTerminals(terminals) =>
       updated(value.copy(terminals = terminals))
 
 
-    case AddToTerminalHistory(message) =>
-      value.selectedTerminalHistory += message
-      updated(value)
+    case UpdateTerminalConnected(terminalConnected) =>
+      updated(value.copy(terminalConnected = terminalConnected))
 
 
-    case EventBusConnected =>
-      if (value.selectedTerminal.isDefined) {
-        val id = value.selectedTerminal.get.id
-        EventBus.subscribe(s"terminal-$id-stdout", message => {
-          Circuit.dispatch(AddToTerminalHistory(TerminalHistory(HistoryType.Stdout, message)))
-        })
-      }
-      effectOnly(Effect.action(Nothing))
+    case UpdateTerminalHistory(terminalHistory) =>
+      updated(value.copy(terminalHistory = terminalHistory))
+
   }
 }

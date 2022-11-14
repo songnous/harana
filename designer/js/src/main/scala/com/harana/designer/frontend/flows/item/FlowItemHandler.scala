@@ -20,7 +20,7 @@ import java.util.Timer
 import scala.scalajs.js
 
 class FlowItemHandler extends ActionHandler(zoomTo(_.flowItemState)) {
-  override def handle: PartialFunction[Any, ActionResult[State]] = {
+  override def handle = {
 
     case Reset =>
       updated(initialState)

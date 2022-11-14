@@ -27,7 +27,7 @@ import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 import scala.concurrent.Future
 
 class SystemHandler extends ActionHandler(zoomTo(_.systemState)) {
-  override def handle: PartialFunction[Any, ActionResult[State]] = {
+  override def handle = {
 
     case InitSourceMaps =>
       effectOnly(

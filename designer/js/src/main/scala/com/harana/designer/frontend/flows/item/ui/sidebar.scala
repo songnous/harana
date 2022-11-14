@@ -1,7 +1,7 @@
 package com.harana.designer.frontend.flows.item.ui
 
 import com.harana.designer.frontend.Circuit
-import com.harana.designer.frontend.flows.item.FlowItemStore.{FlowItemState, SelectActionType, UpdateIsEditingParameters, UpdateParameterValues}
+import com.harana.designer.frontend.flows.item.FlowItemStore.{State, SelectActionType, UpdateIsEditingParameters, UpdateParameterValues}
 import com.harana.designer.frontend.utils.DateUtils
 import com.harana.designer.frontend.utils.i18nUtils._
 import com.harana.sdk.shared.models.flow.execution.spark.AggregateMetric._
@@ -19,7 +19,7 @@ import scala.util.Try
 
 package object sidebar {
 
-  def actionTypes(state: FlowItemState): ReactElement = {
+  def actionTypes(state: State): ReactElement = {
     div(className := "flow-sidebar-components")(
       state.actionTypes.map { at =>
         li(className := "flow-component-item", draggable := (!state.isRunning).toString, onDrag := (_ => Circuit.dispatch(SelectActionType(at))))(

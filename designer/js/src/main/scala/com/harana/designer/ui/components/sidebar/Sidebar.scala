@@ -57,7 +57,7 @@ import scala.scalajs.js
 			)
 
 	def renderSection(section: SidebarSection) =
-		div(key := section.id, className := "sidebar-category")(
+		div(key := section.id, className := s"sidebar-category ${section.className.getOrElse("")}")(
 			if (section.title.isDefined)
 				Fragment(
 					div(className := "category-title")(
@@ -85,4 +85,5 @@ case class SidebarSection(title: Option[String] = None,
 													allowClear: Boolean = false,
 													onClear: Option[js.Any => Unit] = None,
 													content: ReactElement,
+													className: Option[String] = None,
 													id: String = Random.short)

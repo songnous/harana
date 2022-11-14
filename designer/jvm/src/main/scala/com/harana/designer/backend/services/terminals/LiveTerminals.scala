@@ -22,7 +22,7 @@ import zio.stream.ZStream
 import zio.{Hub, Runtime, Task, UIO, ZIO, ZLayer}
 
 import java.util.concurrent.ConcurrentHashMap
-import scala.jdk.CollectionConverters.ConcurrentMapHasAsScala
+import scala.jdk.CollectionConverters.{ConcurrentMapHasAsScala, EnumerationHasAsScala}
 
 object LiveTerminals {
 
@@ -87,7 +87,6 @@ object LiveTerminals {
           sourceStream      =  ZStream.fromHub(sourceHub)
 
           consumer          <- vertx.subscribe(userId, s"$terminalRef-stdin", msg => {
-                                println("STDIN: " + msg)
                                 // mongo.appengit dToListField("Terminals", terminalId, "history", msg) *>
                                 sourceHub.publish(msg).unit
                               })
@@ -102,14 +101,12 @@ object LiveTerminals {
                                 containerName = Some("terminal"),
                                 stdin = Some(sourceStream),
                                 stdout = Some((m: String) =>
-                                  logger.info("STDOUT: " + m) *>
-//                                  mongo.appendToListField("Terminals", terminalId, "history", TerminalHistory(Stdout, m)) *>
-                                  vertx.sendMessage(userId, s"$terminalRef-stdout", m)
+//                                  mongo.appendToListField("Terminals", terminalId, "history", m) *>
+                                  vertx.publishMessage(userId, s"$terminalRef-stdout", m)
                                 ),
                                 stderr = Some((m: String) =>
-                                  logger.error("STDERR: " + m) *>
-//                                  mongo.appendToListField("Terminals", terminalId, "history", TerminalHistory(Stderr, m)) *>
-                                  vertx.sendMessage(userId, s"$terminalRef-stderr", m)
+//                                  mongo.appendToListField("Terminals", terminalId, "history", m) *>
+                                  vertx.publishMessage(userId, s"$terminalRef-stderr", m)
                                 ),
                                 command = Seq(terminal.get.shell),
                                 tty = true).retryUntilM(_ => podExists).ignore
@@ -152,15 +149,12 @@ object LiveTerminals {
       null
 
 
-//    sys.addShutdownHook {
-//      Runtime.default.unsafeRun {
-//        for {
-//          _ <- logger.info("Shutting down Terminals ..")
-//          terminals = subscribers.keys().asScala.toList
-//          _ <- ZIO.foreach_(terminals)(id => vertx.unsubscribe(subscribers.get(id)))
-//          _ <- ZIO.foreach_(terminals)(id => vertx.removeMapValue("terminal-connections", id))
-//        } yield ()
-//      }
-//    }
+    def shutdown: UIO[Unit] =
+      for {
+        _                   <- logger.error("Shutting down Terminals ..")
+        terminals           = subscribers.keys().asScala.toList
+        _                   <- ZIO.foreach_(terminals)(id => vertx.unsubscribe(subscribers.get(id)).ignore)
+        _                   <- ZIO.foreach_(terminals)(id => vertx.removeMapValue("terminal-connections", id).ignore)
+      } yield ()
   }}
 }

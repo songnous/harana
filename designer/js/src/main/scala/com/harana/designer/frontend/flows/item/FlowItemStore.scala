@@ -16,30 +16,29 @@ object FlowItemStore {
 
   type UndoState = (List[FlowNode], List[FlowEdge])
 
-  case class FlowItemState(flow: Option[Flow],
-                           flowExecution: Option[FlowExecution],
-                           isDirty: Boolean,
-                           isRunning: Boolean,
-                           isEditingParameters: Boolean,
-                           flowInstance: Option[FlowInstance],
-                           logsKey: String,
-                           nodes: List[FlowNode],
-                           edges: List[FlowEdge],
-                           actionTypes: List[ActionTypeInfo],
-                           activeActionIds: List[ActionTypeInfo.Id],
-                           completedActionIds: List[ActionTypeInfo.Id],
-                           selectedActionId: Option[ActionTypeInfo.Id],
-                           selectedActionType: Option[ActionTypeInfo],
-                           selectedTab: FlowTab,
-                           portsOrientation: Boolean,
-                           showLogs: Boolean,
-                           showMiniMap: Boolean,
-                           showGrid: Boolean,
-                           snapToGrid: Boolean,
-                           undoHistory: UndoHistory[UndoState])
+  case class State(flow: Option[Flow],
+                   flowExecution: Option[FlowExecution],
+                   isDirty: Boolean,
+                   isRunning: Boolean,
+                   isEditingParameters: Boolean,
+                   flowInstance: Option[FlowInstance],
+                   logsKey: String,
+                   nodes: List[FlowNode],
+                   edges: List[FlowEdge],
+                   actionTypes: List[ActionTypeInfo],
+                   activeActionIds: List[ActionTypeInfo.Id],
+                   completedActionIds: List[ActionTypeInfo.Id],
+                   selectedActionId: Option[ActionTypeInfo.Id],
+                   selectedActionType: Option[ActionTypeInfo],
+                   selectedTab: FlowTab,
+                   portsOrientation: Boolean,
+                   showLogs: Boolean,
+                   showMiniMap: Boolean,
+                   showGrid: Boolean,
+                   snapToGrid: Boolean,
+                   undoHistory: UndoHistory[UndoState])
 
-  val initialState = FlowItemState(None, None, false, false, false, None, Random.short, List(), List(), Catalog.actionsByInfoMap.keys.toList, List(), List(), None, None, FlowTab.ActionTypes, false, false, true, true, true, new UndoHistory[UndoState])
-
+  val initialState = State(None, None, false, false, false, None, Random.short, List(), List(), Catalog.actionsByInfoMap.keys.toList, List(), List(), None, None, FlowTab.ActionTypes, false, false, true, true, true, new UndoHistory[UndoState])
 
   case object Reset extends DiodeAction
   case class Init(userPreferences: Map[String, String]) extends DiodeAction

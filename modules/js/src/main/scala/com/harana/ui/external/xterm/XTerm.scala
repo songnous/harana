@@ -50,6 +50,25 @@ class BufferLine extends js.Object {
 @js.native
 class Terminal extends js.Object {
   val buffer: BufferNamespace = js.native
+  def blur(): Unit = js.native
+  def clear(): Unit = js.native
+  def clearSelection(): Unit = js.native
+  def focus(): Unit = js.native
+  def getOption(key: String): js.Any = js.native
+  def getSelection(): String = js.native
+  def hasSelection(): Boolean = js.native
+  def paste(data: String): Unit = js.native
+  def refresh(start: Int, end: Int): Unit = js.native
+  def reset(): Unit = js.native
+  def select(column: Int, row: Int, length: Int): Unit = js.native
+  def selectAll(): Unit = js.native
+  def selectLines(start: Int, end: Int): Unit = js.native
+  def setOption(key: String, value: js.Any): Unit = js.native
+  def scrollLines(count: Int): Unit = js.native
+  def scrollPages(count: Int): Unit = js.native
+  def scrollToBottom(): Unit = js.native
+  def scrollToLine(line: Int): Unit = js.native
+  def scrollToTop(): Unit = js.native
   def write(line: String): Unit = js.native
   def writeln(line: String): Unit = js.native
 }

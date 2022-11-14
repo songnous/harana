@@ -4,9 +4,8 @@ import com.harana.designer.frontend.Circuit.zoomTo
 import com.harana.designer.frontend.Main
 import com.harana.designer.frontend.analytics.Analytics
 import com.harana.designer.frontend.common.grid.GridHandler
-import com.harana.designer.frontend.common.grid.GridStore.{EntitySubType, UpdateEditParameterValue, UpdateEditParameters, UpdateEditState}
+import com.harana.designer.frontend.common.grid.GridStore.{EntitySubType, UpdateEditParameterValue, UpdateEditParameters, UpdateAdditionalState}
 import com.harana.designer.frontend.common.grid.ui.GridPageItem
-import com.harana.designer.frontend.data.list.DataSourceListStore.DataSourceEditState
 import com.harana.designer.frontend.utils.ColorUtils
 import com.harana.designer.frontend.utils.http.Http
 import com.harana.sdk.shared.models.common.{Background, Visibility}
@@ -19,7 +18,7 @@ import diode.AnyAction.aType
 import diode._
 import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 
-class DataSourceListHandler extends GridHandler[DataSource, DataSourceEditState]("datasources", zoomTo(_.dataSourceListState)) {
+class DataSourceListHandler extends GridHandler[DataSource, DataSourceListStore.State]("datasources", zoomTo(_.dataSourceListState)) {
 
   val directionParameter = StringParameter("direction",
     default = Some(SyncDirection.Source.value),
@@ -86,7 +85,7 @@ class DataSourceListHandler extends GridHandler[DataSource, DataSourceEditState]
   // 1. Update the type dropdown with new data sources
   // 2. Add the additional data source parameters
   private def updateDataSourceType(direction: String, dsType: String) = {
-    val dsTypes = state.value.editState.dataSourceTypes
+    val dsTypes = state.value.additionalState.dataSourceTypes
     typeParameter = StringParameter("type", options = dsTypes(direction).map(s => (s, s)))
 
     Effect.action(UpdateEditParameterValue("datasources", typeParameter, dsType)) >>
@@ -109,7 +108,7 @@ class DataSourceListHandler extends GridHandler[DataSource, DataSourceEditState]
           sourceTypes         <- fetchDataSourceTypes("source")
           destinationTypes    <- fetchDataSourceTypes("destination")
         } yield
-          UpdateEditState("datasources", state.value.editState.copy(
+          UpdateAdditionalState("datasources", state.value.additionalState.copy(
             dataSourceTypes = Map(
              "source"       -> sourceTypes,
              "destination"  -> destinationTypes
@@ -121,7 +120,7 @@ class DataSourceListHandler extends GridHandler[DataSource, DataSourceEditState]
 
   override def onEdit =
     Some(
-      updateDataSourceType(SyncDirection.Source.value, state.value.editState.dataSourceTypes(SyncDirection.Source.value).head)
+      updateDataSourceType(SyncDirection.Source.value, state.value.additionalState.dataSourceTypes(SyncDirection.Source.value).head)
     )
 
 
@@ -129,7 +128,7 @@ class DataSourceListHandler extends GridHandler[DataSource, DataSourceEditState]
     parameter.name match {
       case "direction"  =>
         val direction = value.asInstanceOf[String]
-        Some(updateDataSourceType(direction, state.value.editState.dataSourceTypes(direction).head))
+        Some(updateDataSourceType(direction, state.value.additionalState.dataSourceTypes(direction).head))
 
       case "type"       =>
         val direction = state.value.editValues.getOrElse(directionParameter, SyncDirection.Source.value)

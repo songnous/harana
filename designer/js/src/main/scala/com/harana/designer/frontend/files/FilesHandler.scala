@@ -26,7 +26,7 @@ class FilesHandler extends ActionHandler(zoomTo(_.filesState)) {
 
   private val pathPreferenceId = "designer.files.path"
 
-  override def handle: PartialFunction[Any, ActionResult[State]] = {
+  override def handle = {
 
     case Init(preferences) =>
       effectOnly(

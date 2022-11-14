@@ -30,7 +30,7 @@ object toolbar {
     MenuItem(i"common.menu.sort.descending.updated", iconPrefix = Some("lindua", "sort-time-desc"), onClick = Some(_ => Circuit.dispatch(UpdateSortOrdering(UpdatedDescending)))).withKey("descending-updated")
   ))
 
-  def create(ref: ReactRef[Dialog.Def], state: FilesState) = HeadingItem.IconMenu(("icomoon", "plus3"), i"files.menu.new", className = Some("heading-icon"), menuItems = List(
+  def create(ref: ReactRef[Dialog.Def], state: State) = HeadingItem.IconMenu(("icomoon", "plus3"), i"files.menu.new", className = Some("heading-icon"), menuItems = List(
     MenuItem(
       label = i"files.menu.new.new-folder",
       iconPrefix = Some("lindua", "folder-plus"),
@@ -44,7 +44,7 @@ object toolbar {
     ).withKey("upload-files")
   ))
 
-  def pathTree(state: FilesState) =
+  def pathTree(state: State) =
     HeadingItem.IconMenu(("icomoon", "arrow-up8"), i"files.menu.new", className = Some("heading-icon"), menuItems =
       List[ReactElement](
         MenuItem(
@@ -67,7 +67,7 @@ object toolbar {
         )
     )
 
-  def edit(ref: ReactRef[Dialog.Def], state: FilesState) = HeadingItem.IconMenu(("icomoon", "menu7"), i"files.menu.edit", className = Some("heading-icon"), enabled = state.selectedFile.isDefined, menuItems =
+  def edit(ref: ReactRef[Dialog.Def], state: State) = HeadingItem.IconMenu(("icomoon", "menu7"), i"files.menu.edit", className = Some("heading-icon"), enabled = state.selectedFile.isDefined, menuItems =
     if (state.selectedFile.isEmpty)
       List()
     else

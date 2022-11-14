@@ -2,7 +2,7 @@ package com.harana.designer.frontend.help.ui
 
 import com.harana.designer.frontend.Circuit
 import com.harana.designer.frontend.Circuit.zoomTo
-import com.harana.designer.frontend.help.HelpStore.HelpState
+import com.harana.designer.frontend.help.HelpStore.State
 import com.harana.designer.frontend.navigation.ui.Navigation
 import com.harana.ui.components.elements.Page
 import com.harana.ui.components.sidebar.{NavigationGroup, NavigationItem, NavigationSection, Sidebar, SidebarSection}
@@ -27,7 +27,7 @@ import scala.scalajs.js
   }
 
 
-  def sidebar(state: HelpState) = {
+  def sidebar(state: State) = {
     val categories = state.categories.map { category =>
       val pages = category.pages.map { page =>
         NavigationItem(title = page.name, onClick = () => ())
@@ -38,7 +38,7 @@ import scala.scalajs.js
   }
 
 
-  def pageContent(state: HelpState) = {
+  def pageContent(state: State) = {
     div(className := "flow-container")(
       div(className := "panel panel-flat")(
         div(className := "table-responsive")(

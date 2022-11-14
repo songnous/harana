@@ -59,7 +59,7 @@ import scala.scalajs.js
   }
 
 
-  def pageContent(state: FlowItemState) = {
+  def pageContent(state: State) = {
     val tabs = sidebarTabs(state)
     val selectedTab = tabs.find(_.name.equals(state.selectedTab.toString))
 
@@ -101,7 +101,7 @@ import scala.scalajs.js
   }
 
 
-  def headingItems(state: FlowItemState) =
+  def headingItems(state: State) =
     List(
       HeadingItem.IconButton(("icomoon", "undo2"), i"flows.menu.zoom-in", LinkType.Action(Undo), enabled = state.undoHistory.canUndo),
       HeadingItem.IconButton(("icomoon", "redo2"), i"flows.menu.zoom-in", LinkType.Action(Redo), enabled = state.undoHistory.canRedo),
@@ -133,7 +133,7 @@ import scala.scalajs.js
     )
 
 
-  def sidebarTabs(state: FlowItemState) = {
+  def sidebarTabs(state: State) = {
     val actionTypesCategory = SidebarSection(None, allowCollapse = false, allowClear = false, None, ContentSection(actionTypes(state), padding = false))
     val dataSourcesCategory = SidebarSection(None, allowCollapse = false, allowClear = false, None, ContentSection(actionTypes(state), padding = false))
 

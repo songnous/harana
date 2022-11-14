@@ -3,8 +3,9 @@ package com.harana.designer.frontend.schedules.list
 import com.harana.designer.frontend.Circuit.zoomTo
 import com.harana.designer.frontend.analytics.Analytics
 import com.harana.designer.frontend.common.grid.GridHandler
-import com.harana.designer.frontend.common.grid.GridStore.{EntitySubType, UpdateEditParameters, UpdateEditState}
+import com.harana.designer.frontend.common.grid.GridStore.{EntitySubType, UpdateEditParameters, UpdateAdditionalState, UpdateViewMode}
 import com.harana.designer.frontend.common.grid.ui.GridPageItem
+import com.harana.designer.frontend.common.ui.ViewMode
 import com.harana.designer.frontend.schedules.list.ScheduleListStore._
 import com.harana.designer.frontend.utils.ColorUtils
 import com.harana.designer.frontend.utils.http.Http
@@ -19,39 +20,39 @@ import diode._
 import scala.collection.mutable.ListBuffer
 import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 
-class ScheduleListHandler extends GridHandler[Schedule, ScheduleEditState]("schedules", zoomTo(_.scheduleListState)) {
+class ScheduleListHandler extends GridHandler[Schedule, ScheduleListStore.State]("schedules", zoomTo(_.scheduleListState)) {
 
-  override def gridHandle: Option[PartialFunction[Any, ActionResult[State]]] = Some({
+  override def gridHandle = Some({
 
     case AddEvent(event) =>
-      val events = state.value.editState.itemEvents
+      val events = state.value.additionalState.itemEvents
       events += event
-      effectOnly(Effect.action(UpdateEditState("schedules", state.value.editState.copy(itemEvents = events))))
+      effectOnly(Effect.action(UpdateAdditionalState("schedules", state.value.additionalState.copy(itemEvents = events))))
 
     case DeleteEvent(index) =>
-      val events = state.value.editState.itemEvents
+      val events = state.value.additionalState.itemEvents
       events.remove(index)
-      effectOnly(Effect.action(UpdateEditState("schedules", state.value.editState.copy(itemEvents = events))))
+      effectOnly(Effect.action(UpdateAdditionalState("schedules", state.value.additionalState.copy(itemEvents = events))))
 
     case UpdateEvent(index, newEvent) =>
-      val events = state.value.editState.itemEvents
+      val events = state.value.additionalState.itemEvents
       events.update(index, newEvent)
-      effectOnly(Effect.action(UpdateEditState("schedules", state.value.editState.copy(itemEvents = events))))
+      effectOnly(Effect.action(UpdateAdditionalState("schedules", state.value.additionalState.copy(itemEvents = events))))
 
     case AddAction(action) =>
-      val actions = state.value.editState.itemActions
+      val actions = state.value.additionalState.itemActions
       actions += action
-      effectOnly(Effect.action(UpdateEditState("schedules", state.value.editState.copy(itemActions = actions))))
+      effectOnly(Effect.action(UpdateAdditionalState("schedules", state.value.additionalState.copy(itemActions = actions))))
 
     case DeleteAction(index) =>
-      val actions = state.value.editState.itemActions
+      val actions = state.value.additionalState.itemActions
       actions.remove(index)
-      effectOnly(Effect.action(UpdateEditState("schedules", state.value.editState.copy(itemActions = actions))))
+      effectOnly(Effect.action(UpdateAdditionalState("schedules", state.value.additionalState.copy(itemActions = actions))))
 
     case UpdateAction(index, newAction) =>
-      val actions = state.value.editState.itemActions
+      val actions = state.value.additionalState.itemActions
       actions.update(index, newAction)
-      effectOnly(Effect.action(UpdateEditState("schedules", state.value.editState.copy(itemActions = actions))))
+      effectOnly(Effect.action(UpdateAdditionalState("schedules", state.value.additionalState.copy(itemActions = actions))))
 
   })
 
@@ -104,24 +105,25 @@ class ScheduleListHandler extends GridHandler[Schedule, ScheduleEditState]("sche
 
   override def onInit(preferences: Map[String, String]) =
     Some {
-      val actions = if (state.value.editState.item.isEmpty) List(Action.DataSync()) else state.value.editState.item.get.actions
-      val events = if (state.value.editState.item.isEmpty) List(Event.CalendarInterval()) else state.value.editState.item.get.events
+      val actions = if (state.value.additionalState.item.isEmpty) List(Action.DataSync()) else state.value.additionalState.item.get.actions
+      val events = if (state.value.additionalState.item.isEmpty) List(Event.CalendarInterval()) else state.value.additionalState.item.get.events
 
       Effect(
         Http.getRelativeAs[List[String]](s"/api/schedules/actionTypes").map(at =>
-          UpdateEditState("schedules", state.value.editState.copy(actionTypes = at.getOrElse(List())))
+          UpdateAdditionalState("schedules", state.value.additionalState.copy(actionTypes = at.getOrElse(List())))
         )
       ) +
       Effect(
         Http.getRelativeAs[List[String]](s"/api/schedules/eventTypes").map(et =>
-          UpdateEditState("schedules", state.value.editState.copy(eventTypes = et.getOrElse(List()))))
+          UpdateAdditionalState("schedules", state.value.additionalState.copy(eventTypes = et.getOrElse(List()))))
       ) +
+      Effect.action(UpdateViewMode("schedules", ViewMode.List)) +
       Effect.action(UpdateEditParameters("schedules", List(
         ParameterGroup("about",
           StringParameter("title", required = true),
           StringParameter("description", multiLine = true, required = true)
         )))) +
-      Effect.action(UpdateEditState("schedules", state.value.editState.copy(itemActions = ListBuffer.from(actions), itemEvents = ListBuffer.from(events))))
+      Effect.action(UpdateAdditionalState("schedules", state.value.additionalState.copy(itemActions = ListBuffer.from(actions), itemEvents = ListBuffer.from(events))))
     }
 
 

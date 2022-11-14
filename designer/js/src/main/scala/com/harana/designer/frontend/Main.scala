@@ -62,8 +62,8 @@ object Main {
     new Timer().scheduleAtFixedRate(new java.util.TimerTask {
       def run(): Unit = {
 //        Circuit.dispatch(RefreshEvents)
-//        Circuit.dispatch(SaveRoute)
-//        Circuit.dispatch(SavePreferences)
+        Circuit.dispatch(SaveRoute)
+        Circuit.dispatch(SavePreferences)
       }
     }, 0L, 2000L)
   }

@@ -12,24 +12,24 @@ object GridStore {
   type EntityType = String
   type EntitySubType = String
 
-  case class GridState[Entity, EditState](blocked: Boolean,
-                                          entities: List[Entity],
-                                          items: List[GridPageItem],
-                                          selectedItem: Option[GridPageItem],
-                                          entitySubType: Option[EntitySubType],
-                                          viewMode: ViewMode,
-                                          searchQuery: Option[String],
-                                          sortOrdering: SortOrdering,
-                                          tags: List[FilterItem],
-                                          tag: Option[FilterItem],
-                                          owners: List[FilterItem],
-                                          owner: Option[FilterItem],
-                                          editParameterGroups: List[ParameterGroup],
-                                          editValues: HMap[Parameter.Values],
-                                          editState: EditState)
+  case class GridState[E, S](blocked: Boolean,
+                             entities: List[E],
+                             items: List[GridPageItem],
+                             selectedItem: Option[GridPageItem],
+                             entitySubType: Option[EntitySubType],
+                             viewMode: ViewMode,
+                             searchQuery: Option[String],
+                             sortOrdering: SortOrdering,
+                             tags: List[FilterItem],
+                             tag: Option[FilterItem],
+                             owners: List[FilterItem],
+                             owner: Option[FilterItem],
+                             editParameterGroups: List[ParameterGroup],
+                             editValues: HMap[Parameter.Values],
+                             additionalState: S)
 
-  def initialState[Entity, EditState](editState: EditState) =
-    GridState[Entity, EditState](false, List(), List(), None, None, ViewMode.Grid, None, SortOrdering.NameAscending, List(), None, List(), None, List.empty[ParameterGroup], HMap.empty, editState)
+  def initialState[E, S](additionalState: S) =
+    GridState[E, S](false, List(), List(), None, None, ViewMode.Grid, None, SortOrdering.NameAscending, List(), None, List(), None, List.empty[ParameterGroup], HMap.empty, additionalState)
 
   case class Init(userPreferences: Map[String, String]) extends DiodeAction
   case class ReceiveEvent(entityType: EntityType, eventType: String, eventParameters: Map[String, String]) extends DiodeAction
@@ -49,8 +49,8 @@ object GridStore {
   case class SaveNewItem(entityType: EntityType, parameterValues: HMap[Parameter.Values]) extends DiodeAction
   case class SaveExistingItem(entityType: EntityType, entityId: EntityId, parameterValues: HMap[Parameter.Values]) extends DiodeAction
 
+  case class UpdateAdditionalState[S](entityType: EntityType, additionalState: S) extends DiodeAction
   case class UpdateEditParameters(entityType: EntityType, parameters: List[ParameterGroup]) extends DiodeAction
-  case class UpdateEditState[E](entityType: EntityType, editState: E) extends DiodeAction
   case class UpdateEditParameterValue(entityType: EntityType, name: Parameter[_], value: Any) extends DiodeAction
   case class UpdateEditParameterValues(entityType: EntityType, values: HMap[Parameter.Values]) extends DiodeAction
   case class UpdateEntitySubType(entityType: EntityType, subType: Option[EntitySubType]) extends DiodeAction

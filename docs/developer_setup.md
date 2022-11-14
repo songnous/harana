@@ -65,7 +65,7 @@ osascript -e 'quit app "Docker"'; open -a Docker ; while [ -z "$(docker info 2> 
 
 ## Setup Kubernetes Cluster
 ```bash
-k3d cluster create harana --api-port 6550
+k3d cluster create harana --api-port 6550 --registry-create registry.harana.build
 k3d node create core --cluster harana
 k3d node create task --cluster harana
 k3d node create terminal --cluster harana

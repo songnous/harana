@@ -18,7 +18,7 @@ import scala.scalajs.js.JSConverters._
 
 object dialogs {
 
-  private def selectStyle(state: FilesState, onOk: () => Unit) =
+  private def selectStyle(state: State, onOk: () => Unit) =
     DialogStyle.General(
       innerElement =
         div(className := "select-file-table")(
@@ -38,14 +38,14 @@ object dialogs {
       onOk = Some(onOk)
   )
 
-  def select(dialogRef: ReactRef[Dialog.Def], state: FilesState, onOk: () => Unit, width: Option[String] = None) =
+  def select(dialogRef: ReactRef[Dialog.Def], state: State, onOk: () => Unit, width: Option[String] = None) =
     dialogRef.current.show(
       title = None,
       style = selectStyle(state, onOk),
       width = width
     )
 
-  def updateSelect(dialogRef: ReactRef[Dialog.Def], state: FilesState, onOk: () => Unit, width: Option[String] = None) =
+  def updateSelect(dialogRef: ReactRef[Dialog.Def], state: State, onOk: () => Unit, width: Option[String] = None) =
     dialogRef.current.update(style = Some(selectStyle(state, onOk)), width = width)
 
   def newFolder(ref: ReactRef[Dialog.Def]) = {
@@ -62,7 +62,7 @@ object dialogs {
     )
   }
 
-  def uploadFiles(ref: ReactRef[Dialog.Def], state: FilesState) = ref.current.show(
+  def uploadFiles(ref: ReactRef[Dialog.Def], state: State) = ref.current.show(
     title = Some(i"files.menu.new.upload-files"),
     style = DialogStyle.General(
       div(className := "files-upload")(
@@ -82,7 +82,7 @@ object dialogs {
     width = Some("500px")
   )
 
-  def editInfo(ref: ReactRef[Dialog.Def], state: FilesState) = {
+  def editInfo(ref: ReactRef[Dialog.Def], state: State) = {
     val nameParameter = StringParameter("name", required = true)
 
     ref.current.show(
@@ -104,7 +104,7 @@ object dialogs {
     style = DialogStyle.Confirm("Are you sure you want to delete this file ?", "Delete", onOk = Some(() => Circuit.dispatch(DeleteItem)))
   )
 
-  def mountDrive(ref: ReactRef[Dialog.Def], state: FilesState) =
+  def mountDrive(ref: ReactRef[Dialog.Def], state: State) =
     ref.current.show(
       title = Some(i"files.mount-drive.title"),
       style = DialogStyle.Tabbed(
