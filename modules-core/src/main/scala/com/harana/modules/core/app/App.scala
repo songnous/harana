@@ -3,7 +3,7 @@ package com.harana.modules.core.app
 import com.harana.modules.core.Layers
 import com.harana.modules.core.config.Config
 import com.harana.modules.core.logger.Logger
-import zio.ZIO
+import zio.{IO, Task, UIO}
 
 abstract class App extends zio.App {
 
@@ -14,8 +14,8 @@ abstract class App extends zio.App {
   def logInfo(s: String) = Logger.info(s).provideLayer(Layers.logger)
   def logError(s: String) = Logger.error(s).provideLayer(Layers.logger)
 
-  def startup: ZIO[Any, Throwable, Unit]
-  def shutdown: ZIO[Any, Throwable, Unit]
+  def startup: Task[Unit]
+  def shutdown: UIO[Unit]
 
   override def run(args: List[String]) =
     for {
@@ -25,6 +25,16 @@ abstract class App extends zio.App {
       _             <- logInfo(s"Harana Cluster: $cluster")
       _             <- logInfo(s"Harana Domain: $domain")
       _             <- logInfo(s"Harana Environment: $environment")
+
+                    // BROKEN - This thread just gets terminated early
+      _             <- IO.effectTotal(java.lang.Runtime.getRuntime.addShutdownHook(new Thread {
+                          override def run() = {
+                            println("------------------------------------------------ A")
+                            val _ = unsafeRunSync(shutdown)
+                            println("------------------------------------------------ B")
+                          }
+                        }))
+
       exitCode      <- startup.onError(e => logError(e.prettyPrint)).exitCode
     } yield exitCode
 }

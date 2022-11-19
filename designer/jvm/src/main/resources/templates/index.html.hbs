@@ -41,7 +41,7 @@
 <script type="text/javascript" src="/public/js/designer-fastopt.js"></script>
 <script type="module">
   import { registerIconLibrary } from 'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.72/dist/shoelace.js';
-  registerIconLibrary('icomoon', { resolver: name => `/public/icons/icomoon/${name}.svg` });
-  registerIconLibrary('lindua', { resolver: name => `/public/icons/lindua/${name}.svg` });
+  registerIconLibrary('icomoon', { resolver: name => `/public/icons/icomoon/${name}.svg`, mutator: svg => svg.children.forEach(function(item){ item.setAttribute('fill', 'currentColor') })});
+  registerIconLibrary('lindua', { resolver: name => `/public/icons/lindua/${name}.svg`, mutator: svg => svg.setAttribute('fill', '#abcabc') });
 </script>
 </html>

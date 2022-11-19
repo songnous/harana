@@ -21,7 +21,7 @@ import scala.util.Random
 	case class Props(title: String,
 									 subtitle: Option[String],
 									 chartType: Option[PillChartType],
-									 link: LinkType,
+									 link: Option[LinkType],
 									 background: Background,
 									 menuItems: List[ReactElement] = List())
 
@@ -39,11 +39,11 @@ import scala.util.Random
 					)
 				)
 			),
-			div(className := "panel-body", onClick := (event => openLink(props.link)))(
+			div(className := "panel-body", onClick := (event => if (props.link.isDefined) openLink(props.link.get)))(
 				h3(className := "heading-text")(span(props.title)),
 				props.subtitle
 			),
-			div(className := "container-fluid", onClick := (event => openLink(props.link)))(
+			div(className := "container-fluid", onClick := (event => if (props.link.isDefined) openLink(props.link.get)))(
 				props.chartType match {
 
 					case Some(PillChartType.Bar) =>

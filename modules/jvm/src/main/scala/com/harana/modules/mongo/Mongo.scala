@@ -45,23 +45,23 @@ object Mongo {
 
     def distinctEquals(collectionName: String, field: String, keyValues: Map[String, Object]): Task[List[String]]
 
-    def findEquals[E <: Id](collectionName: String, keyValues: Map[String, Object], sort: Option[(String, Boolean)] = None)(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]]
+    def findEquals[E <: Id](collectionName: String, keyValues: Map[String, Object], sort: Option[(String, Boolean)] = None, limit: Option[Int] = None)(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]]
 
     def findOne[E <: Id](collectionName: String, keyValues: Map[String, Object], sort: Option[(String, Boolean)] = None)(implicit tt: TypeTag[E], d: Decoder[E]): Task[Option[E]]
 
     def findOneAndDelete[E <: Id](collectionName: String, findValues: Map[String, Object], sort: Option[(String, Boolean)] = None)(implicit tt: TypeTag[E], d: Decoder[E]): Task[Option[E]]
 
-    def find[E <: Id](collectionName: String, bson: Bson, sort: Option[(String, Boolean)] = None)(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]]
+    def find[E <: Id](collectionName: String, bson: Bson, sort: Option[(String, Boolean)] = None, limit: Option[Int] = None)(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]]
 
     def countEquals(collectionName: String, keyValues: Map[String, Object]): Task[Long]
 
     def count(collectionName: String, bson: Bson): Task[Long]
 
-    def textSearch[E <: Id](collectionName: String, text: String)(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]]
+    def textSearch[E <: Id](collectionName: String, text: String, limit: Option[Int] = None)(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]]
 
-    def textSearchFindEquals[E <: Id](collectionName: String, text: String, keyValues: Map[String, Object])(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]]
+    def textSearchFindEquals[E <: Id](collectionName: String, text: String, keyValues: Map[String, Object], limit: Option[Int] = None)(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]]
 
-    def all[E <: Id](collectionName: String, sort: Option[(String, Boolean)] = None)(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]]
+    def all[E <: Id](collectionName: String, sort: Option[(String, Boolean)] = None, limit: Option[Int] = None)(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]]
 
     def createIndex[E <: Id](collectionName: String, indexes: Map[String, Int], unique: Boolean = false, opts: Option[IndexOptions] = None)(implicit tt: TypeTag[E]): Task[Unit]
 

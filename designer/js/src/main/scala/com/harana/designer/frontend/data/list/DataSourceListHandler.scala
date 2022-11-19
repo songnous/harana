@@ -39,7 +39,7 @@ class DataSourceListHandler extends GridHandler[DataSource, DataSourceListStore.
       created = dataSource.created,
       updated = dataSource.updated,
       chartType = Some(PillChartType.Bar),
-      link = LinkType.Page(s"/data/${dataSource.id}"),
+      link = Some(LinkType.Page(s"/data/${dataSource.id}")),
       background = dataSource.background,
       additionalData = Map("type" -> dataSource.dataSourceType),
       parameterValues = HMap[Parameter.Values](

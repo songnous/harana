@@ -6,5 +6,7 @@ object AppListStore {
 
   case class State()
 
+  val initialState = State()
+
   case class StopApp(appId: String) extends DiodeAction
 }

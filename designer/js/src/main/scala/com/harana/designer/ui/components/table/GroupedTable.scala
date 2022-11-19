@@ -18,7 +18,7 @@ import scala.util.Random
   case class Props(columns: List[Column], 
                    rowGroups: List[RowGroup],
                    includeRadios: Boolean = true,
-                   includeMenus: Boolean = true,
+                   includeMenus: Boolean = false,
                    className: Option[String] = None)
 
   case class State(rowClickCount: Int,

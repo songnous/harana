@@ -15,6 +15,8 @@ import com.harana.sdk.shared.models.apps.{App => DesignerApp}
 import com.harana.sdk.shared.models.common.{PendingEvent, User}
 import com.harana.sdk.shared.models.data.{DataSet, DataSource}
 import com.harana.sdk.shared.models.flow.{Flow, FlowExecution}
+import com.harana.sdk.shared.models.schedules.{Schedule, ScheduleExecution}
+import com.harana.sdk.shared.models.terminals.Terminal
 import io.circe.parser._
 import io.vertx.ext.web.RoutingContext
 import org.jsoup.Jsoup
@@ -66,33 +68,41 @@ object LiveSystem {
 
     def createIndexes: Task[Unit] =
       for {
-        _         <- mongo.createTextIndex[DesignerApp]("Apps", List("title", "description", "tags"))
-        _         <- mongo.createTextIndex[DataSource]("DataSources", List("title", "description", "tags"))
-        _         <- mongo.createTextIndex[DataSet]("DataSets", List("title", "description", "tags"))
-        _         <- mongo.createTextIndex[Flow]("Flows", List("title", "description", "tags", "actions.0.title", "actions.0.tags", "actions.0.description", "connections.0.title", "connections.0.tags", "connections.0.description"))
+        _         <- mongo.createTextIndex[DesignerApp]("Apps", List("title", "description", "tags")).ignore
+        _         <- mongo.createTextIndex[DataSource]("DataSources", List("title", "description", "tags")).ignore
+        _         <- mongo.createTextIndex[DataSet]("DataSets", List("title", "description", "tags")).ignore
+        _         <- mongo.createTextIndex[Flow]("Flows", List("title", "description", "tags", "actions.0.title", "actions.0.tags", "actions.0.description", "connections.0.title", "connections.0.tags", "connections.0.description")).ignore
 
-        _         <- mongo.createIndex[DesignerApp]("Apps", Map("id" -> 1), true)
-        _         <- mongo.createIndex[DesignerApp]("Apps", Map("id" -> 1, "createdBy" -> 1), true)
+        _         <- mongo.createIndex[DesignerApp]("Apps", Map("createdBy" -> 1)).ignore
+        _         <- mongo.createIndex[DesignerApp]("Apps", Map("id" -> 1, "createdBy" -> 1), true).ignore
 
-        _         <- mongo.createIndex[DataSet]("DataSets", Map("id" -> 1), true)
-        _         <- mongo.createIndex[DataSet]("DataSets", Map("id" -> 1, "createdBy" -> 1), true)
+        _         <- mongo.createIndex[DataSet]("DataSets", Map("createdBy" -> 1)).ignore
+        _         <- mongo.createIndex[DataSet]("DataSets", Map("id" -> 1, "createdBy" -> 1), true).ignore
 
-        _         <- mongo.createIndex[DataSource]("DataSources", Map("id" -> 1), true)
-        _         <- mongo.createIndex[DataSource]("DataSources", Map("id" -> 1, "createdBy" -> 1), true)
-        _         <- mongo.createIndex[DataSource]("DataSources", Map("dataSourceType" -> 1, "createdBy" -> 1))
+        _         <- mongo.createIndex[DataSource]("DataSources", Map("createdBy" -> 1)).ignore
+        _         <- mongo.createIndex[DataSource]("DataSources", Map("id" -> 1, "createdBy" -> 1), true).ignore
+        _         <- mongo.createIndex[DataSource]("DataSources", Map("dataSourceType" -> 1, "createdBy" -> 1)).ignore
 
-        _         <- mongo.createIndex[Flow]("Flows", Map("id" -> 1), true)
-        _         <- mongo.createIndex[Flow]("Flows", Map("id" -> 1, "createdBy" -> 1), true)
+        _         <- mongo.createIndex[Flow]("Flows", Map("createdBy" -> 1)).ignore
+        _         <- mongo.createIndex[Flow]("Flows", Map("id" -> 1, "createdBy" -> 1), true).ignore
 
-        _         <- mongo.createIndex[FlowExecution]("FlowExecutions", Map("executionStatus" -> 1))
-        _         <- mongo.createIndex[FlowExecution]("FlowExecutions", Map("flowId" -> 1))
-        _         <- mongo.createIndex[FlowExecution]("FlowExecutions", Map("id" -> 1), true)
-        _         <- mongo.createIndex[FlowExecution]("FlowExecutions", Map("id" -> 1, "createdBy" -> 1), true)
+        _         <- mongo.createIndex[FlowExecution]("FlowExecutions", Map("executionStatus" -> 1)).ignore
+        _         <- mongo.createIndex[FlowExecution]("FlowExecutions", Map("flowId" -> 1)).ignore
+        _         <- mongo.createIndex[FlowExecution]("FlowExecutions", Map("id" -> 1), true).ignore
 
-        _         <- mongo.createIndex[User]("Users", Map("emailAddress" -> 1), true)
-        _         <- mongo.createIndex[User]("Users", Map("id" -> 1), true)
-        _         <- mongo.createIndex[User]("Users", Map("id" -> 1, "subscriptionUpdated" -> 1), true)
-        _         <- mongo.createIndex[User]("Users", Map("subscriptionCustomerId" -> 1))
+        _         <- mongo.createIndex[ScheduleExecution]("ScheduleExecutions", Map("createdBy" -> 1)).ignore
+        _         <- mongo.createIndex[ScheduleExecution]("ScheduleExecutions", Map("scheduleId" -> 1)).ignore
+
+        _         <- mongo.createIndex[Schedule]("Schedules", Map("createdBy" -> 1)).ignore
+        _         <- mongo.createIndex[Schedule]("Schedules", Map("id" -> 1), true).ignore
+        _         <- mongo.createIndex[Schedule]("Schedules", Map("id" -> 1, "createdBy" -> 1), true).ignore
+
+        _         <- mongo.createIndex[Terminal]("Terminals", Map("id" -> 1, "createdBy" -> 1), true).ignore
+
+        _         <- mongo.createIndex[User]("Users", Map("emailAddress" -> 1)).ignore
+        _         <- mongo.createIndex[User]("Users", Map("id" -> 1), true).ignore
+        _         <- mongo.createIndex[User]("Users", Map("id" -> 1, "subscriptionUpdated" -> 1), true).ignore
+        _         <- mongo.createIndex[User]("Users", Map("subscriptionCustomerId" -> 1)).ignore
       } yield ()
 
 

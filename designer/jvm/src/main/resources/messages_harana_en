@@ -1244,6 +1244,8 @@ schedules.section.about.tags.title = Tags
 
 schedules.common.title = Title
 schedules.common.tags = Tags
+schedules.common.time = Time
+schedules.common.lastrun = Last Run
 schedules.common.type = Type
 schedules.common.history = History
 

@@ -133,7 +133,7 @@ import scala.collection.mutable.ListBuffer
         val rows = props.state.items.map { item =>
           val checked = props.state.selectedItem.isDefined && props.state.selectedItem.get == item
           val radio = Some(Radio.Props(name = "s", checked = Some(checked), onChange = Some(checked => if (checked) Circuit.dispatch(UpdateSelectedItem(props.entityType, Some(item))))))
-          Row(props.tableColumns.map(column => column -> props.tableContent(column, item)).toMap, radio, None, onDoubleClick = Some(() => openLink(item.link)))
+          Row(props.tableColumns.map(column => column -> props.tableContent(column, item)).toMap, radio, None, onDoubleClick = item.link.map(l => () => openLink(l)))
         }
         GroupedTable(props.tableColumns, List(RowGroup(None, rows))).withKey(Random.short)
 

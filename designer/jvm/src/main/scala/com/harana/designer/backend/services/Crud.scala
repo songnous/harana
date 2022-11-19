@@ -267,7 +267,7 @@ object Crud {
     update(collection, rc, config, jwt, logger, micrometer, mongo).as(Response.Empty())
 
 
-  private def creatorOrPublic(userId: UserId) = {
+  def creatorOrPublic(userId: UserId) = {
     val isPublic = BsonDocument("visibility" -> Visibility.Public.toString)
     val isCreator = BsonDocument("createdBy" -> userId)
     List(isPublic, isCreator)

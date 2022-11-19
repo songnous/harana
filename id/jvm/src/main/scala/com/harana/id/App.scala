@@ -84,7 +84,7 @@ object App extends CoreApp {
     } yield ()
 
 
-  def shutdown: Task[Unit] = {
+  def shutdown: UIO[Unit] = {
     for {
       _                     <- Vertx.close.provideLayer(Layers.vertx)
     } yield ()

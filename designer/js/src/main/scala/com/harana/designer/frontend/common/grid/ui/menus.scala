@@ -77,7 +77,7 @@ object menus {
     MenuItem(
       label = i"common.grid.item.menu.open",
       iconPrefix = Some("lindua", "file-pencil"),
-      onClick = Some(_ => openLink(item.link))
+      onClick = item.link.map(l => _ => openLink(l))
     )
 
 

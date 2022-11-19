@@ -977,3 +977,25 @@ pre code {
 .schedules-history {
     height: calc(100vh - 308px);
 }
+
+.schedules-pill {
+    width: 7px;
+    height: 40px;
+    border-radius: 3px;
+    float: left;
+    margin-right: 3px;
+}
+
+.schedule-success {
+    color: #26a69a;
+    padding-left: 10px;
+}
+
+.schedule-failure {
+    color: rgb(184,65,102);
+    padding-left: 10px;
+}
+
+.navigation-item {
+    color: black;
+}

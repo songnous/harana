@@ -4,4 +4,6 @@ object DataSourceListStore {
 
   case class State(dataSourceTypes: Map[String, List[String]])
 
+  val initialState = State(Map())
+
 }

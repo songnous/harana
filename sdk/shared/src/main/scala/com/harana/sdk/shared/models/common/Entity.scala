@@ -11,7 +11,8 @@ import scala.annotation.meta.field
 sealed trait Status extends EnumEntry
 case object Status extends Enum[Status] with CirceEnum[Status] {
   case object Active extends Status
-  case object Delete extends Status
+  case object Paused extends Status
+  case object Deleted extends Status
   val values = findValues
 }
 

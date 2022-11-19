@@ -22,7 +22,7 @@ import com.harana.modules.core.app.{App => CoreApp}
 import com.harana.modules.core.micrometer.{LiveMicrometer, Micrometer}
 import com.harana.modules.core.{Layers => CoreLayers}
 import com.harana.modules.mongo.Mongo
-import com.harana.modules.vertx.models._
+import com.harana.modules.vertx.models.{Route, _}
 import com.harana.modules.vertx.{LiveVertx, Vertx}
 import com.harana.modules.vfs.LiveVfs
 import com.harana.sdk.shared.models.common.{User => DesignerUser}
@@ -158,6 +158,8 @@ object App extends CoreApp {
     // Schedules
     Route("/api/schedules/actionTypes",                       GET,      rc => Schedules.actionTypes(rc).provideLayer(schedules)),
     Route("/api/schedules/eventTypes",                        GET,      rc => Schedules.eventTypes(rc).provideLayer(schedules)),
+    Route("/api/schedules/history/",                          GET,      rc => Schedules.history(rc).provideLayer(schedules)),
+    Route("/api/schedules/history/:size",                     GET,      rc => Schedules.history(rc).provideLayer(schedules)),
     Route("/api/schedules/search/:query",                     GET,      rc => Schedules.search(rc).provideLayer(schedules)),
     Route("/api/schedules/tags",                              GET,      rc => Schedules.tags(rc).provideLayer(schedules)),
     Route("/api/schedules",                                   GET,      rc => Schedules.list(rc).provideLayer(schedules)),
@@ -187,7 +189,7 @@ object App extends CoreApp {
     Route("/api/user/preferences",                            GET,      rc => User.preferences(rc).provideLayer(user)),
     Route("/api/user/preferences",                            POST,     rc => User.savePreferences(rc).provideLayer(user)),
     Route("/api/user/settings",                               GET,      rc => User.settings(rc).provideLayer(user)),
-    Route("/api/user/settings",                               POST,     rc => User.saveSettings(rc).provideLayer(user))
+    Route("/api/user/setup",                                  GET,      rc => Schedules.setup(rc).provideLayer(schedules))
   )
 
 

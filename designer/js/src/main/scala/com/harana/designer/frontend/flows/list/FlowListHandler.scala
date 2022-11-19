@@ -28,7 +28,7 @@ class FlowListHandler extends GridHandler[Flow, FlowListStore.State]("flows", zo
       tags = flow.tags,
       created = flow.created,
       updated = flow.updated,
-      link = LinkType.Page(s"/flows/${flow.id}"),
+      link = Some(LinkType.Page(s"/flows/${flow.id}")),
       background = Some(flow.background),
       parameterValues = HMap[Parameter.Values](
         (GridPageItem.titleParameter, flow.title),

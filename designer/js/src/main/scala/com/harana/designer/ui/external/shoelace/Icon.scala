@@ -16,7 +16,6 @@ import scala.scalajs.js
   val elementRef = React.createRef[HTMLElement]
 
   case class Props(className: Option[String] = None,
-                   currentColor: Option[String] = None,
                    label: Option[String] = None,
                    library: Option[String] = None,
                    name: String,
@@ -39,17 +38,13 @@ import scala.scalajs.js
 
   def render() = {
     val attrs = new ListBuffer[TagMod[_]]()
-    add(attrs, props.currentColor, "currentColor")
+    add(attrs, props.className, "class")
     add(attrs, props.label, "label")
     add(attrs, props.library, "library")
     add(attrs, props.name, "name")
     add(attrs, props.src, "src")
 
     attrs += (ref := elementRef)
-
-    if (props.className.isDefined)
-      div(className := props.className)(CustomTag("sl-icon")(attrs.toSeq: _*))
-    else
-      CustomTag("sl-icon")(attrs.toSeq: _*)
+    CustomTag("sl-icon")(attrs.toSeq: _*)
   }
 }

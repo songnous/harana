@@ -63,9 +63,9 @@ package object mongo {
     }
 
 
-  def executeFind[E](fn: => FindObservable[BsonDocument])(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]] =
+  def executeFind[E](fn: => FindObservable[BsonDocument], limit: Option[Int])(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]] =
     IO.effectAsync { cb =>
-      fn.subscribe(new Observer[BsonDocument] {
+      fn.limit(limit.getOrElse(0)).subscribe(new Observer[BsonDocument] {
         private val buffer = new ListBuffer[BsonDocument]()
 
         override def onNext(result: BsonDocument): Unit = buffer.append(result)

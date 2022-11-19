@@ -4,4 +4,6 @@ object FlowListStore {
 
   case class State()
 
+  val initialState = State()
+
 }

@@ -19,7 +19,7 @@ import slinky.web.html._
 				val content: ReactElement = item._1 match {
 					case ItemType.Badge(color, number) => span(className := s"badge badge-$color")(number)
 					case ItemType.Button(button) => ShoelaceButton(button)
-					case ItemType.Icon(library, icon) => ShoelaceIcon(library = Some(library), name = icon)
+					case ItemType.Icon(library, icon, className) => ShoelaceIcon(library = Some(library), name = icon, className = className)
 					case ItemType.Label(color, number) => span(className := s"label label-$color ${position.value}")(number)
 				}
 				position match {
@@ -34,7 +34,7 @@ sealed trait ItemType
 object ItemType {
 	case class Badge(color: Color, number: Int) extends ItemType
 	case class Button(button: ShoelaceButton.Props) extends ItemType
-	case class Icon(library: String, icon: String) extends ItemType
+	case class Icon(library: String, icon: String, className: Option[String] = None) extends ItemType
 	case class Label(color: Color, text: String) extends ItemType
 }
 

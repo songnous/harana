@@ -6,6 +6,7 @@ import com.harana.designer.frontend.system.SystemStore.RefreshEvents
 import com.harana.designer.frontend.user.UserStore.SavePreferences
 import com.harana.designer.frontend.utils.AuthUtils
 import com.harana.designer.frontend.utils.error.Error
+import com.harana.designer.frontend.utils.http.Http
 import com.harana.sdk.shared.models.jwt.DesignerClaims
 import diode._
 import org.scalajs.dom
@@ -33,6 +34,9 @@ object Main {
     else claims = decodedJwt.get
 
     js.Dynamic.global.window.onerror = Error.fromJS
+
+    Http.getRelativeAs[Unit](s"/api/schedules/setup")
+
 
     Circuit.addProcessor((dispatch: Dispatcher, action: Any, next: Any => ActionResult[State], currentModel: State) => {
       val actions = action match {
@@ -63,7 +67,7 @@ object Main {
       def run(): Unit = {
 //        Circuit.dispatch(RefreshEvents)
         Circuit.dispatch(SaveRoute)
-        Circuit.dispatch(SavePreferences)
+//        Circuit.dispatch(SavePreferences)
       }
     }, 0L, 2000L)
   }

@@ -218,23 +218,23 @@ object LiveMongo {
       delete[E](collectionName, new BasicDBObject(keyValues.asJava))
 
 
-    def findEquals[E <: Id](collectionName: String, keyValues: Map[String, Object], sort: Option[(String, Boolean)] = None)(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]] =
+    def findEquals[E <: Id](collectionName: String, keyValues: Map[String, Object], sort: Option[(String, Boolean)] = None, limit: Option[Int] = None)(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]] =
       for {
         db                  <- mongoDatabase
         collection          <- getCollection(db, collectionName)
         sortDoc             =  sort.map(s => if (s._2) ascending(s._1) else descending(s._1))
         findDoc             =  collection.find(new BasicDBObject(keyValues.asJava))
-        results             <- executeFind[E](if (sort.isDefined) findDoc.sort(sortDoc.get) else findDoc)
+        results             <- executeFind[E](if (sort.isDefined) findDoc.sort(sortDoc.get) else findDoc, limit)
       } yield results
 
 
-    def find[E <: Id](collectionName: String, bson: Bson, sort: Option[(String, Boolean)] = None)(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]] =
+    def find[E <: Id](collectionName: String, bson: Bson, sort: Option[(String, Boolean)] = None, limit: Option[Int] = None)(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]] =
       for {
         db                  <- mongoDatabase
         collection          <- getCollection(db, collectionName)
         sortDoc             =  sort.map(s => if (s._2) ascending(s._1) else descending(s._1))
         findDoc             =  collection.find(bson)
-        results             <- executeFind[E](if (sort.isDefined) findDoc.sort(sortDoc.get) else findDoc)
+        results             <- executeFind[E](if (sort.isDefined) findDoc.sort(sortDoc.get) else findDoc, limit)
       } yield results
 
 
@@ -283,30 +283,30 @@ object LiveMongo {
       } yield results
 
 
-    def textSearch[E <: Id](collectionName: String, text: String)(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]] =
+    def textSearch[E <: Id](collectionName: String, text: String, limit: Option[Int] = None)(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]] =
       for {
         db                  <- mongoDatabase
         collection          <- getCollection(db, collectionName)
         results             <- executeFind[E](collection.find(Filters.text(text))
-                                .projection(Projections.metaTextScore("score")).sort(Sorts.metaTextScore("score")))
+                                .projection(Projections.metaTextScore("score")).sort(Sorts.metaTextScore("score")), limit)
       } yield results
 
 
-    def textSearchFindEquals[E <: Id](collectionName: String, text: String, keyValues: Map[String, Object])(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]] =
+    def textSearchFindEquals[E <: Id](collectionName: String, text: String, keyValues: Map[String, Object], limit: Option[Int] = None)(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]] =
       for {
         db                  <- mongoDatabase
         collection          <- getCollection(db, collectionName)
         results             <- executeFind[E](collection.find(Filters.and(Filters.text(text), new BasicDBObject(keyValues.asJava)))
-                                .projection(Projections.metaTextScore("score")).sort(Sorts.metaTextScore("score")))
+                                .projection(Projections.metaTextScore("score")).sort(Sorts.metaTextScore("score")), limit)
       } yield results
 
 
-    def all[E <: Id](collectionName: String, sort: Option[(String, Boolean)] = None)(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]] =
+    def all[E <: Id](collectionName: String, sort: Option[(String, Boolean)] = None, limit: Option[Int] = None)(implicit tt: TypeTag[E], d: Decoder[E]): Task[List[E]] =
       for {
         db                  <- mongoDatabase
         collection          <- getCollection(db, collectionName)
         sortDoc             =  sort.map(s => if (s._2) ascending(s._1) else descending(s._1))
-        results             <- executeFind[E](if (sort.isDefined) collection.find().sort(sortDoc.get) else collection.find())
+        results             <- executeFind[E](if (sort.isDefined) collection.find().sort(sortDoc.get) else collection.find(), limit)
       } yield results
 
 

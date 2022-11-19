@@ -29,5 +29,9 @@ object Schedules {
     def actionTypes(rc: RoutingContext): Task[Response]
 
     def eventTypes(rc: RoutingContext): Task[Response]
+
+    def history(rc: RoutingContext): Task[Response]
+
+    def setup(rc: RoutingContext): Task[Response]
   }
 }
