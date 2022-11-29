@@ -83,6 +83,7 @@ class ScheduleListHandler extends GridHandler[Schedule, ScheduleListStore.State]
       tags = schedule.tags,
       created = schedule.created,
       updated = schedule.updated,
+      entity = schedule,
       link = None,
       background = schedule.background,
       parameterValues = HMap[Parameter.Values](
@@ -127,17 +128,17 @@ class ScheduleListHandler extends GridHandler[Schedule, ScheduleListStore.State]
       val actions = if (state.value.additionalState.item.isEmpty) List(Action.DataSync()) else state.value.additionalState.item.get.actions
       val events = if (state.value.additionalState.item.isEmpty) List(Event.CalendarInterval()) else state.value.additionalState.item.get.events
 
-      Effect(Http.getRelativeAs[List[String]](s"/api/schedules/actionTypes").map(at => UpdateActionTypes(at.getOrElse(List())))) +
-      Effect(Http.getRelativeAs[List[String]](s"/api/schedules/eventTypes").map(et => UpdateEventTypes(et.getOrElse(List())))) +
-      Effect(Http.getRelativeAs[List[(ScheduleExecution, Schedule)]](s"/api/schedules/history/20").map(et => UpdateScheduleHistory(et.getOrElse(List())))) +
-      Effect.action(UpdateViewMode("schedules", ViewMode.List)) +
+      Effect.action(UpdateViewMode("schedules", ViewMode.List)) >>
+      Effect(Http.getRelativeAs[List[String]](s"/api/schedules/actionTypes").map(at => UpdateActionTypes(at.getOrElse(List())))) >>
+      Effect(Http.getRelativeAs[List[String]](s"/api/schedules/eventTypes").map(et => UpdateEventTypes(et.getOrElse(List())))) >>
+      Effect(Http.getRelativeAs[List[(ScheduleExecution, Schedule)]](s"/api/schedules/history/20").map(et => UpdateScheduleHistory(et.getOrElse(List())))) >>
       Effect.action(UpdateEditParameters("schedules", List(
         ParameterGroup("about",
           StringParameter("title", required = true),
           StringParameter("description", multiLine = true, required = true)
         )))
-      ) +
-      Effect.action(UpdateItemActions(ListBuffer.from(actions))) +
+      ) >>
+      Effect.action(UpdateItemActions(ListBuffer.from(actions))) >>
       Effect.action(UpdateItemEvents(ListBuffer.from(events)))
     }
 

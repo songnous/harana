@@ -7,19 +7,17 @@ import com.harana.id.jwt.modules.jwt.JWT
 import com.harana.modules.core.config.Config
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
-import com.harana.modules.mongo.{Mongo, convertToBson}
+import com.harana.modules.mongo.Mongo
 import com.harana.modules.vertx.models.Response
-import com.harana.sdk.shared.models.common.{Background, Status, Visibility}
-import com.harana.sdk.shared.models.flow.Flow
-import com.harana.sdk.shared.models.schedules.{Action, Event, EventMode, Schedule, ScheduleExecution, ScheduleExecutionStatus, ScheduleExecutionSummary}
+import com.harana.sdk.shared.models.common.{Status, Visibility}
+import com.harana.sdk.shared.models.schedules._
 import com.harana.sdk.shared.utils.Random
 import io.circe.syntax._
 import io.vertx.ext.web.RoutingContext
-import org.mongodb.scala.bson.Document
 import org.mongodb.scala.model.Filters
 import zio.{Task, UIO, ZLayer}
 
-import java.time.Instant
+import java.time.{Duration, Instant}
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 
 object LiveSchedules {

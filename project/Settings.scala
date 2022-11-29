@@ -98,7 +98,7 @@ object Settings {
     version.toInt
   }
 
-  val javaLaunchOptions = if (javaVersion > 9) Seq(
+  val javaLaunchOptions = if (javaVersion > 11) Seq(
     "--add-modules=jdk.incubator.foreign",
     "--add-opens=java.base/java.io=ALL-UNNAMED",
     "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",

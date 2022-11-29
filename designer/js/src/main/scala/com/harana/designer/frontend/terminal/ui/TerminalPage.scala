@@ -8,6 +8,7 @@ import com.harana.ui.components.elements.Page
 import com.harana.ui.external.xterm.{TerminalOptions, XTerm}
 import slinky.core.FunctionalComponent
 import slinky.core.annotations.react
+import slinky.core.facade.Hooks.useEffect
 import slinky.core.facade.ReactElement
 import slinky.web.html.div
 
@@ -18,6 +19,11 @@ import scala.scalajs.js
   val component = FunctionalComponent[js.Dynamic] { props =>
     val state = Circuit.state(zoomTo(_.terminalState))
     val title = "Terminal"
+
+    useEffect(() => {
+      val terminal = state.selectedTerminalRef.current
+      if (terminal != null) terminal.terminal.focus()
+    })
 
     Page(
       title = title,
@@ -48,7 +54,7 @@ import scala.scalajs.js
           override val allowProposedApi = true
           override val cursorBlink = true
         }),
-        onData = Some(data => EventBus.sendMessage(s"terminal-$terminalId-stdin", data)),
+        onData = Some(data => if (!state.loadingTerminalHistory) EventBus.sendMessage(s"terminal-$terminalId-stdin", data)),
 //        onLineFeed = Some(_ => handleLineFeed(terminalId))
       ).withRef(state.selectedTerminalRef)
     } else

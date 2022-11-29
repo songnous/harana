@@ -13,16 +13,19 @@ import com.harana.modules.mongo.Mongo
 import com.harana.modules.vertx.Vertx
 import com.harana.modules.vertx.models.Response
 import com.harana.sdk.shared.models.jwt.DesignerClaims
-import com.harana.sdk.shared.models.terminals.Terminal
+import com.harana.sdk.shared.models.terminals.{Terminal, TerminalHistory}
+import com.harana.sdk.shared.utils.Random
+import io.circe.jawn
+import io.circe.syntax.EncoderOps
 import io.vertx.core.eventbus.MessageConsumer
 import io.vertx.ext.web.RoutingContext
 import skuber.json.format.podFormat
 import skuber.{Container, ObjectMeta, Pod}
 import zio.stream.ZStream
-import zio.{Hub, Runtime, Task, UIO, ZIO, ZLayer}
+import zio.{Hub, Task, UIO, ZIO, ZLayer}
 
 import java.util.concurrent.ConcurrentHashMap
-import scala.jdk.CollectionConverters.{ConcurrentMapHasAsScala, EnumerationHasAsScala}
+import scala.jdk.CollectionConverters.EnumerationHasAsScala
 
 object LiveTerminals {
 
@@ -47,10 +50,47 @@ object LiveTerminals {
       for {
         userId                <- jwt.claims[DesignerClaims](rc).map(_.userId)
         terminalId            <- Task(rc.request.getParam("id"))
-        existingConnection    <- vertx.getMapValue("terminal-connections", terminalId)
-        _                     <- start(userId, terminalId).unless(existingConnection.nonEmpty || subscribers.asScala.contains(terminalId))
+        namespace             <- config.string("terminal.namespace")
+        podName               =  s"terminal-$terminalId".toLowerCase
+        terminal              <- mongo.get[Terminal]("Terminals", terminalId)
+
+        client                <- kubernetes.newClient
+        _                     <- start(userId, terminalId).whenM(!kubernetes.exists(client, namespace, podName))
+
+        sourceStream          <- subscribeToStdin(userId, terminalId)
+
+        _                     <- kubernetes.exec(client, namespace, podName,
+                                  containerName = Some("terminal"),
+                                  stdin = Some(sourceStream),
+                                  stdout = Some(value = (m: String) =>
+                                    mongo.insert[TerminalHistory](s"Terminals-$terminalId", TerminalHistory(m)) *>
+                                    vertx.publishMessage(userId, s"terminal-$terminalId-stdout", m)
+                                  ),
+                                  stderr = Some((m: String) =>
+                                    mongo.insert[TerminalHistory](s"Terminals-$terminalId", TerminalHistory(m)) *>
+                                    vertx.publishMessage(userId, s"terminal-$terminalId-stderr", m)
+                                  ),
+                                  command = Seq(terminal.get.shell), tty = true).retryUntilM(_ =>
+                                    kubernetes.get[Pod](client, namespace, podName).map(_.isDefined).orDie
+                                  ).ignore
+
+        _                     <- kubernetes.close(client)
         response              =  Response.Empty()
       } yield response
+
+
+    private def subscribeToStdin(userId: String, terminalId: String) =
+      for {
+        sessionId             <- UIO(Random.long)
+        _                     <- vertx.publishMessage("terminal", "unsubscribe", Map("terminalId" -> terminalId, "sessionId" -> sessionId).asJson.noSpaces)
+        sourceHub             <- Hub.unbounded[String]
+        sourceStream          =  ZStream.fromHub(sourceHub)
+        consumer              <- vertx.subscribe(userId, s"terminal-$terminalId-stdin", m =>
+                                    mongo.insert[TerminalHistory](s"Terminals-$terminalId", TerminalHistory(m)) *>
+                                    sourceHub.publish(m).unit
+                                 )
+        _                     =  subscribers.put(s"$terminalId-$sessionId-stdin", consumer)
+      } yield sourceStream
 
 
     private def start(userId: String, terminalId: String): Task[Unit] =
@@ -81,35 +121,8 @@ object LiveTerminals {
                                 labels = Map("harana/app" -> "terminal", "harana/user" -> userId),
                                 namespace = namespace))
 
-          terminalRef       =  s"terminal-$terminalId"
-
-          sourceHub         <- Hub.unbounded[String]
-          sourceStream      =  ZStream.fromHub(sourceHub)
-
-          consumer          <- vertx.subscribe(userId, s"$terminalRef-stdin", msg => {
-                                // mongo.appengit dToListField("Terminals", terminalId, "history", msg) *>
-                                sourceHub.publish(msg).unit
-                              })
-
-          _                 <- UIO(subscribers.asScala.put(terminalId, consumer))
-
-          _                 <- kubernetes.create(client, namespace, pod).whenM(!kubernetes.exists(client, namespace, podName))
-
-          podExists         =  kubernetes.get[Pod](client, namespace, podName).map(_.isDefined).orDie
-
-          _                 <- kubernetes.exec(client, namespace, podName,
-                                containerName = Some("terminal"),
-                                stdin = Some(sourceStream),
-                                stdout = Some((m: String) =>
-//                                  mongo.appendToListField("Terminals", terminalId, "history", m) *>
-                                  vertx.publishMessage(userId, s"$terminalRef-stdout", m)
-                                ),
-                                stderr = Some((m: String) =>
-//                                  mongo.appendToListField("Terminals", terminalId, "history", m) *>
-                                  vertx.publishMessage(userId, s"$terminalRef-stderr", m)
-                                ),
-                                command = Seq(terminal.get.shell),
-                                tty = true).retryUntilM(_ => podExists).ignore
+          _                 <- kubernetes.create(client, namespace, pod)
+          _                 <- kubernetes.close(client)
         } yield ()
 
 
@@ -123,6 +136,7 @@ object LiveTerminals {
 
           _                 <- vertx.unsubscribe(subscribers.get(terminalId)).when(subscribers.contains(terminalId))
           _                 =  subscribers.remove(terminalId)
+          _                 <- vertx.removeMapValue("terminal-connections", terminalId)
 
           _                 <- kubernetes.delete[Pod](client, namespace, terminalRef.toLowerCase)
           response          =  Response.Empty()
@@ -132,6 +146,8 @@ object LiveTerminals {
 
     def restart(rc: RoutingContext): Task[Response] =
       for {
+        _                   <- disconnect(rc)
+        _                   <- connect(rc)
         response            <- UIO(Response.Empty())
       } yield response
 
@@ -141,12 +157,29 @@ object LiveTerminals {
         terminal            <- Crud.get[Terminal]("Terminals", rc, config, jwt, logger, micrometer, mongo)
         terminalId          <- Task(rc.request.getParam("id"))
         _                   <- mongo.updateFields("Terminals", terminalId, Map("history" -> List.empty)).when(terminal.isDefined)
-        response            = Response.Empty()
+        response            =  Response.Empty()
       } yield response
 
 
     def history(rc: RoutingContext): Task[Response] =
-      null
+      for {
+        terminalId          <- Task(rc.request.getParam("id"))
+        messages            <- mongo.all[TerminalHistory](s"terminal-$terminalId", sort = Some(("created", true)), limit = Some(1000))
+        response            =  Response.JSON(messages.asJson)
+      } yield response
+
+
+    def startup: Task[Unit] =
+      vertx.subscribe("terminal", "unsubscribe", ids =>
+        for {
+          payload           <- UIO(jawn.decode[Map[String, String]](ids).getOrElse(Map()))
+          oldSubscribers    =  subscribers.keys().asScala.filter(_.startsWith(payload("terminalId"))).toList
+          _                 <- ZIO.foreach_(oldSubscribers)(id =>
+                                  ZIO.fromCompletionStage(subscribers.get(id).unregister().toCompletionStage) *>
+                                  UIO(subscribers.remove(id))
+                               )
+        } yield ()
+      ).unit
 
 
     def shutdown: UIO[Unit] =
@@ -154,7 +187,6 @@ object LiveTerminals {
         _                   <- logger.error("Shutting down Terminals ..")
         terminals           = subscribers.keys().asScala.toList
         _                   <- ZIO.foreach_(terminals)(id => vertx.unsubscribe(subscribers.get(id)).ignore)
-        _                   <- ZIO.foreach_(terminals)(id => vertx.removeMapValue("terminal-connections", id).ignore)
       } yield ()
   }}
 }

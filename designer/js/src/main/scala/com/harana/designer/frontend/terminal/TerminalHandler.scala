@@ -1,18 +1,15 @@
 package com.harana.designer.frontend.terminal
 
 import com.harana.designer.frontend.Circuit.zoomTo
-import com.harana.designer.frontend.system.SystemStore.{EventBusConnected, EventBusDisconnected}
 import com.harana.designer.frontend.terminal.TerminalStore._
 import com.harana.designer.frontend.utils.http.Http
-import com.harana.designer.frontend.{Circuit, EventBus, Main, State}
-import com.harana.sdk.shared.models.terminals.{HistoryType, Terminal, TerminalHistory}
+import com.harana.designer.frontend.{EventBus, Main}
+import com.harana.sdk.shared.models.terminals.{Terminal, TerminalHistory}
 import diode.AnyAction._
 import diode._
-import io.circe.parser.decode
 import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 import typings.std.global.navigator
 
-import scala.collection.mutable.ListBuffer
 import scala.concurrent.Future
 
 class TerminalHandler extends ActionHandler(zoomTo(_.terminalState)) {
@@ -49,9 +46,9 @@ class TerminalHandler extends ActionHandler(zoomTo(_.terminalState)) {
 
 
     case ConnectTerminal =>
-      if (value.terminalConnected)
+      if (value.terminalConnected) {
         effectOnly(Effect.action(Nothing))
-      else {
+      } else {
         val id = value.selectedTerminal.get.id
 
         EventBus.subscribe(s"terminal-$id-stdout", message =>
@@ -63,8 +60,12 @@ class TerminalHandler extends ActionHandler(zoomTo(_.terminalState)) {
         )
 
         effectOnly(
-          Effect(Http.getRelative(s"/api/terminals/$id/connect")) >>
-            Effect.action(UpdateTerminalConnected(true))
+          Effect.action(Http.getRelative(s"/api/terminals/$id/connect").map(_ => UpdateTerminalConnected(true))) >>
+          Effect.action(UpdateLoadingTerminalHistory(false)) >>
+          Effect(Http.getRelativeAs[List[TerminalHistory]](s"/api/terminals/$id/history").map(history =>
+            history.getOrElse(List()).foreach(line => value.selectedTerminalRef.current.terminal.writeln(line.message))
+          )) >>
+          Effect.action(UpdateLoadingTerminalHistory(true))
         )
       }
 
@@ -136,6 +137,10 @@ class TerminalHandler extends ActionHandler(zoomTo(_.terminalState)) {
       )
 
 
+    case UpdateLoadingTerminalHistory(loading) =>
+      updated(value.copy(loadingTerminalHistory = loading))
+
+
     case UpdateSelectedTerminal(terminal) =>
       updated(value.copy(selectedTerminal = terminal))
 
@@ -147,9 +152,6 @@ class TerminalHandler extends ActionHandler(zoomTo(_.terminalState)) {
     case UpdateTerminalConnected(terminalConnected) =>
       updated(value.copy(terminalConnected = terminalConnected))
 
-
-    case UpdateTerminalHistory(terminalHistory) =>
-      updated(value.copy(terminalHistory = terminalHistory))
 
   }
 }

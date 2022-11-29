@@ -14,8 +14,8 @@ object GridStore {
 
   case class GridState[E, S](blocked: Boolean,
                              entities: List[E],
-                             items: List[GridPageItem],
-                             selectedItem: Option[GridPageItem],
+                             items: List[GridPageItem[E]],
+                             selectedItem: Option[GridPageItem[E]],
                              entitySubType: Option[EntitySubType],
                              viewMode: ViewMode,
                              searchQuery: Option[String],
@@ -55,11 +55,11 @@ object GridStore {
   case class UpdateEditParameterValues(entityType: EntityType, values: HMap[Parameter.Values]) extends DiodeAction
   case class UpdateEntitySubType(entityType: EntityType, subType: Option[EntitySubType]) extends DiodeAction
   case class UpdateEntities[E](entityType: EntityType, entities: List[E]) extends DiodeAction
-  case class UpdateItems(entityType: EntityType, gridItems: List[GridPageItem]) extends DiodeAction
+  case class UpdateItems[E](entityType: EntityType, gridItems: List[GridPageItem[E]]) extends DiodeAction
   case class UpdateOwner(entityType: EntityType, owner: Option[FilterItem]) extends DiodeAction
   case class UpdateOwners(entityType: EntityType, owners: Map[String, Int]) extends DiodeAction
   case class UpdateSearchQuery(entityType: EntityType, searchQuery: Option[String]) extends DiodeAction
-  case class UpdateSelectedItem(entityType: EntityType, item: Option[GridPageItem]) extends DiodeAction
+  case class UpdateSelectedItem[E](entityType: EntityType, item: Option[GridPageItem[E]]) extends DiodeAction
   case class UpdateSortOrdering(entityType: EntityType, ordering: SortOrdering) extends DiodeAction
   case class UpdateTag(entityType: EntityType, tag: Option[FilterItem]) extends DiodeAction
   case class UpdateTags(entityType: EntityType, tags: Map[String, Int]) extends DiodeAction

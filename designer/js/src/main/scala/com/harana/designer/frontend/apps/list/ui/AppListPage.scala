@@ -25,13 +25,13 @@ import slinky.web.html.{div, i}
       state = Circuit.state(zoomTo(_.appListState)),
       title = i"heading.section.apps",
       tableColumns = List(titleColumn, tagsColumn),
-      tableContent = (column: Column, item: GridPageItem) => column match {
+      tableContent = (column: Column, item: GridPageItem[_]) => column match {
         case `titleColumn` => div(item.title)
         case `tagsColumn` => div(item.tags)
       },
       allowDelete = false,
       allowEdit = false,
-      itemMenuItems = Some((item: GridPageItem) =>
+      itemMenuItems = Some((item: GridPageItem[_]) =>
         List(
           MenuItem(i"apps.menu.stop",
             iconPrefix = Some("lindua", "repeat"),

@@ -29,9 +29,7 @@ object EventBus {
       eventBus.registerHandler(Main.claims.userId, new EventBusHeaders { val `type` = messageType }, (error: std.Error, result: js.Any) => {
         val message = result.asInstanceOf[EventBusMessage]
         if (message.headers.`type`.equals(messageType)) {
-          val body = new String(Base64.getDecoder.decode(message.body), "UTF-8")
-          val body2 = new String(Base64.getDecoder.decode(body), "UTF-8")
-          fn(body2)
+          fn(new String(Base64.getDecoder.decode(message.body), "UTF-8"))
         }
       })
     } else

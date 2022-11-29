@@ -58,7 +58,7 @@ object LiveFlows {
                                 updated = Instant.now
                                )
 
-        _                   <- mongo.update[FlowExecution]("FlowExecutions", newFlowExecution)
+        _                   <- mongo.update[FlowExecution]("FlowExecutions", newFlowExecution.id, newFlowExecution)
 
         response            =  Response.JSON(newFlowExecution.asJson)
       } yield response

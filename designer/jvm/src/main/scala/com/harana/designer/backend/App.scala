@@ -173,7 +173,6 @@ object App extends CoreApp {
 
     Route("/api/content/:id",                                 GET,      rc => System.content(rc).provideLayer(system)),
 
-    Route("/api/terminals/:id/history",                       GET,      rc => Terminals.history(rc).provideLayer(terminals)),
     Route("/api/terminals",                                   GET,      rc => Terminals.list(rc).provideLayer(terminals)),
     Route("/api/terminals",                                   POST,     rc => Terminals.create(rc).provideLayer(terminals)),
     Route("/api/terminals",                                   PUT,      rc => Terminals.update(rc).provideLayer(terminals)),
@@ -183,6 +182,7 @@ object App extends CoreApp {
     Route("/api/terminals/:id/disconnect",                    GET,      rc => Terminals.disconnect(rc).provideLayer(terminals)),
     Route("/api/terminals/:id/restart",                       GET,      rc => Terminals.restart(rc).provideLayer(terminals)),
     Route("/api/terminals/:id/clear",                         GET,      rc => Terminals.clear(rc).provideLayer(terminals)),
+    Route("/api/terminals/:id/history",                       GET,      rc => Terminals.history(rc).provideLayer(terminals)),
 
     // User
     Route("/api/user/onboard",                                GET,      rc => User.onboard(rc).provideLayer(user)),
@@ -203,6 +203,7 @@ object App extends CoreApp {
 
 //      _                     <- Mongo.createQueue[Event]("EventsGlobal").provideLayer(Layers.mongo)
 
+      _                     <- Terminals.startup.provideLayer(terminals)
       _                     <- System.createIndexes.provideLayer(system)
       _                     <- Vertx.startHttpServer(
                                 s"designer.$domain",

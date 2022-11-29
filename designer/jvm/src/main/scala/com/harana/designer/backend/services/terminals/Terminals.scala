@@ -32,5 +32,7 @@ object Terminals {
     def history(rc: RoutingContext): Task[Response]
 
     def shutdown: UIO[Unit]
+
+    def startup: Task[Unit]
   }
 }

@@ -19,11 +19,11 @@ object menus {
 
   def headingMenu(viewMode: ViewMode,
                   itemType: String,
-                  item: Option[GridPageItem],
+                  item: Option[GridPageItem[_]],
                   allowEdit: Boolean,
                   allowDelete: Boolean,
                   deleteDialogRef: ReactRef[Dialog.Def],
-                  itemMenuItems: Option[GridPageItem => List[ReactElement]]) =
+                  itemMenuItems: Option[GridPageItem[_] => List[ReactElement]]) =
    HeadingItem.IconMenu(
      icon = ("icomoon", "menu7"),
      tooltip = i"files.menu.edit",
@@ -34,11 +34,11 @@ object menus {
 
   def itemMenu(viewMode: ViewMode,
                itemType: String,
-               item: GridPageItem,
+               item: GridPageItem[_],
                allowEdit: Boolean,
                allowDelete: Boolean,
                deleteDialogRef: ReactRef[Dialog.Def],
-               itemMenuItems: Option[GridPageItem => List[ReactElement]]) = {
+               itemMenuItems: Option[GridPageItem[_] => List[ReactElement]]) = {
     val items = ListBuffer[ReactElement]()
     if (viewMode == ViewMode.List) {
       items += menus.openItem(item)
@@ -73,7 +73,7 @@ object menus {
     ) else List.empty[HeadingItem]
 
 
-  def openItem(item: GridPageItem) =
+  def openItem(item: GridPageItem[_]) =
     MenuItem(
       label = i"common.grid.item.menu.open",
       iconPrefix = Some("lindua", "file-pencil"),
@@ -81,7 +81,7 @@ object menus {
     )
 
 
-  def editItem(itemType: String, item: GridPageItem) =
+  def editItem(itemType: String, item: GridPageItem[_]) =
     MenuItem(
       label = i"common.grid.item.menu.edit",
       iconPrefix = Some("lindua", "file-pencil"),
@@ -95,7 +95,7 @@ object menus {
       )
     )
 
-  def deleteItem(itemType: String, item: GridPageItem, dialogRef: ReactRef[Dialog.Def]) =
+  def deleteItem(itemType: String, item: GridPageItem[_], dialogRef: ReactRef[Dialog.Def]) =
     MenuItem(
       label = i"common.grid.item.menu.delete",
       iconPrefix = Some("lindua", "trash"),

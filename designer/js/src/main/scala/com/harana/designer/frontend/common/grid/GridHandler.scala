@@ -27,7 +27,7 @@ abstract case class GridHandler[Entity <: Id, S](entityType: EntityType, state: 
   private val tagPreferenceId = s"designer.$entityType.filter.tag"
   private val viewModePreferenceId = s"designer.$entityType.viewMode"
 
-  def toGridPageItem(entity: Entity): GridPageItem
+  def toGridPageItem(entity: Entity): GridPageItem[Entity]
   def toEntity(editedItem: Option[Entity], subType: Option[EntitySubType], values: HMap[Parameter.Values]): Entity
 
   def onInit(userPreferences: Map[String, String]): Option[Effect] = None
@@ -217,7 +217,7 @@ abstract case class GridHandler[Entity <: Id, S](entityType: EntityType, state: 
 
 
     case UpdateItems(e, items) =>
-      if (e.equals(entityType)) updated(value.copy(items = items)) else noChange
+      if (e.equals(entityType)) updated(value.copy(items = items.asInstanceOf[List[GridPageItem[Entity]]])) else noChange
 
 
     case UpdateOwner(e, owner) =>
@@ -242,7 +242,7 @@ abstract case class GridHandler[Entity <: Id, S](entityType: EntityType, state: 
 
     case UpdateSelectedItem(e, item) =>
       if (e.equals(entityType)) {
-        updated(value.copy(selectedItem = item, editValues = item.map(_.parameterValues).getOrElse(HMap.empty)))
+        updated(value.copy(selectedItem = item.asInstanceOf[Option[GridPageItem[Entity]]], editValues = item.map(_.parameterValues).getOrElse(HMap.empty)))
       } else noChange
 
 

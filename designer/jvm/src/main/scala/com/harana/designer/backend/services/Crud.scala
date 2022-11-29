@@ -252,7 +252,7 @@ object Crud {
       _                 =  entityJson.put("updated", Instant.now)
       entity            <- Task.fromEither(decode[E](entityJson.toString))
       _                 <- logger.debug(entityJson.toString)
-      _                 <- mongo.update[E](collection, entity).when(isValid)
+      _                 <- mongo.update[E](collection, entity.id, entity).when(isValid)
       _                 <- logger.debug(s"Update $entityName")
     } yield entity
 

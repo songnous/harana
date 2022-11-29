@@ -17,9 +17,8 @@ import com.harana.ui.external.shoelace.Radio
 import diode.{ActionResult, Dispatcher}
 import slinky.core.StatelessComponent
 import slinky.core.annotations.react
-import slinky.core.facade.Hooks.useEffect
 import slinky.core.facade.{Fragment, React, ReactElement}
-
+import scala.language.existentials
 import scala.collection.mutable.ListBuffer
 
 @react class GridPage extends StatelessComponent {
@@ -28,10 +27,10 @@ import scala.collection.mutable.ListBuffer
                    state: GridState[_, _],
                    title: String,
                    tableColumns: List[Column],
-                   tableContent: (Column, GridPageItem) => ReactElement,
+                   tableContent: (Column, GridPageItem[_]) => ReactElement,
                    toolbarItems: List[HeadingItem] = List(),
                    itemSubTypes: List[(String, EntitySubType)] = List(),
-                   itemMenuItems: Option[GridPageItem => List[ReactElement]] = None,
+                   itemMenuItems: Option[GridPageItem[_] => List[ReactElement]] = None,
                    fixedNavigationBar: Boolean = true,
                    footerNavigationBar: Option[ReactElement] = None,
                    sidebarSections: List[SidebarSection] = List(),
@@ -145,7 +144,7 @@ import scala.collection.mutable.ListBuffer
               subtitle = item.description,
               chartType = None,
               link = item.link,
-              background = item.background.get,
+              background = item.background,
               menuItems = menus.itemMenu(props.state.viewMode, props.entityType, item, props.allowEdit, props.allowDelete, deleteDialogRef, props.itemMenuItems)
             ).withKey(item.id)
           },

@@ -119,7 +119,7 @@ object LiveVertx {
         result  <- IO.effectAsync[Throwable, MessageConsumer[String]] { cb =>
                       val consumer = eb.consumer(address, (message: Message[String]) => {
                         if (message.headers().get("type").equals(`type`)) {
-                          val body = new String(Base64.getDecoder.decode(message.body().getBytes("UTF-8")))
+                          val body = if (message.body() == null) null else new String(Base64.getDecoder.decode(message.body()))
                           runAsync(onMessage(body))
                         }}
                       )
@@ -147,8 +147,7 @@ object LiveVertx {
       for {
         eb  <- vertx.map(_.eventBus)
         m   <- Task(Base64.getEncoder.encode(message.getBytes("UTF-8")))
-        _   <- Task(eb.publish(address, m, new DeliveryOptions().addHeader("type", `type`)))
-        _   <- logger.error(s"Event bus message: ${`type`} published to address: $address with message: $message")
+        _   <- Task(eb.publish(address, new String(m), new DeliveryOptions().addHeader("type", `type`)))
       } yield ()
 
 
@@ -156,7 +155,6 @@ object LiveVertx {
       for {
         eb  <- vertx.map(_.eventBus)
         _   <- Task(eb.send(address, null, new DeliveryOptions().addHeader("type", `type`)))
-        _   <- logger.error(s"Event bus message: ${`type`} sent to address: $address")
       } yield ()
 
 
@@ -164,8 +162,7 @@ object LiveVertx {
       for {
         eb  <- vertx.map(_.eventBus)
         m   <- Task(Base64.getEncoder.encode(message.getBytes("UTF-8")))
-        _   <- Task(eb.send(address, m, new DeliveryOptions().addHeader("type", `type`)))
-        _   <- logger.error(s"Event bus message: ${`type`} sent to address: $address with message: $message")
+        _   <- Task(eb.send(address, new String(m), new DeliveryOptions().addHeader("type", `type`)))
       } yield ()
 
 
@@ -173,7 +170,6 @@ object LiveVertx {
       for {
         eb  <- vertx.map(_.eventBus)
         _   <- Task(eb.send(address, null, new DeliveryOptions().addHeader("type", `type`)))
-        _   <- logger.error(s"Event bus message: ${`type`} sent to address: $address")
       } yield ()
 
 

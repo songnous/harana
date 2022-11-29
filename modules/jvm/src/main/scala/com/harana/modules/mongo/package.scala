@@ -131,14 +131,14 @@ package object mongo {
     Task.fromEither(entity.toBson.left.map(err => new Exception(err.mkString))).map(_.asDocument())
 
 
-  case class Message[E <: Id](id: EntityId,
-                              ack: Option[String] = None,
-                              visible: Option[Date] = None,
-                              deleted: Option[Date] = None,
-                              tries: Int = 0,
-                              payload: E) extends Id
+  case class Message[E](id: EntityId,
+                        ack: Option[String] = None,
+                        visible: Option[Date] = None,
+                        deleted: Option[Date] = None,
+                        tries: Int = 0,
+                        payload: E) extends Id
 
-  implicit def encodeMessage[E <: Id](implicit encoder: Encoder[E]): Encoder[Message[E]] =
+  implicit def encodeMessage[E](implicit encoder: Encoder[E]): Encoder[Message[E]] =
     Encoder.instance[Message[E]] { m =>
       Json.obj(
         ("id", Json.fromString(m.id)),
@@ -150,7 +150,7 @@ package object mongo {
       )
     }
 
-  implicit def decodeMessage[E <: Id](implicit decoder: Decoder[E]): Decoder[Message[E]] =
+  implicit def decodeMessage[E](implicit decoder: Decoder[E]): Decoder[Message[E]] =
     (c: HCursor) => for {
       idField <- c.downField("id").as[EntityId]
       ackField <- c.downField("ack").as[String]

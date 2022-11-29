@@ -22,7 +22,7 @@ import scala.util.Random
 									 subtitle: Option[String],
 									 chartType: Option[PillChartType],
 									 link: Option[LinkType],
-									 background: Background,
+									 background: Option[Background],
 									 menuItems: List[ReactElement] = List())
 
 	def render() =

@@ -1,19 +1,20 @@
 package com.harana.designer.frontend.terminal
 
 import com.harana.sdk.shared.models.terminals.{Terminal, TerminalHistory}
+import com.harana.sdk.shared.utils.Random
 import com.harana.ui.external.xterm.XTerm
 import diode.{Action => DiodeAction}
 import slinky.core.facade.{React, ReactRef}
 
 object TerminalStore {
 
-  case class State(selectedTerminal: Option[Terminal],
+  case class State(loadingTerminalHistory: Boolean,
+                   selectedTerminal: Option[Terminal],
                    selectedTerminalRef: ReactRef[XTerm.RefType],
                    terminalConnected: Boolean,
-                   terminalHistory: List[String],
                    terminals: List[Terminal])
 
-  val initialState = State(None, React.createRef[XTerm.RefType], false, List(), List())
+  val initialState = State(false, None, React.createRef[XTerm.RefType], false, List())
 
   case object Nothing extends DiodeAction
   case class Init(userPreferences: Map[String, String]) extends DiodeAction
@@ -36,6 +37,6 @@ object TerminalStore {
   case class UpdateSelectedTerminal(terminal: Option[Terminal]) extends DiodeAction
   case class UpdateTerminals(terminals: List[Terminal]) extends DiodeAction
   case class UpdateTerminalConnected(terminalConnected: Boolean) extends DiodeAction
-  case class UpdateTerminalHistory(terminalHistory: List[String]) extends DiodeAction
+  case class UpdateLoadingTerminalHistory(loading: Boolean) extends DiodeAction
 
 }

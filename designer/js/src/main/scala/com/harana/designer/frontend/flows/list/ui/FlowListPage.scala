@@ -24,7 +24,7 @@ import slinky.web.html.{div, i}
       state = Circuit.state(zoomTo(_.flowListState)),
       title = i"heading.section.flows",
       tableColumns = List(titleColumn, tagsColumn, historyColumn),
-      tableContent = (column: Column, item: GridPageItem) => div(),
+      tableContent = (column: Column, item: GridPageItem[_]) => div(),
     )
   }
 }

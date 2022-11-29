@@ -20,6 +20,7 @@ class AppListHandler extends GridHandler[App, AppListStore.State]("apps", zoomTo
       tags = app.tags,
       created = app.created,
       updated = app.updated,
+      entity = app,
       link = Some(LinkType.Page(s"/apps/${app.id}")),
       background = app.background,
       parameterValues = HMap[Parameter.Values](

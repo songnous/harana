@@ -25,7 +25,7 @@ import slinky.web.html.div
       state = Circuit.state(zoomTo(_.dataSourceListState)),
       title = i"heading.section.data",
       tableColumns = List(titleColumn, tagsColumn, typeColumn, historyColumn),
-      tableContent = (column: Column, item: GridPageItem) => column match {
+      tableContent = (column: Column, item: GridPageItem[_]) => column match {
         case `titleColumn` => div(item.title)
         case `tagsColumn` => TagsColumn(Set("one", "two"))
         case `typeColumn` =>

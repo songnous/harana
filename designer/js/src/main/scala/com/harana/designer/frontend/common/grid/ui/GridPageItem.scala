@@ -9,18 +9,19 @@ import com.harana.ui.components.widgets.PillChartType
 
 import java.time.Instant
 
-case class GridPageItem(id: String,
-                        title: String,
-                        description: Option[String],
-                        tags: Set[String],
-                        created: Instant,
-                        updated: Instant,
-                        link: Option[LinkType],
-                        chartType: Option[PillChartType] = None,
-                        entitySubType: Option[String] = None,
-                        background: Option[Background] = None,
-                        parameterValues: HMap[Parameter.Values] = HMap.empty,
-                        additionalData: Map[String, AnyRef] = Map.empty)
+case class GridPageItem[E](id: String,
+                          title: String,
+                          description: Option[String],
+                          tags: Set[String],
+                          created: Instant,
+                          updated: Instant,
+                          entity: E,
+                          link: Option[LinkType],
+                          chartType: Option[PillChartType] = None,
+                          entitySubType: Option[String] = None,
+                          background: Option[Background] = None,
+                          parameterValues: HMap[Parameter.Values] = HMap.empty,
+                          additionalData: Map[String, AnyRef] = Map.empty)
 
 object GridPageItem {
   val titleParameter = StringParameter("title")
