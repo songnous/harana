@@ -56,7 +56,7 @@ source ~/.zprofile
 sudo mkdir -p /opt/harana
 sudo chown -R $(id -un) /opt/harana
 
-cd "~/Group Containers/group.com.docker/"
+cd ~/Library/"Group Containers"/group.com.docker
 cat settings.json | jq ".filesharingDirectories |= . + [\"/opt/harana\"]" >| settings.tmp
 mv settings.tmp settings.json
 
@@ -65,10 +65,13 @@ osascript -e 'quit app "Docker"'; open -a Docker ; while [ -z "$(docker info 2> 
 
 ## Setup Kubernetes Cluster
 ```bash
-k3d cluster create harana --api-port 6550 --registry-create registry.harana.build
-k3d node create core --cluster harana
-k3d node create task --cluster harana
-k3d node create terminal --cluster harana
+k3d cluster create harana --api-port 6550 --registry-create registry.harana.build -v /opt/harana:/opt/harana
+k3d node create system --k3s-node-label type=system --cluster harana
+k3d node create core --k3s-node-label type=core --cluster harana
+k3d node create task --k3s-node-label type=task --cluster harana
+kubectl create ns harana-designer
+kubectl create ns harana-id
+kubectl apply -f user-home.yaml
 ```
 
 ## Setup HAProxy Certificates
