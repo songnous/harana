@@ -22,7 +22,7 @@ import scala.scalajs.js.Dynamic.literal
   type Props = Unit
 
   val titleColumn = Column(Some(i"schedules.common.title"), Map(Desktop -> ColumnSize.Four))
-  val tagsColumn = Column(Some(i"schedules.common.tags"), Map(Desktop -> ColumnSize.Three))
+  val tagsColumn = Column(Some(i"schedules.common.tags"), Map(Desktop -> ColumnSize.Two))
   val lastRunColumn = Column(Some(i"schedules.common.lastrun"), Map(Desktop -> ColumnSize.Two))
   val historyColumn = Column(Some(i"schedules.common.history"), Map(Desktop -> ColumnSize.Three))
 
@@ -47,7 +47,7 @@ import scala.scalajs.js.Dynamic.literal
             onClick = None)
           )
       ),
-      tableColumns = List(titleColumn, tagsColumn, lastRunColumn, historyColumn),
+      tableColumns = List(titleColumn, lastRunColumn, tagsColumn, historyColumn),
       tableContent = (column: Column, item: GridPageItem[_]) => {
         val schedule = item.entity.asInstanceOf[Schedule]
         val execution = schedule.recentExecutions.lastOption
@@ -116,8 +116,8 @@ import scala.scalajs.js.Dynamic.literal
 
   def statusIcon(status: ScheduleExecutionStatus) =
     if (status == ScheduleExecutionStatus.Succeeded)
-      Icon(library = Some("icomoon"), name = "checkmark3", className = Some("schedule-success"))
+      Icon(library = Some("icomoon"), name = "checkmark-circle", className = Some("schedule-success"))
     else
-      Icon(library = Some("icomoon"), name = "cross2", className = Some("schedule-failure"))
+      Icon(library = Some("icomoon"), name = "cancel-circle2", className = Some("schedule-failure"))
 
 }

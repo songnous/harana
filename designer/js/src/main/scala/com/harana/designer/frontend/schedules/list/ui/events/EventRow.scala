@@ -8,7 +8,7 @@ import com.harana.sdk.shared.models.schedules.Event
 import com.harana.ui.external.shoelace.{Button, ButtonGroup, MenuItem, Select}
 import slinky.core.FunctionalComponent
 import slinky.core.annotations.react
-import slinky.web.html.{i, td, tr}
+import slinky.web.html.{className, i, td, tr}
 
 @react object EventRow {
 
@@ -18,7 +18,7 @@ import slinky.web.html.{i, td, tr}
 
   val component = FunctionalComponent[Props] { props =>
     tr(
-      td(
+      td(className := "schedule-row-type")(
         Select(
           hoist = Some(true),
           name = s"${getClass.getSimpleName}-${props.rowIndex}",
@@ -48,13 +48,13 @@ import slinky.web.html.{i, td, tr}
         case e @ Event.ScheduleFailed(_, _) => ScheduleEditor(props.rowIndex, e)
         case e @ Event.Webhook(_, _) => ScheduleEditor(props.rowIndex, e)
       },
-      td(
+      td(className := "schedule-row-actions")(
         ButtonGroup(label = Some("Buttons"))(
           List(
-            Button(icon = Some(("icomoon", "plus3")), circle = Some(true), size = Some("small"), onClick = Some(_ =>
+            Button(icon = Some(("icomoon", "plus3")), iconClassName = Some("schedule-action-button"), circle = Some(true), size = Some("small"), onClick = Some(_ =>
               Circuit.dispatch(AddEvent(Event.CalendarInterval()))
             )),
-            Button(icon = Some(("icomoon", "minus3")), circle = Some(true), size = Some("small"), disabled = Some(!props.allowDelete), onClick = Some(_ =>
+            Button(icon = Some(("icomoon", "minus3")), iconClassName = Some("schedule-action-button"), circle = Some(true), size = Some("small"), disabled = Some(!props.allowDelete), onClick = Some(_ =>
               Circuit.dispatch(DeleteEvent(props.rowIndex))
             ))
           )

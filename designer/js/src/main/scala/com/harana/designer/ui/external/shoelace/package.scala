@@ -10,6 +10,7 @@ import scala.scalajs.js
 package object shoelace {
 
   val libraryAttr = CustomAttribute[String]("library")
+  val classAttr = CustomAttribute[String]("class")
   val nameAttr = CustomAttribute[String]("name")
   val partAttr = CustomAttribute[String]("part")
   val slotAttr = CustomAttribute[String]("slot")
@@ -21,7 +22,7 @@ package object shoelace {
   def icon(slot: String, parentClass: Option[String], name: (String, String)) =
     CustomTag("sl-icon")(
       partAttr := "icon",
-      className := s"${parentClass.getOrElse("default")}-$slot-icon",
+      classAttr := parentClass.getOrElse("default"),
       libraryAttr := name._1,
       nameAttr := name._2,
       slotAttr := slot,

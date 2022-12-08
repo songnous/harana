@@ -25,7 +25,7 @@ import slinky.web.html._
 
   val component = FunctionalComponent[Props] { props =>
     tr(
-      td(
+      td(className := "schedule-row-type")(
         Select(
           hoist = Some(true),
           name = s"${getClass.getSimpleName}-${props.rowIndex}",
@@ -52,13 +52,13 @@ import slinky.web.html._
         case a @ Action.ScheduleEnable(_) => ScheduleEditor(props.rowIndex, a, props.schedules)
         case a @ Action.ScheduleDisable(_) => ScheduleEditor(props.rowIndex, a, props.schedules)
       },
-      td(
+      td(className := "schedule-row-actions")(
         ButtonGroup(label = Some("Buttons"))(
           List(
-            Button(icon = Some(("icomoon", "plus3")), circle = Some(true), size = Some("small"), onClick = Some(_ =>
+            Button(icon = Some(("icomoon", "plus3")), iconClassName = Some("schedule-action-button"), circle = Some(true), size = Some("small"), onClick = Some(_ =>
               Circuit.dispatch(AddAction(Action.DataSync()))
             )),
-            Button(icon = Some(("icomoon", "minus3")), circle = Some(true), size = Some("small"), disabled = Some(!props.allowDelete), onClick = Some(_ =>
+            Button(icon = Some(("icomoon", "minus3")), iconClassName = Some("schedule-action-button"), circle = Some(true), size = Some("small"), disabled = Some(!props.allowDelete), onClick = Some(_ =>
               Circuit.dispatch(DeleteAction(props.rowIndex))
             ))
           )

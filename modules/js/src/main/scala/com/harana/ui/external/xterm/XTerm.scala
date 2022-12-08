@@ -1,11 +1,18 @@
 package com.harana.ui.external.xterm
 
+import org.scalajs.dom.Element
 import slinky.core.ExternalComponentWithRefType
 import slinky.core.annotations.react
 import typings.react.mod.KeyboardEvent
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
+import scala.scalajs.js.|
+
+
+@JSImport("xterm/css/xterm.css", JSImport.Default)
+@js.native
+object XTermCSS extends js.Object
 
 @JSImport("updated-xterm-for-react", "XTerm")
 @js.native
@@ -14,6 +21,21 @@ object ReactXTerm extends js.Object
 @js.native trait XTermApi extends js.Object {
   val terminal: Terminal = js.native
 }
+
+@JSImport("xterm-addon-fit", "FitAddon")
+@js.native
+class FitAddon extends js.Object {
+  def fit(): Unit = js.native
+  def proposeDimensions(): ITerminalDimensions = js.native
+}
+
+@JSImport("xterm-addon-fit", "ITerminalDimensions")
+@js.native
+class ITerminalDimensions extends js.Object {
+  val rows: Int = js.native
+  val cols: Int = js.native
+}
+
 
 @JSImport("xterm", "IBufferNamespace")
 @js.native
@@ -46,10 +68,23 @@ class BufferLine extends js.Object {
                         endColumn: Option[Int] = None): String = js.native
 }
 
+@JSImport("xterm", "IEvent")
+@js.native
+class IEvent[T] extends js.Object {
+  def addListener(fn: T => Unit) = js.native
+}
+
 @JSImport("xterm", "Terminal")
 @js.native
 class Terminal extends js.Object {
   val buffer: BufferNamespace = js.native
+  val cols: Int = js.native
+  val rows: Int = js.native
+  def onBinary(fn: String => Unit) = js.native
+  def onData(fn: js.Function1[String, Unit]) = js.native
+  def onKey(fn: js.Function1[KeyEvent, Unit]) = js.native
+  def onLineFeed(fn: js.Function0[Unit]) = js.native
+  var options: TerminalOptions = js.native
   def blur(): Unit = js.native
   def clear(): Unit = js.native
   def clearSelection(): Unit = js.native
@@ -57,6 +92,8 @@ class Terminal extends js.Object {
   def getOption(key: String): js.Any = js.native
   def getSelection(): String = js.native
   def hasSelection(): Boolean = js.native
+  def loadAddon(addon: js.Object): Unit = js.native
+  def open(element: Element): Unit = js.native
   def paste(data: String): Unit = js.native
   def refresh(start: Int, end: Int): Unit = js.native
   def reset(): Unit = js.native
@@ -97,8 +134,8 @@ trait RenderEvent extends js.Object {
 }
 
 trait TerminalOptions extends js.Object {
-  val allowProposedApi: js.UndefOr[Boolean] = js.undefined
-  val allowTransparency: js.UndefOr[Boolean] = js.undefined
-  val cursorBlink: js.UndefOr[Boolean] = js.undefined
-  val cursorStyle: js.UndefOr[String] = js.undefined
+  var allowProposedApi: js.UndefOr[Boolean] = js.undefined
+  var allowTransparency: js.UndefOr[Boolean] = js.undefined
+  var cursorBlink: js.UndefOr[Boolean] = js.undefined
+  var cursorStyle: js.UndefOr[String] = js.undefined
 }

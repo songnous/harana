@@ -223,7 +223,8 @@ object Library {
     "style-loader"                        -> "3.3.1",
     "throttle-debounce"                   -> "5.0.0",
     "url-loader"                          -> "4.1.1",
-    "updated-xterm-for-react"             -> "5.0.0"
+    "updated-xterm-for-react"             -> "5.0.0",
+    "xterm-addon-fit"                     -> "0.6.0"
   ))
 
   val okhttp = Def.setting(Seq(

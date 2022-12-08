@@ -178,7 +178,7 @@ object App extends CoreApp {
     Route("/api/terminals",                                   PUT,      rc => Terminals.update(rc).provideLayer(terminals)),
     Route("/api/terminals/:id",                               GET,      rc => Terminals.get(rc).provideLayer(terminals)),
     Route("/api/terminals/:id",                               DELETE,   rc => Terminals.delete(rc).provideLayer(terminals)),
-    Route("/api/terminals/:id/connect",                       GET,      rc => Terminals.connect(rc).provideLayer(terminals)),
+    Route("/api/terminals/:id/connect/:rows/:cols",           GET,      rc => Terminals.connect(rc).provideLayer(terminals)),
     Route("/api/terminals/:id/disconnect",                    GET,      rc => Terminals.disconnect(rc).provideLayer(terminals)),
     Route("/api/terminals/:id/restart",                       GET,      rc => Terminals.restart(rc).provideLayer(terminals)),
     Route("/api/terminals/:id/clear",                         GET,      rc => Terminals.clear(rc).provideLayer(terminals)),

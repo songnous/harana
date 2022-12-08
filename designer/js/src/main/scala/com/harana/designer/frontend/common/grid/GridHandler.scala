@@ -193,11 +193,14 @@ abstract case class GridHandler[Entity <: Id, S](entityType: EntityType, state: 
 
 
     case UpdateAdditionalState(e, additionalState) =>
-      if (e.equals(entityType)) updated(value.copy(additionalState = additionalState.asInstanceOf[S])) else noChange
+      if (e.equals(entityType)) {
+        println("Updating state: " + e)
+        updated(value.copy(additionalState = additionalState.asInstanceOf[S]), Effect.action(RefreshEditDialog(e)))
+      } else noChange
 
 
     case UpdateEditParameters(e, parameters) =>
-      if (e.equals(entityType)) updated(value.copy(editParameterGroups = parameters), Effect.action(RefreshEditDialog(e, value.editValues))) else noChange
+      if (e.equals(entityType)) updated(value.copy(editParameterGroups = parameters), Effect.action(RefreshEditDialogWithValues(e, value.editValues))) else noChange
 
 
     case UpdateEditParameterValue(e, k, v) =>

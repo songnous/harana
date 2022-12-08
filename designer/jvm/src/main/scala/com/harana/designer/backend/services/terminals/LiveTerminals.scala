@@ -19,8 +19,10 @@ import io.circe.jawn
 import io.circe.syntax.EncoderOps
 import io.vertx.core.eventbus.MessageConsumer
 import io.vertx.ext.web.RoutingContext
+import skuber.api.client.KubernetesClient
 import skuber.json.format.podFormat
-import skuber.{Container, ObjectMeta, Pod}
+import skuber.{Container, EnvVar, ExecAction, ObjectMeta, Pod, Probe}
+import zio.clock.Clock
 import zio.stream.ZStream
 import zio.{Hub, Task, UIO, ZIO, ZLayer}
 
@@ -50,12 +52,15 @@ object LiveTerminals {
       for {
         userId                <- jwt.claims[DesignerClaims](rc).map(_.userId)
         terminalId            <- Task(rc.request.getParam("id"))
+        terminalRows          <- Task(rc.request.getParam("rows"))
+        terminalColumns       <- Task(rc.request.getParam("cols"))
         namespace             <- config.string("terminal.namespace")
         podName               =  s"terminal-$terminalId".toLowerCase
         terminal              <- mongo.get[Terminal]("Terminals", terminalId)
 
         client                <- kubernetes.newClient
-        _                     <- start(userId, terminalId).whenM(!kubernetes.exists(client, namespace, podName))
+        _                     <- kubernetes.waitForPodToTerminate(client, namespace, podName)
+        _                     <- start(client, userId, terminalId, terminalRows, terminalColumns).whenM(!kubernetes.exists[Pod](client, namespace, podName))
 
         sourceStream          <- subscribeToStdin(userId, terminalId)
 
@@ -63,12 +68,12 @@ object LiveTerminals {
                                   containerName = Some("terminal"),
                                   stdin = Some(sourceStream),
                                   stdout = Some(value = (m: String) =>
-                                    mongo.insert[TerminalHistory](s"Terminals-$terminalId", TerminalHistory(m)) *>
-                                    vertx.publishMessage(userId, s"terminal-$terminalId-stdout", m)
+                                    (mongo.insert[TerminalHistory](s"Terminals-$terminalId", TerminalHistory(m)) *>
+                                      vertx.publishMessage(userId, s"terminal-$terminalId-stdout", m))
                                   ),
                                   stderr = Some((m: String) =>
-                                    mongo.insert[TerminalHistory](s"Terminals-$terminalId", TerminalHistory(m)) *>
-                                    vertx.publishMessage(userId, s"terminal-$terminalId-stderr", m)
+                                    (mongo.insert[TerminalHistory](s"Terminals-$terminalId", TerminalHistory(m)) *>
+                                    vertx.publishMessage(userId, s"terminal-$terminalId-stderr", m))
                                   ),
                                   command = Seq(terminal.get.shell), tty = true).retryUntilM(_ =>
                                     kubernetes.get[Pod](client, namespace, podName).map(_.isDefined).orDie
@@ -85,20 +90,21 @@ object LiveTerminals {
         _                     <- vertx.publishMessage("terminal", "unsubscribe", Map("terminalId" -> terminalId, "sessionId" -> sessionId).asJson.noSpaces)
         sourceHub             <- Hub.unbounded[String]
         sourceStream          =  ZStream.fromHub(sourceHub)
-        consumer              <- vertx.subscribe(userId, s"terminal-$terminalId-stdin", m =>
+        stdinConsumer         <- vertx.subscribe(userId, s"terminal-$terminalId-stdin", m =>
                                     mongo.insert[TerminalHistory](s"Terminals-$terminalId", TerminalHistory(m)) *>
                                     sourceHub.publish(m).unit
                                  )
-        _                     =  subscribers.put(s"$terminalId-$sessionId-stdin", consumer)
+        resizeConsumer        <- vertx.subscribe(userId, s"terminal-$terminalId-resize", m => {
+                                    ZIO.unit
+                                 })
+        _                     =  subscribers.put(s"$terminalId-$sessionId-stdin", stdinConsumer)
+        _                     =  subscribers.put(s"$terminalId-$sessionId-resize", resizeConsumer)
       } yield sourceStream
 
 
-    private def start(userId: String, terminalId: String): Task[Unit] =
+    private def start(client: KubernetesClient, userId: String, terminalId: String, terminalRows: String, terminalColumns: String): Task[Unit] =
         for {
-          _                 <- logger.info(s"Starting Terminal for user: $userId")
-          client            <- kubernetes.newClient
-
-          podName           =  s"terminal-$terminalId".toLowerCase
+          podName           <- UIO(s"terminal-$terminalId".toLowerCase)
           namespace         <- config.string("terminal.namespace")
           nodeType          <- config.string("terminal.nodeType")
           serviceAccount    <- config.string("terminal.serviceAccount")
@@ -107,8 +113,10 @@ object LiveTerminals {
 
           container         =  Container(
                                 name = "terminal",
+                                env = List(EnvVar("COLUMNS", terminalColumns), EnvVar("LINES", terminalRows)),
                                 image = terminal.get.image,
-                                command = List("/bin/sh" , "-c", "tail -f /dev/null"))
+                                command = List("/bin/sh" , "-c", "touch /tmp/healthy && tail -f /dev/null"),
+                                livenessProbe = Some(Probe(periodSeconds = Some(1), action = ExecAction(List("cat", "/tmp/healthy")))))
 
           podSpec           =  Pod.Spec()
                                 .addContainer(container)
@@ -121,8 +129,7 @@ object LiveTerminals {
                                 labels = Map("harana/app" -> "terminal", "harana/user" -> userId),
                                 namespace = namespace))
 
-          _                 <- kubernetes.create(client, namespace, pod)
-          _                 <- kubernetes.close(client)
+          _                 <- kubernetes.createPodAndWait(client, namespace, pod, 1000)
         } yield ()
 
 
@@ -156,7 +163,7 @@ object LiveTerminals {
       for {
         terminal            <- Crud.get[Terminal]("Terminals", rc, config, jwt, logger, micrometer, mongo)
         terminalId          <- Task(rc.request.getParam("id"))
-        _                   <- mongo.updateFields("Terminals", terminalId, Map("history" -> List.empty)).when(terminal.isDefined)
+        _                   <- mongo.dropCollection(s"Terminals-$terminalId").when(terminal.isDefined)
         response            =  Response.Empty()
       } yield response
 
@@ -164,7 +171,7 @@ object LiveTerminals {
     def history(rc: RoutingContext): Task[Response] =
       for {
         terminalId          <- Task(rc.request.getParam("id"))
-        messages            <- mongo.all[TerminalHistory](s"terminal-$terminalId", sort = Some(("created", true)), limit = Some(1000))
+        messages            <- mongo.all[TerminalHistory](s"Terminals-$terminalId", sort = Some(("created", true)), limit = Some(1000))
         response            =  Response.JSON(messages.asJson)
       } yield response
 

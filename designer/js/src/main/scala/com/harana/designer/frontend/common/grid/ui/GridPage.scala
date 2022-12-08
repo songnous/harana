@@ -58,12 +58,21 @@ import scala.collection.mutable.ListBuffer
               width = props.editWidth
             )
 
-        case RefreshEditDialog(entityType, values) =>
+        case RefreshEditDialogWithValues(entityType, values) =>
           if (entityType == props.entityType)
             drawerRef.current.update(
               style = editStyle,
               values = values
             )
+
+        case RefreshEditDialog(entityType) =>
+          if (entityType == props.entityType) {
+            drawerRef.current.update(
+              style = editStyle,
+              values = props.state.editValues
+            )
+          }
+
         case _ =>
       }
       next(action)

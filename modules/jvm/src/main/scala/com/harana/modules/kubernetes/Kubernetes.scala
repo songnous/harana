@@ -30,6 +30,14 @@ object Kubernetes {
 
     def create[O <: ObjectResource](client: KubernetesClient, namespace: String, obj: O)(implicit fmt: Format[O], rd: ResourceDefinition[O], lc: LoggingContext): IO[K8SException, O]
 
+    def createPodAndWait(client: KubernetesClient, namespace: String, obj: Pod, startupTime: Long)(implicit fmt: Format[Pod], rd: ResourceDefinition[Pod], lc: LoggingContext): IO[K8SException, Pod]
+
+    def podInState(client: KubernetesClient, namespace: String, name: String, desiredState: String)(implicit fmt: Format[Pod], rd: ResourceDefinition[Pod], lc: LoggingContext): IO[K8SException, Boolean]
+
+    def podTerminating(client: KubernetesClient, namespace: String, name: String)(implicit fmt: Format[Pod], rd: ResourceDefinition[Pod], lc: LoggingContext): IO[K8SException, Boolean]
+
+    def waitForPodToTerminate(client: KubernetesClient, namespace: String, name: String)(implicit fmt: Format[Pod], rd: ResourceDefinition[Pod], lc: LoggingContext): IO[K8SException, Unit]
+
     def update[O <: ObjectResource](client: KubernetesClient, namespace: String, obj: O)(implicit fmt: Format[O], rd: ResourceDefinition[O], lc: LoggingContext): IO[K8SException, O]
 
     def delete[O <: ObjectResource](client: KubernetesClient, namespace: String, name: String, gracePeriodSeconds: Int = -1)(implicit rd: ResourceDefinition[O], lc: LoggingContext): IO[K8SException, Unit]
@@ -50,9 +58,9 @@ object Kubernetes {
 
     def listWithOptions[O <: ObjectResource](client: KubernetesClient, namespace: String, options: ListOptions)(implicit fmt: Format[ListResource[O]], rd: ResourceDefinition[ListResource[O]], lc: LoggingContext): IO[K8SException, ListResource[O]]
 
-    def updateStatus[O <: ObjectResource](client: KubernetesClient, namespace: String, obj: O)(implicit fmt: Format[O], rd: ResourceDefinition[O],statusEv: HasStatusSubresource[O], lc: LoggingContext): IO[K8SException, O]
+    def updateStatus[O <: ObjectResource](client: KubernetesClient, namespace: String, obj: O)(implicit fmt: Format[O], rd: ResourceDefinition[O], statusEv: HasStatusSubresource[O], lc: LoggingContext): IO[K8SException, O]
 
-    def getStatus[O <: ObjectResource](client: KubernetesClient, namespace: String, name: String)(implicit fmt: Format[O], rd: ResourceDefinition[O],statusEv: HasStatusSubresource[O], lc: LoggingContext): IO[K8SException, O]
+    def getStatus[O <: ObjectResource](client: KubernetesClient, namespace: String, name: String)(implicit fmt: Format[O], rd: ResourceDefinition[O], statusEv: HasStatusSubresource[O], lc: LoggingContext): IO[K8SException, O]
 
     def watch[O <: ObjectResource](client: KubernetesClient, namespace: String, obj: O)(implicit fmt: Format[O], rd: ResourceDefinition[O], lc: LoggingContext): IO[K8SException, Source[WatchEvent[O], _]]
 

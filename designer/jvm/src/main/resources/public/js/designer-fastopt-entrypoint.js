@@ -1,5 +1,5 @@
 module.exports = {
-  "require": (function(x0) {
+  "require": (function(x1) {
     return {
       "source-map": require("source-map"),
       "react-dom": require("react-dom"),
@@ -7,9 +7,9 @@ module.exports = {
       "react-syntax-highlighter/dist/esm/languages/hljs/css": require("react-syntax-highlighter/dist/esm/languages/hljs/css"),
       "history": require("history"),
       "@nivo/waffle": require("@nivo/waffle"),
-      "updated-xterm-for-react": require("updated-xterm-for-react"),
       "react-syntax-highlighter/dist/esm/languages/hljs/plaintext": require("react-syntax-highlighter/dist/esm/languages/hljs/plaintext"),
       "react": require("react"),
+      "xterm": require("xterm"),
       "react-syntax-highlighter/dist/esm/styles/hljs": require("react-syntax-highlighter/dist/esm/styles/hljs"),
       "react-proxy": require("react-proxy"),
       "react-syntax-highlighter/dist/esm/languages/hljs/scala": require("react-syntax-highlighter/dist/esm/languages/hljs/scala"),
@@ -18,7 +18,9 @@ module.exports = {
       "react-syntax-highlighter/dist/esm/languages/hljs/java": require("react-syntax-highlighter/dist/esm/languages/hljs/java"),
       "react-syntax-highlighter/dist/esm/languages/hljs/dockerfile": require("react-syntax-highlighter/dist/esm/languages/hljs/dockerfile"),
       "react-syntax-highlighter/dist/esm/languages/hljs/c-like": require("react-syntax-highlighter/dist/esm/languages/hljs/c-like"),
+      "xterm/css/xterm.css": require("xterm/css/xterm.css"),
       "react-syntax-highlighter/dist/esm/languages/hljs/go": require("react-syntax-highlighter/dist/esm/languages/hljs/go"),
+      "xterm-addon-fit": require("xterm-addon-fit"),
       "react-syntax-highlighter/dist/esm/languages/hljs/markdown": require("react-syntax-highlighter/dist/esm/languages/hljs/markdown"),
       "react-syntax-highlighter/dist/esm/languages/hljs/r": require("react-syntax-highlighter/dist/esm/languages/hljs/r"),
       "@vertx/eventbus-bridge-client.js": require("@vertx/eventbus-bridge-client.js"),
@@ -34,6 +36,6 @@ module.exports = {
       "react-syntax-highlighter/dist/esm/languages/hljs/bash": require("react-syntax-highlighter/dist/esm/languages/hljs/bash"),
       "react-syntax-highlighter/dist/esm/languages/hljs/python": require("react-syntax-highlighter/dist/esm/languages/hljs/python"),
       "react-markdown": require("react-markdown")
-    }[x0]
+    }[x1]
   })
 }

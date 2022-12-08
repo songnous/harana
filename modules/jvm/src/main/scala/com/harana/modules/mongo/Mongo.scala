@@ -21,6 +21,8 @@ object Mongo {
 
     def aggregate(collectionName: String, stages: List[Bson]): Task[List[BsonDocument]]
 
+    def dropCollection(collectionName: String): Task[Unit]
+
     def get[E](collectionName: String, id: EntityId)(implicit tt: TypeTag[E], d: Decoder[E]): Task[Option[E]]
 
     def insert[E](collectionName: String, entity: E)(implicit tt: TypeTag[E], e: Encoder[E]): Task[Unit]

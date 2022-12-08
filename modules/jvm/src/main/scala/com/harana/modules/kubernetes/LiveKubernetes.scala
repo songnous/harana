@@ -17,6 +17,8 @@ import skuber.apiextensions.CustomResourceDefinition
 import skuber.json.format.namespaceFormat
 import skuber.{K8SException, k8sInit, _}
 import zio._
+import zio.clock.Clock
+import zio.duration.{durationInt, durationLong}
 import zio.interop.reactivestreams._
 import zio.stream.{ZSink, ZStream}
 
@@ -30,7 +32,8 @@ object LiveKubernetes {
   private val actorSystem: Layer[Throwable, Has[ActorSystem]] = ZLayer.fromManaged(Managed.make(Task(ActorSystem("Test")))(sys => Task.fromFuture(_ => sys.terminate()).either))
   private val materializerLayer: Layer[Throwable, Has[Materializer]] = actorSystem >>> ZLayer.fromFunction(as => Materializer(as.get))
 
-  val layer = ZLayer.fromServices { (config: Config.Service,
+  val layer = ZLayer.fromServices { (clock: Clock.Service,
+                                     config: Config.Service,
                                      logger: Logger.Service,
                                      micrometer: Micrometer.Service) => new Kubernetes.Service {
 
@@ -70,7 +73,41 @@ object LiveKubernetes {
 
 
     def create[O <: ObjectResource](client: KubernetesClient, namespace: String, obj: O)(implicit fmt: Format[O], rd: ResourceDefinition[O], lc: LoggingContext): IO[K8SException, O] =
-      ZIO.fromFuture { _ =>  client.usingNamespace(namespace).create[O](obj)(fmt, rd, lc) }.refineToOrDie[K8SException]
+      ZIO.fromFuture { _ => client.usingNamespace(namespace).create[O](obj)(fmt, rd, lc) }.refineToOrDie[K8SException]
+
+
+    def createPodAndWait(client: KubernetesClient, namespace: String, obj: Pod, startupTime: Long)(implicit fmt: Format[Pod], rd: ResourceDefinition[Pod], lc: LoggingContext): IO[K8SException, Pod] =
+      for {
+        pod                   <-  create[Pod](client, namespace, obj)
+        schedule              =   Schedule.fixed(500.milliseconds) && Schedule.recurUntil[Boolean](running => running == true)
+        _                     <-  podInState(client, namespace, obj.name, "running").repeat(schedule).provide(Has(clock))
+      } yield pod
+
+
+    def podTerminating(client: KubernetesClient, namespace: String, name: String)(implicit fmt: Format[Pod], rd: ResourceDefinition[Pod], lc: LoggingContext): IO[K8SException, Boolean] =
+      get[Pod](client, namespace, name).map(pod => pod.flatMap(p => p.metadata.deletionTimestamp).isDefined)
+
+
+    def waitForPodToTerminate(client: KubernetesClient, namespace: String, name: String)(implicit fmt: Format[Pod], rd: ResourceDefinition[Pod], lc: LoggingContext): IO[K8SException, Unit] =
+      for {
+        schedule              <-  UIO(Schedule.fixed(500.milliseconds) && Schedule.recurWhile[Boolean](terminating => terminating == true))
+        _                     <-  (for {
+                                    terminating   <- podTerminating(client, namespace, name)
+                                    exists        <- exists[Pod](client, namespace, name)
+                                  } yield terminating && exists).repeat(schedule).provide(Has(clock))
+      } yield ()
+
+
+    def podInState(client: KubernetesClient, namespace: String, name: String, desiredState: String)(implicit fmt: Format[Pod], rd: ResourceDefinition[Pod], lc: LoggingContext): IO[K8SException, Boolean] =
+      get[Pod](client, namespace, name).map(maybePod =>
+        for {
+          pod                 <- maybePod
+          status              <- pod.status
+          containerStatus     <- status.containerStatuses.headOption
+          containerState      <- containerStatus.state
+          ready               =  containerState.id == desiredState
+        } yield ready
+      ).map(_.getOrElse(false))
 
 
     def update[O <: ObjectResource](client: KubernetesClient, namespace: String, obj: O)(implicit fmt: Format[O], rd: ResourceDefinition[O], lc: LoggingContext): IO[K8SException, O] =

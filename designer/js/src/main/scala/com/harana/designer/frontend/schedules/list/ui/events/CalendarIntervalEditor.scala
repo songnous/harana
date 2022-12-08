@@ -51,7 +51,8 @@ import slinky.web.html._
       ),
       td(
         Button(
-          icon = Some("icomoon", "cog"),
+          icon = Some("icomoon", "cog3"),
+          iconClassName = Some("schedule-action-options"),
           onClick = Some(_ => dialogs.select(dialogRef, filesState, () => println("hi"), width = Some("720px")))
         )
       )

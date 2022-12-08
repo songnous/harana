@@ -5,5 +5,4 @@ import io.circe.generic.JsonCodec
 import java.time.Instant
 
 @JsonCodec
-case class TerminalHistory(message: String,
-                           created: Instant = Instant.now)
+case class TerminalHistory(message: String, created: Instant = Instant.now)

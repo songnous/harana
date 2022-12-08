@@ -22,6 +22,7 @@ import scala.scalajs.js
                    download: Option[String] = None,
                    href: Option[String]= None,
                    icon: Option[(String, String)] = None,
+                   iconClassName: Option[String] = None,
                    iconPrefix: Option[(String, String)] = None,
                    iconSuffix: Option[(String, String)] = None,
                    label: Option[String] = None,
@@ -80,7 +81,7 @@ import scala.scalajs.js
     val children = new ListBuffer[ReactElement]()
     if (props.iconPrefix.isDefined) children += icon("prefix", props.className, props.iconPrefix.get)
     if (props.iconSuffix.isDefined) children += icon("suffix", props.className, props.iconSuffix.get)
-    if (props.icon.isDefined) children += icon("", props.className, props.icon.get)
+    if (props.icon.isDefined) children += icon("", props.iconClassName, props.icon.get)
     if (props.content.isDefined) children += props.content.get
     if (props.label.isDefined) children += props.label.get
     if (props.badge.isDefined) children += Badge(props.badge.get)

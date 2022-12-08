@@ -66,5 +66,6 @@ object GridStore {
   case class UpdateViewMode(entityType: EntityType, mode: ViewMode) extends DiodeAction
 
   case class ShowEditDialog(entityType: EntityType, title: Option[String]) extends DiodeAction
-  case class RefreshEditDialog(entityType: EntityType, values: HMap[Parameter.Values]) extends DiodeAction
+  case class RefreshEditDialog(entityType: EntityType) extends DiodeAction
+  case class RefreshEditDialogWithValues(entityType: EntityType, values: HMap[Parameter.Values]) extends DiodeAction
 }

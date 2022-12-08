@@ -110,6 +110,14 @@ object LiveMongo {
       } yield ()
 
 
+    def dropCollection(collectionName: String): Task[Unit] =
+      for {
+        db                  <- mongoDatabase
+        collection          <- getCollection(db, collectionName)
+        _                   <- execute(collection.drop())
+      } yield ()
+
+
     def aggregate(collectionName: String, stages: List[Bson]): Task[List[BsonDocument]] =
       for {
         db                  <- mongoDatabase

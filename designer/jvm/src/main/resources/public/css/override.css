@@ -969,7 +969,7 @@ pre code {
     user-select: all;          /* Likely future */
 }
 
-.xterm {
+#terminal-container {
     height: calc(100vh - 170px);
     padding: 5px;
 }
@@ -986,6 +986,19 @@ pre code {
     margin-right: 3px;
 }
 
+.schedule-action-button {
+    padding-top: 3px;
+}
+
+.schedule-action-options {
+    padding: 5px 4px 5px 5px;
+}
+
+.schedule-row-type {
+    width: 200px;
+    max-width: 200px;
+}
+
 .schedule-success {
     color: #26a69a;
     padding-left: 10px;
@@ -996,6 +1009,13 @@ pre code {
     padding-left: 10px;
 }
 
-.navigation-item {
+.schedule-row-actions {
+    width: 30px;
+    text-align: right;
+    padding-right: 0px !important;
+}
+
+.navigation-item, default-prefix-icon {
     color: black;
 }
+

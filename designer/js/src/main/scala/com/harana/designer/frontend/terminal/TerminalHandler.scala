@@ -5,14 +5,21 @@ import com.harana.designer.frontend.terminal.TerminalStore._
 import com.harana.designer.frontend.utils.http.Http
 import com.harana.designer.frontend.{EventBus, Main}
 import com.harana.sdk.shared.models.terminals.{Terminal, TerminalHistory}
+import com.harana.ui.external.xterm.{FitAddon, Terminal => XTerminal}
 import diode.AnyAction._
 import diode._
+import io.circe.syntax.EncoderOps
+import org.scalablytyped.runtime.TopLevel.asT
+import org.scalajs.dom.{Event, document, window}
 import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 import typings.std.global.navigator
 
+import java.time.{Duration, Instant}
 import scala.concurrent.Future
 
 class TerminalHandler extends ActionHandler(zoomTo(_.terminalState)) {
+
+  private var lastResize: Option[Instant] = None
 
   override def handle = {
 
@@ -50,22 +57,42 @@ class TerminalHandler extends ActionHandler(zoomTo(_.terminalState)) {
         effectOnly(Effect.action(Nothing))
       } else {
         val id = value.selectedTerminal.get.id
+        val container = document.getElementById("terminal-container")
 
-        EventBus.subscribe(s"terminal-$id-stdout", message =>
-          value.selectedTerminalRef.current.terminal.write(message)
+        val xTerminal = new XTerminal()
+        val fitAddon = new FitAddon
+        xTerminal.loadAddon(fitAddon)
+
+        xTerminal.options.allowProposedApi = true
+        xTerminal.options.cursorBlink = true
+
+        xTerminal.onData(data => if (!value.loadingTerminalHistory) EventBus.sendMessage(s"terminal-$id-stdin", data))
+        xTerminal.open(container)
+        fitAddon.fit()
+
+        window.addEventListener("resize", (_: Event) =>
+          if (value.xTerminal.isDefined) {
+            val now = Instant.now()
+            if (lastResize.isEmpty || (now.toEpochMilli - lastResize.get.toEpochMilli) > 250) {
+              fitAddon.fit()
+              EventBus.sendMessage(s"terminal-$id-resize", Map("rows" -> value.xTerminal.get.rows, "columns" -> value.xTerminal.get.cols).asJson.noSpaces)
+              lastResize = Some(Instant.now())
+            }
+          }
         )
 
-        EventBus.subscribe(s"terminal-$id-stderr", message =>
-          value.selectedTerminalRef.current.terminal.write(message)
-        )
+        EventBus.subscribe(s"terminal-$id-stdout", message => if (value.xTerminal.isDefined) value.xTerminal.get.write(message))
+        EventBus.subscribe(s"terminal-$id-stderr", message => if (value.xTerminal.isDefined) value.xTerminal.get.write(message))
 
         effectOnly(
-          Effect.action(Http.getRelative(s"/api/terminals/$id/connect").map(_ => UpdateTerminalConnected(true))) >>
-          Effect.action(UpdateLoadingTerminalHistory(false)) >>
+          Effect.action(UpdateXTerminal(Some(xTerminal))) >>
+          Effect.action(UpdateTerminalConnected(true)) >>
+          Effect(Http.getRelative(s"/api/terminals/$id/connect/${fitAddon.proposeDimensions().rows}/${fitAddon.proposeDimensions().cols}")) >>
+          Effect.action(UpdateLoadingTerminalHistory(true)) >>
           Effect(Http.getRelativeAs[List[TerminalHistory]](s"/api/terminals/$id/history").map(history =>
-            history.getOrElse(List()).foreach(line => value.selectedTerminalRef.current.terminal.writeln(line.message))
+            history.getOrElse(List()).foreach(line => value.xTerminal.get.writeln(line.message))
           )) >>
-          Effect.action(UpdateLoadingTerminalHistory(true))
+          Effect.action(UpdateLoadingTerminalHistory(false))
         )
       }
 
@@ -94,7 +121,8 @@ class TerminalHandler extends ActionHandler(zoomTo(_.terminalState)) {
 
     case ClearTerminal =>
       effectOnly(
-        Effect(Future(value.selectedTerminalRef.current.terminal.clear()))
+        Effect(Http.getRelative(s"/api/terminals/${value.selectedTerminal.get.id}/clear")) >>
+        Effect(Future(value.xTerminal.get.clear()))
       )
 
 
@@ -106,22 +134,23 @@ class TerminalHandler extends ActionHandler(zoomTo(_.terminalState)) {
 
     case ScrollTerminalToTop =>
       effectOnly(
-        Effect(Future(value.selectedTerminalRef.current.terminal.scrollToTop()))
+        Effect(Future(value.xTerminal.get.scrollToTop()))
       )
 
 
     case ScrollTerminalToBottom =>
       effectOnly(
-        Effect(Future(value.selectedTerminalRef.current.terminal.scrollToBottom()))
+        Effect(Future(value.xTerminal.get.scrollToBottom()))
       )
 
 
     case CopyFromTerminal =>
       effectOnly(
         Effect {
-          val selection = value.selectedTerminalRef.current.terminal.getSelection()
-          println(s"Selection = $selection")
-          navigator.clipboard.writeText(selection).toFuture
+          if (value.xTerminal.isDefined) {
+            val selection = value.xTerminal.get.getSelection()
+            navigator.clipboard.writeText(selection).toFuture
+          } else Future()
         }
       )
 
@@ -152,6 +181,9 @@ class TerminalHandler extends ActionHandler(zoomTo(_.terminalState)) {
     case UpdateTerminalConnected(terminalConnected) =>
       updated(value.copy(terminalConnected = terminalConnected))
 
+
+    case UpdateXTerminal(terminal) =>
+      updated(value.copy(xTerminal = terminal))
 
   }
 }

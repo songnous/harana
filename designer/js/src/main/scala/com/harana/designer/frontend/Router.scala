@@ -39,6 +39,7 @@ import slinky.core.facade.React
 import slinky.core.{CustomAttribute, FunctionalComponent}
 import slinky.web.html._
 import com.harana.sdk.shared.utils.CirceCodecs._
+import com.harana.ui.external.xterm.XTermCSS
 import org.scalajs.macrotaskexecutor.MacrotaskExecutor.Implicits._
 
 @react
@@ -87,6 +88,7 @@ object Router {
             link(rel := "manifest", href := "/manifest.json"),
             link(rel := "shortcut icon", href := "/favicon.ico"),
             style(`type` := "text/css")(ReactFilePondCSS.toString),
+            style(`type` := "text/css")(XTermCSS.toString),
           ),
           Switch(
              Route("/", FilesPage.component, exact = true),

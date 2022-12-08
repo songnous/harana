@@ -25,8 +25,7 @@ class ScheduleListHandler extends GridHandler[Schedule, ScheduleListStore.State]
   override def gridHandle = Some({
 
     case AddEvent(event) =>
-      val events = state.value.additionalState.itemEvents
-      events += event
+      val events = state.value.additionalState.itemEvents :+ event
       effectOnly(Effect.action(UpdateAdditionalState("schedules", state.value.additionalState.copy(itemEvents = events))))
 
     case DeleteEvent(index) =>
@@ -40,8 +39,7 @@ class ScheduleListHandler extends GridHandler[Schedule, ScheduleListStore.State]
       effectOnly(Effect.action(UpdateAdditionalState("schedules", state.value.additionalState.copy(itemEvents = events))))
 
     case AddAction(action) =>
-      val actions = state.value.additionalState.itemActions
-      actions += action
+      val actions = state.value.additionalState.itemActions :+ action
       effectOnly(Effect.action(UpdateAdditionalState("schedules", state.value.additionalState.copy(itemActions = actions))))
 
     case DeleteAction(index) =>
