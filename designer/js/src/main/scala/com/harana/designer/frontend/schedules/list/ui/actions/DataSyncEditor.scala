@@ -14,14 +14,18 @@ import slinky.web.html._
 
   val component = FunctionalComponent[Props] { props =>
     Fragment(
-      td(
-        Select(
-          hoist = Some(true),
-          name = s"${getClass.getSimpleName}-${props.rowIndex}",
-          onChange = Some(id => {}),
-          placeholder = Some("Select .."),
-          options = List(props.datasources.map(ds => MenuItem(ds.title, value = Some(ds.id)))),
-          size = Some("large")
+      table(
+        tr(
+          td(
+            Select(
+              hoist = Some(true),
+              name = s"${getClass.getSimpleName}-${props.rowIndex}",
+              onChange = Some(id => {}),
+              placeholder = Some("Select .."),
+              options = List(props.datasources.map(ds => MenuItem(ds.title, value = Some(ds.id)))),
+              size = Some("large")
+            )
+          )
         )
       )
     )

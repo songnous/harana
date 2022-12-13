@@ -30,27 +30,24 @@ import slinky.web.html._
           hoist = Some(true),
           name = s"${getClass.getSimpleName}-${props.rowIndex}",
           value = Some(props.action.map(_.getClass.getSimpleName).getOrElse("")),
-          onChange = Some(v => Circuit.dispatch(UpdateAction(props.rowIndex, Action.withName(v)))),
+          onChange = Some(v => Circuit.dispatch(UpdateAction(props.rowIndex, Action.newWithName(v)))),
           placeholder = Some("Select .."),
-          options = Action.types.map(a => MenuItem(i"schedules.actions.${a.toLowerCase}", value=Some(a))),
+          options = Action.typesByName.map(a => MenuItem(i"schedules.actions.${a.toLowerCase}", value=Some(a))),
           size = Some("large")
         )
       ),
       props.action.map {
-        case a @ Action.DataSync(_) => DataSyncEditor(props.rowIndex, a, props.datasources)
-        case a @ Action.FileCompress(_, _) => FileEditor(props.rowIndex, a)
-        case a @ Action.FileCopy(_, _, _, _) => FileEditor(props.rowIndex, a)
-        case a @ Action.FileDecompress(_, _) => FileEditor(props.rowIndex, a)
-        case a @ Action.FileDelete(_, _) => FileEditor(props.rowIndex, a)
-        case a @ Action.FileDuplicate(_, _) => FileEditor(props.rowIndex, a)
-        case a @ Action.FileMkDir(_, _) => FileEditor(props.rowIndex, a)
-        case a @ Action.FileMove(_, _, _, _) => FileEditor(props.rowIndex, a)
-        case a @ Action.FileRename(_, _, _) => FileEditor(props.rowIndex, a)
-        case a @ Action.FlowStart(_) => FlowEditor(props.rowIndex, a, props.flows)
-        case a @ Action.FlowStop(_) => FlowEditor(props.rowIndex, a, props.flows)
-        case a @ Action.HttpRequest(_, _, _, _) => HttpRequestEditor(props.rowIndex, a)
-        case a @ Action.ScheduleEnable(_) => ScheduleEditor(props.rowIndex, a, props.schedules)
-        case a @ Action.ScheduleDisable(_) => ScheduleEditor(props.rowIndex, a, props.schedules)
+        case a @ Action.DataSync(_)               => DataSyncEditor(props.rowIndex, a, props.datasources)
+        case a @ Action.ExecuteCommand(_)         => ExecuteCommandEditor(props.rowIndex, a)
+        case a @ Action.ExecuteScript(_)          => ExecuteScriptEditor(props.rowIndex, a)
+        case a @ Action.FlowStart(_)              => FlowEditor(props.rowIndex, a, props.flows)
+        case a @ Action.FlowStop(_)               => FlowEditor(props.rowIndex, a, props.flows)
+        case a @ Action.HttpRequest(_, _, _, _)   => HttpRequestEditor(props.rowIndex, a)
+        case a @ Action.ScheduleEnable(_)         => ScheduleEditor(props.rowIndex, a, props.schedules)
+        case a @ Action.ScheduleDisable(_)        => ScheduleEditor(props.rowIndex, a, props.schedules)
+        case a @ Action.ScheduleTrigger(_)        => ScheduleEditor(props.rowIndex, a, props.schedules)
+        case a @ Action.SendEmail(_)              => SendEmailEditor(props.rowIndex, a)
+        case a @ Action.SendSlackMessage(_)       => SendSlackMessageEditor(props.rowIndex, a)
       },
       td(className := "schedule-row-actions")(
         ButtonGroup(label = Some("Buttons"))(

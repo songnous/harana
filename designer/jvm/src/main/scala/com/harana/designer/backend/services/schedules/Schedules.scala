@@ -26,12 +26,14 @@ object Schedules {
 
     def update(rc: RoutingContext): Task[Response]
 
-    def actionTypes(rc: RoutingContext): Task[Response]
-
-    def eventTypes(rc: RoutingContext): Task[Response]
-
     def history(rc: RoutingContext): Task[Response]
 
     def setup(rc: RoutingContext): Task[Response]
+
+    def trigger(rc: RoutingContext): Task[Response]
+
+    def enable(rc: RoutingContext): Task[Response]
+
+    def disable(rc: RoutingContext): Task[Response]
   }
 }

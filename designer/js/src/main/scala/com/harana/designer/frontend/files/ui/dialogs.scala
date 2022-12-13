@@ -13,10 +13,23 @@ import com.harana.ui.external.markdown.Markdown
 import slinky.core.facade.ReactRef
 import slinky.web.html.{className, div}
 
+import scala.collection.immutable.List
 import scala.scalajs.js
 import scala.scalajs.js.JSConverters._
 
 object dialogs {
+
+  def select(dialogRef: ReactRef[Dialog.Def], state: State, onOk: () => Unit, width: Option[String] = None) =
+    dialogRef.current.show(
+      title = None,
+      style = selectStyle(state, onOk),
+      width = width
+    )
+
+
+  def updateSelect(dialogRef: ReactRef[Dialog.Def], state: State, onOk: () => Unit, width: Option[String] = None) =
+    dialogRef.current.update(style = Some(selectStyle(state, onOk)), width = width)
+
 
   private def selectStyle(state: State, onOk: () => Unit) =
     DialogStyle.General(
@@ -25,8 +38,7 @@ object dialogs {
           GroupedTable(
             table.selectColumns,
             rowGroups = List(RowGroup(None, table.selectRows(state))),
-            className = Some("select-file-table"),
-            includeMenus = false
+            className = Some("select-file-table")
           )
         ),
       headerElement = Some(
@@ -36,20 +48,10 @@ object dialogs {
       ),
       okButtonLabel = "Select",
       onOk = Some(onOk)
-  )
-
-  def select(dialogRef: ReactRef[Dialog.Def], state: State, onOk: () => Unit, width: Option[String] = None) =
-    dialogRef.current.show(
-      title = None,
-      style = selectStyle(state, onOk),
-      width = width
     )
 
-  def updateSelect(dialogRef: ReactRef[Dialog.Def], state: State, onOk: () => Unit, width: Option[String] = None) =
-    dialogRef.current.update(style = Some(selectStyle(state, onOk)), width = width)
 
-  def newFolder(ref: ReactRef[Dialog.Def]) = {
-
+  def newFolder(ref: ReactRef[Dialog.Def]) =
     ref.current.show(
       title = Some(i"files.menu.new.new-folder"),
       style = DialogStyle.Tabbed(
@@ -60,27 +62,29 @@ object dialogs {
         onOk = Some(values => Circuit.dispatch(NewFolder(values.getOrElse(nameParameter, ""))))
       )
     )
-  }
 
-  def uploadFiles(ref: ReactRef[Dialog.Def], state: State) = ref.current.show(
-    title = Some(i"files.menu.new.upload-files"),
-    style = DialogStyle.General(
-      div(className := "files-upload")(
-        FilePond(
-          allowMultiple = true,
-          allowBrowse = true,
-          allowRevert = false,
-          files = state.uploadedFiles.toJSArray,
-          labelIdle="""Drag & Drop up to 5 files or <span class="filepond--label-action">Browse</span>.""",
-          maxFiles = 5,
-          server = s"/api/files?path=${state.path}",
-          onupdatefiles = Some((files: js.Array[File]) => Circuit.dispatch(UpdateUploadedFiles(files.map(_.file).toList))).orUndefined
-        )
+
+  def uploadFiles(ref: ReactRef[Dialog.Def], state: State) =
+    ref.current.show(
+      title = Some(i"files.menu.new.upload-files"),
+      style = DialogStyle.General(
+        div(className := "files-upload")(
+          FilePond(
+            allowMultiple = true,
+            allowBrowse = true,
+            allowRevert = false,
+            files = state.uploadedFiles.toJSArray,
+            labelIdle="""Drag & Drop up to 5 files or <span class="filepond--label-action">Browse</span>.""",
+            maxFiles = 5,
+            server = s"/api/files?path=${state.path}",
+            onupdatefiles = Some((files: js.Array[File]) => Circuit.dispatch(UpdateUploadedFiles(files.map(_.file).toList))).orUndefined
+          )
+        ),
+        "Close", onOk = Some(() => Circuit.dispatch(Refresh))
       ),
-      "Close", onOk = Some(() => Circuit.dispatch(Refresh))
-    ),
-    width = Some("500px")
-  )
+      width = Some("500px")
+    )
+
 
   def editInfo(ref: ReactRef[Dialog.Def], state: State) = {
     val nameParameter = StringParameter("name", required = true)
@@ -100,9 +104,9 @@ object dialogs {
 
   def deleteFiles(ref: ReactRef[Dialog.Def]) =
     ref.current.show(
-    title = Some(i"files.menu.edit.delete"),
-    style = DialogStyle.Confirm("Are you sure you want to delete this file ?", "Delete", onOk = Some(() => Circuit.dispatch(DeleteItem)))
-  )
+      title = Some(i"files.menu.edit.delete"),
+      style = DialogStyle.Confirm("Are you sure you want to delete this file ?", "Delete", onOk = Some(() => Circuit.dispatch(DeleteItem)))
+    )
 
   def mountDrive(ref: ReactRef[Dialog.Def], state: State) =
     ref.current.show(

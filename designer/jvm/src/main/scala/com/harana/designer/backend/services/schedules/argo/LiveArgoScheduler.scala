@@ -100,7 +100,7 @@ object LiveArgoScheduler {
         case Event.DataSyncStarted(dataSourceId) =>
           ("generic", EventSource("", EventSource.Spec(eventBusName, generic = Map(index.toString -> EventSource.Generic(eventServerUrl)))))
 
-        case Event.DataSyncCompleted(dataSourceId) =>
+        case Event.DataSyncFinished(dataSourceId) =>
           ("generic", EventSource("", EventSource.Spec(eventBusName, generic = Map(index.toString -> EventSource.Generic(eventServerUrl)))))
 
         case Event.DataSyncFailed(dataSourceId, errorMessage) =>
@@ -118,7 +118,7 @@ object LiveArgoScheduler {
         case Event.FlowStarted(flowId) =>
           ("generic", EventSource("", EventSource.Spec(eventBusName, generic = Map(index.toString -> EventSource.Generic(eventServerUrl)))))
 
-        case Event.FlowCompleted(flowId) =>
+        case Event.FlowFinished(flowId) =>
           ("generic", EventSource("", EventSource.Spec(eventBusName, generic = Map(index.toString -> EventSource.Generic(eventServerUrl)))))
 
         case Event.FlowFailed(flowId, errorMessage) =>
@@ -133,7 +133,7 @@ object LiveArgoScheduler {
         case Event.ScheduleStarted(scheduleId) =>
           ("generic", EventSource("", EventSource.Spec(eventBusName, generic = Map(index.toString -> EventSource.Generic(eventServerUrl)))))
 
-        case Event.ScheduleCompleted(scheduleId) =>
+        case Event.ScheduleFinished(scheduleId) =>
           ("generic", EventSource("", EventSource.Spec(eventBusName, generic = Map(index.toString -> EventSource.Generic(eventServerUrl)))))
 
         case Event.ScheduleFailed(scheduleId, errorMessage) =>

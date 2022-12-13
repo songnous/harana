@@ -13,10 +13,7 @@ class ScheduleItemHandler extends ActionHandler(zoomTo(_.scheduleItemState)) {
   def handle = {
 
     case Init(preferences) =>
-      effectOnly(
-        Effect(Http.getRelativeAs[List[String]](s"/api/schedules/actionTypes").map(actionTypes => UpdateActionTypes(actionTypes.getOrElse(List())))) >>
-        Effect(Http.getRelativeAs[List[String]](s"/api/schedules/eventTypes").map(eventTypes => UpdateEventTypes(eventTypes.getOrElse(List()))))
-      )
+      noChange
 
 
     case OpenSchedule(id) =>

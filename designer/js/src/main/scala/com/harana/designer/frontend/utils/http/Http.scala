@@ -97,6 +97,7 @@ object Http {
       decode[T](response.body.toOption.get) match {
         case Left(e) =>
           println(s"Failed decoding JSON: $url - ${e.getMessage}")
+          //println(response.body.toOption.get)
           throw new Exception(e)
 
         case Right(result) =>

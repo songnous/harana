@@ -7,14 +7,12 @@ import scala.collection.mutable.ListBuffer
 
 object ScheduleListStore {
 
-  case class State(actionTypes: List[String],
-                   eventTypes: List[String],
-                   item: Option[Schedule],
+  case class State(item: Option[Schedule],
                    itemActions: ListBuffer[Action],
                    itemEvents: ListBuffer[Event],
                    scheduleHistory: List[(ScheduleExecution, Schedule)])
 
-  val initialState = State(List(), List(), None, ListBuffer.empty, ListBuffer.empty, List())
+  val initialState = State(None, ListBuffer.empty, ListBuffer.empty, List())
 
   case class AddAction(action: Action) extends DiodeAction
   case class DeleteAction(index: Int) extends DiodeAction
@@ -26,8 +24,6 @@ object ScheduleListStore {
   case class MoveEvent(fromIndex: Int, toIndex: Int) extends DiodeAction
   case class UpdateEvent(index: Int, newEvent: Event) extends DiodeAction
 
-  case class UpdateActionTypes(actionTypes: List[String]) extends DiodeAction
-  case class UpdateEventTypes(eventTypes: List[String]) extends DiodeAction
   case class UpdateItem(item: Option[Schedule]) extends DiodeAction
   case class UpdateItemActions(actions: ListBuffer[Action]) extends DiodeAction
   case class UpdateItemEvents(events: ListBuffer[Event]) extends DiodeAction

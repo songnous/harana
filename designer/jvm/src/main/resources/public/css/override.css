@@ -906,7 +906,7 @@ form {
 }
 
 .drawer-header {
-    font-size: 16px !important;
+    font-size: 18px !important;
     margin-top: 0px;
 }
 
@@ -976,6 +976,31 @@ pre code {
 
 .schedules-history {
     height: calc(100vh - 308px);
+}
+
+.schedules-history .item {
+    float: left;
+    height: 50px;
+    width: 100%;
+    padding: 15px 0px 50px 10px;
+    font-size: 15px;
+}
+
+.schedules-history .item .title {
+    padding-left: 40px;
+    width: 100%;
+}
+
+.schedules-history .item .info {
+    float: left;
+    padding-left: 40px;
+    color: grey;
+    font-size: 13px;
+}
+
+.schedules-history .item .schedule-success, .schedule-failure {
+    float: left;
+    padding-top: 4px;
 }
 
 .schedules-pill {

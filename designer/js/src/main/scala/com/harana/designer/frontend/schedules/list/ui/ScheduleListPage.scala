@@ -55,11 +55,10 @@ import scala.scalajs.js.Dynamic.literal
         column match {
           case `titleColumn`    => div(schedule.title)
           case `tagsColumn`     => TagsColumn(Set("tag-alpha", "tag-beta"))
-          case `lastRunColumn`  =>
-            schedule.recentExecutions.lastOption match {
-              case Some(e) => div(s"${e.duration.getOrElse("")} min", statusIcon(e.executionStatus))
-              case None => div()
-            }
+          case `lastRunColumn`  => schedule.recentExecutions.lastOption match {
+                                      case Some(e) => div(s"${e.duration.getOrElse("")} min", statusIcon(e.executionStatus))
+                                      case None => div()
+                                    }
           case `historyColumn`  =>
             val executions = item.additionalData("recentExecutions").asInstanceOf[List[ScheduleExecutionSummary]]
             div(
@@ -93,7 +92,8 @@ import scala.scalajs.js.Dynamic.literal
           content = state.additionalState.scheduleHistory.map(pair =>
             div(className := "item")(
               statusIcon(pair._1.executionStatus),
-              div(className := "title") (pair._2.title)
+              div(className := "title") (pair._2.title),
+              div(className := "info") ("42 mins ago")
             )
           ),
         )
@@ -102,7 +102,7 @@ import scala.scalajs.js.Dynamic.literal
       editAdditionalSections = List(
         (i"schedules.groups.events", div(className := "schedule-editor")(
           table(tbody(state.additionalState.itemEvents.zipWithIndex.map { case (a, index) =>
-            EventRow(index, Some(a), allowDelete = state.additionalState.itemEvents.size > 1) }))
+            EventRow(index, Some(a), dataState.entities, flowState.entities, state.entities, allowDelete = state.additionalState.itemEvents.size > 1) }))
           )
         ),
         (i"schedules.groups.actions", div(className := "schedule-editor")(

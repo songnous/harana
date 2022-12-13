@@ -28,53 +28,44 @@ object LiveSchedules {
                                      mongo: Mongo.Service,
                                      scheduler: ArgoScheduler.Service) =>
     new Service {
-
-      def actionTypes(rc: RoutingContext): Task[Response] = Task(Response.JSON(Action.types.asJson))
-
-      def eventTypes(rc: RoutingContext): Task[Response] = Task(Response.JSON(Event.types.asJson))
-
       def list(rc: RoutingContext): Task[Response] = Crud.listResponse[Schedule]("Schedules", rc, config, jwt, logger, micrometer, mongo)
-
       def tags(rc: RoutingContext): Task[Response] = Crud.tagsResponse[Schedule]("Schedules", rc, config, jwt, logger, micrometer, mongo)
-
       def owners(rc: RoutingContext): Task[Response] = Crud.ownersResponse[Schedule]("Schedules", rc, config, jwt, logger, micrometer, mongo)
-
       def search(rc: RoutingContext): Task[Response] = Crud.searchResponse[Schedule]("Schedules", rc, config, jwt, logger, micrometer, mongo)
-
       def get(rc: RoutingContext): Task[Response] = Crud.getResponse[Schedule]("Schedules", rc, config, jwt, logger, micrometer, mongo)
 
       def create(rc: RoutingContext): Task[Response] =
         for {
-          schedule <- Crud.create[Schedule]("Schedules", rc, config, jwt, logger, micrometer, mongo)
-          userId <- Crud.userId(rc, config, jwt)
+          schedule        <- Crud.create[Schedule]("Schedules", rc, config, jwt, logger, micrometer, mongo)
+          userId          <- Crud.userId(rc, config, jwt)
           //          _               <- scheduler.deploy(schedule, userId)
-          response = Response.Empty()
+          response        = Response.Empty()
         } yield response
 
 
       def update(rc: RoutingContext): Task[Response] =
         for {
-          schedule <- Crud.update[Schedule]("Schedules", rc, config, jwt, logger, micrometer, mongo)
-          userId <- Crud.userId(rc, config, jwt)
+          schedule        <- Crud.update[Schedule]("Schedules", rc, config, jwt, logger, micrometer, mongo)
+          userId          <- Crud.userId(rc, config, jwt)
           //          _               <- scheduler.deploy(schedule, userId)
-          response = Response.Empty()
+          response        = Response.Empty()
         } yield response
 
 
       def delete(rc: RoutingContext): Task[Response] =
         for {
-          schedule <- Crud.get[Schedule]("Schedules", rc, config, jwt, logger, micrometer, mongo).map(_.get)
-          userId <- Crud.userId(rc, config, jwt)
+          schedule        <- Crud.get[Schedule]("Schedules", rc, config, jwt, logger, micrometer, mongo).map(_.get)
+          userId          <- Crud.userId(rc, config, jwt)
           //          _               <- scheduler.undeploy(schedule, userId)
-          _ <- Crud.delete[Schedule]("Schedules", rc, config, jwt, logger, micrometer, mongo)
-          response = Response.Empty()
+          _               <- Crud.delete[Schedule]("Schedules", rc, config, jwt, logger, micrometer, mongo)
+          response        = Response.Empty()
         } yield response
 
 
       def history(rc: RoutingContext): Task[Response] =
         for {
           userId          <- Crud.userId(rc, config, jwt)
-          size            <- Task(rc.queryParam("size").asScala.head.toInt).orElse(UIO(50))
+          size            <- Task(rc.pathParam("size").toInt).orElse(UIO(10))
           filter          <- UIO(Map("$or" -> Crud.creatorOrPublic(userId)))
           executions      <- mongo.findEquals[ScheduleExecution]("ScheduleExecutions", filter, Some("finished", false), Some(size)).onError(e => logger.error(e.prettyPrint))
           scheduleIds     =  executions.map(_.scheduleId)
@@ -82,6 +73,18 @@ object LiveSchedules {
           combined        =  executions.map(se => (se, schedules.find(_.id == se.scheduleId).get))
           response        =  Response.JSON(combined.asJson)
         } yield response
+
+
+      def trigger(rc: RoutingContext): Task[Response] =
+        Task(Response.Empty())
+
+
+      def enable(rc: RoutingContext): Task[Response] =
+        Task(Response.Empty())
+
+
+      def disable(rc: RoutingContext): Task[Response] =
+        Task(Response.Empty())
 
 
       def setup(rc: RoutingContext): Task[Response] = {

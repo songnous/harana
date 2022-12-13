@@ -6,7 +6,7 @@ import com.harana.ui.external.shoelace.{Button, Input}
 import slinky.core.FunctionalComponent
 import slinky.core.annotations.react
 import slinky.core.facade.Fragment
-import slinky.web.html.{div, td}
+import slinky.web.html.{div, table, td, tr}
 
 @react object GithubEditor {
 
@@ -14,15 +14,19 @@ import slinky.web.html.{div, td}
 
   val component = FunctionalComponent[Props] { props =>
     Fragment(
-      td(
-        Input(
-          name = s"${getClass.getSimpleName}-${props.rowIndex}",
-          placeholder = Some("email@domain.com"),
-          size = Some("large")
+      table(
+        tr(
+          td(
+            Input(
+              name = s"${getClass.getSimpleName}-${props.rowIndex}",
+              placeholder = Some("email@domain.com"),
+              size = Some("large")
+            )
+          ),
+          td(
+            Button(label = Some("message .."))
+          )
         )
-      ),
-      td(
-        Button(label = Some("message .."))
       )
     )
   }

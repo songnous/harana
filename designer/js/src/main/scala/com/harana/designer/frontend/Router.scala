@@ -91,7 +91,7 @@ object Router {
             style(`type` := "text/css")(XTermCSS.toString),
           ),
           Switch(
-             Route("/", FilesPage.component, exact = true),
+             Route("/", ScheduleListPage.component, exact = true),
              Route("/apps", AppListPage.component, exact = true),
              Route("/apps/:id", AppItemPage.component, exact = true),
              Route("/data", DataSourceListPage.component, exact = true),
@@ -108,7 +108,7 @@ object Router {
              Route("/test/parameters", ParametersPage.component, exact = true),
              Route("/test/shoelace", ShoelacePage.component, exact = true),
              Route("/welcome", WelcomePage.component, exact = true),
-             Route("*", FilesPage.component)
+             Route("*", ScheduleListPage.component)
           )
         )
       )

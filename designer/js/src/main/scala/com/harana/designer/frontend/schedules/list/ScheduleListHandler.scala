@@ -52,12 +52,6 @@ class ScheduleListHandler extends GridHandler[Schedule, ScheduleListStore.State]
       actions.update(index, newAction)
       effectOnly(Effect.action(UpdateAdditionalState("schedules", state.value.additionalState.copy(itemActions = actions))))
 
-    case UpdateActionTypes(actionTypes: List[String]) =>
-      effectOnly(Effect.action(UpdateAdditionalState("schedules", state.value.additionalState.copy(actionTypes = actionTypes))))
-
-    case UpdateEventTypes(eventTypes: List[String]) =>
-      effectOnly(Effect.action(UpdateAdditionalState("schedules", state.value.additionalState.copy(eventTypes = eventTypes))))
-
     case UpdateItem(item: Option[Schedule]) =>
       effectOnly(Effect.action(UpdateAdditionalState("schedules", state.value.additionalState.copy(item = item))))
 
@@ -127,9 +121,7 @@ class ScheduleListHandler extends GridHandler[Schedule, ScheduleListStore.State]
       val events = if (state.value.additionalState.item.isEmpty) List(Event.CalendarInterval()) else state.value.additionalState.item.get.events
 
       Effect.action(UpdateViewMode("schedules", ViewMode.List)) >>
-      Effect(Http.getRelativeAs[List[String]](s"/api/schedules/actionTypes").map(at => UpdateActionTypes(at.getOrElse(List())))) >>
-      Effect(Http.getRelativeAs[List[String]](s"/api/schedules/eventTypes").map(et => UpdateEventTypes(et.getOrElse(List())))) >>
-      Effect(Http.getRelativeAs[List[(ScheduleExecution, Schedule)]](s"/api/schedules/history/20").map(et => UpdateScheduleHistory(et.getOrElse(List())))) >>
+      Effect(Http.getRelativeAs[List[(ScheduleExecution, Schedule)]](s"/api/schedules/history/10").map(et => UpdateScheduleHistory(et.getOrElse(List())))) >>
       Effect.action(UpdateEditParameters("schedules", List(
         ParameterGroup("about",
           StringParameter("title", required = true),

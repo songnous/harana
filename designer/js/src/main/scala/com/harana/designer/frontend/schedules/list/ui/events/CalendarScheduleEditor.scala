@@ -28,17 +28,15 @@ import slinky.web.html._
 
     Fragment(
       Dialog().withRef(dialogRef),
-      td(
-        Input(
-          name = s"${getClass.getSimpleName}-${props.rowIndex}",
-          placeholder = Some("0 0 * * *"),
-          size = Some("large")
-        )
-      ),
-      td(
-        Button(
-          icon = Some("icomoon", "cog"),
-          onClick = Some(_ => dialogs.select(dialogRef, filesState, () => println("hi"), width = Some("720px")))
+      table(
+        tr(
+          td(
+            Input(
+              name = s"${getClass.getSimpleName}-${props.rowIndex}",
+              placeholder = Some("0 0 * * *"),
+              size = Some("large")
+            )
+          )
         )
       )
     )
