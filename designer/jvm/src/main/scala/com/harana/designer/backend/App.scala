@@ -161,8 +161,6 @@ object App extends CoreApp {
     Route("/api/schedules",                                   PUT,      rc => Schedules.update(rc).provideLayer(schedules)),
     Route("/api/schedules/:id",                               GET,      rc => Schedules.get(rc).provideLayer(schedules)),
     Route("/api/schedules/:id",                               DELETE,   rc => Schedules.delete(rc).provideLayer(schedules)),
-    Route("/api/schedules/history/",                          GET,      rc => Schedules.history(rc).provideLayer(schedules)),
-    Route("/api/schedules/history/:size",                     GET,      rc => Schedules.history(rc).provideLayer(schedules)),
     Route("/api/schedules/search/:query",                     GET,      rc => Schedules.search(rc).provideLayer(schedules)),
     Route("/api/schedules/tags",                              GET,      rc => Schedules.tags(rc).provideLayer(schedules)),
     Route("/api/schedules/trigger/:id",                       GET,      rc => Schedules.trigger(rc).provideLayer(schedules)),
@@ -184,6 +182,8 @@ object App extends CoreApp {
     Route("/api/terminals/:id/restart",                       GET,      rc => Terminals.restart(rc).provideLayer(terminals)),
     Route("/api/terminals/:id/clear",                         GET,      rc => Terminals.clear(rc).provideLayer(terminals)),
     Route("/api/terminals/:id/history",                       GET,      rc => Terminals.history(rc).provideLayer(terminals)),
+
+    Route("/api/test/logs",                                   GET,      rc => User.testLogs(rc).provideLayer(user)),
 
     // User
     Route("/api/user/onboard",                                GET,      rc => User.onboard(rc).provideLayer(user)),

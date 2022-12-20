@@ -8,7 +8,7 @@ import slinky.core.facade.ReactElement
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSImport
 
-@JSImport("react-lazylog/build/ScrollFollow", JSImport.Default)
+@JSImport("react-lazylog-x/build/ScrollFollow", JSImport.Default)
 @js.native
 object ReactScrollFollow extends js.Object
 

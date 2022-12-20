@@ -66,7 +66,7 @@ class FlowListHandler extends GridHandler[Flow, FlowListStore.State]("flows", zo
         StringArrayParameter("tags")
     )))))
 
-  override def onCreate(subType: Option[EntitySubType]) = {
+  override def onSave(subType: Option[EntitySubType]) = {
     Analytics.flowCreate()
     None
   }

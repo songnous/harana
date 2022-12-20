@@ -91,7 +91,7 @@ import slinky.web.html._
       footerNavigationBar = props.footerNavigationBar,
       toolbarItems = props.toolbarItems,
       blocked = props.blocked,
-      sidebar = Some(sidebar),
+      leftSidebar = Some(sidebar),
       content =
         props.file match {
           case f if FileUtils.isCode(f) => codePreview

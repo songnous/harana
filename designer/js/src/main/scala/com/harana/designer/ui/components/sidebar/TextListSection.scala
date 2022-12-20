@@ -2,7 +2,7 @@ package com.harana.ui.components.sidebar
 
 import com.harana.designer.frontend.utils.DateUtils
 import com.harana.designer.frontend.utils.i18nUtils.ops
-import com.harana.ui.components.elements.Date
+import com.harana.designer.ui.components.elements.PrettyDate
 import com.harana.ui.components.when
 import slinky.core.StatelessComponent
 import slinky.core.annotations.react
@@ -23,7 +23,7 @@ import java.time.Instant
 						h6(className := "list-group-item-heading")(textItem.title),
 						span(className := "list-group-item-text")(
 							textItem.body match {
-								case Some(Left(date)) => Date(date)
+								case Some(Left(date)) => PrettyDate(date)
 								case Some(Right(string)) => p(string)
 								case None => ""
 							}

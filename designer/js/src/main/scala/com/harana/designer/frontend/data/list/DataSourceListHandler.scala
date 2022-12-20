@@ -140,7 +140,7 @@ class DataSourceListHandler extends GridHandler[DataSource, DataSourceListStore.
   }
 
 
-  override def onCreate(subType: Option[EntitySubType]) = {
+  override def onSave(subType: Option[EntitySubType]) = {
     Analytics.dataSourceCreate()
     None
   }

@@ -54,7 +54,7 @@ object Settings {
 
   val common = Seq(
     javaOptions                               := javaLaunchOptions,
-    scalaVersion                              := "2.13.8",
+    scalaVersion                              := "2.13.10",
     scalacOptions                             := Seq(
                                                       "-deprecation",
                                                       "-feature",
@@ -129,6 +129,7 @@ object Settings {
     startWebpackDevServer / version           := "4.11.1",
     fastOptJS / webpackDevServerExtraArgs     := Seq("--inline", "--hot"),
     webpackEmitSourceMaps                     := false,
+    libraryDependencySchemes                  ++= Library.jsLibraryDependencySchemes.value,
     fastOptJS / webpackBundlingMode           := BundlingMode.LibraryAndApplication(),
     fastOptJS / webpackConfigFile             := Some(baseDirectory.value / "webpack-dev.js"),
     fullOptJS / webpackConfigFile             := Some(baseDirectory.value / "webpack-prod.js")
@@ -137,7 +138,7 @@ object Settings {
   val jvm = Seq(
     javacOptions                              ++= Seq("-encoding", "UTF-8"),
     excludeDependencies                       ++= Library.globalExclusions.value,
-    libraryDependencySchemes                  ++= Library.libraryDependencySchemes.value,
+    libraryDependencySchemes                  ++= Library.jvmLibraryDependencySchemes.value,
     javaOptions                               ++= {
       val Digits = "^(\\d+)$".r
       sys.env.get("DEBUG") match {

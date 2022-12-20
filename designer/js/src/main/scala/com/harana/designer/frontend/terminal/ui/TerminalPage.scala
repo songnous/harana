@@ -38,8 +38,7 @@ import scala.scalajs.js
             toolbar.options
           )
         else List(),
-      content = pageContent(state),
-      sidebar = None
+      content = pageContent(state)
     )
   }
 

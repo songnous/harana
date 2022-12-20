@@ -4,9 +4,10 @@ import com.harana.designer.frontend.Circuit
 import com.harana.designer.frontend.files.FilesStore.{PushPath, State, UpdateSelectedFile}
 import com.harana.designer.frontend.utils.SizeUtils
 import com.harana.designer.frontend.utils.i18nUtils.ops
+import com.harana.designer.ui.components.elements.PrettyDate
 import com.harana.ui.components.ColumnSize
 import com.harana.ui.components.Device.Desktop
-import com.harana.ui.components.elements.{DataFileName, Date}
+import com.harana.ui.components.elements.DataFileName
 import com.harana.ui.components.table.{Column, Row}
 import com.harana.ui.external.shoelace.Radio
 import slinky.core.facade.ReactElement
@@ -35,7 +36,7 @@ object table {
         Map[Column, ReactElement](
           columns.head -> DataFileName(file).withKey(s"datafilename-$index"),
           columns(1) -> p(SizeUtils.format(file.size)),
-          columns(2) -> Date(file.updated),
+          columns(2) -> PrettyDate(file.updated),
           columns(3) -> ""
         ),
         radio = Some(Radio.Props(name = "s", checked = Some(selected), onChange = Some(value => if (value) Circuit.dispatch(UpdateSelectedFile(Some(file)))))),
@@ -51,14 +52,14 @@ object table {
         Map[Column, ReactElement](
           selectColumns.head -> DataFileName(file).withKey(s"datafilename-$index"),
           selectColumns(1) -> p(SizeUtils.format(file.size)),
-          selectColumns(2) -> Date(file.updated)
+          selectColumns(2) -> PrettyDate(file.updated)
         ),
+        onDoubleClick = Some(() => Circuit.dispatch(PushPath(file.name))),
         radio =
           if (file.isFolder)
             Some(Radio.Props(name = "s", checked = Some(selected), onChange = Some(value => if (value) Circuit.dispatch(UpdateSelectedFile(Some(file))))))
           else
-            None,
-        onDoubleClick = Some(() => Circuit.dispatch(PushPath(file.name)))
+            None
       )
     }
 }

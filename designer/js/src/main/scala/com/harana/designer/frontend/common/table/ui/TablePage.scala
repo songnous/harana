@@ -56,7 +56,7 @@ import scala.collection.mutable.ListBuffer
       toolbarItems = props.toolbarItems,
       blocked = props.blocked,
       noScrollingContent = true,
-      sidebar = if (props.sidebar.isDefined) props.sidebar else Some(sidebar),
+      leftSidebar = if (props.sidebar.isDefined) props.sidebar else Some(sidebar),
       content = Some(table)
     )
 }

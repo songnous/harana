@@ -13,6 +13,7 @@ module.exports = {
       "react-syntax-highlighter/dist/esm/styles/hljs": require("react-syntax-highlighter/dist/esm/styles/hljs"),
       "react-proxy": require("react-proxy"),
       "react-syntax-highlighter/dist/esm/languages/hljs/scala": require("react-syntax-highlighter/dist/esm/languages/hljs/scala"),
+      "react-lazylog-x": require("react-lazylog-x"),
       "react-syntax-highlighter/dist/esm/languages/hljs/sql": require("react-syntax-highlighter/dist/esm/languages/hljs/sql"),
       "react-syntax-highlighter/dist/esm/languages/hljs/javascript": require("react-syntax-highlighter/dist/esm/languages/hljs/javascript"),
       "react-syntax-highlighter/dist/esm/languages/hljs/java": require("react-syntax-highlighter/dist/esm/languages/hljs/java"),

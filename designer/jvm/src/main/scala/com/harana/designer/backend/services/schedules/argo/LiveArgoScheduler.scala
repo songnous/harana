@@ -62,8 +62,8 @@ object LiveArgoScheduler {
         domain          <- env("harana_domain")
         authToken       <- config.secret("harana-token")
 
-        triggers        =  _triggers(userId, authToken, domain, schedule.actions)
-        eventSources    =  _eventSources(userId, schedule.id, eventBusName, s"https://events.$domain", schedule.events)
+        triggers        =  _triggers(userId, authToken, domain, schedule.actions.map(_._2))
+        eventSources    =  _eventSources(userId, schedule.id, eventBusName, s"https://events.$domain", schedule.events.map(_._2))
         _               <- Task.foreach_(eventSources)(es => argo.createOrUpdateEventSource("harana-events", es._2))
         _               <- argo.createOrUpdateSensor("harana-events", Sensor("name", Sensor.Spec(
           eventBusName = Some(eventBusName),

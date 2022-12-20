@@ -26,8 +26,6 @@ object Schedules {
 
     def update(rc: RoutingContext): Task[Response]
 
-    def history(rc: RoutingContext): Task[Response]
-
     def setup(rc: RoutingContext): Task[Response]
 
     def trigger(rc: RoutingContext): Task[Response]

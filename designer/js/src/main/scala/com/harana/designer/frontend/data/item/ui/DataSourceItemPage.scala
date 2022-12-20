@@ -35,7 +35,7 @@ import scala.scalajs.js
       title = i"heading.section.data",
       subtitle = state.dataSource.map(_.title),
       navigationBar = Some(Navigation(())),
-      sidebar = Some(
+      leftSidebar = Some(
         Sidebar(
           List(SidebarSection(Some(i"datasources.sidebar.about"), allowCollapse = false, allowClear = false, None, 
             TextListSection(List(

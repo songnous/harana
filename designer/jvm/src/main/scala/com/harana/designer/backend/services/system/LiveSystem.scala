@@ -90,9 +90,6 @@ object LiveSystem {
         _         <- mongo.createIndex[FlowExecution]("FlowExecutions", Map("flowId" -> 1)).ignore
         _         <- mongo.createIndex[FlowExecution]("FlowExecutions", Map("id" -> 1), true).ignore
 
-        _         <- mongo.createIndex[ScheduleExecution]("ScheduleExecutions", Map("createdBy" -> 1)).ignore
-        _         <- mongo.createIndex[ScheduleExecution]("ScheduleExecutions", Map("scheduleId" -> 1)).ignore
-
         _         <- mongo.createIndex[Schedule]("Schedules", Map("createdBy" -> 1)).ignore
         _         <- mongo.createIndex[Schedule]("Schedules", Map("id" -> 1), true).ignore
         _         <- mongo.createIndex[Schedule]("Schedules", Map("id" -> 1, "createdBy" -> 1), true).ignore

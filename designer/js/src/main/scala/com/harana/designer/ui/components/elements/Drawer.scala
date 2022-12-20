@@ -27,8 +27,8 @@ import scala.collection.mutable
 	def initialState = State(None, None, None, None)
 
 	def show(style: DrawerStyle,
-					 values: Option[HMap[Parameter.Values]],
-					 title: Option[String],
+					 values: Option[HMap[Parameter.Values]] = None,
+					 title: Option[String] = None,
 					 width: Option[String] = None) = {
 		update(style, values.getOrElse(HMap.empty), title, width)
 		drawerRef.current.show()

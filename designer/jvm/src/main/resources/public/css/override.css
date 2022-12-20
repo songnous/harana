@@ -11,7 +11,9 @@
     --sl-font-weight-normal: 300;
     --sl-focus-ring-width: 0px;
     --sl-color: rgb(51, 51, 51);
+    --sl-focus-ring: 0px;
     user-select: none;
+    --sl-tooltip-font-size: 14px;
     -webkit-user-select: none;
     outline: none;
 }
@@ -24,7 +26,7 @@ textarea, select, input, button { outline: none; }
     height: 100vh;
     max-width: 100%;
     margin: 0;
- d   padding: 0;
+    padding: 0;
     border: 0 none;
     box-sizing: border-box;
 }
@@ -870,7 +872,7 @@ form {
 }
 
 .schedule-editor tr {
-    height: 30px;e
+    height: 30px;
 }
 
 .schedule-editor td {
@@ -975,14 +977,19 @@ pre code {
 }
 
 .schedules-history {
-    height: calc(100vh - 308px);
+    height: calc(100vh - 168px);
+}
+
+.schedules-history .items {
+    overflow: scroll;
+    height: 100%;
 }
 
 .schedules-history .item {
     float: left;
     height: 50px;
     width: 100%;
-    padding: 15px 0px 50px 10px;
+    padding: 18px 0px 50px 10px;
     font-size: 15px;
 }
 
@@ -998,9 +1005,10 @@ pre code {
     font-size: 13px;
 }
 
-.schedules-history .item .schedule-success, .schedule-failure {
+.schedules-history .item .schedule-success, .schedules-history .item .schedule-failure {
     float: left;
     padding-top: 4px;
+    padding-left: 10px;
 }
 
 .schedules-pill {
@@ -1026,12 +1034,10 @@ pre code {
 
 .schedule-success {
     color: #26a69a;
-    padding-left: 10px;
 }
 
 .schedule-failure {
     color: rgb(184,65,102);
-    padding-left: 10px;
 }
 
 .schedule-row-actions {
@@ -1044,3 +1050,114 @@ pre code {
     color: black;
 }
 
+.sidebar-content {
+    overflow: hidden;
+}
+
+@keyframes schedules-pill-pulse {
+    0% {
+        background-color: green;
+    }
+
+    50% {
+        background-color: lime;
+    }
+
+    100% {
+        background-color: green;
+    }
+}
+
+.schedules-pill-running {
+    animation-name: schedules-pill-pulse;
+    animation-duration: 2.0s;
+    animation-timing-function: ease-out;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+    animation-play-state: running;
+}
+
+.schedules-execution-title {
+    padding-left: 15px;
+}
+
+.schedules-execution-select {
+    padding: 15px 10px 20px 0;
+}
+
+.schedules-execution-row {
+    padding-bottom: 15px;
+}
+
+.schedules-circle {
+    height: 20px;
+    width: 20px;
+    background-color: #eee;
+    border-radius: 50%;
+    display: inline-block;
+    float: left;
+}
+
+.schedules-circle-heading {
+    font-size: 19px !important;
+}
+
+.schedules-circle-text {
+    padding-left: 15px;
+    font-size: 14px;
+}
+
+.schedules-circle-section {
+    padding-bottom: 20px;
+}
+
+.schedules-circle-icon {
+    font-size: 21px;
+    display: inline-block;
+    float: left;
+}
+
+.schedules-heading-circle-icon {
+    font-size: 21px;
+    display: inline-block;
+    padding-left: 15px;
+}
+
+.schedules-circle-icon::part(base) svg {
+    width: 20px;
+    height: 20px;
+}
+
+.schedules-execution-table {
+    width: 100%;
+}
+
+.schedules-execution-main {
+    vertical-align: top;
+}
+
+.schedules-execution-sidebar {
+    vertical-align: top;
+    width: 220px;
+}
+
+.schedules-execution-sidebar h5 {
+    padding-top: 20px;
+}
+
+.schedules-execution-logs {
+    padding: 15px 25px 15px 15px;
+}
+
+.schedules-execution-logs-line {
+    font-size: 13px;
+}
+
+.ReactVirtualized__Grid__innerScrollContainer a {
+    width: 0px;
+    min-width: 10px;
+}
+
+.content-wrapper-right {
+    padding-right: 20px;
+}

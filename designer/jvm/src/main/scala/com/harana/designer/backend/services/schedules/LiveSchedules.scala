@@ -62,19 +62,6 @@ object LiveSchedules {
         } yield response
 
 
-      def history(rc: RoutingContext): Task[Response] =
-        for {
-          userId          <- Crud.userId(rc, config, jwt)
-          size            <- Task(rc.pathParam("size").toInt).orElse(UIO(10))
-          filter          <- UIO(Map("$or" -> Crud.creatorOrPublic(userId)))
-          executions      <- mongo.findEquals[ScheduleExecution]("ScheduleExecutions", filter, Some("finished", false), Some(size)).onError(e => logger.error(e.prettyPrint))
-          scheduleIds     =  executions.map(_.scheduleId)
-          schedules       <- mongo.find[Schedule]("Schedules", Filters.in("id", scheduleIds: _*), limit = Some(size))
-          combined        =  executions.map(se => (se, schedules.find(_.id == se.scheduleId).get))
-          response        =  Response.JSON(combined.asJson)
-        } yield response
-
-
       def trigger(rc: RoutingContext): Task[Response] =
         Task(Response.Empty())
 
@@ -111,39 +98,25 @@ object LiveSchedules {
           s3 = Schedule("Schedule Three", "", List(), EventMode.All, List(), List(), List(), Some(userId), Visibility.Owner, None, Set())
           s4 = Schedule("Schedule Four", "", List(), EventMode.All, List(), List(), List(), Some(userId), Visibility.Owner, None, Set())
 
-          se1 = ScheduleExecution(s1.id, date1, Some(date2), ScheduleExecutionStatus.Executing, Some(userId), Instant.now, None, Instant.now, Random.long, Status.Active, Visibility.Owner, 1L, Set(), Map())
-          se2 = ScheduleExecution(s1.id, date2, None, ScheduleExecutionStatus.PendingExecution, Some(userId), Instant.now, None, Instant.now, Random.long, Status.Active, Visibility.Owner, 1L, Set(), Map())
-          se3 = ScheduleExecution(s1.id, date3, Some(date4), ScheduleExecutionStatus.Failed, Some(userId), Instant.now, None, Instant.now, Random.long, Status.Active, Visibility.Owner, 1L, Set(), Map())
-          se4 = ScheduleExecution(s1.id, date4, None, ScheduleExecutionStatus.Killed, Some(userId), Instant.now, None, Instant.now, Random.long, Status.Active, Visibility.Owner, 1L, Set(), Map())
-          se5 = ScheduleExecution(s1.id, date5, None, ScheduleExecutionStatus.Cancelled, Some(userId), Instant.now, None, Instant.now, Random.long, Status.Active, Visibility.Owner, 1L, Set(), Map())
-          se6 = ScheduleExecution(s1.id, date6, None, ScheduleExecutionStatus.Initialised, Some(userId), Instant.now, None, Instant.now, Random.long, Status.Active, Visibility.Owner, 1L, Set(), Map())
-          se7 = ScheduleExecution(s1.id, date7, None, ScheduleExecutionStatus.Paused, Some(userId), Instant.now, None, Instant.now, Random.long, Status.Active, Visibility.Owner, 1L, Set(), Map())
-          se8 = ScheduleExecution(s1.id, date8, None, ScheduleExecutionStatus.Executing, Some(userId), Instant.now, None, Instant.now, Random.long, Status.Active, Visibility.Owner, 1L, Set(), Map())
-          se9 = ScheduleExecution(s1.id, date4, Some(date9), ScheduleExecutionStatus.Succeeded, Some(userId), Instant.now, None, Instant.now, Random.long, Status.Active, Visibility.Owner, 1L, Set(), Map())
-          se10 = ScheduleExecution(s2.id, date10, None, ScheduleExecutionStatus.PendingCancellation, Some(userId), Instant.now, None, Instant.now, Random.long, Status.Active, Visibility.Owner, 1L, Set(), Map())
-          se11 = ScheduleExecution(s2.id, date11, Some(date13), ScheduleExecutionStatus.Succeeded, Some(userId), Instant.now, None, Instant.now, Random.long, Status.Active, Visibility.Owner, 1L, Set(), Map())
-          se12 = ScheduleExecution(s2.id, date12, None, ScheduleExecutionStatus.TimedOut, Some(userId), Instant.now, None, Instant.now, Random.long, Status.Active, Visibility.Owner, 1L, Set(), Map())
-          se13 = ScheduleExecution(s3.id, date13, None, ScheduleExecutionStatus.Executing, Some(userId), Instant.now, None, Instant.now, Random.long, Status.Active, Visibility.Owner, 1L, Set(), Map())
+          se1 = ScheduleExecution(Random.long, s1.id, date1, Some(date2), ScheduleExecutionStatus.Executing)
+          se2 = ScheduleExecution(Random.long, s1.id, date2, None, ScheduleExecutionStatus.PendingExecution)
+          se3 = ScheduleExecution(Random.long, s1.id, date3, Some(date4), ScheduleExecutionStatus.Failed)
+          se4 = ScheduleExecution(Random.long, s1.id, date4, None, ScheduleExecutionStatus.Killed)
+          se5 = ScheduleExecution(Random.long, s1.id, date5, None, ScheduleExecutionStatus.Cancelled)
+          se6 = ScheduleExecution(Random.long, s1.id, date6, None, ScheduleExecutionStatus.Initialised)
+          se7 = ScheduleExecution(Random.long, s1.id, date7, None, ScheduleExecutionStatus.Paused)
+          se8 = ScheduleExecution(Random.long, s1.id, date8, None, ScheduleExecutionStatus.Executing)
+          se9 = ScheduleExecution(Random.long, s1.id, date4, Some(date9), ScheduleExecutionStatus.Succeeded)
+          se10 = ScheduleExecution(Random.long, s2.id, date10, None, ScheduleExecutionStatus.PendingCancellation)
+          se11 = ScheduleExecution(Random.long, s2.id, date11, Some(date13), ScheduleExecutionStatus.Succeeded)
+          se12 = ScheduleExecution(Random.long, s2.id, date12, None, ScheduleExecutionStatus.TimedOut)
+          se13 = ScheduleExecution(Random.long, s3.id, date13, None, ScheduleExecutionStatus.Executing)
 
 
-          _               <- mongo.insert[Schedule]("Schedules", s1.copy(recentExecutions = List(se1, se2, se3, se4, se5, se6, se7, se8, se9).map(ScheduleExecutionSummary.apply)))
-          _               <- mongo.insert[Schedule]("Schedules", s2.copy(recentExecutions = List(se10, se11, se12, se13).map(ScheduleExecutionSummary.apply)))
+          _               <- mongo.insert[Schedule]("Schedules", s1.copy(executions = List(se1, se2, se3, se4, se5, se6, se7, se8, se9)))
+          _               <- mongo.insert[Schedule]("Schedules", s2.copy(executions = List(se10, se11, se12, se13)))
           _               <- mongo.insert[Schedule]("Schedules", s3)
           _               <- mongo.insert[Schedule]("Schedules", s4)
-
-          _               <- mongo.insert[ScheduleExecution]("ScheduleExecutions", se1)
-          _               <- mongo.insert[ScheduleExecution]("ScheduleExecutions", se2)
-          _               <- mongo.insert[ScheduleExecution]("ScheduleExecutions", se3)
-          _               <- mongo.insert[ScheduleExecution]("ScheduleExecutions", se4)
-          _               <- mongo.insert[ScheduleExecution]("ScheduleExecutions", se5)
-          _               <- mongo.insert[ScheduleExecution]("ScheduleExecutions", se6)
-          _               <- mongo.insert[ScheduleExecution]("ScheduleExecutions", se7)
-          _               <- mongo.insert[ScheduleExecution]("ScheduleExecutions", se8)
-          _               <- mongo.insert[ScheduleExecution]("ScheduleExecutions", se9)
-          _               <- mongo.insert[ScheduleExecution]("ScheduleExecutions", se10)
-          _               <- mongo.insert[ScheduleExecution]("ScheduleExecutions", se11)
-          _               <- mongo.insert[ScheduleExecution]("ScheduleExecutions", se12)
-          _               <- mongo.insert[ScheduleExecution]("ScheduleExecutions", se13)
 
           response = Response.Empty()
 

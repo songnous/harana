@@ -28,18 +28,22 @@ object Version {
 object Library {
 
   val globalDependencyOverrides = Def.setting(Seq(
-    "org.json4s" %% "json4s-core" % "3.7.0-M11",
-    "org.json4s" %% "json4s-native" % "3.7.0-M11",
-    "org.json4s" %% "json4s-jackson" % "3.7.0-M11",
-    "org.json4s" %% "json4s-ext" % "3.7.0-M11",
-    "org.codehaus.janino" % "janino" % "3.0.16",
-    "org.slf4j" % "slf4j-api" % "1.7.36",
-    "io.spray" %%% "spray-json" % "1.4.0"
+    "org.json4s"              %%  "json4s-core"     % "3.7.0-M11",
+    "org.json4s"              %%  "json4s-native"   % "3.7.0-M11",
+    "org.json4s"              %%  "json4s-jackson"  % "3.7.0-M11",
+    "org.json4s"              %%  "json4s-ext"      % "3.7.0-M11",
+    "org.codehaus.janino"     %   "janino"          % "3.0.16",
+    "org.slf4j"               %   "slf4j-api"       % "1.7.36",
+    "io.spray"                %%% "spray-json"      % "1.4.0"
   ))
 
-  val libraryDependencySchemes = Def.setting(Seq(
-    "org.scala-lang.modules" %% "scala-java8-compat" % VersionScheme.Always,
-    "org.scala-lang.modules" %% "scala-parser-combinators" % VersionScheme.Always
+  val jvmLibraryDependencySchemes = Def.setting(Seq(
+    "org.scala-lang.modules" %% "scala-java8-compat"        % VersionScheme.Always,
+    "org.scala-lang.modules" %% "scala-parser-combinators"  % VersionScheme.Always,
+  ))
+
+  val jsLibraryDependencySchemes = Def.setting(Seq(
+    "org.scala-lang.modules" %% "scala-xml"                 % VersionScheme.Always
   ))
 
   val globalExclusions = Def.setting(Seq(
@@ -208,7 +212,7 @@ object Library {
     "react-flow-renderer"                 -> "10.3.17",
     "react-helmet"                        -> "6.1.0",
     "react-intl"                          -> "6.2.1",
-//    "react-lazylog-x"                   -> "4.5.6",
+    "react-lazylog-x"                   -> "4.5.6",
 //    "react-lazyload"                    -> "3.1.0",
     "react-markdown"                      -> "5.0.3",
     "react-proxy"                         -> "1.1.8",
@@ -468,6 +472,7 @@ object Library {
 
   // Scala.js
   val scalablyTyped = Def.setting("com.olvind" %%% "scalablytyped-runtime" % "2.1.0")
-  val scalaJavaTime = Def.setting("io.github.cquiroz" %%% "scala-java-time" % "2.0.0")
+  val scalajsJavaTime = Def.setting("io.github.cquiroz" %%% "scala-java-time" % "2.5.0")
+  val scalajsSecureRandom = Def.setting("org.scala-js" %%% "scalajs-java-securerandom" % "1.0.0")
 }
 

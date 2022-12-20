@@ -33,8 +33,9 @@ abstract case class GridHandler[Entity <: Id, S](entityType: EntityType, state: 
   def onInit(userPreferences: Map[String, String]): Option[Effect] = None
   def onEdit: Option[Effect] = None
   def onEditParameterWillChange(parameter: Parameter[_], value: Any): Option[Effect] = None
-  def onCreate(subType: Option[EntitySubType]): Option[Effect] = None
+  def onSave(subType: Option[EntitySubType]): Option[Effect] = None
   def onDelete(subType: Option[EntitySubType]): Option[Effect] = None
+  def onUpdateEntities(entities: List[Entity]): Option[Effect] = None
 
   def gridHandle: Option[PartialFunction[Any, ActionResult[State]]] = None
   override def handle = if (gridHandle.isDefined) gridHandle.get.orElse(commonHandle) else commonHandle
@@ -138,7 +139,7 @@ abstract case class GridHandler[Entity <: Id, S](entityType: EntityType, state: 
         val entityTypeItem = toEntity(None, value.entitySubType, parameterValues)
         effectOnly(
           Effect.action(Block(e)) >>
-          onCreate(value.entitySubType).getOrElse(Effect.action(NoAction)) >>
+          onSave(value.entitySubType).getOrElse(Effect.action(NoAction)) >>
           Effect(Http.postRelative(s"/api/$entityType", List(), entityTypeItem.asJson.noSpaces).map(_ => NoAction)) >>
           Effect.action(UpdateItems(e, value.items :+ toGridPageItem(entityTypeItem))) >>
           Effect.action(RefreshSidebar(e)) >>
@@ -193,10 +194,7 @@ abstract case class GridHandler[Entity <: Id, S](entityType: EntityType, state: 
 
 
     case UpdateAdditionalState(e, additionalState) =>
-      if (e.equals(entityType)) {
-        println("Updating state: " + e)
-        updated(value.copy(additionalState = additionalState.asInstanceOf[S]), Effect.action(RefreshEditDialog(e)))
-      } else noChange
+      if (e.equals(entityType)) updated(value.copy(additionalState = additionalState.asInstanceOf[S]), Effect.action(RefreshEditDialog(e))) else noChange
 
 
     case UpdateEditParameters(e, parameters) =>
@@ -212,7 +210,11 @@ abstract case class GridHandler[Entity <: Id, S](entityType: EntityType, state: 
 
 
     case UpdateEntities(e, entities) =>
-      if (e.equals(entityType)) updated(value.copy(entities = entities.asInstanceOf[List[Entity]])) else noChange
+      if (e.equals(entityType)) {
+        val newEntities = entities.asInstanceOf[List[Entity]]
+        val effect = onUpdateEntities(newEntities).getOrElse(Effect.action(noChange))
+        updated(value.copy(entities = newEntities), effect)
+      } else noChange
 
 
     case UpdateEntitySubType(e, entitySubType) =>

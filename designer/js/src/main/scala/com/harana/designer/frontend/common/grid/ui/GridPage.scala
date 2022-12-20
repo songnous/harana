@@ -33,7 +33,8 @@ import scala.collection.mutable.ListBuffer
                    itemMenuItems: Option[GridPageItem[_] => List[ReactElement]] = None,
                    fixedNavigationBar: Boolean = true,
                    footerNavigationBar: Option[ReactElement] = None,
-                   sidebarSections: List[SidebarSection] = List(),
+                   leftSidebarSections: List[SidebarSection] = List(),
+                   rightSidebarSections: List[SidebarSection] = List(),
                    showOwners: Boolean = true,
                    showTags: Boolean = true,
                    allowViewChange: Boolean = false,
@@ -125,12 +126,12 @@ import scala.collection.mutable.ListBuffer
   }
 
 
-  def sidebar = {
+  def leftSidebar = {
     val sections = new ListBuffer[SidebarSection]()
     sections += searchSection(props.state.searchQuery, query => Circuit.dispatch(UpdateSearchQuery(props.entityType, query)))
     if (props.showOwners && props.state.owners.nonEmpty) sections += filterSection("Owner", props.state.owners, props.state.owner, owner => Circuit.dispatch(UpdateOwner(props.entityType, owner)))
     if (props.showTags && props.state.tags.nonEmpty) sections += filterSection(i"common.sidebar.tags", props.state.tags, props.state.tag, tag => Circuit.dispatch(UpdateTag(props.entityType, tag)))
-    sections ++= props.sidebarSections
+    sections ++= props.leftSidebarSections
     Sidebar(sections.toList)
   }
 
@@ -174,7 +175,8 @@ import scala.collection.mutable.ListBuffer
         footerNavigationBar = props.footerNavigationBar,
         toolbarItems = props.toolbarItems ++ headingItems,
         blocked = props.state.blocked,
-        sidebar = Some(sidebar),
+        leftSidebar = Some(leftSidebar),
+        rightSidebar = if (props.rightSidebarSections.nonEmpty) Some(Sidebar(props.rightSidebarSections)) else None,
         content = Some(content)
       )
     )

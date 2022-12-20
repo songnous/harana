@@ -12,8 +12,7 @@ import com.harana.designer.frontend.flows.item.{FlowItemHandler, FlowItemStore}
 import com.harana.designer.frontend.flows.list.{FlowListHandler, FlowListStore}
 import com.harana.designer.frontend.help.{HelpHandler, HelpStore}
 import com.harana.designer.frontend.navigation.{NavigationHandler, NavigationStore}
-import com.harana.designer.frontend.schedules.item.{ScheduleItemHandler, ScheduleItemStore}
-import com.harana.designer.frontend.schedules.list.{ScheduleListHandler, ScheduleListStore}
+import com.harana.designer.frontend.schedules.{ScheduleHandler, ScheduleStore}
 import com.harana.designer.frontend.system.{SystemHandler, SystemStore}
 import com.harana.designer.frontend.terminal.{TerminalHandler, TerminalStore}
 import com.harana.designer.frontend.user.{UserHandler, UserStore}
@@ -36,8 +35,7 @@ case class State(appItemState: AppItemStore.State,
                  flowListState: GridState[Flow, FlowListStore.State],
                  helpState: HelpStore.State,
                  navigationState: NavigationStore.State,
-                 scheduleItemState: ScheduleItemStore.State,
-                 scheduleListState: GridState[Schedule, ScheduleListStore.State],
+                 scheduleState: GridState[Schedule, ScheduleStore.State],
                  systemState: SystemStore.State,
                  terminalState: TerminalStore.State,
                  userState: UserStore.State,
@@ -58,8 +56,7 @@ object Circuit extends diode.Circuit[State] {
     GridStore.initialState(FlowListStore.initialState),
     HelpStore.initialState,
     NavigationStore.initialState,
-    ScheduleItemStore.initialState,
-    GridStore.initialState(ScheduleListStore.initialState),
+    GridStore.initialState(ScheduleStore.initialState),
     SystemStore.initialState,
     TerminalStore.initialState,
     UserStore.initialState,
@@ -76,8 +73,7 @@ object Circuit extends diode.Circuit[State] {
     new FlowListHandler,
     new HelpHandler,
     new NavigationHandler,
-    new ScheduleItemHandler,
-    new ScheduleListHandler,
+    new ScheduleHandler,
     new SystemHandler,
     new TerminalHandler,
     new UserHandler,

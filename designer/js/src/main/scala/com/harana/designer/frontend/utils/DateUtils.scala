@@ -1,28 +1,23 @@
 package com.harana.designer.frontend.utils
 
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeFormatter
-import java.time.{Duration, Instant, ZoneId}
-
+import java.time.{Duration, Instant, LocalDateTime, ZoneOffset}
 
 object DateUtils {
 
-  private val dateFormatter = DateTimeFormatter.ofPattern("d LLL YYYY", java.util.Locale.ENGLISH).withZone(ZoneId.of("Australia/Sydney"))
-  private val dateTimeFormatter = DateTimeFormatter.ofPattern("d LLL YYYY / hh:mm:ss a", java.util.Locale.ENGLISH).withZone(ZoneId.of("Australia/Sydney"))
+  val dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM YYYY / hh:mm:ss a")
 
-  def format(instant: Instant, includeTime: Boolean = false): String =
-    (if (includeTime) dateTimeFormatter.format(instant) else dateFormatter.format(instant)).replace("AM", "am").replace("PM", "pm")
+  def format(instant: Instant, includeTime: Boolean = false): String = {
+    val date = LocalDateTime.ofInstant(instant, ZoneOffset.UTC)
+    (if (includeTime) dateTimeFormatter.format(date) else dateTimeFormatter.format(date)).replace("AM", "am").replace("PM", "pm")
+  }
 
 
   def pretty(duration: Duration): String = {
-    if (duration.toDays > 0) return s"${duration.toDays} days"
-    if (duration.toHours > 0) return s"${duration.toHours} hours"
-    if (duration.toMinutes > 0) return s"${duration.toMinutes} mins"
-    if (duration.getSeconds > 0) return s"${duration.getSeconds} s"
-    if (duration.toMillis > 0) return s"${duration.toMillis} ms"
+    if (duration.toDays > 0) return s"${duration.toDays} day${if (duration.toDays > 1) "s" else ""}"
+    if (duration.toHours > 0) return s"${duration.toHours} hour${if (duration.toHours > 1) "s" else ""}"
+    if (duration.toMinutes > 0) return s"${duration.toMinutes} min${if (duration.toMinutes > 1) "s" else ""}"
+    if (duration.getSeconds > 0) return s"${duration.getSeconds} sec"
     ""
   }
 
@@ -31,21 +26,4 @@ object DateUtils {
     pretty(Duration.between(instant1, instant2))
   }
 
-
-//  def pretty(instant: Instant): String = {
-//      // Compare the date-only value of incoming date-time to date-only of today and yesterday.
-//      val localDateIncoming = zdt.toLocalDate
-//      val instant = Instant.now
-//      val now = ZonedDateTime.now(zdt.getZone) // Get current date-time in same zone as incoming ZonedDateTime.
-//      val localDateToday = now.toLocalDate
-//      val localDateYesterday = localDateToday.minusDays(1)
-//      var formatter = null
-//      if (localDateIncoming.isEqual(localDateToday)) formatter = DateTimeFormatter.ofPattern("'Today' hh:mma", locale) // FIXME: Localize "Today".
-//      else if (localDateIncoming.isEqual(localDateYesterday)) formatter = DateTimeFormatter.ofPattern("'Yesterday' hh:mma", locale) // FIXME: Localize "Yesterday".
-//      else formatter = DateTimeFormatter.ofPattern("EEE hh:mma MMM d, uuuu", locale)
-//      val output = zdt.format(formatter)
-//      output // FIXME: Check for null.
-//
-//    }
-//  }
 }

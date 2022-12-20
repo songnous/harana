@@ -45,7 +45,7 @@ import scala.collection.mutable.{Map => MutableMap}
 				parametersOrTabs match {
 					case Left(pt) =>
 						var updatedValues = values.getOrElse(state.values.getOrElse(HMap.empty))
-						pt.parameterGroups.flatMap(_.parameters).foreach { p =>
+						pt.groups.flatMap(_.parameters).foreach { p =>
 							parameterRefs += (p -> React.createRef[ParameterItem.Def])
 							if (!updatedValues.contains(p.name) && p.default.isDefined) {
 								updatedValues +~= (p, p.default.get)
@@ -106,20 +106,20 @@ import scala.collection.mutable.{Map => MutableMap}
 				case DialogStyle.Tabbed(parametersOrTabs, onChange, onOk, onCancel, showCancelButton, headerElement) =>
 					val content: ReactElement = parametersOrTabs match {
 						case Left(info) =>
-							if ((info.parameterGroups.size + info.additionalTabs.size) == 1)
-								layoutParameterGroup(info.parameterGroups.head, info, onChange, info.parameterGroups.head.parameters.head)
+							if ((info.groups.size + info.additionalTabs.size) == 1)
+								layoutParameterGroup(info.groups.head, info, onChange, info.groups.head.parameters.head)
 							else {
 								TabGroup(placement = Some("top"), noScrollControls = Some(true))(
 									List(
 										Fragment(
-											info.parameterGroups.map { group =>
+											info.groups.map { group =>
 												Tab(label = i"${info.i18nPrefix}.tab.${group.name}.title", panel = group.name).withKey(group.name)
 											} ++ info.additionalTabs.map {
 												case (name, _) => Tab(label = i"${info.i18nPrefix}.tab.$name.title", panel = name).withKey(name)
 											},
 
-											info.parameterGroups.map { group =>
-												TabPanel(name = group.name)(layoutParameterGroup(group, info, onChange, info.parameterGroups.head.parameters.head)).withKey(group.name)
+											info.groups.map { group =>
+												TabPanel(name = group.name)(layoutParameterGroup(group, info, onChange, info.groups.head.parameters.head)).withKey(group.name)
 											} ++ info.additionalTabs.map {
 												case (name, content) => TabPanel(name = name)(List(content)).withKey(name)
 											}
@@ -211,7 +211,7 @@ import scala.collection.mutable.{Map => MutableMap}
 		)
 }
 
-case class DialogParameters(parameterGroups: List[ParameterGroup],
+case class DialogParameters(groups: List[ParameterGroup],
 														i18nPrefix: String,
 														layout: Option[ParameterGroup => ParameterGroupLayout] = None,
 														additionalTabs: List[(String, ReactElement)] = List())

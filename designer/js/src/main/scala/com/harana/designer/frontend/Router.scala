@@ -18,9 +18,7 @@ import com.harana.designer.frontend.flows.list.ui.FlowListPage
 import com.harana.designer.frontend.help.HelpStore
 import com.harana.designer.frontend.help.ui.HelpPage
 import com.harana.designer.frontend.navigation.NavigationStore
-import com.harana.designer.frontend.schedules.item.ScheduleItemStore
-import com.harana.designer.frontend.schedules.item.ui.ScheduleItemPage
-import com.harana.designer.frontend.schedules.list.ui.ScheduleListPage
+import com.harana.designer.frontend.schedules.ui.SchedulePage
 import com.harana.designer.frontend.system.SystemStore
 import com.harana.designer.frontend.welcome.ui.WelcomePage
 import com.harana.designer.frontend.terminal.TerminalStore
@@ -69,7 +67,6 @@ object Router {
             Circuit.dispatch(GridStore.Init(p))
             Circuit.dispatch(HelpStore.Init(p))
             Circuit.dispatch(NavigationStore.Init(p))
-            Circuit.dispatch(ScheduleItemStore.Init(p))
             Circuit.dispatch(SystemStore.Init(p))
             Circuit.dispatch(TerminalStore.Init(p))
             Circuit.dispatch(UserStore.Init(p))
@@ -91,7 +88,7 @@ object Router {
             style(`type` := "text/css")(XTermCSS.toString),
           ),
           Switch(
-             Route("/", ScheduleListPage.component, exact = true),
+             Route("/", SchedulePage.component, exact = true),
              Route("/apps", AppListPage.component, exact = true),
              Route("/apps/:id", AppItemPage.component, exact = true),
              Route("/data", DataSourceListPage.component, exact = true),
@@ -102,13 +99,12 @@ object Router {
              Route("/flows/:id", FlowItemPage.component, exact = true),
              Route("/help", HelpPage.component, exact = true),
              Route("/help/:id", HelpPage.component, exact = true),
-             Route("/schedules", ScheduleListPage.component, exact = true),
-             Route("/schedules/:id", ScheduleItemPage.component, exact = true),
+             Route("/schedules", SchedulePage.component, exact = true),
              Route("/terminal", TerminalPage.component, exact = true),
              Route("/test/parameters", ParametersPage.component, exact = true),
              Route("/test/shoelace", ShoelacePage.component, exact = true),
              Route("/welcome", WelcomePage.component, exact = true),
-             Route("*", ScheduleListPage.component)
+             Route("*", SchedulePage.component)
           )
         )
       )

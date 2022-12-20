@@ -22,7 +22,7 @@ import scala.scalajs.js
       title = title,
       navigationBar = Some(Navigation(())),
       content = pageContent(state),
-      sidebar = Some(sidebar(state))
+      leftSidebar = Some(sidebar(state))
     )
   }
 

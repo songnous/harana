@@ -15,6 +15,8 @@ sealed trait Event
 @EnableReflectiveInstantiation
 object Event {
 
+  type EventId = String
+
   case class CalendarInterval(interval: Option[String] = None,
                               timeZone: Option[String] = None,
                               exclusionDates: List[String] = List()) extends Event
@@ -97,7 +99,7 @@ object Event {
 
 
   implicit val decoder = Decoder.instance[Event] { c =>
-    val content = c.downField("event").success.get
+    val content = c.downField("value").success.get
     c.downField("type").as[String].getOrElse(throw new Exception("Event type not found")) match {
       case "CalendarInterval"    => deriveDecoder[CalendarInterval].apply(content)
       case "CalendarSchedule"    => deriveDecoder[CalendarSchedule].apply(content)
@@ -125,7 +127,7 @@ object Event {
       case "CalendarSchedule"    => deriveEncoder[CalendarSchedule].apply(event.asInstanceOf[CalendarSchedule])
       case "DataSyncStarted"     => deriveEncoder[DataSyncStarted].apply(event.asInstanceOf[DataSyncStarted])
       case "DataSyncFinished"    => deriveEncoder[DataSyncFinished].apply(event.asInstanceOf[DataSyncFinished])
-      case "DataSyncFailed"      => deriveEncoder[CalendarInterval].apply(event.asInstanceOf[CalendarInterval])
+      case "DataSyncFailed"      => deriveEncoder[DataSyncFailed].apply(event.asInstanceOf[DataSyncFailed])
       case "FileCreated"         => deriveEncoder[FileCreated].apply(event.asInstanceOf[FileCreated])
       case "FileModified"        => deriveEncoder[FileModified].apply(event.asInstanceOf[FileModified])
       case "FileDeleted"         => deriveEncoder[FileDeleted].apply(event.asInstanceOf[FileDeleted])

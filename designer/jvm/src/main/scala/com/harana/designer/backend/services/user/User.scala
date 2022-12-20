@@ -27,5 +27,7 @@ object User {
     def startSession(rc: RoutingContext): Task[Response]
 
     def extendSession(rc: RoutingContext): Task[Response]
+
+    def testLogs(rc: RoutingContext): Task[Response]
   }
 }

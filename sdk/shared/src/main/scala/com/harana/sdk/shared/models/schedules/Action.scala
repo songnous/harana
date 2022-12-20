@@ -14,6 +14,8 @@ sealed trait Action
 
 object Action {
 
+  type ActionId = String
+
   case class DataSync(dataSourceId: Option[DataSourceId] = None) extends Action
 
   case class ExecuteCommand(command: Option[String] = None) extends Action
@@ -94,7 +96,7 @@ object Action {
   val typesByName = types.map(_.getClass.getSimpleName.replace("$", ""))
 
   implicit val decoder = Decoder.instance[Action] { c =>
-    val content = c.downField("action").success.get
+    val content = c.downField("value").success.get
     c.downField("type").as[String].getOrElse(throw new Exception("Action type not found")) match {
       case "DataSync"          => deriveDecoder[DataSync].apply(content)
       case "ExecuteCommand"    => deriveDecoder[ExecuteCommand].apply(content)

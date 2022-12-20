@@ -190,7 +190,7 @@ object Analytics {
         override val last_session = if (newSession) date(Some(Instant.now)) else js.undefined
         override val marketing_channel = claims.marketingChannel.map(_.entryName).orUndefined
         override val marketing_channel_id = claims.marketingChannelId
-        override val schedule_count = Circuit.state(zoomTo(_.scheduleListState), false).items.size.toString
+        override val schedule_count = Circuit.state(zoomTo(_.scheduleState), false).items.size.toString
         override val subscription_id = claims.billing.subscriptionId
         override val subscription_ended = date(claims.billing.subscriptionEnded)
         override val subscription_customer_id = claims.billing.subscriptionCustomerId

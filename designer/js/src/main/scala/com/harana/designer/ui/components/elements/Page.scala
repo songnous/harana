@@ -19,7 +19,8 @@ import slinky.web.html._
 									 footerNavigationBar: Option[ReactElement] = None,
 									 toolbarItems: List[HeadingItem] = List(),
 									 blocked: Boolean = false,
-									 sidebar: Option[Ref[Sidebar]] = None,
+									 leftSidebar: Option[Ref[Sidebar]] = None,
+									 rightSidebar: Option[Ref[Sidebar]] = None,
 									 content: ReactElement,
 									 noScrollingContent: Boolean = false,
 									 fullSizedContent: Boolean = false,
@@ -55,17 +56,14 @@ import slinky.web.html._
 					"block-ui" -> props.blocked,
 					"non-block-ui" -> !props.blocked)
 				)(
-						whenRef(props.sidebar),
-						when(props.sidebar,
-							div(className := "content-wrapper")(
-								props.content
-							)
-						),
-						whenNot(props.sidebar,
-							div(className := "content")(
-								props.content
-							)
-						)
+						whenRef(props.leftSidebar),
+						(props.leftSidebar, props.rightSidebar) match {
+							case (None, None) 			=> div(className := "content")(props.content)
+							case (None, Some(_)) 		=> div(className := "content")(props.content)
+							case (Some(_), None) 		=> div(className := "content-wrapper")(props.content)
+							case (Some(_), Some(_)) => div(className := "content-wrapper content-wrapper-right")(props.content)
+						},
+						whenRef(props.rightSidebar),
 				)
 			),
 			when(props.footerNavigationBar, props.footerNavigationBar.get)
