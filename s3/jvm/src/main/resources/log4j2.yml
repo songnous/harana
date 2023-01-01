@@ -1,0 +1,85 @@
+Configutation:
+  name: Default
+  Properties:
+    Property:
+      name: log-path
+      value: "logs"
+  Appenders:
+    Console:
+      name: ConsoleAppender
+      target: SYSTEM_OUT
+      PatternLayout:
+        pattern: "%highlight{%d{HH:mm:ss} | %c:%line |} %style{%msg%n%throwable}{white}"
+    File:
+      name: FileAppender
+      fileName: ${log-path}/logfile.log
+      PatternLayout:
+        pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss} %c - %msg%n"
+    Syslog:
+      name: SyslogAppender
+      host: logs4.papertrailapp.com
+      port: 32532
+      protocol: TCP
+      facility: local6
+      connectTimeoutMillis: 10000
+      reconnectionDelayMillis: 5000
+      mdcId: mdc
+      appName: designer
+      charset: UTF-8
+      ignoreExceptions: false
+      exceptionPattern: "%throwable{full}"
+      newLine: true
+      format: RFC5424
+      PatternLayout:
+        pattern: "%style{designer}{yellow} %style{%c:%line}{cyan} %style{%msg%n%throwable}{white}"
+  Loggers:
+      Root:
+        level: info
+        AppenderRef:
+          - ref: ConsoleAppender
+          - ref: SyslogAppender
+      Logger:
+        - name: akka.event.slf4j.Slf4jLogger
+          level: error
+        - name: alluxio.client
+          level: error
+        - name: alluxio.conf.AlluxioProperties
+          level: error
+        - name: alluxio.grpc.GrpcManagedChannelPool
+          level: error
+        - name: alluxio.security.authentication
+          level: error
+        - name: com.harana.modules.vertx
+          level: debug
+        - name: io.grpc.netty.NettyClientHandler
+          level: error
+        - name: com.github.jknack.handlebars
+          level: error
+        - name: com.harana.modules.vertx.LiveVertx
+          level: debug
+        - name: io.netty
+          level: info
+        - name: io.vertx
+          level: info
+        - name: io.vertx.ext.web.handler.sockjs
+          level: info
+        - name: org.apache.commons.vfs2
+          level: error
+        - name: org.apache.curator
+          level: error
+        - name: org.apache.zookeeper
+          level: error
+        - name: org.apache.http
+          level: debug
+        - name: org.redisson
+          level: info
+        - name: org.mongodb
+          level: warn
+        - name: skuber.api
+          level: debug
+        - name: org.apache.parquet
+          level: error
+        - name: org.apache.hadoop
+          level: error
+        - name: org.apache.htrace
+          level: error

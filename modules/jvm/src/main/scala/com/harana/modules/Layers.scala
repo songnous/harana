@@ -16,6 +16,7 @@ import com.harana.modules.vertx.LiveVertx
 import com.harana.modules.zendesk.LiveZendesk
 import com.harana.modules.core.{Layers => CoreLayers}
 import com.harana.modules.core.okhttp.LiveOkHttp
+import com.harana.modules.docker.LiveDocker
 import zio.blocking.Blocking
 import zio.clock.Clock
 import zio.console.Console
@@ -28,6 +29,7 @@ object Layers {
   val alluxioFs = CoreLayers.standard >>> LiveAlluxioFs.layer
   val aws = Blocking.live ++ CoreLayers.standard >>> LiveAWS.layer
   val clearbit = (CoreLayers.standard ++ okhttp) >>> LiveClearbit.layer
+  val docker = Blocking.live ++ CoreLayers.standard ++ okhttp >>> LiveDocker.layer
   val email = CoreLayers.standard >>> LiveEmail.layer
   val handlebars = LiveHandlebars.layer
   val kubernetes = Clock.live ++ CoreLayers.standard >>> LiveKubernetes.layer
