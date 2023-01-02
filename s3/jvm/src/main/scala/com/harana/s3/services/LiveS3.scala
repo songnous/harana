@@ -1,20 +1,29 @@
 package com.harana.s3.services
 
-import com.harana.modules.ognl.Ognl.Service
-import ognl.{DefaultClassResolver, OgnlRuntime, Ognl => jOgnl}
+import com.harana.modules.core.config.Config
+import com.harana.modules.core.logger.Logger
+import com.harana.modules.core.micrometer.Micrometer
+import com.harana.modules.vertx.models.Response
+import com.harana.s3.services.models.AwsHttpHeaders
+import io.vertx.core.http.HttpMethod
+import io.vertx.ext.web.RoutingContext
+import zio.clock.Clock
 import zio.{Task, ZLayer}
 
-import scala.jdk.CollectionConverters._
-
 object LiveS3 {
-  val layer = ZLayer.succeed(new Service {
+  val layer = ZLayer.fromServices { (clock: Clock.Service,
+                                     config: Config.Service,
+                                     logger: Logger.Service,
+                                     micrometer: Micrometer.Service) => new S3.Service {
 
-    OgnlRuntime.setPropertyAccessor(classOf[Object], new models.OgnlObjectPropertyAccessor())
+      def handle(rc: RoutingContext, method: HttpMethod): Task[Response] =
+      for {
+        _         <- logger.info(rc.request().toString)
+        _         =  rc.response().headers().add(AwsHttpHeaders.REQUEST_ID.value, "4442587FB7D0A2F9")
 
-    def render(expression: String, context: Map[String, Any]): Task[Any] = {
-      val ognlContext = jOgnl.createDefaultContext(context.asJava, new models.OgnlMemberAccess, new DefaultClassResolver, null)
-      val ognlExpression = jOgnl.parseExpression(expression)
-      Task.succeed(jOgnl.getValue(ognlExpression, ognlContext, context.asJava))
-    }
+
+
+      } yield ()
+
   })
 }

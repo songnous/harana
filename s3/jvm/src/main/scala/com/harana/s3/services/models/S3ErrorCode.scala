@@ -38,7 +38,7 @@ object S3ErrorCode extends IntEnum[S3ErrorCode] {
   case object REQUEST_TIME_TOO_SKEWED extends S3ErrorCode(28, 403, "Forbidden")
   case object REQUEST_TIMEOUT extends S3ErrorCode(29, 403, "Bad Request")
   case object SIGNATURE_DOES_NOT_MATCH extends S3ErrorCode(30, 403, "Forbidden")
-  case object X_AMZ_CONTENT_S_H_A_256_MISMATCH extends S3ErrorCode(31, 400, "The provided 'x-amz-content-sha256' header does not match what was computed.")
+  case object X_AMZ_CONTENT_SHA256_MISMATCH extends S3ErrorCode(31, 400, "The provided 'x-amz-content-sha256' header does not match what was computed.")
 
   val values = findValues
 

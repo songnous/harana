@@ -6,25 +6,25 @@ import java.util
 import java.util.Objects.requireNonNull
 
 
-final class S3Exception(error: Nothing, message: String, cause: Throwable, elements: util.Map[String, String]) extends Exception(requireNonNull(message), cause) {
+final class S3Exception(error: S3ErrorCode, message: String, cause: Throwable, elements: util.Map[String, String]) extends Exception(requireNonNull(message), cause) {
   this.error = requireNonNull(error)
   this.elements = ImmutableMap.copyOf(elements)
   final private var error: Nothing = null
   final private var elements: util.Map[String, String] = null
 
-  def this(error: Nothing) {
-    this(error, error.getMessage, null.asInstanceOf[Throwable], ImmutableMap.of[String, String])
+  def this(error: S3ErrorCode) {
+    this(error, error, null.asInstanceOf[Throwable], ImmutableMap.of[String, String])
   }
 
-  def this(error: Nothing, message: String) {
+  def this(error: S3ErrorCode, message: String) {
     this(error, message, null.asInstanceOf[Throwable], ImmutableMap.of[String, String])
   }
 
-  def this(error: Nothing, cause: Throwable) {
+  def this(error: S3ErrorCode, cause: Throwable) {
     this(error, error.getMessage, cause, ImmutableMap.of[String, String])
   }
 
-  def this(error: Nothing, message: String, cause: Throwable) {
+  def this(error: S3ErrorCode, message: String, cause: Throwable) {
     this(error, message, cause, ImmutableMap.of[String, String])
   }
 

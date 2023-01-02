@@ -11,7 +11,7 @@ import com.google.common.io.ByteStreams;
  * Parse an AWS v4 signature chunked stream.  Reference:
  * <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-streaming.html">...</a>
  */
-final class ChunkedInputStream extends FilterInputStream {
+public class ChunkedInputStream extends FilterInputStream {
     private byte[] chunk;
     private int currentIndex;
     private int currentLength;
@@ -21,7 +21,7 @@ final class ChunkedInputStream extends FilterInputStream {
     @SuppressWarnings("UnusedVariable")
     private String currentSignature;
 
-    ChunkedInputStream(InputStream is) {
+    public ChunkedInputStream(InputStream is) {
         super(is);
     }
 
