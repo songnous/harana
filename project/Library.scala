@@ -90,6 +90,12 @@ object Library {
     "org.ow2.asm" % "asm-tree" % "6.0"
   ))
 
+  val awsS3v2 = Def.setting(Seq(
+    "software.amazon.awssdk" % "iam" % "2.19.8",
+    "software.amazon.awssdk" % "s3" % "2.19.8",
+    "software.amazon.awssdk.crt" % "aws-crt" % "0.20.5"
+  ))
+
   val circe = Def.setting(Seq(
     "io.circe" %%% "circe-core" % "0.14.2",
     "io.circe" %%% "circe-derivation" % "0.13.0-M5" exclude("io.circe", "circe-core"),
@@ -405,6 +411,7 @@ object Library {
   val handlebars = Def.setting("com.github.jknack" % "handlebars" % "4.3.1")
   val httpCore = Def.setting("org.apache.httpcomponents" % "httpcore" % "4.4.15")
   val izumiReflect = Def.setting("dev.zio" %%% "izumi-reflect" % "2.2.0")
+  val jasyncfio = Def.setting("one.jasyncfio" % "jasyncfio" % "0.0.7" classifier "linux-amd64")
   val javaMail = Def.setting("com.sun.mail" % "jakarta.mail" % "2.0.1")
   val javassist = Def.setting("org.javassist" % "javassist" % "3.23.0-GA")
   val javaWebsocket = Def.setting("org.java-websocket" % "Java-WebSocket" % "1.5.3")
@@ -424,6 +431,7 @@ object Library {
   val mongodbScala = Def.setting("org.mongodb.scala" %% "mongo-scala-driver" % "4.7.2")
   val nscalaTime = Def.setting("com.github.nscala-time" %% "nscala-time" % "2.32.0")
   val ognl = Def.setting("ognl" % "ognl" % "3.3.3")
+  val ohc = Def.setting("org.caffinitas.ohc" % "ohc-core" % "0.7.4")
   val opencsv = Def.setting("com.opencsv" % "opencsv"% "5.7.1")
   val parboiled = Def.setting("org.parboiled" %% "parboiled" % "2.4.0")
   val playJsonExtensions = Def.setting("ai.x" %% "play-json-extensions" % "0.42.0")
@@ -475,4 +483,3 @@ object Library {
   val scalajsJavaTime = Def.setting("io.github.cquiroz" %%% "scala-java-time" % "2.5.0")
   val scalajsSecureRandom = Def.setting("org.scala-js" %%% "scalajs-java-securerandom" % "1.0.0")
 }
-

@@ -10,7 +10,7 @@ import zio.{Task, ZLayer}
 import scala.jdk.CollectionConverters._
 
 object LiveFacebook {
-  val layer = ZLayer.fromServices { (blocking: Blocking,
+  val layer = ZLayer.fromServices { (blocking: Blocking.Service,
                                      config: Config.Service) => new Service {
 
     private val apiContext = for {
