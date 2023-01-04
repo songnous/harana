@@ -1,13 +1,13 @@
 package com.harana.modules.docker
 
 import java.io.{File, InputStream}
-
 import com.github.dockerjava.api.command._
 import com.github.dockerjava.api.exception.{DockerException, NotFoundException, UnauthorizedException}
 import com.github.dockerjava.api.model.Network.Ipam
 import com.github.dockerjava.api.model._
 import com.github.dockerjava.api.model.{Service => DockerService}
 import com.harana.modules.core.okhttp.models.OkHttpError
+import com.harana.modules.docker.models.HubTag
 import zio.macros.accessible
 import zio.{Has, IO, Queue, UIO}
 
@@ -106,6 +106,11 @@ object Docker {
                   detach: Boolean = false,
                   stdIn: Option[InputStream] = None,
                   tty: Boolean = false): UIO[Queue[Frame]]
+
+    def hubTags(namespace: String,
+                repository: String,
+                page: Option[Int] = None,
+                pageSize: Option[Int] = None): zio.Task[List[HubTag]]
 
     def info: UIO[Info]
 

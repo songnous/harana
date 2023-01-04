@@ -1,4 +1,4 @@
-package com.harana
+package com.harana.modules
 
 import com.harana.modules.airbyte.LiveAirbyte
 import com.harana.modules.airtable.LiveAirtable
@@ -6,6 +6,9 @@ import com.harana.modules.alluxiofs.LiveAlluxioFs
 import com.harana.modules.argo.LiveArgo
 import com.harana.modules.aws.LiveAWS
 import com.harana.modules.clearbit.LiveClearbit
+import com.harana.modules.core.okhttp.LiveOkHttp
+import com.harana.modules.core.{Layers => CoreLayers}
+import com.harana.modules.docker.LiveDocker
 import com.harana.modules.email.LiveEmail
 import com.harana.modules.handlebars.LiveHandlebars
 import com.harana.modules.kubernetes.LiveKubernetes
@@ -14,12 +17,8 @@ import com.harana.modules.mongo.LiveMongo
 import com.harana.modules.stripe._
 import com.harana.modules.vertx.LiveVertx
 import com.harana.modules.zendesk.LiveZendesk
-import com.harana.modules.core.{Layers => CoreLayers}
-import com.harana.modules.core.okhttp.LiveOkHttp
-import com.harana.modules.docker.LiveDocker
 import zio.blocking.Blocking
 import zio.clock.Clock
-import zio.console.Console
 
 object Layers {
 

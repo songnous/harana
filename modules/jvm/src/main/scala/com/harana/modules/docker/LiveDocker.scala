@@ -15,6 +15,7 @@ import com.harana.modules.docker.Docker._
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.okhttp.OkHttp
 import com.harana.modules.core.okhttp.models.OkHttpError
+import com.harana.modules.docker.models.HubTag
 import zio.blocking.Blocking
 import zio.{Has, IO, Queue, UIO, ZLayer}
 import io.circe.parser._
@@ -23,7 +24,7 @@ import org.json4s.DefaultFormats
 import scala.jdk.CollectionConverters._
 
 object LiveDocker {
-  val layer = ZLayer.fromServices { (blocking: Blocking.Service,
+    val layer = ZLayer.fromServices { (blocking: Blocking.Service,
                                      config: Config.Service,
                                      logger: Logger.Service,
                                      okHttp: OkHttp.Service) => new Docker.Service {
@@ -324,6 +325,18 @@ object LiveDocker {
         )
         q
       }
+
+    def hubTags(namespace: String,
+                repository: String,
+                page: Option[Int] = None,
+                pageSize: Option[Int] = None): zio.Task[List[HubTag]] =
+      for {
+        page        <- UIO(page.getOrElse(1))
+        pageSize    <- UIO(pageSize.getOrElse(10))
+        query       =  s"https://hub.docker.com/v2/namespaces/$namespace/repositories/$repository/tags?page=$page&page_size=$pageSize"
+        response    <- okHttp.get(query).mapError(ex => new Exception(ex.toString))
+        hubTags     <- zio.Task.fromEither(decode[List[HubTag]](response.body().string()))
+      } yield hubTags
 
 
     def info: UIO[Info] =
@@ -895,6 +908,6 @@ null
           )
         }
       }
-  }
+      }
   }
 }

@@ -1,5 +1,6 @@
 package com.harana
 
+import com.harana.modules.Layers
 import com.harana.modules.calcite.LiveCalcite
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.{Layers => CoreLayers}
