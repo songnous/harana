@@ -402,8 +402,10 @@ object LiveVertx {
 
                                   // Custom Routes
                                   routes.foreach { route =>
-                                    def handler(rc: RoutingContext): Unit =
+                                    def handler(rc: RoutingContext): Unit = {
+                                      rc.request().setExpectMultipart(route.isMultipart)
                                       generateResponse(vx, micrometer, templateEngine, rc, route.handler, route.isSecured)
+                                    }
 
                                     if (route.isRegex) {
                                       if (route.isBlocking)
