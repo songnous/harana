@@ -13,13 +13,15 @@ import io.circe.{Decoder, Encoder}
 import io.vertx.core.buffer.Buffer
 import io.vertx.core.eventbus._
 import io.vertx.core.file.FileSystemOptions
-import io.vertx.core.http.{HttpServer, HttpServerOptions, WebSocket}
+import io.vertx.core.http.{HttpServer, HttpServerFileUpload, HttpServerOptions, WebSocket}
 import io.vertx.core.json.JsonObject
 import io.vertx.core.net.{JksOptions, NetServer, NetServerOptions}
 import io.vertx.core.shareddata.{AsyncMap, Counter, Lock}
+import io.vertx.core.streams.Pump
 import io.vertx.core.{AsyncResult, Context, Handler, VertxOptions, Vertx => VX}
 import io.vertx.ext.bridge.{BridgeOptions, PermittedOptions}
 import io.vertx.ext.eventbus.bridge.tcp.TcpEventBusBridge
+import io.vertx.ext.reactivestreams.ReactiveWriteStream
 import io.vertx.ext.web.client.{WebClient, WebClientOptions}
 import io.vertx.ext.web.handler.{BodyHandler, CorsHandler, SessionHandler}
 import io.vertx.ext.web.sstore.cookie.CookieSessionStore
@@ -499,6 +501,16 @@ object LiveVertx {
                                   })
 
     } yield httpServer
+
+
+    def withUploadStream[T](rc: RoutingContext, fn: ReactiveWriteStream[Buffer] => Task[T]) =
+      for {
+        event   <- Task.effectAsync[HttpServerFileUpload](cb => rc.request().uploadHandler((event: HttpServerFileUpload) => cb(Task(event))))
+        stream  =  ReactiveWriteStream.writeStream[Buffer](VX)
+        pump    =  Pump.pump(event, stream).start()
+        result  <- fn(stream)
+        _       =  pump.stop()
+      } yield result
 
 
     def startNetServer(listenHost: String, listenPort: Int, options: Option[NetServerOptions] = None): Task[NetServer] =

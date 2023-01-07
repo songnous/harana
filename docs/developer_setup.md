@@ -21,7 +21,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 ```bash
 brew tap mongodb/brew
 brew tap let-us-go/zkcli
-brew install argocd awscli cilium-cli consul cortex gh gnupg go golangci-lint gradle haproxy helm hub istioctl java jq k3d k9s kubectx maven mongodb-community@6.0 mongosh node openjdk@11 pre-commit python@3.9 rust sbt terraform tfenv tflint wget yarn yq zkcli
+brew install argocd awscli cilium-cli consul cortex gh gnupg go golangci-lint gradle haproxy helm hub istioctl java jq k3d k9s kubectx maven mongodb-community@6.0 mongosh node openjdk@17 packer pre-commit python@3.9 rust sbt terraform tfenv tflint wget yarn yq zkcli
 brew services start mongodb/brew/mongodb-community
 ```
 
@@ -48,11 +48,12 @@ echo "export HARANA_CLUSTER=$(id -un)" >> ~/.zprofile
 echo "export HARANA_DOMAIN=harana.build" >> ~/.zprofile
 echo "export HARANA_ENVIRONMENT=build" >> ~/.zprofile
 echo "export SBT_OPTS=\"-Xms1G -Xmx4G -Xss2M -XX:MaxInlineLevel=18\"" >> ~/.zprofile
+echo 'export PATH="$PATH:/Users/$(id -un)/Library/Python/3.10/bin"' >> ~/.zprofile
 source ~/.zprofile
 ```
 
 ## Setup Docker
-```bash
+```bash 
 sudo mkdir -p /opt/harana
 sudo chown -R $(id -un) /opt/harana
 
@@ -65,10 +66,10 @@ osascript -e 'quit app "Docker"'; open -a Docker ; while [ -z "$(docker info 2> 
 
 ## Setup Kubernetes Cluster
 ```bash
-k3d cluster create harana --api-port 6550 --registry-create registry.harana.build -v /opt/harana:/opt/harana
-k3d node create system --k3s-node-label type=system --cluster harana
-k3d node create core --k3s-node-label type=core --cluster harana
-k3d node create task --k3s-node-label type=task --cluster harana
+k3d cluster create harana --api-port 6550 --registry-create registry.harana.build -v /opt/harana:/nvme/disk
+k3d node create system --k3s-node-label harana/system=true --cluster harana
+k3d node create core --k3s-node-label harana/core=true --cluster harana
+k3d node create task --k3s-node-label harana/task=true --cluster harana
 kubectl create ns harana-designer
 kubectl create ns harana-id
 kubectl apply -f user-home.yaml

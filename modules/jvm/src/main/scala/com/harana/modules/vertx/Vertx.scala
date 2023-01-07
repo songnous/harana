@@ -9,13 +9,15 @@ import io.vertx.core.eventbus.{EventBus, Message, MessageConsumer}
 import io.vertx.core.http.HttpServer
 import io.vertx.core.net.{NetServer, NetServerOptions}
 import io.vertx.core.shareddata.{AsyncMap, Counter, Lock}
+import io.vertx.core.streams.Pump
 import io.vertx.core.{Context, MultiMap}
+import io.vertx.ext.reactivestreams.ReactiveWriteStream
 import io.vertx.ext.web.RoutingContext
 import io.vertx.servicediscovery.Record
 import org.jose4j.jwk.JsonWebKeySet
 import org.pac4j.core.profile.{CommonProfile, UserProfile}
 import zio.macros.accessible
-import zio.{Has, Task, UIO}
+import zio.{Has, Managed, Task, TaskManaged, UIO, ZManaged}
 
 @accessible
 object Vertx {
@@ -50,6 +52,7 @@ object Vertx {
     def removeMapValue[K, V](name: String, key: K): Task[Unit]
     def putMapValueIfAbsent[K, V](name: String, key: K, value: V, ttl: Option[Long] = None): Task[V]
 
+    def withUploadStream[T](rc: RoutingContext, fn: ReactiveWriteStream[Buffer] => Task[T]): Task[T]
     def getUploadedFile(filename: String): Task[Buffer]
 
     def getOrCreateContext: Task[Context]

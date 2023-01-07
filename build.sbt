@@ -2,6 +2,8 @@
 
 import ProjectsPlugin.autoImport.crossProject
 import scalajsbundler.sbtplugin.ScalaJSBundlerPlugin.autoImport.npmDependencies
+import locales.LocalesPlugin.autoImport._
+import locales._
 
 /****************************************************************************************************************
  * Spark Patching                                                                                               *
@@ -128,7 +130,7 @@ val modules = crossProject("modules")
     libraryDependencies ++=
       Library.slinky.value :+
       Library.scalablyTyped.value :+
-      Library.scalaJavaTime.value
+      Library.scalajsJavaTime.value
   )
 
   .jvmSettings(
@@ -136,6 +138,7 @@ val modules = crossProject("modules")
     libraryDependencies ++=
       Library.airbyte.value ++
       Library.alluxio.value ++
+      Library.awsS3v2.value ++
       Library.dockerJava.value ++
       Library.jackson.value ++
       Library.jgrapht.value ++
@@ -147,7 +150,6 @@ val modules = crossProject("modules")
       Library.vertx.value ++
       Library.vfs.value ++
       Library.zio1.value :+
-
       Library.airtable.value :+
       Library.avro4s.value :+
       Library.awsJavaSes.value :+
@@ -163,6 +165,7 @@ val modules = crossProject("modules")
       Library.facebook.value :+
       Library.kryo.value :+
       Library.handlebars.value :+
+      Library.jasyncfio.value :+
       Library.javaWebsocket.value :+
       Library.jbrowserDriver.value :+
       Library.jgit.value :+
@@ -172,6 +175,7 @@ val modules = crossProject("modules")
       Library.mixpanel.value :+
       Library.mongodbScala.value :+
       Library.ognl.value :+
+      Library.ohc.value :+
       Library.playJsonExtensions.value :+
       Library.pureCsv.value :+
       Library.redisson.value :+
@@ -202,6 +206,9 @@ val modulesJS = modules.js dependsOn (sdkJS)
 
 val designer = crossProject("designer")
   .jvmConfigure(_.enablePlugins(HaranaBuildInfoPlugin))
+  .jsConfigure(_.enablePlugins(LocalesPlugin).settings(
+    localesFilter := LocalesFilter.Selection("en-US")
+  ))
   .settings(
     libraryDependencies ++=
       Library.sttp.value :+
@@ -244,6 +251,7 @@ val executor = jvmProject("executor")
         Library.jsonLenses.value :+
         Library.parboiled.value :+ // FIXME: Only using this for Base64
         Library.rabbitmq.value :+
+        Library.scalajsJavaTime.value :+
         Library.scopt.value
   )
 
@@ -254,8 +262,7 @@ val sparkExecutor = jvmProject("spark-executor")
     sdkJVM,
     sdkJVM % "test->test",
     sdkJVM % "test->it",
-    sdkJVM % "it->it",
-    sparkPatchesCurrentVersion)
+    sdkJVM % "it->it")
   .settings(
     libraryDependencies ++=
       Library.akka.value ++
@@ -268,6 +275,15 @@ val sparkExecutor = jvmProject("spark-executor")
       Library.rabbitmq.value :+
       Library.scopt.value
   )
+
+val s3 = crossProject("s3")
+  .settings(
+    libraryDependencies ++=
+      Library.awsS3v2.value
+  )
+val s3JVM = s3.jvm dependsOn(modulesJVM, modulesCore, sdkJVM)
+val s3JS = s3.js dependsOn(modulesJS, sdkJS)
+
 
 val id = crossProject("id")
   .settings(
@@ -290,6 +306,8 @@ val root = project
     designerJVM,
     idJS,
     idJVM,
+    s3JS,
+    s3JVM,
     sdkJS,
     sdkJVM,
     sparkExecutor)

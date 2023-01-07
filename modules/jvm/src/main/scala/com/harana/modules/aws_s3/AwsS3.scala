@@ -5,11 +5,9 @@ import io.vertx.core.buffer.Buffer
 import io.vertx.ext.reactivestreams.{ReactiveReadStream, ReactiveWriteStream}
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider
 import software.amazon.awssdk.services.s3.S3AsyncClient
-import software.amazon.awssdk.services.s3.model.{Bucket, GetBucketAclResponse, GetObjectAclResponse, MultipartUpload, ObjectIdentifier, Part, S3Object}
+import software.amazon.awssdk.services.s3.model._
 import zio.macros.accessible
 import zio.{Has, Task}
-
-import java.io.InputStream
 
 @accessible
 object AwsS3 {
@@ -43,13 +41,13 @@ object AwsS3 {
 
     def putObject(client: S3AsyncClient, bucket: String, key: String, writeStream: ReactiveWriteStream[Buffer]): Task[Unit]
 
-    def copyObject(client: S3AsyncClient, bucket: String, sourceBucket: String, sourceKey: String, destinationBucket: String, destinationKey: String): Task[Unit]
+    def copyObject(client: S3AsyncClient, sourceBucket: String, sourceKey: String, destinationBucket: String, destinationKey: String): Task[Unit]
 
     def getObjectAcl(client: S3AsyncClient, bucket: String, key: String): Task[GetObjectAclResponse]
 
     def putObjectAcl(client: S3AsyncClient, bucket: String, key: String, acl: String): Task[Unit]
 
-    def uploadPartCopy(client: S3AsyncClient, bucket: String, sourceBucket: String, sourceKey: String, destinationBucket: String, destinationKey: String, uploadId: String): Task[Unit]
+    def uploadPartCopy(client: S3AsyncClient, sourceBucket: String, sourceKey: String, destinationBucket: String, destinationKey: String, uploadId: String): Task[Unit]
 
     def uploadPart(client: S3AsyncClient, bucket: String, key: String, uploadId: String, writeStream: ReactiveWriteStream[Buffer]): Task[Unit]
 
@@ -61,7 +59,7 @@ object AwsS3 {
 
     def abortMultipartUpload(client: S3AsyncClient, bucket: String, key: String, uploadId: String): Task[Unit]
 
-    def completeMultipartUpload(client: S3AsyncClient, bucket: String, key: String, uploadId: String, is: InputStream): Task[String]
+    def completeMultipartUpload(client: S3AsyncClient, bucket: String, key: String, uploadId: String): Task[String]
 
   }
 }

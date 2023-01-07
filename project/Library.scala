@@ -338,19 +338,20 @@ object Library {
   ))
 
   val vertx = Def.setting(Seq(
-    "io.vertx" % "vertx-auth-jwt" % "4.3.4",
-    "io.vertx" % "vertx-config-git" % "4.3.4",
-    "io.vertx" % "vertx-core" % "4.3.4",
-    "io.vertx" % "vertx-health-check" % "4.3.4",
-    "io.vertx" % "vertx-micrometer-metrics" % "4.3.4",
-    "io.vertx" % "vertx-service-discovery-bridge-kubernetes" % "4.3.4",
-    "io.vertx" % "vertx-tcp-eventbus-bridge" % "4.3.4",
-    "io.vertx" % "vertx-unit" % "4.3.4",
-    "io.vertx" % "vertx-web" % "4.3.4",
-    "io.vertx" % "vertx-web-client" % "4.3.4",
-    "io.vertx" % "vertx-web-sstore-cookie" % "4.3.4",
-    "io.vertx" % "vertx-web-templ-handlebars" % "4.3.4",
-    "io.vertx" % "vertx-zookeeper" % "4.3.4"
+    "io.vertx" % "vertx-auth-jwt" % "4.3.7",
+    "io.vertx" % "vertx-config-git" % "4.3.7",
+    "io.vertx" % "vertx-core" % "4.3.7",
+    "io.vertx" % "vertx-health-check" % "4.3.7",
+    "io.vertx" % "vertx-micrometer-metrics" % "4.3.7",
+    "io.vertx" % "vertx-reactive-streams" % "4.3.7",
+    "io.vertx" % "vertx-service-discovery-bridge-kubernetes" % "4.3.7",
+    "io.vertx" % "vertx-tcp-eventbus-bridge" % "4.3.7",
+    "io.vertx" % "vertx-unit" % "4.3.7",
+    "io.vertx" % "vertx-web" % "4.3.7",
+    "io.vertx" % "vertx-web-client" % "4.3.7",
+    "io.vertx" % "vertx-web-sstore-cookie" % "4.3.7",
+    "io.vertx" % "vertx-web-templ-handlebars" % "4.3.7",
+    "io.vertx" % "vertx-zookeeper" % "4.3.7"
   ))
 
   val vfs = Def.setting(Seq(
@@ -360,15 +361,15 @@ object Library {
   ))
 
   val zio1 = Def.setting(Seq(
-    "dev.zio" %% "zio" % "1.0.15",
+    "dev.zio" %% "zio" % "1.0.17",
     "dev.zio" %% "zio-interop-cats" % "3.2.9.1",
     "dev.zio" %% "zio-interop-reactivestreams" % "1.3.12",
-    "dev.zio" %% "zio-macros" % "1.0.15",
+    "dev.zio" %% "zio-macros" % "1.0.17",
     "dev.zio" %% "zio-process" % "0.6.1",
     "dev.zio" %% "zio-streams" % "1.0.14",
-    "dev.zio" %% "zio-test" % "1.0.15" % "test",
-    "dev.zio" %% "zio-test-sbt" % "1.0.15" % "test",
-    "dev.zio" %% "zio-test-magnolia" % "1.0.15" % "test"
+    "dev.zio" %% "zio-test" % "1.0.17" % "test",
+    "dev.zio" %% "zio-test-sbt" % "1.0.17" % "test",
+    "dev.zio" %% "zio-test-magnolia" % "1.0.17" % "test"
   ))
 
   val zio2 = Def.setting(Seq(

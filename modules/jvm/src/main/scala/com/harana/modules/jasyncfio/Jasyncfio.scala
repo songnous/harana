@@ -1,5 +1,7 @@
 package com.harana.modules.jasyncfio
 
+import io.vertx.core.buffer.Buffer
+import io.vertx.ext.reactivestreams.{ReactiveReadStream, ReactiveWriteStream}
 import one.jasyncfio.AsyncFile
 import zio.macros.accessible
 import zio.{Has, Task}
@@ -14,7 +16,11 @@ object Jasyncfio {
 
     def open(path: String): Task[AsyncFile]
 
+    def read(file: AsyncFile,  readStream: ReactiveReadStream[Buffer]): Task[Unit]
+
     def read(file: AsyncFile, buffer: ByteBuffer, position: Option[Int] = None): Task[Int]
+
+    def write(file: AsyncFile, writeStream: ReactiveWriteStream[Buffer]): Task[Unit]
 
     def write(file: AsyncFile, buffer: ByteBuffer, position: Option[Int] = None): Task[Int]
 

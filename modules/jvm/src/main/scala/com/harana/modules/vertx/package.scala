@@ -96,6 +96,17 @@ package object vertx {
                           case Response.JSON(json, contentType, cookies, statusCode, headers) =>
                             response(context, contentType, cookies, statusCode, headers).end(json.toString)
 
+                          case Response.ReadStream(stream, contentSize, contentType, cookies, statusCode, headers) =>
+                            val r = response(context, contentType, cookies, statusCode, headers)
+                            if (contentSize.isDefined) r.putHeader(HttpHeaders.CONTENT_LENGTH, contentSize.get.toString)
+                            val pump = Pump.pump(stream, r)
+                            stream.endHandler(_ => {
+                              r.end()
+                              r.close()
+                            })
+                            pump.start()
+                            stream.resume()
+
                           case Response.Redirect(url, contentType, cookies, _, headers) =>
                             response(context, contentType, cookies, Some(302), headers).putHeader("location", url).end()
 
