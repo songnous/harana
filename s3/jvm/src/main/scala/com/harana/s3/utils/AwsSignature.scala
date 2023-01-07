@@ -22,7 +22,7 @@ import com.google.common.collect.TreeMultimap
 import com.google.common.io.BaseEncoding
 import com.google.common.net.HttpHeaders
 import com.google.common.net.PercentEscaper
-import com.harana.s3.services.models.{AwsHttpHeaders, S3Exception}
+import com.harana.s3.services.server.models.{AwsHttpHeaders, S3Exception}
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

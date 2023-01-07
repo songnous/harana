@@ -1,4 +1,4 @@
-package com.harana.s3.services.s3_server.crypto;
+package com.harana.s3.services.server.crypto;
 
 import java.io.FilterInputStream;
 import java.io.IOException;

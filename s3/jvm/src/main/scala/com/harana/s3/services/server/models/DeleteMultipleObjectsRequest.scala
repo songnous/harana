@@ -1,4 +1,4 @@
-package com.harana.s3.services.s3_server.models
+package com.harana.s3.services.server.models
 
 import com.fasterxml.jackson.dataformat.xml.annotation.{JacksonXmlElementWrapper, JacksonXmlProperty}
 

@@ -1,7 +1,10 @@
 package com.harana.s3.utils
 
-import com.harana.s3.services.models.StorageType.{FOLDER, RELATIVE_PATH}
-import com.harana.s3.services.models._
+import com.harana.modules.aws_s3
+import com.harana.modules.aws_s3.models.{Bucket, Item}
+import com.harana.modules.aws_s3.{Bucket, Item, models}
+import com.harana.s3.services.server.models.StorageType.{FOLDER, RELATIVE_PATH}
+import com.harana.s3.services.server.models._
 import com.harana.s3.services.urlEscaper
 import com.harana.s3.utils.DateTime.{formatDate, iso8601DateFormat}
 
@@ -79,6 +82,7 @@ object AwsXml {
     xml.writeEndElement()
     xml.writeEndElement()
     xml.flush()
+    xml.
   }
 
 
@@ -172,7 +176,7 @@ object AwsXml {
                                       key: String,
                                       uploadId: String,
                                       encodingType: String,
-                                      parts: List[Part]) = {
+                                      parts: List[models.Part]) = {
     xml.writeStartDocument()
     xml.writeStartElement("ListPartsResult")
     xml.writeDefaultNamespace(awsXmlNs)

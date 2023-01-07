@@ -1,6 +1,6 @@
 package com.harana.s3.utils
 
-import com.harana.s3.services.models.{S3ErrorCode, S3Exception}
+import com.harana.s3.services.server.models.{S3ErrorCode, S3Exception}
 import org.joda.time.{DateTime, DateTimeZone}
 import org.joda.time.format.DateTimeFormat
 

@@ -2,6 +2,7 @@ package com.harana.s3
 
 import com.harana.modules.core.app.{App => CoreApp}
 import com.harana.modules.vertx.Vertx
+import com.harana.modules.vertx.models.Route
 import io.vertx.core.http.HttpMethod._
 
 object App extends CoreApp {
@@ -13,6 +14,10 @@ object App extends CoreApp {
     Route("/*",                                               OPTIONS,    rc => handle(rc, OPTIONS)),
     Route("/*",                                               DELETE,     rc => handle(rc, DELETE))
   )
+
+
+    // MAKE SURE TO CREATE LOCAL.ROOT
+
 
   def startup =
     for {

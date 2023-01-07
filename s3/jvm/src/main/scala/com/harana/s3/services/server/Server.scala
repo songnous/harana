@@ -7,8 +7,8 @@ import zio.macros.accessible
 import zio.{Has, Task}
 
 @accessible
-object S3 {
-  type S3 = Has[S3.Service]
+object Server {
+  type Server = Has[Server.Service]
 
   trait Service {
 

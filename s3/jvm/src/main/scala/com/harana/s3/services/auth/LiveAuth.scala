@@ -1,4 +1,4 @@
-package com.harana.s3.services.cache
+package com.harana.s3.services.auth
 
 import com.harana.modules.core.config.Config
 import com.harana.modules.core.logger.Logger
@@ -9,11 +9,11 @@ import io.vertx.ext.web.RoutingContext
 import zio.clock.Clock
 import zio.{Task, ZLayer}
 
-object LiveCache {
+object LiveAuth {
   val layer = ZLayer.fromServices { (clock: Clock.Service,
                                      config: Config.Service,
                                      logger: Logger.Service,
-                                     micrometer: Micrometer.Service) => new Cache.Service {
+                                     micrometer: Micrometer.Service) => new Auth.Service {
 
       def handle(rc: RoutingContext, method: HttpMethod): Task[Response] =
         for {

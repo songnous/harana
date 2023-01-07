@@ -1,15 +1,22 @@
-package com.harana.s3.services.s3_server
+package com.harana.s3.services.server
 
 import com.google.common.base.CharMatcher
 import com.google.common.io.{BaseEncoding, ByteStreams}
 import com.google.common.net.PercentEscaper
-import com.harana.s3.utils.{ChunkedInputStream, DateTime, IPAddress}
-import io.vertx.core.http.{HttpHeaders, HttpMethod}
+import com.harana.modules.vertx.models.{ContentType, Response}
+import com.harana.s3.services.server.models.AuthenticationType._
+import com.harana.s3.services.server.models._
+import com.harana.s3.utils._
+import io.vertx.core.Vertx
+import io.vertx.core.http.{HttpHeaders, HttpMethod, HttpServerFileUpload}
 import io.vertx.ext.web.RoutingContext
+import zio.Task
 
-import java.io.{ByteArrayInputStream, InputStream}
+import scala.jdk.CollectionConverters._
+import java.io.{ByteArrayInputStream, InputStream, StringWriter}
 import java.security.MessageDigest
 import java.util.concurrent.TimeUnit
+import javax.xml.stream.{XMLOutputFactory, XMLStreamWriter}
 
 package object s3_server {
   val maxMultipartCopySize = 5L * 1024L * 1024L * 1024L
@@ -186,4 +193,11 @@ package object s3_server {
       case iae: Exception =>
         throw new S3Exception(S3ErrorCode.INVALID_ARGUMENT, iae)
     }
+
+  def xmlResponse(outputFactory: XMLOutputFactory, fn: XMLStreamWriter => Unit) = {
+    val stringWriter = new StringWriter()
+    val writer = outputFactory.createXMLStreamWriter(stringWriter)
+    fn(writer)
+    Response.Content(stringWriter.toString, contentType = Some(ContentType.XML))
+  }
 }

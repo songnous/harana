@@ -1,4 +1,4 @@
-package com.harana.s3.services.cache
+package com.harana.s3.services.auth
 
 import zio.macros.accessible
 import zio.{Has, Task}
@@ -6,8 +6,8 @@ import zio.{Has, Task}
 import java.nio.ByteBuffer
 
 @accessible
-object Cache {
-  type Cache = Has[Cache.Service]
+object Auth {
+  type Auth = Has[Auth.Service]
 
   trait Service {
 

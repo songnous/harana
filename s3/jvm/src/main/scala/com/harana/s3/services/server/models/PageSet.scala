@@ -1,4 +1,4 @@
-package com.harana.s3.services.s3_server.models
+package com.harana.s3.services.server.models
 
 trait PageSet[T] extends Set[T] {
 
