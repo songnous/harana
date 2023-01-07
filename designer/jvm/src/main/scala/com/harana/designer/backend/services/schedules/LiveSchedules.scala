@@ -91,12 +91,14 @@ object LiveSchedules {
 
         for {
           userId         <- Crud.userId(rc, config, jwt)
-          _               <- logger.info(">>> Setting up scheudles")
+          _              <- logger.info(">>> Setting up scheudles")
 
-          s1 = Schedule("Schedule One", "", List(), EventMode.All, List(), List(), List(), Some(userId), Visibility.Owner, None, Set())
-          s2 = Schedule("Schedule Two", "", List(), EventMode.All, List(), List(), List(), Some(userId), Visibility.Owner, None, Set()).copy(status = Status.Paused)
-          s3 = Schedule("Schedule Three", "", List(), EventMode.All, List(), List(), List(), Some(userId), Visibility.Owner, None, Set())
-          s4 = Schedule("Schedule Four", "", List(), EventMode.All, List(), List(), List(), Some(userId), Visibility.Owner, None, Set())
+          tags          =  Set("confidential", "engineering")
+
+          s1 = Schedule("Schedule One", "", List(), EventMode.All, List(), List(), List(), Some(userId), Visibility.Owner, None, tags)
+          s2 = Schedule("Schedule Two", "", List(), EventMode.All, List(), List(), List(), Some(userId), Visibility.Owner, None, tags).copy(status = Status.Paused)
+          s3 = Schedule("Schedule Three", "", List(), EventMode.All, List(), List(), List(), Some(userId), Visibility.Owner, None, tags)
+          s4 = Schedule("Schedule Four", "", List(), EventMode.All, List(), List(), List(), Some(userId), Visibility.Owner, None, tags)
 
           se1 = ScheduleExecution(Random.long, s1.id, date1, Some(date2), ScheduleExecutionStatus.Executing)
           se2 = ScheduleExecution(Random.long, s1.id, date2, None, ScheduleExecutionStatus.PendingExecution)

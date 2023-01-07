@@ -59,6 +59,7 @@ apps.common.category = Category
 apps.common.tags = Tags
 
 apps.menu.stop = Stop
+apps.menu.update = Update to Latest
 
 datasources.sidebar.about = About
 datasources.sidebar.updated = Updated

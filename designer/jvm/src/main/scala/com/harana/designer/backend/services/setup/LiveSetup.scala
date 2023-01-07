@@ -29,7 +29,7 @@ object LiveSetup {
         for {
           _                   <- mongo.insert[DesignerApp]("Apps", DesignerApp("Jupyter", "", "Notebook", "467100553131.dkr.ecr.ap-southeast-2.amazonaws.com/apps-jupyter:1.0.0", 8888, Some(8888), Some(claims.userId), Visibility.Owner, Some(Background.Image(randomBackground)), Set("Notebook")))
           _                   <- mongo.insert[DesignerApp]("Apps", DesignerApp("RStudio", "", "Notebook", "467100553131.dkr.ecr.ap-southeast-2.amazonaws.com/apps-rstudio:1.0.0", 8787, Some(8787), Some(claims.userId), Visibility.Owner, Some(Background.Image(randomBackground)), Set("IDE")))
-          // _                   <- mongo.insert[DesignerApp]("Apps", DesignerApp("Theia", "", "Notebook", "467100553131.dkr.ecr.ap-southeast-2.amazonaws.com/apps-theia:1.0.0", 3000, Some(3000), Some(claims.userId), Visibility.Owner, Background.Image(randomBackground), Set("Editor")))
+          _                   <- mongo.insert[DesignerApp]("Apps", DesignerApp("Visual Studio Code", "", "Editor", "467100553131.dkr.ecr.ap-southeast-2.amazonaws.com/apps-theia:1.0.0", 3000, Some(3000), Some(claims.userId), Visibility.Owner, Some(Background.Image(randomBackground)), Set("Editor")))
         } yield ()
       )
 

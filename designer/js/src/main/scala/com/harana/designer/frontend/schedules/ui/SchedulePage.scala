@@ -46,6 +46,7 @@ import scala.scalajs.js.Dynamic.literal
         entityType = "schedules",
         state = state,
         title = i"heading.section.schedules",
+        showTags = true,
         itemMenuItems = Some((item: GridPageItem[_]) =>
           List(
             MenuItem(i"apps.menu.stop",

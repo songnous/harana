@@ -27,10 +27,10 @@ package object ui {
     val values = findValues
   }
 
-  def filterSection(title: String, filterItems: List[FilterItem], activeFilterItem: Option[FilterItem], onFilterChanged: Option[FilterItem] => Unit) = {
+  def filterSection(title: String, isPill: Boolean, filterItems: List[FilterItem], activeFilterItem: Option[FilterItem], onFilterChanged: Option[FilterItem] => Unit) = {
     val navigationItems = filterItems.sortBy(_.title).map { fi =>
       val isActive = activeFilterItem.isDefined && activeFilterItem.get.equals(fi)
-      NavigationItem(fi.title, onClick = () => onFilterChanged(Some(fi)), icon = fi.icon, rightText = Some(fi.count.toString), isActive = isActive)
+      NavigationItem(fi.title, onClick = () => onFilterChanged(Some(fi)), icon = fi.icon, rightText = Some(fi.count.toString), isActive = isActive, isPill = isPill)
     }
 
     SidebarSection(

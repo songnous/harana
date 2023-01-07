@@ -5,6 +5,7 @@ import com.harana.id.jwt.modules.jwt.JWT
 import com.harana.modules.core.config.Config
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
+import com.harana.modules.docker.Docker
 import com.harana.modules.kubernetes.Kubernetes
 import com.harana.modules.mongo.Mongo
 import com.harana.modules.vertx.Vertx
@@ -25,10 +26,12 @@ import zio.duration._
 import zio.{Task, _}
 
 import java.net.URI
+import java.util.concurrent.atomic.AtomicReference
 
 object LiveApps {
   val layer = ZLayer.fromServices { (clock: Clock.Service,
                                      config: Config.Service,
+                                     docker: Docker.Service,
                                      jwt: JWT.Service,
                                      kubernetes: Kubernetes.Service,
                                      logger: Logger.Service,
@@ -45,7 +48,38 @@ object LiveApps {
     def create(rc: RoutingContext): Task[Response]  = Crud.createResponse[DesignerApp]("Apps", rc, config, jwt, logger, micrometer, mongo)
     def update(rc: RoutingContext): Task[Response]  = Crud.updateResponse[DesignerApp]("Apps", rc, config, jwt, logger, micrometer, mongo)
 
-    def start(rc: RoutingContext): Task[Response] =
+    private val updateVersionsRef = new AtomicReference[Option[Fiber.Runtime[_, _]]](None)
+    private val versions = new AtomicReference[Map[String, String]](Map.empty)
+
+
+    def startup: Task[Unit] =
+      for {
+        _                 <- updateVersions()
+        updateFiber       <- updateVersions().repeat(Schedule.spaced(60.minutes).forever).provideLayer(Clock.live).fork
+        _                 =  updateVersionsRef.set(Some(updateFiber))
+      } yield ()
+
+
+    private def updateVersions() =
+      for {
+        images            <- config.listString("apps.images")
+        tags              <- ZIO.foreach(images)(i => docker.hubTags("haranaoss", i, pageSize = Some(1)).map(t => (i, t.head)))
+        _                 <- ZIO.foreach_(tags)(t => UIO(versions.set(versions.get() + (t._1 -> t._2.name))))
+      } yield ()
+
+
+    def shutdown: UIO[Unit] =
+      for {
+        updateFiber       <- UIO(updateVersionsRef.get.get)
+        _                 <- updateFiber.interrupt.ignore
+      } yield ()
+
+
+    def updates(rc: RoutingContext): Task[Response] =
+      Task(Response.JSON(content = versions.get().asJson))
+
+
+    def connect(rc: RoutingContext): Task[Response] =
       for {
         claims            <- jwt.claims[DesignerClaims](rc)
         app               <- Crud.get[DesignerApp]("Apps", rc, config, jwt, logger, micrometer, mongo).map(_.head)
@@ -59,7 +93,7 @@ object LiveApps {
       } yield response
 
 
-    def stop(rc: RoutingContext): Task[Response] =
+    def disconnect(rc: RoutingContext): Task[Response] =
       for {
         claims            <- jwt.claims[DesignerClaims](rc)
         app               <- Crud.get[DesignerApp]("Apps", rc, config, jwt, logger, micrometer, mongo).map(_.head)
@@ -81,8 +115,8 @@ object LiveApps {
 
     def restart(rc: RoutingContext): Task[Response] =
       for {
-        _                 <- stop(rc)
-        response          <- start(rc)
+        _                 <- disconnect(rc)
+        response          <- connect(rc)
       } yield response
 
 

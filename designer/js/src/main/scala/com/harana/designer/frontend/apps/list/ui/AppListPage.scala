@@ -11,6 +11,7 @@ import com.harana.ui.external.shoelace.MenuItem
 import com.harana.ui.components.ColumnSize
 import com.harana.ui.components.Device.Desktop
 import com.harana.ui.components.table.Column
+import slinky.core.facade.ReactElement
 import slinky.web.html.{div, i}
 
 @react object AppListPage {
@@ -31,14 +32,19 @@ import slinky.web.html.{div, i}
       },
       allowDelete = false,
       allowEdit = false,
-      itemMenuItems = Some((item: GridPageItem[_]) =>
-        List(
-          MenuItem(i"apps.menu.stop",
-            iconPrefix = Some("lindua", "repeat"),
-            onClick = Some(_ => Circuit.dispatch(StopApp(item.id))
-          ))
+      itemMenuItems = Some((item: GridPageItem[_]) => {
+        val state = Circuit.state(zoomTo(_.appListState))
+        val otherMenuItems: List[ReactElement] = List(
+          MenuItem(i"apps.menu.stop", iconPrefix = Some("lindua", "repeat"), onClick = Some(_ => Circuit.dispatch(StopApp(item.id))))
         )
-      )
+
+        state.additionalState.latestVersions.get(item.additionalData("image").toString) match {
+          case Some(version) if version != item.additionalData("version").toString =>
+            otherMenuItems ++ List(MenuItem(i"apps.menu.update", iconPrefix = Some("lindua", "repeat"), onClick = Some(_ => Circuit.dispatch(StopApp(item.id)))))
+          case _ =>
+            otherMenuItems
+        }
+      })
     )
   }
 }

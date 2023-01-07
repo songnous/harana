@@ -1,30 +1,27 @@
 package com.harana.designer.backend
 
-import com.harana.Layers
-import com.harana.designer.backend.services.apps.{Apps, LiveApps}
-import com.harana.designer.backend.services.data.LiveData
-import com.harana.designer.backend.services.datasets.{DataSets, LiveDataSets}
-import com.harana.designer.backend.services.datasources.{DataSources, LiveDataSources}
-import com.harana.designer.backend.services.events.{Events, LiveEvents}
-import com.harana.designer.backend.services.files.{Files, LiveFiles}
-import com.harana.designer.backend.services.flowexecutions.{FlowExecutions, LiveFlowExecutions}
-import com.harana.designer.backend.services.flows.{Flows, LiveFlows}
-import com.harana.designer.backend.services.help.{Help, LiveHelp}
-import com.harana.designer.backend.services.schedules.argo.LiveArgoScheduler
-import com.harana.designer.backend.services.schedules.{LiveSchedules, Schedules}
-import com.harana.designer.backend.services.setup.{LiveSetup, Setup}
-import com.harana.designer.backend.services.system.{LiveSystem, System}
-import com.harana.designer.backend.services.terminals.{LiveTerminals, Terminals}
-import com.harana.designer.backend.services.user.{LiveUser, User}
+import com.harana.designer.backend.Layers._
+import com.harana.designer.backend.services.apps.Apps
+import com.harana.designer.backend.services.datasets.DataSets
+import com.harana.designer.backend.services.datasources.DataSources
+import com.harana.designer.backend.services.events.Events
+import com.harana.designer.backend.services.files.Files
+import com.harana.designer.backend.services.flowexecutions.FlowExecutions
+import com.harana.designer.backend.services.flows.Flows
+import com.harana.designer.backend.services.help.Help
+import com.harana.designer.backend.services.schedules.Schedules
+import com.harana.designer.backend.services.setup.Setup
+import com.harana.designer.backend.services.system.System
+import com.harana.designer.backend.services.terminals.Terminals
+import com.harana.designer.backend.services.user.User
 import com.harana.id.jwt.modules.jwt.JWT
 import com.harana.id.jwt.{Layers => JWTLayers}
+import com.harana.modules.Layers
 import com.harana.modules.core.app.{App => CoreApp}
 import com.harana.modules.core.micrometer.{LiveMicrometer, Micrometer}
-import com.harana.modules.core.{Layers => CoreLayers}
 import com.harana.modules.mongo.Mongo
-import com.harana.modules.vertx.models.{Route, _}
-import com.harana.modules.vertx.{LiveVertx, Vertx}
-import com.harana.modules.vfs.LiveVfs
+import com.harana.modules.vertx.Vertx
+import com.harana.modules.vertx.models._
 import com.harana.sdk.shared.models.common.{User => DesignerUser}
 import com.harana.sdk.shared.models.flow.FlowExecution
 import com.harana.sdk.shared.models.flow.catalog.Catalog
@@ -32,7 +29,6 @@ import com.harana.sdk.shared.models.flow.execution.spark.ExecutionStatus
 import com.harana.sdk.shared.models.jwt.DesignerClaims
 import io.vertx.core.http.HttpMethod._
 import io.vertx.ext.web.RoutingContext
-import zio.blocking.Blocking
 import zio.clock.Clock
 import zio.duration.durationInt
 import zio.{Schedule, Task}
@@ -42,26 +38,7 @@ import scala.util.Try
 
 object App extends CoreApp {
 
-    // FIXME: Airbyte requires CoreLayers.standard when it shouldn't
-  val dataSources = (CoreLayers.standard ++ (CoreLayers.standard >>> Layers.airbyte) ++ JWTLayers.jwt ++ Layers.mongo) >>> LiveDataSources.layer
-  val dataSets = (CoreLayers.standard ++ JWTLayers.jwt ++ Layers.mongo) >>> LiveDataSets.layer
-  val system = (CoreLayers.standard ++ Clock.live ++ JWTLayers.jwt ++ Layers.mongo ++ Layers.vertx) >>> LiveSystem.layer
-  val execution = (CoreLayers.standard ++ Layers.mongo) >>> LiveFlowExecutions.layer
-  val events = (CoreLayers.standard ++ JWTLayers.jwt ++ Layers.mongo) >>> LiveEvents.layer
-  val flows = (Layers.kubernetes ++ CoreLayers.standard ++ JWTLayers.jwt ++ Layers.mongo) >>> LiveFlows.layer
-  val setup = (CoreLayers.standard ++ Clock.live ++ Layers.kubernetes ++ Layers.mongo) >>> LiveSetup.layer
-  val vertx = (Blocking.live ++ CoreLayers.standard ++ CoreLayers.cache) >>> LiveVertx.layer
-  val user = (CoreLayers.standard ++ Layers.aws ++ JWTLayers.jwt ++ Layers.kubernetes ++ Layers.mongo ++ vertx) >>> LiveUser.layer
-  val apps = (CoreLayers.standard ++ Clock.live ++ JWTLayers.jwt ++ Layers.kubernetes ++ Layers.mongo ++ vertx) >>> LiveApps.layer
-  val data = (CoreLayers.standard ++ Layers.alluxioFs ++ JWTLayers.jwt ++ vertx) >>> LiveData.layer
-  val files = (CoreLayers.standard ++ JWTLayers.jwt ++ Layers.kubernetes ++ vertx ++ LiveVfs.layer) >>> LiveFiles.layer
-
-  val argoScheduler = (CoreLayers.standard ++ Layers.argo ++ Layers.kubernetes) >>> LiveArgoScheduler.layer
-  val schedules = (CoreLayers.standard ++ JWTLayers.jwt ++ argoScheduler ++ Layers.mongo ++ vertx) >>> LiveSchedules.layer
-  val terminals = (CoreLayers.standard ++ JWTLayers.jwt ++ Layers.kubernetes ++ Layers.mongo ++ vertx) >>> LiveTerminals.layer
-  val help = (CoreLayers.standard ++ JWTLayers.jwt ++ Layers.mongo) >>> LiveHelp.layer
-
-  private def routes = List(
+  def routes = List(
     Route("/",                                                GET,      rc => homePage(rc), isBlocking = false),
     Route("/welcome",                                         GET,      rc => homePage(rc, true), isBlocking = false),
     Route("/apps*",                                           GET,      rc => homePage(rc), isBlocking = false),
@@ -79,12 +56,14 @@ object App extends CoreApp {
     Route("/system/error",                                    POST,     rc => System.error(rc).provideLayer(system)),
 //    Route("/system/events",                                   GET,      rc => Events.stream(rc).provideLayer(system)),
 
-  // Apps
-    Route("/api/apps/start/:id",                              GET,      rc => Apps.start(rc).provideLayer(apps)),
-    Route("/api/apps/restart/:id",                            GET,      rc => Apps.restart(rc).provideLayer(apps)),
-    Route("/api/apps/stop/:id",                               GET,      rc => Apps.stop(rc).provideLayer(apps)),
+    // Apps
     Route("/api/apps/search/:query",                          GET,      rc => Apps.search(rc).provideLayer(apps)),
     Route("/api/apps/tags",                                   GET,      rc => Apps.tags(rc).provideLayer(apps)),
+    Route("/api/apps/owners",                                 GET,      rc => Apps.tags(rc).provideLayer(apps)),
+    Route("/api/apps/updates",                                GET,      rc => Apps.updates(rc).provideLayer(apps)),
+    Route("/api/apps/connect/:id",                            GET,      rc => Apps.connect(rc).provideLayer(apps)),
+    Route("/api/apps/disconnect/:id",                         GET,      rc => Apps.disconnect(rc).provideLayer(apps)),
+    Route("/api/apps/restart/:id",                            GET,      rc => Apps.restart(rc).provideLayer(apps)),
     Route("/api/apps",                                        GET,      rc => Apps.list(rc).provideLayer(apps)),
     Route("/api/apps",                                        POST,     rc => Apps.create(rc).provideLayer(apps)),
     Route("/api/apps",                                        PUT,      rc => Apps.update(rc).provideLayer(apps)),
@@ -94,6 +73,7 @@ object App extends CoreApp {
     // Datasets
     Route("/api/datasets/search/:query",                      GET,      rc => DataSets.search(rc).provideLayer(dataSets)),
     Route("/api/datasets/tags",                               GET,      rc => DataSets.tags(rc).provideLayer(dataSets)),
+    Route("/api/datasets/owners",                             GET,      rc => DataSets.owners(rc).provideLayer(dataSets)),
     Route("/api/datasets",                                    GET,      rc => DataSets.list(rc).provideLayer(dataSets)),
     Route("/api/datasets",                                    POST,     rc => DataSets.create(rc).provideLayer(dataSets)),
     Route("/api/datasets",                                    PUT,      rc => DataSets.update(rc).provideLayer(dataSets)),
@@ -104,6 +84,7 @@ object App extends CoreApp {
     // Data Sources
     Route("/api/datasources/search/:query",                   GET,      rc => DataSources.search(rc).provideLayer(dataSources)),
     Route("/api/datasources/tags",                            GET,      rc => DataSources.tags(rc).provideLayer(dataSources)),
+    Route("/api/datasources/owners",                          GET,      rc => DataSources.owners(rc).provideLayer(dataSources)),
     Route("/api/datasources",                                 GET,      rc => DataSources.list(rc).provideLayer(dataSources)),
     Route("/api/datasources",                                 POST,     rc => DataSources.create(rc).provideLayer(dataSources)),
     Route("/api/datasources",                                 PUT,      rc => DataSources.update(rc).provideLayer(dataSources)),
@@ -120,9 +101,10 @@ object App extends CoreApp {
 
     // Files
     Route("/api/files/search/:query",                         GET,      rc => Files.search(rc).provideLayer(files)),
+    Route("/api/files/tags",                                  GET,      rc => Files.tags(rc).provideLayer(files)),
+    Route("/api/files/owners",                                GET,      rc => Files.tags(rc).provideLayer(files)),
     Route("/api/files/info",                                  GET,      rc => Files.info(rc).provideLayer(files)),
     Route("/api/files/info",                                  POST,     rc => Files.updateInfo(rc).provideLayer(files)),
-    Route("/api/files/tags",                                  GET,      rc => Files.tags(rc).provideLayer(files)),
     Route("/api/files/directory",                             POST,     rc => Files.createDirectory(rc).provideLayer(files)),
     Route("/api/files/download",                              GET,      rc => Files.download(rc).provideLayer(files)),
     Route("/api/files/preview",                               GET,      rc => Files.preview(rc).provideLayer(files)),
@@ -138,6 +120,7 @@ object App extends CoreApp {
     // Flows
     Route("/api/flows/search/:query",                         GET,      rc => Flows.search(rc).provideLayer(flows)),
     Route("/api/flows/tags",                                  GET,      rc => Flows.tags(rc).provideLayer(flows)),
+    Route("/api/flows/owners",                                GET,      rc => Flows.owners(rc).provideLayer(flows)),
     Route("/api/flows/start/:flowId",                         PUT,      rc => Flows.start(rc).provideLayer(flows)),
     Route("/api/flows/stop/:flowExecutionId",                 PUT,      rc => Flows.stop(rc).provideLayer(flows)),
     Route("/api/flows/progress/:id",                          POST,     rc => Flows.updateProgress(rc).provideLayer(flows)),
@@ -156,13 +139,14 @@ object App extends CoreApp {
     Route("/api/flows/executions/progress/:flowId",           GET,      rc => FlowExecutions.progress(rc).provideLayer(execution)),
 
     // Schedules
+    Route("/api/schedules/search/:query",                     GET,      rc => Schedules.search(rc).provideLayer(schedules)),
+    Route("/api/schedules/tags",                              GET,      rc => Schedules.tags(rc).provideLayer(schedules)),
+    Route("/api/schedules/owners",                            GET,      rc => Schedules.owners(rc).provideLayer(schedules)),
     Route("/api/schedules",                                   GET,      rc => Schedules.list(rc).provideLayer(schedules)),
     Route("/api/schedules",                                   POST,     rc => Schedules.create(rc).provideLayer(schedules)),
     Route("/api/schedules",                                   PUT,      rc => Schedules.update(rc).provideLayer(schedules)),
     Route("/api/schedules/:id",                               GET,      rc => Schedules.get(rc).provideLayer(schedules)),
     Route("/api/schedules/:id",                               DELETE,   rc => Schedules.delete(rc).provideLayer(schedules)),
-    Route("/api/schedules/search/:query",                     GET,      rc => Schedules.search(rc).provideLayer(schedules)),
-    Route("/api/schedules/tags",                              GET,      rc => Schedules.tags(rc).provideLayer(schedules)),
     Route("/api/schedules/trigger/:id",                       GET,      rc => Schedules.trigger(rc).provideLayer(schedules)),
     Route("/api/schedules/enable/:id",                        GET,      rc => Schedules.enable(rc).provideLayer(schedules)),
     Route("/api/schedules/disable/:id",                       GET,      rc => Schedules.disable(rc).provideLayer(schedules)),
@@ -204,6 +188,7 @@ object App extends CoreApp {
 
 //      _                     <- Mongo.createQueue[Event]("EventsGlobal").provideLayer(Layers.mongo)
 
+      _                     <- Apps.startup.provideLayer(apps)
       _                     <- Terminals.startup.provideLayer(terminals)
       _                     <- System.createIndexes.provideLayer(system)
       _                     <- Vertx.startHttpServer(
@@ -227,6 +212,7 @@ object App extends CoreApp {
 
   def shutdown =
     for {
+      _                     <- Apps.shutdown.provideLayer(apps)
       _                     <- Terminals.shutdown.provideLayer(terminals)
       _                     <- Vertx.close.provideLayer(vertx)
     } yield ()

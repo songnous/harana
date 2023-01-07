@@ -37,7 +37,7 @@ import scala.collection.mutable.ListBuffer
 
   def sidebar = {
     val sections = ListBuffer(searchSection(props.activeSearchQuery, props.onSearchQueryChanged))
-    if (props.tags.nonEmpty) sections += filterSection(i"common.sidebar.tags", props.tags, props.activeTag, props.onTagChanged)
+    if (props.tags.nonEmpty) sections += filterSection(i"common.sidebar.tags", true, props.tags, props.activeTag, props.onTagChanged)
     sections += SidebarSection(Some(i"files.sidebar.about"), allowCollapse = false, allowClear = false, None, TextListSection(props.sidebarAboutItems))
     Sidebar(sections.toList)
   }
