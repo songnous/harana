@@ -1,13 +1,12 @@
 package com.harana.modules.jasyncfio
 
-import com.harana.modules.core.config.Config
 import com.harana.modules.jasyncfio.Jasyncfio.Service
 import io.vertx.core.buffer.Buffer
 import io.vertx.ext.reactivestreams.{ReactiveReadStream, ReactiveWriteStream}
 import one.jasyncfio.{AsyncFile, EventExecutor}
 import org.reactivestreams.{Subscriber, Subscription}
-import zio.{Has, Task, ZIO, ZLayer}
 import zio.blocking._
+import zio.{Has, Task, ZIO, ZLayer}
 
 import java.nio.{ByteBuffer, ByteOrder}
 
@@ -19,8 +18,9 @@ object LiveJasyncfio {
     def open(path: String) =
       ZIO.fromFutureJava(AsyncFile.open(path, eventExecutor)).provide(Has(blocking))
 
-    def read(file: AsyncFile, readStream: ReactiveReadStream[Buffer]) =
+    def readStream(path: String, readStream: ReactiveReadStream[Buffer]) =
       Task {
+        val file = AsyncFile.open(path, eventExecutor).join()
         var read = -1
         val buffer = ByteBuffer.allocateDirect(Integer.BYTES).order(ByteOrder.nativeOrder())
 
@@ -28,19 +28,23 @@ object LiveJasyncfio {
           read = file.read(buffer).join()
           readStream.onNext(Buffer.buffer(buffer.array()))
         }
-    }
+        readStream.onComplete()
+        file.close().join()
+      }
 
     def read(file: AsyncFile, buffer: ByteBuffer, position: Option[Int] = None) =
       ZIO.fromFutureJava(if (position.isDefined) file.read(buffer, position.get) else file.read(buffer)).provide(Has(blocking)).map(_.toInt)
 
-    def write(file: AsyncFile, writeStream: ReactiveWriteStream[Buffer]) =
+    def writeStream(path: String, writeStream: ReactiveWriteStream[Buffer]) =
       Task {
+        val file = AsyncFile.open(path, eventExecutor).join()
         writeStream.subscribe(new Subscriber[Buffer] {
-            override def onSubscribe(sub: Subscription) = _
+            override def onSubscribe(sub: Subscription) = {}
             override def onNext(t: Buffer) = file.write(t.getByteBuf.nioBuffer())
             override def onError(t: Throwable) = throw t
             override def onComplete() = file.close()
           })
+        file.close().join()
       }
 
     def write(file: AsyncFile, buffer: ByteBuffer, position: Option[Int] = None) =

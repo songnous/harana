@@ -1,9 +1,9 @@
 package com.harana.modules.aws_s3
 
-import awscala.Region
 import io.vertx.core.buffer.Buffer
 import io.vertx.ext.reactivestreams.{ReactiveReadStream, ReactiveWriteStream}
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider
+import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.s3.S3AsyncClient
 import software.amazon.awssdk.services.s3.model._
 import zio.macros.accessible
@@ -15,7 +15,10 @@ object AwsS3 {
 
   trait Service {
 
-    def newClient(region: Region, credentials: AwsCredentialsProvider): Task[S3AsyncClient]
+    def newClient(credentials: AwsCredentialsProvider,
+              region: Option[Region] = None,
+              endpoint: Option[String] = None,
+              targetThroughput: Option[Double] = None): Task[S3AsyncClient]
 
     def createBucket(client: S3AsyncClient, bucket: String): Task[Unit]
 

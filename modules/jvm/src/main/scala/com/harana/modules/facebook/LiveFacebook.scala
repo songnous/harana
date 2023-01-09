@@ -5,7 +5,7 @@ import com.facebook.ads.sdk._
 import com.harana.modules.core.config.Config
 import com.harana.modules.facebook.Facebook.Service
 import zio.blocking._
-import zio.{Task, ZLayer}
+import zio.{Has, Task, ZLayer}
 
 import scala.jdk.CollectionConverters._
 
@@ -333,13 +333,13 @@ object LiveFacebook {
     private def adAccount[A <: APINode](adAccountId: String, fn: AdAccount => APINodeList[A]): Task[List[A]] =
       for {
         ac <- apiContext
-        list <- effectBlocking(fn(new AdAccount(adAccountId, ac))).provide(blocking)
+        list <- effectBlocking(fn(new AdAccount(adAccountId, ac))).provide(Has(blocking))
       } yield list
 
     private def user[A <: APINode](userId: String, fn: User => APINodeList[A]): Task[List[A]] =
       for {
         ac <- apiContext
-        list <- effectBlocking(fn(new User(userId, ac))).provide(blocking)
+        list <- effectBlocking(fn(new User(userId, ac))).provide(Has(blocking))
       } yield list
 
     private implicit def toList[A <: APINode](nodeList: APINodeList[A]): List[A] =

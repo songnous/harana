@@ -506,10 +506,18 @@ object LiveVertx {
     def withUploadStream[T](rc: RoutingContext, fn: ReactiveWriteStream[Buffer] => Task[T]) =
       for {
         event   <- Task.effectAsync[HttpServerFileUpload](cb => rc.request().uploadHandler((event: HttpServerFileUpload) => cb(Task(event))))
-        stream  =  ReactiveWriteStream.writeStream[Buffer](VX)
+        vertx   <- vertx
+        stream  =  ReactiveWriteStream.writeStream[Buffer](vertx)
         pump    =  Pump.pump(event, stream).start()
         result  <- fn(stream)
         _       =  pump.stop()
+      } yield result
+
+
+    def newWriteStream[T]: Task[ReactiveWriteStream[T]] =
+      for {
+        vertx   <- vertx
+        result  <- Task(ReactiveWriteStream.writeStream[T](vertx))
       } yield result
 
 
@@ -519,7 +527,7 @@ object LiveVertx {
         result  <- IO.effectAsync[Throwable, NetServer] { cb =>
                     vx.createNetServer().listen(listenPort, listenHost, (result: AsyncResult[NetServer]) =>
                       if (result.succeeded()) cb(Task(result.result())) else cb(Task.fail(result.cause())))
-                    }
+                   }
       } yield result
 
 

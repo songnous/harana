@@ -16,11 +16,11 @@ object Jasyncfio {
 
     def open(path: String): Task[AsyncFile]
 
-    def read(file: AsyncFile,  readStream: ReactiveReadStream[Buffer]): Task[Unit]
+    def readStream(path: String,  readStream: ReactiveReadStream[Buffer]): Task[Unit]
 
     def read(file: AsyncFile, buffer: ByteBuffer, position: Option[Int] = None): Task[Int]
 
-    def write(file: AsyncFile, writeStream: ReactiveWriteStream[Buffer]): Task[Unit]
+    def writeStream(path: String, writeStream: ReactiveWriteStream[Buffer]): Task[Unit]
 
     def write(file: AsyncFile, buffer: ByteBuffer, position: Option[Int] = None): Task[Int]
 
