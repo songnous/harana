@@ -19,17 +19,20 @@ object Response {
                     contentType: Option[ContentType] = None,
                     cookies: List[Cookie] = List(),
                     statusCode: Option[Int] = None,
+                    cors: Boolean = false,
                     headers: Map[String, List[String]] = Map()) extends Response
 
   case class Content(content: String,
                      contentType: Option[ContentType] = None,
                      cookies: List[Cookie] = List(),
                      statusCode: Option[Int] = None,
+                     cors: Boolean = false,
                      headers: Map[String, List[String]] = Map()) extends Response
 
   case class Empty(contentType: Option[ContentType] = None,
                    cookies: List[Cookie] = List(),
                    statusCode: Option[Int] = None,
+                   cors: Boolean = false,
                    headers: Map[String, List[String]] = Map()) extends Response
 
   case class File(filename: String,
@@ -39,6 +42,7 @@ object Response {
                   contentType: Option[ContentType] = None,
                   cookies: List[Cookie] = List(),
                   statusCode: Option[Int] = None,
+                  cors: Boolean = false,
                   headers: Map[String, List[String]] = Map()) extends Response
 
   case class InputStream(inputStream: java.io.InputStream,
@@ -47,12 +51,14 @@ object Response {
                          contentType: Option[ContentType] = None,
                          cookies: List[Cookie] = List(),
                          statusCode: Option[Int] = None,
+                         cors: Boolean = false,
                          headers: Map[String, List[String]] = Map()) extends Response
 
   case class JSON(content: Json,
                   contentType: Option[ContentType] = Some(ContentType.JSON),
                   cookies: List[Cookie] = List(),
                   statusCode: Option[Int] = None,
+                  cors: Boolean = false,
                   headers: Map[String, List[String]] = Map()) extends Response
 
   case class ReadStream(stream: ReactiveReadStream[VertxBuffer],
@@ -60,12 +66,14 @@ object Response {
                         contentType: Option[ContentType] = None,
                         cookies: List[Cookie] = List(),
                         statusCode: Option[Int] = None,
+                        cors: Boolean = false,
                         headers: Map[String, List[String]] = Map()) extends Response
 
   case class Redirect(url: String,
                       contentType: Option[ContentType] = None,
                       cookies: List[Cookie] = List(),
                       statusCode: Option[Int] = None,
+                      cors: Boolean = false,
                       headers: Map[String, List[String]] = Map()) extends Response
 
   case class Template(path: String,
@@ -73,5 +81,6 @@ object Response {
                       contentType: Option[ContentType] = None,
                       cookies: List[Cookie] = List(),
                       statusCode: Option[Int] = None,
+                      cors: Boolean = false,
                       headers: Map[String, List[String]] = Map()) extends Response
 }

@@ -1,5 +1,6 @@
 package com.harana.modules
 
+import com.google.common.base.Strings
 import com.harana.modules.vertx.models._
 import com.harana.modules.vertx.models.streams.{BufferReadStream, GzipReadStream, InputStreamReadStream}
 import com.harana.modules.core.logger.Logger
@@ -30,6 +31,8 @@ package object vertx {
   val runtime = Runtime[Unit]((), Platform.default
       .withReportFailure(cause => if (!cause.interrupted) logger.error(cause.prettyPrint)))
 
+  val crossOriginResourceSharing = CrossOriginResourceSharing()
+
   @inline
   def run[A](zio: Task[A]): A =
     runtime.unsafeRun(zio)
@@ -50,7 +53,7 @@ package object vertx {
       for {
         sample        <- micrometer.startTimer
         _             <- handler(context).map {
-                          case Response.Buffer(buffer, gzipped, _, _, _, _) =>
+                          case Response.Buffer(buffer, gzipped, _, _, _, _, _) =>
                             val brs = new BufferReadStream(buffer)
                             val rs = if (gzipped) new GzipReadStream(brs) else brs
                             val pump = Pump.pump(rs, context.response())
@@ -58,14 +61,14 @@ package object vertx {
                             pump.start()
                             rs.resume()
 
-                          case Response.Content(content, contentType, cookies, statusCode, headers) =>
-                            response(context, contentType, cookies, statusCode, headers).end(content)
+                          case Response.Content(content, contentType, cookies, statusCode, cors, headers) =>
+                            response(context, contentType, cookies, statusCode, cors, headers).end(content)
 
-                          case Response.Empty(contentType, cookies, statusCode, headers) =>
-                            response(context, contentType, cookies, statusCode, headers).end()
+                          case Response.Empty(contentType, cookies, statusCode, cors, headers) =>
+                            response(context, contentType, cookies, statusCode, cors, headers).end()
 
-                          case Response.File(filename, inputStream, gzipped, contentSize, contentType, cookies, statusCode, headers) =>
-                            val r = response(context, contentType, cookies, statusCode, headers)
+                          case Response.File(filename, inputStream, gzipped, contentSize, contentType, cookies, statusCode, cors, headers) =>
+                            val r = response(context, contentType, cookies, statusCode, cors, headers)
                             r.putHeader("Content-Disposition",  s"attachment; filename=$filename;")
                             r.setChunked(true)
                             if (contentSize.isDefined) r.putHeader(HttpHeaders.CONTENT_LENGTH, contentSize.get.toString)
@@ -79,8 +82,8 @@ package object vertx {
                             pump.start()
                             rs.resume()
 
-                          case Response.InputStream(inputStream, gzipped, contentSize, contentType, cookies, statusCode, headers) =>
-                            val r = response(context, contentType, cookies, statusCode, headers)
+                          case Response.InputStream(inputStream, gzipped, contentSize, contentType, cookies, statusCode, cors, headers) =>
+                            val r = response(context, contentType, cookies, statusCode, cors, headers)
                             r.setChunked(true)
                             val isrs = new InputStreamReadStream(inputStream, vx)
                             if (contentSize.isDefined) r.putHeader(HttpHeaders.CONTENT_LENGTH, contentSize.get.toString)
@@ -93,11 +96,11 @@ package object vertx {
                             pump.start()
                             rs.resume()
 
-                          case Response.JSON(json, contentType, cookies, statusCode, headers) =>
-                            response(context, contentType, cookies, statusCode, headers).end(json.toString)
+                          case Response.JSON(json, contentType, cookies, statusCode, cors, headers) =>
+                            response(context, contentType, cookies, statusCode, cors, headers).end(json.toString)
 
-                          case Response.ReadStream(stream, contentSize, contentType, cookies, statusCode, headers) =>
-                            val r = response(context, contentType, cookies, statusCode, headers)
+                          case Response.ReadStream(stream, contentSize, contentType, cookies, statusCode, cors, headers) =>
+                            val r = response(context, contentType, cookies, statusCode, cors, headers)
                             if (contentSize.isDefined) r.putHeader(HttpHeaders.CONTENT_LENGTH, contentSize.get.toString)
                             val pump = Pump.pump(stream, r)
                             stream.endHandler(_ => {
@@ -107,13 +110,13 @@ package object vertx {
                             pump.start()
                             stream.resume()
 
-                          case Response.Redirect(url, contentType, cookies, _, headers) =>
-                            response(context, contentType, cookies, Some(302), headers).putHeader("location", url).end()
+                          case Response.Redirect(url, contentType, cookies, _, cors, headers) =>
+                            response(context, contentType, cookies, Some(302), cors, headers).putHeader("location", url).end()
 
-                          case Response.Template(path, parameters, contentType, cookies, statusCode, headers) =>
+                          case Response.Template(path, parameters, contentType, cookies, statusCode, cors, headers) =>
                             templateEngine.render(parameters.asJava, path, new Handler[AsyncResult[Buffer]] {
                               override def handle(result: AsyncResult[Buffer]): Unit =
-                                if (result.succeeded()) response(context, contentType, cookies, statusCode, headers).end(result.result())
+                                if (result.succeeded()) response(context, contentType, cookies, statusCode, cors, headers).end(result.result())
                                 else {
                                   result.cause().printStackTrace()
                                   context.fail(result.cause())
@@ -235,15 +238,23 @@ package object vertx {
     }
   }
 
-  private def response(context: RoutingContext,
+  private def response(rc: RoutingContext,
                        contentType: Option[ContentType],
                        cookies: List[Cookie],
                        statusCode: Option[Int],
+                       cors: Boolean,
                        headers: Map[String, List[String]]) = {
-    val response = context.response()
+    val response = rc.response()
     if (contentType.isDefined) response.putHeader(CONTENT_TYPE, contentType.get.value)
     cookies.foreach(response.addCookie)
     if (statusCode.isDefined) response.setStatusCode(statusCode.get)
+    if (cors) {
+      val corsOrigin = rc.request().getHeader(HttpHeaders.ORIGIN)
+      if (!Strings.isNullOrEmpty(corsOrigin) && crossOriginResourceSharing.isOriginAllowed(corsOrigin)) {
+        response.putHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN.toString, crossOriginResourceSharing.getAllowedOrigin(corsOrigin))
+        response.putHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS.toString, crossOriginResourceSharing.allowedMethods.asJava)
+      }
+    }
     headers.foreach { case (k, v) => if (v.size == 1) response.putHeader(k, v.head) else response.putHeader(k, v.asJava) }
     response
   }

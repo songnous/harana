@@ -39,7 +39,7 @@ import org.pac4j.vertx.handler.impl._
 import org.pac4j.vertx.http.VertxHttpActionAdapter
 import org.pac4j.vertx.{VertxProfileManager, VertxWebContext}
 import zio.blocking._
-import zio.{IO, Task, UIO, ZLayer}
+import zio.{IO, Task, UIO, ZIO, ZLayer}
 
 import java.io.File
 import java.net.URI
@@ -503,7 +503,14 @@ object LiveVertx {
     } yield httpServer
 
 
-    def withUploadStream[T](rc: RoutingContext, fn: ReactiveWriteStream[Buffer] => Task[T]) =
+    def withUploadBody[T](rc: RoutingContext)(fn: Buffer => Task[T]) =
+      for {
+        buffer  <- ZIO.fromCompletionStage(rc.request().body().toCompletionStage)
+        result  <- fn(buffer)
+      } yield result
+
+
+    def withUploadBodyAsStream[T](rc: RoutingContext)(fn: ReactiveWriteStream[Buffer] => Task[T]) =
       for {
         event   <- Task.effectAsync[HttpServerFileUpload](cb => rc.request().uploadHandler((event: HttpServerFileUpload) => cb(Task(event))))
         vertx   <- vertx

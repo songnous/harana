@@ -5,12 +5,14 @@ import com.harana.modules.airtable.LiveAirtable
 import com.harana.modules.alluxiofs.LiveAlluxioFs
 import com.harana.modules.argo.LiveArgo
 import com.harana.modules.aws.LiveAWS
+import com.harana.modules.aws_s3.LiveAwsS3
 import com.harana.modules.clearbit.LiveClearbit
 import com.harana.modules.core.okhttp.LiveOkHttp
 import com.harana.modules.core.{Layers => CoreLayers}
 import com.harana.modules.docker.LiveDocker
 import com.harana.modules.email.LiveEmail
 import com.harana.modules.handlebars.LiveHandlebars
+import com.harana.modules.jasyncfio.LiveJasyncfio
 import com.harana.modules.kubernetes.LiveKubernetes
 import com.harana.modules.mixpanel.LiveMixpanel
 import com.harana.modules.mongo.LiveMongo
@@ -27,9 +29,11 @@ object Layers {
   val airtable = CoreLayers.standard >>> LiveAirtable.layer
   val alluxioFs = CoreLayers.standard >>> LiveAlluxioFs.layer
   val aws = Blocking.live ++ CoreLayers.standard >>> LiveAWS.layer
+  val awsS3 = Blocking.live ++ CoreLayers.standard >>> LiveAwsS3.layer
   val clearbit = (CoreLayers.standard ++ okhttp) >>> LiveClearbit.layer
   val docker = Blocking.live ++ CoreLayers.standard ++ okhttp >>> LiveDocker.layer
   val email = CoreLayers.standard >>> LiveEmail.layer
+  val jasyncfio = Blocking.live ++ CoreLayers.standard >>> LiveJasyncfio.layer
   val handlebars = LiveHandlebars.layer
   val kubernetes = Clock.live ++ CoreLayers.standard >>> LiveKubernetes.layer
   val mixpanel = CoreLayers.standard >>> LiveMixpanel.layer
