@@ -15,10 +15,6 @@ public class ChunkedInputStream extends FilterInputStream {
     private byte[] chunk;
     private int currentIndex;
     private int currentLength;
-    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
-            value = "URF_UNREAD_FIELD",
-            justification = "https://github.com/gaul/s3proxy/issues/205")
-    @SuppressWarnings("UnusedVariable")
     private String currentSignature;
 
     public ChunkedInputStream(InputStream is) {

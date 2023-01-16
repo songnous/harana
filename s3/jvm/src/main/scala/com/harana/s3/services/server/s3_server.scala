@@ -7,21 +7,26 @@ import com.harana.modules.vertx.models.{ContentType, Response}
 import com.harana.s3.services.server.models.AuthenticationType._
 import com.harana.s3.services.server.models._
 import com.harana.s3.utils._
-import io.vertx.core.Vertx
-import io.vertx.core.http.{HttpHeaders, HttpMethod, HttpServerFileUpload}
+import io.vertx.core.http.{HttpHeaders, HttpMethod}
 import io.vertx.ext.web.RoutingContext
-import zio.Task
+import zio.{Task, UIO, ZIO}
+import com.fasterxml.jackson.dataformat.xml.XmlMapper
+import software.amazon.awssdk.services.s3.model.ObjectCannedACL
 
-import scala.jdk.CollectionConverters._
 import java.io.{ByteArrayInputStream, InputStream, StringWriter}
 import java.security.MessageDigest
 import java.util.concurrent.TimeUnit
 import javax.xml.stream.{XMLOutputFactory, XMLStreamWriter}
+import scala.jdk.CollectionConverters._
 
 package object s3_server {
   val maxMultipartCopySize = 5L * 1024L * 1024L * 1024L
   val urlEscaper = new PercentEscaper("*-./_", false)
 
+  private val fakeOwnerId = "75aa57f09aa0c8caeab4f8c24e99d10f8e7faeebf76c078efc7c6caea54ba06a"
+
+  private val xmlMapper = new XmlMapper()
+  private val xmlOutputFactory = XMLOutputFactory.newInstance()
   private val userMetdataPrefix = "x-amz-meta-"
   private val validBucketFirstChar = CharMatcher.inRange('a', 'z').or(CharMatcher.inRange('A', 'Z')).or(CharMatcher.inRange('0', '9'))
   private val validBucket = validBucketFirstChar.or(CharMatcher.is('.')).or(CharMatcher.is('_')).or(CharMatcher.is('-'))
@@ -62,15 +67,9 @@ package object s3_server {
         throw new S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
     }
 
-  def isValidContainer(containerName: String) =
-    containerName == null ||
-      containerName.length < 3 ||
-      containerName.length > 255 ||
-      containerName.startsWith(".") ||
-      containerName.endsWith(".") ||
-      IPAddress.validate(containerName) ||
-      !validBucketFirstChar.matches(containerName.charAt(0)) ||
-      !validBucket.matchesAllOf(containerName)
+  def isValidBucket(name: String) =
+    name == null ||  name.length < 3 || name.length > 255 || name.startsWith(".") || name.endsWith(".") ||
+    IPAddress.validate(name) || !validBucketFirstChar.matches(name.charAt(0)) || !validBucket.matchesAllOf(name)
 
   def isAnonymous(rc: RoutingContext, anonymousIdentity: Boolean) = {
     val method = rc.request().method()
@@ -111,7 +110,7 @@ package object s3_server {
       if (dateStr != null) {
         val date = DateTime.parseIso8601(dateStr)
         if (nowSeconds >= date + expires) throw new S3Exception(S3ErrorCode.ACCESS_DENIED, "Request has expired")
-        if (expires > TimeUnit.DAYS.toSeconds(7)) throw new Nothing(S3ErrorCode.ACCESS_DENIED)
+        if (expires > TimeUnit.DAYS.toSeconds(7)) throw new S3Exception(S3ErrorCode.ACCESS_DENIED)
       }
     }
   }
@@ -119,10 +118,10 @@ package object s3_server {
   def authenticationType(rc: RoutingContext, authHeader: S3AuthorizationHeader, authenticationType: AuthenticationType) = {
     val at = authHeader.authenticationType
     if (at == AuthenticationType.AWS_V2 && (
-      authenticationType == AuthenticationType.AWS_V2 ||
+        authenticationType == AuthenticationType.AWS_V2 ||
         authenticationType == AuthenticationType.AWS_V2_OR_V4)) AuthenticationType.AWS_V2
     else if (at == AuthenticationType.AWS_V4 && (
-      authenticationType == AuthenticationType.AWS_V4 ||
+        authenticationType == AuthenticationType.AWS_V4 ||
         authenticationType == AuthenticationType.AWS_V2_OR_V4)) AuthenticationType.AWS_V4
     else if (authenticationType != AuthenticationType.NONE)
       throw new S3Exception(S3ErrorCode.ACCESS_DENIED)
@@ -131,7 +130,7 @@ package object s3_server {
   def dateSkew(rc: RoutingContext, authenticationType: AuthenticationType) = {
     if (dateHeaders(rc)._2)
       authenticationType match {
-        case AWS_V2 => headerDate(rc.request().getHeader(AwsHttpHeaders.DATE_V2.value)) /= 1000
+        case AWS_V2 => headerDate(rc.request().getHeader(AwsHttpHeaders.DATE_V2.value)) / 1000
         case AWS_V4 | AWS_V2_OR_V4 => DateTime.parseIso8601(rc.request().getHeader(AwsHttpHeaders.DATE_V2.value))
       }
 
@@ -139,7 +138,7 @@ package object s3_server {
       DateTime.parseIso8601(rc.request().getHeader(AwsHttpHeaders.DATE_V4.value))
 
     else if (dateHeaders(rc)._1)
-      headerDate(rc.request().getHeader(HttpHeaders.DATE)) /= 1000
+      headerDate(rc.request().getHeader(HttpHeaders.DATE)) / 1000
   }
 
   def payload(rc: RoutingContext, authHeader: S3AuthorizationHeader, is: InputStream, v4MaxNonChunkedRequestSize: Long): (Array[Byte], InputStream) = {
@@ -167,6 +166,14 @@ package object s3_server {
     }
   }
 
+  def addResponseHeaderWithOverride(rc: RoutingContext, headers: Map[_<: CharSequence, List[_<: CharSequence]], headerName: String, overrideHeaderName: String, value: String) =
+    (Option(rc.request().getParam(overrideHeaderName)), Option(value)) match {
+       case (Some(ov), _) => headers ++ Map(headerName -> List(ov))
+       case (None, Some(v)) => headers ++ Map(headerName -> List(v))
+       case _ =>
+     }
+
+
   def headerAuthorization(rc: RoutingContext, anonymousIdentity: Boolean) =
     try {
       if (!anonymousIdentity) {
@@ -191,13 +198,79 @@ package object s3_server {
     }
     catch {
       case iae: Exception =>
-        throw new S3Exception(S3ErrorCode.INVALID_ARGUMENT, iae)
+        throw new S3Exception(S3ErrorCode.INVALID_ARGUMENT)
     }
 
-  def xmlResponse(outputFactory: XMLOutputFactory, fn: XMLStreamWriter => Unit) = {
-    val stringWriter = new StringWriter()
-    val writer = outputFactory.createXMLStreamWriter(stringWriter)
-    fn(writer)
-    Response.Content(stringWriter.toString, contentType = Some(ContentType.XML))
-  }
+  def mapXmlAclsToCannedPolicy(policy: AccessControlPolicy): String = {
+    if (!policy.owner.id.equals(fakeOwnerId))
+      throw new S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
+
+    var ownerFullControl = false
+    var allUsersRead = false
+
+    if (policy.aclList != null)
+      for (grant <- policy.aclList.grants) {
+        if (grant.grantee.`type`.equals("CanonicalUser") && grant.grantee.id.equals(fakeOwnerId) && grant.permission.equals("FULL_CONTROL"))
+          ownerFullControl = true
+        else
+          if (grant.grantee.`type`.equals("Group") && grant.grantee.uri.equals("http://acs.amazonaws.com/groups/global/AllUsers") && grant.permission.equals("READ"))
+            allUsersRead = true
+          else
+            throw new S3Exception(S3ErrorCode.NOT_IMPLEMENTED);
+        }
+
+        if (ownerFullControl) {
+          if (allUsersRead) "public-read" else "private"
+        } else {
+            throw new S3Exception(S3ErrorCode.NOT_IMPLEMENTED);
+        }
+    }
+
+  def acl(rc: RoutingContext) =
+    for {
+      hasBody     <- hasBody(rc)
+      acl         <- if (hasBody)
+                       xmlRequest(rc, classOf[AccessControlPolicy])(request => UIO(mapXmlAclsToCannedPolicy(request) match {
+                         case "private" => ObjectCannedACL.PRIVATE
+                         case "public-read" => ObjectCannedACL.PUBLIC_READ
+                         case _ => throw new S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
+                       }))
+                     else
+                       Task(
+                          Option(rc.request().getHeader(AwsHttpHeaders.ACL.value)) match {
+                            case Some("private") => ObjectCannedACL.PRIVATE
+                            case Some("public-read") => ObjectCannedACL.PUBLIC_READ
+                            case Some(acl) if cannedAcls.contains(acl) => throw new S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
+                            case _ => throw new S3Exception(S3ErrorCode.INVALID_REQUEST)
+                          }
+                        )
+    } yield acl
+
+  def maybeQuoteETag(eTag: String) =
+		if (eTag != null && !eTag.startsWith("\"") && !eTag.endsWith("\""))
+			"\"" + eTag + "\""
+    else eTag
+
+  def hasBody(rc: RoutingContext): Task[Boolean] =
+    for {
+      buffer    <- ZIO.fromCompletionStage(rc.request().body().toCompletionStage)
+      valid     =  buffer != null && buffer.length() > 0
+    } yield valid
+
+  def xmlRequest[A, B](rc: RoutingContext, xmlClass: Class[A])(fn: A => Task[B]) =
+    for {
+      buffer    <- ZIO.fromCompletionStage(rc.request().body().toCompletionStage)
+      cls       <- Task(xmlMapper.readValue(buffer.getBytes, xmlClass))
+      result    <- fn(cls)
+    } yield result
+
+  def xmlResponse(fn: XMLStreamWriter => Task[Unit]) =
+    for {
+      stringWriter    <- UIO(new StringWriter())
+      xmlWriter       =  xmlOutputFactory.createXMLStreamWriter(stringWriter)
+      _               <- fn(xmlWriter)
+      response        =  Response.Content(stringWriter.toString, contentType = Some(ContentType.XML))
+      _               =  stringWriter.close()
+      _               =  xmlWriter.close()
+    } yield response
 }

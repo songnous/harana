@@ -15,6 +15,9 @@ case class CrossOriginResourceSharing(allowedOrigins: Set[String],
   val anyOriginAllowed = allowedOrigins.contains(ALLOW_ANY_ORIGIN)
   val allowedOriginPatterns = allowedOrigins.map(Pattern.compile(_, Pattern.CASE_INSENSITIVE))
 
+  def getAllowedMethods =
+    allowedMethodsRaw
+
   def getAllowedOrigin(origin: String) =
     if (anyOriginAllowed) ALLOW_ANY_ORIGIN else origin
 

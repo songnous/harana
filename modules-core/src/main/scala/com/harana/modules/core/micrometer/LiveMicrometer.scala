@@ -48,11 +48,11 @@ object LiveMicrometer {
       } yield s
 
 
-    def gauge[T <: Number](name: String, tags: Map[String, String] = Map(), number: T): Task[T] =
-      for {
-        r <- registry
-        s <- Task.effect(r.gauge(name, toTags(tags), number))
-      } yield s
+//    def gauge[T <: Number](name: String, tags: Map[String, String] = Map(), number: T): Task[T] =
+//      for {
+//        r <- registry
+//        s <- Task.effect(r.gauge(name, toTags(tags), number))
+//      } yield s
 
 
     def get(name: String): Task[RequiredSearch] =

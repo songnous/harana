@@ -503,14 +503,14 @@ object LiveVertx {
     } yield httpServer
 
 
-    def withUploadBody[T](rc: RoutingContext)(fn: Buffer => Task[T]) =
+    def withBody[T](rc: RoutingContext)(fn: Buffer => Task[T]) =
       for {
         buffer  <- ZIO.fromCompletionStage(rc.request().body().toCompletionStage)
         result  <- fn(buffer)
       } yield result
 
 
-    def withUploadBodyAsStream[T](rc: RoutingContext)(fn: ReactiveWriteStream[Buffer] => Task[T]) =
+    def withBodyAsStream[T](rc: RoutingContext)(fn: ReactiveWriteStream[Buffer] => Task[T]) =
       for {
         event   <- Task.effectAsync[HttpServerFileUpload](cb => rc.request().uploadHandler((event: HttpServerFileUpload) => cb(Task(event))))
         vertx   <- vertx

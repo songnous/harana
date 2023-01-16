@@ -19,7 +19,7 @@ object Micrometer {
 
     def find(name: String): Task[Search]
 
-    def gauge[T <: Number](name: String, tags: Map[String, String] = Map(), number: T): Task[T]
+//    def gauge[T <: Number](name: String, tags: Map[String, String] = Map(), number: T): Task[T]
 
     def get(name: String): Task[RequiredSearch]
 

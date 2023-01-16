@@ -25,8 +25,6 @@ object App extends zio.App {
 
 
 
-
-
   private def log(s: String) =
     Logger.info(s).provideLayer(CoreLayers.logger)
 

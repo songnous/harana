@@ -16,6 +16,7 @@ import com.harana.modules.jasyncfio.LiveJasyncfio
 import com.harana.modules.kubernetes.LiveKubernetes
 import com.harana.modules.mixpanel.LiveMixpanel
 import com.harana.modules.mongo.LiveMongo
+import com.harana.modules.ohc.LiveOHC
 import com.harana.modules.stripe._
 import com.harana.modules.vertx.LiveVertx
 import com.harana.modules.zendesk.LiveZendesk
@@ -38,6 +39,7 @@ object Layers {
   val kubernetes = Clock.live ++ CoreLayers.standard >>> LiveKubernetes.layer
   val mixpanel = CoreLayers.standard >>> LiveMixpanel.layer
   val mongo = CoreLayers.standard >>> LiveMongo.layer
+  val ohc = Blocking.live >>> LiveOHC.layer
   val vertx = (Blocking.live ++ CoreLayers.standard) >>> LiveVertx.layer
   val zendesk = CoreLayers.standard >>> LiveZendesk.layer
 

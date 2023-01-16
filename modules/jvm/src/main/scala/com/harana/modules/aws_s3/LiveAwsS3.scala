@@ -17,6 +17,7 @@ import zio.{Task, ZLayer}
 
 import java.net.URI
 import java.nio.ByteBuffer
+import java.time.Instant
 import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import scala.jdk.CollectionConverters._
@@ -31,7 +32,7 @@ object LiveAwsS3 {
     def newClient(credentials: AwsCredentialsProvider,
                   region: Option[Region] = None,
                   endpoint: Option[String] = None,
-                  targetThroughput: Option[Double] = None) =
+                  targetThroughput: Option[Double] = None): Task[S3AsyncClient] =
       for {
         defaultRegion     <- config.string("aws.defaultRegion")
         clientBuilder     =  S3AsyncClient.crtBuilder()
@@ -57,10 +58,10 @@ object LiveAwsS3 {
     def getBucketPolicy(client: S3AsyncClient, bucket: String) =
       Task.fromCompletableFuture(client.getBucketPolicy(GetBucketPolicyRequest.builder().bucket(bucket).build())).map(_.policy())
 
-    def getBucketAcl(client: S3AsyncClient, bucket: String): Task[GetBucketAclResponse] =
+    def getBucketAcl(client: S3AsyncClient, bucket: String) =
       Task.fromCompletableFuture(client.getBucketAcl(GetBucketAclRequest.builder().bucket(bucket).build()))
 
-    def putBucketAcl(client: S3AsyncClient, bucket: String, acl: String) =
+    def putBucketAcl(client: S3AsyncClient, bucket: String, acl: BucketCannedACL) =
       Task.fromCompletableFuture(client.putBucketAcl(PutBucketAclRequest.builder().bucket(bucket).acl(acl).build())).unit
 
     def listObjects(client: S3AsyncClient, bucket: String, prefix: Option[String] = None) = {
@@ -78,10 +79,27 @@ object LiveAwsS3 {
         .delete(Delete.builder().objects(identifiers.asJava).build()).build())
       ).unit
 
-    def getObject(client: S3AsyncClient, bucket: String, key: String) = {
+    def getObject(client: S3AsyncClient,
+                  bucket: String,
+                  key: String,
+                  ifMatch: Option[String] = None,
+                  ifNoneMatch: Option[String] = None,
+                  ifModifiedSince: Option[Instant] = None,
+                  ifUnmodifiedSince: Option[Instant] = None,
+                  range: Option[String] = None) = {
       val readStream = ReactiveReadStream.readStream[Buffer]
 
-      Task.fromCompletableFuture(client.getObject(GetObjectRequest.builder().bucket(bucket).key(key).build(), new AsyncResponseTransformer[GetObjectResponse, Unit] {
+      val builder = GetObjectRequest.builder()
+        .bucket(bucket)
+        .key(key)
+
+        if (ifMatch.isDefined) builder.ifMatch(ifMatch.get)
+        if (ifNoneMatch.isDefined) builder.ifNoneMatch(ifNoneMatch.get)
+        if (ifModifiedSince.isDefined) builder.ifModifiedSince(ifModifiedSince.get)
+        if (ifUnmodifiedSince.isDefined) builder.ifUnmodifiedSince(ifUnmodifiedSince.get)
+        if (range.isDefined) builder.range(range.get)
+
+      Task.fromCompletableFuture(client.getObject(builder.build(), new AsyncResponseTransformer[GetObjectResponse, Unit] {
         override def onStream(publisher: SdkPublisher[ByteBuffer]) =
           publisher.subscribe(new Subscriber[ByteBuffer] {
             override def onSubscribe(sub: Subscription) = readStream.onSubscribe(sub)
@@ -96,33 +114,76 @@ object LiveAwsS3 {
       })).as(readStream)
     }
 
-    def putObject(client: S3AsyncClient, bucket: String, key: String, writeStream: ReactiveWriteStream[Buffer]) =
-      Task.fromCompletableFuture(client.putObject(PutObjectRequest.builder().bucket(bucket).key(key).build(), publisher(writeStream))).unit
+    def getObjectAttributes(client: S3AsyncClient, bucket: String, key: String) =
+      Task.fromCompletableFuture(client.getObjectAttributes(GetObjectAttributesRequest.builder().bucket(bucket).key(key).build()))
+
+    def putObject(client: S3AsyncClient,
+                  bucket: String,
+                  key: String,
+                  writeStream: ReactiveWriteStream[Buffer],
+                  acl: ObjectCannedACL,
+                  contentLength: Option[Long] = None,
+                  contentMD5: Option[String] = None,
+                  storageClass: Option[String] = None,
+                  tags: Map[String, String] = Map()) =
+      Task.fromCompletableFuture {
+        val builder = PutObjectRequest.builder()
+          .bucket(bucket)
+          .key(key)
+          .acl(acl)
+          .tagging(Tagging.builder().tagSet(tags.map { case (k,v) => Tag.builder().key(k).value(v).build() }.toList.asJava).build())
+
+        if (contentLength.isDefined) builder.contentLength(contentLength.get)
+        if (contentMD5.isDefined) builder.contentMD5(contentMD5.get)
+        if (storageClass.isDefined) builder.storageClass(storageClass.get)
+
+        client.putObject(builder.build(), publisher(writeStream))
+      }.map(_.eTag())
 
     def copyObject(client: S3AsyncClient, sourceBucket: String, sourceKey: String, destinationBucket: String, destinationKey: String) =
       Task.fromCompletableFuture(client.copyObject(CopyObjectRequest.builder()
         .sourceBucket(sourceBucket).sourceKey(sourceKey)
         .destinationBucket(destinationBucket).destinationKey(destinationKey)
         .build()
-      )).unit
+      )).map(_.copyObjectResult())
 
     def getObjectAcl(client: S3AsyncClient, bucket: String, key: String) =
       Task.fromCompletableFuture(client.getObjectAcl(GetObjectAclRequest.builder().bucket(bucket).key(key).build()))
 
-    def putObjectAcl(client: S3AsyncClient, bucket: String, key: String, acl: String) =
+    def putObjectAcl(client: S3AsyncClient, bucket: String, key: String, acl: ObjectCannedACL) =
       Task.fromCompletableFuture(client.putObjectAcl(PutObjectAclRequest.builder().bucket(bucket).acl(acl).build())).unit
 
-    def uploadPartCopy(client: S3AsyncClient, sourceBucket: String, sourceKey: String, destinationBucket: String, destinationKey: String, uploadId: String) =
-      Task.fromCompletableFuture(client.uploadPartCopy(UploadPartCopyRequest.builder()
-        .sourceBucket(sourceBucket).sourceKey(sourceKey)
-        .destinationBucket(destinationBucket).destinationKey(destinationKey)
-        .uploadId(uploadId).build()
-      )).unit
+    def uploadPartCopy(client: S3AsyncClient,
+                       sourceBucket: String,
+                       sourceKey: String,
+                       destinationBucket: String,
+                       destinationKey: String,
+                       uploadId: String,
+                       partNumber: Int,
+                       copySourceIfMatch: Option[String],
+                       copySourceIfNoneMatch: Option[String],
+                       copySourceIfModifiedSince: Option[Instant],
+                       copySourceIfUnmodifiedSince: Option[Instant],
+                       copySourceRange: Option[String]) =
+      Task.fromCompletableFuture {
+        val builder = UploadPartCopyRequest.builder()
+          .sourceBucket(sourceBucket).sourceKey(sourceKey)
+          .destinationBucket(destinationBucket).destinationKey(destinationKey)
+          .partNumber(partNumber).uploadId(uploadId)
 
-    def uploadPart(client: S3AsyncClient, bucket: String, key: String, uploadId: String, writeStream: ReactiveWriteStream[Buffer]) =
+        if (copySourceRange.isDefined) builder.copySourceRange(copySourceRange.get)
+        if (copySourceIfMatch.isDefined) builder.copySourceIfMatch(copySourceIfMatch.get)
+        if (copySourceIfNoneMatch.isDefined) builder.copySourceIfNoneMatch(copySourceIfNoneMatch.get)
+        if (copySourceIfModifiedSince.isDefined) builder.copySourceIfModifiedSince(copySourceIfModifiedSince.get)
+        if (copySourceIfUnmodifiedSince.isDefined) builder.copySourceIfUnmodifiedSince(copySourceIfUnmodifiedSince.get)
+
+        client.uploadPartCopy(builder.build())
+      }.map(_.copyPartResult())
+
+    def uploadPart(client: S3AsyncClient, bucket: String, key: String, uploadId: String, partNumber: Int, writeStream: ReactiveWriteStream[Buffer]) =
       Task.fromCompletableFuture(
-        client.uploadPart(UploadPartRequest.builder().bucket(bucket).key(key).uploadId(uploadId).build(), AsyncRequestBody.fromPublisher(publisher(writeStream)))
-      ).unit
+        client.uploadPart(UploadPartRequest.builder().bucket(bucket).key(key).partNumber(partNumber).uploadId(uploadId).build(), AsyncRequestBody.fromPublisher(publisher(writeStream)))
+      ).map(_.eTag())
 
     def listParts(client: S3AsyncClient, bucket: String, key: String, uploadId: String) =
       Task.fromCompletableFuture(client.listParts(ListPartsRequest.builder().bucket(bucket).key(key).uploadId(uploadId).build())).map(_.parts().asScala.toList)
@@ -130,8 +191,8 @@ object LiveAwsS3 {
     def listMultipartUploads(client: S3AsyncClient, bucket: String) =
       Task.fromCompletableFuture(client.listMultipartUploads(ListMultipartUploadsRequest.builder().bucket(bucket).build())).map(_.uploads().asScala.toList)
 
-    def createMultipartUpload(client: S3AsyncClient, bucket: String, key: String) =
-      Task.fromCompletableFuture(client.createMultipartUpload(CreateMultipartUploadRequest.builder().bucket(bucket).key(key).build())).map(_.uploadId())
+    def createMultipartUpload(client: S3AsyncClient, bucket: String, key: String, cannedACL: ObjectCannedACL) =
+      Task.fromCompletableFuture(client.createMultipartUpload(CreateMultipartUploadRequest.builder().bucket(bucket).key(key).acl(cannedACL).build())).map(_.uploadId())
 
     def abortMultipartUpload(client: S3AsyncClient, bucket: String, key: String, uploadId: String) =
       Task.fromCompletableFuture(client.abortMultipartUpload(AbortMultipartUploadRequest.builder().bucket(bucket).key(key).uploadId(uploadId).build())).unit

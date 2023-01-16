@@ -5,6 +5,7 @@ import org.joda.time.{DateTime, DateTimeZone}
 import org.joda.time.format.DateTimeFormat
 
 import java.text.{ParseException, SimpleDateFormat}
+import java.time.Instant
 import java.util.regex.Pattern
 import java.util.{Date, Locale, TimeZone}
 
@@ -43,8 +44,8 @@ object DateTime {
     }
   }
 
-  def iso8601DateFormat(date: Date) = {
-    var parsed = iso8601DateFormatter.print(new DateTime(date))
+  def iso8601DateFormat(instant: Instant) = {
+    var parsed = iso8601DateFormatter.print(new DateTime(instant))
     val tz = findTZ(parsed)
     if (tz == "+0000") parsed = trimTZ(parsed) + "Z"
     parsed
@@ -74,4 +75,9 @@ object DateTime {
     formatter.format(date)
   }
 
+  def formatDate(instant: Instant) = {
+    val formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+    formatter.setTimeZone(TimeZone.getTimeZone("GMT"))
+    formatter.format(Date.from(instant))
+  }
 }

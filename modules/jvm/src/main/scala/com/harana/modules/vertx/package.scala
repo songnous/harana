@@ -31,7 +31,7 @@ package object vertx {
   val runtime = Runtime[Unit]((), Platform.default
       .withReportFailure(cause => if (!cause.interrupted) logger.error(cause.prettyPrint)))
 
-  val crossOriginResourceSharing = CrossOriginResourceSharing()
+  val corsRules = CrossOriginResourceSharing()
 
   @inline
   def run[A](zio: Task[A]): A =
@@ -243,19 +243,22 @@ package object vertx {
                        cookies: List[Cookie],
                        statusCode: Option[Int],
                        cors: Boolean,
-                       headers: Map[String, List[String]]) = {
+                       headers: Map[_ <: CharSequence, List[_ <: CharSequence]]) = {
     val response = rc.response()
     if (contentType.isDefined) response.putHeader(CONTENT_TYPE, contentType.get.value)
     cookies.foreach(response.addCookie)
     if (statusCode.isDefined) response.setStatusCode(statusCode.get)
     if (cors) {
       val corsOrigin = rc.request().getHeader(HttpHeaders.ORIGIN)
-      if (!Strings.isNullOrEmpty(corsOrigin) && crossOriginResourceSharing.isOriginAllowed(corsOrigin)) {
-        response.putHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN.toString, crossOriginResourceSharing.getAllowedOrigin(corsOrigin))
-        response.putHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS.toString, crossOriginResourceSharing.allowedMethods.asJava)
+      if (!Strings.isNullOrEmpty(corsOrigin) && corsRules.isOriginAllowed(corsOrigin)) {
+        response.putHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN.toString, corsRules.getAllowedOrigin(corsOrigin))
+        response.putHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS.toString, corsRules.allowedMethods.asJava)
       }
     }
-    headers.foreach { case (k, v) => if (v.size == 1) response.putHeader(k, v.head) else response.putHeader(k, v.asJava) }
+    headers.foreach { case (k, v) =>
+      if (v.size == 1) response.putHeader(k.toString, v.head.toString)
+      else response.putHeader(k.toString, v.map(_.toString).asJava)
+    }
     response
   }
 }

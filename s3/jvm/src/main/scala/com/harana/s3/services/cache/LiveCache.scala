@@ -9,20 +9,23 @@ import io.vertx.ext.web.RoutingContext
 import zio.clock.Clock
 import zio.{Task, ZLayer}
 
+import java.nio.ByteBuffer
+
 object LiveCache {
   val layer = ZLayer.fromServices { (clock: Clock.Service,
                                      config: Config.Service,
                                      logger: Logger.Service,
                                      micrometer: Micrometer.Service) => new Cache.Service {
+    def get(key: String): Task[ByteBuffer] =
+      Task(null)
 
-      def handle(rc: RoutingContext, method: HttpMethod): Task[Response] =
-        for {
-          _ <- logger.info(rc.request().toString)
-          _ = rc.response().headers().add(AwsHttpHeaders.REQUEST_ID.value, "4442587FB7D0A2F9")
+    def put(key: String, content: ByteBuffer): Task[Int] =
+      Task(1)
 
+    def remove(key: String): Task[Unit] =
+      Task.unit
 
-        } yield ()
-
-    })
-  }
+    def containsKey(key: String): Task[Boolean] =
+      Task(false)
+  }}
 }

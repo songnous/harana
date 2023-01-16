@@ -3,7 +3,7 @@ package com.harana.modules.core.app
 import com.harana.modules.core.Layers
 import com.harana.modules.core.config.Config
 import com.harana.modules.core.logger.Logger
-import zio.{IO, Task, UIO}
+import zio.{IO, Task, UIO, ZIO}
 
 abstract class App extends zio.App {
 
@@ -14,7 +14,7 @@ abstract class App extends zio.App {
   def logInfo(s: String) = Logger.info(s).provideLayer(Layers.logger)
   def logError(s: String) = Logger.error(s).provideLayer(Layers.logger)
 
-  def startup: Task[Unit]
+  def startup: ZIO[Any, Any, _]
   def shutdown: UIO[Unit]
 
   override def run(args: List[String]) =

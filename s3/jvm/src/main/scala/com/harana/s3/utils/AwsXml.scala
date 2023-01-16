@@ -1,17 +1,14 @@
 package com.harana.s3.utils
 
-import com.harana.modules.aws_s3
-import com.harana.modules.aws_s3.models.{Bucket, Item}
-import com.harana.modules.aws_s3.{Bucket, Item, models}
+import com.google.common.net.PercentEscaper
 import com.harana.s3.services.server.models.StorageType.{FOLDER, RELATIVE_PATH}
 import com.harana.s3.services.server.models._
-import com.harana.s3.services.urlEscaper
 import com.harana.s3.utils.DateTime.{formatDate, iso8601DateFormat}
+import software.amazon.awssdk.services.s3.model._
 
-import java.util.Date
+import java.time.Instant
 import javax.xml.stream.XMLStreamWriter
 import scala.collection.mutable
-import scala.util.control.Breaks.{break, breakable}
 
 object AwsXml {
 
@@ -21,6 +18,7 @@ object AwsXml {
   private val fakeInitiatorId = "arn:aws:iam::111122223333:" + "user/some-user-11116a31-17b5-4fb7-9df5-b288870f11xx"
   private val fakeInitiatorDisplayName = "umat-user-11116a31-17b5-4fb7-9df5-b288870f11xx"
   private val fakeRequestId = "4442587FB7D0A2F9"
+  private val urlEscaper = new PercentEscaper("*-./_", false)
 
   def writeAccessControlPolicy(xml: XMLStreamWriter, publicRead: Boolean = false) = {
     xml.writeStartDocument()
@@ -74,27 +72,25 @@ object AwsXml {
     for (bucket <- buckets) {
       xml.writeStartElement("Bucket")
       writeSimpleElement(xml, "Name", bucket.name)
-      val creationDate = if (bucket.creationDate == null) new Date(0) else bucket.creationDate
-      writeSimpleElement(xml, "CreationDate", iso8601DateFormat(creationDate).trim)
+      writeSimpleElement(xml, "CreationDate", iso8601DateFormat(bucket.creationDate()).trim)
       xml.writeEndElement()
     }
 
     xml.writeEndElement()
     xml.writeEndElement()
     xml.flush()
-    xml.
   }
 
 
-  def writeDeleteResult(xml: XMLStreamWriter, quiet: Boolean, blobNames: Set[String]) = {
+  def writeDeleteResult(xml: XMLStreamWriter, quiet: Boolean, keys: List[String]) = {
     xml.writeStartDocument()
     xml.writeStartElement("DeleteResult")
     xml.writeDefaultNamespace(awsXmlNs)
 
     if (!quiet) {
-      for (blobName <- blobNames) {
+      for (key <- keys) {
         xml.writeStartElement("Deleted")
-        writeSimpleElement(xml, "Key", blobName)
+        writeSimpleElement(xml, "Key", key)
         xml.writeEndElement()
       }
     }
@@ -104,7 +100,7 @@ object AwsXml {
   }
 
 
-  def writeCopyObjectResult(xml: XMLStreamWriter, lastModified: Long, eTag: String) = {
+  def writeCopyObjectResult(xml: XMLStreamWriter, lastModified: Instant, eTag: String) = {
     xml.writeStartDocument()
     xml.writeStartElement("CopyObjectResult")
     xml.writeDefaultNamespace(awsXmlNs)
@@ -127,11 +123,11 @@ object AwsXml {
   }
 
 
-  def writeInitiateMultipartUploadResult(xml: XMLStreamWriter, container: String, key: String, uploadId: String) = {
+  def writeInitiateMultipartUploadResult(xml: XMLStreamWriter, bucket: String, key: String, uploadId: String) = {
     xml.writeStartDocument()
     xml.writeStartElement("InitiateMultipartUploadResult")
     xml.writeDefaultNamespace(awsXmlNs)
-    writeSimpleElement(xml, "Bucket", container)
+    writeSimpleElement(xml, "Bucket", bucket)
     writeSimpleElement(xml, "Key", key)
     writeSimpleElement(xml, "UploadId", uploadId)
     xml.writeEndElement()
@@ -171,12 +167,12 @@ object AwsXml {
   }
 
 
-  def writeListMultipartUploadsResult(xml: XMLStreamWriter,
-                                      bucket: String,
-                                      key: String,
-                                      uploadId: String,
-                                      encodingType: String,
-                                      parts: List[models.Part]) = {
+  def writeListPartsResult(xml: XMLStreamWriter,
+                           bucket: String,
+                           key: String,
+                           uploadId: String,
+                           encodingType: String,
+                           parts: List[Part]) = {
     xml.writeStartDocument()
     xml.writeStartElement("ListPartsResult")
     xml.writeDefaultNamespace(awsXmlNs)
@@ -192,11 +188,11 @@ object AwsXml {
     writeOwnerStanza(xml)
     writeSimpleElement(xml, "StorageClass", "STANDARD")
 
-    for (part <- parts) {
+    parts.foreach { part =>
       xml.writeStartElement("Part")
-      writeSimpleElement(xml, "PartNumber", String.valueOf(part.number))
-      if (part.lastModified.isDefined) writeSimpleElement(xml, "LastModified", formatDate(part.lastModified.get))
-      if (part.eTag.isDefined) writeSimpleElement(xml, "ETag", maybeQuoteETag(part.eTag.get))
+      writeSimpleElement(xml, "PartNumber", String.valueOf(part.partNumber))
+      writeSimpleElement(xml, "LastModified", formatDate(part.lastModified))
+      writeSimpleElement(xml, "ETag", maybeQuoteETag(part.eTag))
       writeSimpleElement(xml, "Size", part.size.toString)
       xml.writeEndElement()
     }
@@ -230,12 +226,12 @@ object AwsXml {
       if (prefix.isEmpty || (prefix.isDefined && upload.key.startsWith(prefix.get))) {
         xml.writeStartElement("Upload")
         writeSimpleElement(xml, "Key", upload.key)
-        writeSimpleElement(xml, "UploadId", upload.id)
+        writeSimpleElement(xml, "UploadId", upload.uploadId())
         writeInitiatorStanza(xml)
         writeOwnerStanza(xml)
 
         writeSimpleElement(xml, "StorageClass", "STANDARD")
-        writeSimpleElement(xml, "Initiated", iso8601DateFormat(new Date()))
+        writeSimpleElement(xml, "Initiated", iso8601DateFormat(java.time.Instant.now()))
         xml.writeEndElement()
       }
     }
@@ -247,7 +243,7 @@ object AwsXml {
   def writeListBucketResult(xml: XMLStreamWriter,
                             bucket: String,
                             prefix: Option[String],
-                            items: PageSet[Item],
+                            s3Objects: List[S3Object],
                             encodingType: String,
                             isListV2: Boolean,
                             maxKeys: Int,
@@ -262,7 +258,7 @@ object AwsXml {
     writeSimpleElement(xml, "Name", bucket)
 
     if (prefix.isEmpty) xml.writeEmptyElement("Prefix") else writeSimpleElement(xml, "Prefix", encodeBlob(encodingType, prefix.get))
-    if (isListV2) writeSimpleElement(xml, "KeyCount", String.valueOf(items.size))
+    if (isListV2) writeSimpleElement(xml, "KeyCount", String.valueOf(s3Objects.size))
     writeSimpleElement(xml, "MaxKeys", String.valueOf(maxKeys))
 
     if (!isListV2)
@@ -275,34 +271,32 @@ object AwsXml {
     if (delimiter.isDefined) writeSimpleElement(xml, "Delimiter", encodeBlob(encodingType, delimiter.get))
     if (encodingType.equals("url")) writeSimpleElement(xml, "EncodingType", encodingType)
 
-    val nextMarker = items.nextMarker()
-    if (nextMarker != null) {
-      writeSimpleElement(xml, "IsTruncated", "true")
-      writeSimpleElement(xml, if (isListV2) "NextContinuationToken" else "NextMarker", encodeBlob(encodingType, nextMarker))
-    }
-    else
-      writeSimpleElement(xml, "IsTruncated", "false")
+//    val nextMarker = s3Objects.nextMarker()
+//    if (nextMarker != null) {
+//      writeSimpleElement(xml, "IsTruncated", "true")
+//      writeSimpleElement(xml, if (isListV2) "NextContinuationToken" else "NextMarker", encodeBlob(encodingType, nextMarker))
+//    }
+//    else
+//      writeSimpleElement(xml, "IsTruncated", "false")
+
+    writeSimpleElement(xml, "IsTruncated", "false")
 
     val commonPrefixes = mutable.Set.empty[String]
-    breakable {
-      for (item <- items) {
-        if (item.storageType.equals(FOLDER)) {
-          xml.writeStartElement("Contents")
-          writeSimpleElement(xml, "Key", encodeBlob(encodingType, item.name))
-          if (item.lastModifiedDate.isDefined) writeSimpleElement(xml, "LastModified", formatDate(item.lastModifiedDate.get))
-          if (item.eTag.isDefined) writeSimpleElement(xml, "ETag", maybeQuoteETag(item.eTag.get))
-          writeSimpleElement(xml, "Size", String.valueOf(item.size))
-          writeSimpleElement(xml, "StorageClass", item.storageClass.name())
-          if (fetchOwner) writeOwnerStanza(xml)
-          xml.writeEndElement()
-        }
 
-        if (item.storageType.equals(RELATIVE_PATH))
-          commonPrefixes.add(item.name)
+    for (s3Object <- s3Objects) {
 
-        if (item.storageType != FOLDER || item.storageType != RELATIVE_PATH)
-          break;
-      }
+      xml.writeStartElement("Contents")
+      writeSimpleElement(xml, "Key", encodeBlob(encodingType, s3Object.key()))
+      writeSimpleElement(xml, "LastModified", formatDate(s3Object.lastModified))
+      writeSimpleElement(xml, "ETag", maybeQuoteETag(s3Object.eTag))
+      writeSimpleElement(xml, "Size", String.valueOf(s3Object.size))
+      writeSimpleElement(xml, "StorageClass", s3Object.storageClassAsString())
+      if (fetchOwner) writeOwnerStanza(xml)
+      xml.writeEndElement()
+
+      // FIXME
+//      if (s3Object.storageType.equals(RELATIVE_PATH))
+//        commonPrefixes.add(s3Object.name)
     }
 
     for (commonPrefix <- commonPrefixes) {

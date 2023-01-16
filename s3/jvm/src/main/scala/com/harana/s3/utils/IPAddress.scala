@@ -7,13 +7,13 @@ object IPAddress {
 
   def validate(string: String): Boolean = {
     val parts = Splitter.on('.').splitToList(string).asScala
-    if (parts.size ne 4) return false
+    if (parts.size != 4) return false
     for (part <- parts) {
       try {
         val num = part.toInt
         if (num < 0 || num > 255) return false
       } catch {
-        case nfe: NumberFormatException => return false
+        case _: NumberFormatException => return false
       }
     }
     true

@@ -9,6 +9,8 @@ import software.amazon.awssdk.services.s3.model._
 import zio.macros.accessible
 import zio.{Has, Task}
 
+import java.time.Instant
+
 @accessible
 object AwsS3 {
   type AwsS3 = Has[AwsS3.Service]
@@ -32,7 +34,7 @@ object AwsS3 {
 
     def getBucketAcl(client: S3AsyncClient, bucket: String): Task[GetBucketAclResponse]
 
-    def putBucketAcl(client: S3AsyncClient, bucket: String, acl: String): Task[Unit]
+    def putBucketAcl(client: S3AsyncClient, bucket: String, acl: BucketCannedACL): Task[Unit]
 
     def listObjects(client: S3AsyncClient, bucket: String, prefix: Option[String] = None): Task[List[S3Object]]
 
@@ -40,25 +42,53 @@ object AwsS3 {
 
     def deleteObjects(client: S3AsyncClient, bucket: String, identifiers: List[ObjectIdentifier]): Task[Unit]
 
-    def getObject(client: S3AsyncClient, bucket: String, key: String): Task[ReactiveReadStream[Buffer]]
+    def getObject(client: S3AsyncClient,
+                  bucket: String,
+                  key: String,
+                  ifMatch: Option[String] = None,
+                  ifNoneMatch: Option[String] = None,
+                  ifModifiedSince: Option[Instant] = None,
+                  ifUnmodifiedSince: Option[Instant] = None,
+                  range: Option[String] = None): Task[ReactiveReadStream[Buffer]]
 
-    def putObject(client: S3AsyncClient, bucket: String, key: String, writeStream: ReactiveWriteStream[Buffer]): Task[Unit]
+    def putObject(client: S3AsyncClient,
+                  bucket: String,
+                  key: String,
+                  writeStream: ReactiveWriteStream[Buffer],
+                  acl: ObjectCannedACL,
+                  contentLength: Option[Long] = None,
+                  contentMD5: Option[String] = None,
+                  storageClass: Option[String] = None,
+                  tags: Map[String, String] = Map()): Task[String]
 
-    def copyObject(client: S3AsyncClient, sourceBucket: String, sourceKey: String, destinationBucket: String, destinationKey: String): Task[Unit]
+    def copyObject(client: S3AsyncClient, sourceBucket: String, sourceKey: String, destinationBucket: String, destinationKey: String): Task[CopyObjectResult]
+
+    def getObjectAttributes(client: S3AsyncClient, bucket: String, key: String): Task[GetObjectAttributesResponse]
 
     def getObjectAcl(client: S3AsyncClient, bucket: String, key: String): Task[GetObjectAclResponse]
 
-    def putObjectAcl(client: S3AsyncClient, bucket: String, key: String, acl: String): Task[Unit]
+    def putObjectAcl(client: S3AsyncClient, bucket: String, key: String, acl: ObjectCannedACL): Task[Unit]
 
-    def uploadPartCopy(client: S3AsyncClient, sourceBucket: String, sourceKey: String, destinationBucket: String, destinationKey: String, uploadId: String): Task[Unit]
+    def uploadPartCopy(client: S3AsyncClient,
+                       sourceBucket: String,
+                       sourceKey: String,
+                       destinationBucket: String,
+                       destinationKey: String,
+                       uploadId: String,
+                       partNumber: Int,
+                       copySourceIfMatch: Option[String],
+                       copySourceIfNoneMatch: Option[String],
+                       copySourceIfModifiedSince: Option[Instant],
+                       copySourceIfUnmodifiedSince: Option[Instant],
+                       copySourceRange: Option[String]): Task[CopyPartResult]
 
-    def uploadPart(client: S3AsyncClient, bucket: String, key: String, uploadId: String, writeStream: ReactiveWriteStream[Buffer]): Task[Unit]
+    def uploadPart(client: S3AsyncClient, bucket: String, key: String, uploadId: String, partNumber: Int, writeStream: ReactiveWriteStream[Buffer]): Task[String]
 
     def listParts(client: S3AsyncClient, bucket: String, key: String, uploadId: String): Task[List[Part]]
 
     def listMultipartUploads(client: S3AsyncClient, bucket: String): Task[List[MultipartUpload]]
 
-    def createMultipartUpload(client: S3AsyncClient, bucket: String, key: String): Task[String]
+    def createMultipartUpload(client: S3AsyncClient, bucket: String, key: String, cannedACL: ObjectCannedACL): Task[String]
 
     def abortMultipartUpload(client: S3AsyncClient, bucket: String, key: String, uploadId: String): Task[Unit]
 

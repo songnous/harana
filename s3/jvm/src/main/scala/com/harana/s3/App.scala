@@ -1,27 +1,33 @@
 package com.harana.s3
 
 import com.harana.modules.core.app.{App => CoreApp}
-import com.harana.modules.vertx.Vertx
+import com.harana.modules.vertx.{LiveVertx, Vertx}
 import com.harana.modules.vertx.models.Route
 import io.vertx.core.http.HttpMethod._
+import zio.blocking.Blocking
+import com.harana.modules.{Layers => ModuleLayers}
+import com.harana.modules.core.{Layers => CoreLayers}
+import com.harana.s3.services.router.LiveRouter
+import com.harana.s3.services.server._
+import zio.UIO
+import zio.clock.Clock
 
 object App extends CoreApp {
 
-  def routes = List(
-    Route("/*",                                               GET,        rc => handle(rc, GET)),
-    Route("/*",                                               PUT,        rc => handle(rc, PUT)),
-    Route("/*",                                               POST,       rc => handle(rc, POST)),
-    Route("/*",                                               OPTIONS,    rc => handle(rc, OPTIONS)),
-    Route("/*",                                               DELETE,     rc => handle(rc, DELETE))
-  )
-
-
-    // MAKE SURE TO CREATE LOCAL.ROOT
-
+  val router = (Clock.live ++ CoreLayers.standard ++ ModuleLayers.awsS3 ++ ModuleLayers.jasyncfio ++ ModuleLayers.ohc) >>> LiveRouter.layer
+  val s3server = (CoreLayers.standard ++ CoreLayers.cache ++ router ++ ModuleLayers.vertx) >>> LiveServer.layer
 
   def startup =
     for {
       domain                <- env("harana_domain")
-      _                     <- Vertx.startHttpServer(s"s3.$domain", routes = routes).provideLayer(vertx).toManaged_.useForever
+      _                     <- Vertx.startHttpServer(s"s3.$domain", routes = List(
+                                Route("/*",     GET,        rc => Server.handle(rc, GET).provideLayer(s3server)),
+                                Route("/*",     PUT,        rc => Server.handle(rc, PUT).provideLayer(s3server)),
+                                Route("/*",     POST,       rc => Server.handle(rc, POST).provideLayer(s3server)),
+                                Route("/*",     OPTIONS,    rc => Server.handle(rc, OPTIONS).provideLayer(s3server)),
+                                Route("/*",     DELETE,     rc => Server.handle(rc, DELETE).provideLayer(s3server))
+                               )).provideLayer(ModuleLayers.vertx).toManaged_.useForever
     } yield ()
+
+  def shutdown = UIO.unit
 }

@@ -22,9 +22,9 @@ object S3AuthorizationHeader {
 
     if (header.startsWith("AWS ")) {
       val fields = Splitter.on(' ').splitToList(header)
-      if (fields.size ne 2) throw new IllegalArgumentException("Invalid header")
+      if (fields.size != 2) throw new IllegalArgumentException("Invalid header")
       val identityTuple = Splitter.on(':').splitToList(fields.get(1))
-      if (identityTuple.size ne 2) throw new IllegalArgumentException("Invalid header")
+      if (identityTuple.size != 2) throw new IllegalArgumentException("Invalid header")
 
       new S3AuthorizationHeader(
         authenticationType = AuthenticationType.AWS_V2,
@@ -39,7 +39,7 @@ object S3AuthorizationHeader {
       if (credentialEnd < 0) throw new IllegalArgumentException("Invalid header")
       val credential = header.substring(credentialIndex + CREDENTIAL_FIELD.length, credentialEnd)
       val fields = Splitter.on('/').splitToList(credential)
-      if (fields.size ne 5) throw new IllegalArgumentException("Invalid Credential: " + credential)
+      if (fields.size != 5) throw new IllegalArgumentException("Invalid Credential: " + credential)
       val awsSignatureVersion = header.substring(0, header.indexOf(' '))
 
       new S3AuthorizationHeader(

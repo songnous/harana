@@ -33,7 +33,7 @@ object OHC {
 
     def get[K, V](cache: OHCache[K, V], key: K): UIO[V]
 
-    def getAsBytes[K, V](cache: OHCache[K, V], key: K, updateLRU: Boolean = false): Task[ByteBuffer]
+    def getAsBytes[K, V](cache: OHCache[K, V], key: K, updateLRU: Boolean = false): UIO[ByteBuffer]
 
     def getWithLoader[K, V](cache: OHCache[K, V], key: K, loader: CacheLoader[K, V], expiresAt: Option[Long] = None): UIO[V]
 

@@ -52,8 +52,8 @@ object Vertx {
     def removeMapValue[K, V](name: String, key: K): Task[Unit]
     def putMapValueIfAbsent[K, V](name: String, key: K, value: V, ttl: Option[Long] = None): Task[V]
 
-    def withUploadBody[T](rc: RoutingContext)(fn: Buffer => Task[T]): Task[T]
-    def withUploadBodyAsStream[T](rc: RoutingContext)(fn: ReactiveWriteStream[Buffer] => Task[T]): Task[T]
+    def withBody[T](rc: RoutingContext)(fn: Buffer => Task[T]): Task[T]
+    def withBodyAsStream[T](rc: RoutingContext)(fn: ReactiveWriteStream[Buffer] => Task[T]): Task[T]
     def newWriteStream[T]: Task[ReactiveWriteStream[T]]
     def getUploadedFile(filename: String): Task[Buffer]
 
