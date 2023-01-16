@@ -1,7 +1,7 @@
 package com.harana.modules.facebook
 
 import com.facebook.ads.sdk.Campaign.{EnumBidStrategy, EnumObjective, EnumSpecialAdCategory}
-import com.facebook.ads.sdk.{Ad, AdAccount, AdAccountAdRulesHistory, AdAccountAdVolume, AdAccountDeliveryEstimate, AdAccountMatchedSearchApplicationsEdgeData, AdAccountMaxBid, AdAccountReachEstimate, AdAccountSubscribedApps, AdAccountTargetingUnified, AdAccountTrackingData, AdAccountUser, AdActivity, AdCreative, AdImage, AdLabel, AdPlacePageSet, AdPreview, AdRule, AdSet, AdStudy, AdVideo, AdsInsights, AdsPixel, Album, AppRequest, Application, AssignedUser, AsyncRequest, Business, BusinessAssetGroup, BusinessOwnedObjectOnBehalfOfRequest, BusinessUser, Campaign, ContentDeliveryReport, CustomAudience, CustomAudiencesTOS, CustomConversion, Event, InstagramUser, MinimumBudget, OfflineConversionDataSet, Page, PageUserMessageThreadLabel, PlayableContent, ProductCatalog, PublisherBlockList, ReachFrequencyPrediction, SavedAudience, TargetingSentenceLine, UnifiedThread, User, VideoThumbnail}
+import com.facebook.ads.sdk.{Ad, AdAccount, AdAccountAdRulesHistory, AdAccountAdVolume, AdAccountDeliveryEstimate, AdAccountMatchedSearchApplicationsEdgeData, AdAccountMaxBid, AdAccountReachEstimate, AdAccountSubscribedApps, AdAccountTargetingUnified, AdAccountTrackingData, AdAccountUser, AdActivity, AdCreative, AdImage, AdLabel, AdPlacePageSet, AdPreview, AdRule, AdSet, AdStudy, AdVideo, AdsInsights, AdsPixel, Album, AppRequest, Application, AssignedUser, AsyncRequest, Business, BusinessAssetGroup, BusinessOwnedObjectOnBehalfOfRequest, BusinessUser, Campaign, CustomAudience, CustomAudiencesTOS, CustomConversion, Event, InstagramUser, MinimumBudget, OfflineConversionDataSet, Page, PageUserMessageThreadLabel, PlayableContent, ProductCatalog, PublisherBlockList, ReachFrequencyPrediction, SavedAudience, TargetingSentenceLine, UnifiedThread, User, VideoThumbnail}
 import zio.{Has, Task}
 import zio.macros.accessible
 
@@ -99,8 +99,6 @@ object Facebook {
     def adCampaigns(adAccountId: String): Task[List[Campaign]]
     
     def adCampaignsByLabels(adAccountId: String): Task[List[Campaign]]
-      
-    def adContentDeliveryReport(adAccountId: String): Task[List[ContentDeliveryReport]]
 
     def adCustomAudiences(adAccountId: String): Task[List[CustomAudience]]
 
@@ -111,9 +109,7 @@ object Facebook {
     def adDeliveryEstimate(adAccountId: String): Task[List[AdAccountDeliveryEstimate]]
 
     def adDeprecatedTargetingAdSets(adAccountId: String): Task[List[AdSet]]
-
-    def adGeneratePreviews(adAccountId: String): Task[List[AdPreview]]
-
+    
     def adImpactingAdStudies(adAccountId: String): Task[List[AdStudy]]
 
     def adInsights(adAccountId: String): Task[List[AdsInsights]]

@@ -185,9 +185,6 @@ object LiveFacebook {
     def adCampaignsByLabels(adAccountId: String): Task[List[Campaign]] =
       adAccount(adAccountId, _.getCampaignsByLabels.requestAllFields.execute())
 
-    def adContentDeliveryReport(adAccountId: String): Task[List[ContentDeliveryReport]] =
-      adAccount(adAccountId, _.getContentDeliveryReport.requestAllFields.execute())
-
     def adCustomAudiences(adAccountId: String): Task[List[CustomAudience]] =
       adAccount(adAccountId, _.getCustomAudiences.requestAllFields.execute())
 
@@ -202,9 +199,6 @@ object LiveFacebook {
 
     def adDeprecatedTargetingAdSets(adAccountId: String): Task[List[AdSet]] =
       adAccount(adAccountId, _.getDeprecatedTargetingAdSets.requestAllFields.execute())
-
-    def adGeneratePreviews(adAccountId: String): Task[List[AdPreview]] =
-      adAccount(adAccountId, _.getGeneratePreviews.requestAllFields.execute())
 
     def adImpactingAdStudies(adAccountId: String): Task[List[AdStudy]] =
       adAccount(adAccountId, _.getImpactingAdStudies.requestAllFields.execute())

@@ -13,7 +13,7 @@ case class CrossOriginResourceSharing(allowedOrigins: Set[String],
   val allowedHeadersRaw = Joiner.on(HEADER_VALUE_SEPARATOR).join(allowedHeaders.asJava)
   val allowedMethodsRaw = Joiner.on(HEADER_VALUE_SEPARATOR).join(allowedMethods.asJava)
   val anyOriginAllowed = allowedOrigins.contains(ALLOW_ANY_ORIGIN)
-  val allowedOriginPatterns = allowedOrigins.map(Pattern.compile(_, Pattern.CASE_INSENSITIVE))
+  val allowedOriginPatterns = allowedOrigins.filterNot(_.equals(ALLOW_ANY_ORIGIN)).map(Pattern.compile(_, Pattern.CASE_INSENSITIVE))
 
   def getAllowedMethods =
     allowedMethodsRaw
