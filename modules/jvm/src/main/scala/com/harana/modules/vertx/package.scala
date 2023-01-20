@@ -1,13 +1,13 @@
 package com.harana.modules
 
 import com.google.common.base.Strings
-import com.harana.modules.vertx.models._
-import com.harana.modules.vertx.models.streams.{BufferReadStream, GzipReadStream, InputStreamReadStream}
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
+import com.harana.modules.vertx.models._
+import com.harana.modules.vertx.models.streams.{BufferReadStream, GzipReadStream, InputStreamReadStream}
 import io.vertx.core.buffer.Buffer
-import io.vertx.core.http.{Cookie, HttpHeaders, HttpMethod, HttpServerResponse, ServerWebSocket, WebSocket, WebSocketBase, WebSocketFrame}
 import io.vertx.core.http.HttpHeaders.CONTENT_TYPE
+import io.vertx.core.http._
 import io.vertx.core.streams.Pump
 import io.vertx.core.{AsyncResult, Handler, Promise, Vertx => VX}
 import io.vertx.ext.web.templ.handlebars.HandlebarsTemplateEngine
@@ -15,11 +15,10 @@ import io.vertx.ext.web.{Router, RoutingContext}
 import org.apache.logging.log4j.LogManager
 import org.pac4j.core.config.{Config => Pac4jConfig}
 import org.pac4j.core.context.session.SessionStore
-import org.pac4j.vertx.VertxWebContext
 import org.pac4j.vertx.auth.Pac4jAuthProvider
 import org.pac4j.vertx.handler.impl.{SecurityHandler, SecurityHandlerOptions}
 import zio.internal.Platform
-import zio.{Exit, Runtime, Task, ZIO}
+import zio.{Runtime, Task, ZIO}
 
 import java.io.{File, FileInputStream}
 import scala.jdk.CollectionConverters._
@@ -44,31 +43,34 @@ package object vertx {
 
 
   def generateResponse(vx: VX,
+                       logger: Logger.Service,
                        micrometer: Micrometer.Service,
                        templateEngine: HandlebarsTemplateEngine,
-                       context: RoutingContext,
+                       rc: RoutingContext,
                        handler: RoutingContext => Task[Response],
-                       auth: Boolean): Unit =
+                       log: Boolean = true,
+                       auth: Boolean = false): Unit =
     runAsync(
       for {
         sample        <- micrometer.startTimer
-        _             <- handler(context).map {
+        _             <- Task.when(log)(logger.info(s"${rc.request().method().name()}: ${rc.request().uri()}"))
+        _             <- handler(rc).map {
                           case Response.Buffer(buffer, gzipped, _, _, _, _, _) =>
                             val brs = new BufferReadStream(buffer)
                             val rs = if (gzipped) new GzipReadStream(brs) else brs
-                            val pump = Pump.pump(rs, context.response())
-                            rs.endHandler(_ => context.response().close())
+                            val pump = Pump.pump(rs, rc.response())
+                            rs.endHandler(_ => rc.response().close())
                             pump.start()
                             rs.resume()
 
                           case Response.Content(content, contentType, cookies, statusCode, cors, headers) =>
-                            response(context, contentType, cookies, statusCode, cors, headers).end(content)
+                            response(rc, contentType, cookies, statusCode, cors, headers).end(content)
 
                           case Response.Empty(contentType, cookies, statusCode, cors, headers) =>
-                            response(context, contentType, cookies, statusCode, cors, headers).end()
+                            response(rc, contentType, cookies, statusCode, cors, headers).end()
 
                           case Response.File(filename, inputStream, gzipped, contentSize, contentType, cookies, statusCode, cors, headers) =>
-                            val r = response(context, contentType, cookies, statusCode, cors, headers)
+                            val r = response(rc, contentType, cookies, statusCode, cors, headers)
                             r.putHeader("Content-Disposition",  s"attachment; filename=$filename;")
                             r.setChunked(true)
                             if (contentSize.isDefined) r.putHeader(HttpHeaders.CONTENT_LENGTH, contentSize.get.toString)
@@ -83,7 +85,7 @@ package object vertx {
                             rs.resume()
 
                           case Response.InputStream(inputStream, gzipped, contentSize, contentType, cookies, statusCode, cors, headers) =>
-                            val r = response(context, contentType, cookies, statusCode, cors, headers)
+                            val r = response(rc, contentType, cookies, statusCode, cors, headers)
                             r.setChunked(true)
                             val isrs = new InputStreamReadStream(inputStream, vx)
                             if (contentSize.isDefined) r.putHeader(HttpHeaders.CONTENT_LENGTH, contentSize.get.toString)
@@ -97,10 +99,10 @@ package object vertx {
                             rs.resume()
 
                           case Response.JSON(json, contentType, cookies, statusCode, cors, headers) =>
-                            response(context, contentType, cookies, statusCode, cors, headers).end(json.toString)
+                            response(rc, contentType, cookies, statusCode, cors, headers).end(json.toString)
 
                           case Response.ReadStream(stream, contentSize, contentType, cookies, statusCode, cors, headers) =>
-                            val r = response(context, contentType, cookies, statusCode, cors, headers)
+                            val r = response(rc, contentType, cookies, statusCode, cors, headers)
                             if (contentSize.isDefined) r.putHeader(HttpHeaders.CONTENT_LENGTH, contentSize.get.toString)
                             val pump = Pump.pump(stream, r)
                             stream.endHandler(_ => {
@@ -111,19 +113,19 @@ package object vertx {
                             stream.resume()
 
                           case Response.Redirect(url, contentType, cookies, _, cors, headers) =>
-                            response(context, contentType, cookies, Some(302), cors, headers).putHeader("location", url).end()
+                            response(rc, contentType, cookies, Some(302), cors, headers).putHeader("location", url).end()
 
                           case Response.Template(path, parameters, contentType, cookies, statusCode, cors, headers) =>
                             templateEngine.render(parameters.asJava, path, new Handler[AsyncResult[Buffer]] {
                               override def handle(result: AsyncResult[Buffer]): Unit =
-                                if (result.succeeded()) response(context, contentType, cookies, statusCode, cors, headers).end(result.result())
+                                if (result.succeeded()) response(rc, contentType, cookies, statusCode, cors, headers).end(result.result())
                                 else {
                                   result.cause().printStackTrace()
-                                  context.fail(result.cause())
+                                  rc.fail(result.cause())
                                 }
                             })
                         }
-        _           <-  micrometer.stopTimer(sample, s"route_${context.normalizedPath().substring(1).replaceAll("/", "_")}")
+        _           <-  micrometer.stopTimer(sample, s"route_${rc.normalizedPath().substring(1).replaceAll("/", "_")}")
       } yield ()
     )                         
 

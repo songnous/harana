@@ -107,6 +107,7 @@ frontend designer
   use_backend executor if { hdr(host) -i executor.harana.build }
   use_backend growth if { hdr(host) -i growth.harana.build }
   use_backend id if { hdr(host) -i id.harana.build }
+  use_backend s3 if { hdr(host) -i ] }
   default_backend designer
 
 backend autoscaler
@@ -129,6 +130,9 @@ backend growth
 
 backend id
   server server1 127.0.0.1:8085
+
+backend s3
+  server server1 127.0.0.1:8086
 EOF
 ```
 

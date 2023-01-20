@@ -9,7 +9,7 @@ import com.harana.s3.services.server.models._
 import com.harana.s3.utils._
 import io.vertx.core.http.{HttpHeaders, HttpMethod}
 import io.vertx.ext.web.RoutingContext
-import zio.{Task, UIO, ZIO}
+import zio.{IO, Task, UIO, ZIO}
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL
 
@@ -59,12 +59,12 @@ package object s3_server {
 
   def validateParameters(rc: RoutingContext) =
     if (unsupportedParameters.diff(rc.request().params().names().asScala).nonEmpty)
-      throw new S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
+      throw S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
 
   def validateHeaders(rc: RoutingContext, ignoreUnknownHeaders: Boolean) =
     rc.request().headers().names().asScala.map(_.toLowerCase).foreach { h =>
       if (!ignoreUnknownHeaders && h.startsWith("x-amz-") && !h.startsWith(userMetdataPrefix) && !supportedHeaders.map(_.value).contains(h))
-        throw new S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
+        throw S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
     }
 
   def isValidBucket(name: String) =
@@ -95,7 +95,7 @@ package object s3_server {
     val dh = dateHeaders(rc)
     val expires = rc.request().headers.contains(AwsHttpParameters.EXPIRES_V2.value)
     if (!anonymousIdentity && !dh._1 && !dh._3 && !expires)
-      throw new S3Exception(S3ErrorCode.ACCESS_DENIED)
+      throw S3Exception(S3ErrorCode.ACCESS_DENIED)
   }
 
   def validateExpires(rc: RoutingContext) = {
@@ -103,14 +103,14 @@ package object s3_server {
     if (expiresStr != null) {
       val expires = expiresStr.toLong
       val nowSeconds = System.currentTimeMillis() / 1000
-      if (nowSeconds >= expires) throw new S3Exception(S3ErrorCode.ACCESS_DENIED, "Request has expired")
-      if (expires - nowSeconds > TimeUnit.DAYS.toSeconds(365)) throw new S3Exception(S3ErrorCode.ACCESS_DENIED)
+      if (nowSeconds >= expires) throw S3Exception(S3ErrorCode.ACCESS_DENIED, "Request has expired")
+      if (expires - nowSeconds > TimeUnit.DAYS.toSeconds(365)) throw S3Exception(S3ErrorCode.ACCESS_DENIED)
 
       val dateStr = rc.request().getParam(AwsHttpHeaders.DATE_V4.value)
       if (dateStr != null) {
         val date = DateTime.parseIso8601(dateStr)
-        if (nowSeconds >= date + expires) throw new S3Exception(S3ErrorCode.ACCESS_DENIED, "Request has expired")
-        if (expires > TimeUnit.DAYS.toSeconds(7)) throw new S3Exception(S3ErrorCode.ACCESS_DENIED)
+        if (nowSeconds >= date + expires) throw S3Exception(S3ErrorCode.ACCESS_DENIED, "Request has expired")
+        if (expires > TimeUnit.DAYS.toSeconds(7)) throw S3Exception(S3ErrorCode.ACCESS_DENIED)
       }
     }
   }
@@ -124,7 +124,7 @@ package object s3_server {
         authenticationType == AuthenticationType.AWS_V4 ||
         authenticationType == AuthenticationType.AWS_V2_OR_V4)) AuthenticationType.AWS_V4
     else if (authenticationType != AuthenticationType.NONE)
-      throw new S3Exception(S3ErrorCode.ACCESS_DENIED)
+      throw S3Exception(S3ErrorCode.ACCESS_DENIED)
   }
 
   def dateSkew(rc: RoutingContext, authenticationType: AuthenticationType) = {
@@ -156,12 +156,12 @@ package object s3_server {
     else {
       val payload = ByteStreams.toByteArray(ByteStreams.limit(is, v4MaxNonChunkedRequestSize + 1));
       if (payload.length == v4MaxNonChunkedRequestSize + 1)
-        throw new S3Exception(S3ErrorCode.MAX_MESSAGE_LENGTH_EXCEEDED)
+        throw S3Exception(S3ErrorCode.MAX_MESSAGE_LENGTH_EXCEEDED)
 
       val md = MessageDigest.getInstance(authHeader.hashAlgorithm)
       val hash = md.digest(payload)
       if (!contentSha256.equals(BaseEncoding.base16.lowerCase.encode(hash)))
-        throw new S3Exception(S3ErrorCode.X_AMZ_CONTENT_SHA256_MISMATCH)
+        throw S3Exception(S3ErrorCode.X_AMZ_CONTENT_SHA256_MISMATCH)
       (payload, new ByteArrayInputStream(payload))
     }
   }
@@ -181,29 +181,29 @@ package object s3_server {
         if (algorithm == null) {
           val identity = rc.request().getParam(AwsHttpParameters.ACCESS_KEY_ID.value)
           val signature = rc.request().getParam(AwsHttpParameters.SIGNATURE.value)
-          if (identity == null || signature == null) throw new S3Exception(S3ErrorCode.ACCESS_DENIED)
+          if (identity == null || signature == null) throw S3Exception(S3ErrorCode.ACCESS_DENIED)
           (S3AuthorizationHeader("AWS " + identity + ":" + signature), true)
 
         } else if (algorithm.equals("AWS4-HMAC-SHA256")) {
           val credential = rc.request().getParam(AwsHttpParameters.CREDENTIAL.value)
           val signedHeaders = rc.request().getParam(AwsHttpParameters.SIGNED_HEADERS.value)
           val signature = rc.request().getParam(AwsHttpParameters.SIGNATURE.value)
-          if (credential == null || signedHeaders == null || signature == null) throw new S3Exception(S3ErrorCode.ACCESS_DENIED)
+          if (credential == null || signedHeaders == null || signature == null) throw S3Exception(S3ErrorCode.ACCESS_DENIED)
           (S3AuthorizationHeader(s"AWS4-HMAC-SHA256 Credential=$credential, requestSignedHeaders=$signedHeaders, Signature=$signature"), true)
 
         } else
-          throw new S3Exception(S3ErrorCode.INVALID_ARGUMENT)
+          throw S3Exception(S3ErrorCode.INVALID_ARGUMENT)
       } else
         (S3AuthorizationHeader(rc.request().getHeader(HttpHeaders.AUTHORIZATION)), false)
     }
     catch {
       case iae: Exception =>
-        throw new S3Exception(S3ErrorCode.INVALID_ARGUMENT)
+        throw S3Exception(S3ErrorCode.INVALID_ARGUMENT)
     }
 
   def mapXmlAclsToCannedPolicy(policy: AccessControlPolicy): String = {
     if (!policy.owner.id.equals(fakeOwnerId))
-      throw new S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
+      throw S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
 
     var ownerFullControl = false
     var allUsersRead = false
@@ -216,13 +216,13 @@ package object s3_server {
           if (grant.grantee.`type`.equals("Group") && grant.grantee.uri.equals("http://acs.amazonaws.com/groups/global/AllUsers") && grant.permission.equals("READ"))
             allUsersRead = true
           else
-            throw new S3Exception(S3ErrorCode.NOT_IMPLEMENTED);
+            throw S3Exception(S3ErrorCode.NOT_IMPLEMENTED);
         }
 
         if (ownerFullControl) {
           if (allUsersRead) "public-read" else "private"
         } else {
-            throw new S3Exception(S3ErrorCode.NOT_IMPLEMENTED);
+            throw S3Exception(S3ErrorCode.NOT_IMPLEMENTED);
         }
     }
 
@@ -233,38 +233,42 @@ package object s3_server {
                        xmlRequest(rc, classOf[AccessControlPolicy])(request => UIO(mapXmlAclsToCannedPolicy(request) match {
                          case "private" => ObjectCannedACL.PRIVATE
                          case "public-read" => ObjectCannedACL.PUBLIC_READ
-                         case _ => throw new S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
+                         case _ => throw S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
                        }))
                      else
-                       Task(
+                       UIO(
                           Option(rc.request().getHeader(AwsHttpHeaders.ACL.value)) match {
                             case Some("private") => ObjectCannedACL.PRIVATE
                             case Some("public-read") => ObjectCannedACL.PUBLIC_READ
-                            case Some(acl) if cannedAcls.contains(acl) => throw new S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
-                            case _ => throw new S3Exception(S3ErrorCode.INVALID_REQUEST)
+                            case Some(acl) if cannedAcls.contains(acl) => throw S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
+                            case _ => throw S3Exception(S3ErrorCode.INVALID_REQUEST)
                           }
                         )
     } yield acl
+
 
   def maybeQuoteETag(eTag: String) =
 		if (eTag != null && !eTag.startsWith("\"") && !eTag.endsWith("\""))
 			"\"" + eTag + "\""
     else eTag
 
-  def hasBody(rc: RoutingContext): Task[Boolean] =
+
+  def hasBody(rc: RoutingContext): IO[S3Exception, Boolean] =
     for {
-      buffer    <- ZIO.fromCompletionStage(rc.request().body().toCompletionStage)
+      buffer    <- ZIO.fromCompletionStage(rc.request().body().toCompletionStage).mapError(e => S3Exception(S3ErrorCode.UNKNOWN_ERROR, e.getMessage, e.getCause))
       valid     =  buffer != null && buffer.length() > 0
     } yield valid
 
-  def xmlRequest[A, B](rc: RoutingContext, xmlClass: Class[A])(fn: A => Task[B]) =
+
+  def xmlRequest[A, B](rc: RoutingContext, xmlClass: Class[A])(fn: A => IO[S3Exception, B]): IO[S3Exception, B] =
     for {
-      buffer    <- ZIO.fromCompletionStage(rc.request().body().toCompletionStage)
-      cls       <- Task(xmlMapper.readValue(buffer.getBytes, xmlClass))
+      buffer    <- Task.fromCompletionStage(rc.request().body().toCompletionStage).mapError(e => S3Exception(S3ErrorCode.UNKNOWN_ERROR, e.getMessage, e.getCause))
+      cls       <- IO(xmlMapper.readValue(buffer.getBytes, xmlClass)).mapError(e => S3Exception(S3ErrorCode.INVALID_REQUEST, e.getMessage, e.getCause))
       result    <- fn(cls)
     } yield result
 
-  def xmlResponse(fn: XMLStreamWriter => Task[Unit]) =
+
+  def xmlResponse(fn: XMLStreamWriter => IO[S3Exception, Unit]) =
     for {
       stringWriter    <- UIO(new StringWriter())
       xmlWriter       =  xmlOutputFactory.createXMLStreamWriter(stringWriter)

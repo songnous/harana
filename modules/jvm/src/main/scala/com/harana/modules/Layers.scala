@@ -12,7 +12,7 @@ import com.harana.modules.core.{Layers => CoreLayers}
 import com.harana.modules.docker.LiveDocker
 import com.harana.modules.email.LiveEmail
 import com.harana.modules.handlebars.LiveHandlebars
-import com.harana.modules.jasyncfio.LiveJasyncfio
+import com.harana.modules.file.LiveFile
 import com.harana.modules.kubernetes.LiveKubernetes
 import com.harana.modules.mixpanel.LiveMixpanel
 import com.harana.modules.mongo.LiveMongo
@@ -34,7 +34,7 @@ object Layers {
   val clearbit = (CoreLayers.standard ++ okhttp) >>> LiveClearbit.layer
   val docker = Blocking.live ++ CoreLayers.standard ++ okhttp >>> LiveDocker.layer
   val email = CoreLayers.standard >>> LiveEmail.layer
-  val jasyncfio = Blocking.live ++ CoreLayers.standard >>> LiveJasyncfio.layer
+  val jasyncfio = Blocking.live ++ CoreLayers.standard >>> LiveFile.layer
   val handlebars = LiveHandlebars.layer
   val kubernetes = Clock.live ++ CoreLayers.standard >>> LiveKubernetes.layer
   val mixpanel = CoreLayers.standard >>> LiveMixpanel.layer

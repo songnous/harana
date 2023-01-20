@@ -308,6 +308,7 @@ object LiveVertx {
     def startHttpServer(domain: String,
                         proxyDomain: Option[String] = None,
                         routes: List[Route] = List(),
+                        routeHandler: Option[RoutingContext => Task[Response]] = None,
                         proxyMapping: Option[RoutingContext => Task[Option[URI]]] = None,
                         webSocketProxyMapping: Option[WebSocketHeaders => Task[WSURI]] = None,
                         errorHandlers: Map[Int, RoutingContext => Task[Response]] = Map(),
@@ -345,6 +346,12 @@ object LiveVertx {
 
         router                <- Task {
                                   val router = Router.router(vx)
+
+                                  // Generic
+                                  if (routeHandler.isDefined)
+                                    router.route.handler(rc =>
+                                      generateResponse(vx, logger, micrometer, templateEngine, rc, routeHandler.get)
+                                    )
 
                                   // Body
                                   router.route.handler(BodyHandler.create())
@@ -398,7 +405,7 @@ object LiveVertx {
                                     router.get("/postLogin").handler(rc => {
                                       val profileManager = new VertxProfileManager(new VertxWebContext(rc, sessionStore), sessionStore)
                                       val postLoginHandler = postLogin.get.apply(_, profileManager.getProfile.asScala)
-                                      generateResponse(vx, micrometer, templateEngine, rc, postLoginHandler, auth = false)
+                                      generateResponse(vx, logger, micrometer, templateEngine, rc, postLoginHandler, auth = false, log = false)
                                     })
                                   }
 
@@ -406,7 +413,7 @@ object LiveVertx {
                                   routes.foreach { route =>
                                     def handler(rc: RoutingContext): Unit = {
                                       rc.request().setExpectMultipart(route.isMultipart)
-                                      generateResponse(vx, micrometer, templateEngine, rc, route.handler, route.isSecured)
+                                      generateResponse(vx, logger, micrometer, templateEngine, rc, route.handler, route.isSecured, route.log)
                                     }
 
                                     if (route.isRegex) {
@@ -442,7 +449,7 @@ object LiveVertx {
                                   router.route.failureHandler((rc: RoutingContext) => {
                                     val response = rc.response
                                     errorHandlers.get(response.getStatusCode) match {
-                                      case Some(r) => generateResponse(vx, micrometer, templateEngine, rc, r, auth = false)
+                                      case Some(r) => generateResponse(vx, logger, micrometer, templateEngine, rc, r, auth = false, log = true)
                                       case None => if (!response.closed() && !response.ended()) response.end()
                                     }
                                   })

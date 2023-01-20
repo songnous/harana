@@ -62,10 +62,10 @@ object DateTime {
   }
 
   def isTimeSkewed(date: Long) = {
-    if (date < 0) throw new S3Exception(S3ErrorCode.ACCESS_DENIED)
+    if (date < 0) throw S3Exception(S3ErrorCode.ACCESS_DENIED)
     val now = System.currentTimeMillis / 1000
     if (now + maximumTimeSkew < date || now - maximumTimeSkew > date) {
-      throw new S3Exception(S3ErrorCode.REQUEST_TIME_TOO_SKEWED)
+      throw S3Exception(S3ErrorCode.REQUEST_TIME_TOO_SKEWED)
     }
   }
 

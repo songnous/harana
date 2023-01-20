@@ -109,7 +109,7 @@ object Facebook {
     def adDeliveryEstimate(adAccountId: String): Task[List[AdAccountDeliveryEstimate]]
 
     def adDeprecatedTargetingAdSets(adAccountId: String): Task[List[AdSet]]
-    
+
     def adImpactingAdStudies(adAccountId: String): Task[List[AdStudy]]
 
     def adInsights(adAccountId: String): Task[List[AdsInsights]]

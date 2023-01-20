@@ -1,10 +1,11 @@
 package com.harana.s3.services.router
 
+import com.harana.s3.services.server.models.S3Exception
 import io.vertx.core.buffer.Buffer
 import io.vertx.ext.reactivestreams.{ReactiveReadStream, ReactiveWriteStream}
 import software.amazon.awssdk.services.s3.model._
 import zio.macros.accessible
-import zio.{Has, Task}
+import zio.{Has, IO}
 
 import java.time.Instant
 
@@ -14,25 +15,25 @@ object Router {
 
   trait Service {
 
-    def createBucket(bucket: String): Task[Unit]
+    def createBucket(bucket: String): IO[S3Exception, Unit]
 
-    def deleteBucket(bucket: String): Task[Unit]
+    def deleteBucket(bucket: String): IO[S3Exception, Unit]
 
-    def listBuckets(): Task[List[Bucket]]
+    def listBuckets(): IO[S3Exception, List[Bucket]]
 
-    def bucketExists(bucket: String): Task[Boolean]
+    def bucketExists(bucket: String): IO[S3Exception, Boolean]
 
-    def getBucketPolicy(bucket: String): Task[String]
+    def getBucketPolicy(bucket: String): IO[S3Exception, String]
 
-    def getBucketAcl(bucket: String): Task[GetBucketAclResponse]
+    def getBucketAcl(bucket: String): IO[S3Exception, GetBucketAclResponse]
 
-    def putBucketAcl(bucket: String, acl: BucketCannedACL): Task[Unit]
+    def putBucketAcl(bucket: String, acl: BucketCannedACL): IO[S3Exception, Unit]
 
-    def listObjects(bucket: String, prefix: Option[String] = None): Task[List[S3Object]]
+    def listObjects(bucket: String, prefix: Option[String] = None): IO[S3Exception, List[S3Object]]
 
-    def deleteObject(bucket: String, key: String): Task[Unit]
+    def deleteObject(bucket: String, key: String): IO[S3Exception, Unit]
 
-    def deleteObjects(bucket: String, keys: List[String]): Task[Unit]
+    def deleteObjects(bucket: String, keys: List[String]): IO[S3Exception, Unit]
 
     def getObject(bucket: String,
                   key: String,
@@ -40,9 +41,9 @@ object Router {
                   ifNoneMatch: Option[String] = None,
                   ifModifiedSince: Option[Instant] = None,
                   ifUnmodifiedSince: Option[Instant] = None,
-                  range: Option[String] = None): Task[ReactiveReadStream[Buffer]]
+                  range: Option[String] = None): IO[S3Exception, ReactiveReadStream[Buffer]]
 
-    def getObjectAttributes(bucket: String, key: String): Task[GetObjectAttributesResponse]
+    def getObjectAttributes(bucket: String, key: String): IO[S3Exception, GetObjectAttributesResponse]
 
     def putObject(bucket: String,
                   key: String,
@@ -51,13 +52,13 @@ object Router {
                   contentLength: Option[Long] = None,
                   contentMD5: Option[String] = None,
                   storageClass: Option[String] = None,
-                  tags: Map[String, String] = Map()): Task[String]
+                  tags: Map[String, String] = Map()): IO[S3Exception, String]
 
-    def copyObject(sourceBucket: String, sourceKey: String, destinationBucket: String, destinationKey: String): Task[CopyObjectResult]
+    def copyObject(sourceBucket: String, sourceKey: String, destinationBucket: String, destinationKey: String): IO[S3Exception, CopyObjectResult]
 
-    def getObjectAcl(bucket: String, key: String): Task[GetObjectAclResponse]
+    def getObjectAcl(bucket: String, key: String): IO[S3Exception, GetObjectAclResponse]
 
-    def putObjectAcl(bucket: String, key: String, acl: ObjectCannedACL): Task[Unit]
+    def putObjectAcl(bucket: String, key: String, acl: ObjectCannedACL): IO[S3Exception, Unit]
 
     def uploadPartCopy(sourceBucket: String,
                        sourceKey: String,
@@ -69,19 +70,19 @@ object Router {
                        copySourceIfNoneMatch: Option[String],
                        copySourceIfModifiedSince: Option[Instant],
                        copySourceIfUnmodifiedSince: Option[Instant],
-                       copySourceRange: Option[String]): Task[CopyPartResult]
+                       copySourceRange: Option[String]): IO[S3Exception, CopyPartResult]
 
-    def uploadPart(bucket: String, key: String, uploadId: String, partNumber: Int, writeStream: ReactiveWriteStream[Buffer]): Task[String]
+    def uploadPart(bucket: String, key: String, uploadId: String, partNumber: Int, writeStream: ReactiveWriteStream[Buffer]): IO[S3Exception, String]
 
-    def listParts(bucket: String, key: String, uploadId: String): Task[List[Part]]
+    def listParts(bucket: String, key: String, uploadId: String): IO[S3Exception, List[Part]]
 
-    def listMultipartUploads(bucket: String): Task[List[MultipartUpload]]
+    def listMultipartUploads(bucket: String): IO[S3Exception, List[MultipartUpload]]
 
-    def createMultipartUpload(bucket: String, key: String, cannedACL: ObjectCannedACL): Task[String]
+    def createMultipartUpload(bucket: String, key: String, cannedACL: ObjectCannedACL): IO[S3Exception, String]
 
-    def abortMultipartUpload(bucket: String, key: String, uploadId: String): Task[Unit]
+    def abortMultipartUpload(bucket: String, key: String, uploadId: String): IO[S3Exception, Unit]
 
-    def completeMultipartUpload(bucket: String, key: String, uploadId: String): Task[String]
+    def completeMultipartUpload(bucket: String, key: String, uploadId: String): IO[S3Exception, String]
 
   }
 }
