@@ -25,7 +25,7 @@ import org.mongodb.scala.model.Sorts.{ascending, descending}
 import org.mongodb.scala.model._
 import org.mongodb.scala.result.{DeleteResult, UpdateResult}
 import org.mongodb.scala.{ConnectionString, MongoClient, MongoClientSettings, MongoDatabase, Observer, ServerAddress}
-import zio.{Task, ZLayer}
+import zio.{Task, UIO, ZLayer}
 
 import java.util.Date
 import java.util.concurrent.atomic.AtomicReference
@@ -52,7 +52,8 @@ object LiveMongo {
 
     private def getClient: Task[MongoClient] =
       for {
-        client            <- if (clientRef.get.isDefined) Task(clientRef.get.get) else
+        hasClient         <- UIO(clientRef.get.isDefined)
+        client            <- if (hasClient) Task(clientRef.get.get) else
                               for {
                                 uri               <- config.optSecret("mongodb-uri")
                                 srvHost           <- config.optString(s"mongodb.srvHost")
@@ -85,8 +86,8 @@ object LiveMongo {
                                 db                <- Task(client.getDatabase("admin")).onError(e => logger.error(e.prettyPrint))
                                 _                 <- execute(db.runCommand(BsonDocument("ping" -> 1)))
                                 _                 <- logger.info(s"Connected to MongoDB and successfully pinged.")
+                                _                 =  clientRef.set(Some(client))
                               } yield client
-        _                 =  clientRef.set(Some(client))
       } yield client
 
 

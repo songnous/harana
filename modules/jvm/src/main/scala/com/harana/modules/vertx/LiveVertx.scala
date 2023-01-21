@@ -308,7 +308,7 @@ object LiveVertx {
     def startHttpServer(domain: String,
                         proxyDomain: Option[String] = None,
                         routes: List[Route] = List(),
-                        routeHandler: Option[RoutingContext => Task[Response]] = None,
+                        fallbackRouteHandler: Option[RoutingContext => Task[Response]] = None,
                         proxyMapping: Option[RoutingContext => Task[Option[URI]]] = None,
                         webSocketProxyMapping: Option[WebSocketHeaders => Task[WSURI]] = None,
                         errorHandlers: Map[Int, RoutingContext => Task[Response]] = Map(),
@@ -346,12 +346,6 @@ object LiveVertx {
 
         router                <- Task {
                                   val router = Router.router(vx)
-
-                                  // Generic
-                                  if (routeHandler.isDefined)
-                                    router.route.handler(rc =>
-                                      generateResponse(vx, logger, micrometer, templateEngine, rc, routeHandler.get)
-                                    )
 
                                   // Body
                                   router.route.handler(BodyHandler.create())
@@ -405,29 +399,29 @@ object LiveVertx {
                                     router.get("/postLogin").handler(rc => {
                                       val profileManager = new VertxProfileManager(new VertxWebContext(rc, sessionStore), sessionStore)
                                       val postLoginHandler = postLogin.get.apply(_, profileManager.getProfile.asScala)
-                                      generateResponse(vx, logger, micrometer, templateEngine, rc, postLoginHandler, auth = false, log = false)
+                                      generateResponse(vx, logger, micrometer, templateEngine, rc, postLoginHandler, log = false)
                                     })
                                   }
 
                                   // Custom Routes
                                   routes.foreach { route =>
                                     def handler(rc: RoutingContext): Unit = {
-                                      rc.request().setExpectMultipart(route.isMultipart)
-                                      generateResponse(vx, logger, micrometer, templateEngine, rc, route.handler, route.isSecured, route.log)
+                                      rc.request().setExpectMultipart(route.multipart)
+                                      generateResponse(vx, logger, micrometer, templateEngine, rc, route.handler, route.secured, route.log)
                                     }
 
-                                    if (route.isRegex) {
-                                      if (route.isBlocking)
+                                    if (route.regex) {
+                                      if (route.blocking)
                                         router.routeWithRegex(route.method, route.path).virtualHost(domain).blockingHandler(handler)
                                       else
                                         router.routeWithRegex(route.method, route.path).virtualHost(domain).handler(handler)
                                     }
                                     else {
                                       val customRoute =
-                                        if (route.isBlocking)
-                                          router.route(route.method, route.path).virtualHost(domain).blockingHandler(handler).useNormalizedPath(route.isNormalisedPath)
+                                        if (route.blocking)
+                                          router.route(route.method, route.path).virtualHost(domain).blockingHandler(handler).useNormalizedPath(route.normalisedPath)
                                         else
-                                          router.route(route.method, route.path).virtualHost(domain).handler(handler).useNormalizedPath(route.isNormalisedPath)
+                                          router.route(route.method, route.path).virtualHost(domain).handler(handler).useNormalizedPath(route.normalisedPath)
 
                                       if (route.consumes.isDefined) customRoute.consumes(route.consumes.get.value)
                                       if (route.produces.isDefined) customRoute.produces(route.produces.get.value)
@@ -449,10 +443,17 @@ object LiveVertx {
                                   router.route.failureHandler((rc: RoutingContext) => {
                                     val response = rc.response
                                     errorHandlers.get(response.getStatusCode) match {
-                                      case Some(r) => generateResponse(vx, logger, micrometer, templateEngine, rc, r, auth = false, log = true)
+                                      case Some(r) => generateResponse(vx, logger, micrometer, templateEngine, rc, r)
                                       case None => if (!response.closed() && !response.ended()) response.end()
                                     }
                                   })
+
+                                  // Fallback
+                                  if (fallbackRouteHandler.isDefined)
+                                    router.route.handler(rc =>
+                                      generateResponse(vx, logger, micrometer, templateEngine, rc, fallbackRouteHandler.get)
+                                    )
+
 
                                   router
                                 }
@@ -512,7 +513,7 @@ object LiveVertx {
 
     def withBody[T](rc: RoutingContext)(fn: Buffer => Task[T]) =
       for {
-        buffer  <- ZIO.fromCompletionStage(rc.request().body().toCompletionStage)
+        buffer  <- UIO(rc.body().buffer())
         result  <- fn(buffer)
       } yield result
 

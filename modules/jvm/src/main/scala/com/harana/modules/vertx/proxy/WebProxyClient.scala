@@ -39,12 +39,12 @@ class WebProxyClient(client: WebClient, clientOptions: WebProxyClientOptions) {
 
     val proxyRequest = client.requestAbs(method, proxyRequestUri).ssl(targetUri.getScheme.equalsIgnoreCase("https"))
 
-    val isMultipart = isMultipartForm(rc)
-    if (isMultipart) copyRequestHeadersForMultipartForm(rc, proxyRequest, targetUri)
+    val multipart = multipartForm(rc)
+    if (multipart) copyRequestHeadersForMultipartForm(rc, proxyRequest, targetUri)
     else copyRequestHeaders(rc, proxyRequest, targetUri)
     if (clientOptions.forwardIP) setXForwardedForHeader(rc, proxyRequest, serverRequestUriInfo.scheme)
 
-    if (isMultipart) proxyRequest.sendMultipartForm(createMultipartForm(rc, uploadsDirectory), handler)
+    if (multipart) proxyRequest.sendMultipartForm(createMultipartForm(rc, uploadsDirectory), handler)
     else {
       val buffer = rc.getBody
       if (buffer != null) {

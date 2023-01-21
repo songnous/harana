@@ -216,13 +216,13 @@ package object s3_server {
           if (grant.grantee.`type`.equals("Group") && grant.grantee.uri.equals("http://acs.amazonaws.com/groups/global/AllUsers") && grant.permission.equals("READ"))
             allUsersRead = true
           else
-            throw S3Exception(S3ErrorCode.NOT_IMPLEMENTED);
+            throw S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
         }
 
         if (ownerFullControl) {
           if (allUsersRead) "public-read" else "private"
         } else {
-            throw S3Exception(S3ErrorCode.NOT_IMPLEMENTED);
+            throw S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
         }
     }
 
@@ -255,15 +255,15 @@ package object s3_server {
 
   def hasBody(rc: RoutingContext): IO[S3Exception, Boolean] =
     for {
-      buffer    <- ZIO.fromCompletionStage(rc.request().body().toCompletionStage).mapError(e => S3Exception(S3ErrorCode.UNKNOWN_ERROR, e.getMessage, e.getCause))
+      buffer    <- UIO(rc.body().buffer())
       valid     =  buffer != null && buffer.length() > 0
     } yield valid
 
 
   def xmlRequest[A, B](rc: RoutingContext, xmlClass: Class[A])(fn: A => IO[S3Exception, B]): IO[S3Exception, B] =
     for {
-      buffer    <- Task.fromCompletionStage(rc.request().body().toCompletionStage).mapError(e => S3Exception(S3ErrorCode.UNKNOWN_ERROR, e.getMessage, e.getCause))
-      cls       <- IO(xmlMapper.readValue(buffer.getBytes, xmlClass)).mapError(e => S3Exception(S3ErrorCode.INVALID_REQUEST, e.getMessage, e.getCause))
+      buffer    <- UIO(rc.body().buffer())
+      cls       <- IO(xmlMapper.readValue(buffer.getBytes, xmlClass)).mapError(e => S3Exception(S3ErrorCode.INVALID_REQUEST, e.getMessage, e.fillInStackTrace()))
       result    <- fn(cls)
     } yield result
 

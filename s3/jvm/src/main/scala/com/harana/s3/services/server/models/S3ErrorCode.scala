@@ -38,7 +38,7 @@ object S3ErrorCode extends IntEnum[S3ErrorCode] {
   case object PRECONDITION_FAILED extends S3ErrorCode(28, 412, "At least one of the preconditions you specified did not hold.")
   case object REQUEST_TIME_TOO_SKEWED extends S3ErrorCode(29, 403, "Forbidden")
   case object REQUEST_TIMEOUT extends S3ErrorCode(30, 403, "Bad Request")
-  case object ROUTE_NOT_FOUND extends S3ErrorCode(31, 401, "Route Not Found")
+  case object ROUTE_NOT_FOUND extends S3ErrorCode(31, 406, "Route Not Found")
   case object SIGNATURE_DOES_NOT_MATCH extends S3ErrorCode(32, 403, "Forbidden")
   case object UNKNOWN_ERROR extends S3ErrorCode(33, 500, "Unknown error")
   case object X_AMZ_CONTENT_SHA256_MISMATCH extends S3ErrorCode(34, 400, "The provided 'x-amz-content-sha256' header does not match what was computed.")

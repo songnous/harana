@@ -1,11 +1,9 @@
 package com.harana.s3.services.server
 
 import com.harana.modules.vertx.models.Response
-import com.harana.s3.services.server.models.S3Exception
-import io.vertx.core.http.HttpMethod
 import io.vertx.ext.web.RoutingContext
 import zio.macros.accessible
-import zio.{Has, IO, Task}
+import zio.{Has, Task, UIO}
 
 @accessible
 object Server {
@@ -13,7 +11,19 @@ object Server {
 
   trait Service {
 
-    def handle(rc: RoutingContext): Task[Response]
+    def s3Request(rc: RoutingContext): Task[Response]
+
+    def createRoute(rc: RoutingContext): Task[Response]
+
+    def deleteRoute(rc: RoutingContext): Task[Response]
+
+    def updateRoute(rc: RoutingContext): Task[Response]
+
+    def listRoutes(rc: RoutingContext): Task[Response]
+
+    def syncRoutes: UIO[Unit]
+
+    def sampleData(rc: RoutingContext): Task[Response]
 
   }
 }

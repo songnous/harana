@@ -39,17 +39,17 @@ import scala.util.Try
 object App extends CoreApp {
 
   def routes = List(
-    Route("/",                                                GET,      rc => homePage(rc), isBlocking = false),
-    Route("/welcome",                                         GET,      rc => homePage(rc, true), isBlocking = false),
-    Route("/apps*",                                           GET,      rc => homePage(rc), isBlocking = false),
-    Route("/data*",                                           GET,      rc => homePage(rc), isBlocking = false),
-    Route("/files*",                                          GET,      rc => homePage(rc), isBlocking = false),
-    Route("/flows*",                                          GET,      rc => homePage(rc), isBlocking = false),
-    Route("/help*",                                           GET,      rc => homePage(rc), isBlocking = false),
-    Route("/schedules*",                                      GET,      rc => homePage(rc), isBlocking = false),
-    Route("/settings*",                                       GET,      rc => homePage(rc), isBlocking = false),
-    Route("/terminal*",                                       GET,      rc => homePage(rc), isBlocking = false),
-    Route("/test*",                                           GET,      rc => homePage(rc), isBlocking = false),
+    Route("/",                                                GET,      rc => homePage(rc)),
+    Route("/welcome",                                         GET,      rc => homePage(rc, true)),
+    Route("/apps*",                                           GET,      rc => homePage(rc)),
+    Route("/data*",                                           GET,      rc => homePage(rc)),
+    Route("/files*",                                          GET,      rc => homePage(rc)),
+    Route("/flows*",                                          GET,      rc => homePage(rc)),
+    Route("/help*",                                           GET,      rc => homePage(rc)),
+    Route("/schedules*",                                      GET,      rc => homePage(rc)),
+    Route("/settings*",                                       GET,      rc => homePage(rc)),
+    Route("/terminal*",                                       GET,      rc => homePage(rc)),
+    Route("/test*",                                           GET,      rc => homePage(rc)),
 
     Route("/health",                                          GET,      rc => System.health(rc).provideLayer(system)),
 

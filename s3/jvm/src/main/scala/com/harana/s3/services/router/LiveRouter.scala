@@ -17,7 +17,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient
 import software.amazon.awssdk.services.s3.model._
 import zio.CanFail.canFailAmbiguous1
 import zio.clock.Clock
-import zio.{IO, Task, UIO, ZLayer}
+import zio.{IO, Task, UIO, ZIO, ZLayer}
 
 import java.nio.file.attribute.BasicFileAttributes
 import java.nio.file.{Files, Path, Paths}
@@ -27,6 +27,10 @@ import java.util.concurrent.atomic.AtomicReference
 import scala.jdk.CollectionConverters._
 
 object LiveRouter {
+
+  private val routesRef = new AtomicReference[List[Route]](List.empty)
+  private val s3ClientsRef = new AtomicReference[Map[Int, S3AsyncClient]](Map.empty)
+
   val layer = ZLayer.fromServices { (clock: Clock.Service,
                                      config: Config.Service,
                                      jasyncfio: File.Service,
@@ -34,10 +38,6 @@ object LiveRouter {
                                      micrometer: Micrometer.Service,
                                      ohc: OHC.Service,
                                      s3: AwsS3.Service) => new Router.Service {
-
-    private val routesRef = new AtomicReference[List[Route]](List.empty)
-    private val s3ClientsRef = new AtomicReference[Map[Int, S3AsyncClient]](Map.empty)
-
 
     // 💚
     def createBucket(bucket: String) =
@@ -50,7 +50,7 @@ object LiveRouter {
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
                           case Some(Local) =>
-                            val path = Paths.get(rootDir, bucket)
+                            val path = rootDir.resolve(bucket)
                             if (Files.exists(path))
                               IO.fail(S3Exception(S3ErrorCode.BUCKET_ALREADY_EXISTS))
                             else
@@ -67,14 +67,14 @@ object LiveRouter {
     def deleteBucket(bucket: String) =
       for {
         _             <- logger.debug(s"[DeleteBucket] $bucket")
-        rootDir       <- config.string("local.root")
+        rootDir       <- localRootDirectory
         result        <- if (validAccess(bucket)(_.deleteBuckets))
                           route(bucket).map(_.destination) match {
                             case None =>
                               IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
                             case Some(Local) =>
-                              val path = Paths.get(rootDir, bucket)
+                              val path = rootDir.resolve(bucket)
                               if (Files.notExists(path)) IO.fail(S3Exception(S3ErrorCode.NO_SUCH_BUCKET))
                               else if (Files.list(path).count() > 0) IO.fail(S3Exception(S3ErrorCode.BUCKET_NOT_EMPTY))
                               else toS3Exception(IO(Files.delete(path)))
@@ -86,34 +86,14 @@ object LiveRouter {
       } yield result
 
 
-    // 💚
     def listBuckets() =
-      for {
-        _           <- logger.debug(s"[ListBuckets]")
-        rootDir     <- localRootDirectory
-        result      <- anyRoute.map(_.destination) match {
-                        case None =>
-                          IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
-
-                        case Some(Local) =>
-                          toS3Exception(
-                            Files.list(Paths.get(rootDir)).toList.asScala.toList.map { path =>
-                              val at = Files.readAttributes(path, classOf[BasicFileAttributes])
-                              Bucket.builder().name(path.getFileName.toString).creationDate(at.creationTime().toInstant).build()
-                            }
-                          )
-
-                        case Some(S3(credentials, region, endpoint)) =>
-                          s3Operation(credentials, region, endpoint)(s3.listBuckets)
-                      }
-      } yield result
+      logger.debug(s"[ListBuckets]") *> UIO(List.empty[Bucket])
 
 
-    // 💚
     def bucketExists(bucket: String) =
       for {
         _           <- logger.debug(s"[BucketExists] $bucket")
-        result      <- anyRoute.map(_.destination) match {
+        result      <- route(bucket).map(_.destination) match {
                         case None =>
                           IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
@@ -130,7 +110,7 @@ object LiveRouter {
     def getBucketPolicy(bucket: String) =
       for {
         _           <- logger.debug(s"[GetBucketPolicy] $bucket")
-        result      <- anyRoute.map(_.destination) match {
+        result      <- route(bucket).map(_.destination) match {
                         case None =>
                           IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
@@ -147,7 +127,7 @@ object LiveRouter {
     def getBucketAcl(bucket: String) =
       for {
         _           <- logger.debug(s"[GetBucketAcl] $bucket")
-        result      <- anyRoute.map(_.destination) match {
+        result      <- route(bucket).map(_.destination) match {
                         case None =>
                           IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
@@ -169,7 +149,7 @@ object LiveRouter {
       for {
         _           <- logger.debug(s"[PutBucketAcl] $bucket")
         rootDir     <- localRootDirectory
-        result      <- anyRoute.map(_.destination) match {
+        result      <- route(bucket).map(_.destination) match {
                         case None =>
                           IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
@@ -187,12 +167,12 @@ object LiveRouter {
       for {
         _           <- logger.debug(s"[ListObjects] $bucket")
         rootDir     <- localRootDirectory
-        result      <- anyRoute.map(_.destination) match {
+        result      <- route(bucket).map(_.destination) match {
                         case None =>
-                          IO.fail((S3Exception(S3ErrorCode.ROUTE_NOT_FOUND)))
+                          IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
                         case Some(Local) =>
-                          val bucketPath = Paths.get(rootDir, bucket)
+                          val bucketPath = rootDir.resolve(bucket)
                           if (Files.notExists(bucketPath))
                             IO.fail(S3Exception(S3ErrorCode.NO_SUCH_BUCKET))
                           else
@@ -217,7 +197,7 @@ object LiveRouter {
     def deleteObject(bucket: String, key: String) =
       for {
         _           <- logger.debug(s"[DeleteObject] $bucket / $key")
-        result      <- anyRoute.map(_.destination) match {
+        result      <- route(bucket, Some(key)).map(_.destination) match {
                         case None =>
                           IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
@@ -229,11 +209,11 @@ object LiveRouter {
          }
       } yield result
 
-    // 💚
+    // FIXME need to iterate on keys
     def deleteObjects(bucket: String, keys: List[String]) =
       for {
         _           <- logger.debug(s"[DeleteObjects] $bucket / ${keys.mkString(",")}")
-        _           <- anyRoute.map(_.destination) match {
+        _           <- route(bucket, Some(keys.head)).map(_.destination) match {
                         case None =>
                           IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
@@ -256,7 +236,7 @@ object LiveRouter {
       for {
         _           <- logger.debug(s"[GetObject] $bucket / $key")
         stream      =  ReactiveReadStream.readStream[Buffer]()
-        result      <- anyRoute.map(_.destination) match {
+        result      <- route(bucket, Some(key)).map(_.destination) match {
                         case None =>
                           IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
@@ -279,7 +259,7 @@ object LiveRouter {
                   tags: Map[String, String] = Map()) =
       for {
         _           <- logger.debug(s"[PutObject] $bucket / $key")
-        result      <- anyRoute.map(_.destination) match {
+        result      <- route(bucket, Some(key)).map(_.destination) match {
                         case None =>
                           IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
@@ -297,7 +277,7 @@ object LiveRouter {
     def copyObject(sourceBucket: String, sourceKey: String, destinationBucket: String, destinationKey: String) =
       for {
         _           <- logger.debug(s"[CopyObject]")
-        result      <- anyRoute.map(_.destination) match {
+        result      <- route(sourceBucket, Some(sourceKey)).map(_.destination) match {
                           case None =>
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
@@ -313,7 +293,7 @@ object LiveRouter {
     def getObjectAttributes(bucket: String, key: String) =
       for {
         _           <- logger.debug(s"[GetObjectAttributes] $bucket / $key")
-        result      <- anyRoute.map(_.destination) match {
+        result      <- route(bucket, Some(key)).map(_.destination) match {
                           case None =>
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
@@ -338,7 +318,7 @@ object LiveRouter {
     def getObjectAcl(bucket: String, key: String) =
       for {
         _           <- logger.debug(s"[GetObjectACL] $bucket / $key")
-        result      <- anyRoute.map(_.destination) match {
+        result      <- route(bucket, Some(key)).map(_.destination) match {
                           case None =>
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
@@ -356,7 +336,7 @@ object LiveRouter {
     def putObjectAcl(bucket: String, key: String, acl: ObjectCannedACL) =
       for {
         _           <- logger.debug(s"[PutObjectACL] $bucket / $key")
-        result      <- anyRoute.map(_.destination) match {
+        result      <- route(bucket, Some(key)).map(_.destination) match {
                           case None =>
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
@@ -383,7 +363,7 @@ object LiveRouter {
                        copySourceRange: Option[String]) =
       for {
         _           <- logger.debug(s"[UploadPartCopy] $sourceBucket / $sourceKey - $destinationBucket / $destinationKey")
-        result      <- anyRoute.map(_.destination) match {
+        result      <- route(sourceBucket, Some(sourceKey)).map(_.destination) match {
                           case None =>
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
@@ -403,7 +383,7 @@ object LiveRouter {
     def uploadPart(bucket: String, key: String, uploadId: String, partNumber: Int, writeStream: ReactiveWriteStream[Buffer]) =
       for {
         _           <- logger.debug(s"[UploadPart] $bucket / $key")
-        result      <- anyRoute.map(_.destination) match {
+        result      <- route(bucket, Some(key)).map(_.destination) match {
                           case None =>
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
@@ -420,7 +400,7 @@ object LiveRouter {
     def listParts(bucket: String, key: String, uploadId: String) =
       for {
         _           <- logger.debug(s"[ListParts] $bucket / $key")
-        result      <- anyRoute.map(_.destination) match {
+        result      <- route(bucket, Some(key)).map(_.destination) match {
                           case None =>
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
@@ -437,7 +417,7 @@ object LiveRouter {
     def listMultipartUploads(bucket: String) =
       for {
         _           <- logger.debug(s"[ListMultipartUploads] $bucket")
-        result      <- anyRoute.map(_.destination) match {
+        result      <- route(bucket).map(_.destination) match {
                           case None =>
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
@@ -454,7 +434,7 @@ object LiveRouter {
     def createMultipartUpload(bucket: String, key: String, cannedACL: ObjectCannedACL) =
       for {
         _           <- logger.debug(s"[CreateMultipartUpload] $bucket / $key")
-        result      <- anyRoute.map(_.destination) match {
+        result      <- route(bucket, Some(key)).map(_.destination) match {
                           case None =>
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
@@ -471,7 +451,7 @@ object LiveRouter {
     def abortMultipartUpload(bucket: String, key: String, uploadId: String) =
       for {
         _           <- logger.debug(s"[AbortMultipartUpload] $bucket / $key")
-        result      <- anyRoute.map(_.destination) match {
+        result      <- route(bucket, Some(key)).map(_.destination) match {
                           case None =>
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
@@ -487,7 +467,7 @@ object LiveRouter {
     def completeMultipartUpload(bucket: String, key: String, uploadId: String) =
       for {
         _           <- logger.debug(s"[CompleteMultipartUpload] $bucket / $key")
-        result      <- anyRoute.map(_.destination) match {
+        result      <- route(bucket, Some(key)).map(_.destination) match {
                           case None =>
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
@@ -500,11 +480,15 @@ object LiveRouter {
       } yield result
 
 
+    def updateRoutes(routes: List[Route]) =
+      UIO(routesRef.set(routes))
+
+
     private def bucketOperation[T](bucket: String)(operation: Path => Task[T]): IO[S3Exception, T] =
       for {
         rootDir     <- localRootDirectory
-        path        =  Paths.get(rootDir, bucket)
-        result      <- if (Files.notExists(Paths.get(rootDir, bucket)))
+        path        =  rootDir.resolve(bucket)
+        result      <- if (Files.notExists(rootDir.resolve(bucket)))
                         IO.fail(S3Exception(S3ErrorCode.NO_SUCH_BUCKET))
                        else
                         toS3Exception(operation(path))
@@ -514,8 +498,8 @@ object LiveRouter {
     private def fileOperation[T](bucket: String, key: String)(operation: Path => Task[T]): IO[S3Exception, T] =
       for {
         rootDir     <- localRootDirectory
-        path        =  Paths.get(rootDir, bucket, key)
-        result      <- if (Files.notExists(Paths.get(rootDir, bucket)))
+        path        =  rootDir.resolve(bucket).resolve(key)
+        result      <- if (Files.notExists(rootDir.resolve(bucket)))
                         IO.fail(S3Exception(S3ErrorCode.NO_SUCH_BUCKET))
                        else if (Files.notExists(path))
                         IO.fail(S3Exception(S3ErrorCode.NO_SUCH_KEY))
@@ -545,11 +529,17 @@ object LiveRouter {
     private def toS3Exception[T](task: T): IO[S3Exception, T] =
       toS3Exception(IO(task))
 
+
     private def toS3Exception[T](task: Task[T]): IO[S3Exception, T] =
-      task.mapError(e => S3Exception(S3ErrorCode.UNKNOWN_ERROR, e.getMessage, e.getCause))
+      task.mapError(e => S3Exception(S3ErrorCode.UNKNOWN_ERROR, e.getMessage, e.fillInStackTrace()))
+
 
     private def localRootDirectory =
-      config.string("local.root").orElseFail(S3Exception(S3ErrorCode.INVALID_LOCAL_ROOT))
+      for {
+        localRoot   <- config.string("local.root").orElseFail(S3Exception(S3ErrorCode.INVALID_LOCAL_ROOT))
+        path        =  Path.of(localRoot)
+        _           <- toS3Exception(ZIO.when(Files.notExists(path))(Task(Files.createDirectory(path))))
+      } yield path
 
 
     private def validAccess(bucket: String, key: Option[String] = None)(check: AccessPolicy => Boolean) = {
@@ -560,13 +550,8 @@ object LiveRouter {
 
     private def route(bucket: String, key: Option[String] = None) = {
       val term = if (key.isDefined) s"$bucket/$key" else bucket
-      if (routesRef.get().isEmpty) None
-      else Some(routesRef.get().filter(_.pathMatch.matches(term)).maxBy(_.priority))
+      val routes = routesRef.get().filter(_.pathMatch.matches(term))
+      if (routes.isEmpty) None else Some(routes.maxBy(_.priority))
     }
-
-
-    private def anyRoute =
-      if (routesRef.get().isEmpty) None 
-      else Some(routesRef.get().filter(_.pathMatch == PathMatch.Any).maxBy(_.priority))
   }}
 }

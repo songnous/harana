@@ -1,11 +1,12 @@
 package com.harana.s3.services.router
 
+import com.harana.s3.models.Route
 import com.harana.s3.services.server.models.S3Exception
 import io.vertx.core.buffer.Buffer
 import io.vertx.ext.reactivestreams.{ReactiveReadStream, ReactiveWriteStream}
 import software.amazon.awssdk.services.s3.model._
 import zio.macros.accessible
-import zio.{Has, IO}
+import zio.{Has, IO, UIO}
 
 import java.time.Instant
 
@@ -19,7 +20,7 @@ object Router {
 
     def deleteBucket(bucket: String): IO[S3Exception, Unit]
 
-    def listBuckets(): IO[S3Exception, List[Bucket]]
+    def listBuckets(): UIO[List[Bucket]]
 
     def bucketExists(bucket: String): IO[S3Exception, Boolean]
 
@@ -84,5 +85,6 @@ object Router {
 
     def completeMultipartUpload(bucket: String, key: String, uploadId: String): IO[S3Exception, String]
 
+    def updateRoutes(routes: List[Route]): UIO[Unit]
   }
 }

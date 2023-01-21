@@ -40,7 +40,7 @@ object App extends CoreApp {
   val ssh = (CoreLayers.standard ++ Layers.mongo) >>> LiveSSH.layer
 
   private def routes = List(
-    Route("/",                                      GET,    rc => Task(Response.Template("public/index.hbs")), isSecured = true),
+    Route("/",                                      GET,    rc => Task(Response.Template("public/index.hbs")), secured = true),
     Route("/logout",                                GET,    rc => Auth.logout(rc).provideLayer(auth)),
     Route("/token/renew",                           GET,    rc => Auth.renewToken(rc).provideLayer(auth)),
 

@@ -116,7 +116,7 @@ package object proxy {
   }
 
 
-  def isMultipartForm(routingContext: RoutingContext) = {
+  def multipartForm(routingContext: RoutingContext) = {
     val value = routingContext.request.getHeader(HttpHeaders.CONTENT_TYPE)
     if (value != null) {
       value.contains(HttpHeaderValues.MULTIPART_FORM_DATA.toString)

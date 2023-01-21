@@ -10,8 +10,8 @@ case class Route(path: String,
                  consumes: Option[ContentType] = None,
                  produces: Option[ContentType] = Some(ContentType.HTML),
                  log: Boolean = false,
-                 isMultipart: Boolean = false,
-                 isSecured: Boolean = false,
-                 isRegex: Boolean = false,
-                 isNormalisedPath: Boolean = true,
-                 isBlocking: Boolean = true)
+                 multipart: Boolean = false,
+                 secured: Boolean = false,
+                 regex: Boolean = false,
+                 normalisedPath: Boolean = true,
+                 blocking: Boolean = false)

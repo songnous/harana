@@ -64,7 +64,7 @@ object Vertx {
     def startHttpServer(domain: String,
                         proxyDomain: Option[String] = None,
                         routes: List[Route] = List(),
-                        routeHandler: Option[RoutingContext => Task[Response]] = None,
+                        fallbackRouteHandler: Option[RoutingContext => Task[Response]] = None,
                         proxyMapping: Option[RoutingContext => Task[Option[URI]]] = None,
                         webSocketProxyMapping: Option[WebSocketHeaders => Task[WSURI]] = None,
                         errorHandlers: Map[Int, RoutingContext => Task[Response]] = Map(),

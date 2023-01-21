@@ -5,8 +5,10 @@ import com.google.common.hash.{HashCode, Hashing}
 import com.harana.modules.core.config.Config
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
+import com.harana.modules.mongo.Mongo
 import com.harana.modules.vertx.models.Response
 import com.harana.modules.vertx.{Vertx, corsRules}
+import com.harana.s3.models.{AccessPolicy, Credentials, Destination, PathMatch, Route}
 import com.harana.s3.services.router.Router
 import com.harana.s3.services.server.models._
 import com.harana.s3.services.server.s3_server._
@@ -16,41 +18,49 @@ import io.vertx.core.http.HttpMethod._
 import io.vertx.ext.web.RoutingContext
 import software.amazon.awssdk.services.s3.model.{BucketCannedACL, CompleteMultipartUploadRequest, ObjectCannedACL}
 import zio.{IO, Task, UIO, ZLayer}
+import io.circe.parser._
+import io.circe.syntax._
+import zio.clock.Clock
+import zio._
+import zio.duration.durationInt
 
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 import java.time.Instant
 import java.util.Base64
+import java.util.concurrent.atomic.AtomicReference
 import scala.collection.mutable
 
 object LiveServer {
-  val layer = ZLayer.fromServices { (config: Config.Service,
+  val layer = ZLayer.fromServices { (clock: Clock.Service,
+                                     config: Config.Service,
                                      logger: Logger.Service,
                                      micrometer: Micrometer.Service,
+                                     mongo: Mongo.Service,
                                      router: Router.Service,
                                      vertx: Vertx.Service) => new Server.Service {
 
-      def handle(rc: RoutingContext): Task[Response] = {
+      def s3Request(rc: RoutingContext): Task[Response] = {
         val r = rc.request()
         val path = r.uri().split("/", 3)
-        val (bucket, key) = (path(0), path(1))
-        val bucketOnly = path.length <= 2 && key.isEmpty
+        val bucket = path(1)
+        val key = if (path.length > 2) Some(path(2)) else None
         val uploadId = r.getParam("uploadId")
         val MD5 = Hashing.md5()
 
         val response = r.method() match {
 
             // 💚
-            case DELETE if bucketOnly =>
+            case DELETE if key.isEmpty =>
               router.deleteBucket(bucket).as(Response.Empty())
 
             // 💚
             case DELETE if uploadId != null =>
-              router.abortMultipartUpload(bucket, key, uploadId).as(Response.Empty(cors = true))
+              router.abortMultipartUpload(bucket, key.get, uploadId).as(Response.Empty(cors = true))
 
             // 💚
             case DELETE =>
-              router.deleteObject(bucket, key).as(Response.Empty())
+              router.deleteObject(bucket, key.get).as(Response.Empty())
 
             // 💚
             case GET if r.uri().equals("/") =>
@@ -59,24 +69,24 @@ object LiveServer {
               ))
 
             // 💚
-            case GET if bucketOnly && r.getParam("acl") != null =>
+            case GET if key.isEmpty && r.getParam("acl") != null =>
               xmlResponse(writer => router.getBucketAcl(bucket).map(acl =>
                 // FIXME
                 AwsXml.writeAccessControlPolicy(writer, false))
               )
 
             // 💚
-            case GET if bucketOnly && r.getParam("location") != null =>
+            case GET if key.isEmpty && r.getParam("location") != null =>
               xmlResponse(writer =>
                 UIO(AwsXml.writeLocationConstraint(writer))
               )
 
             // 💚
-            case GET if bucketOnly && r.getParam("policy") != null =>
+            case GET if key.isEmpty && r.getParam("policy") != null =>
               UIO(Response.Empty())
 
             // 💚
-            case GET if bucketOnly && r.getParam("uploads") != null =>
+            case GET if key.isEmpty && r.getParam("uploads") != null =>
               if (r.getParam("delimiter") != null || r.getParam("max-uploads") != null ||
                 r.getParam("key-marker") != null || r.getParam("upload-id-marker") != null)
                 throw S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
@@ -89,7 +99,7 @@ object LiveServer {
               )
 
             // ❤️
-            case GET if bucketOnly =>
+            case GET if key.isEmpty =>
               val encodingType = Option(r.getParam("encoding-type")).getOrElse("url")
               val prefix = Option(r.getParam("prefix"))
               val delimiter = Option(r.getParam("delimiter"))
@@ -122,7 +132,7 @@ object LiveServer {
 
             // 💚
             case GET if r.getParam("acl") != null =>
-              xmlResponse(writer => router.getObjectAcl(bucket, key).map(acl =>
+              xmlResponse(writer => router.getObjectAcl(bucket, key.get).map(acl =>
                 // FIXME
                 AwsXml.writeAccessControlPolicy(writer, false)
               ))
@@ -135,8 +145,8 @@ object LiveServer {
 
               val encodingType = Option(r.getParam("encoding-type")).getOrElse("url")
               xmlResponse(xml =>
-                router.listParts(bucket, key, uploadId).map { parts =>
-                  AwsXml.writeListPartsResult(xml, bucket, key, uploadId, encodingType, parts)
+                router.listParts(bucket, key.get, uploadId).map { parts =>
+                  AwsXml.writeListPartsResult(xml, bucket, key.get, uploadId, encodingType, parts)
                 }
               )
 
@@ -144,15 +154,15 @@ object LiveServer {
             case GET =>
               for {
                 ifMatch             <- UIO(Option(r.getHeader(HttpHeaders.IF_MATCH)))
-                ifNoneMatch         = Option(r.getHeader(HttpHeaders.IF_NONE_MATCH))
-                ifModifiedSince     = Option(r.getHeader(HttpHeaders.IF_MODIFIED_SINCE)).map(_.toLong)
-                ifUnmodifiedSince   = Option(r.getHeader("If-Unmodified-Since")).map(_.toLong)
-                range               = Option(r.getHeader("range"))
-                response            <- router.getObject(bucket, key, ifMatch, ifNoneMatch, ifModifiedSince.map(Instant.ofEpochMilli), ifUnmodifiedSince.map(Instant.ofEpochMilli), range).map(Response.ReadStream(_))
+                ifNoneMatch         =  Option(r.getHeader(HttpHeaders.IF_NONE_MATCH))
+                ifModifiedSince     =  Option(r.getHeader(HttpHeaders.IF_MODIFIED_SINCE)).map(_.toLong)
+                ifUnmodifiedSince   =  Option(r.getHeader("If-Unmodified-Since")).map(_.toLong)
+                range               =  Option(r.getHeader("range"))
+                response            <- router.getObject(bucket, key.get, ifMatch, ifNoneMatch, ifModifiedSince.map(Instant.ofEpochMilli), ifUnmodifiedSince.map(Instant.ofEpochMilli), range).map(Response.ReadStream(_))
               } yield response
 
             // 💚
-            case HEAD if bucketOnly =>
+            case HEAD if key.isEmpty =>
               for {
                 exists    <- router.bucketExists(bucket)
                 response  = if (exists) Response.Empty() else Response.Empty(statusCode = Some(404))
@@ -161,7 +171,7 @@ object LiveServer {
             // 💚
             case HEAD =>
               for {
-                attributes          <- router.getObjectAttributes(bucket, key)
+                attributes          <- router.getObjectAttributes(bucket, key.get)
                 ifMatch             = Option(r.getHeader(HttpHeaders.IF_MATCH))
                 ifNoneMatch         = Option(r.getHeader(HttpHeaders.IF_NONE_MATCH))
                 ifModifiedSince     = Option(r.getHeader(HttpHeaders.IF_MODIFIED_SINCE)).map(_.toLong)
@@ -204,20 +214,20 @@ object LiveServer {
             case POST if r.getParam("uploads") != null =>
               val acl = ObjectCannedACL.valueOf(r.getHeader(AwsHttpHeaders.ACL.value))
 
-              xmlResponse(writer => router.createMultipartUpload(bucket, key, acl).map(uploadId =>
-                AwsXml.writeInitiateMultipartUploadResult(writer, bucket, key, uploadId)
+              xmlResponse(writer => router.createMultipartUpload(bucket, key.get, acl).map(uploadId =>
+                AwsXml.writeInitiateMultipartUploadResult(writer, bucket, key.get, uploadId)
               ))
 
             // 💚
             case POST if uploadId != null && r.getParam("partNumber") == null =>
               xmlResponse(writer => xmlRequest(rc, classOf[CompleteMultipartUploadRequest])(request =>
-                router.completeMultipartUpload(bucket, key, uploadId).map(etag =>
+                router.completeMultipartUpload(bucket, key.get, uploadId).map(etag =>
                   AwsXml.writeCompleteMultipartUploadResult(writer, request.bucket(), request.key(), request.uploadId(), Some(etag))
                 )
               ))
 
             // 💚
-            case PUT if bucketOnly && r.getParam("acl") != null =>
+            case PUT if key.isEmpty && r.getParam("acl") != null =>
               IO.whenCaseM(hasBody(rc)) {
                 case true =>
                   for {
@@ -241,7 +251,7 @@ object LiveServer {
               }.as(Response.Empty())
 
             // 💚
-            case PUT if bucketOnly =>
+            case PUT if key.isEmpty =>
               xmlRequest(rc, classOf[CreateBucketRequest])(_ => {
                 router.createBucket(bucket).as(Response.Empty(headers = Map(HttpHeaders.LOCATION -> List(s"/$bucket"))))
               })
@@ -264,8 +274,8 @@ object LiveServer {
                 case None =>
                   for {
                     partNumber  <- UIO(r.getParam("partNumber").toInt).onError(_ => throw S3Exception(S3ErrorCode.INVALID_ARGUMENT))
-                    eTag        <- vertx.withBodyAsStream(rc)(body => router.uploadPart(bucket, key, uploadId, partNumber, body))
-                                    .mapError(e => S3Exception(S3ErrorCode.UNKNOWN_ERROR, e.getMessage, e.getCause))
+                    eTag        <- vertx.withBodyAsStream(rc)(body => router.uploadPart(bucket, key.get, uploadId, partNumber, body))
+                                    .mapError(e => S3Exception(S3ErrorCode.UNKNOWN_ERROR, e.getMessage, e.fillInStackTrace()))
                     response    = Response.Empty(headers = Map(HttpHeaders.ETAG -> List(eTag)), cors = true)
                   } yield response
               }
@@ -278,9 +288,9 @@ object LiveServer {
               if (sourcePath.length != 2) throw S3Exception(S3ErrorCode.INVALID_REQUEST)
 
               val replaceMetadata = r.getHeader(AwsHttpHeaders.METADATA_DIRECTIVE.value).equalsIgnoreCase("REPLACE")
-              if (sourceBucket.equals(bucket) && sourceKey.equals(key) && !replaceMetadata) throw S3Exception(S3ErrorCode.INVALID_REQUEST)
+              if (sourceBucket.equals(bucket) && sourceKey.equals(key.get) && !replaceMetadata) throw S3Exception(S3ErrorCode.INVALID_REQUEST)
 
-              xmlResponse(xml => router.copyObject(sourceBucket, sourceKey, bucket, key).map(result =>
+              xmlResponse(xml => router.copyObject(sourceBucket, sourceKey, bucket, key.get).map(result =>
                 AwsXml.writeCopyObjectResult(xml, result.lastModified(), result.eTag())
               ))
 
@@ -288,7 +298,7 @@ object LiveServer {
             case PUT if r.getParam("acl") != null =>
               for {
                 acl       <- acl(rc)
-                _         <- router.putObjectAcl(bucket, key, acl)
+                _         <- router.putObjectAcl(bucket, key.get, acl)
                 response  = Response.Empty()
               } yield response
 
@@ -311,8 +321,8 @@ object LiveServer {
 
               for {
                 acl       <- acl(rc)
-                eTag      <- vertx.withBodyAsStream(rc)(body => router.putObject(bucket, key, body, acl))
-                              .mapError(e => S3Exception(S3ErrorCode.UNKNOWN_ERROR, e.getMessage, e.getCause))
+                eTag      <- vertx.withBodyAsStream(rc)(body => router.putObject(bucket, key.get, body, acl))
+                              .mapError(e => S3Exception(S3ErrorCode.UNKNOWN_ERROR, e.getMessage, e.fillInStackTrace()))
                 response  = Response.Empty(headers = Map(HttpHeaders.ETAG -> List(eTag)), cors = true)
               } yield response
 
@@ -347,8 +357,57 @@ object LiveServer {
           }
 
           response.catchAll(e =>
-            UIO(Response.Empty(statusCode = Some(e.error.statusCode)))
+            logger.error(e.cause)(e.message) *> UIO(Response.Empty(statusCode = Some(e.error.statusCode)))
           )
       }
+
+    def createRoute(rc: RoutingContext): Task[Response] =
+      for {
+        route       <- Task.fromEither(decode[Route](rc.body().asString))
+        _           <- mongo.insert[Route]("Routes", route)
+        response    =  Response.Empty()
+      } yield response
+
+
+    def deleteRoute(rc: RoutingContext): Task[Response] =
+      for {
+        id          <- Task(rc.pathParam("id"))
+        _           <- mongo.deleteEquals[Route]("Routes", Map("id" -> id))
+        response    =  Response.Empty()
+      } yield response
+
+
+    def updateRoute(rc: RoutingContext): Task[Response] =
+      for {
+        id          <- Task(rc.pathParam("id"))
+        route       <- Task.fromEither(decode[Route](rc.body().asString))
+        _           <- mongo.insert[Route]("Routes", route)
+        _           <- mongo.update[Route]("Routes", id, route)
+        response    =  Response.Empty()
+      } yield response
+
+
+    def listRoutes(rc: RoutingContext): Task[Response] =
+      for {
+        routes      <- mongo.all[Route]("Routes")
+        response    =  Response.JSON(routes.asJson)
+      } yield response
+
+
+    def syncRoutes =
+      (mongo.all[Route]("Routes") >>= router.updateRoutes)
+        .repeat(Schedule.spaced(10.second).forever)
+        .provide(Has(clock)).fork.unit
+
+
+    def sampleData(rc: RoutingContext): Task[Response] =
+      for {
+        _           <- logger.info("Inserting sample data for S3 server ..")
+        policy      <- UIO(AccessPolicy(credentials = Credentials.Allow, createBuckets = true, deleteBuckets = true, listObjects = true, getObject = true, putObject = true, copyObject = true, deleteObject = true))
+        route       <- UIO(Route(PathMatch.Any, Destination.Local, Set(policy), 0, false, false))
+        _           <- mongo.insert[Route]("Routes", route)
+        response    =  Response.Empty()
+      } yield response
+
   }}
 }

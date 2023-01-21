@@ -52,7 +52,7 @@ package object alertmanager {
                     labels: Map[String, String])
 
   @JsonCodec
-  case class Matcher(isRegex: Boolean,
+  case class Matcher(regex: Boolean,
                      name: String,
                      value: String)
 
