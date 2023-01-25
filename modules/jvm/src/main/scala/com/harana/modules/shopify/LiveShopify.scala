@@ -184,7 +184,7 @@ object LiveShopify {
                                   _                 <- itemsRef.set (existingItems ++ currentPage.get.items)
                                   nextPage          <- Task.foreach(currentPage)(nextPage[T](connection, _)).map(_.flatten)
                                   _                 <- currentPageRef.set(nextPage)
-                                } yield ()).repeatWhileM { _ => currentPageRef.get.map(_.isDefined) }
+                                } yield ()).repeatWhileM { _ => currentPageRef.get.map(_.nonEmpty) }
         items               <- itemsRef.get
       } yield items
 

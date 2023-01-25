@@ -41,10 +41,10 @@ package object actiontypes {
 
     reader.option("user", username)
     reader.option("password", password)
-    if (sessionInitStatement.isDefined) reader.option("sessionInitStatement", sessionInitStatement.get)
-    if (numPartitions.isDefined) reader.option("numPartitions", numPartitions.get)
-    if (queryTimeout.isDefined) reader.option("queryTimeout", queryTimeout.get)
-    if (isolationLevel.isDefined) reader.option("isolationLevel", isolationLevel.get)
+    if (sessionInitStatement.nonEmpty) reader.option("sessionInitStatement", sessionInitStatement.get)
+    if (numPartitions.nonEmpty) reader.option("numPartitions", numPartitions.get)
+    if (queryTimeout.nonEmpty) reader.option("queryTimeout", queryTimeout.get)
+    if (isolationLevel.nonEmpty) reader.option("isolationLevel", isolationLevel.get)
   }
 
   def log(df: DataFrame, parameterValues: ParameterValues)(implicit file: File): IO[ExecutionError, Unit] = {

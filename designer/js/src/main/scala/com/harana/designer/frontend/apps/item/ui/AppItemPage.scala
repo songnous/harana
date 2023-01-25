@@ -33,7 +33,7 @@ import scala.scalajs.js
 
     def pageContent: ReactElement =
       div(className := "app-progressbar-content")(
-        if (state.app.isDefined)
+        if (state.app.nonEmpty)
           iframe(
             className := s"full-screen-iframe ${if (state.appLaunching) "hidden" else "visible"}",
             src := s"https://${Globals.proxyDomain}",

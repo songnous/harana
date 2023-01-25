@@ -33,17 +33,17 @@ import scala.scalajs.js
                    onShow: Option[js.Any => Unit] = None)
 
   override def componentDidMount(): Unit = {
-    if (props.onAfterHide.isDefined) elementRef.current.addEventListener("sl-after-hide", props.onAfterHide.get)
-    if (props.onAfterShow.isDefined) elementRef.current.addEventListener("sl-after-show", props.onAfterShow.get)
-    if (props.onHide.isDefined) elementRef.current.addEventListener("sl-hide", props.onHide.get)
-    if (props.onShow.isDefined) elementRef.current.addEventListener("sl-show", props.onShow.get)
+    if (props.onAfterHide.nonEmpty) elementRef.current.addEventListener("sl-after-hide", props.onAfterHide.get)
+    if (props.onAfterShow.nonEmpty) elementRef.current.addEventListener("sl-after-show", props.onAfterShow.get)
+    if (props.onHide.nonEmpty) elementRef.current.addEventListener("sl-hide", props.onHide.get)
+    if (props.onShow.nonEmpty) elementRef.current.addEventListener("sl-show", props.onShow.get)
   }
 
   override def componentWillUnmount(): Unit = {
-    if (props.onAfterHide.isDefined) elementRef.current.removeEventListener("sl-after-hide", props.onAfterHide.get)
-    if (props.onAfterShow.isDefined) elementRef.current.removeEventListener("sl-after-show", props.onAfterShow.get)
-    if (props.onHide.isDefined) elementRef.current.removeEventListener("sl-hide", props.onHide.get)
-    if (props.onShow.isDefined) elementRef.current.removeEventListener("sl-show", props.onShow.get)
+    if (props.onAfterHide.nonEmpty) elementRef.current.removeEventListener("sl-after-hide", props.onAfterHide.get)
+    if (props.onAfterShow.nonEmpty) elementRef.current.removeEventListener("sl-after-show", props.onAfterShow.get)
+    if (props.onHide.nonEmpty) elementRef.current.removeEventListener("sl-hide", props.onHide.get)
+    if (props.onShow.nonEmpty) elementRef.current.removeEventListener("sl-show", props.onShow.get)
   }
 
   def show() =
@@ -67,9 +67,9 @@ import scala.scalajs.js
     attrs += (ref := elementRef)
 
     val style = js.Dynamic.literal()
-    if (props.hideDelay.isDefined) style.updateDynamic("--hide-delay")(props.hideDelay.get)
-    if (props.maxWidth.isDefined) style.updateDynamic("--max-width")(props.maxWidth.get)
-    if (props.showDelay.isDefined) style.updateDynamic("--show-delay")(props.showDelay.get)
+    if (props.hideDelay.nonEmpty) style.updateDynamic("--hide-delay")(props.hideDelay.get)
+    if (props.maxWidth.nonEmpty) style.updateDynamic("--max-width")(props.maxWidth.get)
+    if (props.showDelay.nonEmpty) style.updateDynamic("--show-delay")(props.showDelay.get)
     add(attrs, Some(style), "style")
 
     CustomTag("sl-tooltip")(attrs.toSeq: _*)(props.children: _*)

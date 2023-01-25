@@ -1,6 +1,9 @@
 package com.harana.s3.services.server
 
 import com.harana.modules.vertx.models.Response
+import io.vertx.core.buffer.Buffer
+import io.vertx.core.streams.Pump
+import io.vertx.ext.reactivestreams.ReactiveWriteStream
 import io.vertx.ext.web.RoutingContext
 import zio.macros.accessible
 import zio.{Has, Task, UIO}
@@ -11,7 +14,7 @@ object Server {
 
   trait Service {
 
-    def s3Request(rc: RoutingContext): Task[Response]
+    def s3Request(rc: RoutingContext, stream: ReactiveWriteStream[Buffer], streamPump: Pump): Task[Response]
 
     def createRoute(rc: RoutingContext): Task[Response]
 

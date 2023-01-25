@@ -40,7 +40,7 @@ object LiveAwsS3 {
                               .region(region.getOrElse(Region.of(defaultRegion)))
                               .targetThroughputInGbps(java.lang.Double.valueOf(targetThroughput.getOrElse(40.0)))
                               .minimumPartSizeInBytes(8 * 1024 * 1024)
-        client            =  if (endpoint.isDefined) clientBuilder.endpointOverride(new URI(endpoint.get)).build() else clientBuilder.build()
+        client            =  if (endpoint.nonEmpty) clientBuilder.endpointOverride(new URI(endpoint.get)).build() else clientBuilder.build()
       } yield client
 
     def createBucket(client: S3AsyncClient, bucket: String) =
@@ -66,7 +66,7 @@ object LiveAwsS3 {
 
     def listObjects(client: S3AsyncClient, bucket: String, prefix: Option[String] = None) = {
       var builder = ListObjectsV2Request.builder().bucket(bucket)
-      builder = if (prefix.isDefined) builder.prefix(prefix.get) else builder
+      builder = if (prefix.nonEmpty) builder.prefix(prefix.get) else builder
       Task.fromCompletableFuture(client.listObjectsV2(builder.build())).map(_.contents().asScala.toList)
     }
 
@@ -87,17 +87,18 @@ object LiveAwsS3 {
                   ifModifiedSince: Option[Instant] = None,
                   ifUnmodifiedSince: Option[Instant] = None,
                   range: Option[String] = None) = {
+
       val readStream = ReactiveReadStream.readStream[Buffer]
 
       val builder = GetObjectRequest.builder()
         .bucket(bucket)
         .key(key)
 
-        if (ifMatch.isDefined) builder.ifMatch(ifMatch.get)
-        if (ifNoneMatch.isDefined) builder.ifNoneMatch(ifNoneMatch.get)
-        if (ifModifiedSince.isDefined) builder.ifModifiedSince(ifModifiedSince.get)
-        if (ifUnmodifiedSince.isDefined) builder.ifUnmodifiedSince(ifUnmodifiedSince.get)
-        if (range.isDefined) builder.range(range.get)
+        if (ifMatch.nonEmpty) builder.ifMatch(ifMatch.get)
+        if (ifNoneMatch.nonEmpty) builder.ifNoneMatch(ifNoneMatch.get)
+        if (ifModifiedSince.nonEmpty) builder.ifModifiedSince(ifModifiedSince.get)
+        if (ifUnmodifiedSince.nonEmpty) builder.ifUnmodifiedSince(ifUnmodifiedSince.get)
+        if (range.nonEmpty) builder.range(range.get)
 
       Task.fromCompletableFuture(client.getObject(builder.build(), new AsyncResponseTransformer[GetObjectResponse, Unit] {
         override def onStream(publisher: SdkPublisher[ByteBuffer]) =
@@ -133,9 +134,9 @@ object LiveAwsS3 {
           .acl(acl)
           .tagging(Tagging.builder().tagSet(tags.map { case (k,v) => Tag.builder().key(k).value(v).build() }.toList.asJava).build())
 
-        if (contentLength.isDefined) builder.contentLength(contentLength.get)
-        if (contentMD5.isDefined) builder.contentMD5(contentMD5.get)
-        if (storageClass.isDefined) builder.storageClass(storageClass.get)
+        if (contentLength.nonEmpty) builder.contentLength(contentLength.get)
+        if (contentMD5.nonEmpty) builder.contentMD5(contentMD5.get)
+        if (storageClass.nonEmpty) builder.storageClass(storageClass.get)
 
         client.putObject(builder.build(), publisher(writeStream))
       }.map(_.eTag())
@@ -171,11 +172,11 @@ object LiveAwsS3 {
           .destinationBucket(destinationBucket).destinationKey(destinationKey)
           .partNumber(partNumber).uploadId(uploadId)
 
-        if (copySourceRange.isDefined) builder.copySourceRange(copySourceRange.get)
-        if (copySourceIfMatch.isDefined) builder.copySourceIfMatch(copySourceIfMatch.get)
-        if (copySourceIfNoneMatch.isDefined) builder.copySourceIfNoneMatch(copySourceIfNoneMatch.get)
-        if (copySourceIfModifiedSince.isDefined) builder.copySourceIfModifiedSince(copySourceIfModifiedSince.get)
-        if (copySourceIfUnmodifiedSince.isDefined) builder.copySourceIfUnmodifiedSince(copySourceIfUnmodifiedSince.get)
+        if (copySourceRange.nonEmpty) builder.copySourceRange(copySourceRange.get)
+        if (copySourceIfMatch.nonEmpty) builder.copySourceIfMatch(copySourceIfMatch.get)
+        if (copySourceIfNoneMatch.nonEmpty) builder.copySourceIfNoneMatch(copySourceIfNoneMatch.get)
+        if (copySourceIfModifiedSince.nonEmpty) builder.copySourceIfModifiedSince(copySourceIfModifiedSince.get)
+        if (copySourceIfUnmodifiedSince.nonEmpty) builder.copySourceIfUnmodifiedSince(copySourceIfUnmodifiedSince.get)
 
         client.uploadPartCopy(builder.build())
       }.map(_.copyPartResult())
@@ -203,13 +204,13 @@ object LiveAwsS3 {
 
     private def publisher(writeStream: ReactiveWriteStream[Buffer]) =
       new AsyncRequestBody() {
-        override def contentLength: Optional[java.lang.Long] = Optional.empty
-        override def subscribe(s: Subscriber[_ >: ByteBuffer]) =
+        def contentLength: Optional[java.lang.Long] = Optional.empty
+        def subscribe(s: Subscriber[_ >: ByteBuffer]) =
           writeStream.subscribe(new Subscriber[Buffer] {
-            override def onSubscribe(sub: Subscription) = s.onSubscribe(sub)
-            override def onNext(t: Buffer) = s.onNext(t.getByteBuf.nioBuffer())
-            override def onError(t: Throwable) = s.onError(t)
-            override def onComplete() = s.onComplete()
+            def onSubscribe(sub: Subscription) = s.onSubscribe(sub)
+            def onNext(t: Buffer) = s.onNext(t.getByteBuf.nioBuffer())
+            def onError(t: Throwable) = s.onError(t)
+            def onComplete() = s.onComplete()
           })
       }
   }}

@@ -32,15 +32,15 @@ import scala.scalajs.js
 	}
 
   override def componentDidMount(): Unit = {
-    if (props.onActivate.isDefined) elementRef.current.addEventListener("sl-activate", props.onActivate.get)
-    if (props.onClick.isDefined && !props.disabled.getOrElse(false)) elementRef.current.addEventListener("click", props.onClick.get)
-    if (props.onDeactivate.isDefined) elementRef.current.addEventListener("sl-deactivate", props.onDeactivate.get)
+    if (props.onActivate.nonEmpty) elementRef.current.addEventListener("sl-activate", props.onActivate.get)
+    if (props.onClick.nonEmpty && !props.disabled.getOrElse(false)) elementRef.current.addEventListener("click", props.onClick.get)
+    if (props.onDeactivate.nonEmpty) elementRef.current.addEventListener("sl-deactivate", props.onDeactivate.get)
   }
 
   override def componentWillUnmount(): Unit = {
-    if (props.onActivate.isDefined) elementRef.current.removeEventListener("sl-activate", props.onActivate.get)
-    if (props.onClick.isDefined) elementRef.current.removeEventListener("click", props.onClick.get)
-    if (props.onDeactivate.isDefined) elementRef.current.removeEventListener("sl-deactivate", props.onDeactivate.get)
+    if (props.onActivate.nonEmpty) elementRef.current.removeEventListener("sl-activate", props.onActivate.get)
+    if (props.onClick.nonEmpty) elementRef.current.removeEventListener("click", props.onClick.get)
+    if (props.onDeactivate.nonEmpty) elementRef.current.removeEventListener("sl-deactivate", props.onDeactivate.get)
   }
 
   def render() = {
@@ -55,8 +55,8 @@ import scala.scalajs.js
 
     val children = new ListBuffer[ReactElement]()
     children += props.label
-    if (props.iconPrefix.isDefined) children += icon("prefix", props.className, props.iconPrefix.get)
-    if (props.iconSuffix.isDefined) children += icon("suffix", props.className, props.iconSuffix.get)
+    if (props.iconPrefix.nonEmpty) children += icon("prefix", props.className, props.iconPrefix.get)
+    if (props.iconSuffix.nonEmpty) children += icon("suffix", props.className, props.iconSuffix.get)
 
     CustomTag("sl-menu-item")(attrs.toSeq: _*)(children.toSeq: _*)
   }

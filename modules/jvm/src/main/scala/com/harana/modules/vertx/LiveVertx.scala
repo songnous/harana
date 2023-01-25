@@ -7,21 +7,16 @@ import com.harana.modules.vertx.Vertx.{Address, Service, WebSocketHeaders}
 import com.harana.modules.vertx.gc.GCHealthCheck
 import com.harana.modules.vertx.models._
 import com.harana.modules.vertx.proxy.{WSURI, WebProxyClient, WebProxyClientOptions}
-import io.circe.parser._
-import io.circe.syntax._
-import io.circe.{Decoder, Encoder}
 import io.vertx.core.buffer.Buffer
 import io.vertx.core.eventbus._
 import io.vertx.core.file.FileSystemOptions
-import io.vertx.core.http.{HttpServer, HttpServerFileUpload, HttpServerOptions, WebSocket}
+import io.vertx.core.http.{HttpServer, HttpServerOptions, WebSocket}
 import io.vertx.core.json.JsonObject
 import io.vertx.core.net.{JksOptions, NetServer, NetServerOptions}
 import io.vertx.core.shareddata.{AsyncMap, Counter, Lock}
-import io.vertx.core.streams.Pump
 import io.vertx.core.{AsyncResult, Context, Handler, VertxOptions, Vertx => VX}
 import io.vertx.ext.bridge.{BridgeOptions, PermittedOptions}
 import io.vertx.ext.eventbus.bridge.tcp.TcpEventBusBridge
-import io.vertx.ext.reactivestreams.ReactiveWriteStream
 import io.vertx.ext.web.client.{WebClient, WebClientOptions}
 import io.vertx.ext.web.handler.{BodyHandler, CorsHandler, SessionHandler}
 import io.vertx.ext.web.sstore.cookie.CookieSessionStore
@@ -39,7 +34,7 @@ import org.pac4j.vertx.handler.impl._
 import org.pac4j.vertx.http.VertxHttpActionAdapter
 import org.pac4j.vertx.{VertxProfileManager, VertxWebContext}
 import zio.blocking._
-import zio.{IO, Task, UIO, ZIO, ZLayer}
+import zio.{IO, Task, UIO, ZLayer}
 
 import java.io.File
 import java.net.URI
@@ -91,7 +86,7 @@ object LiveVertx {
                                     new ZookeeperClusterManager(zkConfig)
                                    }
 
-        vx                      <- if (vertxRef.get.isDefined) Task(vertxRef.get.get) else
+        vx                      <- if (vertxRef.get.nonEmpty) Task(vertxRef.get.get) else
                                     Task.effectAsync[VX] { cb =>
                                       VX.clusteredVertx(
                                         new VertxOptions()
@@ -110,9 +105,13 @@ object LiveVertx {
     private def serviceDiscovery: Task[ServiceDiscovery] =
       for {
         vx                      <- vertx
-        serviceDiscovery        <- if (serviceDiscoveryRef.get.isDefined) Task(serviceDiscoveryRef.get.get) else Task(ServiceDiscovery.create(vx))
+        serviceDiscovery        <- if (serviceDiscoveryRef.get.nonEmpty) Task(serviceDiscoveryRef.get.get) else Task(ServiceDiscovery.create(vx))
         _                       =  serviceDiscoveryRef.set(Some(serviceDiscovery))
       } yield serviceDiscovery
+
+
+    def underlying: Task[VX] =
+      vertx
 
 
     def subscribe(address: Address, `type`: String, onMessage: String => Task[Unit]): Task[MessageConsumer[String]] =
@@ -278,7 +277,7 @@ object LiveVertx {
 
 
     def putMapValue[K, V](name: String, key: K, value: V, ttl: Option[Long] = None): Task[Unit] =
-      withMap[K, V, Void](name, (map, handler) => if (ttl.isDefined) map.put(key, value, ttl.get, handler) else map.put(key, value, handler)).unit
+      withMap[K, V, Void](name, (map, handler) => if (ttl.nonEmpty) map.put(key, value, ttl.get, handler) else map.put(key, value, handler)).unit
 
 
     def removeMapValue[K, V](name: String, key: K): Task[Unit] =
@@ -286,15 +285,11 @@ object LiveVertx {
 
 
     def putMapValueIfAbsent[K, V](name: String, key: K, value: V, ttl: Option[Long] = None): Task[V] =
-      withMap[K, V, V](name, (map, handler) => if (ttl.isDefined) map.putIfAbsent(key, value, ttl.get, handler) else map.putIfAbsent(key, value, handler))
+      withMap[K, V, V](name, (map, handler) => if (ttl.nonEmpty) map.putIfAbsent(key, value, ttl.get, handler) else map.putIfAbsent(key, value, handler))
 
 
     def getOrCreateContext: Task[Context] =
       vertx.map(_.getOrCreateContext())
-
-
-    def getUploadedFile(filename: String): Task[Buffer] =
-      vertx.map(_.fileSystem().readFileBlocking(filename))
 
 
     def close: UIO[Unit] =
@@ -308,7 +303,7 @@ object LiveVertx {
     def startHttpServer(domain: String,
                         proxyDomain: Option[String] = None,
                         routes: List[Route] = List(),
-                        fallbackRouteHandler: Option[RoutingContext => Task[Response]] = None,
+                        defaultHandler: Option[RouteHandler] = None,
                         proxyMapping: Option[RoutingContext => Task[Option[URI]]] = None,
                         webSocketProxyMapping: Option[WebSocketHeaders => Task[WSURI]] = None,
                         errorHandlers: Map[Int, RoutingContext => Task[Response]] = Map(),
@@ -335,20 +330,45 @@ object LiveVertx {
 
         vx                    <- vertx
 
-        clusteredStore        <- Task(CookieSessionStore.create(vx, "temp"))
+
+        router                <- UIO(Router.router(vx))
+
+        _                     = router.route().handler((rc: RoutingContext) => {
+                                  rc.request().pause()
+                                  rc.next()
+                                })
 
         //        clusteredStore        <- Task(ClusteredSessionStore.create(vx))
+        clusteredStore        <- Task(CookieSessionStore.create(vx, "temp"))
         sessionStore          <- Task(new VertxSessionStore(clusteredStore))
         sessionHandler        <- Task(SessionHandler.create(clusteredStore))
         templateEngine        <- Task(HandlebarsTemplateEngine.create(vx))
         webClient             <- Task(WebClient.create(vx, new WebClientOptions().setFollowRedirects(false).setMaxRedirects(1)))
         httpClient            <- Task(vx.createHttpClient())
 
-        router                <- Task {
-                                  val router = Router.router(vx)
+        _                     <- Task {
+                                  // Custom Routes
+                                  routes.foreach { route =>
+                                    def handler(rc: RoutingContext): Unit =
+                                      generateResponse(vx, logger, micrometer, templateEngine, rc, route.handler, route.secured, route.log)
 
-                                  // Body
-                                  router.route.handler(BodyHandler.create())
+                                    if (route.regex) {
+                                      if (route.blocking)
+                                        router.routeWithRegex(route.method, route.path).virtualHost(domain).blockingHandler(handler)
+                                      else
+                                        router.routeWithRegex(route.method, route.path).virtualHost(domain).handler(handler)
+                                    }
+                                    else {
+                                      val customRoute =
+                                        if (route.blocking)
+                                          router.route(route.method, route.path).virtualHost(domain).blockingHandler(handler).useNormalizedPath(route.normalisedPath)
+                                        else
+                                          router.route(route.method, route.path).virtualHost(domain).handler(handler).useNormalizedPath(route.normalisedPath)
+
+                                      if (route.consumes.nonEmpty) customRoute.consumes(route.consumes.get.value)
+                                      if (route.produces.nonEmpty) customRoute.produces(route.produces.get.value)
+                                    }
+                                  }
 
                                   // Common
                                   router.mountSubRouter("/eventbus", Handlers.sock(vx, eventBusInbound, eventBusOutbound))
@@ -384,7 +404,7 @@ object LiveVertx {
                                     val callbackHandlerOptions = new CallbackHandlerOptions().setDefaultUrl("/postLogin").setMultiProfile(true)
                                     val callbackHandler = new CallbackHandler(vx, sessionStore, authConfig, callbackHandlerOptions)
 
-                                    if (sessionRegexp.isDefined) router.routeWithRegex(sessionRegexp.get).handler(sessionHandler)
+                                    if (sessionRegexp.nonEmpty) router.routeWithRegex(sessionRegexp.get).handler(sessionHandler)
                                     router.route.handler(sessionHandler)
 
                                     if (jwtKeySet.nonEmpty) router.get("/jwks").handler(Handlers.jwks(jwtKeySet.get))
@@ -399,37 +419,12 @@ object LiveVertx {
                                     router.get("/postLogin").handler(rc => {
                                       val profileManager = new VertxProfileManager(new VertxWebContext(rc, sessionStore), sessionStore)
                                       val postLoginHandler = postLogin.get.apply(_, profileManager.getProfile.asScala)
-                                      generateResponse(vx, logger, micrometer, templateEngine, rc, postLoginHandler, log = false)
+                                      generateResponse(vx, logger, micrometer, templateEngine, rc, RouteHandler.Standard(postLoginHandler), log = false)
                                     })
                                   }
 
-                                  // Custom Routes
-                                  routes.foreach { route =>
-                                    def handler(rc: RoutingContext): Unit = {
-                                      rc.request().setExpectMultipart(route.multipart)
-                                      generateResponse(vx, logger, micrometer, templateEngine, rc, route.handler, route.secured, route.log)
-                                    }
-
-                                    if (route.regex) {
-                                      if (route.blocking)
-                                        router.routeWithRegex(route.method, route.path).virtualHost(domain).blockingHandler(handler)
-                                      else
-                                        router.routeWithRegex(route.method, route.path).virtualHost(domain).handler(handler)
-                                    }
-                                    else {
-                                      val customRoute =
-                                        if (route.blocking)
-                                          router.route(route.method, route.path).virtualHost(domain).blockingHandler(handler).useNormalizedPath(route.normalisedPath)
-                                        else
-                                          router.route(route.method, route.path).virtualHost(domain).handler(handler).useNormalizedPath(route.normalisedPath)
-
-                                      if (route.consumes.isDefined) customRoute.consumes(route.consumes.get.value)
-                                      if (route.produces.isDefined) customRoute.produces(route.produces.get.value)
-                                    }
-                                  }
-
                                   // Proxy
-                                  if (proxyDomain.isDefined && proxyMapping.isDefined) {
+                                  if (proxyDomain.nonEmpty && proxyMapping.nonEmpty) {
                                     val client = new WebProxyClient(webClient, WebProxyClientOptions(iFrameAncestors = List(domain, proxyDomain.get)))
                                     router.route().virtualHost(proxyDomain.get).blockingHandler(rc => {
                                       run(proxyMapping.get(rc)) match {
@@ -443,17 +438,14 @@ object LiveVertx {
                                   router.route.failureHandler((rc: RoutingContext) => {
                                     val response = rc.response
                                     errorHandlers.get(response.getStatusCode) match {
-                                      case Some(r) => generateResponse(vx, logger, micrometer, templateEngine, rc, r)
+                                      case Some(r) => generateResponse(vx, logger, micrometer, templateEngine, rc, RouteHandler.Standard(r))
                                       case None => if (!response.closed() && !response.ended()) response.end()
                                     }
                                   })
 
                                   // Fallback
-                                  if (fallbackRouteHandler.isDefined)
-                                    router.route.handler(rc =>
-                                      generateResponse(vx, logger, micrometer, templateEngine, rc, fallbackRouteHandler.get)
-                                    )
-
+                                  if (defaultHandler.nonEmpty)
+                                    router.route.handler(rc => generateResponse(vx, logger, micrometer, templateEngine, rc, defaultHandler.get))
 
                                   router
                                 }
@@ -463,13 +455,14 @@ object LiveVertx {
                                     .setCompressionSupported(true)
                                     .setDecompressionSupported(true)
                                     .setLogActivity(logActivity)
+                                    .setHandle100ContinueAutomatically(true)
                                     .setHost(listenHost)
                                     .setMaxHeaderSize(1024 * 16)
                                     .setPort(listenPort)
                                     .setSsl(useSSL)
                                     .setUseAlpn(getVersion >= 9)
 
-                                    if (keyStorePath.isDefined) httpServerOptions = httpServerOptions.setKeyStoreOptions(
+                                    if (keyStorePath.nonEmpty) httpServerOptions = httpServerOptions.setKeyStoreOptions(
                                       new JksOptions().setPath(keyStorePath.get).setPassword(keyStorePassword.get)
                                     )
 
@@ -480,7 +473,7 @@ object LiveVertx {
                                   vx.createHttpServer(options)
                                     .requestHandler(router)
                                     .webSocketHandler(sourceSocket => {
-                                      if (webSocketProxyMapping.isDefined && !sourceSocket.uri().startsWith("/eventbus")) {
+                                      if (webSocketProxyMapping.nonEmpty && !sourceSocket.uri().startsWith("/eventbus")) {
                                         val target = run(webSocketProxyMapping.get(sourceSocket.headers()))
 
                                         logger.info(s"Syncing socket: ${target.host}:${target.port} -> ${sourceSocket.uri()}")
@@ -511,31 +504,6 @@ object LiveVertx {
     } yield httpServer
 
 
-    def withBody[T](rc: RoutingContext)(fn: Buffer => Task[T]) =
-      for {
-        buffer  <- UIO(rc.body().buffer())
-        result  <- fn(buffer)
-      } yield result
-
-
-    def withBodyAsStream[T](rc: RoutingContext)(fn: ReactiveWriteStream[Buffer] => Task[T]) =
-      for {
-        event   <- Task.effectAsync[HttpServerFileUpload](cb => rc.request().uploadHandler((event: HttpServerFileUpload) => cb(Task(event))))
-        vertx   <- vertx
-        stream  =  ReactiveWriteStream.writeStream[Buffer](vertx)
-        pump    =  Pump.pump(event, stream).start()
-        result  <- fn(stream)
-        _       =  pump.stop()
-      } yield result
-
-
-    def newWriteStream[T]: Task[ReactiveWriteStream[T]] =
-      for {
-        vertx   <- vertx
-        result  <- Task(ReactiveWriteStream.writeStream[T](vertx))
-      } yield result
-
-
     def startNetServer(listenHost: String, listenPort: Int, options: Option[NetServerOptions] = None): Task[NetServer] =
       for {
         vx      <- vertx
@@ -557,5 +525,6 @@ object LiveVertx {
                         if (result.succeeded()) cb(Task.succeed(result.result())) else cb(Task.fail(result.cause())))
                   }
       } yield result
+
   }}
 }

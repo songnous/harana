@@ -43,7 +43,7 @@ import scala.scalajs._
 
 
 	override def componentWillReceiveProps(nextProps: Props) = {
-		val value = if (nextProps.value.isDefined) Some(nextProps.value.get) else nextProps.parameter.default
+		val value = if (nextProps.value.nonEmpty) Some(nextProps.value.get) else nextProps.parameter.default
 		setState(State(true, value))
 	}
 
@@ -89,14 +89,14 @@ import scala.scalajs._
 		}
 
 	private def onBlur = Some((_: js.Any) => {
-		if (props.onEditing.isDefined) props.onEditing.map(fn => (_: Any) => fn(false))
+		if (props.onEditing.nonEmpty) props.onEditing.map(fn => (_: Any) => fn(false))
 		()
 	})
 
 
 	private def onChange(parameter: Parameter[_], value: Any) = {
 		setState(State(state.isValid, Some(value)))
-		if (props.onChange.isDefined) props.onChange.get(parameter, value)
+		if (props.onChange.nonEmpty) props.onChange.get(parameter, value)
 	}
 
 

@@ -47,7 +47,7 @@ import scala.collection.mutable.{Map => MutableMap}
 						var updatedValues = values.getOrElse(state.values.getOrElse(HMap.empty))
 						pt.groups.flatMap(_.parameters).foreach { p =>
 							parameterRefs += (p -> React.createRef[ParameterItem.Def])
-							if (!updatedValues.contains(p.name) && p.default.isDefined) {
+							if (!updatedValues.contains(p.name) && p.default.nonEmpty) {
 								updatedValues +~= (p, p.default.get)
 							}
 						}
@@ -69,18 +69,18 @@ import scala.collection.mutable.{Map => MutableMap}
 	val slotAttr = CustomAttribute[String]("slot")
 
 	def render() = {
-		if (state.style.isDefined)
+		if (state.style.nonEmpty)
 			state.style.get match {
 				case DialogStyle.Confirm(confirmLabel, confirmButtonLabel, onOk, onCancel) =>
 					ShoelaceDialog(label = state.title, width = state.width)(
 						List(
 							confirmLabel,
 							ShoelaceButton(label = Some(i"common.dialog.cancel"), slot = Some("footer"), `type` = Some("default"), onClick = Some(_ => {
-								if (onCancel.isDefined) onCancel.get.apply()
+								if (onCancel.nonEmpty) onCancel.get.apply()
 								hide()
 							})),
 							ShoelaceButton(label = Some(confirmButtonLabel), slot = Some("footer"), `type` = Some("primary"), onClick = Some(_ => {
-								if (onOk.isDefined) onOk.get.apply()
+								if (onOk.nonEmpty) onOk.get.apply()
 								hide()
 							}))
 						)
@@ -90,14 +90,14 @@ import scala.collection.mutable.{Map => MutableMap}
 					ShoelaceDialog(
 						label = state.title,
 						width = state.width,
-						noHeader = Some(headerElement.isDefined),
+						noHeader = Some(headerElement.nonEmpty),
 						headerElement = headerElement
 					)(
 						List(
 							h4(slotAttr := "label")("Title"),
 							innerElement,
 							ShoelaceButton(label = Some(okButtonLabel), slot = Some("footer"), `type` = Some("primary"), onClick = Some(_ => {
-								if (onOk.isDefined) onOk.get.apply()
+								if (onOk.nonEmpty) onOk.get.apply()
 								hide()
 							}))
 						)
@@ -146,11 +146,11 @@ import scala.collection.mutable.{Map => MutableMap}
 					val buttons: List[ReactElement] = if (showCancelButton)
 						List(
 							ShoelaceButton(label = Some(i"common.dialog.cancel"), slot = Some("footer"), `type` = Some("default"), onClick = Some(_ => {
-								if (onCancel.isDefined) onCancel.get.apply()
+								if (onCancel.nonEmpty) onCancel.get.apply()
 								hide()
 							})),
 							ShoelaceButton(label = Some(i"common.dialog.save"), slot = Some("footer"), `type` = Some("success"), onClick = Some(_ => {
-								if (onOk.isDefined) {
+								if (onOk.nonEmpty) {
 //									parameterRefs.values.foreach(_.current.validate)
 									if (parameterRefs.forall(_._2.current.isValid)) {
 										onOk.get.apply(state.values.getOrElse(HMap.empty))
@@ -165,7 +165,7 @@ import scala.collection.mutable.{Map => MutableMap}
 					else
 						List(
 							ShoelaceButton(label = Some(i"common.dialog.ok"), slot = Some("footer"), `type` = Some("success"), onClick = Some(_ => {
-								if (onOk.isDefined) onOk.get.apply(state.values.getOrElse(HMap.empty))
+								if (onOk.nonEmpty) onOk.get.apply(state.values.getOrElse(HMap.empty))
 								hide()
 							}))
 						)
@@ -173,7 +173,7 @@ import scala.collection.mutable.{Map => MutableMap}
 					ShoelaceDialog(
 						label = state.title,
 						width = state.width,
-						noHeader = Some(headerElement.isDefined),
+						noHeader = Some(headerElement.nonEmpty),
 						headerElement = headerElement
 					)(List(content) ++ buttons).withRef(dialogRef)
 			}
@@ -205,7 +205,7 @@ import scala.collection.mutable.{Map => MutableMap}
 			value = state.values.getOrElse(HMap.empty).underlying.get(p),
 			onChange = Some((_, value) => {
 				setState(this.state.copy(values = Some(state.values.getOrElse(HMap.empty) +~ (p -> value))))
-				if (onChange.isDefined) onChange.get(p, state.values.get)
+				if (onChange.nonEmpty) onChange.get(p, state.values.get)
 			}),
 			autoFocus = autoFocus
 		)

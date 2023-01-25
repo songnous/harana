@@ -5,12 +5,12 @@ import com.harana.sdk.shared.models.designer.data.DataSourceTypes.Cassandra._
 import com.harana.sdk.backend.models.flow.actiontypes.output.PutCassandraInfo
 import com.harana.sdk.backend.models.flow.execution.ExecutionError
 import com.harana.sdk.backend.models.flow.ActionType.{Inputs, Outputs}
-import com.harana.sdk.backend.models.flow.{Action, FlowContext}
+import com.harana.sdk.backend.models.flow.{ActionType, FlowContext}
 import com.harana.executor.spark.actiontypes.log
 import com.harana.executor.spark.actiontypes.dataSourceParameterValues
 import zio.{IO, Task, UIO}
 
-class PutCassandra extends PutCassandraInfo with Action {
+class PutCassandra extends PutCassandraInfo with ActionType {
 
   def validate(parameters: ParameterValues, context: FlowContext): UIO[List[ExecutionError]] = null
 
@@ -28,58 +28,58 @@ class PutCassandra extends PutCassandraInfo with Action {
     conf.set("spark.cassandra.connection.ssl.enabled", dsParameterValues(sslParameter))
 
     val compression = dsParameterValues.opt(compressionParameter)
-    if (compression.isDefined) conf.set("spark.cassandra.connection.compression", compression.get)
+    if (compression.nonEmpty) conf.set("spark.cassandra.connection.compression", compression.get)
 
     val reconnectionDelayMSMin = dsParameterValues.opt(minReconnectionDelayParameter)
-    if (reconnectionDelayMSMin.isDefined) conf.set("spark.cassandra.connection.reconnectionDelayMS.min", reconnectionDelayMSMin.get)
+    if (reconnectionDelayMSMin.nonEmpty) conf.set("spark.cassandra.connection.reconnectionDelayMS.min", reconnectionDelayMSMin.get)
 
     val reconnectionDelayMSMax = dsParameterValues.opt(maxReconnectionDelayParameter)
-    if (reconnectionDelayMSMax.isDefined) conf.set("spark.cassandra.connection.reconnectionDelayMS.max", reconnectionDelayMSMax.get)
+    if (reconnectionDelayMSMax.nonEmpty) conf.set("spark.cassandra.connection.reconnectionDelayMS.max", reconnectionDelayMSMax.get)
 
     val connectionTimeout = dsParameterValues.opt(connectionTimeoutParameter)
-    if (connectionTimeout.isDefined) conf.set("spark.cassandra.connection.timeoutMS", connectionTimeout.get)
+    if (connectionTimeout.nonEmpty) conf.set("spark.cassandra.connection.timeoutMS", connectionTimeout.get)
 
     val readTimeout = dsParameterValues.opt(readTimeoutParameter)
-    if (readTimeout.isDefined) conf.set("spark.cassandra.read.timeoutMS", readTimeout.get)
+    if (readTimeout.nonEmpty) conf.set("spark.cassandra.read.timeoutMS", readTimeout.get)
 
     val consistencyLevel = parameters.opt(consistencyLevelParameter)
-    if (consistencyLevel.isDefined) conf.set("spark.cassandra.input.consistency.level", consistencyLevel.get)
+    if (consistencyLevel.nonEmpty) conf.set("spark.cassandra.input.consistency.level", consistencyLevel.get)
 
     val concurrentWrites = parameters.opt(concurrentWritesParameter)
-    if (concurrentWrites.isDefined) conf.set("spark.cassandra.output.concurrent.writes", concurrentWrites.get)
+    if (concurrentWrites.nonEmpty) conf.set("spark.cassandra.output.concurrent.writes", concurrentWrites.get)
 
     val ignoreNulls = parameters.opt(ignoreNullsParameter)
-    if (ignoreNulls.isDefined) conf.set("spark.cassandra.output.ignoreNulls", ignoreNulls.get)
+    if (ignoreNulls.nonEmpty) conf.set("spark.cassandra.output.ignoreNulls", ignoreNulls.get)
 
     val timestamp = parameters.opt(timestampParameter)
-    if (timestamp.isDefined) conf.set("spark.cassandra.output.timestamp", timestamp.get)
+    if (timestamp.nonEmpty) conf.set("spark.cassandra.output.timestamp", timestamp.get)
 
     val ttl = parameters.opt(ttlParameter)
-    if (ttl.isDefined) conf.set("spark.cassandra.output.ttl", ttl.get)
+    if (ttl.nonEmpty) conf.set("spark.cassandra.output.ttl", ttl.get)
 
     val batchGroupingBufferSize = parameters.opt(batchGroupingBufferSizeParameter)
-    if (batchGroupingBufferSize.isDefined) conf.set("spark.cassandra.output.batch.grouping.buffer.size", batchGroupingBufferSize.get)
+    if (batchGroupingBufferSize.nonEmpty) conf.set("spark.cassandra.output.batch.grouping.buffer.size", batchGroupingBufferSize.get)
 
     val batchGroupingKey = parameters.opt(batchGroupingKeyParameter)
-    if (batchGroupingKey.isDefined) conf.set("spark.cassandra.output.batch.grouping.key", batchGroupingKey.get)
+    if (batchGroupingKey.nonEmpty) conf.set("spark.cassandra.output.batch.grouping.key", batchGroupingKey.get)
 
     val batchSizeBytes = parameters.opt(batchSizeBytesParameter)
-    if (batchSizeBytes.isDefined) conf.set("spark.cassandra.output.batch.size.bytes", batchSizeBytes.get)
+    if (batchSizeBytes.nonEmpty) conf.set("spark.cassandra.output.batch.size.bytes", batchSizeBytes.get)
 
     val batchSizeRows = parameters.opt(batchSizeRowsParameter)
-    if (batchSizeRows.isDefined) conf.set("spark.cassandra.output.batch.size.rows", batchSizeRows.get)
+    if (batchSizeRows.nonEmpty) conf.set("spark.cassandra.output.batch.size.rows", batchSizeRows.get)
 
     val throughputMBPerSec = parameters.opt(throughputMBPerSecParameter)
-    if (throughputMBPerSec.isDefined) conf.set("spark.cassandra.output.throughputMBPerSec", throughputMBPerSec.get)
+    if (throughputMBPerSec.nonEmpty) conf.set("spark.cassandra.output.throughputMBPerSec", throughputMBPerSec.get)
 
     val directJoinSetting = parameters.opt(directJoinSettingParameter)
-    if (directJoinSetting.isDefined) conf.set("directJoinSetting", directJoinSetting.get)
+    if (directJoinSetting.nonEmpty) conf.set("directJoinSetting", directJoinSetting.get)
 
     val directJoinSizeRatio = parameters.opt(directJoinSizeRatioParameter)
-    if (directJoinSizeRatio.isDefined) conf.set("directJoinSizeRatio", directJoinSizeRatio.get.toString)
+    if (directJoinSizeRatio.nonEmpty) conf.set("directJoinSizeRatio", directJoinSizeRatio.get.toString)
 
     val ignoreMissingMetaColumns = parameters.opt(ignoreMissingMetaColumnsParameter)
-    if (ignoreMissingMetaColumns.isDefined) conf.set("ignoreMissingMetaColumns", ignoreMissingMetaColumns.get)
+    if (ignoreMissingMetaColumns.nonEmpty) conf.set("ignoreMissingMetaColumns", ignoreMissingMetaColumns.get)
 
     inputDf.write
       .format("cassandra")

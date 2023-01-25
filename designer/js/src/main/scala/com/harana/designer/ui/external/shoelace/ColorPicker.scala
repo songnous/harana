@@ -35,19 +35,19 @@ import scala.scalajs.js
                    onShow: Option[js.Any => Unit] = None)
 
   override def componentDidMount(): Unit = {
-    if (props.onAfterHide.isDefined) elementRef.current.addEventListener("sl-after-hide", props.onAfterHide.get)
-    if (props.onAfterShow.isDefined) elementRef.current.addEventListener("sl-after-show", props.onAfterShow.get)
-    if (props.onChange.isDefined) elementRef.current.addEventListener("sl-change", e => handleValue[String](e, props.onChange.get))
-    if (props.onHide.isDefined) elementRef.current.addEventListener("sl-hide", props.onHide.get)
-    if (props.onShow.isDefined) elementRef.current.addEventListener("sl-show", props.onShow.get)
+    if (props.onAfterHide.nonEmpty) elementRef.current.addEventListener("sl-after-hide", props.onAfterHide.get)
+    if (props.onAfterShow.nonEmpty) elementRef.current.addEventListener("sl-after-show", props.onAfterShow.get)
+    if (props.onChange.nonEmpty) elementRef.current.addEventListener("sl-change", e => handleValue[String](e, props.onChange.get))
+    if (props.onHide.nonEmpty) elementRef.current.addEventListener("sl-hide", props.onHide.get)
+    if (props.onShow.nonEmpty) elementRef.current.addEventListener("sl-show", props.onShow.get)
   }
 
   override def componentWillUnmount(): Unit = {
-    if (props.onAfterHide.isDefined) elementRef.current.removeEventListener("sl-after-hide", props.onAfterHide.get)
-    if (props.onAfterShow.isDefined) elementRef.current.removeEventListener("sl-after-show", props.onAfterShow.get)
-    if (props.onChange.isDefined) elementRef.current.removeEventListener("sl-change", e => handleValue[String](e, props.onChange.get))
-    if (props.onHide.isDefined) elementRef.current.removeEventListener("sl-hide", props.onHide.get)
-    if (props.onShow.isDefined) elementRef.current.removeEventListener("sl-show", props.onShow.get)
+    if (props.onAfterHide.nonEmpty) elementRef.current.removeEventListener("sl-after-hide", props.onAfterHide.get)
+    if (props.onAfterShow.nonEmpty) elementRef.current.removeEventListener("sl-after-show", props.onAfterShow.get)
+    if (props.onChange.nonEmpty) elementRef.current.removeEventListener("sl-change", e => handleValue[String](e, props.onChange.get))
+    if (props.onHide.nonEmpty) elementRef.current.removeEventListener("sl-hide", props.onHide.get)
+    if (props.onShow.nonEmpty) elementRef.current.removeEventListener("sl-show", props.onShow.get)
   }
 
   def getFormattedValue() =

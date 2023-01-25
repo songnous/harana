@@ -34,7 +34,7 @@ object StandaloneSparkClusterForTests {
       _.getInetAddresses.asScala.map {
         case ip4: Inet4Address => Some(ip4.getHostAddress)
         case _ => None
-      }.filter(_.isDefined)
+      }.filter(_.nonEmpty)
     }.next().get
   }
 

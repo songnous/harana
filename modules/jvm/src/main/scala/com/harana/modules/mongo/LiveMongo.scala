@@ -52,7 +52,7 @@ object LiveMongo {
 
     private def getClient: Task[MongoClient] =
       for {
-        hasClient         <- UIO(clientRef.get.isDefined)
+        hasClient         <- UIO(clientRef.get.nonEmpty)
         client            <- if (hasClient) Task(clientRef.get.get) else
                               for {
                                 uri               <- config.optSecret("mongodb-uri")
@@ -75,12 +75,12 @@ object LiveMongo {
                                                       .applyToClusterSettings(b => {
                                                         b.mode(if (multiple) ClusterConnectionMode.MULTIPLE else ClusterConnectionMode.SINGLE)
                                                         if (seeds.nonEmpty) b.hosts(seeds.map(s => new ServerAddress(s"$s")).asJava)
-                                                        if (srvHost.isDefined) b.srvHost(srvHost.get).mode(ClusterConnectionMode.MULTIPLE)
-                                                        if (uri.isDefined) b.applyConnectionString(ConnectionString(uri.get))
+                                                        if (srvHost.nonEmpty) b.srvHost(srvHost.get).mode(ClusterConnectionMode.MULTIPLE)
+                                                        if (uri.nonEmpty) b.applyConnectionString(ConnectionString(uri.get))
                                                       })
                                                       .applyToConnectionPoolSettings(b => b.addConnectionPoolListener(new MongoMetricsConnectionPoolListener(metricsRegistry)))
                                                       .applyToSslSettings(b => b.enabled(useSSL))
-                                builder           =  if (username.isDefined) baseBuilder.credential(credential(authType, username.get, userDatabase.getOrElse("admin"), password, passwordSource)) else baseBuilder
+                                builder           =  if (username.nonEmpty) baseBuilder.credential(credential(authType, username.get, userDatabase.getOrElse("admin"), password, passwordSource)) else baseBuilder
                                 client            =  MongoClient(builder.build())
                                 _                 <- logger.info(s"Connecting to MongoDB: ${client.getClusterDescription.toString}")
                                 db                <- Task(client.getDatabase("admin")).onError(e => logger.error(e.prettyPrint))
@@ -233,7 +233,7 @@ object LiveMongo {
         collection          <- getCollection(db, collectionName)
         sortDoc             =  sort.map(s => if (s._2) ascending(s._1) else descending(s._1))
         findDoc             =  collection.find(new BasicDBObject(keyValues.asJava))
-        results             <- executeFind[E](if (sort.isDefined) findDoc.sort(sortDoc.get) else findDoc, limit)
+        results             <- executeFind[E](if (sort.nonEmpty) findDoc.sort(sortDoc.get) else findDoc, limit)
       } yield results
 
 
@@ -243,7 +243,7 @@ object LiveMongo {
         collection          <- getCollection(db, collectionName)
         sortDoc             =  sort.map(s => if (s._2) ascending(s._1) else descending(s._1))
         findDoc             =  collection.find(bson)
-        results             <- executeFind[E](if (sort.isDefined) findDoc.sort(sortDoc.get) else findDoc, limit)
+        results             <- executeFind[E](if (sort.nonEmpty) findDoc.sort(sortDoc.get) else findDoc, limit)
       } yield results
 
 
@@ -253,7 +253,7 @@ object LiveMongo {
         collection          <- getCollection(db, collectionName)
         sortDoc             =  sort.map(s => if (s._2) ascending(s._1) else descending(s._1))
         query               =  new BasicDBObject(keyValues.asJava)
-        result              <- executeGet[E](if (sort.isDefined) collection.find(query).sort(sortDoc.get).first() else collection.find(query).first())
+        result              <- executeGet[E](if (sort.nonEmpty) collection.find(query).sort(sortDoc.get).first() else collection.find(query).first())
       } yield result
 
 
@@ -264,7 +264,7 @@ object LiveMongo {
         sortDoc             =  sort.map(s => if (s._2) ascending(s._1) else descending(s._1))
         query               =  new BasicDBObject(keyValues.asJava)
         options             =  FindOneAndDeleteOptions().sort(sortDoc.get)
-        result              <- executeGet[E](if (sort.isDefined) collection.findOneAndDelete(query, options) else collection.findOneAndDelete(query))
+        result              <- executeGet[E](if (sort.nonEmpty) collection.findOneAndDelete(query, options) else collection.findOneAndDelete(query))
       } yield result
 
 
@@ -315,7 +315,7 @@ object LiveMongo {
         db                  <- mongoDatabase
         collection          <- getCollection(db, collectionName)
         sortDoc             =  sort.map(s => if (s._2) ascending(s._1) else descending(s._1))
-        results             <- executeFind[E](if (sort.isDefined) collection.find().sort(sortDoc.get) else collection.find(), limit)
+        results             <- executeFind[E](if (sort.nonEmpty) collection.find().sort(sortDoc.get) else collection.find(), limit)
       } yield results
 
 
@@ -326,7 +326,7 @@ object LiveMongo {
         keys                =  new BsonDocument()
         _                   =  indexes.foreach { case (k, v) => keys.append(k, new BsonInt32(v)) }
         results             <- Task.effectAsync[Unit] { cb =>
-                                val options = if (opts.isDefined) opts.get else new IndexOptions()
+                                val options = if (opts.nonEmpty) opts.get else new IndexOptions()
                                 val result = collection.createIndex(keys, options.unique(unique))
 
                                 result.subscribe(new Observer[String] {

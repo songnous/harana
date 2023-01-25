@@ -27,15 +27,15 @@ import scala.scalajs.js
                    onFocus: Option[js.Any => Unit] = None)
 
   override def componentDidMount(): Unit = {
-    if (props.onBlur.isDefined) elementRef.current.addEventListener("sl-blur", props.onBlur.get)
-    if (props.onChange.isDefined) elementRef.current.addEventListener("sl-change", e => handleChecked(e, props.onChange.get))
-    if (props.onFocus.isDefined) elementRef.current.addEventListener("sl-focus", props.onFocus.get)
+    if (props.onBlur.nonEmpty) elementRef.current.addEventListener("sl-blur", props.onBlur.get)
+    if (props.onChange.nonEmpty) elementRef.current.addEventListener("sl-change", e => handleChecked(e, props.onChange.get))
+    if (props.onFocus.nonEmpty) elementRef.current.addEventListener("sl-focus", props.onFocus.get)
   }
 
   override def componentWillUnmount(): Unit = {
-    if (props.onBlur.isDefined) elementRef.current.removeEventListener("sl-blur", props.onBlur.get)
-    if (props.onChange.isDefined) elementRef.current.removeEventListener("sl-change", e => handleChecked(e, props.onChange.get))
-    if (props.onFocus.isDefined) elementRef.current.removeEventListener("sl-focus", props.onFocus.get)
+    if (props.onBlur.nonEmpty) elementRef.current.removeEventListener("sl-blur", props.onBlur.get)
+    if (props.onChange.nonEmpty) elementRef.current.removeEventListener("sl-change", e => handleChecked(e, props.onChange.get))
+    if (props.onFocus.nonEmpty) elementRef.current.removeEventListener("sl-focus", props.onFocus.get)
   }
 
   def blur() =

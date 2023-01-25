@@ -34,7 +34,7 @@ object Layers {
   val clearbit = (CoreLayers.standard ++ okhttp) >>> LiveClearbit.layer
   val docker = Blocking.live ++ CoreLayers.standard ++ okhttp >>> LiveDocker.layer
   val email = CoreLayers.standard >>> LiveEmail.layer
-  val jasyncfio = Blocking.live ++ CoreLayers.standard >>> LiveFile.layer
+  val file = Blocking.live ++ CoreLayers.standard >>> LiveFile.layer
   val handlebars = LiveHandlebars.layer
   val kubernetes = Clock.live ++ CoreLayers.standard >>> LiveKubernetes.layer
   val mixpanel = CoreLayers.standard >>> LiveMixpanel.layer

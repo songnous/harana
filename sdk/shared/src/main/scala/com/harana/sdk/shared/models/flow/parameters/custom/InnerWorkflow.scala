@@ -16,8 +16,8 @@ case class InnerWorkflow(graph: FlowGraph,
   val sourceId = new SourceInfo {}.id
   val sinkId = new SinkInfo {}.id
 
-  require(findNodeOfType(sourceId).isDefined, "Inner workflow must have source node")
-  require(findNodeOfType(sinkId).isDefined, "Inner workflow must have sink node")
+  require(findNodeOfType(sourceId).nonEmpty, "Inner workflow must have source node")
+  require(findNodeOfType(sinkId).nonEmpty, "Inner workflow must have sink node")
 
   val source = findNodeOfType(sourceId).get
   val sink = findNodeOfType(sinkId).get

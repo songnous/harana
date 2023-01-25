@@ -12,7 +12,7 @@ package object ui {
     SidebarSection(
       Some(i"common.sidebar.search"),
       allowCollapse = false,
-      allowClear = activeSearchQuery.isDefined,
+      allowClear = activeSearchQuery.nonEmpty,
       Some(_ => onSearchQueryChanged(None)),
       List(SearchSection(onSearch = (search: Option[String]) => onSearchQueryChanged(search), value = activeSearchQuery).withKey("search"))
     )
@@ -29,14 +29,14 @@ package object ui {
 
   def filterSection(title: String, isPill: Boolean, filterItems: List[FilterItem], activeFilterItem: Option[FilterItem], onFilterChanged: Option[FilterItem] => Unit) = {
     val navigationItems = filterItems.sortBy(_.title).map { fi =>
-      val isActive = activeFilterItem.isDefined && activeFilterItem.get.equals(fi)
+      val isActive = activeFilterItem.nonEmpty && activeFilterItem.get.equals(fi)
       NavigationItem(fi.title, onClick = () => onFilterChanged(Some(fi)), icon = fi.icon, rightText = Some(fi.count.toString), isActive = isActive, isPill = isPill)
     }
 
     SidebarSection(
       Some(title),
       allowCollapse = false,
-      allowClear = activeFilterItem.isDefined,
+      allowClear = activeFilterItem.nonEmpty,
       Some(_ => onFilterChanged(None)),
       List(NavigationSection(List(NavigationGroup(navigationItems))))
     )

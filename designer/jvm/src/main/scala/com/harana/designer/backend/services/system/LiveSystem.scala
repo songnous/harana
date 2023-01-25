@@ -106,7 +106,7 @@ object LiveSystem {
     def events: Task[Unit] =
       for {
         event     <- mongo.findOneAndDelete[PendingEvent]("PendingEvents", Map(), Some(("created", true)))
-        _         <- Task.when(event.isDefined)(vertx.sendMessage(event.get.address, event.get.`type`, event.get.payload))
+        _         <- Task.when(event.nonEmpty)(vertx.sendMessage(event.get.address, event.get.`type`, event.get.payload))
       } yield ()
 
 

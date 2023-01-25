@@ -3,7 +3,7 @@ package com.harana.modules.vertx.models
 import io.circe.Json
 import io.vertx.core.http.Cookie
 import io.vertx.core.buffer.{Buffer => VertxBuffer}
-import io.vertx.ext.reactivestreams.ReactiveReadStream
+import io.vertx.core.streams.{ReadStream => VertxReadStream}
 
 sealed trait Response {
   val contentType: Option[ContentType]
@@ -61,7 +61,7 @@ object Response {
                   cors: Boolean = false,
                   headers: Map[_<: CharSequence, List[_<: CharSequence]] = Map()) extends Response
 
-  case class ReadStream(stream: ReactiveReadStream[VertxBuffer],
+  case class ReadStream(stream: VertxReadStream[VertxBuffer],
                         contentSize: Option[Long] = None,
                         contentType: Option[ContentType] = None,
                         cookies: List[Cookie] = List(),

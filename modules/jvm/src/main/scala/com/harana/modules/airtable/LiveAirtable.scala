@@ -24,7 +24,7 @@ object LiveAirtable {
 
     private def client =
       for {
-        client            <- if (clientRef.get.isDefined) Task(clientRef.get.get) else
+        client            <- if (clientRef.get.nonEmpty) Task(clientRef.get.get) else
                             for {
                               key             <- config.secret("airtable-key")
                               api             <- Task(new AirtableApi(key))

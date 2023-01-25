@@ -76,7 +76,7 @@ object LiveTerminals {
                                     vertx.publishMessage(userId, s"terminal-$terminalId-stderr", m))
                                   ),
                                   command = Seq(terminal.get.shell), tty = true).retryUntilM(_ =>
-                                    kubernetes.get[Pod](client, namespace, podName).map(_.isDefined).orDie
+                                    kubernetes.get[Pod](client, namespace, podName).map(_.nonEmpty).orDie
                                   ).ignore
 
         _                     <- kubernetes.close(client)
@@ -163,7 +163,7 @@ object LiveTerminals {
       for {
         terminal            <- Crud.get[Terminal]("Terminals", rc, config, jwt, logger, micrometer, mongo)
         terminalId          <- Task(rc.request.getParam("id"))
-        _                   <- mongo.dropCollection(s"Terminals-$terminalId").when(terminal.isDefined)
+        _                   <- mongo.dropCollection(s"Terminals-$terminalId").when(terminal.nonEmpty)
         response            =  Response.Empty()
       } yield response
 

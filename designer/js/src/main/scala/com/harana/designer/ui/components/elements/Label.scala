@@ -19,8 +19,8 @@ import slinky.web.html._
 	def render() = {
 		val cls = cssSet(
 			"label" -> true,
-			"bg-" + props.color.map(_.value).orNull -> props.color.isDefined,
-			s"label-" + props.style.map(_.value).orNull -> props.style.isDefined
+			"bg-" + props.color.map(_.value).orNull -> props.color.nonEmpty,
+			s"label-" + props.style.map(_.value).orNull -> props.style.nonEmpty
 		)
 
 		props.link match {

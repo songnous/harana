@@ -3,6 +3,7 @@ package com.harana.s3.services.router
 import com.harana.s3.models.Route
 import com.harana.s3.services.server.models.S3Exception
 import io.vertx.core.buffer.Buffer
+import io.vertx.core.streams.{Pump, ReadStream}
 import io.vertx.ext.reactivestreams.{ReactiveReadStream, ReactiveWriteStream}
 import software.amazon.awssdk.services.s3.model._
 import zio.macros.accessible
@@ -42,15 +43,16 @@ object Router {
                   ifNoneMatch: Option[String] = None,
                   ifModifiedSince: Option[Instant] = None,
                   ifUnmodifiedSince: Option[Instant] = None,
-                  range: Option[String] = None): IO[S3Exception, ReactiveReadStream[Buffer]]
+                  range: Option[String] = None): IO[S3Exception, ReadStream[Buffer]]
 
     def getObjectAttributes(bucket: String, key: String): IO[S3Exception, GetObjectAttributesResponse]
 
     def putObject(bucket: String,
                   key: String,
-                  writeStream: ReactiveWriteStream[Buffer],
+                  stream: ReactiveWriteStream[Buffer],
+                  streamPump: Pump,
+                  contentLength: Long,
                   acl: ObjectCannedACL,
-                  contentLength: Option[Long] = None,
                   contentMD5: Option[String] = None,
                   storageClass: Option[String] = None,
                   tags: Map[String, String] = Map()): IO[S3Exception, String]
@@ -73,7 +75,11 @@ object Router {
                        copySourceIfUnmodifiedSince: Option[Instant],
                        copySourceRange: Option[String]): IO[S3Exception, CopyPartResult]
 
-    def uploadPart(bucket: String, key: String, uploadId: String, partNumber: Int, writeStream: ReactiveWriteStream[Buffer]): IO[S3Exception, String]
+    def uploadPart(bucket: String,
+                   key: String,
+                   uploadId: String,
+                   partNumber: Int,
+                   writeStream: ReactiveWriteStream[Buffer]): IO[S3Exception, String]
 
     def listParts(bucket: String, key: String, uploadId: String): IO[S3Exception, List[Part]]
 

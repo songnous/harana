@@ -19,11 +19,11 @@ import scala.scalajs.js
                    onChange: Option[String => Unit] = None)
 
   override def componentDidMount(): Unit = {
-    if (props.onChange.isDefined) elementRef.current.addEventListener("sl-change", props.onChange.get)
+    if (props.onChange.nonEmpty) elementRef.current.addEventListener("sl-change", props.onChange.get)
   }
 
   override def componentWillUnmount(): Unit = {
-    if (props.onChange.isDefined) elementRef.current.removeEventListener("sl-change", props.onChange.get)
+    if (props.onChange.nonEmpty) elementRef.current.removeEventListener("sl-change", props.onChange.get)
   }
 
   def render() = {
@@ -33,8 +33,8 @@ import scala.scalajs.js
     attrs += (ref := elementRef)
 
     val style = js.Dynamic.literal()
-    if (props.dividerWidth.isDefined) style.updateDynamic("--divider-width")(props.dividerWidth.get)
-    if (props.handleSize.isDefined) style.updateDynamic("--handle-size")(props.handleSize.get)
+    if (props.dividerWidth.nonEmpty) style.updateDynamic("--divider-width")(props.dividerWidth.get)
+    if (props.handleSize.nonEmpty) style.updateDynamic("--handle-size")(props.handleSize.get)
     add(attrs, Some(style), "style")
 
     CustomTag("sl-image-comparer")(attrs.toSeq: _*)

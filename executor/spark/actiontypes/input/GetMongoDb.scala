@@ -5,13 +5,13 @@ import com.harana.sdk.shared.models.designer.data.DataSourceTypes.MongoDb.hostPa
 import com.harana.sdk.backend.models.flow.ActionType.{Inputs, Outputs}
 import com.harana.sdk.backend.models.flow.actiontypes.input.GetMongoDbInfo
 import com.harana.sdk.backend.models.flow.execution.ExecutionError
-import com.harana.sdk.backend.models.flow.{Action, FlowContext}
+import com.harana.sdk.backend.models.flow.{ActionType, FlowContext}
 import com.harana.executor.spark.actiontypes.{dataSourceParameterValues, log}
 import com.mongodb.spark.MongoSpark
 import com.mongodb.spark.config.ReadConfig
 import zio.{IO, Task, UIO}
 
-class GetMongoDb extends GetMongoDbInfo with Action {
+class GetMongoDb extends GetMongoDbInfo with ActionType {
 
   def validate(parameters: ParameterValues, context: FlowContext): UIO[List[ExecutionError]] = null
 
@@ -32,12 +32,12 @@ class GetMongoDb extends GetMongoDbInfo with Action {
     val samplePoolSize = parameters.opt(samplePoolSizeParameter)
     val batchSize = parameters.opt(batchSizeParameter)
 
-    if (sampleSize.isDefined) readConfig = readConfig.withOption(ReadConfig.sampleSizeProperty, sampleSize.get.toString)
-    if (localThreshold.isDefined) readConfig = readConfig.withOption(ReadConfig.localThresholdProperty, localThreshold.get.toString)
-    if (readPreference.isDefined) readConfig = readConfig.withOption(ReadConfig.readPreferenceNameProperty, readPreference.get)
-    if (readConcern.isDefined) readConfig = readConfig.withOption(ReadConfig.readConcernLevelProperty, readConcern.get)
-    if (samplePoolSize.isDefined) readConfig = readConfig.withOption(ReadConfig.samplePoolSizeProperty, samplePoolSize.get.toString)
-    if (batchSize.isDefined) readConfig = readConfig.withOption(ReadConfig.batchSizeProperty, batchSize.get.toString)
+    if (sampleSize.nonEmpty) readConfig = readConfig.withOption(ReadConfig.sampleSizeProperty, sampleSize.get.toString)
+    if (localThreshold.nonEmpty) readConfig = readConfig.withOption(ReadConfig.localThresholdProperty, localThreshold.get.toString)
+    if (readPreference.nonEmpty) readConfig = readConfig.withOption(ReadConfig.readPreferenceNameProperty, readPreference.get)
+    if (readConcern.nonEmpty) readConfig = readConfig.withOption(ReadConfig.readConcernLevelProperty, readConcern.get)
+    if (samplePoolSize.nonEmpty) readConfig = readConfig.withOption(ReadConfig.samplePoolSizeProperty, samplePoolSize.get.toString)
+    if (batchSize.nonEmpty) readConfig = readConfig.withOption(ReadConfig.batchSizeProperty, batchSize.get.toString)
 
     val outputDf = MongoSpark.load(spark, readConfig)
     log(outputDf, parameters) *>

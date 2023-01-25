@@ -1,17 +1,22 @@
 package com.harana.s3.services.server
 
+import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.google.common.base.CharMatcher
 import com.google.common.io.{BaseEncoding, ByteStreams}
 import com.google.common.net.PercentEscaper
 import com.harana.modules.vertx.models.{ContentType, Response}
+import com.harana.modules.vertx.VertxUtils
 import com.harana.s3.services.server.models.AuthenticationType._
+import com.harana.s3.services.server.models.S3Exception._
 import com.harana.s3.services.server.models._
 import com.harana.s3.utils._
+import io.vertx.core.buffer.Buffer
 import io.vertx.core.http.{HttpHeaders, HttpMethod}
+import io.vertx.core.streams.Pump
+import io.vertx.ext.reactivestreams.ReactiveWriteStream
 import io.vertx.ext.web.RoutingContext
-import zio.{IO, Task, UIO, ZIO}
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL
+import zio.{IO, UIO, ZIO}
 
 import java.io.{ByteArrayInputStream, InputStream, StringWriter}
 import java.security.MessageDigest
@@ -226,25 +231,30 @@ package object s3_server {
         }
     }
 
-  def acl(rc: RoutingContext) =
+
+  def acl(rc: RoutingContext, stream: ReactiveWriteStream[Buffer]) =
     for {
-      hasBody     <- hasBody(rc)
-      acl         <- if (hasBody)
+      body        <- VertxUtils.streamToString(rc, stream).mapError(e => S3Exception(S3ErrorCode.UNKNOWN_ERROR, e.getMessage, e.fillInStackTrace()))
+      acl         <- if (body.nonEmpty)
                        xmlRequest(rc, classOf[AccessControlPolicy])(request => UIO(mapXmlAclsToCannedPolicy(request) match {
                          case "private" => ObjectCannedACL.PRIVATE
                          case "public-read" => ObjectCannedACL.PUBLIC_READ
                          case _ => throw S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
                        }))
                      else
-                       UIO(
-                          Option(rc.request().getHeader(AwsHttpHeaders.ACL.value)) match {
-                            case Some("private") => ObjectCannedACL.PRIVATE
-                            case Some("public-read") => ObjectCannedACL.PUBLIC_READ
-                            case Some(acl) if cannedAcls.contains(acl) => throw S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
-                            case _ => throw S3Exception(S3ErrorCode.INVALID_REQUEST)
-                          }
-                        )
+                       aclHeader(rc)
     } yield acl
+
+
+    def aclHeader(rc: RoutingContext) =
+      UIO(
+        Option(rc.request().getHeader(AwsHttpHeaders.ACL.value)) match {
+          case None | Some("private") => ObjectCannedACL.PRIVATE
+          case Some("public-read") => ObjectCannedACL.PUBLIC_READ
+          case Some(acl) if cannedAcls.contains(acl) => throw S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
+          case _ => throw S3Exception(S3ErrorCode.INVALID_REQUEST)
+        }
+      )
 
 
   def maybeQuoteETag(eTag: String) =
@@ -253,16 +263,9 @@ package object s3_server {
     else eTag
 
 
-  def hasBody(rc: RoutingContext): IO[S3Exception, Boolean] =
-    for {
-      buffer    <- UIO(rc.body().buffer())
-      valid     =  buffer != null && buffer.length() > 0
-    } yield valid
-
-
   def xmlRequest[A, B](rc: RoutingContext, xmlClass: Class[A])(fn: A => IO[S3Exception, B]): IO[S3Exception, B] =
     for {
-      buffer    <- UIO(rc.body().buffer())
+      buffer    <- ZIO.fromCompletionStage(rc.request().body().toCompletionStage)
       cls       <- IO(xmlMapper.readValue(buffer.getBytes, xmlClass)).mapError(e => S3Exception(S3ErrorCode.INVALID_REQUEST, e.getMessage, e.fillInStackTrace()))
       result    <- fn(cls)
     } yield result
@@ -273,6 +276,7 @@ package object s3_server {
       stringWriter    <- UIO(new StringWriter())
       xmlWriter       =  xmlOutputFactory.createXMLStreamWriter(stringWriter)
       _               <- fn(xmlWriter)
+      _               =  println(stringWriter.toString)
       response        =  Response.Content(stringWriter.toString, contentType = Some(ContentType.XML))
       _               =  stringWriter.close()
       _               =  xmlWriter.close()

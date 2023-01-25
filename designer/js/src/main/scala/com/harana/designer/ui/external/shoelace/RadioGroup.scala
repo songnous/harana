@@ -25,7 +25,7 @@ import scala.scalajs.js
     attrs += (ref := elementRef)
 
     val children = new ListBuffer[ReactElement]()
-    if (props.label.isDefined) children += props.label.get
+    if (props.label.nonEmpty) children += props.label.get
 
     CustomTag("sl-radio-group")(attrs.toSeq: _*)(children.toSeq: _*)
   }

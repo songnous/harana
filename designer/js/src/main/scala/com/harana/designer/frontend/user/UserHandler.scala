@@ -44,7 +44,7 @@ class UserHandler extends ActionHandler(zoomTo(_.userState)) {
 
 
     case SaveSettings =>
-      if (value.settings.isDefined)
+      if (value.settings.nonEmpty)
         effectOnly(Effect(Http.postRelative(s"/api/user/settings", body = value.settings.get.asJson.noSpaces).map(_ => NoAction)))
       else
         noChange

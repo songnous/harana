@@ -38,7 +38,7 @@ package object projects {
     for {
       cr          <- customResources
       deployed    <- Task.foreach(cr)(cr => kubernetes.create[A](client, namespace, cr).option)
-    } yield deployed.exists(_.isDefined)
+    } yield deployed.exists(_.nonEmpty)
 
 
 
@@ -49,5 +49,5 @@ package object projects {
     for {
       cr          <- customResources
       deployed    <- Task.foreach(cr)(cr => kubernetes.delete[A](client, namespace, cr.name).option)
-    } yield deployed.exists(_.isDefined)
+    } yield deployed.exists(_.nonEmpty)
 }

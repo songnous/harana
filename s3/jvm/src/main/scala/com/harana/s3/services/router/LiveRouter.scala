@@ -8,9 +8,10 @@ import com.harana.modules.file.File
 import com.harana.modules.ohc.OHC
 import com.harana.s3.models.Destination._
 import com.harana.s3.models.S3Credentials.toAWSCredentialsProvider
-import com.harana.s3.models.{AccessPolicy, PathMatch, Route, S3Credentials}
+import com.harana.s3.models.{AccessPolicy, Route, S3Credentials}
 import com.harana.s3.services.server.models.{S3ErrorCode, S3Exception}
 import io.vertx.core.buffer.Buffer
+import io.vertx.core.streams.Pump
 import io.vertx.ext.reactivestreams.{ReactiveReadStream, ReactiveWriteStream}
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.s3.S3AsyncClient
@@ -20,7 +21,7 @@ import zio.clock.Clock
 import zio.{IO, Task, UIO, ZIO, ZLayer}
 
 import java.nio.file.attribute.BasicFileAttributes
-import java.nio.file.{Files, Path, Paths}
+import java.nio.file.{Files, Path}
 import java.time.Instant
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicReference
@@ -33,7 +34,7 @@ object LiveRouter {
 
   val layer = ZLayer.fromServices { (clock: Clock.Service,
                                      config: Config.Service,
-                                     jasyncfio: File.Service,
+                                     file: File.Service,
                                      logger: Logger.Service,
                                      micrometer: Micrometer.Service,
                                      ohc: OHC.Service,
@@ -42,7 +43,7 @@ object LiveRouter {
     // 💚
     def createBucket(bucket: String) =
       for {
-        _           <- logger.debug(s"[CreateBucket] $bucket")
+        _           <- logger.info(s"[CreateBucket] $bucket")
         rootDir     <- localRootDirectory
         _           <- if (validAccess(bucket)(_.createBuckets))
                         route(bucket).map(_.destination) match {
@@ -66,7 +67,7 @@ object LiveRouter {
     // 💚
     def deleteBucket(bucket: String) =
       for {
-        _             <- logger.debug(s"[DeleteBucket] $bucket")
+        _             <- logger.info(s"[DeleteBucket] $bucket")
         rootDir       <- localRootDirectory
         result        <- if (validAccess(bucket)(_.deleteBuckets))
                           route(bucket).map(_.destination) match {
@@ -87,12 +88,12 @@ object LiveRouter {
 
 
     def listBuckets() =
-      logger.debug(s"[ListBuckets]") *> UIO(List.empty[Bucket])
+      logger.info(s"[ListBuckets]") *> UIO(List.empty[Bucket])
 
 
     def bucketExists(bucket: String) =
       for {
-        _           <- logger.debug(s"[BucketExists] $bucket")
+        _           <- logger.info(s"[BucketExists] $bucket")
         result      <- route(bucket).map(_.destination) match {
                         case None =>
                           IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
@@ -109,7 +110,7 @@ object LiveRouter {
     // ❤️
     def getBucketPolicy(bucket: String) =
       for {
-        _           <- logger.debug(s"[GetBucketPolicy] $bucket")
+        _           <- logger.info(s"[GetBucketPolicy] $bucket")
         result      <- route(bucket).map(_.destination) match {
                         case None =>
                           IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
@@ -126,7 +127,7 @@ object LiveRouter {
     // ❤️
     def getBucketAcl(bucket: String) =
       for {
-        _           <- logger.debug(s"[GetBucketAcl] $bucket")
+        _           <- logger.info(s"[GetBucketAcl] $bucket")
         result      <- route(bucket).map(_.destination) match {
                         case None =>
                           IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
@@ -147,7 +148,7 @@ object LiveRouter {
     // ❤️
     def putBucketAcl(bucket: String, acl: BucketCannedACL) =
       for {
-        _           <- logger.debug(s"[PutBucketAcl] $bucket")
+        _           <- logger.info(s"[PutBucketAcl] $bucket")
         rootDir     <- localRootDirectory
         result      <- route(bucket).map(_.destination) match {
                         case None =>
@@ -165,7 +166,7 @@ object LiveRouter {
     // 💚
     def listObjects(bucket: String, prefix: Option[String] = None) =
       for {
-        _           <- logger.debug(s"[ListObjects] $bucket")
+        _           <- logger.info(s"[ListObjects] $bucket")
         rootDir     <- localRootDirectory
         result      <- route(bucket).map(_.destination) match {
                         case None =>
@@ -177,7 +178,7 @@ object LiveRouter {
                             IO.fail(S3Exception(S3ErrorCode.NO_SUCH_BUCKET))
                           else
                             toS3Exception(IO(
-                              Files.walk(bucketPath).toList.asScala.map { path =>
+                              Files.walk(bucketPath).toList.asScala.filterNot(_.equals(bucketPath)).map { path =>
                                 val at = Files.readAttributes(path, classOf[BasicFileAttributes])
                                 S3Object.builder()
                                   .key(path.toUri.getPath)
@@ -196,7 +197,7 @@ object LiveRouter {
     // 💚
     def deleteObject(bucket: String, key: String) =
       for {
-        _           <- logger.debug(s"[DeleteObject] $bucket / $key")
+        _           <- logger.info(s"[DeleteObject] $bucket / $key")
         result      <- route(bucket, Some(key)).map(_.destination) match {
                         case None =>
                           IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
@@ -212,7 +213,7 @@ object LiveRouter {
     // FIXME need to iterate on keys
     def deleteObjects(bucket: String, keys: List[String]) =
       for {
-        _           <- logger.debug(s"[DeleteObjects] $bucket / ${keys.mkString(",")}")
+        _           <- logger.info(s"[DeleteObjects] $bucket / ${keys.mkString(",")}")
         _           <- route(bucket, Some(keys.head)).map(_.destination) match {
                         case None =>
                           IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
@@ -234,14 +235,13 @@ object LiveRouter {
                   ifUnmodifiedSince: Option[Instant] = None,
                   range: Option[String] = None) =
       for {
-        _           <- logger.debug(s"[GetObject] $bucket / $key")
-        stream      =  ReactiveReadStream.readStream[Buffer]()
+        _           <- logger.info(s"[GetObject] $bucket / $key")
         result      <- route(bucket, Some(key)).map(_.destination) match {
                         case None =>
                           IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
                         case Some(Local) =>
-                          fileOperation(bucket, key)(path => jasyncfio.readStream(path.toString, stream).as(stream))
+                          fileOperation(bucket, key)(path => file.readStream(path.toString))
 
                         case Some(S3(credentials, region, endpoint)) =>
                           s3Operation(credentials, region, endpoint)(s3.getObject(_, bucket, key, ifMatch, ifNoneMatch, ifModifiedSince, ifUnmodifiedSince, range))
@@ -251,23 +251,27 @@ object LiveRouter {
     // 💚
     def putObject(bucket: String,
                   key: String,
-                  writeStream: ReactiveWriteStream[Buffer],
+                  stream: ReactiveWriteStream[Buffer],
+                  streamPump: Pump,
+                  contentLength: Long,
                   acl: ObjectCannedACL,
-                  contentLength: Option[Long] = None,
                   contentMD5: Option[String] = None,
                   storageClass: Option[String] = None,
                   tags: Map[String, String] = Map()) =
       for {
-        _           <- logger.debug(s"[PutObject] $bucket / $key")
+        _           <- logger.info(s"[PutObject] $bucket / $key")
         result      <- route(bucket, Some(key)).map(_.destination) match {
                         case None =>
                           IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
                         case Some(Local) =>
-                          fileOperation(bucket, key)(path => jasyncfio.writeStream(path.toString, writeStream).as(""))
+                          for {
+                            rootDir     <- localRootDirectory
+                            result      <- file.writeStream(rootDir.resolve(bucket).resolve(key).toString, stream, contentLength, Some(() => streamPump.start()), Some(() => streamPump.stop())).as("")
+                          } yield result
 
                         case Some(S3(credentials, region, endpoint)) =>
-                          s3Operation(credentials, region, endpoint)(s3.putObject(_, bucket, key, writeStream, acl, contentLength, contentMD5, storageClass, tags))
+                          s3Operation(credentials, region, endpoint)(s3.putObject(_, bucket, key, stream, acl, Some(contentLength), contentMD5, storageClass, tags))
                        }
       } yield result
 
@@ -276,7 +280,7 @@ object LiveRouter {
     // ❤️
     def copyObject(sourceBucket: String, sourceKey: String, destinationBucket: String, destinationKey: String) =
       for {
-        _           <- logger.debug(s"[CopyObject]")
+        _           <- logger.info(s"[CopyObject]")
         result      <- route(sourceBucket, Some(sourceKey)).map(_.destination) match {
                           case None =>
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
@@ -292,7 +296,7 @@ object LiveRouter {
     // 💚
     def getObjectAttributes(bucket: String, key: String) =
       for {
-        _           <- logger.debug(s"[GetObjectAttributes] $bucket / $key")
+        _           <- logger.info(s"[GetObjectAttributes] $bucket / $key")
         result      <- route(bucket, Some(key)).map(_.destination) match {
                           case None =>
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
@@ -317,7 +321,7 @@ object LiveRouter {
     // ❤️
     def getObjectAcl(bucket: String, key: String) =
       for {
-        _           <- logger.debug(s"[GetObjectACL] $bucket / $key")
+        _           <- logger.info(s"[GetObjectACL] $bucket / $key")
         result      <- route(bucket, Some(key)).map(_.destination) match {
                           case None =>
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
@@ -335,7 +339,7 @@ object LiveRouter {
     // ❤️
     def putObjectAcl(bucket: String, key: String, acl: ObjectCannedACL) =
       for {
-        _           <- logger.debug(s"[PutObjectACL] $bucket / $key")
+        _           <- logger.info(s"[PutObjectACL] $bucket / $key")
         result      <- route(bucket, Some(key)).map(_.destination) match {
                           case None =>
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
@@ -362,7 +366,7 @@ object LiveRouter {
                        copySourceIfUnmodifiedSince: Option[Instant],
                        copySourceRange: Option[String]) =
       for {
-        _           <- logger.debug(s"[UploadPartCopy] $sourceBucket / $sourceKey - $destinationBucket / $destinationKey")
+        _           <- logger.info(s"[UploadPartCopy] $sourceBucket / $sourceKey - $destinationBucket / $destinationKey")
         result      <- route(sourceBucket, Some(sourceKey)).map(_.destination) match {
                           case None =>
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
@@ -382,7 +386,7 @@ object LiveRouter {
     // ❤️
     def uploadPart(bucket: String, key: String, uploadId: String, partNumber: Int, writeStream: ReactiveWriteStream[Buffer]) =
       for {
-        _           <- logger.debug(s"[UploadPart] $bucket / $key")
+        _           <- logger.info(s"[UploadPart] $bucket / $key")
         result      <- route(bucket, Some(key)).map(_.destination) match {
                           case None =>
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
@@ -399,7 +403,7 @@ object LiveRouter {
     // ❤️
     def listParts(bucket: String, key: String, uploadId: String) =
       for {
-        _           <- logger.debug(s"[ListParts] $bucket / $key")
+        _           <- logger.info(s"[ListParts] $bucket / $key")
         result      <- route(bucket, Some(key)).map(_.destination) match {
                           case None =>
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
@@ -416,7 +420,7 @@ object LiveRouter {
     // ❤️
     def listMultipartUploads(bucket: String) =
       for {
-        _           <- logger.debug(s"[ListMultipartUploads] $bucket")
+        _           <- logger.info(s"[ListMultipartUploads] $bucket")
         result      <- route(bucket).map(_.destination) match {
                           case None =>
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
@@ -433,7 +437,7 @@ object LiveRouter {
     // ❤️
     def createMultipartUpload(bucket: String, key: String, cannedACL: ObjectCannedACL) =
       for {
-        _           <- logger.debug(s"[CreateMultipartUpload] $bucket / $key")
+        _           <- logger.info(s"[CreateMultipartUpload] $bucket / $key")
         result      <- route(bucket, Some(key)).map(_.destination) match {
                           case None =>
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
@@ -450,7 +454,7 @@ object LiveRouter {
     // ❤️
     def abortMultipartUpload(bucket: String, key: String, uploadId: String) =
       for {
-        _           <- logger.debug(s"[AbortMultipartUpload] $bucket / $key")
+        _           <- logger.info(s"[AbortMultipartUpload] $bucket / $key")
         result      <- route(bucket, Some(key)).map(_.destination) match {
                           case None =>
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
@@ -466,7 +470,7 @@ object LiveRouter {
     // ❤️
     def completeMultipartUpload(bucket: String, key: String, uploadId: String) =
       for {
-        _           <- logger.debug(s"[CompleteMultipartUpload] $bucket / $key")
+        _           <- logger.info(s"[CompleteMultipartUpload] $bucket / $key")
         result      <- route(bucket, Some(key)).map(_.destination) match {
                           case None =>
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
@@ -501,9 +505,11 @@ object LiveRouter {
         path        =  rootDir.resolve(bucket).resolve(key)
         result      <- if (Files.notExists(rootDir.resolve(bucket)))
                         IO.fail(S3Exception(S3ErrorCode.NO_SUCH_BUCKET))
-                       else if (Files.notExists(path))
-                        IO.fail(S3Exception(S3ErrorCode.NO_SUCH_KEY))
-                       else
+                       else if (Files.notExists(path)) {
+
+          println(s"Path = ${path} does not exist")
+          IO.fail(S3Exception(S3ErrorCode.NO_SUCH_KEY))
+        } else
                         toS3Exception(operation(path))
     } yield result
 
@@ -543,13 +549,13 @@ object LiveRouter {
 
 
     private def validAccess(bucket: String, key: Option[String] = None)(check: AccessPolicy => Boolean) = {
-      val term = if (key.isDefined) s"$bucket/$key" else bucket
+      val term = if (key.nonEmpty) s"$bucket/$key" else bucket
       routesRef.get().filter(_.pathMatch.matches(term)).flatMap(_.accessPolicies).exists(check)
     }
 
 
     private def route(bucket: String, key: Option[String] = None) = {
-      val term = if (key.isDefined) s"$bucket/$key" else bucket
+      val term = if (key.nonEmpty) s"$bucket/$key" else bucket
       val routes = routesRef.get().filter(_.pathMatch.matches(term))
       if (routes.isEmpty) None else Some(routes.maxBy(_.priority))
     }

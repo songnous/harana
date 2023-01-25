@@ -113,7 +113,7 @@ object Error {
           position = JavaScriptPosition(tracePosition.map(_.line.toInt), tracePosition.map(_.column.toInt))
         )
       }.collect {
-        case t if t.source.isDefined && t.source.get != null && !t.source.get.endsWith("scala/scalajs/runtime/StackTrace.scala") && !t.source.get.endsWith("java/lang/Throwables.scala") => t
+        case t if t.source.nonEmpty && t.source.get != null && !t.source.get.endsWith("scala/scalajs/runtime/StackTrace.scala") && !t.source.get.endsWith("java/lang/Throwables.scala") => t
       }
 
       JavaScriptCause(

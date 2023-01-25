@@ -1,23 +1,21 @@
 package com.harana.modules.vertx
 
-import java.net.URI
 import com.harana.modules.vertx.models._
 import com.harana.modules.vertx.proxy.WSURI
-import io.circe.{Decoder, Encoder}
-import io.vertx.core.buffer.Buffer
-import io.vertx.core.eventbus.{EventBus, Message, MessageConsumer}
+import io.vertx.core.eventbus.{EventBus, MessageConsumer}
 import io.vertx.core.http.HttpServer
 import io.vertx.core.net.{NetServer, NetServerOptions}
 import io.vertx.core.shareddata.{AsyncMap, Counter, Lock}
-import io.vertx.core.streams.Pump
 import io.vertx.core.{Context, MultiMap}
-import io.vertx.ext.reactivestreams.ReactiveWriteStream
 import io.vertx.ext.web.RoutingContext
 import io.vertx.servicediscovery.Record
+import io.vertx.core.{Vertx => VX}
 import org.jose4j.jwk.JsonWebKeySet
-import org.pac4j.core.profile.{CommonProfile, UserProfile}
+import org.pac4j.core.profile.UserProfile
 import zio.macros.accessible
-import zio.{Has, Managed, Task, TaskManaged, UIO, ZManaged}
+import zio.{Has, Task, UIO}
+
+import java.net.URI
 
 @accessible
 object Vertx {
@@ -52,11 +50,6 @@ object Vertx {
     def removeMapValue[K, V](name: String, key: K): Task[Unit]
     def putMapValueIfAbsent[K, V](name: String, key: K, value: V, ttl: Option[Long] = None): Task[V]
 
-    def withBody[T](rc: RoutingContext)(fn: Buffer => Task[T]): Task[T]
-    def withBodyAsStream[T](rc: RoutingContext)(fn: ReactiveWriteStream[Buffer] => Task[T]): Task[T]
-    def newWriteStream[T]: Task[ReactiveWriteStream[T]]
-    def getUploadedFile(filename: String): Task[Buffer]
-
     def getOrCreateContext: Task[Context]
     def close: UIO[Unit]
 
@@ -64,7 +57,7 @@ object Vertx {
     def startHttpServer(domain: String,
                         proxyDomain: Option[String] = None,
                         routes: List[Route] = List(),
-                        fallbackRouteHandler: Option[RoutingContext => Task[Response]] = None,
+                        defaultHandler: Option[RouteHandler] = None,
                         proxyMapping: Option[RoutingContext => Task[Option[URI]]] = None,
                         webSocketProxyMapping: Option[WebSocketHeaders => Task[WSURI]] = None,
                         errorHandlers: Map[Int, RoutingContext => Task[Response]] = Map(),
@@ -78,5 +71,7 @@ object Vertx {
                         logActivity: Boolean = false): Task[HttpServer]
     def startNetServer(listenHost: String, listenPort: Int, options: Option[NetServerOptions] = None): Task[NetServer]
     def startTcpEventBusServer(listenHost: String, listenPort: Int, inAddressRegex: String, outAddressRegex: String): Task[Unit]
+
+    def underlying: Task[VX]
   }
 }

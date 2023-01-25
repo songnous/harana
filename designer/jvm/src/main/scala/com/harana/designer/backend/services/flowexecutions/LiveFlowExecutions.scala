@@ -62,7 +62,7 @@ object LiveFlowExecutions {
         flowId                <- Task(rc.pathParam("flowId"))
         flowExecutionId       <- mongo.findEquals[FlowExecution]("FlowExecutions", Map("flowId" -> flowId), Some(("updated", false))).map(_.headOption.map(_.id))
         inputStream           <- Task(flowExecutionId.map(id => new FileInputStream(new File(logsDirectory, id))))
-        response              <- if (inputStream.isDefined)
+        response              <- if (inputStream.nonEmpty)
                                     for {
                                       rawLogs         <- Task(IOUtils.toString(inputStream.get, StandardCharsets.UTF_8.name()))
                                       executionLogs   <- Task.fromEither(decode[List[ExecutionLog]](rawLogs))
@@ -78,7 +78,7 @@ object LiveFlowExecutions {
         flowId                <- Task(rc.pathParam("flowId"))
         _                     <- logger.debug(s"Getting flow execution with flow id: $flowId")
         flowExecution         <- mongo.findOne[FlowExecution]("FlowExecutions", Map("flowId" -> flowId), Some(("updated", false)))
-        response              =  if (flowExecution.isDefined) Response.JSON(flowExecution.asJson) else Response.Empty(statusCode = Some(404))
+        response              =  if (flowExecution.nonEmpty) Response.JSON(flowExecution.asJson) else Response.Empty(statusCode = Some(404))
       } yield response
 
 

@@ -34,16 +34,16 @@ class GenericCatalog[O](implicit t: Tag[O]) {
 //    val node = TypeNode[O](javaType)
 //
 //    val registeredNode = nodes.get(node.fullName)
-//    if (registeredNode.isDefined) return registeredNode
+//    if (registeredNode.nonEmpty) return registeredNode
 //
 //    val superTraits = javaType.getInterfaces.filter(_ != null).flatMap(register)
 //    superTraits.foreach(_.addSuccessor(node))
 //    superTraits.foreach(node.addSupertrait)
 //
 //    val parentJavaType = node.getParentJavaType(baseType)
-//    if (parentJavaType.isDefined) {
+//    if (parentJavaType.nonEmpty) {
 //      val parentClass = register(parentJavaType.get)
-//      if (parentClass.isDefined) {
+//      if (parentClass.nonEmpty) {
 //        parentClass.get.addSuccessor(node)
 //        node.setParent(parentClass.get)
 //      }

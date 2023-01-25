@@ -18,7 +18,7 @@ object LiveCache {
     def newCache[K, V](expirationSeconds: Long, removalListener: Option[(K, V, RemovalCause) => Unit] = None): Task[SCache[K, V]] = {
       Task {
         val cache = Scaffeine().recordStats().expireAfterWrite(expirationSeconds.seconds)
-        if (removalListener.isDefined) cache.removalListener(removalListener.get)
+        if (removalListener.nonEmpty) cache.removalListener(removalListener.get)
         cache.build[K, V]()
       }
     }

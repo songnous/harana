@@ -255,7 +255,7 @@ object App extends CoreApp {
       jwtValue    <- Task.fromTry(Try(rc.request.getCookie("jwt").getValue))
       claims      <- JWT.claims[DesignerClaims](jwtValue).provideLayer(JWTLayers.jwt)
       user        <- Mongo.findOne[DesignerUser]("Users", Map("id" -> claims.userId)).onError(e => logError(e.prettyPrint)).option.provideLayer(Layers.mongo)
-      result      =  if (user.flatten.isDefined && claims.issued.isAfter(user.flatten.get.updated)) Some(claims) else None
+      result      =  if (user.flatten.nonEmpty && claims.issued.isAfter(user.flatten.get.updated)) Some(claims) else None
     } yield result
 
 }

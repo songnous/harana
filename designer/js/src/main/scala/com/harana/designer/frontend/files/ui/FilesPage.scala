@@ -26,7 +26,7 @@ import scala.scalajs.js
     val filesState = Circuit.state(zoomTo(_.filesState))
     val userState = Circuit.state(zoomTo(_.userState))
 
-    val subtitle = if (state.item.isDefined && state.item.get.path != "") Some(state.item.get.name) else None
+    val subtitle = if (state.item.nonEmpty && state.item.get.path != "") Some(state.item.get.name) else None
 
     Fragment(
       Dialog.withRef(dialogRef),

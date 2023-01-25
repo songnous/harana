@@ -24,13 +24,13 @@ import scala.scalajs.js
                    onRemove: Option[js.Any => Unit] = None)
 
   override def componentDidMount(): Unit = {
-    if (props.onClick.isDefined) elementRef.current.addEventListener("click", props.onClick.get)
-    if (props.onRemove.isDefined) elementRef.current.addEventListener("sl-remove", props.onRemove.get)
+    if (props.onClick.nonEmpty) elementRef.current.addEventListener("click", props.onClick.get)
+    if (props.onRemove.nonEmpty) elementRef.current.addEventListener("sl-remove", props.onRemove.get)
   }
 
   override def componentWillUnmount(): Unit = {
-    if (props.onClick.isDefined) elementRef.current.removeEventListener("click", props.onClick.get)
-    if (props.onRemove.isDefined) elementRef.current.removeEventListener("sl-remove", props.onRemove.get)
+    if (props.onClick.nonEmpty) elementRef.current.removeEventListener("click", props.onClick.get)
+    if (props.onRemove.nonEmpty) elementRef.current.removeEventListener("sl-remove", props.onRemove.get)
   }
 
   def render() = {

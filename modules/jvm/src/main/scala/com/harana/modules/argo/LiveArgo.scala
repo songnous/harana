@@ -113,7 +113,7 @@ object LiveArgo {
     private def exists[A <: skuber.ObjectResource](namespace: String, name: String, client: Option[KubernetesClient])(implicit fmt: Format[A], rd: ResourceDefinition[A], lc: LoggingContext, ct: ClassTag[A]): Task[Boolean] =
       for {
         client        <- ZIO.fromOption(client).orElse(kubernetes.newClient)
-        exists        <- kubernetes.get[A](client, namespace, name).map(_.isDefined)
+        exists        <- kubernetes.get[A](client, namespace, name).map(_.nonEmpty)
       } yield exists
   }}
 }

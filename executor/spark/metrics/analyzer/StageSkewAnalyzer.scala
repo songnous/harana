@@ -63,7 +63,7 @@ class StageSkewAnalyzer extends AppAnalyzer {
     ).sum * totalCores
 
     val totalRuntime = ac.stageMap.map(x => {
-      if (x._2.stageMetrics.map.isDefinedAt(common.AggregateMetrics.executorRuntime)) {
+      if (x._2.stageMetrics.map.nonEmptyAt(common.AggregateMetrics.executorRuntime)) {
         x._2.stageMetrics.map(common.AggregateMetrics.executorRuntime).value
       } else {
         //making it zero so that rest of the calculation goes through
@@ -82,7 +82,7 @@ class StageSkewAnalyzer extends AppAnalyzer {
       .toBuffer
       .sortWith( _ < _ )
       .filter( x => ac.stageMap.get(x).get.endTime != 0)
-      .filter( x => ac.stageMap.get(x).get.stageMetrics.map.isDefinedAt(common.AggregateMetrics.executorRuntime))
+      .filter( x => ac.stageMap.get(x).get.stageMetrics.map.nonEmptyAt(common.AggregateMetrics.executorRuntime))
       .foreach(x => {
         val sts = ac.stageMap.get(x).get
         val duration = sts.duration().get
@@ -130,7 +130,7 @@ class StageSkewAnalyzer extends AppAnalyzer {
 
     ac.stageMap.keySet.toBuffer.sortWith( _ < _ )
       .filter( x => ac.stageMap(x).endTime > 0)
-      .filter( x => ac.stageMap.get(x).get.stageMetrics.map.isDefinedAt(common.AggregateMetrics.executorRuntime))
+      .filter( x => ac.stageMap.get(x).get.stageMetrics.map.nonEmptyAt(common.AggregateMetrics.executorRuntime))
       .foreach(x => {
       val sts =  ac.stageMap(x)
       val totalExecutorTime     = sts.stageMetrics.map(common.AggregateMetrics.executorRuntime).value

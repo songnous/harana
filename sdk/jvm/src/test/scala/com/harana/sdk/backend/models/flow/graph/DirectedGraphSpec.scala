@@ -109,7 +109,7 @@ class DirectedGraphSpec extends AnyFunSuite with Matchers with Serialization wit
     val graph = flow.graph.FlowGraph(nodes, edgesSet)
 
     val sortedOption = graph.topologicallySorted
-    assert(sortedOption.isDefined)
+    assert(sortedOption.nonEmpty)
     val sorted = sortedOption.get
     edges.foreach(n => checkIfInOrder(n._1, n._2, sorted))
   }

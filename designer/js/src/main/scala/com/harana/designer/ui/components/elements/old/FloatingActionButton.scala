@@ -27,9 +27,9 @@ import slinky.web.html.{i, _}
 			), data-"fab-label" := menuItem.label)(
 				a(href := menuItem.url, className := cssSet(
 					"btn btn-default btn-rounded btn-icon btn-float" -> true,
-					"dropdown-toggle" -> menuItem.menu.isDefined,
-					s"bg-${menuItem.color.get.value}" -> menuItem.color.isDefined
-				), data-"toggle" := (if (menuItem.menu.isDefined) "dropdown" else ""))(
+					"dropdown-toggle" -> menuItem.menu.nonEmpty,
+					s"bg-${menuItem.color.get.value}" -> menuItem.color.nonEmpty
+				), data-"toggle" := (if (menuItem.menu.nonEmpty) "dropdown" else ""))(
 					when(menuItem.icon, i(className := menuItem.icon.map { i => s"icon-$i" })),
 					when(menuItem.image, img(src := menuItem.image))
 				),
@@ -42,14 +42,14 @@ import slinky.web.html.{i, _}
 	def render() =
 		ul(className := cssSet(
 			"fab-menu" -> true,
-			s"fab-menu-${optEnum(props.menuOpenDirection)}" -> props.menuOpenDirection.isDefined,
-			s"fab-menu-${optEnum(props.menuPosition)}" -> props.menuPosition.isDefined,
-			s"fab-menu-${optEnum(props.menuPositionType)}" -> props.menuPositionType.isDefined
+			s"fab-menu-${optEnum(props.menuOpenDirection)}" -> props.menuOpenDirection.nonEmpty,
+			s"fab-menu-${optEnum(props.menuPosition)}" -> props.menuPosition.nonEmpty,
+			s"fab-menu-${optEnum(props.menuPositionType)}" -> props.menuPositionType.nonEmpty
 		), data-"fab-toggle" := optEnum(props.menuOpenBehaviour))(
 			li(
 				a(className := cssSet(
 					"fab-menu-btn btn btn-float btn-rounded btn-icon" -> true,
-					s"bg-${props.buttonColor.map(_.value).orNull}" -> props.buttonColor.isDefined,
+					s"bg-${props.buttonColor.map(_.value).orNull}" -> props.buttonColor.nonEmpty,
 
 				))(
 					i(className := props.buttonOpenIcon.getOrElse("icon-plus3")),

@@ -1,6 +1,7 @@
 package com.harana.modules.aws_s3
 
 import io.vertx.core.buffer.Buffer
+import io.vertx.core.streams.Pump
 import io.vertx.ext.reactivestreams.{ReactiveReadStream, ReactiveWriteStream}
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider
 import software.amazon.awssdk.regions.Region
@@ -82,7 +83,12 @@ object AwsS3 {
                        copySourceIfUnmodifiedSince: Option[Instant],
                        copySourceRange: Option[String]): Task[CopyPartResult]
 
-    def uploadPart(client: S3AsyncClient, bucket: String, key: String, uploadId: String, partNumber: Int, writeStream: ReactiveWriteStream[Buffer]): Task[String]
+    def uploadPart(client: S3AsyncClient,
+                   bucket: String,
+                   key: String,
+                   uploadId: String,
+                   partNumber: Int,
+                   writeStream: ReactiveWriteStream[Buffer]): Task[String]
 
     def listParts(client: S3AsyncClient, bucket: String, key: String, uploadId: String): Task[List[Part]]
 

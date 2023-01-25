@@ -39,12 +39,12 @@ object LiveBuildpack {
         cmd <- buildpackCmd
         args <- UIO {
           val args = mutable.ListBuffer[String]("build", "name", s"--path ${path.getAbsolutePath}")
-          if (builder.isDefined) args += s"--builder ${builder.get}"
+          if (builder.nonEmpty) args += s"--builder ${builder.get}"
           if (environmentVariables.nonEmpty) args += s"--env ${environmentVariables.map { case (k,v) => s"$k=$v" }.mkString(",")}"
           if (mountedVolumes.nonEmpty) args += s"--volume ${mountedVolumes.map { case (k,v) => s"$k:$v" }.mkString(",")}"
-          if (network.isDefined) args += s"--network ${network.get}"
-          if (publish.isDefined) args += s"--publish"
-          if (runImage.isDefined) args += s"--run-image ${runImage.get}s"
+          if (network.nonEmpty) args += s"--network ${network.get}"
+          if (publish.nonEmpty) args += s"--publish"
+          if (runImage.nonEmpty) args += s"--run-image ${runImage.get}s"
           args
         }
         cmd <- Command(cmd, args.toSeq: _*).lines.provide(Has(blocking))
@@ -62,8 +62,8 @@ object LiveBuildpack {
         cmd <- buildpackCmd
         args <- UIO {
           val args = mutable.ListBuffer[String]()
-          if (publish.isDefined) args += s"--publish"
-          if (runImage.isDefined) args += s"--run-image ${runImage.get}s"
+          if (publish.nonEmpty) args += s"--publish"
+          if (runImage.nonEmpty) args += s"--run-image ${runImage.get}s"
           args
         }
         cmd <- Command(cmd, args.toSeq: _*).lines.provide(Has(blocking))

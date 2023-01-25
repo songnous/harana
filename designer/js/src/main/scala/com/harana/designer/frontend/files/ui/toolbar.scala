@@ -53,7 +53,7 @@ object toolbar {
           onClick = Some(_ => Circuit.dispatch(PopToHome))
         ).withKey("pathtree-home")
       ) ++ (
-        if (state.item.isDefined && state.item.get.path.nonEmpty) {
+        if (state.item.nonEmpty && state.item.get.path.nonEmpty) {
           state.item.get.path.split("/").toList.filter(_.nonEmpty).dropRight(1).zipWithIndex.map { case (folder, index) =>
             MenuItem(
               label = folder,
@@ -67,7 +67,7 @@ object toolbar {
         )
     )
 
-  def edit(ref: ReactRef[Dialog.Def], state: State) = HeadingItem.IconMenu(("icomoon", "menu7"), i"files.menu.edit", className = Some("heading-icon"), enabled = state.selectedFile.isDefined, menuItems =
+  def edit(ref: ReactRef[Dialog.Def], state: State) = HeadingItem.IconMenu(("icomoon", "menu7"), i"files.menu.edit", className = Some("heading-icon"), enabled = state.selectedFile.nonEmpty, menuItems =
     if (state.selectedFile.isEmpty)
       List()
     else

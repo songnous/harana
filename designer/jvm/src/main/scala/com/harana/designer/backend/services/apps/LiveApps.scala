@@ -166,7 +166,7 @@ object LiveApps {
         ).fork
 
         existingService       <- kubernetes.get[Service](client, namespace, name)
-        service               =  if (existingService.isDefined) UIO(existingService.get) else
+        service               =  if (existingService.nonEmpty) UIO(existingService.get) else
                                   for {
                                     serviceSpec         <- UIO(Service(name, Map("app" -> name), app.httpPort))
                                     _                   <- kubernetes.create(client, namespace, serviceSpec)

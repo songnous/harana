@@ -37,17 +37,17 @@ import scala.scalajs.js
                    onFocus: Option[js.Any => Unit] = None)
 
   override def componentDidMount(): Unit = {
-    if (props.onBlur.isDefined) elementRef.current.addEventListener("sl-blur", props.onBlur.get)
-    if (props.onChange.isDefined) elementRef.current.addEventListener("sl-change", e => handleValue[String](e, props.onChange.get))
-    if (props.onClear.isDefined) elementRef.current.addEventListener("sl-clear", props.onClear.get)
-    if (props.onFocus.isDefined) elementRef.current.addEventListener("sl-focus", props.onFocus.get)
+    if (props.onBlur.nonEmpty) elementRef.current.addEventListener("sl-blur", props.onBlur.get)
+    if (props.onChange.nonEmpty) elementRef.current.addEventListener("sl-change", e => handleValue[String](e, props.onChange.get))
+    if (props.onClear.nonEmpty) elementRef.current.addEventListener("sl-clear", props.onClear.get)
+    if (props.onFocus.nonEmpty) elementRef.current.addEventListener("sl-focus", props.onFocus.get)
   }
 
   override def componentWillUnmount(): Unit = {
-    if (props.onBlur.isDefined) elementRef.current.removeEventListener("sl-blur", props.onBlur.get)
-    if (props.onChange.isDefined) elementRef.current.removeEventListener("sl-change", e => handleValue[String](e, props.onChange.get))
-    if (props.onClear.isDefined) elementRef.current.removeEventListener("sl-clear", props.onClear.get)
-    if (props.onFocus.isDefined) elementRef.current.removeEventListener("sl-focus", props.onFocus.get)
+    if (props.onBlur.nonEmpty) elementRef.current.removeEventListener("sl-blur", props.onBlur.get)
+    if (props.onChange.nonEmpty) elementRef.current.removeEventListener("sl-change", e => handleValue[String](e, props.onChange.get))
+    if (props.onClear.nonEmpty) elementRef.current.removeEventListener("sl-clear", props.onClear.get)
+    if (props.onFocus.nonEmpty) elementRef.current.removeEventListener("sl-focus", props.onFocus.get)
   }
 
   def blur() =
@@ -84,11 +84,11 @@ import scala.scalajs.js
     attrs += (ref := elementRef)
 
     val style = js.Dynamic.literal()
-    if (props.borderColor.isDefined) style.updateDynamic("--sl-input-border-color")(props.borderColor.get)
+    if (props.borderColor.nonEmpty) style.updateDynamic("--sl-input-border-color")(props.borderColor.get)
     add(attrs, Some(style), "style")
 
     val children = new ListBuffer[ReactElement]()
-    if (props.helpText.isDefined) children += div(slotAttr := "help-text")(props.helpText.get)
+    if (props.helpText.nonEmpty) children += div(slotAttr := "help-text")(props.helpText.get)
     props.options.foreach(children += _)
 
     CustomTag("sl-select")(attrs.toSeq: _*)(children.toSeq: _*)

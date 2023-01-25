@@ -4,6 +4,7 @@ import com.google.common.net.PercentEscaper
 import com.harana.s3.services.server.models.StorageType.{FOLDER, RELATIVE_PATH}
 import com.harana.s3.services.server.models._
 import com.harana.s3.utils.DateTime.{formatDate, iso8601DateFormat}
+import org.apache.commons.lang3.StringUtils
 import software.amazon.awssdk.services.s3.model._
 
 import java.time.Instant
@@ -161,7 +162,7 @@ object AwsXml {
     writeSimpleElement(xml, "Location", "http://Example-Bucket.s3.amazonaws.com/" + key)
     writeSimpleElement(xml, "Bucket", bucket)
     writeSimpleElement(xml, "Key", key)
-    if (eTag.isDefined) writeSimpleElement(xml, "ETag", maybeQuoteETag(eTag.get))
+    if (eTag.nonEmpty) writeSimpleElement(xml, "ETag", maybeQuoteETag(eTag.get))
     xml.writeEndElement()
     xml.flush()
   }
@@ -223,7 +224,7 @@ object AwsXml {
     writeSimpleElement(xml, "IsTruncated", "false")
 
     for (upload <- uploads) {
-      if (prefix.isEmpty || (prefix.isDefined && upload.key.startsWith(prefix.get))) {
+      if (prefix.isEmpty || (prefix.nonEmpty && upload.key.startsWith(prefix.get))) {
         xml.writeStartElement("Upload")
         writeSimpleElement(xml, "Key", upload.key)
         writeSimpleElement(xml, "UploadId", upload.uploadId())
@@ -268,7 +269,7 @@ object AwsXml {
       if (startAfter.isEmpty) xml.writeEmptyElement("StartAfter") else writeSimpleElement(xml, "StartAfter", encodeBlob(encodingType, startAfter.get))
     }
 
-    if (delimiter.isDefined) writeSimpleElement(xml, "Delimiter", encodeBlob(encodingType, delimiter.get))
+    if (delimiter.nonEmpty) writeSimpleElement(xml, "Delimiter", encodeBlob(encodingType, delimiter.get))
     if (encodingType.equals("url")) writeSimpleElement(xml, "EncodingType", encodingType)
 
 //    val nextMarker = s3Objects.nextMarker()
@@ -328,7 +329,7 @@ object AwsXml {
 
   private def writeSimpleElement(xml: XMLStreamWriter, elementName: String, characters: String) = {
     xml.writeStartElement(elementName)
-    xml.writeCharacters(characters)
+    xml.writeCharacters(if (characters == null) "" else characters)
     xml.writeEndElement()
   }
 

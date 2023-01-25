@@ -40,16 +40,16 @@ class FlowItemHandler extends ActionHandler(zoomTo(_.flowItemState)) {
     case OpenFlow(id) =>
       effectOnly(
         Effect.action(Reset) +
-        Effect(Http.getRelativeAs[Flow](s"/api/flows/$id").map(f => if (f.isDefined) UpdateFlow(f.get) else NoAction))
+        Effect(Http.getRelativeAs[Flow](s"/api/flows/$id").map(f => if (f.nonEmpty) UpdateFlow(f.get) else NoAction))
 //FIXME
-//        Effect(Http.getRelativeAs[FlowExecution](s"/api/execution/flows/progress/$id").map(fe => if (fe.isDefined) UpdateFlowExecution(fe.get) else NoAction))
+//        Effect(Http.getRelativeAs[FlowExecution](s"/api/execution/flows/progress/$id").map(fe => if (fe.nonEmpty) UpdateFlowExecution(fe.get) else NoAction))
       )
 
 
     case StartFlow =>
       updated(value.copy(nodes = value.nodes, isRunning = true, selectedTab = FlowTab.Run), Effect(
         Http.putRelativeAs[FlowExecution](s"/api/flows/start/${value.flow.map(_.id).getOrElse("")}", List(), "").map(fe =>
-          if (fe.isDefined) {
+          if (fe.nonEmpty) {
             Analytics.flowStart(value.flow.get.id, value.flow.get.graph.nodes.size)
             UpdateFlowExecution(fe.get)
           } else NoAction)
@@ -59,7 +59,7 @@ class FlowItemHandler extends ActionHandler(zoomTo(_.flowItemState)) {
     case StopFlow =>
       updated(value.copy(isRunning = false), Effect(
         Http.putRelativeAs[FlowExecution](s"/api/flows/stop/${value.flowExecution.map(_.id).getOrElse("")}", List(), "").map(fe =>
-          if (fe.isDefined) {
+          if (fe.nonEmpty) {
 
             val stopCause = fe.get.executionStatus match {
               case ExecutionStatus.Cancelled => "cancelled"
@@ -122,7 +122,7 @@ class FlowItemHandler extends ActionHandler(zoomTo(_.flowItemState)) {
             val `type` = "actionNode"
 
             //------------
-            require(value.flowInstance.isDefined)
+            require(value.flowInstance.nonEmpty)
 
             val position = value.flowInstance.get.project(
               new XYPosition {
@@ -159,7 +159,7 @@ class FlowItemHandler extends ActionHandler(zoomTo(_.flowItemState)) {
 
 
     case SaveFlow =>
-      if (value.flow.isDefined && value.isDirty) {
+      if (value.flow.nonEmpty && value.isDirty) {
         val updatedFlow = value.flow.get.copy(graph = FlowGraph(
           value.nodes.map(toNode).toSet,
           value.edges.map(toEdge).toSet
@@ -191,7 +191,7 @@ class FlowItemHandler extends ActionHandler(zoomTo(_.flowItemState)) {
       val actionIds = elements.filter(isNode).map(toNode(_).id)
       val edgeIds = elements.filter(isEdge).map(e => (toEdge(e).from.portIndex, toEdge(e).to.portIndex))
 
-      val selectedActionId = if (value.selectedActionId.isDefined && actionIds.contains(value.selectedActionId.get)) None else value.selectedActionId
+      val selectedActionId = if (value.selectedActionId.nonEmpty && actionIds.contains(value.selectedActionId.get)) None else value.selectedActionId
       val completedActionIds = value.completedActionIds.diff(actionIds)
       val activeActionIds = value.activeActionIds.diff(actionIds)
 
@@ -277,7 +277,7 @@ class FlowItemHandler extends ActionHandler(zoomTo(_.flowItemState)) {
 
     case UpdateParameterValues(actionId, values) =>
       val node = value.nodes.find(_.id == actionId.toString)
-      if (node.isDefined) {
+      if (node.nonEmpty) {
         val d = node.get.data
         val updatedData = new ActionNodeData {
           val id = node.get.id

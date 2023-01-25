@@ -5,11 +5,11 @@ import com.harana.sdk.shared.models.designer.data.DataSourceTypes.Cassandra._
 import com.harana.sdk.backend.models.flow.ActionType.{Inputs, Outputs}
 import com.harana.sdk.backend.models.flow.actiontypes.input.GetCassandraInfo
 import com.harana.sdk.backend.models.flow.execution.ExecutionError
-import com.harana.sdk.backend.models.flow.{Action, FlowContext}
+import com.harana.sdk.backend.models.flow.{ActionType, FlowContext}
 import com.harana.executor.spark.actiontypes.{dataSourceParameterValues, log}
 import zio.{IO, Task, UIO}
 
-class GetCassandra extends GetCassandraInfo with Action {
+class GetCassandra extends GetCassandraInfo with ActionType {
 
   def validate(parameters: ParameterValues, context: FlowContext): UIO[List[ExecutionError]] = null
 
@@ -24,52 +24,52 @@ class GetCassandra extends GetCassandraInfo with Action {
     conf.set("spark.cassandra.connection.ssl.enabled", dsParameterValues(sslParameter))
 
     val compression = dsParameterValues.opt(compressionParameter)
-    if (compression.isDefined) conf.set("spark.cassandra.connection.compression", compression.get)
+    if (compression.nonEmpty) conf.set("spark.cassandra.connection.compression", compression.get)
 
     val reconnectionDelayMSMin = dsParameterValues.opt(minReconnectionDelayParameter)
-    if (reconnectionDelayMSMin.isDefined) conf.set("spark.cassandra.connection.reconnectionDelayMS.min", reconnectionDelayMSMin.get)
+    if (reconnectionDelayMSMin.nonEmpty) conf.set("spark.cassandra.connection.reconnectionDelayMS.min", reconnectionDelayMSMin.get)
 
     val reconnectionDelayMSMax = dsParameterValues.opt(maxReconnectionDelayParameter)
-    if (reconnectionDelayMSMax.isDefined) conf.set("spark.cassandra.connection.reconnectionDelayMS.max", reconnectionDelayMSMax.get)
+    if (reconnectionDelayMSMax.nonEmpty) conf.set("spark.cassandra.connection.reconnectionDelayMS.max", reconnectionDelayMSMax.get)
 
     val connectionTimeout = dsParameterValues.opt(connectionTimeoutParameter)
-    if (connectionTimeout.isDefined) conf.set("spark.cassandra.connection.timeoutMS", connectionTimeout.get)
+    if (connectionTimeout.nonEmpty) conf.set("spark.cassandra.connection.timeoutMS", connectionTimeout.get)
 
     val readTimeout = dsParameterValues.opt(readTimeoutParameter)
-    if (readTimeout.isDefined) conf.set("spark.cassandra.read.timeoutMS", readTimeout.get)
+    if (readTimeout.nonEmpty) conf.set("spark.cassandra.read.timeoutMS", readTimeout.get)
 
     val queryRetryCount = dsParameterValues.opt(queryRetryCountParameter)
-    if (queryRetryCount.isDefined) conf.set("spark.cassandra.query.retry.count", queryRetryCount.get)
+    if (queryRetryCount.nonEmpty) conf.set("spark.cassandra.query.retry.count", queryRetryCount.get)
 
     val consistencyLevel = parameters.opt(consistencyLevelParameter)
-    if (consistencyLevel.isDefined) conf.set("spark.cassandra.input.consistency.level", consistencyLevel.get)
+    if (consistencyLevel.nonEmpty) conf.set("spark.cassandra.input.consistency.level", consistencyLevel.get)
 
     val concurrentReads = parameters.opt(concurrentReadsParameter)
-    if (concurrentReads.isDefined) conf.set("spark.cassandra.concurrent.reads", concurrentReads.get)
+    if (concurrentReads.nonEmpty) conf.set("spark.cassandra.concurrent.reads", concurrentReads.get)
 
     val fetchSizeInRows = parameters.opt(fetchSizeInRowsParameter)
-    if (fetchSizeInRows.isDefined) conf.set("spark.cassandra.input.fetch.sizeInRows", fetchSizeInRows.get)
+    if (fetchSizeInRows.nonEmpty) conf.set("spark.cassandra.input.fetch.sizeInRows", fetchSizeInRows.get)
 
     val recordMetrics = parameters.opt(recordMetricsParameter)
-    if (recordMetrics.isDefined) conf.set("spark.cassandra.input.metrics", fetchSizeInRows.get)
+    if (recordMetrics.nonEmpty) conf.set("spark.cassandra.input.metrics", fetchSizeInRows.get)
 
     val maxReadsPerSec = parameters.opt(maxReadsPerSecParameter)
-    if (maxReadsPerSec.isDefined) conf.set("spark.cassandra.input.readsPerSec", maxReadsPerSec.get)
+    if (maxReadsPerSec.nonEmpty) conf.set("spark.cassandra.input.readsPerSec", maxReadsPerSec.get)
 
     val splitSizeInMB = parameters.opt(splitSizeInMBParameter)
-    if (splitSizeInMB.isDefined) conf.set("spark.cassandra.input.split.sizeInMB", splitSizeInMB.get)
+    if (splitSizeInMB.nonEmpty) conf.set("spark.cassandra.input.split.sizeInMB", splitSizeInMB.get)
 
     val throughputMBPerSec = parameters.opt(throughputMBPerSecParameter)
-    if (throughputMBPerSec.isDefined) conf.set("spark.cassandra.input.throughputMBPerSec", throughputMBPerSec.get)
+    if (throughputMBPerSec.nonEmpty) conf.set("spark.cassandra.input.throughputMBPerSec", throughputMBPerSec.get)
 
     val directJoinSetting = parameters.opt(directJoinSettingParameter)
-    if (directJoinSetting.isDefined) conf.set("directJoinSetting", directJoinSetting.get)
+    if (directJoinSetting.nonEmpty) conf.set("directJoinSetting", directJoinSetting.get)
 
     val directJoinSizeRatio = parameters.opt(directJoinSizeRatioParameter)
-    if (directJoinSizeRatio.isDefined) conf.set("directJoinSizeRatio", directJoinSizeRatio.get.toString)
+    if (directJoinSizeRatio.nonEmpty) conf.set("directJoinSizeRatio", directJoinSizeRatio.get.toString)
 
     val ignoreMissingMetaColumns = parameters.opt(ignoreMissingMetaColumnsParameter)
-    if (ignoreMissingMetaColumns.isDefined) conf.set("ignoreMissingMetaColumns", ignoreMissingMetaColumns.get)
+    if (ignoreMissingMetaColumns.nonEmpty) conf.set("ignoreMissingMetaColumns", ignoreMissingMetaColumns.get)
 
     val outputDf = spark.read
       .format("cassandra")

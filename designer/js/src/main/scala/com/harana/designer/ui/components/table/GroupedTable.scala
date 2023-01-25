@@ -33,7 +33,7 @@ import scala.util.Random
 
   def radioRefs(rowGroups: List[RowGroup]) =
     rowGroups.zipWithIndex.flatMap { case (group, rowGroupIndex) =>
-      group.rows.zipWithIndex.filter(_._1.radio.isDefined).map { case (_, rowIndex) =>
+      group.rows.zipWithIndex.filter(_._1.radio.nonEmpty).map { case (_, rowIndex) =>
         s"$rowGroupIndex-$rowIndex" -> React.createRef[Radio.Def]
       }
     }.toMap
@@ -57,7 +57,7 @@ import scala.util.Random
           tbody(
             props.rowGroups.zipWithIndex.map { case (group, rowGroupIndex) =>
               Fragment(
-                when(group.title.isDefined)(tr(className := "active")(
+                when(group.title.nonEmpty)(tr(className := "active")(
                   td(key := s"$rowGroupIndex-${group.title.get}", colSpan := 5)(group.title.get)
                 )),
                 group.rows.zipWithIndex.map { case (row, rowIndex) => {
@@ -67,7 +67,7 @@ import scala.util.Random
                     setState(state.copy(rowClickCount = state.rowClickCount+1), () => {
                       setTimeout(200) {
                         if (state.rowClickCount == 1) if (state.radioRefs.contains(rowId)) state.radioRefs(rowId).current.click()
-                        if (state.rowClickCount == 2) if (row.onDoubleClick.isDefined) row.onDoubleClick.get.apply()
+                        if (state.rowClickCount == 2) if (row.onDoubleClick.nonEmpty) row.onDoubleClick.get.apply()
                         setState(state.copy(rowClickCount = 0))
                       }
                       ()
@@ -75,7 +75,7 @@ import scala.util.Random
                   }),
                     when(props.includeRadios)(
                       td(key := s"$rowId-radio")(
-                        when(row.radio.isDefined)(
+                        when(row.radio.nonEmpty)(
                           Radio(row.radio.get.copy(className = Some(s"table-radio-column ${row.radio.get.className.getOrElse("")}"))).withRef(state.radioRefs(rowId))
                         )
                       )
@@ -86,7 +86,7 @@ import scala.util.Random
                     when(props.includeMenus)(
                       td(key := s"$rowId-menu", className := s"col-md-2")(
 // FIXME: LazyLoad is abandoned
-//                        when(row.menu.isDefined)(
+//                        when(row.menu.nonEmpty)(
 //                          LazyLoad(height = 40, offset = 100, unmountIfInvisible = true, scrollContainer = s"#$tableId", scroll = true, children =
 //                            Dropdown(
 //                              button = Some(Button.Props(className = Some("list-dropdown"), icon = Some("icomoon","menu7"), slot = Some("trigger"), caret = Some(true))),

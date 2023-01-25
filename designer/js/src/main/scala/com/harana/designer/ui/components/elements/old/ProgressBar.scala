@@ -22,13 +22,13 @@ import scala.scalajs.js
 			className := cssSet(
 				"progress" -> true,
 				"progress-rounded" -> (optEnum(props.style) == ProgressBarStyle.Rounded.value),
-				props.style.getOrElse(ProgressBarStyle.Default).value -> props.style.isDefined
+				props.style.getOrElse(ProgressBarStyle.Default).value -> props.style.nonEmpty
 			)
 		)(
 			div(
 				className := cssSet(
 					"progress-bar" -> true,
-					("progress-" + props.size.getOrElse(Size.Mini).value) -> props.size.isDefined
+					("progress-" + props.size.getOrElse(Size.Mini).value) -> props.size.nonEmpty
 				),
 				style := js.Dynamic.literal(width = s"${props.percentage}%")
 			)(span(

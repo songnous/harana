@@ -5,13 +5,13 @@ import com.harana.sdk.shared.models.designer.data.DataSourceTypes.MongoDb.hostPa
 import com.harana.sdk.backend.models.flow.ActionType.{Inputs, Outputs}
 import com.harana.sdk.backend.models.flow.actiontypes.output.PutMongoDbInfo
 import com.harana.sdk.backend.models.flow.execution.ExecutionError
-import com.harana.sdk.backend.models.flow.{Action, FlowContext}
+import com.harana.sdk.backend.models.flow.{ActionType, FlowContext}
 import com.harana.executor.spark.actiontypes.{dataSourceParameterValues, log}
 import com.mongodb.spark.MongoSpark
 import com.mongodb.spark.config.{WriteConcernConfig, WriteConfig}
 import zio.{IO, Task, UIO}
 
-class PutMongoDb extends PutMongoDbInfo with Action {
+class PutMongoDb extends PutMongoDbInfo with ActionType {
 
   def validate(parameters: ParameterValues, context: FlowContext): UIO[List[ExecutionError]] = null
 

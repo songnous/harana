@@ -30,7 +30,7 @@ package object shoelace {
     )
 
   def add[A](listBuffer: ListBuffer[TagMod[_]], opt: Option[A], name: String) =
-    if (opt.isDefined)
+    if (opt.nonEmpty)
       opt.get match {
         case b: Boolean =>
           if (b) listBuffer += (CustomAttribute(name) := b)

@@ -50,7 +50,7 @@ object LiveKubernetes {
       
   
     def exists[O <: ObjectResource](client: KubernetesClient, namespace: String, name: String)(implicit fmt: Format[O], rd: ResourceDefinition[O], lc: LoggingContext): IO[K8SException, Boolean] =
-      ZIO.fromFuture { _ =>  client.usingNamespace(namespace).getOption(name)(fmt, rd, lc).map(_.isDefined) }.refineToOrDie[K8SException]
+      ZIO.fromFuture { _ =>  client.usingNamespace(namespace).getOption(name)(fmt, rd, lc).map(_.nonEmpty) }.refineToOrDie[K8SException]
 
 
     def save(client: KubernetesClient, namespace: String, crd: CustomResourceDefinition): IO[K8SException, CustomResourceDefinition] =
@@ -85,7 +85,7 @@ object LiveKubernetes {
 
 
     def podTerminating(client: KubernetesClient, namespace: String, name: String)(implicit fmt: Format[Pod], rd: ResourceDefinition[Pod], lc: LoggingContext): IO[K8SException, Boolean] =
-      get[Pod](client, namespace, name).map(pod => pod.flatMap(p => p.metadata.deletionTimestamp).isDefined)
+      get[Pod](client, namespace, name).map(pod => pod.flatMap(p => p.metadata.deletionTimestamp).nonEmpty)
 
 
     def waitForPodToTerminate(client: KubernetesClient, namespace: String, name: String)(implicit fmt: Format[Pod], rd: ResourceDefinition[Pod], lc: LoggingContext): IO[K8SException, Unit] =
@@ -213,15 +213,15 @@ object LiveKubernetes {
              tty: Boolean = false,
              close: Option[Promise[Unit]] = None)(implicit lc: LoggingContext): IO[K8SException, Unit] =
       for {
-        source    <- if (stdin.isDefined)
+        source    <- if (stdin.nonEmpty)
                       for {
                         publisher <- stdin.get.toPublisher
                         source    =  Some(Source.fromPublisher(publisher))
                       } yield source
                      else ZIO.none
 
-        sinkOut   =  if (stdout.isDefined) Some(Sink.foreach[String](s => Runtime.default.unsafeRun(stdout.get(s)))) else None
-        sinkErr   =  if (stderr.isDefined) Some(Sink.foreach[String](s => Runtime.default.unsafeRun(stderr.get(s)))) else None
+        sinkOut   =  if (stdout.nonEmpty) Some(Sink.foreach[String](s => Runtime.default.unsafeRun(stdout.get(s)))) else None
+        sinkErr   =  if (stderr.nonEmpty) Some(Sink.foreach[String](s => Runtime.default.unsafeRun(stderr.get(s)))) else None
 
         _         <- ZIO.fromFuture { _ =>
                        client.usingNamespace(namespace).exec(podName, command, containerName, source, sinkOut, sinkErr, tty, close)(lc)

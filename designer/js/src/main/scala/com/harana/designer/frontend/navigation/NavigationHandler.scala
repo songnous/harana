@@ -35,7 +35,7 @@ class NavigationHandler extends ActionHandler(zoomTo(_.navigationState)) {
       Analytics.checkout()
       updated(value.copy(openingCheckout = true),
         Effect(Http.getAsJson(s"https://${Globals.authDomain}/billing/checkout", List(Header("jwt", Globals.initialJwt))).map { json =>
-          if (json.isDefined) {
+          if (json.nonEmpty) {
             val stripe = Stripe(root.publishableKey.string.getOption(json.get).get)
             val serverOptions = StripeServerCheckoutOptions(root.sessionId.string.getOption(json.get).get)
             stripe.redirectToCheckout(serverOptions)

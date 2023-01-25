@@ -26,13 +26,13 @@ import scala.scalajs.js
     add(attrs, props.value, "value")
 
     val children = new ListBuffer[ReactElement]()
-    if (props.label.isDefined) children += props.label.get
+    if (props.label.nonEmpty) children += props.label.get
 
     val style = js.Dynamic.literal()
-    if (props.indicatorColor.isDefined) style.updateDynamic("--indicator-color")(props.indicatorColor.get)
-    if (props.trackColor.isDefined) style.updateDynamic("--track-color")(props.trackColor.get)
-    if (props.trackWidth.isDefined) style.updateDynamic("--track-width")(props.trackWidth.get)
-    if (props.size.isDefined) style.updateDynamic("--size")(props.size.get)
+    if (props.indicatorColor.nonEmpty) style.updateDynamic("--indicator-color")(props.indicatorColor.get)
+    if (props.trackColor.nonEmpty) style.updateDynamic("--track-color")(props.trackColor.get)
+    if (props.trackWidth.nonEmpty) style.updateDynamic("--track-width")(props.trackWidth.get)
+    if (props.size.nonEmpty) style.updateDynamic("--size")(props.size.get)
     add(attrs, Some(style), "style")
 
     CustomTag("sl-progress-ring")(attrs.toSeq: _*)(children.toSeq: _*)

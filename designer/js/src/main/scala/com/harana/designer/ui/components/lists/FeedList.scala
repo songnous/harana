@@ -21,7 +21,7 @@ import slinky.web.html._
 		ul(className := s"list-feed ${props.shape.value} ${props.style.value}")(
 			props.items.map { item =>
 				li(className := cssSet(
-					"border-" + props.lineColor.get.value -> props.lineColor.isDefined
+					"border-" + props.lineColor.get.value -> props.lineColor.nonEmpty
 				))(item)
 			}
 		)

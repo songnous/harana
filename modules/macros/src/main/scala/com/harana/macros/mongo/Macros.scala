@@ -520,7 +520,7 @@ object CodecGen {
             fields.zipWithIndex.flatMap { case (field, ix) =>
               if (field.option) {
                 List(
-                  q"""if(it.${field.name.toTermName}.isDefined) ${
+                  q"""if(it.${field.name.toTermName}.nonEmpty) ${
                     q"{..${
                       List(
                         q"""writer.writeName(${Literal(Constant(field.name.toString))})""",

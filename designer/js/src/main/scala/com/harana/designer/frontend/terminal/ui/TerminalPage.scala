@@ -20,10 +20,10 @@ import scala.scalajs.js
     val title = "Terminal"
 
     useEffect(() => {
-      if (state.selectedTerminal.isDefined && state.xTerminal.isEmpty)
+      if (state.selectedTerminal.nonEmpty && state.xTerminal.isEmpty)
         Circuit.dispatch(ConnectTerminal)
 
-        if (state.xTerminal.isDefined)
+        if (state.xTerminal.nonEmpty)
           state.xTerminal.get.focus()
     })
 

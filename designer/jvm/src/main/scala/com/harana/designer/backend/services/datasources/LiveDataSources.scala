@@ -71,7 +71,7 @@ object LiveDataSources {
         id                <- Task(rc.pathParam("id"))
         dataSourceTypes   <- cachedDataSourceTypes
         dataSourceType    =  dataSourceTypes.find(_.id == id)
-        response          =  if (dataSourceType.isDefined) Response.JSON(dataSourceType.get.asJson) else Response.Empty(statusCode = Some(404))
+        response          =  if (dataSourceType.nonEmpty) Response.JSON(dataSourceType.get.asJson) else Response.Empty(statusCode = Some(404))
       } yield response
 
 

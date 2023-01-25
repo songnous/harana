@@ -305,14 +305,14 @@ object LiveOkHttp {
           .url(urlBuilder.build())
           .headers(Headers.of(headers.asJava))
           .header("User-Agent", agent)
-        if (credentials.isDefined) requestBuilder.addHeader("Authorization", Credentials.basic(credentials.get._1, credentials.get._2))
+        if (credentials.nonEmpty) requestBuilder.addHeader("Authorization", Credentials.basic(credentials.get._1, credentials.get._2))
         if (json) requestBuilder.addHeader("accept", "application/json")
         requestBuilder
       }
 
 
     private def requestBody(body: Option[String], mimeType: Option[String]) =
-      if (body.isDefined)
+      if (body.nonEmpty)
         RequestBody.create(body.get, MediaType.parse(mimeType.get + "; charset=utf-8"))
       else
         RequestBody.create("", null)

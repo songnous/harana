@@ -4,12 +4,12 @@ import com.google.common.base.Strings
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
 import com.harana.modules.vertx.models._
-import com.harana.modules.vertx.models.streams.{BufferReadStream, GzipReadStream, InputStreamReadStream}
+import com.harana.modules.vertx.models.streams.{BufferReadStream, GzipReadStream, InputStreamReadStream, Pump}
 import io.vertx.core.buffer.Buffer
 import io.vertx.core.http.HttpHeaders.CONTENT_TYPE
 import io.vertx.core.http._
-import io.vertx.core.streams.Pump
 import io.vertx.core.{AsyncResult, Handler, Promise, Vertx => VX}
+import io.vertx.ext.reactivestreams.ReactiveWriteStream
 import io.vertx.ext.web.templ.handlebars.HandlebarsTemplateEngine
 import io.vertx.ext.web.{Router, RoutingContext}
 import org.apache.logging.log4j.LogManager
@@ -18,7 +18,7 @@ import org.pac4j.core.context.session.SessionStore
 import org.pac4j.vertx.auth.Pac4jAuthProvider
 import org.pac4j.vertx.handler.impl.{SecurityHandler, SecurityHandlerOptions}
 import zio.internal.Platform
-import zio.{Runtime, Task, ZIO}
+import zio.{Runtime, Task, UIO, ZIO}
 
 import java.io.{File, FileInputStream}
 import scala.jdk.CollectionConverters._
@@ -47,21 +47,40 @@ package object vertx {
                        micrometer: Micrometer.Service,
                        templateEngine: HandlebarsTemplateEngine,
                        rc: RoutingContext,
-                       handler: RoutingContext => Task[Response],
-                       log: Boolean = true,
-                       auth: Boolean = false): Unit =
+                       handler: RouteHandler,
+                       secured: Boolean = false,
+                       log: Boolean = true): Unit =
     runAsync(
       for {
         sample        <- micrometer.startTimer
         _             <- Task.when(log)(logger.info(s"${rc.request().method().name()}: ${rc.request().uri()}"))
-        _             <- handler(rc).map {
+        handler       <- handler match {
+                          case RouteHandler.Standard(handler) => handler(rc)
+
+                          case RouteHandler.FileUpload(handler) =>
+                            for {
+                              _         <- UIO(rc.request().setExpectMultipart(true))
+                              upload    <- Task.effectAsync[HttpServerFileUpload](cb => rc.request().uploadHandler((event: HttpServerFileUpload) => cb(Task(event))))
+                              handler   <- handler(rc, upload)
+                            } yield handler
+
+                          // Need to handle logic from here: https://github.com/vert-x3/vertx-web/blob/master/vertx-web/src/main/java/io/vertx/ext/web/handler/impl/BodyHandlerImpl.java
+                          case RouteHandler.Stream(handler) =>
+                            for {
+                              stream    <- UIO(ReactiveWriteStream.writeStream[Buffer](vx))
+                              _         =  rc.request().pause()
+                              pump      =  Pump(rc.request(), stream)
+                              handler   <- handler(rc, stream, pump)
+                            } yield handler
+                        }
+
+        _             = handler match {
                           case Response.Buffer(buffer, gzipped, _, _, _, _, _) =>
                             val brs = new BufferReadStream(buffer)
                             val rs = if (gzipped) new GzipReadStream(brs) else brs
-                            val pump = Pump.pump(rs, rc.response())
+                            val pump = Pump(rs, rc.response())
                             rs.endHandler(_ => rc.response().close())
                             pump.start()
-                            rs.resume()
 
                           case Response.Content(content, contentType, cookies, statusCode, cors, headers) =>
                             response(rc, contentType, cookies, statusCode, cors, headers).end(content)
@@ -73,44 +92,41 @@ package object vertx {
                             val r = response(rc, contentType, cookies, statusCode, cors, headers)
                             r.putHeader("Content-Disposition",  s"attachment; filename=$filename;")
                             r.setChunked(true)
-                            if (contentSize.isDefined) r.putHeader(HttpHeaders.CONTENT_LENGTH, contentSize.get.toString)
+                            if (contentSize.nonEmpty) r.putHeader(HttpHeaders.CONTENT_LENGTH, contentSize.get.toString)
                             val isrs = new InputStreamReadStream(inputStream, vx)
                             val rs = if (gzipped) new GzipReadStream(isrs) else isrs
-                            val pump = Pump.pump(rs, r)
+                            val pump = Pump(rs, r)
                             rs.endHandler(_ => {
                               r.end()
                               r.close()
                             })
                             pump.start()
-                            rs.resume()
 
                           case Response.InputStream(inputStream, gzipped, contentSize, contentType, cookies, statusCode, cors, headers) =>
                             val r = response(rc, contentType, cookies, statusCode, cors, headers)
                             r.setChunked(true)
                             val isrs = new InputStreamReadStream(inputStream, vx)
-                            if (contentSize.isDefined) r.putHeader(HttpHeaders.CONTENT_LENGTH, contentSize.get.toString)
+                            if (contentSize.nonEmpty) r.putHeader(HttpHeaders.CONTENT_LENGTH, contentSize.get.toString)
                             val rs = if (gzipped) new GzipReadStream(isrs) else isrs
-                            val pump = Pump.pump(rs, r)
+                            val pump = Pump(rs, r)
                             rs.endHandler(_ => {
                               r.end()
                               r.close()
                             })
                             pump.start()
-                            rs.resume()
 
                           case Response.JSON(json, contentType, cookies, statusCode, cors, headers) =>
                             response(rc, contentType, cookies, statusCode, cors, headers).end(json.toString)
 
                           case Response.ReadStream(stream, contentSize, contentType, cookies, statusCode, cors, headers) =>
                             val r = response(rc, contentType, cookies, statusCode, cors, headers)
-                            if (contentSize.isDefined) r.putHeader(HttpHeaders.CONTENT_LENGTH, contentSize.get.toString)
-                            val pump = Pump.pump(stream, r)
+                            if (contentSize.nonEmpty) r.putHeader(HttpHeaders.CONTENT_LENGTH, contentSize.get.toString)
+                            val pump = Pump(stream, r)
                             stream.endHandler(_ => {
                               r.end()
                               r.close()
                             })
                             pump.start()
-                            stream.resume()
 
                           case Response.Redirect(url, contentType, cookies, _, cors, headers) =>
                             response(rc, contentType, cookies, Some(302), cors, headers).putHeader("location", url).end()
@@ -148,13 +164,12 @@ package object vertx {
     r.setChunked(true)
     r.putHeader(HttpHeaders.CONTENT_LENGTH, file.length().toString)
     val rs = new InputStreamReadStream(new FileInputStream(file), vx)
-    val pump = Pump.pump(rs, r)
+    val pump = Pump(rs, r)
     rs.endHandler(_ => {
       r.end()
       r.close()
     })
     pump.start()
-    rs.resume()
   }
 
 
@@ -169,7 +184,7 @@ package object vertx {
            authorizerName: Option[String]): Unit = {
 
     var options = new SecurityHandlerOptions().setClients(clientNames)
-    if (authorizerName.isDefined) options = options.setAuthorizers(authorizerName.get)
+    if (authorizerName.nonEmpty) options = options.setAuthorizers(authorizerName.get)
     router.get(url).handler(new SecurityHandler(vx, sessionStore, config, authProvider, options))
     router.get(url).handler(setContentType(ContentType.HTML.value))
     router.get(url).handler(handler)
@@ -247,9 +262,9 @@ package object vertx {
                        cors: Boolean,
                        headers: Map[_ <: CharSequence, List[_ <: CharSequence]]) = {
     val response = rc.response()
-    if (contentType.isDefined) response.putHeader(CONTENT_TYPE, contentType.get.value)
+    if (contentType.nonEmpty) response.putHeader(CONTENT_TYPE, contentType.get.value)
     cookies.foreach(response.addCookie)
-    if (statusCode.isDefined) response.setStatusCode(statusCode.get)
+    if (statusCode.nonEmpty) response.setStatusCode(statusCode.get)
     if (cors) {
       val corsOrigin = rc.request().getHeader(HttpHeaders.ORIGIN)
       if (!Strings.isNullOrEmpty(corsOrigin) && corsRules.isOriginAllowed(corsOrigin)) {

@@ -30,7 +30,7 @@ import scala.scalajs.js
     add(attrs, props.value, "value")
 
     val children = new ListBuffer[ReactElement]()
-    if (props.label.isDefined) children += props.label.get
+    if (props.label.nonEmpty) children += props.label.get
 
     CustomTag("sl-qr-code")(attrs.toSeq: _*)(children.toSeq: _*)
   }

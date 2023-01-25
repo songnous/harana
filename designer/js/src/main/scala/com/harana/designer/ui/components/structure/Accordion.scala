@@ -23,7 +23,7 @@ import slinky.web.html._
 			"panel-group" -> true,
 			"content-group-lg" -> true,
 			"accordion-sortable" -> props.allowMove,
-			optEnum(props.expandControl) -> props.expandControl.isDefined))(
+			optEnum(props.expandControl) -> props.expandControl.nonEmpty))(
 				props.items.map { item =>
 					div(className := "panel panel-white")(
 						div(className := "panel-heading")(

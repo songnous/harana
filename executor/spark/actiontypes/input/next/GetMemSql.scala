@@ -3,11 +3,11 @@ package com.harana.executor.spark.actiontypes.input.next
 import com.harana.sdk.shared.models.common.Parameter.ParameterValues
 import com.harana.sdk.backend.models.flow.ActionType.{Inputs, Outputs}
 import com.harana.sdk.backend.models.flow.execution.ExecutionError
-import com.harana.sdk.backend.models.flow.{Action, FlowContext}
+import com.harana.sdk.backend.models.flow.{ActionType, FlowContext}
 import com.harana.sdk.backend.models.flow.actiontypes.input.next.GetMemSqlInfo
 import zio.{IO, UIO}
 
-class GetMemSql extends GetMemSqlInfo with Action {
+class GetMemSql extends GetMemSqlInfo with ActionType {
 
   def validate(parameters: ParameterValues, context: FlowContext): UIO[List[ExecutionError]] = null
 

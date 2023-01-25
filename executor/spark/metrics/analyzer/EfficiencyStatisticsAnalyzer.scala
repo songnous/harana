@@ -54,7 +54,7 @@ class EfficiencyStatisticsAnalyzer extends AppAnalyzer {
     //sum of millis used by all tasks of all jobs
     val inJobComputeMillisUsed  = ac.jobMap.values
       .filter(x => x.endTime > 0)
-      .filter(x => x.jobMetrics.map.isDefinedAt(common.AggregateMetrics.executorRuntime))
+      .filter(x => x.jobMetrics.map.nonEmptyAt(common.AggregateMetrics.executorRuntime))
       .map(x => x.jobMetrics.map(common.AggregateMetrics.executorRuntime).value)
       .sum
 

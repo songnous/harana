@@ -25,13 +25,13 @@ import scala.scalajs.js
                    onTabShow: Option[js.Any => Unit] = None)
 
   override def componentDidMount(): Unit = {
-    if (props.onTabHide.isDefined) elementRef.current.addEventListener("sl-tab-hide", props.onTabHide.get)
-    if (props.onTabShow.isDefined) elementRef.current.addEventListener("sl-tab-show", props.onTabShow.get)
+    if (props.onTabHide.nonEmpty) elementRef.current.addEventListener("sl-tab-hide", props.onTabHide.get)
+    if (props.onTabShow.nonEmpty) elementRef.current.addEventListener("sl-tab-show", props.onTabShow.get)
   }
 
   override def componentWillUnmount(): Unit = {
-    if (props.onTabHide.isDefined) elementRef.current.removeEventListener("sl-tab-hide", props.onTabHide.get)
-    if (props.onTabShow.isDefined) elementRef.current.removeEventListener("sl-tab-show", props.onTabShow.get)
+    if (props.onTabHide.nonEmpty) elementRef.current.removeEventListener("sl-tab-hide", props.onTabHide.get)
+    if (props.onTabShow.nonEmpty) elementRef.current.removeEventListener("sl-tab-show", props.onTabShow.get)
   }
 
   def show() =
@@ -48,8 +48,8 @@ import scala.scalajs.js
     attrs += (ref := elementRef)
 
     val style = js.Dynamic.literal()
-    if (props.indicatorColor.isDefined) style.updateDynamic("--indicator-color")(props.indicatorColor.get)
-    if (props.trackColor.isDefined) style.updateDynamic("--track-color")(props.trackColor.get)
+    if (props.indicatorColor.nonEmpty) style.updateDynamic("--indicator-color")(props.indicatorColor.get)
+    if (props.trackColor.nonEmpty) style.updateDynamic("--track-color")(props.trackColor.get)
     add(attrs, Some(style), "style")
 
     CustomTag("sl-tab-group")(attrs.toSeq: _*)(props.children: _*)

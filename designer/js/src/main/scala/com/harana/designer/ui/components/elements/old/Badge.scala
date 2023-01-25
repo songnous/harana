@@ -17,8 +17,8 @@ import slinky.web.html._
 	def render() = {
 		val cls = cssSet(
 			"badge" -> true,
-			s"bg-${props.color.map(_.value).orNull}" -> props.color.isDefined,
-			s"badge-${optEnum(props.style)}" -> props.style.isDefined
+			s"bg-${props.color.map(_.value).orNull}" -> props.color.nonEmpty,
+			s"badge-${optEnum(props.style)}" -> props.style.nonEmpty
 		)
 
 		val badge = span(className := cls)

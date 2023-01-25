@@ -24,9 +24,9 @@ object LiveGit {
       for {
         git <- UIO {
           val cloneCommand = JGit.cloneRepository().setDirectory(localDirectory).setURI(uri)
-          if (branch.isDefined) cloneCommand.setBranch(branch.get)
-          if (username.isDefined && password.isDefined) cloneCommand.setCredentialsProvider(new UsernamePasswordCredentialsProvider(username.get, password.get))
-          if (oauthToken.isDefined) cloneCommand.setCredentialsProvider(new UsernamePasswordCredentialsProvider(oauthToken.get, ""))
+          if (branch.nonEmpty) cloneCommand.setBranch(branch.get)
+          if (username.nonEmpty && password.nonEmpty) cloneCommand.setCredentialsProvider(new UsernamePasswordCredentialsProvider(username.get, password.get))
+          if (oauthToken.nonEmpty) cloneCommand.setCredentialsProvider(new UsernamePasswordCredentialsProvider(oauthToken.get, ""))
           cloneCommand.call()
         }
       } yield git
@@ -57,13 +57,13 @@ object LiveGit {
         prevCommit  <- mostRecentCommitHash(git)
         _           <- refresh(git)
         newCommit   <- mostRecentCommitHash(git)
-        changed     =  prevCommit.isEmpty && newCommit.isDefined || prevCommit.isDefined && newCommit.isDefined && prevCommit != newCommit
+        changed     =  prevCommit.isEmpty && newCommit.nonEmpty || prevCommit.nonEmpty && newCommit.nonEmpty && prevCommit != newCommit
       } yield changed
 
     def mostRecentCommitHash(git: JGit): Task[Option[String]] =
       for {
         it    <- Task(git.log.setMaxCount(1).call.iterator()).option
-        hash  = if (it.isDefined && it.get.hasNext) Some(it.get.next().getName) else None
+        hash  = if (it.nonEmpty && it.get.hasNext) Some(it.get.next().getName) else None
       } yield hash
 
     def filesForCommit(git: JGit, hash: String): Task[List[File]] = {
@@ -83,7 +83,7 @@ object LiveGit {
     def latestFiles(git: JGit): Task[List[File]] =
       for {
         hash    <- mostRecentCommitHash(git)
-        files   <- Task.ifM(UIO(hash.isDefined))(filesForCommit(git, hash.get), Task(List()))
+        files   <- Task.ifM(UIO(hash.nonEmpty))(filesForCommit(git, hash.get), Task(List()))
         _       <- logger.debug(s"Latest files end")
       } yield files
   }}

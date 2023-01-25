@@ -25,9 +25,9 @@ object LiveKind {
         _ <- logger.info(s"Creating Kind cluster: $name")
         args <- UIO {
           val args = mutable.ListBuffer[String]("create", "cluster", "--name", name)
-          if (cluster.isDefined) args += s"--config ${generateConfig(cluster.get)}"
-          if (kubeConfig.isDefined) args += s"--kubeconfig ${kubeConfig.get.getAbsolutePath}"
-          if (nodeImage.isDefined) args += s"--image ${nodeImage.get}"
+          if (cluster.nonEmpty) args += s"--config ${generateConfig(cluster.get)}"
+          if (kubeConfig.nonEmpty) args += s"--kubeconfig ${kubeConfig.get.getAbsolutePath}"
+          if (nodeImage.nonEmpty) args += s"--image ${nodeImage.get}"
           if (retainNodesOnFailure) args += s"--retain ${retainNodesOnFailure.toString}"
           if (waitForControlPlane > 0) args += s"--wait ${waitForControlPlane}s"
           args
@@ -42,7 +42,7 @@ object LiveKind {
         _ <- logger.info(s"Deleting Kind cluster: $name")
         args <- UIO {
           val args = mutable.ListBuffer[String]("delete", "cluster", "--name", name)
-          if (kubeConfig.isDefined) args += s"--kubeconfig ${kubeConfig.get.getAbsolutePath}"
+          if (kubeConfig.nonEmpty) args += s"--kubeconfig ${kubeConfig.get.getAbsolutePath}"
           args
         }
         _ <- Command("kind", args.toSeq: _*).lines.provide(Has(blocking))

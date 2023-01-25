@@ -27,7 +27,7 @@ object LiveEmail {
 
         val format =
           if (message.attachments.nonEmpty) MultiPart
-          else if (message.richMessage.isDefined) Rich
+          else if (message.richMessage.nonEmpty) Rich
           else Plain
 
         val commonsMail: Email = format match {
@@ -63,7 +63,7 @@ object LiveEmail {
           commonsMail.setSmtpPort(port)
           commonsMail.setFrom(message.from._1, message.from._2)
           commonsMail.setSubject(message.subject)
-          if (message.replyTo.isDefined) commonsMail.setReplyTo(List(new InternetAddress(message.replyTo.get)).asJava)
+          if (message.replyTo.nonEmpty) commonsMail.setReplyTo(List(new InternetAddress(message.replyTo.get)).asJava)
           commonsMail.send()
         }
       }

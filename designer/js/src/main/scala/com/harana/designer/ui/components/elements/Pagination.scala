@@ -29,8 +29,8 @@ import slinky.web.html.{li, _}
 	def render() =
 		ul(className := cssSet(
 			"pagination" -> true,
-			s"pagination-${props.size.map(_.value).orNull}" -> props.style.isDefined,
-			props.style.get.value -> props.style.isDefined
+			s"pagination-${props.size.map(_.value).orNull}" -> props.style.nonEmpty,
+			props.style.get.value -> props.style.nonEmpty
 		))(
 			li(className := s"${if (allowLeft) "disabled" else ""}")(
 				a(href := "#", onClick := (_ => move(-1)))("&lsaquo;")

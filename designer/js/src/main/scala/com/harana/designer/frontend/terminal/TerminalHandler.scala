@@ -71,7 +71,7 @@ class TerminalHandler extends ActionHandler(zoomTo(_.terminalState)) {
         fitAddon.fit()
 
         window.addEventListener("resize", (_: Event) =>
-          if (value.xTerminal.isDefined) {
+          if (value.xTerminal.nonEmpty) {
             val now = Instant.now()
             if (lastResize.isEmpty || (now.toEpochMilli - lastResize.get.toEpochMilli) > 250) {
               fitAddon.fit()
@@ -81,8 +81,8 @@ class TerminalHandler extends ActionHandler(zoomTo(_.terminalState)) {
           }
         )
 
-        EventBus.subscribe(s"terminal-$id-stdout", message => if (value.xTerminal.isDefined) value.xTerminal.get.write(message))
-        EventBus.subscribe(s"terminal-$id-stderr", message => if (value.xTerminal.isDefined) value.xTerminal.get.write(message))
+        EventBus.subscribe(s"terminal-$id-stdout", message => if (value.xTerminal.nonEmpty) value.xTerminal.get.write(message))
+        EventBus.subscribe(s"terminal-$id-stderr", message => if (value.xTerminal.nonEmpty) value.xTerminal.get.write(message))
 
         effectOnly(
           Effect.action(UpdateXTerminal(Some(xTerminal))) >>
@@ -147,7 +147,7 @@ class TerminalHandler extends ActionHandler(zoomTo(_.terminalState)) {
     case CopyFromTerminal =>
       effectOnly(
         Effect {
-          if (value.xTerminal.isDefined) {
+          if (value.xTerminal.nonEmpty) {
             val selection = value.xTerminal.get.getSelection()
             navigator.clipboard.writeText(selection).toFuture
           } else Future()

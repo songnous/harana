@@ -28,7 +28,7 @@ object menus {
      icon = ("icomoon", "menu7"),
      tooltip = i"files.menu.edit",
      className = Some("heading-icon"),
-     enabled = item.isDefined,
+     enabled = item.nonEmpty,
      menuItems = item.map(itemMenu(viewMode, itemType, _, allowEdit, allowDelete, deleteDialogRef, itemMenuItems)).getOrElse(List())
    )
 
@@ -42,11 +42,11 @@ object menus {
     val items = ListBuffer[ReactElement]()
     if (viewMode == ViewMode.List) {
       items += menus.openItem(item)
-      if (allowEdit || allowDelete || itemMenuItems.isDefined) items += MenuDivider()
+      if (allowEdit || allowDelete || itemMenuItems.nonEmpty) items += MenuDivider()
     }
     if (allowEdit) items += menus.editItem(itemType, item)
     if (allowDelete) items += menus.deleteItem(itemType, item, deleteDialogRef)
-    if (itemMenuItems.isDefined) items += itemMenuItems.get(item)
+    if (itemMenuItems.nonEmpty) items += itemMenuItems.get(item)
     items.toList
   }
 

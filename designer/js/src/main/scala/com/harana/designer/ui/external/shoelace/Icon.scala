@@ -27,13 +27,13 @@ import scala.scalajs.js
   override def shouldComponentUpdate(nextProps: Props, nextState: Unit) = false
 
   override def componentDidMount(): Unit = {
-    if (props.onError.isDefined) elementRef.current.addEventListener("sl-error", props.onError.get)
-    if (props.onLoad.isDefined) elementRef.current.addEventListener("sl-load", props.onLoad.get)
+    if (props.onError.nonEmpty) elementRef.current.addEventListener("sl-error", props.onError.get)
+    if (props.onLoad.nonEmpty) elementRef.current.addEventListener("sl-load", props.onLoad.get)
   }
 
   override def componentWillUnmount(): Unit = {
-    if (props.onError.isDefined) elementRef.current.removeEventListener("sl-error", props.onError.get)
-    if (props.onLoad.isDefined) elementRef.current.removeEventListener("sl-load", props.onLoad.get)
+    if (props.onError.nonEmpty) elementRef.current.removeEventListener("sl-error", props.onError.get)
+    if (props.onLoad.nonEmpty) elementRef.current.removeEventListener("sl-load", props.onLoad.get)
   }
 
   def render() = {

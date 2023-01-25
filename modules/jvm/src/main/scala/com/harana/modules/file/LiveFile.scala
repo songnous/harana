@@ -1,50 +1,34 @@
 package com.harana.modules.file
 
+import com.harana.modules.core.logger.Logger
 import com.harana.modules.file.File.Service
+import com.harana.modules.vertx.Vertx
+import com.harana.modules.vertx.models.streams.AsyncFileReadStream
 import io.vertx.core.buffer.Buffer
-import io.vertx.ext.reactivestreams.{ReactiveReadStream, ReactiveWriteStream}
+import io.vertx.core.streams.ReadStream
+import io.vertx.ext.reactivestreams.ReactiveWriteStream
 import one.jasyncfio.{AsyncFile, EventExecutor}
 import org.apache.commons.lang3.SystemUtils
 import org.reactivestreams.{Subscriber, Subscription}
 import zio.blocking._
 import zio.{Has, Task, ZIO, ZLayer}
 
-import java.nio.file.{Files, Path, Paths, StandardOpenOption}
-import java.nio.{ByteBuffer, ByteOrder}
+import java.io.FileOutputStream
+import java.nio.ByteBuffer
+import java.nio.file.{Files, Path}
 
 object LiveFile {
-  val layer = ZLayer.fromService { (blocking: Blocking.Service) => new Service {
+  val layer = ZLayer.fromServices { (blocking: Blocking.Service,
+                                     logger: Logger.Service) => new Service {
+
+    private val chunk_size = 1024
 
     private val eventExecutor =
       if (SystemUtils.IS_OS_LINUX) Some(EventExecutor.initDefault()) else None
 
-    def open(path: String) = {
-      if (eventExecutor.isDefined)
-        ZIO.fromFutureJava(AsyncFile.open(path, eventExecutor.get)).provide(Has(blocking)).map(Right(_))
-      else
-        Task(Left(Paths.get(path)))
-    }
 
-
-    def readStream(path: String, readStream: ReactiveReadStream[Buffer]) =
-      if (eventExecutor.isDefined)
-        Task {
-          val file = AsyncFile.open(path, eventExecutor.get).join()
-          var read = -1
-          val buffer = ByteBuffer.allocateDirect(Integer.BYTES).order(ByteOrder.nativeOrder())
-
-          while (read > 0 && read != -1) {
-            read = file.read(buffer).join()
-            readStream.onNext(Buffer.buffer(buffer.array()))
-          }
-          readStream.onComplete()
-          file.close().join()
-        }
-      else
-        Task {
-          readStream.onNext(Buffer.buffer(Files.readAllBytes(Paths.get(path))))
-          readStream.onComplete()
-        }
+    def readStream(path: String): Task[ReadStream[Buffer]] =
+      Task(new AsyncFileReadStream(path))
 
 
     def read(file: Either[Path, AsyncFile], buffer: ByteBuffer, position: Option[Int] = None) = {
@@ -57,32 +41,75 @@ object LiveFile {
           }
 
         case Right(file) =>
-          ZIO.fromFutureJava(if (position.isDefined) file.read(buffer, position.get) else file.read(buffer)).provide(Has(blocking)).map(_.toInt)
+          ZIO.fromFutureJava(if (position.nonEmpty) file.read(buffer, position.get) else file.read(buffer)).provide(Has(blocking)).map(_.toInt)
       }
     }
 
 
-    def writeStream(path: String, writeStream: ReactiveWriteStream[Buffer]) =
-      if (eventExecutor.isDefined)
-        Task {
-          val file = AsyncFile.open(path, eventExecutor.get).join()
-          writeStream.subscribe(new Subscriber[Buffer] {
-              override def onSubscribe(sub: Subscription) = {}
-              override def onNext(t: Buffer) = file.write(t.getByteBuf.nioBuffer())
-              override def onError(t: Throwable) = throw t
-              override def onComplete() = file.close()
-            })
-          file.close().join()
-        }
+    def writeStream(path: String, stream: ReactiveWriteStream[Buffer], length: Long, onStart: Option[() => Any] = None, onStop: Option[() => Any]) =
+      if (eventExecutor.nonEmpty)
+        for {
+          file    <- ZIO.fromCompletableFuture(AsyncFile.open(path, eventExecutor.get))
+          _       <- Task.effectAsync[Unit](cb =>
+                      stream.subscribe(new Subscriber[Buffer] {
+                        var subscription: Subscription = _
+                        var remaining = length
+
+                        override def onSubscribe(sub: Subscription) = {
+                          subscription = sub
+                          if (onStart.nonEmpty) onStart.get.apply()
+                          sub.request(if (remaining > chunk_size) chunk_size else remaining)
+                        }
+                        override def onNext(t: Buffer) = {
+                          file.write(t.getByteBuf.nioBuffer())
+                          remaining -= t.length()
+                          if (remaining == 0) {
+                            subscription.cancel()
+                            onComplete()
+                          } else
+                            subscription.request(if (remaining > chunk_size) chunk_size else remaining)
+                        }
+                        override def onError(t: Throwable) = throw t
+                        override def onComplete() = {
+                          file.close()
+                          if (onStop.nonEmpty) onStop.get.apply()
+                          cb(Task.unit)
+                        }
+                      })
+                  )
+        } yield ()
       else
-        Task(
-          writeStream.subscribe(new Subscriber[Buffer] {
-              override def onSubscribe(sub: Subscription) = {}
-              override def onNext(t: Buffer) = Files.write(Paths.get(path), t.getBytes, StandardOpenOption.APPEND)
-              override def onError(t: Throwable) = throw t
-              override def onComplete() = {}
-            })
-        )
+        Task.effectAsync[Unit] { cb =>
+          stream.subscribe(new Subscriber[Buffer] {
+            var subscription: Subscription = _
+            var remaining = length
+            var fos: FileOutputStream = _
+
+            override def onSubscribe(sub: Subscription) = {
+              subscription = sub
+              fos = new FileOutputStream(path)
+              if (onStart.nonEmpty) onStart.get.apply()
+              subscription.request(if (remaining > chunk_size) chunk_size else remaining)
+            }
+
+            override def onNext(t: Buffer) = {
+              fos.write(t.getBytes)
+              remaining -= t.length()
+              if (remaining == 0) {
+                subscription.cancel()
+                onComplete()
+              } else
+                subscription.request(if (remaining > chunk_size) chunk_size else remaining)
+            }
+
+            override def onError(t: Throwable) = cb(Task.fail(t))
+            override def onComplete() = {
+              fos.close()
+              if (onStop.nonEmpty) onStop.get.apply()
+              cb(Task.unit)
+            }
+          })
+        }
 
 
     def write(file: Either[Path, AsyncFile], buffer: ByteBuffer, position: Option[Int] = None) =
@@ -95,7 +122,7 @@ object LiveFile {
           }
 
         case Right(file) =>
-          ZIO.fromFutureJava(if (position.isDefined) file.write(buffer, position.get) else file.write(buffer)).provide(Has(blocking)).map(_.toInt)
+          ZIO.fromFutureJava(if (position.nonEmpty) file.write(buffer, position.get) else file.write(buffer)).provide(Has(blocking)).map(_.toInt)
       }
 
 

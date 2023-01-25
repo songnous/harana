@@ -16,19 +16,19 @@ object LiveOHC {
                          capacity: Option[Long] = None,
                          segmentCount: Option[Int] = None) = {
         val builder = OHCacheBuilder.newBuilder[K, V]()
-        if (hashTableSize.isDefined) builder.hashTableSize(hashTableSize.get)
-        if (chunkSize.isDefined) builder.chunkSize(chunkSize.get)
-        if (capacity.isDefined) builder.capacity(capacity.get)
-        if (segmentCount.isDefined) builder.segmentCount(segmentCount.get)
+        if (hashTableSize.nonEmpty) builder.hashTableSize(hashTableSize.get)
+        if (chunkSize.nonEmpty) builder.chunkSize(chunkSize.get)
+        if (capacity.nonEmpty) builder.capacity(capacity.get)
+        if (segmentCount.nonEmpty) builder.segmentCount(segmentCount.get)
         UIO(builder.build())
       }
 
       def put[K, V](cache: OHCache[K, V], key: K, value: V, expireAt: Option[Long] = None) =
-        UIO(if (expireAt.isDefined) cache.put(key, value, expireAt.get) else cache.put(key, value))
+        UIO(if (expireAt.nonEmpty) cache.put(key, value, expireAt.get) else cache.put(key, value))
 
 
       def putIfAbsent[K, V](cache: OHCache[K, V], key: K, value: V, expireAt: Option[Long] = None) =
-        UIO(if (expireAt.isDefined) cache.put(key, value, expireAt.get) else cache.putIfAbsent(key, value))
+        UIO(if (expireAt.nonEmpty) cache.put(key, value, expireAt.get) else cache.putIfAbsent(key, value))
 
 
       def putAll[K, V](cache: OHCache[K, V], values: Map[K, V]) =
@@ -36,7 +36,7 @@ object LiveOHC {
 
 
       def addOrReplace[K, V](cache: OHCache[K, V], key: K, oldValue: V, newValue: V, expireAt: Option[Long] = None) =
-        UIO(if (expireAt.isDefined) cache.addOrReplace(key, oldValue, newValue, expireAt.get) else cache.addOrReplace(key, oldValue, newValue))
+        UIO(if (expireAt.nonEmpty) cache.addOrReplace(key, oldValue, newValue, expireAt.get) else cache.addOrReplace(key, oldValue, newValue))
 
 
       def remove[K, V](cache: OHCache[K, V], key: K) =
@@ -61,7 +61,7 @@ object LiveOHC {
 
       def getWithLoader[K, V](cache: OHCache[K, V], key: K, loader: CacheLoader[K, V], expireAt: Option[Long] = None) =
         ZIO.fromFutureJava(
-          if (expireAt.isDefined) cache.getWithLoaderAsync(key, loader, expireAt.get) else cache.getWithLoaderAsync(key, loader)
+          if (expireAt.nonEmpty) cache.getWithLoaderAsync(key, loader, expireAt.get) else cache.getWithLoaderAsync(key, loader)
         ).provide(Has(blocking)).orDie
 
 

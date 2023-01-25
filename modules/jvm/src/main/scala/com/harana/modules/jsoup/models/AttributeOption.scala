@@ -29,6 +29,6 @@ object EmptyStringToOption {
 object AttributeRegexToOption {
   def apply(attributes: Attributes, nameRegex: Regex): Option[String] = {
     val atts = attributes.asList.asScala
-    atts.find(att => nameRegex.findFirstIn(att.getKey).isDefined).flatMap(att => EmptyStringToOption(att.getValue))
+    atts.find(att => nameRegex.findFirstIn(att.getKey).nonEmpty).flatMap(att => EmptyStringToOption(att.getValue))
   }
 }

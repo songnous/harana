@@ -38,7 +38,7 @@ abstract case class GridHandler[Entity <: Id, S](entityType: EntityType, state: 
   def onUpdateEntities(entities: List[Entity]): Option[Effect] = None
 
   def gridHandle: Option[PartialFunction[Any, ActionResult[State]]] = None
-  override def handle = if (gridHandle.isDefined) gridHandle.get.orElse(commonHandle) else commonHandle
+  override def handle = if (gridHandle.nonEmpty) gridHandle.get.orElse(commonHandle) else commonHandle
   def commonHandle: PartialFunction[Any, ActionResult[State]] = {
 
     case Init(preferences) =>

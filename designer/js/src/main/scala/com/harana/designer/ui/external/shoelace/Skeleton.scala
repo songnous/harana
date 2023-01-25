@@ -20,9 +20,9 @@ import scala.scalajs.js
     add(attrs, props.effect, "effect")
 
     val style = js.Dynamic.literal()
-    if (props.borderRadius.isDefined) style.updateDynamic("--border-radius")(props.borderRadius.get)
-    if (props.color.isDefined) style.updateDynamic("--color")(props.color.get)
-    if (props.sheenColor.isDefined) style.updateDynamic("--sheen-color")(props.sheenColor.get)
+    if (props.borderRadius.nonEmpty) style.updateDynamic("--border-radius")(props.borderRadius.get)
+    if (props.color.nonEmpty) style.updateDynamic("--color")(props.color.get)
+    if (props.sheenColor.nonEmpty) style.updateDynamic("--sheen-color")(props.sheenColor.get)
     add(attrs, Some(style), "style")
 
     CustomTag("sl-skeleton")(attrs.toSeq: _*)

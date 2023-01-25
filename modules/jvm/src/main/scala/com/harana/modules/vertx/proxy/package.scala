@@ -85,7 +85,7 @@ package object proxy {
       } else if (!Character.isISOControl(c) && !Character.isSpaceChar(c)) escape = false
 
       if (!escape) {
-        if (outBuf.isDefined) outBuf.get.append(c)
+        if (outBuf.nonEmpty) outBuf.get.append(c)
       }else {
         if (outBuf.isEmpty) {
           outBuf = Some(new StringBuffer(in.length() + 5 * 3))
@@ -96,7 +96,7 @@ package object proxy {
         }
       }
     }
-    if (outBuf.isDefined) outBuf.get else in
+    if (outBuf.nonEmpty) outBuf.get else in
   }
 
 

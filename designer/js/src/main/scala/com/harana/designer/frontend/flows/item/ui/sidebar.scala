@@ -50,7 +50,7 @@ package object sidebar {
               i18nPrefix = "flows",
               values = parameterValues,
               onChange = Some((parameter, value) =>
-                if (actionId.isDefined) Circuit.dispatch(UpdateParameterValues(actionId.get, parameterValues +~ (parameter, value)))
+                if (actionId.nonEmpty) Circuit.dispatch(UpdateParameterValues(actionId.get, parameterValues +~ (parameter, value)))
               ),
               isEditable = !isRunning,
               onEditing = Some(isEditing => Circuit.dispatch(UpdateIsEditingParameters(isEditing)))

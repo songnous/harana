@@ -22,8 +22,8 @@ import scala.scalajs.js
     add(attrs, props.vertical, "vertical")
 
     val style = js.Dynamic.literal()
-    if (props.color.isDefined) style.updateDynamic("--color")(props.color.get)
-    if (props.width.isDefined) style.updateDynamic("--width")(props.width.get)
+    if (props.color.nonEmpty) style.updateDynamic("--color")(props.color.get)
+    if (props.width.nonEmpty) style.updateDynamic("--width")(props.width.get)
     add(attrs, Some(style), "style")
 
     attrs += (ref := elementRef)

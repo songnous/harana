@@ -35,7 +35,7 @@ object LiveAWS {
 
     private def credentialsProvider =
       for {
-        provider <- if (credentialsProviderRef.get.isDefined) Task(credentialsProviderRef.get.get) else
+        provider <- if (credentialsProviderRef.get.nonEmpty) Task(credentialsProviderRef.get.get) else
           for {
             accessId                  <- config.secret("aws-access-id")
             secretKey                 <- config.secret("aws-secret-key")
@@ -56,7 +56,7 @@ object LiveAWS {
 
     private def iamClient =
       for {
-        client <- if (iamRef.get.isDefined) Task(iamRef.get.get) else
+        client <- if (iamRef.get.nonEmpty) Task(iamRef.get.get) else
                     for {
                       creds   <- credentialsProvider
                       iam     <- Task(IAM(creds))
@@ -67,7 +67,7 @@ object LiveAWS {
 
     private def s3Client =
       for {
-        client <- if (s3Ref.get.isDefined) Task(s3Ref.get.get) else
+        client <- if (s3Ref.get.nonEmpty) Task(s3Ref.get.get) else
                     for {
                       creds   <- credentialsProvider
                       region  <- config.secret("aws-region")
@@ -79,7 +79,7 @@ object LiveAWS {
 
     private def sesClient =
       for {
-        client <- if (sesRef.get.isDefined) Task(sesRef.get.get) else
+        client <- if (sesRef.get.nonEmpty) Task(sesRef.get.get) else
           for {
             creds     <- credentialsProvider
             region    <- config.secret("aws-region")

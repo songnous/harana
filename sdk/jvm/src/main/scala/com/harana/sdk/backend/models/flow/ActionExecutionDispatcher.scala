@@ -18,7 +18,7 @@ class ActionExecutionDispatcher {
 
   def executionEnded(workflowId: Id, nodeId: Id, result: Result) = {
     val promise = actionEndPromises.remove((workflowId, nodeId))
-    require(promise.isDefined)
+    require(promise.nonEmpty)
     promise.get.success(result)
   }
 }

@@ -55,8 +55,8 @@ object LiveSegment {
                               userId: String,
                               options: SegmentOptions) = {
         if (options.isAnonymous) builder.anonymousId(userId) else builder.userId(userId)
-        if (options.timestamp.isDefined) builder.timestamp(options.timestamp.get)
-        //if (options.integrationOptions.isDefined) builder.integrationOptions(options.integrationOptions.get._1, options.integrationOptions.get._2.asJava)
+        if (options.timestamp.nonEmpty) builder.timestamp(options.timestamp.get)
+        //if (options.integrationOptions.nonEmpty) builder.integrationOptions(options.integrationOptions.get._1, options.integrationOptions.get._2.asJava)
         builder.context(options.context.asJava)
         options.enabledIntegrations.foreach { i => builder.enableIntegration(i._1, i._2) }
         analytics.map(_.enqueue(builder))

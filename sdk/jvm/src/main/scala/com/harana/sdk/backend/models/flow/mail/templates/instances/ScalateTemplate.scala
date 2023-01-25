@@ -15,7 +15,7 @@ class ScalateTemplate(val scalateTemplateConfig: ScalateTemplateConfig) extends 
   object ScalateTemplateFinder extends DirectoryListFileFinder(scalateTemplateConfig.templatesDirs) {
 
     def filePredicate(f: File, desc: Option[String]) = {
-      require(desc.isDefined, "No template name given")
+      require(desc.nonEmpty, "No template name given")
       val filename = f.getName
       filename.startsWith(desc.get) &&
       ScalateTemplate.scalateExtensions.contains(FilenameUtils.getExtension(filename))

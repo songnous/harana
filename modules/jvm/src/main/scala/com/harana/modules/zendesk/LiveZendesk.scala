@@ -30,7 +30,7 @@ object LiveZendesk {
 
     private def client =
       for {
-        client         	<- if (clientRef.get.isDefined) UIO(clientRef.get.get) else
+        client         	<- if (clientRef.get.nonEmpty) UIO(clientRef.get.get) else
 														for {
 																url 					<- config.string("zendesk.url")
 																username 			<- config.secret("zendesk-username")

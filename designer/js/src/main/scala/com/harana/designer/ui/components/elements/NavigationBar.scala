@@ -27,8 +27,8 @@ import slinky.web.html._
 	val component = FunctionalComponent[Props] { props =>
 		div(className := cssSet(
 			"navbar" -> true,
-			s"navbar-${optEnum(props.position)}" -> props.position.isDefined,
-			s"navbar-${optEnum(props.size)}" -> props.size.isDefined,
+			s"navbar-${optEnum(props.position)}" -> props.position.nonEmpty,
+			s"navbar-${optEnum(props.size)}" -> props.size.nonEmpty,
 			s"${props.style.map { style => s"navbar-${style.value}" }.mkString(" ")}" -> true
 		))(
 			div(className := "navbar-header")(
@@ -48,15 +48,15 @@ import slinky.web.html._
 		))(
 			items.zipWithIndex.map { case (item, index) =>
 				li(key := index.toString, className := cssSet(
-					"active" -> (props.activeItem.isDefined && item._1.equals(props.activeItem.get)),
-					"dropdown-user" -> item._1.userTitle.isDefined
+					"active" -> (props.activeItem.nonEmpty && item._1.equals(props.activeItem.get)),
+					"dropdown-user" -> item._1.userTitle.nonEmpty
 				)) {
 					val cls = item._1.item.flatMap {
 						case (ItemType.Button(_), _) => Some("navbar-btn-link")
 						case (_, _) => None
 					}
 
-					if (item._2.isDefined)
+					if (item._2.nonEmpty)
 						Link(item._2.get, cls)(account(item._1))
 					else
 						account(item._1)
@@ -72,7 +72,7 @@ import slinky.web.html._
 						Dropdown(
 							element = Some(
 								div(CustomAttribute[String]("slot") := "trigger")(
-									if (item.userImage.isDefined) img(src := item.userImage.get) else Avatar(className = Some("avatar"), initials = item.userTitle.map(_.head.toString)),
+									if (item.userImage.nonEmpty) img(src := item.userImage.get) else Avatar(className = Some("avatar"), initials = item.userTitle.map(_.head.toString)),
 									span(title),
 									Button(className = Some("navigationbar-caret"), label = Some(""), caret = Some(true), `type` = Some("text"))
 								)

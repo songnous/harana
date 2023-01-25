@@ -47,11 +47,11 @@ object LiveDocker {
         //.withDockerHost(s"tcp://$dockerHost:$dockerPort")
         .withDockerTlsVerify(tlsVerify)
 
-      if (certPath.isDefined) config.withDockerCertPath(certPath.get)
-      if (registryUsername.isDefined) config.withRegistryUsername(registryUsername.get)
-      if (registryPassword.isDefined) config.withRegistryPassword(registryPassword.get)
-      if (registryEmail.isDefined) config.withRegistryEmail(registryEmail.get)
-      if (registryUrl.isDefined) config.withRegistryUrl(registryUrl.get)
+      if (certPath.nonEmpty) config.withDockerCertPath(certPath.get)
+      if (registryUsername.nonEmpty) config.withRegistryUsername(registryUsername.get)
+      if (registryPassword.nonEmpty) config.withRegistryPassword(registryPassword.get)
+      if (registryEmail.nonEmpty) config.withRegistryEmail(registryEmail.get)
+      if (registryUrl.nonEmpty) config.withRegistryUrl(registryUrl.get)
 
       DockerClientBuilder.getInstance(config.build())
         .withDockerCmdExecFactory(new OkHttpDockerCmdExecFactory()).build()
@@ -72,7 +72,7 @@ object LiveDocker {
     def auth(config: Option[AuthConfig]): IO[UnauthorizedException, String] =
       client.map { c =>
         val cmd = c.authCmd
-        if (config.isDefined) cmd.withAuthConfig(config.get)
+        if (config.nonEmpty) cmd.withAuthConfig(config.get)
         cmd.exec().getIdentityToken
       }
 
@@ -142,7 +142,7 @@ object LiveDocker {
     def copyResourceFromContainer(id: ContainerId, resource: String, hostPath: Option[String] = None): IO[NotFoundException, InputStream] =
       client.map { c =>
         val cmd = c.copyArchiveFromContainerCmd(id, resource)
-        if (hostPath.isDefined) cmd.withHostPath(hostPath.get)
+        if (hostPath.nonEmpty) cmd.withHostPath(hostPath.get)
         cmd.exec()
       }
 
@@ -150,7 +150,7 @@ object LiveDocker {
     def copyArchiveToContainer(id: ContainerId, tarInputStream: InputStream, remotePath: Option[String] = None): IO[NotFoundException, Unit] =
       client.map { c =>
         val cmd = c.copyArchiveToContainerCmd(id).withTarInputStream(tarInputStream)
-        if (remotePath.isDefined) cmd.withRemotePath(remotePath.get)
+        if (remotePath.nonEmpty) cmd.withRemotePath(remotePath.get)
         cmd.exec()
       }
 
@@ -158,7 +158,7 @@ object LiveDocker {
     def copyResourceToContainer(id: ContainerId, resource: String, remotePath: Option[String] = None): IO[NotFoundException, Unit] =
       client.map { c =>
         val cmd = c.copyArchiveToContainerCmd(id).withHostResource(resource)
-        if (remotePath.isDefined) cmd.withRemotePath(remotePath.get)
+        if (remotePath.nonEmpty) cmd.withRemotePath(remotePath.get)
         cmd.exec()
       }
 
@@ -200,8 +200,8 @@ object LiveDocker {
           .withInternal(internal)
           .withLabels(labels.asJava)
           .withOptions(options.asJava)
-        if (ipam.isDefined) cmd.withIpam(ipam.get)
-        if (name.isDefined) cmd.withName(name.get)
+        if (ipam.nonEmpty) cmd.withIpam(ipam.get)
+        if (name.nonEmpty) cmd.withName(name.get)
         cmd.exec().getId
       }
 
@@ -213,7 +213,7 @@ object LiveDocker {
     def createVolume(name: String, driver: Option[String] = None, driverOpts: Map[String, String] = Map()): IO[NotFoundException, String] =
       client.map { c =>
         val cmd = c.createVolumeCmd.withName(name).withDriverOpts(driverOpts.asJava)
-        if (driver.isDefined) cmd.withDriver(driver.get)
+        if (driver.nonEmpty) cmd.withDriver(driver.get)
         cmd.exec().getMountpoint
       }
 
@@ -221,8 +221,8 @@ object LiveDocker {
     def disconnectFromNetwork(networkId: Option[NetworkId] = None, containerId: Option[ContainerId] = None, force: Boolean = false): UIO[Unit] =
       client.map { c =>
         val cmd = c.disconnectFromNetworkCmd().withForce(force)
-        if (containerId.isDefined) cmd.withContainerId(containerId.get)
-        if (networkId.isDefined) cmd.withNetworkId(networkId.get)
+        if (containerId.nonEmpty) cmd.withContainerId(containerId.get)
+        if (networkId.nonEmpty) cmd.withNetworkId(networkId.get)
         cmd.exec()
       }
 
@@ -262,8 +262,8 @@ object LiveDocker {
           .withEventFilter(eventFilter: _*)
           .withImageFilter(imageFilter: _*)
           .withLabelFilter(labelFilter.asJava)
-        if (withSince.isDefined) cmd.withSince(withSince.get)
-        if (withUntil.isDefined) cmd.withUntil(withUntil.get)
+        if (withSince.nonEmpty) cmd.withSince(withSince.get)
+        if (withUntil.nonEmpty) cmd.withUntil(withUntil.get)
 
         cmd.exec(
           new ResultCallback[Event]() {
@@ -298,8 +298,8 @@ object LiveDocker {
           .withEnv(env.asJava)
           .withPrivileged(privileged)
           .withTty(tty)
-        if (containerId.isDefined) execCreateCmd = execCreateCmd.withContainerId(containerId.get)
-        if (user.isDefined) execCreateCmd = execCreateCmd.withUser(user.get)
+        if (containerId.nonEmpty) execCreateCmd = execCreateCmd.withContainerId(containerId.get)
+        if (user.nonEmpty) execCreateCmd = execCreateCmd.withUser(user.get)
         execCreateCmd.exec().getId
       }
 
@@ -313,7 +313,7 @@ object LiveDocker {
         q <- Queue.unbounded[Frame]
       } yield {
         val cmd = c.execStartCmd(id).withDetach(detach).withTty(tty)
-        if (stdIn.isDefined) cmd.withStdIn(stdIn.get)
+        if (stdIn.nonEmpty) cmd.withStdIn(stdIn.get)
         cmd.exec(
           new ResultCallback[Frame]() {
             override def onNext(item: Frame): Unit = q.offer(item)
@@ -381,9 +381,9 @@ object LiveDocker {
                   remoteAddrs: List[String] = List()): UIO[Unit] =
       client.map { c =>
         val cmd = c.joinSwarmCmd().withRemoteAddrs(remoteAddrs.asJava)
-        if (advertiseAddr.isDefined) cmd.withAdvertiseAddr(advertiseAddr.get)
-        if (joinToken.isDefined) cmd.withJoinToken(joinToken.get)
-        if (listenAddr.isDefined) cmd.withListenAddr(listenAddr.get)
+        if (advertiseAddr.nonEmpty) cmd.withAdvertiseAddr(advertiseAddr.get)
+        if (joinToken.nonEmpty) cmd.withJoinToken(joinToken.get)
+        if (listenAddr.nonEmpty) cmd.withListenAddr(listenAddr.get)
         cmd.exec()
       }
 
@@ -391,7 +391,7 @@ object LiveDocker {
     def killContainer(id: ContainerId, signal: Option[String] = None): IO[NotFoundException, Unit] =
       client.map { c =>
         val cmd = c.killContainerCmd(id)
-        if (signal.isDefined) cmd.withSignal(signal.get)
+        if (signal.nonEmpty) cmd.withSignal(signal.get)
         cmd.exec()
       }
 
@@ -459,11 +459,11 @@ null
         if (networkFilter.nonEmpty) cmd.withNetworkFilter(networkFilter.asJava)
         if (statusFilter.nonEmpty) cmd.withStatusFilter(statusFilter.asJava)
         if (volumeFilter.nonEmpty) cmd.withVolumeFilter(volumeFilter.asJava)
-        if (before.isDefined) cmd.withBefore(before.get)
-        if (exitedFilter.isDefined) cmd.withExitedFilter(exitedFilter.get)
-        if (limit.isDefined) cmd.withLimit(limit.get)
-        if (showAll.isDefined) cmd.withShowAll(showAll.get)
-        if (showSize.isDefined) cmd.withShowSize(showSize.get)
+        if (before.nonEmpty) cmd.withBefore(before.get)
+        if (exitedFilter.nonEmpty) cmd.withExitedFilter(exitedFilter.get)
+        if (limit.nonEmpty) cmd.withLimit(limit.get)
+        if (showAll.nonEmpty) cmd.withShowAll(showAll.get)
+        if (showSize.nonEmpty) cmd.withShowSize(showSize.get)
         cmd.exec().asScala.toList
       }
 
@@ -494,9 +494,9 @@ null
       client.map { c =>
         val cmd = c.listImagesCmd
           .withLabelFilter(labelFilter.asJava)
-        if (danglingFilter.isDefined) cmd.withDanglingFilter(danglingFilter.get)
-        if (imageNameFilter.isDefined) cmd.withImageNameFilter(imageNameFilter.get)
-        if (showAll.isDefined) cmd.withShowAll(showAll.get)
+        if (danglingFilter.nonEmpty) cmd.withDanglingFilter(danglingFilter.get)
+        if (imageNameFilter.nonEmpty) cmd.withImageNameFilter(imageNameFilter.get)
+        if (showAll.nonEmpty) cmd.withShowAll(showAll.get)
         cmd.exec().asScala.toList
       }
 
@@ -508,7 +508,7 @@ null
         val cmd = c.listNetworksCmd()
           .withIdFilter(idFilter: _*)
           .withNameFilter(nameFilter: _*)
-        if (filter.isDefined) cmd.withFilter(filter.get._1, filter.get._2.asJava)
+        if (filter.nonEmpty) cmd.withFilter(filter.get._1, filter.get._2.asJava)
         cmd.exec().asScala.toList
       }
 
@@ -554,7 +554,7 @@ null
     def listVolumes(includeDangling: Boolean = true, filter: Option[(String, List[String])] = None): IO[NotFoundException, List[InspectVolumeResponse]] =
       client.map { c =>
         val cmd = c.listVolumesCmd.withDanglingFilter(includeDangling)
-        if (filter.isDefined) cmd.withFilter(filter.get._1, filter.get._2.asJava)
+        if (filter.nonEmpty) cmd.withFilter(filter.get._1, filter.get._2.asJava)
         cmd.exec().getVolumes.asScala.toList
       }
 
@@ -575,12 +575,12 @@ null
         q <- Queue.unbounded[Frame]
       } yield {
         val cmd = c.logContainerCmd(id)
-        if (followStream.isDefined) cmd.withFollowStream(followStream.get)
-        if (since.isDefined) cmd.withSince(since.get)
-        if (stderr.isDefined) cmd.withStdErr(stderr.get)
-        if (stdout.isDefined) cmd.withStdOut(stdout.get)
-        if (tail.isDefined) cmd.withTail(tail.get)
-        if (timestamps.isDefined) cmd.withTimestamps(timestamps.get)
+        if (followStream.nonEmpty) cmd.withFollowStream(followStream.get)
+        if (since.nonEmpty) cmd.withSince(since.get)
+        if (stderr.nonEmpty) cmd.withStdErr(stderr.get)
+        if (stdout.nonEmpty) cmd.withStdOut(stdout.get)
+        if (tail.nonEmpty) cmd.withTail(tail.get)
+        if (timestamps.nonEmpty) cmd.withTimestamps(timestamps.get)
 
         cmd.exec(
           new ResultCallback[Frame]() {
@@ -608,13 +608,13 @@ null
         q <- Queue.unbounded[Frame]
       } yield {
         val cmd = c.logServiceCmd(id)
-        if (details.isDefined) cmd.withDetails(details.get)
-        if (follow.isDefined) cmd.withFollow(follow.get)
-        if (since.isDefined) cmd.withSince(since.get)
-        if (stderr.isDefined) cmd.withStderr(stderr.get)
-        if (stdout.isDefined) cmd.withStdout(stdout.get)
-        if (tail.isDefined) cmd.withTail(tail.get)
-        if (timestamps.isDefined) cmd.withTimestamps(timestamps.get)
+        if (details.nonEmpty) cmd.withDetails(details.get)
+        if (follow.nonEmpty) cmd.withFollow(follow.get)
+        if (since.nonEmpty) cmd.withSince(since.get)
+        if (stderr.nonEmpty) cmd.withStderr(stderr.get)
+        if (stdout.nonEmpty) cmd.withStdout(stdout.get)
+        if (tail.nonEmpty) cmd.withTail(tail.get)
+        if (timestamps.nonEmpty) cmd.withTimestamps(timestamps.get)
 
         cmd.exec(
           new ResultCallback[Frame]() {
@@ -642,13 +642,13 @@ null
         q <- Queue.unbounded[Frame]
       } yield {
         val cmd = c.logTaskCmd(id)
-        if (details.isDefined) cmd.withDetails(details.get)
-        if (follow.isDefined) cmd.withFollow(follow.get)
-        if (since.isDefined) cmd.withSince(since.get)
-        if (stderr.isDefined) cmd.withStderr(stderr.get)
-        if (stdout.isDefined) cmd.withStdout(stdout.get)
-        if (tail.isDefined) cmd.withTail(tail.get)
-        if (timestamps.isDefined) cmd.withTimestamps(timestamps.get)
+        if (details.nonEmpty) cmd.withDetails(details.get)
+        if (follow.nonEmpty) cmd.withFollow(follow.get)
+        if (since.nonEmpty) cmd.withSince(since.get)
+        if (stderr.nonEmpty) cmd.withStderr(stderr.get)
+        if (stdout.nonEmpty) cmd.withStdout(stdout.get)
+        if (tail.nonEmpty) cmd.withTail(tail.get)
+        if (timestamps.nonEmpty) cmd.withTimestamps(timestamps.get)
 
         cmd.exec(
           new ResultCallback[Frame]() {
@@ -677,8 +677,8 @@ null
               untilFilter: Option[String] = None): IO[NotFoundException, Long] =
       client.map { c =>
         val cmd = c.pruneCmd(pruneType).withLabelFilter(labelFilter: _*)
-        if (dangling.isDefined) cmd.withDangling(dangling.get)
-        if (untilFilter.isDefined) cmd.withUntilFilter(untilFilter.get)
+        if (dangling.nonEmpty) cmd.withDangling(dangling.get)
+        if (untilFilter.nonEmpty) cmd.withUntilFilter(untilFilter.get)
         cmd.exec().getSpaceReclaimed
       }
 
@@ -691,10 +691,10 @@ null
       client.flatMap { c =>
         IO.effectAsync { cb =>
           val cmd = c.pullImageCmd(repository)
-          if (authConfig.isDefined) cmd.withAuthConfig(authConfig.get)
-          if (platform.isDefined) cmd.withPlatform(platform.get)
-          if (registry.isDefined) cmd.withRegistry(registry.get)
-          if (tag.isDefined) cmd.withTag(tag.get)
+          if (authConfig.nonEmpty) cmd.withAuthConfig(authConfig.get)
+          if (platform.nonEmpty) cmd.withPlatform(platform.get)
+          if (registry.nonEmpty) cmd.withRegistry(registry.get)
+          if (tag.nonEmpty) cmd.withTag(tag.get)
 
           cmd.exec(
             new ResultCallback[PullResponseItem]() {
@@ -715,8 +715,8 @@ null
       client.flatMap { c =>
         IO.effectAsync { cb =>
           val cmd = c.pushImageCmd(name)
-          if (authConfig.isDefined) cmd.withAuthConfig(authConfig.get)
-          if (tag.isDefined) cmd.withTag(tag.get)
+          if (authConfig.nonEmpty) cmd.withAuthConfig(authConfig.get)
+          if (tag.nonEmpty) cmd.withTag(tag.get)
 
           cmd.exec(
             new ResultCallback[PushResponseItem]() {
@@ -765,7 +765,7 @@ null
     def restartContainer(id: ContainerId, timeout: Option[Int] = None): IO[DockerException, Unit] =
       client.map { c =>
         val cmd = c.restartContainerCmd(id)
-        if (timeout.isDefined) cmd.withTimeout(timeout.get)
+        if (timeout.nonEmpty) cmd.withTimeout(timeout.get)
         cmd.exec()
       }
 
@@ -773,7 +773,7 @@ null
     def saveImage(name: String, tag: Option[String] = None): IO[NotFoundException, InputStream] =
       client.map { c =>
         val cmd = c.saveImageCmd(name)
-        if (tag.isDefined) cmd.withTag(tag.get)
+        if (tag.nonEmpty) cmd.withTag(tag.get)
         cmd.exec()
       }
 
@@ -819,7 +819,7 @@ null
     def stopContainer(id: ContainerId, timeout: Option[Int] = None): IO[DockerException, Unit] =
       client.map { c =>
         val cmd = c.stopContainerCmd(id)
-        if (timeout.isDefined) cmd.withTimeout(timeout.get)
+        if (timeout.nonEmpty) cmd.withTimeout(timeout.get)
         cmd.exec()
       }
 
@@ -838,7 +838,7 @@ null
     def topContainer(id: ContainerId, psArgs: Option[String] = None): IO[NotFoundException, TopContainerResponse] =
       client.map { c =>
         val cmd = c.topContainerCmd(id)
-        if (psArgs.isDefined) cmd.withPsArgs(psArgs.get)
+        if (psArgs.nonEmpty) cmd.withPsArgs(psArgs.get)
         cmd.exec()
       }
 
@@ -860,16 +860,16 @@ null
                         memorySwap: Option[Long] = None): IO[NotFoundException, UpdateContainerResponse] =
       client.map { c =>
         val cmd = c.updateContainerCmd(id)
-        if (blkioWeight.isDefined) cmd.withBlkioWeight(blkioWeight.get)
-        if (cpuPeriod.isDefined) cmd.withCpuPeriod(cpuPeriod.get)
-        if (cpuQuota.isDefined) cmd.withCpuQuota(cpuQuota.get)
-        if (cpusetCpus.isDefined) cmd.withCpusetCpus(cpusetCpus.get)
-        if (cpusetMems.isDefined) cmd.withCpusetMems(cpusetMems.get)
-        if (cpuShares.isDefined) cmd.withCpuShares(cpuShares.get)
-        if (kernelMemory.isDefined) cmd.withKernelMemory(kernelMemory.get)
-        if (memory.isDefined) cmd.withMemory(memory.get)
-        if (memoryReservation.isDefined) cmd.withMemoryReservation(memoryReservation.get)
-        if (memorySwap.isDefined) cmd.withMemorySwap(memorySwap.get)
+        if (blkioWeight.nonEmpty) cmd.withBlkioWeight(blkioWeight.get)
+        if (cpuPeriod.nonEmpty) cmd.withCpuPeriod(cpuPeriod.get)
+        if (cpuQuota.nonEmpty) cmd.withCpuQuota(cpuQuota.get)
+        if (cpusetCpus.nonEmpty) cmd.withCpusetCpus(cpusetCpus.get)
+        if (cpusetMems.nonEmpty) cmd.withCpusetMems(cpusetMems.get)
+        if (cpuShares.nonEmpty) cmd.withCpuShares(cpuShares.get)
+        if (kernelMemory.nonEmpty) cmd.withKernelMemory(kernelMemory.get)
+        if (memory.nonEmpty) cmd.withMemory(memory.get)
+        if (memoryReservation.nonEmpty) cmd.withMemoryReservation(memoryReservation.get)
+        if (memorySwap.nonEmpty) cmd.withMemorySwap(memorySwap.get)
         cmd.exec()
       }
 
@@ -885,7 +885,7 @@ null
     def updateSwarmNode(id: SwarmId, spec: SwarmNodeSpec, version: Option[Long] = None): IO[NotFoundException, Unit] =
       client.map { c =>
         val cmd = c.updateSwarmNodeCmd().withSwarmNodeId(id).withSwarmNodeSpec(spec)
-        if (version.isDefined) cmd.withVersion(version.get)
+        if (version.nonEmpty) cmd.withVersion(version.get)
         cmd.exec()
       }
 

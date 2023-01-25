@@ -71,7 +71,7 @@ object LiveMicrometer {
 
     def registry: UIO[MeterRegistry] =
       UIO {
-        if (registryRef.get.isDefined) 
+        if (registryRef.get.nonEmpty)
           registryRef.get.get 
         else {
           val registry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT)

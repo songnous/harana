@@ -27,7 +27,7 @@ import scala.scalajs.js
 		)
 
 	def isTabActive(tab: Tab) =
-		props.activeTab.isDefined && props.activeTab.get.name == tab.name
+		props.activeTab.nonEmpty && props.activeTab.get.name == tab.name
 
 	def renderContent =
 		if (props.tabs.isEmpty)
@@ -37,8 +37,8 @@ import scala.scalajs.js
 				div(className := "tabbable sortable ui-sortable")(
 					ul(className := cssSet("nav nav-lg nav-tabs nav-justified"-> true, "no-margin" -> !props.padding))(
 						props.tabs.map { tab =>
-							li(className := cssSet("active" -> isTabActive(tab), "dropdown" -> tab.menu.isDefined), key := tab.name)(
-								a(onClick := (() => if (props.onChangeTab.isDefined) props.onChangeTab.get(tab)), className := "dropdown-toggle")(
+							li(className := cssSet("active" -> isTabActive(tab), "dropdown" -> tab.menu.nonEmpty), key := tab.name)(
+								a(onClick := (() => if (props.onChangeTab.nonEmpty) props.onChangeTab.get(tab)), className := "dropdown-toggle")(
 									when(tab.icon, Icon(Some(tab.icon.get._1), Some(tab.icon.get._2), name = tab.icon.get._1)),
 									span(className := "visible-xs-inline-block position-right")(tab.name),
 									if (props.tabs.isEmpty) span(className := "caret") else emptyElement
@@ -58,7 +58,7 @@ import scala.scalajs.js
 
 	def renderSection(section: SidebarSection) =
 		div(key := section.id, className := s"sidebar-category ${section.className.getOrElse("")}")(
-			if (section.title.isDefined)
+			if (section.title.nonEmpty)
 				Fragment(
 					div(className := "category-title")(
 						span(section.title),

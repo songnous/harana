@@ -21,11 +21,11 @@ import slinky.web.html._
 		div(className := cssSet(
 			"breadcrumb-line" -> true,
 			"breadcrumb-line-component content-group-lg" -> props.isComponent,
-			s"bg-${props.backgroundColor.map(_.value).orNull}" -> props.backgroundColor.isDefined
+			s"bg-${props.backgroundColor.map(_.value).orNull}" -> props.backgroundColor.nonEmpty
 		))(
 			ul(className := cssSet(
 				"breadcrumb" -> true,
-				s"breadcrumb-${props.arrowStyle.map(_.value).orNull}" -> props.arrowStyle.isDefined
+				s"breadcrumb-${props.arrowStyle.map(_.value).orNull}" -> props.arrowStyle.nonEmpty
 			))(
 				props.items.map { item =>
 					li(className := (if (item.isActive) "active" else ""))(

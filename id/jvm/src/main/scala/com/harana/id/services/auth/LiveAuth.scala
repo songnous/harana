@@ -57,7 +57,7 @@ object LiveAuth {
         updatedUser     <- updateUser(user, profile)
         timeout         <- config.int("web.jwt.sessionTimeout", 900)
         expires         =  Instant.now().plus(timeout, ChronoUnit.SECONDS)
-        claims          =  claimsForUser(updatedUser, expires, profile.isDefined)
+        claims          =  claimsForUser(updatedUser, expires, profile.nonEmpty)
         jwtJson         <- jwt.generate(claims)
         domain          <- config.env("harana_domain")
         jwtCookie       <- jwt.cookie(jwtJson, domain).map(_.setPath("/").setSameSite(CookieSameSite.LAX))
@@ -162,7 +162,7 @@ object LiveAuth {
         foundUser             <- mongo.findOne[User]("Users", Map("id" -> id)).mapError(e => new Exception(e.toString))
         highRiskUrl           <- config.string("signup.url.high")
 
-        _                     <- Task.when(foundUser.isDefined)(sendEmail(config, email, handlebars, logger, "confirm.email", foundUser.get.firstName, foundUser.get.lastName, foundUser.get.emailAddress))
+        _                     <- Task.when(foundUser.nonEmpty)(sendEmail(config, email, handlebars, logger, "confirm.email", foundUser.get.firstName, foundUser.get.lastName, foundUser.get.emailAddress))
         response              = if (foundUser.isEmpty) Response.Redirect(highRiskUrl) else Response.Empty()
       } yield response
 

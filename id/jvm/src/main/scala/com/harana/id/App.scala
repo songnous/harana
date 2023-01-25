@@ -111,7 +111,7 @@ object App extends CoreApp {
           commonProfile.addAttribute(CommonProfileDefinition.FAMILY_NAME, user.lastName)
           commonProfile.addAttribute(CommonProfileDefinition.EMAIL, user.emailAddress)
           commonProfile.addAttribute(CommonProfileDefinition.LOCALE, "en")
-          if (user.displayName.isDefined) commonProfile.addAttribute(CommonProfileDefinition.DISPLAY_NAME, user.displayName.get)
+          if (user.displayName.nonEmpty) commonProfile.addAttribute(CommonProfileDefinition.DISPLAY_NAME, user.displayName.get)
           Optional.of(commonProfile)
 
         case None =>

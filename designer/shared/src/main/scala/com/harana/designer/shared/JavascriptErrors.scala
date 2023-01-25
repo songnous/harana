@@ -18,7 +18,7 @@ case class JavaScriptError(message: String,
        |  jsTrace: $source:${num(jsPosition.line)}:${num(jsPosition.column)}
        |  trace: ${cleanPath(str(fileName))}:${num(position.line)}:${num(position.column)}
        |  url: $url
-       |  ${if (cause.isDefined) s"cause: ${cause.get}"}
+       |  ${if (cause.nonEmpty) s"cause: ${cause.get}"}
        |}
      """.stripMargin.trim
 }
@@ -32,7 +32,7 @@ case class JavaScriptCause(message: String,
        |  {
        |    message: $message
        |    trace:\n${trace.map(s => s"\t$s").mkString("\n")}
-       |    ${if (cause.isDefined) s"cause: ${cause.get}"}
+       |    ${if (cause.nonEmpty) s"cause: ${cause.get}"}
        |  }
      """.stripMargin.trim
 }

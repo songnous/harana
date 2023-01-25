@@ -15,7 +15,7 @@ package object output {
     val table = parameterValues.opt(actionType.tableParameter)
     val batchSize = parameterValues.opt(actionType.batchSizeParameter)
 
-    if (database.isDefined && table.isDefined) reader.option("dbtable", s"${database.get}.${table.get}")
-    if (batchSize.isDefined) reader.option("batchsize", batchSize.get)
+    if (database.nonEmpty && table.nonEmpty) reader.option("dbtable", s"${database.get}.${table.get}")
+    if (batchSize.nonEmpty) reader.option("batchsize", batchSize.get)
   }
 }

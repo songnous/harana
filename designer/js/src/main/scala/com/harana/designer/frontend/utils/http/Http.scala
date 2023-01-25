@@ -23,7 +23,7 @@ object Http {
   def getAsJson(url: String, headers: List[Header] = List()): Future[Option[Json]] = requestAsJson(url, Method.GET, headers)
 
   def deleteRelative(suffix: String, headers: List[Header] = List(), body: Option[String] = None): Future[Unit] =
-    if (body.isDefined) requestRelativeWithBody(suffix, Method.DELETE, headers, body.get) else requestRelative(suffix, Method.DELETE, headers).map(_ => ())
+    if (body.nonEmpty) requestRelativeWithBody(suffix, Method.DELETE, headers, body.get) else requestRelative(suffix, Method.DELETE, headers).map(_ => ())
 
   def post(url: String, headers: List[Header] = List(), body: String): Future[Unit] = requestWithBody(url, Method.POST, headers, body)
   def postAs[T](suffix: String, headers: List[Header] = List(), body: T)(implicit encoder: Encoder[T]): Future[Unit] = requestWithBody(suffix, Method.POST, headers, body.asJson.noSpaces)

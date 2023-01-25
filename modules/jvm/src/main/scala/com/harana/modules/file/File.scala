@@ -1,8 +1,10 @@
 package com.harana.modules.file
 
 import io.vertx.core.buffer.Buffer
+import io.vertx.core.streams.{ReadStream, WriteStream}
 import io.vertx.ext.reactivestreams.{ReactiveReadStream, ReactiveWriteStream}
 import one.jasyncfio.AsyncFile
+import org.reactivestreams.Publisher
 import zio.macros.accessible
 import zio.{Has, Task}
 
@@ -15,13 +17,11 @@ object File {
 
   trait Service {
 
-    def open(path: String): Task[Either[Path, AsyncFile]]
-
-    def readStream(path: String,  readStream: ReactiveReadStream[Buffer]): Task[Unit]
+    def readStream(path: String): Task[ReadStream[Buffer]]
 
     def read(file: Either[Path, AsyncFile], buffer: ByteBuffer, position: Option[Int] = None): Task[Int]
 
-    def writeStream(path: String, writeStream: ReactiveWriteStream[Buffer]): Task[Unit]
+    def writeStream(path: String, stream: ReactiveWriteStream[Buffer], length: Long, onStart: Option[() => Any] = None, onStop: Option[() => Any] = None): Task[Unit]
 
     def write(file: Either[Path, AsyncFile], buffer: ByteBuffer, position: Option[Int] = None): Task[Int]
 

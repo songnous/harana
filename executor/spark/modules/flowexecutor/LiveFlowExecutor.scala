@@ -87,7 +87,7 @@ object LiveFlowExecutor {
 
 
     private def executeAction(flowExecution: FlowExecution,
-                              action: Action,
+                              action: ActionType,
                               context: FlowContext,
                               inputLinks: List[Link],
                               completedActions: Map[ActionInfo.Id, Option[Outputs]],
@@ -113,7 +113,7 @@ object LiveFlowExecutor {
       }
 
 
-      private def failedAction(flowExecutionId: FlowExecutionId, action: Action, error: zio.Cause[Throwable], progressTimer: Fiber[Throwable, Long]): Task[Unit] =
+      private def failedAction(flowExecutionId: FlowExecutionId, action: ActionType, error: zio.Cause[Throwable], progressTimer: Fiber[Throwable, Long]): Task[Unit] =
         for {
           _                 <- logger.error(error.squash.getMessage)
           _                 =  MetricsManager.failAction(flowExecutionId, action.id, error.squash.getMessage)

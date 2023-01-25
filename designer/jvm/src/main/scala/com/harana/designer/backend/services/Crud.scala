@@ -26,7 +26,7 @@ object Crud {
   def userId(rc: RoutingContext, config: Config.Service, jwt: JWT.Service): Task[String] =
     for {
       authToken <- UIO(Option(rc.request.headers().get("auth-token")))
-      userId    <- if (authToken.isDefined)
+      userId    <- if (authToken.nonEmpty)
                       for {
                         secretToken  <- config.secret("harana-token")
                         _            <- Task.fail(new Exception("Auth token != Secret")).unless(authToken.get == secretToken)
@@ -106,7 +106,7 @@ object Crud {
       tag               <- Task(rc.queryParam("tag").asScala.headOption)
       userId            <- userId(rc, config, jwt)
 
-      filter            <- UIO(if (tag.isDefined) Map("$or" -> creatorOrPublic(userId), "tags" -> tag.get) else Map("$or" -> creatorOrPublic(userId)))
+      filter            <- UIO(if (tag.nonEmpty) Map("$or" -> creatorOrPublic(userId), "tags" -> tag.get) else Map("$or" -> creatorOrPublic(userId)))
       entities          <- mongo.findEquals[E](collection, filter).onError(e => logger.error(e.prettyPrint))
 
     } yield entities
@@ -136,7 +136,7 @@ object Crud {
       userId            <- userId(rc, config, jwt)
       entityName        =  ct.runtimeClass.getSimpleName
 
-      filter            <- UIO(if (tag.isDefined) Map("$or" -> creatorOrPublic(userId), "tags" -> tag.get) else Map("$or" -> creatorOrPublic(userId)))
+      filter            <- UIO(if (tag.nonEmpty) Map("$or" -> creatorOrPublic(userId), "tags" -> tag.get) else Map("$or" -> creatorOrPublic(userId)))
       entities          <- mongo.textSearchFindEquals[E](collection, query, filter).onError(e => logger.error(e.prettyPrint))
 
       _                 <- logger.debug(s"Search $entityName. Found: ${entities.size}")

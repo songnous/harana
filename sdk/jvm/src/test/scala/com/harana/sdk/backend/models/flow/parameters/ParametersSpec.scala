@@ -119,7 +119,7 @@ class ParametersSpec extends UnitSpec {
       }
     }
   }
-  "Parameters.isDefined" should {
+  "Parameters.nonEmpty" should {
     "return true" when {
       "param value is set" in {
         val p = WithParameters()

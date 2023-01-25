@@ -39,7 +39,7 @@ import scala.scalajs.js.timers._
 	private def onInput(text: String): Unit = {
 		val optText = if (text.isEmpty || text.length < props.minimumLength) None else Some(text)
 		if (props.debounce) {
-			if (timeout.isDefined) clearTimeout(timeout.get)
+			if (timeout.nonEmpty) clearTimeout(timeout.get)
 			timeout = Some(setTimeout(500) {
 				props.onSearch(optText)
 			})

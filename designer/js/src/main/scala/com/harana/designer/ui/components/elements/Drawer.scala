@@ -56,7 +56,7 @@ import scala.collection.mutable
 
 						pt.groups.flatMap(_.parameters).foreach { p =>
 							parameterRefs += (p -> React.createRef[ParameterItem.Def])
-							if (!updatedValues.contains(p) && p.default.isDefined)
+							if (!updatedValues.contains(p) && p.default.nonEmpty)
 								updatedValues +~= (p, p.default.get)
 						}
 						setState(State(Some(style), Some(updatedValues), title, width))
@@ -76,14 +76,14 @@ import scala.collection.mutable
 	}
 
 	def render() = {
-		if (state.style.isDefined)
+		if (state.style.nonEmpty)
 			state.style.get match {
 				case DrawerStyle.General(innerElement, okButtonLabel, onOk, showHeader) =>
 					ShoelaceDrawer(label = state.title, width = state.width, noHeader = Some(!showHeader))(
 						List(
 							innerElement,
 							ShoelaceButton(label = Some(okButtonLabel), slot = Some("footer"), `type` = Some("primary"), onClick = Some(_ => {
-								if (onOk.isDefined) onOk.get.apply()
+								if (onOk.nonEmpty) onOk.get.apply()
 								hide()
 							}))
 						)
@@ -138,11 +138,11 @@ import scala.collection.mutable
 					val buttons: List[ReactElement] = if (showCancelButton)
 						List(
 							ShoelaceButton(label = Some(i"common.dialog.cancel"), slot = Some("footer"), `type` = Some("default"), onClick = Some(_ => {
-								if (onCancel.isDefined) onCancel.get.apply()
+								if (onCancel.nonEmpty) onCancel.get.apply()
 								hide()
 							})),
 							ShoelaceButton(label = Some(i"common.dialog.save"), slot = Some("footer"), `type` = Some("success"), onClick = Some(_ => {
-								if (onOk.isDefined) {
+								if (onOk.nonEmpty) {
 //									parameterRefs.values.foreach(_.current.validate)
 									if (parameterRefs.forall(_._2.current.isValid)) {
 										onOk.get.apply(state.values.getOrElse(HMap.empty))
@@ -157,7 +157,7 @@ import scala.collection.mutable
 					else
 						List(
 							ShoelaceButton(label = Some(i"common.dialog.ok"), slot = Some("footer"), `type` = Some("success"), onClick = Some(_ => {
-								if (onOk.isDefined) onOk.get.apply(state.values.getOrElse(HMap.empty))
+								if (onOk.nonEmpty) onOk.get.apply(state.values.getOrElse(HMap.empty))
 								hide()
 							}))
 						)
@@ -192,7 +192,7 @@ import scala.collection.mutable
 			i18nPrefix = i18nPrefix,
 			value = values.underlying.get(p),
 			onChange = Some((_, value) => {
-				if (onChange.isDefined) onChange.get(p, value)
+				if (onChange.nonEmpty) onChange.get(p, value)
 			}),
 			autoFocus = autoFocus
 		).withRef(parameterRefs(p))

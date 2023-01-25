@@ -39,11 +39,11 @@ import scala.util.Random
 					)
 				)
 			),
-			div(className := "panel-body", onClick := (event => if (props.link.isDefined) openLink(props.link.get)))(
+			div(className := "panel-body", onClick := (event => if (props.link.nonEmpty) openLink(props.link.get)))(
 				h3(className := "heading-text")(span(props.title)),
 				props.subtitle
 			),
-			div(className := "container-fluid", onClick := (event => if (props.link.isDefined) openLink(props.link.get)))(
+			div(className := "container-fluid", onClick := (event => if (props.link.nonEmpty) openLink(props.link.get)))(
 				props.chartType match {
 
 					case Some(PillChartType.Bar) =>

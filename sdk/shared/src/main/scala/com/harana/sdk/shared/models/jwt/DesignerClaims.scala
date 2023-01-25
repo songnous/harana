@@ -33,15 +33,15 @@ case class DesignerClaims(
 
     def isTrialing: Boolean = {
       val now = Instant.now()
-      if (billing.subscriptionId.isDefined)
+      if (billing.subscriptionId.nonEmpty)
         true
       else
-        if (billing.trialStarted.isDefined && billing.trialEnded.isDefined)
+        if (billing.trialStarted.nonEmpty && billing.trialEnded.nonEmpty)
           billing.trialStarted.get.isBefore(now) && billing.trialEnded.get.isAfter(now)
         else
           false
     }
 
     def hasTrialEnded: Boolean =
-      billing.trialEnded.map(_.isBefore(Instant.now)).isDefined
+      billing.trialEnded.map(_.isBefore(Instant.now)).nonEmpty
 }

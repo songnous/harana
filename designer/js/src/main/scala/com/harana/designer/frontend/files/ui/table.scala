@@ -30,7 +30,7 @@ object table {
 
   def rows(state: State): List[Row] =
     state.files.zipWithIndex.map { case (file, index) =>
-      val selected = state.selectedFile.isDefined && state.selectedFile.get.equals(file)
+      val selected = state.selectedFile.nonEmpty && state.selectedFile.get.equals(file)
 
       Row(
         Map[Column, ReactElement](
@@ -46,7 +46,7 @@ object table {
 
   def selectRows(state: State): List[Row] =
     state.files.zipWithIndex.map { case (file, index) =>
-      val selected = state.selectedFile.isDefined && state.selectedFile.get.equals(file)
+      val selected = state.selectedFile.nonEmpty && state.selectedFile.get.equals(file)
 
       Row(
         Map[Column, ReactElement](

@@ -34,15 +34,15 @@ import scala.scalajs.js
                    onFocus: Option[js.Any => Unit] = None)
 
   override def componentDidMount(): Unit = {
-    if (props.onBlur.isDefined) elementRef.current.addEventListener("sl-blur", props.onBlur.get)
-    if (props.onChange.isDefined) elementRef.current.addEventListener("sl-change", e => handleValue[Double](e, props.onChange.get))
-    if (props.onFocus.isDefined) elementRef.current.addEventListener("sl-focus", props.onFocus.get)
+    if (props.onBlur.nonEmpty) elementRef.current.addEventListener("sl-blur", props.onBlur.get)
+    if (props.onChange.nonEmpty) elementRef.current.addEventListener("sl-change", e => handleValue[Double](e, props.onChange.get))
+    if (props.onFocus.nonEmpty) elementRef.current.addEventListener("sl-focus", props.onFocus.get)
   }
 
   override def componentWillUnmount(): Unit = {
-    if (props.onBlur.isDefined) elementRef.current.removeEventListener("sl-blur", props.onBlur.get)
-    if (props.onChange.isDefined) elementRef.current.removeEventListener("sl-change", e => handleValue[Double](e, props.onChange.get))
-    if (props.onFocus.isDefined) elementRef.current.removeEventListener("sl-focus", props.onFocus.get)
+    if (props.onBlur.nonEmpty) elementRef.current.removeEventListener("sl-blur", props.onBlur.get)
+    if (props.onChange.nonEmpty) elementRef.current.removeEventListener("sl-change", e => handleValue[Double](e, props.onChange.get))
+    if (props.onFocus.nonEmpty) elementRef.current.removeEventListener("sl-focus", props.onFocus.get)
   }
 
   def blur() =
@@ -71,11 +71,11 @@ import scala.scalajs.js
     attrs += (ref := elementRef)
 
     val style = js.Dynamic.literal()
-    if (props.thumbSize.isDefined) style.updateDynamic("--thumb-size")(props.thumbSize.get)
-    if (props.tooltipOffset.isDefined) style.updateDynamic("--tooltip-offset")(props.tooltipOffset.get)
-    if (props.trackColorActive.isDefined) style.updateDynamic("--track-color-active")(props.trackColorActive.get)
-    if (props.trackColorInactive.isDefined) style.updateDynamic("--track-color-inactive")(props.trackColorInactive.get)
-    if (props.trackHeight.isDefined) style.updateDynamic("--track-height")(props.trackHeight.get)
+    if (props.thumbSize.nonEmpty) style.updateDynamic("--thumb-size")(props.thumbSize.get)
+    if (props.tooltipOffset.nonEmpty) style.updateDynamic("--tooltip-offset")(props.tooltipOffset.get)
+    if (props.trackColorActive.nonEmpty) style.updateDynamic("--track-color-active")(props.trackColorActive.get)
+    if (props.trackColorInactive.nonEmpty) style.updateDynamic("--track-color-inactive")(props.trackColorInactive.get)
+    if (props.trackHeight.nonEmpty) style.updateDynamic("--track-height")(props.trackHeight.get)
     add(attrs, Some(style), "style")
 
     CustomTag("sl-range")(attrs.toSeq: _*)

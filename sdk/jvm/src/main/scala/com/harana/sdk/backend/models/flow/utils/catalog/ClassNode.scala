@@ -15,7 +15,7 @@ class ClassNode[O](override val javaType: Class[_]) extends TypeNode[O] {
   }
 
   override def descriptor = {
-    val parentName = if (parent.isDefined) Some(parent.get.fullName) else None
+    val parentName = if (parent.nonEmpty) Some(parent.get.fullName) else None
     ClassDescriptor(fullName, parentName, supertraits.values.map(_.fullName).toList)
   }
 }

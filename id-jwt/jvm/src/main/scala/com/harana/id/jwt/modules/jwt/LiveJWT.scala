@@ -47,7 +47,7 @@ object LiveJWT {
 
     def key: Task[RsaJsonWebKey] =
       for {
-        key            <- if (jwtKeyRef.get.isDefined) Task(jwtKeyRef.get.get) else
+        key            <- if (jwtKeyRef.get.nonEmpty) Task(jwtKeyRef.get.get) else
                               for {
                                 random                    <- Task(SecureRandom.getInstanceStrong)
                                 tokenLength               <- config.int("web.jwt.tokenLength", 64)
@@ -74,7 +74,7 @@ object LiveJWT {
 
     private def jwtCache =
       for {
-        jwtCache          <- if (jwtCacheRef.get.isDefined) Task(jwtCacheRef.get.get) else
+        jwtCache          <- if (jwtCacheRef.get.nonEmpty) Task(jwtCacheRef.get.get) else
                               for {
                                 timeout   <- config.int("web.jwt.sessionRefreshTimeout", 15)
                                 cache     <- cache.newCache[String, String](timeout * 60)
@@ -85,7 +85,7 @@ object LiveJWT {
 
     private def privateKey =
       for {
-        privateKey          <- if (privateKeyRef.get.isDefined) Task(privateKeyRef.get.get) else
+        privateKey          <- if (privateKeyRef.get.nonEmpty) Task(privateKeyRef.get.get) else
                                 for {
                                   pemStr                <- config.string("web.jwt.privateKeyFile", "private.pem")
                                   pem                   <- Task(Resources.toString(Resources.getResource(pemStr), StandardCharsets.UTF_8))

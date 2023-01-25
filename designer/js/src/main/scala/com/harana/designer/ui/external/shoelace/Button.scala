@@ -41,15 +41,15 @@ import scala.scalajs.js
                    onFocus: Option[js.Any => Unit] = None)
 
   override def componentDidMount(): Unit = {
-    if (props.onBlur.isDefined) elementRef.current.addEventListener("sl-blur", props.onBlur.get)
-    if (props.onClick.isDefined) elementRef.current.addEventListener("click", props.onClick.get)
-    if (props.onFocus.isDefined) elementRef.current.addEventListener("sl-focus", props.onFocus.get)
+    if (props.onBlur.nonEmpty) elementRef.current.addEventListener("sl-blur", props.onBlur.get)
+    if (props.onClick.nonEmpty) elementRef.current.addEventListener("click", props.onClick.get)
+    if (props.onFocus.nonEmpty) elementRef.current.addEventListener("sl-focus", props.onFocus.get)
   }
 
   override def componentWillUnmount(): Unit = {
-    if (props.onBlur.isDefined) elementRef.current.removeEventListener("sl-blur", props.onBlur.get)
-    if (props.onClick.isDefined) elementRef.current.removeEventListener("click", props.onClick.get)
-    if (props.onFocus.isDefined) elementRef.current.removeEventListener("sl-focus", props.onFocus.get)
+    if (props.onBlur.nonEmpty) elementRef.current.removeEventListener("sl-blur", props.onBlur.get)
+    if (props.onClick.nonEmpty) elementRef.current.removeEventListener("click", props.onClick.get)
+    if (props.onFocus.nonEmpty) elementRef.current.removeEventListener("sl-focus", props.onFocus.get)
   }
 
   def blur() =
@@ -79,14 +79,14 @@ import scala.scalajs.js
     attrs += (ref := elementRef)
 
     val children = new ListBuffer[ReactElement]()
-    if (props.iconPrefix.isDefined) children += icon("prefix", props.className, props.iconPrefix.get)
-    if (props.iconSuffix.isDefined) children += icon("suffix", props.className, props.iconSuffix.get)
-    if (props.icon.isDefined) children += icon("", props.iconClassName, props.icon.get)
-    if (props.content.isDefined) children += props.content.get
-    if (props.label.isDefined) children += props.label.get
-    if (props.badge.isDefined) children += Badge(props.badge.get)
+    if (props.iconPrefix.nonEmpty) children += icon("prefix", props.className, props.iconPrefix.get)
+    if (props.iconSuffix.nonEmpty) children += icon("suffix", props.className, props.iconSuffix.get)
+    if (props.icon.nonEmpty) children += icon("", props.iconClassName, props.icon.get)
+    if (props.content.nonEmpty) children += props.content.get
+    if (props.label.nonEmpty) children += props.label.get
+    if (props.badge.nonEmpty) children += Badge(props.badge.get)
 
     val button = CustomTag("sl-button")(attrs.toSeq: _*)(children.toSeq: _*)
-    if (props.tooltip.isDefined) Tooltip(props.tooltip.get)(List(button)) else button
+    if (props.tooltip.nonEmpty) Tooltip(props.tooltip.get)(List(button)) else button
   }
 }

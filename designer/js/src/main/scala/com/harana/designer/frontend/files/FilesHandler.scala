@@ -70,7 +70,7 @@ class FilesHandler extends ActionHandler(zoomTo(_.filesState)) {
         Effect.action(Block) >>
         Effect(
           Http.getRelativeAs[HaranaFile](s"/api/files/info?path=${value.pathStr}").flatMap { item =>
-            if (item.isDefined) {
+            if (item.nonEmpty) {
               item match {
                 case item if item.get.isFolder => Http.getRelativeAs[List[HaranaFile]](s"/api/files?path=${value.pathStr}").map(files => ActionBatch(UpdateItem(item), UpdateFiles(files.getOrElse(List()))))
                 case item if FileUtils.isTabular(item.get) => Http.getRelativeAs[PreviewData](s"/api/files/preview?path=${value.pathStr}").map(file => ActionBatch(UpdateItem(item), UpdateItemPreview(file.map(Right(_)))))
@@ -180,7 +180,7 @@ class FilesHandler extends ActionHandler(zoomTo(_.filesState)) {
 
     case DownloadContent(id) =>
       effectOnly(Effect(Http.getRelative(s"/api/content/$id").map(content =>
-        if (content.isDefined) UpdateContent(value.content + (id -> content.get)) else NoAction
+        if (content.nonEmpty) UpdateContent(value.content + (id -> content.get)) else NoAction
       )))
 
 

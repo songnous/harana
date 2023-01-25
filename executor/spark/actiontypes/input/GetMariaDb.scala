@@ -5,11 +5,11 @@ import com.harana.sdk.shared.models.designer.data.DataSourceTypes.MariaDb._
 import com.harana.sdk.backend.models.flow.ActionType.{Inputs, Outputs}
 import com.harana.sdk.backend.models.flow.actiontypes.input._
 import com.harana.sdk.backend.models.flow.execution.ExecutionError
-import com.harana.sdk.backend.models.flow.{Action, FlowContext}
+import com.harana.sdk.backend.models.flow.{ActionType, FlowContext}
 import com.harana.executor.spark.actiontypes.{dataSourceParameterValues, log, setCommonJdbcOptions}
 import zio.{IO, Task, UIO}
 
-class GetMariaDb extends GetMariaDbInfo with Action {
+class GetMariaDb extends GetMariaDbInfo with ActionType {
 
   def validate(parameters: ParameterValues, context: FlowContext): UIO[List[ExecutionError]] = null
 

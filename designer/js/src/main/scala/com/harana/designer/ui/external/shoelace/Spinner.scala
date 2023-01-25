@@ -19,10 +19,10 @@ import scala.scalajs.js
     add(attrs, props.className, "class")
 
     val style = js.Dynamic.literal()
-    if (props.indicatorColor.isDefined) style.updateDynamic("--indicator-color")(props.indicatorColor.get)
-    if (props.speed.isDefined) style.updateDynamic("--color")(props.speed.get)
-    if (props.trackColor.isDefined) style.updateDynamic("--track-color")(props.trackColor.get)
-    if (props.trackWidth.isDefined) style.updateDynamic("--track-width")(props.trackWidth.get)
+    if (props.indicatorColor.nonEmpty) style.updateDynamic("--indicator-color")(props.indicatorColor.get)
+    if (props.speed.nonEmpty) style.updateDynamic("--color")(props.speed.get)
+    if (props.trackColor.nonEmpty) style.updateDynamic("--track-color")(props.trackColor.get)
+    if (props.trackWidth.nonEmpty) style.updateDynamic("--track-width")(props.trackWidth.get)
     add(attrs, Some(style), "style")
 
     CustomTag("sl-spinner")(attrs.toSeq: _*)

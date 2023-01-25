@@ -19,12 +19,12 @@ package object input {
     val partitionLowerBound = parameterValues.opt(actionType.partitionLowerBoundParameter)
     val fetchSize = parameterValues.opt(actionType.fetchSizeParameter)
 
-    if (database.isDefined && table.isDefined) reader.option("dbtable", s"${database.get}.${table.get}")
-    if (query.isDefined) reader.option("query", query.get)
-    if (partitionColumn.isDefined) reader.option("partitionColumn", partitionColumn.get)
-    if (partitionLowerBound.isDefined) reader.option("lowerBound", partitionLowerBound.get)
-    if (partitionUpperBound.isDefined) reader.option("upperBound", partitionUpperBound.get)
-    if (fetchSize.isDefined) reader.option("fetchsize", partitionLowerBound.get)
+    if (database.nonEmpty && table.nonEmpty) reader.option("dbtable", s"${database.get}.${table.get}")
+    if (query.nonEmpty) reader.option("query", query.get)
+    if (partitionColumn.nonEmpty) reader.option("partitionColumn", partitionColumn.get)
+    if (partitionLowerBound.nonEmpty) reader.option("lowerBound", partitionLowerBound.get)
+    if (partitionUpperBound.nonEmpty) reader.option("upperBound", partitionUpperBound.get)
+    if (fetchSize.nonEmpty) reader.option("fetchsize", partitionLowerBound.get)
   }
 
   def readFile(spark: SparkSession, format: String, path: String): Task[DataFrame] =

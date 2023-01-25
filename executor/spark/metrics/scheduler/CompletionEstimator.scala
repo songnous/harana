@@ -131,7 +131,7 @@ object CompletionEstimator {
     var  timeForEmptyJobs:Long = 0
       jobTimeSpans.filter(x => x.stageMap.isEmpty)
       .foreach(x => {
-        if (x.duration().isDefined) {
+        if (x.duration().nonEmpty) {
           timeForEmptyJobs += x.duration().get
         }
       })

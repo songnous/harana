@@ -29,9 +29,9 @@ import scala.scalajs.js
                    onFocus: Option[js.Any => Unit] = None)
 
   override def componentDidMount(): Unit = {
-    if (props.onBlur.isDefined) elementRef.current.addEventListener("sl-blur", props.onBlur.get)
-    if (props.onChange.isDefined) elementRef.current.addEventListener("sl-change", e => handleChecked(e, props.onChange.get))
-    if (props.onFocus.isDefined) elementRef.current.addEventListener("sl-focus", props.onFocus.get)
+    if (props.onBlur.nonEmpty) elementRef.current.addEventListener("sl-blur", props.onBlur.get)
+    if (props.onChange.nonEmpty) elementRef.current.addEventListener("sl-change", e => handleChecked(e, props.onChange.get))
+    if (props.onFocus.nonEmpty) elementRef.current.addEventListener("sl-focus", props.onFocus.get)
   }
 
   def blur() =
@@ -59,12 +59,12 @@ import scala.scalajs.js
     attrs += (ref := elementRef)
 
     val children = new ListBuffer[ReactElement]()
-    if (props.label.isDefined) children += props.label.get
+    if (props.label.nonEmpty) children += props.label.get
 
     val style = js.Dynamic.literal()
-    if (props.thumbSize.isDefined) style.updateDynamic("--thumb-size")(props.thumbSize.get)
-    if (props.height.isDefined) style.updateDynamic("--height")(props.height.get)
-    if (props.width.isDefined) style.updateDynamic("--width")(props.width.get)
+    if (props.thumbSize.nonEmpty) style.updateDynamic("--thumb-size")(props.thumbSize.get)
+    if (props.height.nonEmpty) style.updateDynamic("--height")(props.height.get)
+    if (props.width.nonEmpty) style.updateDynamic("--width")(props.width.get)
     add(attrs, Some(style), "style")
 
 

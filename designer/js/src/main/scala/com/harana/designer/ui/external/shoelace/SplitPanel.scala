@@ -30,10 +30,10 @@ import scala.scalajs.js
     add(attrs, props.vertical, "vertical")
 
     val style = js.Dynamic.literal()
-    if (props.dividerHitArea.isDefined) style.updateDynamic("--divider-hit-area")(props.dividerHitArea.get)
-    if (props.dividerWidth.isDefined) style.updateDynamic("--divider-width")(props.dividerWidth.get)
-    if (props.minSize.isDefined) style.updateDynamic("--min")(props.minSize.get)
-    if (props.maxSize.isDefined) style.updateDynamic("--max")(props.maxSize.get)
+    if (props.dividerHitArea.nonEmpty) style.updateDynamic("--divider-hit-area")(props.dividerHitArea.get)
+    if (props.dividerWidth.nonEmpty) style.updateDynamic("--divider-width")(props.dividerWidth.get)
+    if (props.minSize.nonEmpty) style.updateDynamic("--min")(props.minSize.get)
+    if (props.maxSize.nonEmpty) style.updateDynamic("--max")(props.maxSize.get)
     add(attrs, Some(style), "style")
 
     CustomTag("sl-split-panel")(attrs.toSeq: _*)

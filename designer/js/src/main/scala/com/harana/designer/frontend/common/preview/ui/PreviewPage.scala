@@ -52,7 +52,7 @@ import slinky.web.html._
 
 
   def tablePreview: ReactElement = {
-    if (props.preview.isDefined) {
+    if (props.preview.nonEmpty) {
       val preview = props.preview.get.toOption.get
       val columns = preview.headers.map { header => new Column {
         override val key = header

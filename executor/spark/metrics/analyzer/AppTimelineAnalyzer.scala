@@ -21,14 +21,14 @@ class AppTimelineAnalyzer extends AppAnalyzer {
     jobids.map( x => (x, ac.jobMap(x)))
     .foreach( x => {
       val (jobID, jobTimeSpan) = x
-      if (jobTimeSpan.duration().isDefined) {
+      if (jobTimeSpan.duration().nonEmpty) {
         out.println(s"${pt(jobTimeSpan.startTime)} JOB ${jobID} started : duration ${pd(jobTimeSpan.duration().get)} ")
         printStageTimeLine(out, jobTimeSpan)
         val stageids = jobTimeSpan.stageMap.keySet.toBuffer.sortWith(_ < _)
         stageids.foreach(stageID => {
           val stageTimeSpan = jobTimeSpan.stageMap(stageID)
           val maxTaskTime = stageTimeSpan.stageMetrics.map(common.AggregateMetrics.executorRuntime).max
-          if (stageTimeSpan.duration().isDefined) {
+          if (stageTimeSpan.duration().nonEmpty) {
             out.println(s"${pt(stageTimeSpan.startTime)}      Stage ${stageID} started : duration ${pd(stageTimeSpan.duration().get)} ")
             out.println(s"${pt(stageTimeSpan.endTime)}      Stage ${stageID} ended : maxTaskTime ${maxTaskTime} taskCount ${stageTimeSpan.taskExecutionTimes.length}")
           }else {

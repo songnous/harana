@@ -30,7 +30,7 @@ import scala.scalajs.js
     }
   }
 
-  val isFull = props.size.isDefined && props.size.get.equals(ModalSize.Full)
+  val isFull = props.size.nonEmpty && props.size.get.equals(ModalSize.Full)
   val fullscreenContentStyle = if (isFull) literal("width" -> "100%", "height" -> "92%", "display" -> "table") else literal()
   val fullscreenBodyStyle = if (isFull) literal("width" -> "100%", "height" -> "100%", "display" -> "table-row") else literal()
 

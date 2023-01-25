@@ -34,7 +34,7 @@ class ExecutorWallclockAnalyzer extends AppAnalyzer {
         if (executorCount > 0) {
           val estimatedTime = scheduler.CompletionEstimator.estimateAppWallClockTimeWithJobLists(ac, executorCount, coresPerExecutor, appRealDuration)
           val utilization =
-            ac.stageMap.filter(x => x._2.stageMetrics.map.isDefinedAt(common.AggregateMetrics.executorRuntime))
+            ac.stageMap.filter(x => x._2.stageMetrics.map.nonEmptyAt(common.AggregateMetrics.executorRuntime))
               .map(x => x._2.stageMetrics.map(common.AggregateMetrics.executorRuntime).value).sum.toDouble * 100 / (estimatedTime * executorCount * coresPerExecutor)
           results.synchronized {
             results(percent) = f" Executor count ${executorCount}%5s  ($percent%3s%%) estimated time ${pd(estimatedTime)} and estimated cluster utilization ${utilization}%3.2f%%"

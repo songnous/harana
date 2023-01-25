@@ -54,7 +54,7 @@ package object components {
     if (condition) component else null
 
   @inline def when(condition: Option[_], component: => ReactElement): ReactElement =
-    if (condition.isDefined) component else null
+    if (condition.nonEmpty) component else null
 
   @inline def whenNot(condition: Option[_], component: => ReactElement): ReactElement =
     if (condition.isEmpty) component else null
@@ -63,7 +63,7 @@ package object components {
     condition.map(_.asInstanceOf[StatelessComponent].render()).getOrElse(null.asInstanceOf[ReactElement])
 
   @inline def whenRef[A <: js.Any](condition: Option[Ref[A]]) =
-    if (condition.isDefined) KeyAndRefAddingStage.build(condition.get) else null.asInstanceOf[ReactElement]
+    if (condition.nonEmpty) KeyAndRefAddingStage.build(condition.get) else null.asInstanceOf[ReactElement]
 
   @inline def whenNotRef[A <: js.Any](condition: Option[Ref[A]]) =
     if (condition.isEmpty) KeyAndRefAddingStage.build(condition.get) else null.asInstanceOf[ReactElement]

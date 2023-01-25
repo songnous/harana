@@ -133,7 +133,7 @@ object LiveAlertManager {
           "silenced" -> List(silenced.toString),
           "inhibited" -> List(inhibited.toString),
           "unprocessed" -> List(unprocessed.toString),
-          "filters" -> filters) ++ (if (receiver.isDefined) Map("receiver" -> List(receiver.get)) else Map())
+          "filters" -> filters) ++ (if (receiver.nonEmpty) Map("receiver" -> List(receiver.get)) else Map())
       )
 
     def saveAlerts(alerts: List[PostableAlert]): Task[Unit] =
@@ -150,7 +150,7 @@ object LiveAlertManager {
           "active" -> List(active.toString),
           "silenced" -> List(silenced.toString),
           "inhibited" -> List(inhibited.toString),
-          "filters" -> filters) ++ (if (receiver.isDefined) Map("receiver" -> List(receiver.get)) else Map())
+          "filters" -> filters) ++ (if (receiver.nonEmpty) Map("receiver" -> List(receiver.get)) else Map())
       )
 
 

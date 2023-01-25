@@ -29,7 +29,7 @@ object LiveSSH {
         entity                  <- Task.fromEither(decode[PasswordRequest](rc.body().asString))
         password                <- Task(new String(decoder.decode(entity.passwordBase64), StandardCharsets.UTF_8))
         user                    <- mongo.findOne[User]("Users", Map("emailAddress" -> entity.username, "password" -> Some(password)))
-        response                =  if (user.isDefined) Response.JSON(success) else Response.Empty(statusCode = Some(401))
+        response                =  if (user.nonEmpty) Response.JSON(success) else Response.Empty(statusCode = Some(401))
       } yield response
 
 
@@ -37,7 +37,7 @@ object LiveSSH {
       for {
         entity                  <- Task.fromEither(decode[PublicKeyRequest](rc.body().asString))
         user                    <- mongo.findOne[User]("Users", Map("emailAddress" -> entity.username, "publicKey" -> Some(entity.publicKey)))
-        response                =  if (user.isDefined) Response.JSON(success) else Response.Empty(statusCode = Some(401))
+        response                =  if (user.nonEmpty) Response.JSON(success) else Response.Empty(statusCode = Some(401))
       } yield response
 
 
@@ -45,7 +45,7 @@ object LiveSSH {
       for {
         entity                  <- Task.fromEither(decode[ConfigurationRequest](rc.body().asString))
         user                    <- mongo.findOne[User]("Users", Map("emailAddress" -> entity.username))
-        response                = if (user.isDefined) Response.JSON(success) else Response.Empty(statusCode = Some(401))
+        response                = if (user.nonEmpty) Response.JSON(success) else Response.Empty(statusCode = Some(401))
       } yield response
 
   }}

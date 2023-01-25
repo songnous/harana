@@ -224,5 +224,5 @@ object Analytics {
 
 
   private def date(time: Option[Instant]): String =
-    if (time.isDefined) dateFormatter.format(time.get) else ""
+    if (time.nonEmpty) dateFormatter.format(time.get) else ""
 }

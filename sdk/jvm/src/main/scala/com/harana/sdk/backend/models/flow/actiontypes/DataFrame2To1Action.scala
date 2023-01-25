@@ -12,7 +12,7 @@ trait DataFrame2To1Action {
     val leftSchema = leftDataFrameKnowledge.single.schema
     val rightSchema = rightDataFrameKnowledge.single.schema
 
-    if (leftSchema.isDefined && rightSchema.isDefined) {
+    if (leftSchema.nonEmpty && rightSchema.nonEmpty) {
       val (outputSchema, warnings) = inferSchema(leftSchema.get, rightSchema.get)
       (Knowledge(DataFrame.forInference(outputSchema)), warnings)
     } else

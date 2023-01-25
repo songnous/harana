@@ -27,11 +27,11 @@ import scala.scalajs.js
                    onChange: Option[js.Function1[Int, Unit]] = None)
 
   override def componentDidMount(): Unit = {
-    if (props.onChange.isDefined) elementRef.current.addEventListener("sl-change", e => handleValue[Int](e, props.onChange.get))
+    if (props.onChange.nonEmpty) elementRef.current.addEventListener("sl-change", e => handleValue[Int](e, props.onChange.get))
   }
 
   override def componentWillUnmount(): Unit = {
-    if (props.onChange.isDefined) elementRef.current.removeEventListener("sl-change", e => handleValue[Int](e, props.onChange.get))
+    if (props.onChange.nonEmpty) elementRef.current.removeEventListener("sl-change", e => handleValue[Int](e, props.onChange.get))
   }
 
   def blur() =
@@ -53,10 +53,10 @@ import scala.scalajs.js
     attrs += (ref := elementRef)
 
     val style = js.Dynamic.literal()
-    if (props.symbolColor.isDefined) style.updateDynamic("--symbol-color")(props.symbolColor.get)
-    if (props.symbolColorActive.isDefined) style.updateDynamic("--symbol-color-active")(props.symbolColorActive.get)
-    if (props.symbolSize.isDefined) style.updateDynamic("--symbol-size")(props.symbolSize.get)
-    if (props.symbolSpacing.isDefined) style.updateDynamic("--symbol-spacing")(props.symbolSpacing.get)
+    if (props.symbolColor.nonEmpty) style.updateDynamic("--symbol-color")(props.symbolColor.get)
+    if (props.symbolColorActive.nonEmpty) style.updateDynamic("--symbol-color-active")(props.symbolColorActive.get)
+    if (props.symbolSize.nonEmpty) style.updateDynamic("--symbol-size")(props.symbolSize.get)
+    if (props.symbolSpacing.nonEmpty) style.updateDynamic("--symbol-spacing")(props.symbolSpacing.get)
     add(attrs, Some(style), "style")
 
     CustomTag("sl-rating")(attrs.toSeq: _*)

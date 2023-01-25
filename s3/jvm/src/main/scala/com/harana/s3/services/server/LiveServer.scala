@@ -7,28 +7,29 @@ import com.harana.modules.core.logger.Logger
 import com.harana.modules.core.micrometer.Micrometer
 import com.harana.modules.mongo.Mongo
 import com.harana.modules.vertx.models.Response
-import com.harana.modules.vertx.{Vertx, corsRules}
-import com.harana.s3.models.{AccessPolicy, Credentials, Destination, PathMatch, Route}
+import com.harana.modules.vertx.{Vertx, VertxUtils, corsRules}
+import com.harana.s3.models._
 import com.harana.s3.services.router.Router
 import com.harana.s3.services.server.models._
 import com.harana.s3.services.server.s3_server._
 import com.harana.s3.utils.AwsXml
-import io.vertx.core.http.HttpHeaders
-import io.vertx.core.http.HttpMethod._
-import io.vertx.ext.web.RoutingContext
-import software.amazon.awssdk.services.s3.model.{BucketCannedACL, CompleteMultipartUploadRequest, ObjectCannedACL}
-import zio.{IO, Task, UIO, ZLayer}
 import io.circe.parser._
 import io.circe.syntax._
+import io.vertx.core.buffer.Buffer
+import io.vertx.core.http.HttpHeaders
+import io.vertx.core.http.HttpMethod._
+import io.vertx.core.streams.Pump
+import io.vertx.ext.reactivestreams.ReactiveWriteStream
+import io.vertx.ext.web.RoutingContext
+import software.amazon.awssdk.services.s3.model.{BucketCannedACL, CompleteMultipartUploadRequest, ObjectCannedACL}
 import zio.clock.Clock
-import zio._
 import zio.duration.durationInt
+import zio._
 
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 import java.time.Instant
 import java.util.Base64
-import java.util.concurrent.atomic.AtomicReference
 import scala.collection.mutable
 
 object LiveServer {
@@ -40,9 +41,9 @@ object LiveServer {
                                      router: Router.Service,
                                      vertx: Vertx.Service) => new Server.Service {
 
-      def s3Request(rc: RoutingContext): Task[Response] = {
+      def s3Request(rc: RoutingContext, stream: ReactiveWriteStream[Buffer], streamPump: Pump): Task[Response] = {
         val r = rc.request()
-        val path = r.uri().split("/", 3)
+        val path = r.path().split("/", 3)
         val bucket = path(1)
         val key = if (path.length > 2) Some(path(2)) else None
         val uploadId = r.getParam("uploadId")
@@ -106,14 +107,14 @@ object LiveServer {
               val listType = Option(r.getParam("list-type"))
               val continuationToken = Option(r.getParam("continuation-token"))
               val startAfter = Option(r.getParam("start-after"))
-              val isListV2 = listType.isDefined && listType.get.equals("2")
+              val isListV2 = listType.nonEmpty && listType.get.equals("2")
               val fetchOwner = !isListV2 && r.getParam("fetch  -owner").equals("true")
 
               val marker = {
                 if (listType.isEmpty) Option(r.getParam("marker"))
                 else if (isListV2) {
-                  if (continuationToken.isDefined && startAfter.isDefined) throw S3Exception(S3ErrorCode.INVALID_ARGUMENT)
-                  if (continuationToken.isDefined) continuationToken else startAfter
+                  if (continuationToken.nonEmpty && startAfter.nonEmpty) throw S3Exception(S3ErrorCode.INVALID_ARGUMENT)
+                  if (continuationToken.nonEmpty) continuationToken else startAfter
                 } else throw S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
               }
 
@@ -179,19 +180,19 @@ object LiveServer {
                 eTag                = Option(attributes.eTag()).map(maybeQuoteETag)
                 lastModified        = Option(attributes.lastModified())
                 size                = Option(attributes.objectSize())
-                storageClass        = Option(attributes.storageClass().name())
+                storageClass        = Option(attributes.storageClass()).map(_.name())
 
                 response = (eTag, lastModified) match {
-                  case (Some(eTag), _) if ifMatch.isDefined && !ifMatch.get.equals(eTag) =>
+                  case (Some(eTag), _) if ifMatch.nonEmpty && !ifMatch.get.equals(eTag) =>
                     throw S3Exception(S3ErrorCode.PRECONDITION_FAILED)
 
-                  case (Some(eTag), _) if ifNoneMatch.isDefined && ifNoneMatch.get.equals(eTag) =>
+                  case (Some(eTag), _) if ifNoneMatch.nonEmpty && ifNoneMatch.get.equals(eTag) =>
                     Response.Empty(statusCode = Some(304))
 
-                  case (_, Some(lastModified)) if ifModifiedSince.isDefined && lastModified.compareTo(Instant.ofEpochMilli(ifModifiedSince.get)) <= 0 =>
+                  case (_, Some(lastModified)) if ifModifiedSince.nonEmpty && lastModified.compareTo(Instant.ofEpochMilli(ifModifiedSince.get)) <= 0 =>
                     throw S3Exception(S3ErrorCode.PRECONDITION_FAILED)
 
-                  case (_, Some(lastModified)) if ifUnmodifiedSince.isDefined && lastModified.compareTo(Instant.ofEpochMilli(ifUnmodifiedSince.get)) >= 0 =>
+                  case (_, Some(lastModified)) if ifUnmodifiedSince.nonEmpty && lastModified.compareTo(Instant.ofEpochMilli(ifUnmodifiedSince.get)) >= 0 =>
                     Response.Empty(statusCode = Some(304))
 
                   case _ => Response.Empty(headers = Map(
@@ -228,27 +229,30 @@ object LiveServer {
 
             // 💚
             case PUT if key.isEmpty && r.getParam("acl") != null =>
-              IO.whenCaseM(hasBody(rc)) {
-                case true =>
-                  for {
-                    acl <- xmlRequest(rc, classOf[AccessControlPolicy])(request => UIO(mapXmlAclsToCannedPolicy(request) match {
-                      case "private" => BucketCannedACL.PRIVATE
-                      case "public-read" => BucketCannedACL.PUBLIC_READ
-                      case _ => throw S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
-                    }))
-                    _ <- router.putBucketAcl(bucket, acl)
-                  } yield ()
+              for {
+                body      <- VertxUtils.streamToString(rc, stream).mapError(e => S3Exception(S3ErrorCode.UNKNOWN_ERROR, e.getMessage, e.fillInStackTrace()))
+                response  <- IO.whenCase(body.nonEmpty){
+                  case true =>
+                    for {
+                      acl <- xmlRequest(rc, classOf[AccessControlPolicy])(request => UIO(mapXmlAclsToCannedPolicy(request) match {
+                        case "private" => BucketCannedACL.PRIVATE
+                        case "public-read" => BucketCannedACL.PUBLIC_READ
+                        case _ => throw S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
+                      }))
+                      _ <- router.putBucketAcl(bucket, acl)
+                    } yield ()
 
-                case false =>
-                  router.putBucketAcl(bucket,
-                    Option(r.getHeader(AwsHttpHeaders.ACL.value)) match {
-                      case Some("private") => BucketCannedACL.PRIVATE
-                      case Some("public-read") => BucketCannedACL.PUBLIC_READ
-                      case Some(acl) if cannedAcls.contains(acl) => throw S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
-                      case _ => throw S3Exception(S3ErrorCode.INVALID_REQUEST)
-                    }
-                  )
-              }.as(Response.Empty())
+                  case false =>
+                    router.putBucketAcl(bucket,
+                      Option(r.getHeader(AwsHttpHeaders.ACL.value)) match {
+                        case None | Some("private") => BucketCannedACL.PRIVATE
+                        case Some("public-read") => BucketCannedACL.PUBLIC_READ
+                        case Some(acl) if cannedAcls.contains(acl) => throw S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
+                        case _ => throw S3Exception(S3ErrorCode.INVALID_REQUEST)
+                      }
+                    )
+                }.as(Response.Empty())
+              } yield response
 
             // 💚
             case PUT if key.isEmpty =>
@@ -274,9 +278,8 @@ object LiveServer {
                 case None =>
                   for {
                     partNumber  <- UIO(r.getParam("partNumber").toInt).onError(_ => throw S3Exception(S3ErrorCode.INVALID_ARGUMENT))
-                    eTag        <- vertx.withBodyAsStream(rc)(body => router.uploadPart(bucket, key.get, uploadId, partNumber, body))
-                                    .mapError(e => S3Exception(S3ErrorCode.UNKNOWN_ERROR, e.getMessage, e.fillInStackTrace()))
-                    response    = Response.Empty(headers = Map(HttpHeaders.ETAG -> List(eTag)), cors = true)
+                    eTag        <- router.uploadPart(bucket, key.get, uploadId, partNumber, stream)
+                    response    =  Response.Empty(headers = Map(HttpHeaders.ETAG -> List(eTag)), cors = true)
                   } yield response
               }
 
@@ -297,7 +300,7 @@ object LiveServer {
             // 💚
             case PUT if r.getParam("acl") != null =>
               for {
-                acl       <- acl(rc)
+                acl       <- acl(rc, stream)
                 _         <- router.putObjectAcl(bucket, key.get, acl)
                 response  = Response.Empty()
               } yield response
@@ -306,11 +309,10 @@ object LiveServer {
             case PUT =>
               val contentLength = Option(r.getHeader(HttpHeaders.CONTENT_LENGTH))
               val decodedContentLength = Option(r.getHeader(AwsHttpHeaders.DECODED_CONTENT_LENGTH.value))
-              val finalContentLength = if (decodedContentLength.isDefined) Some(decodedContentLength.get) else contentLength
-              if (finalContentLength.isEmpty) throw S3Exception(S3ErrorCode.MISSING_CONTENT_LENGTH)
+              val finalContentLength = if (decodedContentLength.nonEmpty) Some(decodedContentLength.get) else contentLength
 
               val contentMd5 = Option(r.getHeader(HttpHeaders.CONTENT_MD5))
-              if (contentMd5.isDefined)
+              if (contentMd5.nonEmpty)
                 try {
                   val md5 = HashCode.fromBytes(Base64.getDecoder.decode(contentMd5.get))
                   if (md5.bits() != MD5.bits()) throw S3Exception(S3ErrorCode.INVALID_DIGEST)
@@ -320,10 +322,10 @@ object LiveServer {
                 }
 
               for {
-                acl       <- acl(rc)
-                eTag      <- vertx.withBodyAsStream(rc)(body => router.putObject(bucket, key.get, body, acl))
-                              .mapError(e => S3Exception(S3ErrorCode.UNKNOWN_ERROR, e.getMessage, e.fillInStackTrace()))
-                response  = Response.Empty(headers = Map(HttpHeaders.ETAG -> List(eTag)), cors = true)
+                acl       <- aclHeader(rc)
+                length    <- ZIO.fromOption(finalContentLength).mapBoth(e => S3Exception(S3ErrorCode.MISSING_CONTENT_LENGTH), _.toLong)
+                eTag      <- router.putObject(bucket, key.get, stream, streamPump, length, acl)
+                response  =  Response.Empty(headers = Map(HttpHeaders.ETAG -> List(eTag)), cors = true)
               } yield response
 
             // 💚
@@ -351,8 +353,8 @@ object LiveServer {
 
               for {
                 exists    <- router.bucketExists(bucket)
-                _         = if (!exists) throw S3Exception(S3ErrorCode.ACCESS_DENIED) else UIO.unit
-                response  = Response.Empty(headers = headers.toMap)
+                _         =  if (!exists) throw S3Exception(S3ErrorCode.ACCESS_DENIED) else UIO.unit
+                response  =  Response.Empty(headers = headers.toMap)
               } yield response
           }
 
@@ -363,7 +365,7 @@ object LiveServer {
 
     def createRoute(rc: RoutingContext): Task[Response] =
       for {
-        route       <- Task.fromEither(decode[Route](rc.body().asString))
+        route       <- Task.fromEither(decode[Route](rc.body().asString()))
         _           <- mongo.insert[Route]("Routes", route)
         response    =  Response.Empty()
       } yield response
@@ -380,8 +382,8 @@ object LiveServer {
     def updateRoute(rc: RoutingContext): Task[Response] =
       for {
         id          <- Task(rc.pathParam("id"))
-        route       <- Task.fromEither(decode[Route](rc.body().asString))
-        _           <- mongo.insert[Route]("Routes", route)
+        route       <- Task.fromEither(decode[Route](rc.body().asString()))
+          _         <- mongo.insert[Route]("Routes", route)
         _           <- mongo.update[Route]("Routes", id, route)
         response    =  Response.Empty()
       } yield response

@@ -6,12 +6,12 @@ import com.harana.sdk.backend.models.flow.ActionType.{Inputs, Outputs}
 import com.harana.sdk.backend.models.flow.actiontypes.output.PutHaranaFilesInfo
 import com.harana.sdk.backend.models.flow.actiontypes.{formatParameter, pathParameter}
 import com.harana.sdk.backend.models.flow.execution.ExecutionError
-import com.harana.sdk.backend.models.flow.{Action, FlowContext}
+import com.harana.sdk.backend.models.flow.{ActionType, FlowContext}
 import com.harana.executor.spark.actiontypes.{dataSourceParameterValues, log, param, writeFile}
 import com.harana.executor.spark.utils.PathUtils
 import zio.{IO, Task, UIO}
 
-class PutHaranaFiles extends PutHaranaFilesInfo with Action {
+class PutHaranaFiles extends PutHaranaFilesInfo with ActionType {
 
   def validate(parameters: ParameterValues, context: FlowContext): UIO[List[ExecutionError]] = null
 
@@ -28,7 +28,7 @@ class PutHaranaFiles extends PutHaranaFilesInfo with Action {
                                 case None => IO.unit
                               }
 
-      _                     <- IO.when(inputDf.isDefined)(log(inputDf.get, values))
+      _                     <- IO.when(inputDf.nonEmpty)(log(inputDf.get, values))
       output                <- IO.none
     } yield output
 }

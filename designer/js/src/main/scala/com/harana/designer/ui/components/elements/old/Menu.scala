@@ -22,7 +22,7 @@ type Props = Unit
 			else
 				props.groups.map { group =>
 					val items = new ListBuffer()
-					if (group.label.isDefined) items += SLMenuLabel(Some(group.label.get))
+					if (group.label.nonEmpty) items += SLMenuLabel(Some(group.label.get))
 					items ++= group.items.map(convert)
 					items += SLMenuDivider()
 					items.toList

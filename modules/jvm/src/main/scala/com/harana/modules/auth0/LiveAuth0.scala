@@ -55,13 +55,13 @@ object LiveAuth0 {
         a <- authApi
         r <- UIO {
           var b = a.authorizeUrl(redirectUri)
-          if (audience.isDefined) b = b.withAudience(audience.get)
-          if (audience.isDefined) b = b.withAudience(audience.get)
-          if (connection.isDefined) b = b.withConnection(connection.get)
-          if (parameter.isDefined) b = b.withParameter(parameter.get._1, parameter.get._2)
-          if (responseType.isDefined) b = b.withResponseType(responseType.get)
-          if (scope.isDefined) b = b.withScope(scope.get)
-          if (state.isDefined) b = b.withState(state.get)
+          if (audience.nonEmpty) b = b.withAudience(audience.get)
+          if (audience.nonEmpty) b = b.withAudience(audience.get)
+          if (connection.nonEmpty) b = b.withConnection(connection.get)
+          if (parameter.nonEmpty) b = b.withParameter(parameter.get._1, parameter.get._2)
+          if (responseType.nonEmpty) b = b.withResponseType(responseType.get)
+          if (scope.nonEmpty) b = b.withScope(scope.get)
+          if (state.nonEmpty) b = b.withState(state.get)
           new URL(b.build())
         }
       } yield r
@@ -71,7 +71,7 @@ object LiveAuth0 {
         a <- authApi
         r <- UIO {
           var b = a.logoutUrl(returnToUrl, setClientId)
-          if (useFederated.isDefined) b = b.useFederated(useFederated.get)
+          if (useFederated.nonEmpty) b = b.useFederated(useFederated.get)
           new URL(b.build())
         }
       } yield r
@@ -93,7 +93,7 @@ object LiveAuth0 {
       for {
         a <- authApi
         r <- execute(
-          if (username.isDefined) a.signUp(email, username.get, password, "Username-Password-Authentication")
+          if (username.nonEmpty) a.signUp(email, username.get, password, "Username-Password-Authentication")
           else a.signUp(email, password, "Username-Password-Authentication")
         )
       } yield r
@@ -102,7 +102,7 @@ object LiveAuth0 {
       for {
         a <- authApi
         r <- execute(
-          if (realm.isDefined) a.login(emailOrUsername, password, realm.get)
+          if (realm.nonEmpty) a.login(emailOrUsername, password, realm.get)
           else a.login(emailOrUsername, password)
         )
       } yield r

@@ -33,10 +33,10 @@ object FileUtils {
 
 
     def highlightType(file: HaranaFile): String =
-        if (file.`extension`.isDefined) {
+        if (file.`extension`.nonEmpty) {
             val language = languages.filter(l => l.extensions.contains(file.`extension`.get))
             if (language.isEmpty) "plaintext" else {
-                if (language.head.overrideStyle.isDefined)
+                if (language.head.overrideStyle.nonEmpty)
                     language.head.overrideStyle.get
                 else
                     language.head.extensions.head.toLowerCase

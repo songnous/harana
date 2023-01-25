@@ -75,26 +75,26 @@ class QuboleJobListener(sparkConf: SparkConf)  extends SparkListener {
     //update app metrics
     appMetrics.update(taskMetrics, taskInfo)
     val executorTimeSpan = executorMap.get(taskInfo.executorId)
-    if (executorTimeSpan.isDefined) {
+    if (executorTimeSpan.nonEmpty) {
       //update the executor metrics
       executorTimeSpan.get.updateAggregateTaskMetrics(taskMetrics, taskInfo)
     }
     val hostTimeSpan = hostMap.get(taskInfo.host)
-    if (hostTimeSpan.isDefined) {
+    if (hostTimeSpan.nonEmpty) {
       //also update the host metrics
       hostTimeSpan.get.updateAggregateTaskMetrics(taskMetrics, taskInfo)
     }
 
     val stageTimeSpan = stageMap.get(taskEnd.stageId)
-    if (stageTimeSpan.isDefined) {
+    if (stageTimeSpan.nonEmpty) {
       //update stage metrics
       stageTimeSpan.get.updateAggregateTaskMetrics(taskMetrics, taskInfo)
       stageTimeSpan.get.updateTasks(taskInfo, taskMetrics)
     }
     val jobID = stageIDToJobID.get(taskEnd.stageId)
-    if (jobID.isDefined) {
+    if (jobID.nonEmpty) {
       val jobTimeSpan = jobMap.get(jobID.get)
-      if (jobTimeSpan.isDefined) {
+      if (jobTimeSpan.nonEmpty) {
         //update job metrics
         jobTimeSpan.get.updateAggregateTaskMetrics(taskMetrics, taskInfo)
       }
@@ -196,7 +196,7 @@ class QuboleJobListener(sparkConf: SparkConf)  extends SparkListener {
       val stageTimeSpan = new timespan.StageTimeSpan(stageSubmitted.stageInfo.stageId,
         stageSubmitted.stageInfo.numTasks)
       stageTimeSpan.setParentStageIDs(stageSubmitted.stageInfo.parentIds)
-      if (stageSubmitted.stageInfo.submissionTime.isDefined) {
+      if (stageSubmitted.stageInfo.submissionTime.nonEmpty) {
         stageTimeSpan.setStartTime(stageSubmitted.stageInfo.submissionTime.get)
       }
       stageMap(stageSubmitted.stageInfo.stageId) = stageTimeSpan
@@ -205,14 +205,14 @@ class QuboleJobListener(sparkConf: SparkConf)  extends SparkListener {
 
   override def onStageCompleted(stageCompleted: SparkListenerStageCompleted): Unit = {
     val stageTimeSpan = stageMap(stageCompleted.stageInfo.stageId)
-    if (stageCompleted.stageInfo.completionTime.isDefined) {
+    if (stageCompleted.stageInfo.completionTime.nonEmpty) {
       stageTimeSpan.setEndTime(stageCompleted.stageInfo.completionTime.get)
     }
-    if (stageCompleted.stageInfo.submissionTime.isDefined) {
+    if (stageCompleted.stageInfo.submissionTime.nonEmpty) {
       stageTimeSpan.setStartTime(stageCompleted.stageInfo.submissionTime.get)
     }
 
-    if (stageCompleted.stageInfo.failureReason.isDefined) {
+    if (stageCompleted.stageInfo.failureReason.nonEmpty) {
       //stage failed
       val si = stageCompleted.stageInfo
       failedStages += s""" Stage ${si.stageId} in job ${stageIDToJobID(si.stageId)} failed.

@@ -78,12 +78,12 @@ object LiveProjects {
         _               <- logger.info("Pulling Python/Scala build images")
         pythonImage     <- config.optString("projects.build.pythonImage")
         scalaImage      <- config.optString("projects.build.scalaImage")
-        _               <- Task.when(pythonImage.isDefined)(docker.pullImage(pythonImage.get))
-        _               <- Task.when(scalaImage.isDefined)(docker.pullImage(scalaImage.get, authConfig))
+        _               <- Task.when(pythonImage.nonEmpty)(docker.pullImage(pythonImage.get))
+        _               <- Task.when(scalaImage.nonEmpty)(docker.pullImage(scalaImage.get, authConfig))
 
         _               <- logger.info("Setting default Buildpack builder")
         defaultBuilder  <- config.optString("projects.build.buildpack.defaultBuilder")
-        _               <- Task.when(defaultBuilder.isDefined)(buildpack.setDefaultBuilder(defaultBuilder.get))
+        _               <- Task.when(defaultBuilder.nonEmpty)(buildpack.setDefaultBuilder(defaultBuilder.get))
 
         _               <- logger.info("Cloning Projects Git repository")
         _               <- cloneProjects
@@ -145,7 +145,7 @@ object LiveProjects {
         _                   <- logger.debug(s"Found files: ${files.map(_.getAbsolutePath).mkString(", ")}")
         ymls                <- Task(files.map(f => (f.getName, FileUtils.readFileToString(f, Charset.defaultCharset()))))
         parsedProjects      <- UIO.foreach(ymls)(parseProject)
-        foundProjects       =  parsedProjects.filter(_.isDefined).map(_.get).toSet
+        foundProjects       =  parsedProjects.filter(_.nonEmpty).map(_.get).toSet
         _                   <- logger.info(s"Found projects: ${foundProjects.map(_.title)}")
       } yield foundProjects
 
@@ -188,17 +188,17 @@ object LiveProjects {
                             val imageName = s"${name(project.title)}_${name(c.name)}"
                             val date = dateFormatter.format(new Date())
 
-                            if (c.auto.map(_.repository).isDefined)
+                            if (c.auto.map(_.repository).nonEmpty)
                               for {
                                 git         <- UIO(allRepositories.get()((project, c.docker.get.repository.get)))
                                 success     <- buildpack.build(s"$imageName:$date", git.getRepository.getDirectory).map(_.mkString(",").contains("ERROR"))
                               } yield success
 
-                            if (c.docker.map(_.repository).isDefined)
+                            if (c.docker.map(_.repository).nonEmpty)
                               for {
                                 git         <- UIO(allRepositories.get()((project, c.docker.get.repository.get)))
                                 dockerFile  =  new JFile(git.getRepository.getDirectory, c.docker.get.path.getOrElse("Dockerfile"))
-                                success     <- docker.buildImage(dockerFile, Set(date)).option.map(_.isDefined)
+                                success     <- docker.buildImage(dockerFile, Set(date)).option.map(_.nonEmpty)
                               } yield success
 
                             UIO(false)

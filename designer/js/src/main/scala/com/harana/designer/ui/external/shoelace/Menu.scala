@@ -20,15 +20,15 @@ import scala.scalajs.js
                    onSelect: Option[String => Unit] = None)
 
   override def componentDidMount(): Unit = {
-    if (props.onBlur.isDefined) elementRef.current.addEventListener("sl-blur", props.onBlur.get)
-    if (props.onFocus.isDefined) elementRef.current.addEventListener("sl-focus", props.onFocus.get)
-    if (props.onSelect.isDefined) elementRef.current.addEventListener("sl-select", props.onSelect.get)
+    if (props.onBlur.nonEmpty) elementRef.current.addEventListener("sl-blur", props.onBlur.get)
+    if (props.onFocus.nonEmpty) elementRef.current.addEventListener("sl-focus", props.onFocus.get)
+    if (props.onSelect.nonEmpty) elementRef.current.addEventListener("sl-select", props.onSelect.get)
   }
 
   override def componentWillUnmount(): Unit = {
-    if (props.onBlur.isDefined) elementRef.current.removeEventListener("sl-blur", props.onBlur.get)
-    if (props.onFocus.isDefined) elementRef.current.removeEventListener("sl-focus", props.onFocus.get)
-    if (props.onSelect.isDefined) elementRef.current.removeEventListener("sl-select", props.onSelect.get)
+    if (props.onBlur.nonEmpty) elementRef.current.removeEventListener("sl-blur", props.onBlur.get)
+    if (props.onFocus.nonEmpty) elementRef.current.removeEventListener("sl-focus", props.onFocus.get)
+    if (props.onSelect.nonEmpty) elementRef.current.removeEventListener("sl-select", props.onSelect.get)
   }
 
   def blur() =

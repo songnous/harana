@@ -34,23 +34,23 @@ import scala.scalajs.js.Dynamic.literal
                    onShow: Option[js.Any => Unit] = None)
 
   override def componentDidMount(): Unit = {
-    if (props.onAfterHide.isDefined) elementRef.current.addEventListener("sl-after-hide", props.onAfterHide.get)
-    if (props.onAfterShow.isDefined) elementRef.current.addEventListener("sl-after-show", props.onAfterShow.get)
-    if (props.onHide.isDefined) elementRef.current.addEventListener("sl-hide", props.onHide.get)
-    if (props.onInitialFocus.isDefined) elementRef.current.addEventListener("sl-initial-focus", props.onInitialFocus.get)
-    if (props.onOverlayDismiss.isDefined) elementRef.current.addEventListener("sl-overlay-dismiss", props.onOverlayDismiss.get)
-    if (props.onRequestClose.isDefined) elementRef.current.addEventListener("sl-request-close", props.onRequestClose.get)
-    if (props.onShow.isDefined) elementRef.current.addEventListener("sl-show", props.onShow.get)
+    if (props.onAfterHide.nonEmpty) elementRef.current.addEventListener("sl-after-hide", props.onAfterHide.get)
+    if (props.onAfterShow.nonEmpty) elementRef.current.addEventListener("sl-after-show", props.onAfterShow.get)
+    if (props.onHide.nonEmpty) elementRef.current.addEventListener("sl-hide", props.onHide.get)
+    if (props.onInitialFocus.nonEmpty) elementRef.current.addEventListener("sl-initial-focus", props.onInitialFocus.get)
+    if (props.onOverlayDismiss.nonEmpty) elementRef.current.addEventListener("sl-overlay-dismiss", props.onOverlayDismiss.get)
+    if (props.onRequestClose.nonEmpty) elementRef.current.addEventListener("sl-request-close", props.onRequestClose.get)
+    if (props.onShow.nonEmpty) elementRef.current.addEventListener("sl-show", props.onShow.get)
   }
 
   override def componentWillUnmount(): Unit = {
-    if (props.onAfterHide.isDefined) elementRef.current.removeEventListener("sl-after-hide", props.onAfterHide.get)
-    if (props.onAfterShow.isDefined) elementRef.current.removeEventListener("sl-after-show", props.onAfterShow.get)
-    if (props.onInitialFocus.isDefined) elementRef.current.removeEventListener("sl-initial-focus", props.onInitialFocus.get)
-    if (props.onOverlayDismiss.isDefined) elementRef.current.removeEventListener("sl-overlay-dismiss", props.onOverlayDismiss.get)
-    if (props.onHide.isDefined) elementRef.current.removeEventListener("sl-hide", props.onHide.get)
-    if (props.onRequestClose.isDefined) elementRef.current.removeEventListener("sl-request-close", props.onRequestClose.get)
-    if (props.onShow.isDefined) elementRef.current.removeEventListener("sl-show", props.onShow.get)
+    if (props.onAfterHide.nonEmpty) elementRef.current.removeEventListener("sl-after-hide", props.onAfterHide.get)
+    if (props.onAfterShow.nonEmpty) elementRef.current.removeEventListener("sl-after-show", props.onAfterShow.get)
+    if (props.onInitialFocus.nonEmpty) elementRef.current.removeEventListener("sl-initial-focus", props.onInitialFocus.get)
+    if (props.onOverlayDismiss.nonEmpty) elementRef.current.removeEventListener("sl-overlay-dismiss", props.onOverlayDismiss.get)
+    if (props.onHide.nonEmpty) elementRef.current.removeEventListener("sl-hide", props.onHide.get)
+    if (props.onRequestClose.nonEmpty) elementRef.current.removeEventListener("sl-request-close", props.onRequestClose.get)
+    if (props.onShow.nonEmpty) elementRef.current.removeEventListener("sl-show", props.onShow.get)
   }
 
   def show() =
@@ -68,16 +68,16 @@ import scala.scalajs.js.Dynamic.literal
     add(attrs, props.slot, "slot")
 
     val style = js.Dynamic.literal()
-    if (props.bodySpacing.isDefined) style.updateDynamic("--body-spacing")(props.bodySpacing.get)
-    if (props.footerSpacing.isDefined) style.updateDynamic("--footer-spacing")(props.headerSpacing.get)
-    if (props.headerSpacing.isDefined) style.updateDynamic("--header-spacing")(props.headerSpacing.get)
-    if (props.width.isDefined) style.updateDynamic("--width")(props.width.get)
+    if (props.bodySpacing.nonEmpty) style.updateDynamic("--body-spacing")(props.bodySpacing.get)
+    if (props.footerSpacing.nonEmpty) style.updateDynamic("--footer-spacing")(props.headerSpacing.get)
+    if (props.headerSpacing.nonEmpty) style.updateDynamic("--header-spacing")(props.headerSpacing.get)
+    if (props.width.nonEmpty) style.updateDynamic("--width")(props.width.get)
     add(attrs, Some(style), "style")
 
     attrs += (ref := elementRef)
 
     val headerChild: Option[ReactElement] = props.headerElement.map(he => header(he))
-    val children = if (headerChild.isDefined) List(headerChild.get) ++ props.children else props.children
+    val children = if (headerChild.nonEmpty) List(headerChild.get) ++ props.children else props.children
     CustomTag("sl-dialog")(attrs.toSeq: _*)(children.toSeq: _*)
   }
 }

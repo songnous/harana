@@ -37,17 +37,17 @@ import scala.scalajs.js
                    tooltipKey: Option[String] = None)
 
   override def componentDidMount(): Unit = {
-    if (props.onAfterHide.isDefined) elementRef.current.addEventListener("sl-after-hide", props.onAfterHide.get)
-    if (props.onAfterShow.isDefined) elementRef.current.addEventListener("sl-after-show", props.onAfterShow.get)
-    if (props.onHide.isDefined) elementRef.current.addEventListener("sl-hide", props.onHide.get)
-    if (props.onShow.isDefined) elementRef.current.addEventListener("sl-show", props.onShow.get)
+    if (props.onAfterHide.nonEmpty) elementRef.current.addEventListener("sl-after-hide", props.onAfterHide.get)
+    if (props.onAfterShow.nonEmpty) elementRef.current.addEventListener("sl-after-show", props.onAfterShow.get)
+    if (props.onHide.nonEmpty) elementRef.current.addEventListener("sl-hide", props.onHide.get)
+    if (props.onShow.nonEmpty) elementRef.current.addEventListener("sl-show", props.onShow.get)
   }
 
   override def componentWillUnmount(): Unit = {
-    if (props.onAfterHide.isDefined) elementRef.current.removeEventListener("sl-after-hide", props.onAfterHide.get)
-    if (props.onAfterShow.isDefined) elementRef.current.removeEventListener("sl-after-show", props.onAfterShow.get)
-    if (props.onHide.isDefined) elementRef.current.removeEventListener("sl-hide", props.onHide.get)
-    if (props.onShow.isDefined) elementRef.current.removeEventListener("sl-show", props.onShow.get)
+    if (props.onAfterHide.nonEmpty) elementRef.current.removeEventListener("sl-after-hide", props.onAfterHide.get)
+    if (props.onAfterShow.nonEmpty) elementRef.current.removeEventListener("sl-after-show", props.onAfterShow.get)
+    if (props.onHide.nonEmpty) elementRef.current.removeEventListener("sl-hide", props.onHide.get)
+    if (props.onShow.nonEmpty) elementRef.current.removeEventListener("sl-show", props.onShow.get)
   }
 
   def show() =
@@ -75,15 +75,15 @@ import scala.scalajs.js
     attrs += (ref := elementRef)
 
     val children = new ListBuffer[ReactElement]()
-    if (props.button.isDefined) children += List(
-      if (props.tooltip.isDefined)
+    if (props.button.nonEmpty) children += List(
+      if (props.tooltip.nonEmpty)
         Tooltip(props.tooltip.get, slot = Some("trigger"))(List(Button(props.button.get.copy(slot = None))))
       else
         Button(props.button.get.copy(slot = Some("trigger")))
     )
 
-    if (props.element.isDefined) children += props.element.get
-    if (props.menu.isDefined) children += Menu(props.menu.get)
+    if (props.element.nonEmpty) children += props.element.get
+    if (props.menu.nonEmpty) children += Menu(props.menu.get)
 
     CustomTag("sl-dropdown")(attrs.toSeq: _*)(children.toSeq: _*)
   }

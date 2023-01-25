@@ -140,7 +140,7 @@ import scala.collection.mutable.ListBuffer
     props.state.viewMode match {
       case ViewMode.List =>
         val rows = props.state.items.map { item =>
-          val checked = props.state.selectedItem.isDefined && props.state.selectedItem.get == item
+          val checked = props.state.selectedItem.nonEmpty && props.state.selectedItem.get == item
           val radio = Some(Radio.Props(name = "s", checked = Some(checked), onChange = Some(checked => if (checked) Circuit.dispatch(UpdateSelectedItem(props.entityType, Some(item))))))
           Row(props.tableColumns.map(column => column -> props.tableContent(column, item)).toMap, radio, None, onDoubleClick = item.link.map(l => () => openLink(l)))
         }

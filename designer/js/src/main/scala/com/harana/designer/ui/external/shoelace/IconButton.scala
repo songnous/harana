@@ -26,11 +26,11 @@ import scala.scalajs.js
                    tooltip: Option[String] = None)
 
   override def componentDidMount(): Unit = {
-    if (props.onClick.isDefined) elementRef.current.addEventListener("click", props.onClick.get)
+    if (props.onClick.nonEmpty) elementRef.current.addEventListener("click", props.onClick.get)
   }
 
   override def componentWillUnmount(): Unit = {
-    if (props.onClick.isDefined) elementRef.current.removeEventListener("click", props.onClick.get)
+    if (props.onClick.nonEmpty) elementRef.current.removeEventListener("click", props.onClick.get)
   }
 
   def render() = {
@@ -48,6 +48,6 @@ import scala.scalajs.js
     attrs += (ref := elementRef)
 
     val iconButton = CustomTag("sl-icon-button")(attrs.toSeq: _*)
-    if (props.tooltip.isDefined) Tooltip(props.tooltip.get)(List(iconButton)) else iconButton
+    if (props.tooltip.nonEmpty) Tooltip(props.tooltip.get)(List(iconButton)) else iconButton
   }
 }
