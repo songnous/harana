@@ -8,7 +8,7 @@ import org.apache.commons.lang3.SystemUtils
 
 import java.nio.ByteBuffer
 import java.nio.channels.{AsynchronousFileChannel, CompletionHandler}
-import java.nio.file.Paths
+import java.nio.file.{Paths, StandardOpenOption}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Promise
 import scala.util.Try
@@ -19,7 +19,7 @@ class AsyncFileReadStream(path: String) extends ReadStream[Buffer] {
     if (SystemUtils.IS_OS_LINUX)
       Left(AsyncFile.open(path, EventExecutor.initDefault()).get())
     else
-      Right(AsynchronousFileChannel.open(Paths.get(path)))
+      Right(AsynchronousFileChannel.open(Paths.get(path), StandardOpenOption.READ))
 
   var closed = false
   var readPos = 0
@@ -31,16 +31,15 @@ class AsyncFileReadStream(path: String) extends ReadStream[Buffer] {
   var endHandler: Option[Handler[Void]] = None
 
   var queue = new InboundBuffer[Buffer](0)
+  queue.drainHandler(_ => doRead(ByteBuffer.allocateDirect(readBufferSize)))
 
-  def apply() {
-    queue.handler { buff =>
-      if (buff.length() > 0)
-        if (this.handler.nonEmpty) handler.get.handle(buff)
-        else if (this.endHandler.nonEmpty) endHandler.get.handle(null)
+  queue.handler { buff =>
+    if (buff.length() > 0) {
+      if (this.handler.nonEmpty) this.handler.get.handle(buff)
+    } else {
+      if (this.endHandler.nonEmpty) this.endHandler.get.handle(null)
     }
-    queue.drainHandler(_ => doRead(ByteBuffer.allocateDirect(readBufferSize)))
   }
-
 
   def doRead(bb: ByteBuffer): Unit = {
     val buff = Buffer.buffer(readBufferSize)
@@ -52,9 +51,12 @@ class AsyncFileReadStream(path: String) extends ReadStream[Buffer] {
         val buffer = ar.get
         readPos += buffer.length()
         readLength -= buffer.length()
-        // Empty buffer represents end of file
-        if (queue.write(buffer) && buffer.length() > 0)
-          doRead(bb)
+        if (buffer.length == 0) {
+          if (this.endHandler.nonEmpty) {
+            this.endHandler.get.handle(null)
+          }
+        } else
+            if (queue.write(buffer)) doRead(bb)
       } else
         if (this.exceptionHandler.nonEmpty) this.exceptionHandler.get.handle(ar.failed.get)
     }}
@@ -73,7 +75,6 @@ class AsyncFileReadStream(path: String) extends ReadStream[Buffer] {
           promise.success(Buffer.buffer(tempBuffer.array()))
         }
 
-
       case Right(channel) =>
         channel.read(buff, position, null, new CompletionHandler[Integer, Object]() {
           var pos = position
@@ -81,14 +82,18 @@ class AsyncFileReadStream(path: String) extends ReadStream[Buffer] {
           def completed(bytesRead: Integer, attachment: Object) =
             if (bytesRead == -1)
               done()
-            else if (buff.hasRemaining) {
-              pos += bytesRead
-              read(writeBuff, offset, buff, pos, promise)
-            } else
-              done()
+            else {
+              if (buff.hasRemaining) {
+                pos += bytesRead
+                read(writeBuff, offset, buff, pos, promise)
+              } else
+                done()
+            }
 
-          def failed(t: Throwable, attachment: Object) =
+          def failed(t: Throwable, attachment: Object) = {
+            t.fillInStackTrace().printStackTrace()
             promise.failure(t)
+          }
 
           def done() = {
             buff.flip()
@@ -98,7 +103,6 @@ class AsyncFileReadStream(path: String) extends ReadStream[Buffer] {
           }
         })
     }
-
 
   def handler(handler: Handler[Buffer]) = {
     if (closed)

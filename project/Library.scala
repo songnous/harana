@@ -471,6 +471,7 @@ object Library {
   val youiClient = Def.setting("io.youi" %% "youi-client" % "0.14.4")
   val zendeskClient = Def.setting("com.cloudbees.thirdparty" % "zendesk-java-client" % "0.19.0")
   val zip4j = Def.setting("net.lingala.zip4j" % "zip4j" % "2.11.2")
+  val zstd = Def.setting("com.github.luben" % "zstd-jni" % "1.5.2-5")
   val ztZip = Def.setting("org.zeroturnaround" % "zt-zip" % "1.15")
 
   // Dependencies for swagger-client generated code

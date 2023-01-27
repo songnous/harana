@@ -108,25 +108,24 @@ package object vertx {
                             val isrs = new InputStreamReadStream(inputStream, vx)
                             if (contentSize.nonEmpty) r.putHeader(HttpHeaders.CONTENT_LENGTH, contentSize.get.toString)
                             val rs = if (gzipped) new GzipReadStream(isrs) else isrs
-                            val pump = Pump(rs, r)
                             rs.endHandler(_ => {
                               r.end()
                               r.close()
                             })
-                            pump.start()
+                            Pump(rs, r).start()
 
                           case Response.JSON(json, contentType, cookies, statusCode, cors, headers) =>
                             response(rc, contentType, cookies, statusCode, cors, headers).end(json.toString)
 
                           case Response.ReadStream(stream, contentSize, contentType, cookies, statusCode, cors, headers) =>
                             val r = response(rc, contentType, cookies, statusCode, cors, headers)
+                            r.setChunked(true)
                             if (contentSize.nonEmpty) r.putHeader(HttpHeaders.CONTENT_LENGTH, contentSize.get.toString)
-                            val pump = Pump(stream, r)
                             stream.endHandler(_ => {
                               r.end()
                               r.close()
                             })
-                            pump.start()
+                            Pump(stream, r).start()
 
                           case Response.Redirect(url, contentType, cookies, _, cors, headers) =>
                             response(rc, contentType, cookies, Some(302), cors, headers).putHeader("location", url).end()

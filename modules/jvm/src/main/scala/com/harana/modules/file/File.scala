@@ -25,6 +25,8 @@ object File {
 
     def write(file: Either[Path, AsyncFile], buffer: ByteBuffer, position: Option[Int] = None): Task[Int]
 
+    def merge(sourcePaths: List[Path], targetPath: Path): Task[Unit]
+
     def close(file: Either[Path, AsyncFile]): Task[Unit]
 
   }

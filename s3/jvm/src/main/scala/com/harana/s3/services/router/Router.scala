@@ -79,11 +79,13 @@ object Router {
                    key: String,
                    uploadId: String,
                    partNumber: Int,
-                   writeStream: ReactiveWriteStream[Buffer]): IO[S3Exception, String]
+                   stream: ReactiveWriteStream[Buffer],
+                   streamPump: Pump,
+                   contentLength: Long): IO[S3Exception, String]
 
     def listParts(bucket: String, key: String, uploadId: String): IO[S3Exception, List[Part]]
 
-    def listMultipartUploads(bucket: String): IO[S3Exception, List[MultipartUpload]]
+    def listMultipartUploads(bucket: String, prefix: Option[String] = None): IO[S3Exception, List[MultipartUpload]]
 
     def createMultipartUpload(bucket: String, key: String, cannedACL: ObjectCannedACL): IO[S3Exception, String]
 

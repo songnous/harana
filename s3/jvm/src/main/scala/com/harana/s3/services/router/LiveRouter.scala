@@ -1,5 +1,6 @@
 package com.harana.s3.services.router
 
+import com.github.luben.zstd.Zstd
 import com.harana.modules.aws_s3.AwsS3
 import com.harana.modules.core.config.Config
 import com.harana.modules.core.logger.Logger
@@ -10,27 +11,32 @@ import com.harana.s3.models.Destination._
 import com.harana.s3.models.S3Credentials.toAWSCredentialsProvider
 import com.harana.s3.models.{AccessPolicy, Route, S3Credentials}
 import com.harana.s3.services.server.models.{S3ErrorCode, S3Exception}
+import com.harana.s3.utils.AwsFile
 import io.vertx.core.buffer.Buffer
 import io.vertx.core.streams.Pump
-import io.vertx.ext.reactivestreams.{ReactiveReadStream, ReactiveWriteStream}
+import io.vertx.ext.reactivestreams.ReactiveWriteStream
+import org.apache.commons.io.{FileUtils, FilenameUtils}
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.s3.S3AsyncClient
 import software.amazon.awssdk.services.s3.model._
-import zio.CanFail.canFailAmbiguous1
 import zio.clock.Clock
 import zio.{IO, Task, UIO, ZIO, ZLayer}
 
 import java.nio.file.attribute.BasicFileAttributes
 import java.nio.file.{Files, Path}
 import java.time.Instant
-import java.util.UUID
 import java.util.concurrent.atomic.AtomicReference
+import java.util.{SplittableRandom, UUID}
+import scala.collection.mutable
 import scala.jdk.CollectionConverters._
 
 object LiveRouter {
 
   private val routesRef = new AtomicReference[List[Route]](List.empty)
   private val s3ClientsRef = new AtomicReference[Map[Int, S3AsyncClient]](Map.empty)
+  private val multipartPrefix = "__multipartUploads"
+  private val keyCache = mutable.HashMap.empty[String, String]
+  private val random = new SplittableRandom()
 
   val layer = ZLayer.fromServices { (clock: Clock.Service,
                                      config: Config.Service,
@@ -40,7 +46,7 @@ object LiveRouter {
                                      ohc: OHC.Service,
                                      s3: AwsS3.Service) => new Router.Service {
 
-    // 💚
+
     def createBucket(bucket: String) =
       for {
         _           <- logger.info(s"[CreateBucket] $bucket")
@@ -64,7 +70,7 @@ object LiveRouter {
       } yield ()
 
 
-    // 💚
+
     def deleteBucket(bucket: String) =
       for {
         _             <- logger.info(s"[DeleteBucket] $bucket")
@@ -163,7 +169,7 @@ object LiveRouter {
       } yield result
 
 
-    // 💚
+
     def listObjects(bucket: String, prefix: Option[String] = None) =
       for {
         _           <- logger.info(s"[ListObjects] $bucket")
@@ -194,7 +200,7 @@ object LiveRouter {
                       }
       } yield result
 
-    // 💚
+
     def deleteObject(bucket: String, key: String) =
       for {
         _           <- logger.info(s"[DeleteObject] $bucket / $key")
@@ -226,7 +232,7 @@ object LiveRouter {
         }
       } yield ()
 
-    // 💚
+
     def getObject(bucket: String,
                   key: String,
                   ifMatch: Option[String] = None,
@@ -248,7 +254,7 @@ object LiveRouter {
                       }
       } yield result
 
-    // 💚
+
     def putObject(bucket: String,
                   key: String,
                   stream: ReactiveWriteStream[Buffer],
@@ -267,6 +273,9 @@ object LiveRouter {
                         case Some(Local) =>
                           for {
                             rootDir     <- localRootDirectory
+                            keyPath     =  rootDir.resolve(bucket).resolve(key).getParent
+                            _           <- Task(Files.createDirectories(keyPath))
+
                             result      <- file.writeStream(rootDir.resolve(bucket).resolve(key).toString, stream, contentLength, Some(() => streamPump.start()), Some(() => streamPump.stop())).as("")
                           } yield result
 
@@ -293,7 +302,7 @@ object LiveRouter {
                         }
       } yield result
 
-    // 💚
+
     def getObjectAttributes(bucket: String, key: String) =
       for {
         _           <- logger.info(s"[GetObjectAttributes] $bucket / $key")
@@ -383,8 +392,13 @@ object LiveRouter {
       } yield result
 
 
-    // ❤️
-    def uploadPart(bucket: String, key: String, uploadId: String, partNumber: Int, writeStream: ReactiveWriteStream[Buffer]) =
+    def uploadPart(bucket: String,
+                   key: String,
+                   uploadId: String,
+                   partNumber: Int,
+                   stream: ReactiveWriteStream[Buffer],
+                   streamPump: Pump,
+                   contentLength: Long) =
       for {
         _           <- logger.info(s"[UploadPart] $bucket / $key")
         result      <- route(bucket, Some(key)).map(_.destination) match {
@@ -392,15 +406,19 @@ object LiveRouter {
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
                           case Some(Local) =>
-                            toS3Exception("")
+                            multiPartOperation(bucket, Some(key))(path =>
+                              for {
+                                partsDir    <- Task(path.resolve(uploadId)).orElseFail(new S3Exception(S3ErrorCode.NO_SUCH_UPLOAD))
+                                result      <- file.writeStream(partsDir.resolve(partNumber.toString).toString, stream, contentLength, Some(() => streamPump.start()), Some(() => streamPump.stop())).as("")
+                              } yield result
+                            )
 
                           case Some(S3(credentials, region, endpoint)) =>
-                            s3Operation(credentials, region, endpoint)(s3.uploadPart(_, bucket, key, uploadId, partNumber, writeStream))
+                            s3Operation(credentials, region, endpoint)(s3.uploadPart(_, bucket, key, uploadId, partNumber, stream, Some(contentLength)))
                         }
       } yield result
 
 
-    // ❤️
     def listParts(bucket: String, key: String, uploadId: String) =
       for {
         _           <- logger.info(s"[ListParts] $bucket / $key")
@@ -409,7 +427,21 @@ object LiveRouter {
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
                           case Some(Local) =>
-                            toS3Exception(List())
+                            multiPartOperation(bucket, Some(key))(path =>
+                              for {
+                                partsDir  <- Task(path.resolve(uploadId)).orElseFail(new S3Exception(S3ErrorCode.NO_SUCH_UPLOAD))
+                                parts     <- ZIO.foreachPar(Files.list(partsDir).toList.asScala.toList)(path =>
+                                              Task(
+                                                Part.builder()
+                                                  .partNumber(FilenameUtils.getBaseName(path.getFileName.toString).toInt)
+                                                  .eTag(AwsFile.md5(path))
+                                                  .lastModified(Files.getLastModifiedTime(path).toInstant)
+                                                  .size(Files.size(path))
+                                                  .build()
+                                              )
+                                            )
+                              } yield parts.toList
+                            )
 
                           case Some(S3(credentials, region, endpoint)) =>
                             s3Operation(credentials, region, endpoint)(s3.listParts(_, bucket, key, uploadId))
@@ -417,8 +449,7 @@ object LiveRouter {
       } yield result
 
 
-    // ❤️
-    def listMultipartUploads(bucket: String) =
+    def listMultipartUploads(bucket: String, prefix: Option[String] = None) =
       for {
         _           <- logger.info(s"[ListMultipartUploads] $bucket")
         result      <- route(bucket).map(_.destination) match {
@@ -426,15 +457,26 @@ object LiveRouter {
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
                           case Some(Local) =>
-                            toS3Exception(List())
+                            multiPartOperation(bucket)(path =>
+                              Task {
+                                Files.list(path).toList.asScala.flatMap { key =>
+                                  Files.list(path.resolve(key)).toList.asScala.map { uploadId =>
+                                    MultipartUpload.builder()
+                                      .uploadId(uploadId.getFileName.toString)
+                                      .key(keyCache(key.getFileName.toString))
+                                      .initiated(Files.getLastModifiedTime(key).toInstant)
+                                      .build()
+                                  }
+                                }.toList
+                              }
+                            )
 
                           case Some(S3(credentials, region, endpoint)) =>
-                            s3Operation(credentials, region, endpoint)(s3.listMultipartUploads(_, bucket))
+                            s3Operation(credentials, region, endpoint)(s3.listMultipartUploads(_, bucket, prefix))
                         }
       } yield result
 
 
-    // ❤️
     def createMultipartUpload(bucket: String, key: String, cannedACL: ObjectCannedACL) =
       for {
         _           <- logger.info(s"[CreateMultipartUpload] $bucket / $key")
@@ -443,7 +485,14 @@ object LiveRouter {
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
                           case Some(Local) =>
-                            toS3Exception("")
+                            multiPartOperation(bucket)(path =>
+                              for {
+                                _         <- UIO(if (!keyCache.contains(key)) keyCache.put(key, Zstd.compress(key.getBytes).toString))
+                                _         <- Task.when(Files.exists(path.resolve(keyCache(key))))(IO.fail(S3Exception(S3ErrorCode.INVALID_REQUEST)))
+                                uploadId  <- Task(random.nextLong().toString)
+                                _         <- Task(Files.createDirectories(path.resolve(keyCache(key)).resolve(uploadId)))
+                              } yield uploadId
+                            )
 
                           case Some(S3(credentials, region, endpoint)) =>
                             s3Operation(credentials, region, endpoint)(s3.createMultipartUpload(_, bucket, key, cannedACL))
@@ -451,7 +500,6 @@ object LiveRouter {
       } yield result
 
 
-    // ❤️
     def abortMultipartUpload(bucket: String, key: String, uploadId: String) =
       for {
         _           <- logger.info(s"[AbortMultipartUpload] $bucket / $key")
@@ -460,14 +508,19 @@ object LiveRouter {
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
                           case Some(Local) =>
-                            IO.unit
+                            multiPartOperation(bucket, Some(key))(path =>
+                              for {
+                                _       <- Task(FileUtils.deleteDirectory(path.resolve(uploadId).toFile))
+                                _       <- Task.when(Files.list(path).count() == 0)(Task(Files.delete(path)) *> UIO(keyCache.remove(key)))
+                              } yield ()
+                            )
 
                           case Some(S3(credentials, region, endpoint)) =>
                             s3Operation(credentials, region, endpoint)(s3.abortMultipartUpload(_, bucket, key, uploadId))
                         }
       } yield result
 
-    // ❤️
+
     def completeMultipartUpload(bucket: String, key: String, uploadId: String) =
       for {
         _           <- logger.info(s"[CompleteMultipartUpload] $bucket / $key")
@@ -476,7 +529,18 @@ object LiveRouter {
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
                           case Some(Local) =>
-                            toS3Exception("")
+                            multiPartOperation(bucket, Some(key))(path =>
+                              for {
+                                paths         <- Task(Files.list(path.resolve(uploadId)).toList.asScala.toList.sortBy(_.getFileName.toString))
+                                eTag          <- AwsFile.multipartETag(paths)
+
+                                rootDir       <- localRootDirectory
+                                keyPath       =  rootDir.resolve(bucket).resolve(key).getParent
+                                _             <- Task(Files.createDirectories(keyPath))
+
+                                _             <- file.merge(paths, path.resolve(key))
+                              } yield eTag
+                            )
 
                           case Some(S3(credentials, region, endpoint)) =>
                             s3Operation(credentials, region, endpoint)(s3.completeMultipartUpload(_, bucket, key, uploadId))
@@ -503,17 +567,27 @@ object LiveRouter {
       for {
         rootDir     <- localRootDirectory
         path        =  rootDir.resolve(bucket).resolve(key)
-        result      <- if (Files.notExists(rootDir.resolve(bucket)))
-                        IO.fail(S3Exception(S3ErrorCode.NO_SUCH_BUCKET))
-                       else if (Files.notExists(path)) {
-
-          println(s"Path = ${path} does not exist")
-          IO.fail(S3Exception(S3ErrorCode.NO_SUCH_KEY))
-        } else
-                        toS3Exception(operation(path))
+        result      <- if (Files.notExists(rootDir.resolve(bucket))) IO.fail(S3Exception(S3ErrorCode.NO_SUCH_BUCKET))
+                       else if (Files.notExists(path)) IO.fail(S3Exception(S3ErrorCode.NO_SUCH_KEY))
+                       else toS3Exception(operation(path))
     } yield result
 
-    
+
+    private def multiPartOperation[T](bucket: String, key: Option[String] = None)(operation: Path => Task[T]): IO[S3Exception, T] =
+      for {
+        rootDir     <- localRootDirectory
+        _           <- IO.fail(S3Exception(S3ErrorCode.NO_SUCH_BUCKET)).when(Files.notExists(rootDir.resolve(bucket)))
+        rootPath    =  rootDir.resolve(bucket).resolve(multipartPrefix)
+        _           <- Task(Files.createDirectory(rootPath)).when(Files.notExists(rootPath))
+        path        <- if (key.isEmpty) UIO(rootPath) else
+                        for {
+                          _     <- Task.when(!keyCache.contains(key.get))(IO.fail(S3Exception(S3ErrorCode.INVALID_REQUEST)))
+                          path  =  rootPath.resolve(keyCache(key.get))
+                        } yield path
+        result      <- toS3Exception(operation(path))
+    } yield result
+
+
     private def s3Operation[T](credentials: S3Credentials, region: Option[String], endpoint: Option[String])(operation: S3AsyncClient => Task[T]): IO[S3Exception, T] = {
       val hc = credentials.hashCode() + region.hashCode()
       val map = s3ClientsRef.get()
@@ -542,7 +616,7 @@ object LiveRouter {
 
     private def localRootDirectory =
       for {
-        localRoot   <- config.string("local.root").orElseFail(S3Exception(S3ErrorCode.INVALID_LOCAL_ROOT))
+        localRoot   <- config.string("local.root")
         path        =  Path.of(localRoot)
         _           <- toS3Exception(ZIO.when(Files.notExists(path))(Task(Files.createDirectory(path))))
       } yield path

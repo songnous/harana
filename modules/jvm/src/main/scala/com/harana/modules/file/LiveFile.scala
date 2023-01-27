@@ -2,7 +2,6 @@ package com.harana.modules.file
 
 import com.harana.modules.core.logger.Logger
 import com.harana.modules.file.File.Service
-import com.harana.modules.vertx.Vertx
 import com.harana.modules.vertx.models.streams.AsyncFileReadStream
 import io.vertx.core.buffer.Buffer
 import io.vertx.core.streams.ReadStream
@@ -13,7 +12,7 @@ import org.reactivestreams.{Subscriber, Subscription}
 import zio.blocking._
 import zio.{Has, Task, ZIO, ZLayer}
 
-import java.io.FileOutputStream
+import java.io.{FileInputStream, FileOutputStream}
 import java.nio.ByteBuffer
 import java.nio.file.{Files, Path}
 
@@ -123,6 +122,17 @@ object LiveFile {
 
         case Right(file) =>
           ZIO.fromFutureJava(if (position.nonEmpty) file.write(buffer, position.get) else file.write(buffer)).provide(Has(blocking)).map(_.toInt)
+      }
+
+
+    def merge(sourcePaths: List[Path], targetPath: Path): Task[Unit] =
+      Task {
+        val target = new FileOutputStream(targetPath.toFile, true).getChannel
+        sourcePaths.foreach { path =>
+          val fis = new FileInputStream(path.toFile).getChannel
+          fis.transferFrom(target, Files.size(path), target.size())
+          fis.close()
+        }
       }
 
 

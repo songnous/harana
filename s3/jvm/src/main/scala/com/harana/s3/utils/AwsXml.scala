@@ -224,18 +224,17 @@ object AwsXml {
     writeSimpleElement(xml, "IsTruncated", "false")
 
     for (upload <- uploads) {
-      if (prefix.isEmpty || (prefix.nonEmpty && upload.key.startsWith(prefix.get))) {
-        xml.writeStartElement("Upload")
-        writeSimpleElement(xml, "Key", upload.key)
-        writeSimpleElement(xml, "UploadId", upload.uploadId())
-        writeInitiatorStanza(xml)
-        writeOwnerStanza(xml)
+      xml.writeStartElement("Upload")
+      writeSimpleElement(xml, "Key", upload.key)
+      writeSimpleElement(xml, "UploadId", upload.uploadId())
+      writeInitiatorStanza(xml)
+      writeOwnerStanza(xml)
 
-        writeSimpleElement(xml, "StorageClass", "STANDARD")
-        writeSimpleElement(xml, "Initiated", iso8601DateFormat(java.time.Instant.now()))
-        xml.writeEndElement()
-      }
+      writeSimpleElement(xml, "StorageClass", "STANDARD")
+      writeSimpleElement(xml, "Initiated", iso8601DateFormat(java.time.Instant.now()))
+      xml.writeEndElement()
     }
+
     xml.writeEndElement()
     xml.flush()
   }

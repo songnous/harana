@@ -51,42 +51,42 @@ object LiveServer {
 
         val response = r.method() match {
 
-            // 💚
+
             case DELETE if key.isEmpty =>
               router.deleteBucket(bucket).as(Response.Empty())
 
-            // 💚
+
             case DELETE if uploadId != null =>
               router.abortMultipartUpload(bucket, key.get, uploadId).as(Response.Empty(cors = true))
 
-            // 💚
+
             case DELETE =>
               router.deleteObject(bucket, key.get).as(Response.Empty())
 
-            // 💚
+
             case GET if r.uri().equals("/") =>
               xmlResponse(writer => router.listBuckets().map(buckets =>
                 AwsXml.writeListAllMyBucketsResult(writer, buckets)
               ))
 
-            // 💚
+
             case GET if key.isEmpty && r.getParam("acl") != null =>
               xmlResponse(writer => router.getBucketAcl(bucket).map(acl =>
                 // FIXME
                 AwsXml.writeAccessControlPolicy(writer, false))
               )
 
-            // 💚
+
             case GET if key.isEmpty && r.getParam("location") != null =>
               xmlResponse(writer =>
                 UIO(AwsXml.writeLocationConstraint(writer))
               )
 
-            // 💚
+
             case GET if key.isEmpty && r.getParam("policy") != null =>
               UIO(Response.Empty())
 
-            // 💚
+
             case GET if key.isEmpty && r.getParam("uploads") != null =>
               if (r.getParam("delimiter") != null || r.getParam("max-uploads") != null ||
                 r.getParam("key-marker") != null || r.getParam("upload-id-marker") != null)
@@ -95,7 +95,7 @@ object LiveServer {
               val encodingType = Option(r.getParam("encoding-type")).getOrElse("url")
               val prefix = Option(r.getParam("prefix"))
 
-              xmlResponse(writer => router.listMultipartUploads(bucket).map(uploads =>
+              xmlResponse(writer => router.listMultipartUploads(bucket, prefix).map(uploads =>
                 AwsXml.writeListMultipartUploadsResult(writer, bucket, prefix, encodingType, uploads))
               )
 
@@ -108,7 +108,7 @@ object LiveServer {
               val continuationToken = Option(r.getParam("continuation-token"))
               val startAfter = Option(r.getParam("start-after"))
               val isListV2 = listType.nonEmpty && listType.get.equals("2")
-              val fetchOwner = !isListV2 && r.getParam("fetch  -owner").equals("true")
+              val fetchOwner = !isListV2 && Option(r.getParam("fetch-owner")).getOrElse("").equals("true")
 
               val marker = {
                 if (listType.isEmpty) Option(r.getParam("marker"))
@@ -131,14 +131,14 @@ object LiveServer {
                 AwsXml.writeListBucketResult(writer, bucket, prefix, objects, encodingType, isListV2, maxKeys, fetchOwner, marker, continuationToken, startAfter, delimiter))
               )
 
-            // 💚
+
             case GET if r.getParam("acl") != null =>
               xmlResponse(writer => router.getObjectAcl(bucket, key.get).map(acl =>
                 // FIXME
                 AwsXml.writeAccessControlPolicy(writer, false)
               ))
 
-            // 💚
+
             case GET if uploadId != null =>
               val partNumberMarker = r.getParam("part-number-marker")
               if (partNumberMarker != null && !partNumberMarker.equals("0"))
@@ -156,20 +156,20 @@ object LiveServer {
               for {
                 ifMatch             <- UIO(Option(r.getHeader(HttpHeaders.IF_MATCH)))
                 ifNoneMatch         =  Option(r.getHeader(HttpHeaders.IF_NONE_MATCH))
-                ifModifiedSince     =  Option(r.getHeader(HttpHeaders.IF_MODIFIED_SINCE)).map(_.toLong)
-                ifUnmodifiedSince   =  Option(r.getHeader("If-Unmodified-Since")).map(_.toLong)
+                ifModifiedSince     =  Option(r.getHeader(HttpHeaders.IF_MODIFIED_SINCE)).map(d => Instant.ofEpochMilli(d.toLong))
+                ifUnmodifiedSince   =  Option(r.getHeader("If-Unmodified-Since")).map(d => Instant.ofEpochMilli(d.toLong))
                 range               =  Option(r.getHeader("range"))
-                response            <- router.getObject(bucket, key.get, ifMatch, ifNoneMatch, ifModifiedSince.map(Instant.ofEpochMilli), ifUnmodifiedSince.map(Instant.ofEpochMilli), range).map(Response.ReadStream(_))
+                response            <- router.getObject(bucket, key.get, ifMatch, ifNoneMatch, ifModifiedSince, ifUnmodifiedSince, range).map(Response.ReadStream(_))
               } yield response
 
-            // 💚
+
             case HEAD if key.isEmpty =>
               for {
                 exists    <- router.bucketExists(bucket)
                 response  = if (exists) Response.Empty() else Response.Empty(statusCode = Some(404))
               } yield response
 
-            // 💚
+
             case HEAD =>
               for {
                 attributes          <- router.getObjectAttributes(bucket, key.get)
@@ -204,22 +204,27 @@ object LiveServer {
                 }
               } yield response
 
-            // 💚
+
             case POST if r.getParam("delete") != null =>
               xmlResponse(writer => xmlRequest(rc, classOf[DeleteMultipleObjectsRequest])(request => {
                 val keys = request.objects.map(_.key)
                 router.deleteObjects(bucket, keys).as(AwsXml.writeDeleteResult(writer, false, keys))
               }))
 
-            // 💚
+
             case POST if r.getParam("uploads") != null =>
-              val acl = ObjectCannedACL.valueOf(r.getHeader(AwsHttpHeaders.ACL.value))
+              val acl = Option(r.getHeader(AwsHttpHeaders.ACL.value)) match {
+                case None | Some("private") => ObjectCannedACL.PRIVATE
+                case Some("public-read") => ObjectCannedACL.PUBLIC_READ
+                case Some(acl) if cannedAcls.contains(acl) => throw S3Exception(S3ErrorCode.NOT_IMPLEMENTED)
+                case _ => throw S3Exception(S3ErrorCode.INVALID_REQUEST)
+              }
 
               xmlResponse(writer => router.createMultipartUpload(bucket, key.get, acl).map(uploadId =>
                 AwsXml.writeInitiateMultipartUploadResult(writer, bucket, key.get, uploadId)
               ))
 
-            // 💚
+
             case POST if uploadId != null && r.getParam("partNumber") == null =>
               xmlResponse(writer => xmlRequest(rc, classOf[CompleteMultipartUploadRequest])(request =>
                 router.completeMultipartUpload(bucket, key.get, uploadId).map(etag =>
@@ -227,7 +232,7 @@ object LiveServer {
                 )
               ))
 
-            // 💚
+
             case PUT if key.isEmpty && r.getParam("acl") != null =>
               for {
                 body      <- VertxUtils.streamToString(rc, stream).mapError(e => S3Exception(S3ErrorCode.UNKNOWN_ERROR, e.getMessage, e.fillInStackTrace()))
@@ -254,7 +259,7 @@ object LiveServer {
                 }.as(Response.Empty())
               } yield response
 
-            // 💚
+
             case PUT if key.isEmpty =>
               xmlRequest(rc, classOf[CreateBucketRequest])(_ => {
                 router.createBucket(bucket).as(Response.Empty(headers = Map(HttpHeaders.LOCATION -> List(s"/$bucket"))))
@@ -276,14 +281,19 @@ object LiveServer {
                   UIO(Response.Empty())
 
                 case None =>
+                  val contentLength = Option(r.getHeader(HttpHeaders.CONTENT_LENGTH))
+                  val decodedContentLength = Option(r.getHeader(AwsHttpHeaders.DECODED_CONTENT_LENGTH.value))
+                  val finalContentLength = if (decodedContentLength.nonEmpty) Some(decodedContentLength.get) else contentLength
+
                   for {
                     partNumber  <- UIO(r.getParam("partNumber").toInt).onError(_ => throw S3Exception(S3ErrorCode.INVALID_ARGUMENT))
-                    eTag        <- router.uploadPart(bucket, key.get, uploadId, partNumber, stream)
+                    length      <- ZIO.fromOption(finalContentLength).mapBoth(e => S3Exception(S3ErrorCode.MISSING_CONTENT_LENGTH), _.toLong)
+                    eTag        <- router.uploadPart(bucket, key.get, uploadId, partNumber, stream, streamPump, length)
                     response    =  Response.Empty(headers = Map(HttpHeaders.ETAG -> List(eTag)), cors = true)
                   } yield response
               }
 
-            // 💚
+
             case PUT if r.getHeader(AwsHttpHeaders.COPY_SOURCE.value) != null =>
               val sourceHeader = URLDecoder.decode(r.getHeader(AwsHttpHeaders.COPY_SOURCE.value), StandardCharsets.UTF_8)
               val sourcePath = (if (sourceHeader.startsWith("/")) sourceHeader.substring(1) else sourceHeader).split("/", 2)
@@ -297,7 +307,7 @@ object LiveServer {
                 AwsXml.writeCopyObjectResult(xml, result.lastModified(), result.eTag())
               ))
 
-            // 💚
+
             case PUT if r.getParam("acl") != null =>
               for {
                 acl       <- acl(rc, stream)
@@ -305,7 +315,7 @@ object LiveServer {
                 response  = Response.Empty()
               } yield response
 
-            // 💚
+
             case PUT =>
               val contentLength = Option(r.getHeader(HttpHeaders.CONTENT_LENGTH))
               val decodedContentLength = Option(r.getHeader(AwsHttpHeaders.DECODED_CONTENT_LENGTH.value))
@@ -328,7 +338,7 @@ object LiveServer {
                 response  =  Response.Empty(headers = Map(HttpHeaders.ETAG -> List(eTag)), cors = true)
               } yield response
 
-            // 💚
+
             case OPTIONS =>
               val headers = mutable.Map.empty[CharSequence, List[_ <: CharSequence]]
 

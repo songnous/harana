@@ -194,6 +194,7 @@ val modules = crossProject("modules")
       Library.youiClient.value :+
       Library.zendeskClient.value :+
       Library.zip4j.value :+
+      Library.zstd.value :+
       Library.ztZip.value
   )
 val modulesJVM = modules.jvm dependsOn (modulesCore, sdkJVM)

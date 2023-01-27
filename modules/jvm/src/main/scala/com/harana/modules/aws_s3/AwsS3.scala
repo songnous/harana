@@ -88,11 +88,12 @@ object AwsS3 {
                    key: String,
                    uploadId: String,
                    partNumber: Int,
-                   writeStream: ReactiveWriteStream[Buffer]): Task[String]
+                   writeStream: ReactiveWriteStream[Buffer],
+                   contentLength: Option[Long] = None): Task[String]
 
     def listParts(client: S3AsyncClient, bucket: String, key: String, uploadId: String): Task[List[Part]]
 
-    def listMultipartUploads(client: S3AsyncClient, bucket: String): Task[List[MultipartUpload]]
+    def listMultipartUploads(client: S3AsyncClient, bucket: String, prefix: Option[String] = None): Task[List[MultipartUpload]]
 
     def createMultipartUpload(client: S3AsyncClient, bucket: String, key: String, cannedACL: ObjectCannedACL): Task[String]
 

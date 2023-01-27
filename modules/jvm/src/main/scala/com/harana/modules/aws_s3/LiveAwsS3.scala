@@ -181,16 +181,26 @@ object LiveAwsS3 {
         client.uploadPartCopy(builder.build())
       }.map(_.copyPartResult())
 
-    def uploadPart(client: S3AsyncClient, bucket: String, key: String, uploadId: String, partNumber: Int, writeStream: ReactiveWriteStream[Buffer]) =
-      Task.fromCompletableFuture(
-        client.uploadPart(UploadPartRequest.builder().bucket(bucket).key(key).partNumber(partNumber).uploadId(uploadId).build(), AsyncRequestBody.fromPublisher(publisher(writeStream)))
-      ).map(_.eTag())
+    def uploadPart(client: S3AsyncClient,
+                   bucket: String,
+                   key: String,
+                   uploadId: String,
+                   partNumber: Int,
+                   writeStream: ReactiveWriteStream[Buffer],
+                   contentLength: Option[Long] = None) = {
+      val builder = UploadPartRequest.builder().bucket(bucket).key(key).partNumber(partNumber).uploadId(uploadId)
+      if (contentLength.nonEmpty) builder.contentLength(contentLength.get)
+      Task.fromCompletableFuture(client.uploadPart(builder.build(), AsyncRequestBody.fromPublisher(publisher(writeStream)))).map(_.eTag())
+    }
 
     def listParts(client: S3AsyncClient, bucket: String, key: String, uploadId: String) =
       Task.fromCompletableFuture(client.listParts(ListPartsRequest.builder().bucket(bucket).key(key).uploadId(uploadId).build())).map(_.parts().asScala.toList)
 
-    def listMultipartUploads(client: S3AsyncClient, bucket: String) =
-      Task.fromCompletableFuture(client.listMultipartUploads(ListMultipartUploadsRequest.builder().bucket(bucket).build())).map(_.uploads().asScala.toList)
+    def listMultipartUploads(client: S3AsyncClient, bucket: String, prefix: Option[String] = None) = {
+      val builder = ListMultipartUploadsRequest.builder().bucket(bucket)
+      if (prefix.nonEmpty) builder.prefix(prefix.get)
+      Task.fromCompletableFuture(client.listMultipartUploads(builder.build())).map(_.uploads().asScala.toList)
+    }
 
     def createMultipartUpload(client: S3AsyncClient, bucket: String, key: String, cannedACL: ObjectCannedACL) =
       Task.fromCompletableFuture(client.createMultipartUpload(CreateMultipartUploadRequest.builder().bucket(bucket).key(key).acl(cannedACL).build())).map(_.uploadId())

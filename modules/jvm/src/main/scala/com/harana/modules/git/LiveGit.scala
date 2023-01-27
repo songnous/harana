@@ -31,10 +31,12 @@ object LiveGit {
         }
       } yield git
 
+
     def checkout(git: JGit, branchTagOrCommit: String): Task[Ref] =
       for {
         ref <- Task(git.checkout().setName(branchTagOrCommit).call())
       } yield ref
+
 
     def branch(git: JGit, branch: String, track: Boolean = true): Task[Ref] =
       Task {
@@ -47,10 +49,12 @@ object LiveGit {
           .call()
       }
 
+
     def refresh(git: JGit): Task[Unit] =
       for {
         _ <- Task(git.pull().call())
       } yield ()
+
 
     def hasChanged(git: JGit): Task[Boolean] =
       for {
@@ -60,11 +64,13 @@ object LiveGit {
         changed     =  prevCommit.isEmpty && newCommit.nonEmpty || prevCommit.nonEmpty && newCommit.nonEmpty && prevCommit != newCommit
       } yield changed
 
+
     def mostRecentCommitHash(git: JGit): Task[Option[String]] =
       for {
         it    <- Task(git.log.setMaxCount(1).call.iterator()).option
         hash  = if (it.nonEmpty && it.get.hasNext) Some(it.get.next().getName) else None
       } yield hash
+
 
     def filesForCommit(git: JGit, hash: String): Task[List[File]] = {
       Task {
@@ -79,6 +85,7 @@ object LiveGit {
         paths.toList
       }
     }
+
 
     def latestFiles(git: JGit): Task[List[File]] =
       for {
