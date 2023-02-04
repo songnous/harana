@@ -21,10 +21,12 @@ import io.vertx.core.http.HttpMethod._
 import io.vertx.core.streams.Pump
 import io.vertx.ext.reactivestreams.ReactiveWriteStream
 import io.vertx.ext.web.RoutingContext
+import software.amazon.awssdk.http.HttpStatusCode
 import software.amazon.awssdk.services.s3.model.{BucketCannedACL, CompleteMultipartUploadRequest, ObjectCannedACL}
+import software.amazon.awssdk.utils.DateUtils
+import zio._
 import zio.clock.Clock
 import zio.duration.durationInt
-import zio._
 
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
@@ -45,7 +47,7 @@ object LiveServer {
         val r = rc.request()
         val path = r.path().split("/", 3)
         val bucket = path(1)
-        val key = if (path.length > 2) Some(path(2)) else None
+        val key = if (path.length > 2 && path(2).nonEmpty) Some(path(2)) else None
         val uploadId = r.getParam("uploadId")
         val MD5 = Hashing.md5()
 
@@ -159,7 +161,19 @@ object LiveServer {
                 ifModifiedSince     =  Option(r.getHeader(HttpHeaders.IF_MODIFIED_SINCE)).map(d => Instant.ofEpochMilli(d.toLong))
                 ifUnmodifiedSince   =  Option(r.getHeader("If-Unmodified-Since")).map(d => Instant.ofEpochMilli(d.toLong))
                 range               =  Option(r.getHeader("range"))
-                response            <- router.getObject(bucket, key.get, ifMatch, ifNoneMatch, ifModifiedSince, ifUnmodifiedSince, range).map(Response.ReadStream(_))
+                statusCode          =  if (range.nonEmpty) HttpStatusCode.PARTIAL_CONTENT else HttpStatusCode.OK
+                response            <- router.getObject(bucket, key.get, ifMatch, ifNoneMatch, ifModifiedSince, ifUnmodifiedSince, range).map { response =>
+                                          Response.ReadStream(response._2, statusCode = Some(statusCode), headers = Map(
+                                            AwsHttpHeaders.REQUEST_ID.value   -> List(""),
+                                            HttpHeaders.ACCEPT_RANGES         -> List("bytes"),
+                                            HttpHeaders.CONTENT_LENGTH        -> List(response._1.contentLength().toString),
+                                            HttpHeaders.CONTENT_RANGE         -> Option(response._1.contentRange()).map(r => List(r)).getOrElse(List.empty),
+                                            HttpHeaders.CONTENT_TYPE          -> List("binary/octet-stream"),
+                                            HttpHeaders.DATE                  -> List(DateUtils.formatRfc822Date(Instant.now)),
+                                            HttpHeaders.ETAG                  -> Option(response._1.eTag()).map(e => List(e)).getOrElse(List.empty),
+                                            HttpHeaders.LAST_MODIFIED         -> Option(response._1.lastModified()).map(m => List(DateUtils.formatRfc822Date(m))).getOrElse(List.empty),
+                                          ))
+                                       }
               } yield response
 
 
@@ -196,9 +210,9 @@ object LiveServer {
                     Response.Empty(statusCode = Some(304))
 
                   case _ => Response.Empty(headers = Map(
-                    HttpHeaders.ETAG -> eTag.map(e => List(e)).getOrElse(List.empty),
-                    HttpHeaders.LAST_MODIFIED -> lastModified.map(m => List(m.getEpochSecond.toString)).getOrElse(List.empty),
                     HttpHeaders.CONTENT_LENGTH -> size.map(s => List(s.toString)).getOrElse(List.empty),
+                    HttpHeaders.ETAG -> eTag.map(e => List(e)).getOrElse(List.empty),
+                    HttpHeaders.LAST_MODIFIED -> lastModified.map(m => List(DateUtils.formatRfc822Date(m))).getOrElse(List.empty),
                     AwsHttpHeaders.STORAGE_CLASS.value -> storageClass.map(s => List(s)).getOrElse(List.empty)
                   ))
                 }
@@ -235,7 +249,7 @@ object LiveServer {
 
             case PUT if key.isEmpty && r.getParam("acl") != null =>
               for {
-                body      <- VertxUtils.streamToString(rc, stream).mapError(e => S3Exception(S3ErrorCode.UNKNOWN_ERROR, e.getMessage, e.fillInStackTrace()))
+                body      <- VertxUtils.streamToString(rc, stream).mapError(e => S3Exception(S3ErrorCode.UNKNOWN_ERROR, e.getMessage, e))
                 response  <- IO.whenCase(body.nonEmpty){
                   case true =>
                     for {
@@ -369,7 +383,7 @@ object LiveServer {
           }
 
           response.catchAll(e =>
-            logger.error(e.cause)(e.message) *> UIO(Response.Empty(statusCode = Some(e.error.statusCode)))
+            logger.error(e.cause)(s"Status Code: ${e.error.statusCode} - ${e.message}") *> UIO(Response.Empty(statusCode = Some(e.error.statusCode)))
           )
       }
 

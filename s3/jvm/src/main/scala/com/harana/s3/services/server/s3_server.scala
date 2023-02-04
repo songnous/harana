@@ -234,7 +234,7 @@ package object s3_server {
 
   def acl(rc: RoutingContext, stream: ReactiveWriteStream[Buffer]) =
     for {
-      body        <- VertxUtils.streamToString(rc, stream).mapError(e => S3Exception(S3ErrorCode.UNKNOWN_ERROR, e.getMessage, e.fillInStackTrace()))
+      body        <- VertxUtils.streamToString(rc, stream).mapError(e => S3Exception(S3ErrorCode.UNKNOWN_ERROR, e.getMessage, e))
       acl         <- if (body.nonEmpty)
                        xmlRequest(rc, classOf[AccessControlPolicy])(request => UIO(mapXmlAclsToCannedPolicy(request) match {
                          case "private" => ObjectCannedACL.PRIVATE
@@ -265,8 +265,8 @@ package object s3_server {
 
   def xmlRequest[A, B](rc: RoutingContext, xmlClass: Class[A])(fn: A => IO[S3Exception, B]): IO[S3Exception, B] =
     for {
-      buffer    <- ZIO.fromCompletionStage(rc.request().body().toCompletionStage)
-      cls       <- IO(xmlMapper.readValue(buffer.getBytes, xmlClass)).mapError(e => S3Exception(S3ErrorCode.INVALID_REQUEST, e.getMessage, e.fillInStackTrace()))
+      buffer    <- ZIO.fromCompletionStage(rc.request().body().toCompletionStage).mapError(e => S3Exception(S3ErrorCode.UNKNOWN_ERROR, e))
+      cls       <- IO(xmlMapper.readValue(buffer.getBytes, xmlClass)).mapError(e => S3Exception(S3ErrorCode.INVALID_REQUEST, e.getMessage, e))
       result    <- fn(cls)
     } yield result
 

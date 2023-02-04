@@ -17,7 +17,7 @@ object File {
 
   trait Service {
 
-    def readStream(path: String): Task[ReadStream[Buffer]]
+    def readStream(path: String, range: Option[(Long, Long)] = None): Task[ReadStream[Buffer]]
 
     def read(file: Either[Path, AsyncFile], buffer: ByteBuffer, position: Option[Int] = None): Task[Int]
 

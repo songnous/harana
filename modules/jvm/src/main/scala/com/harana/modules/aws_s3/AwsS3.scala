@@ -50,7 +50,7 @@ object AwsS3 {
                   ifNoneMatch: Option[String] = None,
                   ifModifiedSince: Option[Instant] = None,
                   ifUnmodifiedSince: Option[Instant] = None,
-                  range: Option[String] = None): Task[ReactiveReadStream[Buffer]]
+                  range: Option[String] = None): Task[(GetObjectResponse, ReactiveReadStream[Buffer])]
 
     def putObject(client: S3AsyncClient,
                   bucket: String,

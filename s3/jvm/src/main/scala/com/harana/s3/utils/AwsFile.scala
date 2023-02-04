@@ -8,14 +8,14 @@ import java.nio.file.Path
 
 object AwsFile {
 
-  def multipartETag(path: List[Path]): Task[String] =
+  def eTag(path: List[Path]): Task[String] =
     for {
       md5s        <- ZIO.foreachPar(path)(p => {
                       Task(Files.asByteSource(p.toFile).hash(Hashing.md5()).toString)
                      })
       rawBytes    <- Task(BaseEncoding.base16().decode(md5s.mkString.toUpperCase))
       hasher      <- UIO(Hashing.md5().newHasher())
-      _           <- Task(Hashing.md5().newHasher().putBytes(rawBytes))
+      _           <- Task(hasher.putBytes(rawBytes))
       eTag        <- UIO(s"${hasher.hash.toString}-${md5s.size}")
     } yield eTag
 

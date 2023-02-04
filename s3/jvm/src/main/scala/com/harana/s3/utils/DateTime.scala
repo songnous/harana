@@ -45,7 +45,7 @@ object DateTime {
   }
 
   def iso8601DateFormat(instant: Instant) = {
-    var parsed = iso8601DateFormatter.print(new DateTime(instant))
+    var parsed = iso8601DateFormatter.print(new DateTime(instant.toEpochMilli))
     val tz = findTZ(parsed)
     if (tz == "+0000") parsed = trimTZ(parsed) + "Z"
     parsed

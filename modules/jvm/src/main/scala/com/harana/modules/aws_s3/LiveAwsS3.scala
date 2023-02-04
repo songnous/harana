@@ -89,6 +89,7 @@ object LiveAwsS3 {
                   range: Option[String] = None) = {
 
       val readStream = ReactiveReadStream.readStream[Buffer]
+      var response = Option.empty[GetObjectResponse]
 
       val builder = GetObjectRequest.builder()
         .bucket(bucket)
@@ -110,9 +111,9 @@ object LiveAwsS3 {
           })
 
         override def prepare() = new CompletableFuture[Unit] {}
-        override def onResponse(response: GetObjectResponse) = {}
+        override def onResponse(r: GetObjectResponse) = response = Some(r)
         override def exceptionOccurred(error: Throwable) = readStream.onError(error)
-      })).as(readStream)
+      })).as((response.get, readStream))
     }
 
     def getObjectAttributes(client: S3AsyncClient, bucket: String, key: String) =

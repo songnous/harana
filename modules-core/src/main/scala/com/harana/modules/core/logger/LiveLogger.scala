@@ -13,41 +13,41 @@ object LiveLogger {
 
     private val loggers = new ConcurrentHashMap[String, Log4JLogger]()
 
-    def error(message: => String)(implicit file: File): UIO[Unit] =
-      UIO(logger(file).error(message))
+    def error(message: => String)(implicit fullName: FullName): UIO[Unit] =
+      UIO(logger(fullName).error(message))
 
-    def warn(message: => String)(implicit file: File): UIO[Unit] =
-      UIO(logger(file).warn(message))
+    def warn(message: => String)(implicit fullName: FullName): UIO[Unit] =
+      UIO(logger(fullName).warn(message))
 
-    def info(message: => String)(implicit file: File): UIO[Unit] =
-      UIO(logger(file).info(message))
+    def info(message: => String)(implicit fullName: FullName): UIO[Unit] =
+      UIO(logger(fullName).info(message))
 
-    def debug(message: => String)(implicit file: File): UIO[Unit] =
-      UIO(logger(file).debug(message))
+    def debug(message: => String)(implicit fullName: FullName): UIO[Unit] =
+      UIO(logger(fullName).debug(message))
 
-    def trace(message: => String)(implicit file: File): UIO[Unit] =
-      UIO(logger(file).trace(message))
+    def trace(message: => String)(implicit fullName: FullName): UIO[Unit] =
+      UIO(logger(fullName).trace(message))
 
-    def error(t: Throwable)(message: => String)(implicit file: File): UIO[Unit] =
-      UIO(logger(file).error(message, t))
+    def error(t: Throwable)(message: => String)(implicit fullName: FullName): UIO[Unit] =
+      UIO(logger(fullName).error(message, t))
 
-    def warn(t: Throwable)(message: => String)(implicit file: File): UIO[Unit] =
-      UIO(logger(file).warn(message, t))
+    def warn(t: Throwable)(message: => String)(implicit fullName: FullName): UIO[Unit] =
+      UIO(logger(fullName).warn(message, t))
 
-    def info(t: Throwable)(message: => String)(implicit file: File): UIO[Unit] =
-      UIO(logger(file).info(message, t))
+    def info(t: Throwable)(message: => String)(implicit fullName: FullName): UIO[Unit] =
+      UIO(logger(fullName).info(message, t))
 
-    def debug(t: Throwable)(message: => String)(implicit file: File): UIO[Unit] =
-      UIO(logger(file).debug(message, t))
+    def debug(t: Throwable)(message: => String)(implicit fullName: FullName): UIO[Unit] =
+      UIO(logger(fullName).debug(message, t))
 
-    def trace(t: Throwable)(message: => String)(implicit file: File): UIO[Unit] =
-      UIO(logger(file).trace(message, t))
+    def trace(t: Throwable)(message: => String)(implicit fullName: FullName): UIO[Unit] =
+      UIO(logger(fullName).trace(message, t))
 
-    private def logger(file: File) =
-      if (loggers.contains(file.value))
-        loggers.get(file.value)
+    private def logger(fullName: FullName) =
+      if (loggers.contains(fullName.value))
+        loggers.get(fullName.value)
       else {
-        val name = FilenameUtils.getBaseName(file.value)
+        val name = FilenameUtils.getBaseName(fullName.value)
         val logger = LogManager.getLogger(name)
         loggers.putIfAbsent(name, logger)
         logger

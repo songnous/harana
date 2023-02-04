@@ -96,10 +96,7 @@ package object vertx {
                             val isrs = new InputStreamReadStream(inputStream, vx)
                             val rs = if (gzipped) new GzipReadStream(isrs) else isrs
                             val pump = Pump(rs, r)
-                            rs.endHandler(_ => {
-                              r.end()
-                              r.close()
-                            })
+                            rs.endHandler(_ => r.end().onComplete((_: AsyncResult[Void]) => r.close()))
                             pump.start()
 
                           case Response.InputStream(inputStream, gzipped, contentSize, contentType, cookies, statusCode, cors, headers) =>
@@ -108,10 +105,7 @@ package object vertx {
                             val isrs = new InputStreamReadStream(inputStream, vx)
                             if (contentSize.nonEmpty) r.putHeader(HttpHeaders.CONTENT_LENGTH, contentSize.get.toString)
                             val rs = if (gzipped) new GzipReadStream(isrs) else isrs
-                            rs.endHandler(_ => {
-                              r.end()
-                              r.close()
-                            })
+                            rs.endHandler(_ => r.end().onComplete((_: AsyncResult[Void]) => r.close()))
                             Pump(rs, r).start()
 
                           case Response.JSON(json, contentType, cookies, statusCode, cors, headers) =>
@@ -121,10 +115,7 @@ package object vertx {
                             val r = response(rc, contentType, cookies, statusCode, cors, headers)
                             r.setChunked(true)
                             if (contentSize.nonEmpty) r.putHeader(HttpHeaders.CONTENT_LENGTH, contentSize.get.toString)
-                            stream.endHandler(_ => {
-                              r.end()
-                              r.close()
-                            })
+                            stream.endHandler(_ => r.end().onComplete((_: AsyncResult[Void]) => r.close()))
                             Pump(stream, r).start()
 
                           case Response.Redirect(url, contentType, cookies, _, cors, headers) =>

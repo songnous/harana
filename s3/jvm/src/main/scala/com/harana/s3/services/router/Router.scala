@@ -43,7 +43,7 @@ object Router {
                   ifNoneMatch: Option[String] = None,
                   ifModifiedSince: Option[Instant] = None,
                   ifUnmodifiedSince: Option[Instant] = None,
-                  range: Option[String] = None): IO[S3Exception, ReadStream[Buffer]]
+                  range: Option[String] = None): IO[S3Exception, (GetObjectResponse, ReadStream[Buffer])]
 
     def getObjectAttributes(bucket: String, key: String): IO[S3Exception, GetObjectAttributesResponse]
 

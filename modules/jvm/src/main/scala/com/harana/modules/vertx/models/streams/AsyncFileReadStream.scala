@@ -13,7 +13,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Promise
 import scala.util.Try
 
-class AsyncFileReadStream(path: String) extends ReadStream[Buffer] {
+class AsyncFileReadStream(path: String, range: Option[(Long, Long)] = None) extends ReadStream[Buffer] {
 
   val file =
     if (SystemUtils.IS_OS_LINUX)
@@ -22,9 +22,9 @@ class AsyncFileReadStream(path: String) extends ReadStream[Buffer] {
       Right(AsynchronousFileChannel.open(Paths.get(path), StandardOpenOption.READ))
 
   var closed = false
-  var readPos = 0
+  var readPos = if (range.isDefined) range.get._1 else 0L
   val readBufferSize = 1024
-  var readLength = Long.MaxValue
+  var readLength = if (range.isDefined) (range.get._2 - range.get._1)+1 else Long.MaxValue
 
   var handler: Option[Handler[Buffer]] = None
   var exceptionHandler: Option[Handler[Throwable]] = None
@@ -68,7 +68,7 @@ class AsyncFileReadStream(path: String) extends ReadStream[Buffer] {
     file match {
       case Left(asyncFile) =>
         val tempBuffer = ByteBuffer.allocateDirect(readBufferSize)
-        var read = 0L
+        var read = position
 
         while (read != 1 && buff.hasRemaining) {
           read = asyncFile.read(tempBuffer, read, readBufferSize).get().toLong
@@ -91,7 +91,7 @@ class AsyncFileReadStream(path: String) extends ReadStream[Buffer] {
             }
 
           def failed(t: Throwable, attachment: Object) = {
-            t.fillInStackTrace().printStackTrace()
+            t.printStackTrace()
             promise.failure(t)
           }
 

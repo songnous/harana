@@ -26,8 +26,8 @@ object LiveFile {
       if (SystemUtils.IS_OS_LINUX) Some(EventExecutor.initDefault()) else None
 
 
-    def readStream(path: String): Task[ReadStream[Buffer]] =
-      Task(new AsyncFileReadStream(path))
+    def readStream(path: String, range: Option[(Long, Long)] = None): Task[ReadStream[Buffer]] =
+      Task(new AsyncFileReadStream(path, range))
 
 
     def read(file: Either[Path, AsyncFile], buffer: ByteBuffer, position: Option[Int] = None) = {

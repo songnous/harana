@@ -1,6 +1,5 @@
 package com.harana.s3.services.router
 
-import com.github.luben.zstd.Zstd
 import com.harana.modules.aws_s3.AwsS3
 import com.harana.modules.core.config.Config
 import com.harana.modules.core.logger.Logger
@@ -16,18 +15,20 @@ import io.vertx.core.buffer.Buffer
 import io.vertx.core.streams.Pump
 import io.vertx.ext.reactivestreams.ReactiveWriteStream
 import org.apache.commons.io.{FileUtils, FilenameUtils}
+import org.apache.commons.lang3.StringUtils
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.s3.S3AsyncClient
 import software.amazon.awssdk.services.s3.model._
 import zio.clock.Clock
 import zio.{IO, Task, UIO, ZIO, ZLayer}
 
+import java.net.{URLDecoder, URLEncoder}
+import java.nio.charset.StandardCharsets
 import java.nio.file.attribute.BasicFileAttributes
-import java.nio.file.{Files, Path}
+import java.nio.file.{Files, Path, Paths}
 import java.time.Instant
 import java.util.concurrent.atomic.AtomicReference
 import java.util.{SplittableRandom, UUID}
-import scala.collection.mutable
 import scala.jdk.CollectionConverters._
 
 object LiveRouter {
@@ -35,7 +36,6 @@ object LiveRouter {
   private val routesRef = new AtomicReference[List[Route]](List.empty)
   private val s3ClientsRef = new AtomicReference[Map[Int, S3AsyncClient]](Map.empty)
   private val multipartPrefix = "__multipartUploads"
-  private val keyCache = mutable.HashMap.empty[String, String]
   private val random = new SplittableRandom()
 
   val layer = ZLayer.fromServices { (clock: Clock.Service,
@@ -61,7 +61,7 @@ object LiveRouter {
                             if (Files.exists(path))
                               IO.fail(S3Exception(S3ErrorCode.BUCKET_ALREADY_EXISTS))
                             else
-                              toS3Exception(Files.createDirectory(path))
+                              toS3Exception(Task(Files.createDirectory(path)))
 
                           case Some(S3(credentials, region, endpoint)) =>
                             s3Operation(credentials, region, endpoint)(s3.createBucket(_, bucket))
@@ -122,7 +122,7 @@ object LiveRouter {
                           IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
                         case Some(Local) =>
-                          bucketOperation(bucket)(_ => toS3Exception(""))
+                          bucketOperation(bucket)(_ => toS3Exception(Task("")))
 
                         case Some(S3(credentials, region, endpoint)) =>
                           s3Operation(credentials, region, endpoint)(s3.getBucketPolicy(_, bucket))
@@ -172,7 +172,7 @@ object LiveRouter {
 
     def listObjects(bucket: String, prefix: Option[String] = None) =
       for {
-        _           <- logger.info(s"[ListObjects] $bucket")
+        _           <- logger.info(s"[ListObjects] $bucket - prefix: ${prefix.getOrElse("None")}")
         rootDir     <- localRootDirectory
         result      <- route(bucket).map(_.destination) match {
                         case None =>
@@ -184,14 +184,20 @@ object LiveRouter {
                             IO.fail(S3Exception(S3ErrorCode.NO_SUCH_BUCKET))
                           else
                             toS3Exception(IO(
-                              Files.walk(bucketPath).toList.asScala.filterNot(_.equals(bucketPath)).map { path =>
-                                val at = Files.readAttributes(path, classOf[BasicFileAttributes])
-                                S3Object.builder()
-                                  .key(path.toUri.getPath)
-                                  .size(at.size())
-                                  .lastModified(at.lastModifiedTime().toInstant)
-                                  .eTag(UUID.randomUUID().toString)
-                                  .build()
+                              Files.walk(bucketPath).toList.asScala
+                                .map(f => StringUtils.removeStart(f.toUri.getPath, bucketPath.toUri.getPath))
+                                .filter(p => if (prefix.isDefined) p.startsWith(prefix.get) else true)
+                                .filter(_.nonEmpty)
+                                .filterNot(_.startsWith(multipartPrefix))
+                                .map { relativePath =>
+                                  val path = bucketPath.resolve(relativePath)
+                                  val at = Files.readAttributes(path, classOf[BasicFileAttributes])
+                                  S3Object.builder()
+                                    .key(relativePath)
+                                    .size(at.size())
+                                    .lastModified(at.lastModifiedTime().toInstant)
+                                    .eTag(AwsFile.md5(path))
+                                    .build()
                               }.toList
                             ))
 
@@ -247,7 +253,23 @@ object LiveRouter {
                           IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
                         case Some(Local) =>
-                          fileOperation(bucket, key)(path => file.readStream(path.toString))
+                          fileOperation(bucket, key)(path =>
+                            for {
+                              attributes  <- Task(Files.readAttributes(path, classOf[BasicFileAttributes]))
+                              fileRange   =  range.map(r => {
+                                              val pair = r.replace("bytes=", "").split("-").map(_.toLong)
+                                              (pair(0), pair(1))
+                                             })
+                              length      =  if (fileRange.nonEmpty) (fileRange.get._2 - fileRange.get._1) + 1 else attributes.size()
+                              response    <- Task(GetObjectResponse.builder()
+                                              .contentLength(length)
+                                              .contentRange(if (fileRange.nonEmpty) s"bytes ${fileRange.get._1}-${fileRange.get._2}/${attributes.size()}" else "")
+                                              .eTag(AwsFile.md5(path))
+                                              .lastModified(attributes.lastModifiedTime().toInstant)
+                                              .build())
+                              stream      <- file.readStream(path.toString, fileRange)
+                            } yield (response, stream)
+                          )
 
                         case Some(S3(credentials, region, endpoint)) =>
                           s3Operation(credentials, region, endpoint)(s3.getObject(_, bucket, key, ifMatch, ifNoneMatch, ifModifiedSince, ifUnmodifiedSince, range))
@@ -274,9 +296,9 @@ object LiveRouter {
                           for {
                             rootDir     <- localRootDirectory
                             keyPath     =  rootDir.resolve(bucket).resolve(key).getParent
-                            _           <- Task(Files.createDirectories(keyPath))
-
-                            result      <- file.writeStream(rootDir.resolve(bucket).resolve(key).toString, stream, contentLength, Some(() => streamPump.start()), Some(() => streamPump.stop())).as("")
+                            _           <- Task(Files.createDirectories(keyPath)).mapError(e => S3Exception(S3ErrorCode.INVALID_DIRECTORIES, e))
+                            result      <- file.writeStream(rootDir.resolve(bucket).resolve(key).toString, stream, contentLength, Some(() => streamPump.start()), Some(() => streamPump.stop()))
+                                            .mapBoth(e => S3Exception(S3ErrorCode.IO_FAILURE, e), _ => "")
                           } yield result
 
                         case Some(S3(credentials, region, endpoint)) =>
@@ -295,7 +317,7 @@ object LiveRouter {
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
                           case Some(Local) =>
-                            toS3Exception(CopyObjectResult.builder().build())
+                            toS3Exception(Task(CopyObjectResult.builder().build()))
 
                           case Some(S3(credentials, region, endpoint)) =>
                             s3Operation(credentials, region, endpoint)(s3.copyObject(_, sourceBucket, sourceKey, destinationBucket, destinationKey))
@@ -311,15 +333,16 @@ object LiveRouter {
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
                           case Some(Local) =>
-                            fileOperation(bucket, key)(path => toS3Exception({
-                              val attributes = Files.readAttributes(path, classOf[BasicFileAttributes])
-
-                              GetObjectAttributesResponse.builder()
-                                .eTag(attributes.fileKey().toString)
-                                .lastModified(attributes.lastModifiedTime().toInstant)
-                                .objectSize(attributes.size())
-                                .build()
-                            }))
+                            fileOperation(bucket, key)(path => toS3Exception(
+                              Task {
+                                val attributes = Files.readAttributes(path, classOf[BasicFileAttributes])
+                                GetObjectAttributesResponse.builder()
+                                  .eTag(AwsFile.md5(path))
+                                  .lastModified(attributes.lastModifiedTime().toInstant)
+                                  .objectSize(attributes.size())
+                                  .build()
+                              }
+                            ))
 
                           case Some(S3(credentials, region, endpoint)) =>
                             s3Operation(credentials, region, endpoint)(s3.getObjectAttributes(_, bucket, key))
@@ -336,9 +359,7 @@ object LiveRouter {
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
                           case Some(Local) =>
-                            toS3Exception(
-                              GetObjectAclResponse.builder().build()
-                            )
+                            toS3Exception(Task(GetObjectAclResponse.builder().build()))
 
                           case Some(S3(credentials, region, endpoint)) =>
                             s3Operation(credentials, region, endpoint)(s3.getObjectAcl(_, bucket, key))
@@ -381,7 +402,7 @@ object LiveRouter {
                             IO.fail(S3Exception(S3ErrorCode.ROUTE_NOT_FOUND))
 
                           case Some(Local) =>
-                            toS3Exception(CopyPartResult.builder().build())
+                            toS3Exception(Task(CopyPartResult.builder().build()))
 
                           case Some(S3(credentials, region, endpoint)) =>
                             s3Operation(credentials, region, endpoint)(s3.uploadPartCopy(_,
@@ -440,7 +461,7 @@ object LiveRouter {
                                                   .build()
                                               )
                                             )
-                              } yield parts.toList
+                              } yield parts
                             )
 
                           case Some(S3(credentials, region, endpoint)) =>
@@ -463,7 +484,7 @@ object LiveRouter {
                                   Files.list(path.resolve(key)).toList.asScala.map { uploadId =>
                                     MultipartUpload.builder()
                                       .uploadId(uploadId.getFileName.toString)
-                                      .key(keyCache(key.getFileName.toString))
+                                      .key(URLDecoder.decode(key.getFileName.toString, StandardCharsets.UTF_8.toString))
                                       .initiated(Files.getLastModifiedTime(key).toInstant)
                                       .build()
                                   }
@@ -487,10 +508,10 @@ object LiveRouter {
                           case Some(Local) =>
                             multiPartOperation(bucket)(path =>
                               for {
-                                _         <- UIO(if (!keyCache.contains(key)) keyCache.put(key, Zstd.compress(key.getBytes).toString))
-                                _         <- Task.when(Files.exists(path.resolve(keyCache(key))))(IO.fail(S3Exception(S3ErrorCode.INVALID_REQUEST)))
-                                uploadId  <- Task(random.nextLong().toString)
-                                _         <- Task(Files.createDirectories(path.resolve(keyCache(key)).resolve(uploadId)))
+                                encodedKey  <- Task(URLEncoder.encode(key, StandardCharsets.UTF_8.toString))
+                                _           <- Task.when(Files.exists(path.resolve(encodedKey)))(IO.fail(S3Exception(S3ErrorCode.INVALID_REQUEST)))
+                                uploadId    <- Task(random.nextLong().toString)
+                                _           <- Task(Files.createDirectories(path.resolve(encodedKey).resolve(uploadId)))
                               } yield uploadId
                             )
 
@@ -510,8 +531,9 @@ object LiveRouter {
                           case Some(Local) =>
                             multiPartOperation(bucket, Some(key))(path =>
                               for {
+                                _       <- Task.when(!Files.exists(path.resolve(uploadId)))(IO.fail(S3Exception(S3ErrorCode.NO_SUCH_UPLOAD)))
                                 _       <- Task(FileUtils.deleteDirectory(path.resolve(uploadId).toFile))
-                                _       <- Task.when(Files.list(path).count() == 0)(Task(Files.delete(path)) *> UIO(keyCache.remove(key)))
+                                _       <- Task.when(Files.list(path).count() == 0)(Task(Files.delete(path)))
                               } yield ()
                             )
 
@@ -532,7 +554,7 @@ object LiveRouter {
                             multiPartOperation(bucket, Some(key))(path =>
                               for {
                                 paths         <- Task(Files.list(path.resolve(uploadId)).toList.asScala.toList.sortBy(_.getFileName.toString))
-                                eTag          <- AwsFile.multipartETag(paths)
+                                eTag          <- AwsFile.eTag(paths)
 
                                 rootDir       <- localRootDirectory
                                 keyPath       =  rootDir.resolve(bucket).resolve(key).getParent
@@ -568,7 +590,7 @@ object LiveRouter {
         rootDir     <- localRootDirectory
         path        =  rootDir.resolve(bucket).resolve(key)
         result      <- if (Files.notExists(rootDir.resolve(bucket))) IO.fail(S3Exception(S3ErrorCode.NO_SUCH_BUCKET))
-                       else if (Files.notExists(path)) IO.fail(S3Exception(S3ErrorCode.NO_SUCH_KEY))
+                       else if (!Files.exists(path)) IO.fail(S3Exception(S3ErrorCode.NO_SUCH_KEY))
                        else toS3Exception(operation(path))
     } yield result
 
@@ -578,11 +600,11 @@ object LiveRouter {
         rootDir     <- localRootDirectory
         _           <- IO.fail(S3Exception(S3ErrorCode.NO_SUCH_BUCKET)).when(Files.notExists(rootDir.resolve(bucket)))
         rootPath    =  rootDir.resolve(bucket).resolve(multipartPrefix)
-        _           <- Task(Files.createDirectory(rootPath)).when(Files.notExists(rootPath))
+        _           <- Task(Files.createDirectory(rootPath)).when(Files.notExists(rootPath)).mapError(e => S3Exception(S3ErrorCode.INVALID_DIRECTORIES, e))
         path        <- if (key.isEmpty) UIO(rootPath) else
                         for {
-                          _     <- Task.when(!keyCache.contains(key.get))(IO.fail(S3Exception(S3ErrorCode.INVALID_REQUEST)))
-                          path  =  rootPath.resolve(keyCache(key.get))
+                          encodedKey  <- Task(URLEncoder.encode(key.get, StandardCharsets.UTF_8.toString)).mapError(e => S3Exception(S3ErrorCode.UNKNOWN_ERROR, e))
+                          path        =  rootPath.resolve(encodedKey)
                         } yield path
         result      <- toS3Exception(operation(path))
     } yield result
@@ -606,12 +628,11 @@ object LiveRouter {
     }
 
 
-    private def toS3Exception[T](task: T): IO[S3Exception, T] =
-      toS3Exception(IO(task))
-
-
     private def toS3Exception[T](task: Task[T]): IO[S3Exception, T] =
-      task.mapError(e => S3Exception(S3ErrorCode.UNKNOWN_ERROR, e.getMessage, e.fillInStackTrace()))
+      task.mapError {
+        case e @ S3Exception(_, _, _, _) => e
+        case e: Throwable => S3Exception(S3ErrorCode.UNKNOWN_ERROR, e.getMessage, e)
+      }
 
 
     private def localRootDirectory =
@@ -632,6 +653,10 @@ object LiveRouter {
       val term = if (key.nonEmpty) s"$bucket/$key" else bucket
       val routes = routesRef.get().filter(_.pathMatch.matches(term))
       if (routes.isEmpty) None else Some(routes.maxBy(_.priority))
+    }
+
+    private def escapeKey(key: String) = {
+
     }
   }}
 }
